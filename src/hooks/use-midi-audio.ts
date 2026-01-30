@@ -7,7 +7,7 @@ import * as Tone from "tone";
 export function useMidiAudio() {
   const polySynthRef = useRef<Tone.PolySynth | null>(null);
   const [isMuted, setIsMuted] = useState(false);
-  const [isReady, setIsReady] = useState(false);
+  const [_isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     // Initialize synth

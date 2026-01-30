@@ -1,13 +1,14 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
 import { DeviceSelector } from "@/components/midi/device-selector";
 import { FalldownVisualizer } from "@/components/midi/falldown-visualizer";
 import { MidiControlCenter } from "@/components/midi/midi-control-center";
 import { PianoKeyboard } from "@/components/midi/piano-keyboard";
 import { useActiveNotes } from "@/hooks/use-active-notes";
+import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMIDIConnection } from "@/hooks/use-midi-connection";
 import { useMIDIInputs } from "@/hooks/use-midi-inputs";
-import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { getMidiFiles } from "@/lib/action/midi";
 import {
@@ -15,7 +16,6 @@ import {
   loadMidiFile,
   type MidiEvent,
 } from "@/lib/midi/midi-player";
-import { useCallback, useEffect, useState } from "react";
 
 interface MidiFile {
   name: string;

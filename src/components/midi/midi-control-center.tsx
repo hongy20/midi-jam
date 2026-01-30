@@ -1,6 +1,6 @@
 "use client";
 
-import { Play, Pause, Square, Volume2, VolumeX } from "lucide-react";
+import { Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
 
 interface MidiFile {
   name: string;
