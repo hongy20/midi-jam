@@ -1,14 +1,18 @@
 "use client";
 
 interface PianoKeyboardProps {
-  activeNotes: Set<number>;
+  liveNotes?: Set<number>;
+  playbackNotes?: Set<number>;
 }
 
 /**
  * A visual representation of a piano keyboard that highlights active notes.
  * Renders a full 88-key piano range (A0 to C8).
  */
-export function PianoKeyboard({ activeNotes }: PianoKeyboardProps) {
+export function PianoKeyboard({
+  liveNotes = new Set(),
+  playbackNotes = new Set(),
+}: PianoKeyboardProps) {
   // Standard 88-key piano range
   const START_NOTE = 21; // A0
   const END_NOTE = 108; // C8
@@ -44,6 +48,32 @@ export function PianoKeyboard({ activeNotes }: PianoKeyboardProps) {
     }
   }
 
+  const getWhiteKeyColor = (note: number) => {
+    const isLive = liveNotes.has(note);
+    const isPlayback = playbackNotes.has(note);
+
+    if (isLive && isPlayback)
+      return "bg-indigo-500 shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] translate-y-[2px]";
+    if (isLive)
+      return "bg-blue-400 shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] translate-y-[2px]";
+    if (isPlayback)
+      return "bg-purple-400 shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] translate-y-[2px]";
+    return "bg-white hover:bg-gray-50";
+  };
+
+  const getBlackKeyColor = (note: number) => {
+    const isLive = liveNotes.has(note);
+    const isPlayback = playbackNotes.has(note);
+
+    if (isLive && isPlayback)
+      return "bg-indigo-700 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] translate-y-[1px]";
+    if (isLive)
+      return "bg-blue-600 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] translate-y-[1px]";
+    if (isPlayback)
+      return "bg-purple-600 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] translate-y-[1px]";
+    return "bg-gray-900";
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="w-full overflow-x-auto pb-4 scrollbar-hide">
@@ -59,13 +89,9 @@ export function PianoKeyboard({ activeNotes }: PianoKeyboardProps) {
                 type="button"
                 key={note}
                 aria-label={`Note ${note}`}
-                aria-pressed={activeNotes.has(note)}
+                aria-pressed={liveNotes.has(note) || playbackNotes.has(note)}
                 tabIndex={-1}
-                className={`flex-1 border-r border-gray-300 h-full transition-all duration-75 outline-none ${
-                  activeNotes.has(note)
-                    ? "bg-blue-400 shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] translate-y-[2px]"
-                    : "bg-white hover:bg-gray-50"
-                }`}
+                className={`flex-1 border-r border-gray-300 h-full transition-all duration-75 outline-none ${getWhiteKeyColor(note)}`}
               />
             ))}
           </div>
@@ -81,18 +107,14 @@ export function PianoKeyboard({ activeNotes }: PianoKeyboardProps) {
                   type="button"
                   key={note}
                   aria-label={`Note ${note}`}
-                  aria-pressed={activeNotes.has(note)}
+                  aria-pressed={liveNotes.has(note) || playbackNotes.has(note)}
                   tabIndex={-1}
                   style={{
                     left,
                     width: `${(1 / whiteKeys.length) * 0.6 * 100}%`,
                     position: "absolute",
                   }}
-                  className={`h-2/3 z-10 rounded-b-md border border-black shadow-md transition-all duration-75 outline-none pointer-events-auto ${
-                    activeNotes.has(note)
-                      ? "bg-blue-600 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] translate-y-[1px]"
-                      : "bg-gray-900"
-                  }`}
+                  className={`h-2/3 z-10 rounded-b-md border border-black shadow-md transition-all duration-75 outline-none pointer-events-auto ${getBlackKeyColor(note)}`}
                 />
               );
             })}

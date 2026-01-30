@@ -4,15 +4,18 @@ import { PianoKeyboard } from "./piano-keyboard";
 
 describe("PianoKeyboard", () => {
   it("should render 88 keys (52 white keys)", () => {
-    render(<PianoKeyboard activeNotes={new Set()} />);
+    render(<PianoKeyboard />);
     // 52 white keys + 36 black keys = 88 total buttons
     const keys = screen.getAllByRole("button");
     expect(keys.length).toBe(88);
   });
 
   it("should highlight active keys", () => {
-    const activeNotes = new Set([21, 60, 108]); // A0, middle C, C8
-    render(<PianoKeyboard activeNotes={activeNotes} />);
+    const liveNotes = new Set([21]); // A0
+    const playbackNotes = new Set([60, 108]); // middle C, C8
+    render(
+      <PianoKeyboard liveNotes={liveNotes} playbackNotes={playbackNotes} />,
+    );
 
     expect(screen.getByLabelText(/Note 21/i)).toHaveAttribute(
       "aria-pressed",
