@@ -8,10 +8,10 @@ This plan outlines the steps required to implement the core Web MIDI API connect
     - [x] Write Failing Tests: Create tests to ensure the browser environment supports Web MIDI API and can request access. These tests should initially fail, confirming the absence of the required functionality.
     - [x] Implement to Pass Tests: Implement the necessary code to request Web MIDI API access and gracefully handle both successful access and cases where access is denied or not supported.
     - [x] Refactor: Review and refactor the MIDI access request logic for clarity, error handling, and adherence to best practices.
-- [~] Task: List Available MIDI Input Devices
-    - [ ] Write Failing Tests: Develop tests to verify that the application can correctly enumerate and display a list of all connected MIDI input devices. These tests should fail until the enumeration logic is implemented.
-    - [ ] Implement to Pass Tests: Implement the functionality to detect and list all available MIDI input devices, making them accessible for user selection.
-    - [ ] Refactor: Optimize the device listing mechanism, ensuring efficient updates and robust error handling for device changes.
+- [x] Task: List Available MIDI Input Devices (90666d3)
+    - [x] Write Failing Tests: Develop tests to verify that the application can correctly enumerate and display a list of all connected MIDI input devices. These tests should fail until the enumeration logic is implemented.
+    - [x] Implement to Pass Tests: Implement the functionality to detect and list all available MIDI input devices, making them accessible for user selection.
+    - [x] Refactor: Optimize the device listing mechanism, ensuring efficient updates and robust error handling for device changes.
 - [ ] Task: Select and Connect to a MIDI Device
     - [ ] Write Failing Tests: Create tests to simulate user selection and connection to a mock MIDI device, asserting that the application correctly establishes and manages the connection.
     - [ ] Implement to Pass Tests: Develop the user interface and underlying logic that allows users to select a MIDI input device from the enumerated list and establish a connection.
