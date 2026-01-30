@@ -5,6 +5,7 @@ This web application aims to assist users in learning musical instruments, speci
 
 ## Core Functionalities
 The application's core functionalities include:
-- Connecting to MIDI devices and processing input from these instruments.
+- Seamlessly connecting to MIDI devices and processing real-time input (Note On/Off).
+- Displaying an interactive, responsive 88-key piano visualizer that highlights keys in real-time.
 - Displaying engaging visual feedback inspired by rhythm games (e.g., Guitar Hero) to enhance the learning experience.
 - Providing a comprehensive learning platform for piano, with the architectural foresight to be extended to other MIDI instruments in the future.
