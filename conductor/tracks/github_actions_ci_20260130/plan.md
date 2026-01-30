@@ -5,7 +5,7 @@ This plan outlines the steps to integrate GitHub Actions for Continuous Integrat
 ## Phase 1: Local Script Setup
 Focuses on adding and verifying the necessary scripts in `package.json` to be used by the CI pipeline.
 
-- [ ] **Task: Add `type-check` script to `package.json`**
+- [x] **Task: Add `type-check` script to `package.json`** (64198b8)
     - [ ] Add `"type-check": "next typegen && tsc --noEmit"` to the `scripts` section.
 - [ ] **Task: Verify scripts locally**
     - [ ] Run `npm run lint` and ensure it passes.
