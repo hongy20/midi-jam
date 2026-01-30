@@ -7,7 +7,7 @@ Focuses on adding and verifying the necessary scripts in `package.json` to be us
 
 - [x] **Task: Add `type-check` script to `package.json`** (64198b8)
     - [ ] Add `"type-check": "next typegen && tsc --noEmit"` to the `scripts` section.
-- [ ] **Task: Verify scripts locally**
+- [x] **Task: Verify scripts locally** (b005fc3)
     - [ ] Run `npm run lint` and ensure it passes.
     - [ ] Run `npm run type-check` and ensure it passes.
     - [ ] Run `npm run test` and ensure it passes.
