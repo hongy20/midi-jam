@@ -10,6 +10,7 @@ This document outlines the core technologies and tools used in the project.
 
 ## Tooling
 -   **Linting & Formatting**: [Biome](https://biomejs.dev)
+-   **Testing**: [Vitest](https://vitest.dev) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 
 ## Implementation Guidelines
 -   **Visual Effects**:
