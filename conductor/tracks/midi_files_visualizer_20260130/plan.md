@@ -1,7 +1,7 @@
 # Implementation Plan: MIDI File Support and Falldown Visualizer
 
 ## Phase 1: Infrastructure & Server Integration
-- [~] Task: Setup MIDI directory and Server Action
+- [x] Task: Setup MIDI directory and Server Action (5714519)
     - [ ] Create `public/midi/` directory.
     - [ ] Implement `getMidiFiles` Server Action in `src/lib/action/midi.ts`.
     - [ ] Add regex-based formatting logic to convert filenames to human-readable strings.
