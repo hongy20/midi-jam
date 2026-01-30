@@ -18,7 +18,7 @@ export function PianoKeyboard({ activeNotes }: PianoKeyboardProps) {
     return [1, 3, 6, 8, 10].includes(n);
   };
 
-  const whiteKeys = [];
+  const whiteKeys: number[] = [];
   for (let note = START_NOTE; note <= END_NOTE; note++) {
     if (!isBlackKey(note)) {
       whiteKeys.push(note);
@@ -37,7 +37,7 @@ export function PianoKeyboard({ activeNotes }: PianoKeyboardProps) {
     return `${((leftWhiteKeyIndex + 0.7) / whiteKeys.length) * 100}%`;
   };
 
-  const blackKeys = [];
+  const blackKeys: number[] = [];
   for (let note = START_NOTE; note <= END_NOTE; note++) {
     if (isBlackKey(note)) {
       blackKeys.push(note);
