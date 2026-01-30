@@ -1,17 +1,21 @@
 "use client";
 
 import { DeviceSelector } from "@/components/midi/device-selector";
-import { PianoKeyboard } from "@/components/midi/piano-keyboard";
-import { DeviceSelector } from "@/components/midi/device-selector";
+import { FalldownVisualizer } from "@/components/midi/falldown-visualizer";
 import { MidiControlCenter } from "@/components/midi/midi-control-center";
 import { PianoKeyboard } from "@/components/midi/piano-keyboard";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMIDIConnection } from "@/hooks/use-midi-connection";
 import { useMIDIInputs } from "@/hooks/use-midi-inputs";
+import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { getMidiFiles } from "@/lib/action/midi";
-import { loadMidiFile, getMidiEvents, type MidiEvent } from "@/lib/midi/midi-player";
-import { useMemo, useState, useEffect, useCallback } from "react";
+import {
+  getMidiEvents,
+  loadMidiFile,
+  type MidiEvent,
+} from "@/lib/midi/midi-player";
+import { useCallback, useEffect, useState } from "react";
 
 interface MidiFile {
   name: string;
@@ -19,25 +23,40 @@ interface MidiFile {
 }
 
 export default function Home() {
-  const { inputs, isLoading: isMidiLoading, error: midiError } = useMIDIInputs();
+  const {
+    inputs,
+    isLoading: isMidiLoading,
+    error: midiError,
+  } = useMIDIInputs();
   const { selectedDevice, selectDevice } = useMIDIConnection(inputs);
-  const liveActiveNotes = useActiveNotes(selectedDevice);
-  
+
+  // Audio setup
+  const { playNote, stopNote, isMuted, toggleMute } = useMidiAudio();
+
+  // Live input tracking
+  const liveActiveNotes = useActiveNotes(selectedDevice, {
+    onNoteOn: playNote,
+    onNoteOff: stopNote,
+  });
+
   // MIDI File State
   const [midiFiles, setMidiFiles] = useState<MidiFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<MidiFile | null>(null);
   const [midiEvents, setMidiEvents] = useState<MidiEvent[]>([]);
-  
-  const { 
-    activeNotes: playbackActiveNotes, 
-    isPlaying, 
-    currentTime, 
-    speed, 
-    play, 
-    pause, 
-    stop, 
-    setSpeed 
-  } = useMidiPlayer(midiEvents);
+
+  const {
+    activeNotes: playbackActiveNotes,
+    isPlaying,
+    currentTime,
+    speed,
+    play,
+    pause,
+    stop,
+    setSpeed,
+  } = useMidiPlayer(midiEvents, {
+    onNoteOn: playNote,
+    onNoteOff: stopNote,
+  });
 
   // Load file list
   useEffect(() => {
@@ -45,26 +64,21 @@ export default function Home() {
   }, []);
 
   // Handle file selection and parsing
-  const handleSelectFile = useCallback(async (file: MidiFile) => {
-    setSelectedFile(file);
-    stop(); // Reset current playback
-    try {
-      const midi = await loadMidiFile(file.url);
-      const events = getMidiEvents(midi);
-      setMidiEvents(events);
-    } catch (err) {
-      console.error("Failed to load MIDI file:", err);
-      setMidiEvents([]);
-    }
-  }, [stop]);
-
-  const combinedActiveNotes = useMemo(() => {
-    const combined = new Set(liveActiveNotes);
-    for (const note of playbackActiveNotes) {
-      combined.add(note);
-    }
-    return combined;
-  }, [liveActiveNotes, playbackActiveNotes]);
+  const handleSelectFile = useCallback(
+    async (file: MidiFile) => {
+      setSelectedFile(file);
+      stop(); // Reset current playback
+      try {
+        const midi = await loadMidiFile(file.url);
+        const events = getMidiEvents(midi);
+        setMidiEvents(events);
+      } catch (err) {
+        console.error("Failed to load MIDI file:", err);
+        setMidiEvents([]);
+      }
+    },
+    [stop],
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -106,12 +120,14 @@ export default function Home() {
               onStop={stop}
               speed={speed}
               onSpeedChange={setSpeed}
+              isMuted={isMuted}
+              onToggleMute={toggleMute}
             />
           </div>
 
           {(selectedDevice || selectedFile) && (
-            <div className="pt-8 border-t-4 border-gray-50 space-y-6 animate-in fade-in zoom-in duration-500">
-              <div className="flex items-center justify-between">
+            <div className="pt-8 border-t-4 border-gray-50 space-y-0 animate-in fade-in zoom-in duration-500">
+              <div className="flex items-center justify-between pb-6">
                 <h2 className="text-2xl font-bold text-gray-800">
                   {selectedFile ? selectedFile.name : "Your Keyboard"}
                 </h2>
@@ -131,16 +147,26 @@ export default function Home() {
                 </div>
               </div>
 
-              <PianoKeyboard activeNotes={combinedActiveNotes} />
+              {/* Integrated Visualizer Area */}
+              <div className="flex flex-col">
+                <FalldownVisualizer 
+                  events={midiEvents}
+                  currentTime={currentTime}
+                  speed={speed}
+                  height={300}
+                />
+                <PianoKeyboard 
+                  liveNotes={liveActiveNotes} 
+                  playbackNotes={playbackActiveNotes} 
+                />
+              </div>
             </div>
           )}
         </section>
 
         {!selectedDevice && !selectedFile && !isMidiLoading && (
           <div className="text-center p-12 border-4 border-dashed border-gray-200 rounded-[3rem] text-gray-400">
-            <p className="text-xl font-medium">
-              Waiting for some music...
-            </p>
+            <p className="text-xl font-medium">Waiting for some music...</p>
           </div>
         )}
       </main>
