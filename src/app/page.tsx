@@ -1,26 +1,29 @@
 "use client";
 
 import { DeviceSelector } from "@/components/midi/device-selector";
+import { PianoKeyboard } from "@/components/midi/piano-keyboard";
+import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMIDIConnection } from "@/hooks/use-midi-connection";
 import { useMIDIInputs } from "@/hooks/use-midi-inputs";
 
 export default function Home() {
   const { inputs, isLoading, error } = useMIDIInputs();
   const { selectedDevice, selectDevice } = useMIDIConnection(inputs);
+  const activeNotes = useActiveNotes(selectedDevice);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <main className="max-w-2xl mx-auto space-y-8">
-        <header className="text-center space-y-2">
-          <h1 className="text-4xl font-black text-blue-600 tracking-tight">
+      <main className="max-w-4xl mx-auto space-y-12">
+        <header className="text-center space-y-4">
+          <h1 className="text-6xl font-black text-blue-600 tracking-tighter italic transform -rotate-2">
             MIDI JAM
           </h1>
-          <p className="text-gray-500 font-medium">
-            Connect your instrument and let's make some music!
+          <p className="text-xl text-gray-500 font-medium">
+            Step up to the stage and start jamming!
           </p>
         </header>
 
-        <section className="bg-white p-6 rounded-3xl shadow-xl border-2 border-gray-100">
+        <section className="bg-white p-8 rounded-[3rem] shadow-2xl border-4 border-gray-100 space-y-8">
           <DeviceSelector
             devices={inputs}
             isLoading={isLoading}
@@ -28,13 +31,28 @@ export default function Home() {
             selectedDevice={selectedDevice}
             onSelect={selectDevice}
           />
+
+          {selectedDevice && (
+            <div className="pt-8 border-t-4 border-gray-50 space-y-6 animate-in fade-in zoom-in duration-500">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  Your Keyboard
+                </h2>
+                <div className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-bold flex items-center gap-2">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                  CONNECTED
+                </div>
+              </div>
+
+              <PianoKeyboard activeNotes={activeNotes} />
+            </div>
+          )}
         </section>
 
-        {selectedDevice && (
-          <div className="p-4 bg-green-50 border-2 border-green-500 rounded-2xl text-green-700 animate-in fade-in slide-in-from-bottom-4">
-            <p className="font-bold flex items-center gap-2">
-              <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-              Connected to: {selectedDevice.name}
+        {!selectedDevice && !isLoading && (
+          <div className="text-center p-12 border-4 border-dashed border-gray-200 rounded-[3rem] text-gray-400">
+            <p className="text-xl font-medium">
+              Waiting for your instrument...
             </p>
           </div>
         )}
