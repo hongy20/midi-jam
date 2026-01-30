@@ -4,10 +4,10 @@ This plan outlines the steps required to implement the core Web MIDI API connect
 
 ## Phase 1: Web MIDI API Connection
 
-- [~] Task: Setup Web MIDI API Access
-    - [ ] Write Failing Tests: Create tests to ensure the browser environment supports Web MIDI API and can request access. These tests should initially fail, confirming the absence of the required functionality.
-    - [ ] Implement to Pass Tests: Implement the necessary code to request Web MIDI API access and gracefully handle both successful access and cases where access is denied or not supported.
-    - [ ] Refactor: Review and refactor the MIDI access request logic for clarity, error handling, and adherence to best practices.
+- [x] Task: Setup Web MIDI API Access (00bb60a)
+    - [x] Write Failing Tests: Create tests to ensure the browser environment supports Web MIDI API and can request access. These tests should initially fail, confirming the absence of the required functionality.
+    - [x] Implement to Pass Tests: Implement the necessary code to request Web MIDI API access and gracefully handle both successful access and cases where access is denied or not supported.
+    - [x] Refactor: Review and refactor the MIDI access request logic for clarity, error handling, and adherence to best practices.
 - [ ] Task: List Available MIDI Input Devices
     - [ ] Write Failing Tests: Develop tests to verify that the application can correctly enumerate and display a list of all connected MIDI input devices. These tests should fail until the enumeration logic is implemented.
     - [ ] Implement to Pass Tests: Implement the functionality to detect and list all available MIDI input devices, making them accessible for user selection.
