@@ -24,5 +24,9 @@ The primary objective of this track is to establish a robust connection to MIDI 
 -   Users can see a list of connected MIDI input devices.
 -   Users can select a MIDI input device, and the application connects to it.
 -   Pressing a key on the connected MIDI device triggers a visible change in a corresponding on-screen element.
--   Releasing a key on the connected MIDI device reverts the visual change in the corresponding on-screen element.
+- Releasing a key on the connected MIDI device reverts the visual change in the corresponding on-screen element.
 -   No errors are logged in the browser console during MIDI device connection or during note input.
+
+## Constraints
+-   **Visual Implementation**: The visualizer must be implemented using **pure CSS** (animations, transitions) and DOM elements. The use of the `<canvas>` element is **strictly prohibited** to ensure consistency with the UI framework and accessibility.
+
