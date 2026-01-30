@@ -20,10 +20,10 @@ This plan outlines the steps required to implement the core Web MIDI API connect
 
 ## Phase 2: MIDI Input Processing and Basic Visualizer
 
-- [~] Task: Receive MIDI Note On/Off Messages
-    - [ ] Write Failing Tests: Implement tests that simulate MIDI "note on" and "note off" messages, ensuring the application's event listeners correctly capture and interpret these messages.
-    - [ ] Implement to Pass Tests: Set up event listeners on the connected MIDI device to receive and parse incoming MIDI "note on" and "note off" messages, extracting relevant data such as note number and velocity.
-    - [ ] Refactor: Improve the MIDI message parsing logic and ensure efficient and reliable event dispatching to other components.
+- [x] Task: Receive MIDI Note On/Off Messages (fa190e0)
+    - [x] Write Failing Tests: Implement tests that simulate MIDI "note on" and "note off" messages, ensuring the application's event listeners correctly capture and interpret these messages.
+    - [x] Implement to Pass Tests: Set up event listeners on the connected MIDI device to receive and parse incoming MIDI "note on" and "note off" messages, extracting relevant data such as note number and velocity.
+    - [x] Refactor: Improve the MIDI message parsing logic and ensure efficient and reliable event dispatching to other components.
 - [ ] Task: Create Basic On-Screen Visualizer
     - [ ] Write Failing Tests: Develop tests to verify that the basic visualizer component reacts correctly to simulated MIDI "note on" and "note off" events, confirming visual changes occur as expected.
     - [ ] Implement to Pass Tests: Develop a basic visual component, such as a representation of piano keys, that visually responds to received MIDI "note on" (e.g., key lights up) and "note off" (e.g., key darkens) events.
