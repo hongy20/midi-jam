@@ -18,6 +18,8 @@ describe('MidiControlCenter', () => {
     onStop: vi.fn(),
     speed: 1,
     onSpeedChange: vi.fn(),
+    isMuted: false,
+    onToggleMute: vi.fn(),
   };
 
   it('should render correctly', () => {
@@ -26,6 +28,15 @@ describe('MidiControlCenter', () => {
     expect(screen.getByLabelText(/select midi file/i)).toBeDefined();
     expect(screen.getByRole('button', { name: /play/i })).toBeDefined();
     expect(screen.getByRole('button', { name: /stop/i })).toBeDefined();
+    expect(screen.getByLabelText(/mute/i)).toBeDefined();
+  });
+
+  it('should call onToggleMute when mute button is clicked', () => {
+    render(<MidiControlCenter {...defaultProps} />);
+    
+    const muteButton = screen.getByLabelText(/mute/i);
+    fireEvent.click(muteButton);
+    expect(defaultProps.onToggleMute).toHaveBeenCalled();
   });
 
   it('should call onSelectFile when a file is selected', () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Play, Pause, Square } from "lucide-react";
+import { Play, Pause, Square, Volume2, VolumeX } from "lucide-react";
 
 interface MidiFile {
   name: string;
@@ -17,6 +17,8 @@ interface MidiControlCenterProps {
   onStop: () => void;
   speed: number;
   onSpeedChange: (speed: number) => void;
+  isMuted: boolean;
+  onToggleMute: () => void;
 }
 
 export function MidiControlCenter({
@@ -29,6 +31,8 @@ export function MidiControlCenter({
   onStop,
   speed,
   onSpeedChange,
+  isMuted,
+  onToggleMute,
 }: MidiControlCenterProps) {
   const speeds = [0.5, 1.0, 1.5, 2.0];
 
@@ -62,6 +66,23 @@ export function MidiControlCenter({
       </div>
 
       <div className="flex items-center gap-3">
+        <button
+          type="button"
+          onClick={onToggleMute}
+          className={`p-4 rounded-2xl transition-all shadow-md active:scale-95 ${
+            isMuted
+              ? "bg-red-100 text-red-600 hover:bg-red-200"
+              : "bg-green-100 text-green-600 hover:bg-green-200"
+          }`}
+          aria-label={isMuted ? "Unmute" : "Mute"}
+        >
+          {isMuted ? (
+            <VolumeX className="w-6 h-6" />
+          ) : (
+            <Volume2 className="w-6 h-6" />
+          )}
+        </button>
+
         <button
           type="button"
           onClick={isPlaying ? onPause : onPlay}

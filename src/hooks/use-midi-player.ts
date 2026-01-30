@@ -1,7 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { MidiEvent } from "../lib/midi/midi-player";
 
-export function useMidiPlayer(events: MidiEvent[]) {
+export function useMidiPlayer(
+  events: MidiEvent[], 
+  options?: {
+    onNoteOn?: (note: number, velocity: number) => void;
+    onNoteOff?: (note: number) => void;
+  }
+) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [speed, setSpeed] = useState(1);
@@ -12,11 +18,22 @@ export function useMidiPlayer(events: MidiEvent[]) {
   const eventIndexRef = useRef(0);
   const requestRef = useRef<number>(null);
 
+  // Use refs for options to avoid re-triggering the effect
+  const optionsRef = useRef(options);
+  useEffect(() => {
+    optionsRef.current = options;
+  }, [options]);
+
   // Use a ref for events to avoid re-triggering the effect if the array identity changes
   // but content remains the same (though usually we want to reset if events change)
   const eventsRef = useRef(events);
   useEffect(() => {
     eventsRef.current = events;
+    // Reset when events change
+    eventIndexRef.current = 0;
+    pausedTimeRef.current = 0;
+    setCurrentTime(0);
+    setActiveNotes(new Set());
   }, [events]);
 
   const stop = useCallback(() => {
@@ -32,7 +49,7 @@ export function useMidiPlayer(events: MidiEvent[]) {
   const play = useCallback(() => {
     if (isPlaying) return;
     setIsPlaying(true);
-    startTimeRef.current = performance.now() - pausedTimeRef.current * 1000 / speed;
+    startTimeRef.current = performance.now() - (pausedTimeRef.current * 1000) / speed;
   }, [isPlaying, speed]);
 
   const pause = useCallback(() => {
@@ -55,19 +72,26 @@ export function useMidiPlayer(events: MidiEvent[]) {
       let index = eventIndexRef.current;
       let changed = false;
       const currentEvents = eventsRef.current;
+      const { onNoteOn, onNoteOff } = optionsRef.current || {};
       
-      // We need to work with the latest state of activeNotes
-      // but in a rAF loop, we should probably use a functional update or a ref
-      // To keep it simple and reactive, we'll use the functional update pattern later
-      // For now, let's just collect changes
-      const notesToToggle: { note: number; type: 'add' | 'delete' }[] = [];
+      const notesToToggle: { note: number; velocity: number; type: 'add' | 'delete' }[] = [];
 
       while (index < currentEvents.length && currentEvents[index].time <= elapsed) {
         const event = currentEvents[index];
+        const type = event.type === "noteOn" ? "add" : "delete";
+        
         notesToToggle.push({ 
           note: event.note, 
-          type: event.type === "noteOn" ? "add" : "delete" 
+          velocity: event.velocity,
+          type 
         });
+
+        if (type === 'add') {
+          onNoteOn?.(event.note, event.velocity);
+        } else {
+          onNoteOff?.(event.note);
+        }
+
         index++;
         changed = true;
       }
@@ -84,14 +108,6 @@ export function useMidiPlayer(events: MidiEvent[]) {
         eventIndexRef.current = index;
       }
 
-      // Check for end of song
-      if (index >= currentEvents.length && notesToToggle.length === 0 && Array.from(activeNotes).length === 0) {
-        // We use a small delay or check to ensure we don't stop prematurely
-        // but for now, if we're past all events, we stop.
-        // Actually, let's keep it playing until the user stops or a new song is loaded
-        // or we reach the absolute end.
-      }
-      
       requestRef.current = requestAnimationFrame(tick);
     };
 
