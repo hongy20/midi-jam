@@ -46,12 +46,15 @@ export function FalldownVisualizer({
         const startTime = activeNoteStarts.get(event.note);
         if (startTime !== undefined) {
           const duration = event.time - startTime;
-          
+
           // Only include if it's within our time window
-          if (startTime + duration > currentTime && startTime < currentTime + LOOK_AHEAD_SECONDS) {
+          if (
+            startTime + duration > currentTime &&
+            startTime < currentTime + LOOK_AHEAD_SECONDS
+          ) {
             const n = event.note % 12;
             const isBlack = [1, 3, 6, 8, 10].includes(n);
-            
+
             notes.push({
               id: `${event.note}-${startTime}`,
               note: event.note,
@@ -103,7 +106,7 @@ export function FalldownVisualizer({
   };
 
   return (
-    <div 
+    <div
       className="relative overflow-hidden bg-gray-900/5 backdrop-blur-sm rounded-t-[3rem] border-x-4 border-t-4 border-gray-100"
       style={{ height: `${height}px` }}
     >
@@ -133,7 +136,7 @@ export function FalldownVisualizer({
           );
         })}
       </div>
-      
+
       {/* Target Line */}
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 opacity-50 shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
     </div>

@@ -149,15 +149,15 @@ export default function Home() {
 
               {/* Integrated Visualizer Area */}
               <div className="flex flex-col">
-                <FalldownVisualizer 
+                <FalldownVisualizer
                   events={midiEvents}
                   currentTime={currentTime}
                   speed={speed}
                   height={300}
                 />
-                <PianoKeyboard 
-                  liveNotes={liveActiveNotes} 
-                  playbackNotes={playbackActiveNotes} 
+                <PianoKeyboard
+                  liveNotes={liveActiveNotes}
+                  playbackNotes={playbackActiveNotes}
                 />
               </div>
             </div>

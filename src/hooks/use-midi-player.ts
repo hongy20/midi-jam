@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { MidiEvent } from "../lib/midi/midi-player";
 
 export function useMidiPlayer(
-  events: MidiEvent[], 
+  events: MidiEvent[],
   options?: {
     onNoteOn?: (note: number, velocity: number) => void;
     onNoteOff?: (note: number) => void;
-  }
+  },
 ) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -49,7 +49,8 @@ export function useMidiPlayer(
   const play = useCallback(() => {
     if (isPlaying) return;
     setIsPlaying(true);
-    startTimeRef.current = performance.now() - (pausedTimeRef.current * 1000) / speed;
+    startTimeRef.current =
+      performance.now() - (pausedTimeRef.current * 1000) / speed;
   }, [isPlaying, speed]);
 
   const pause = useCallback(() => {
@@ -73,20 +74,27 @@ export function useMidiPlayer(
       let changed = false;
       const currentEvents = eventsRef.current;
       const { onNoteOn, onNoteOff } = optionsRef.current || {};
-      
-      const notesToToggle: { note: number; velocity: number; type: 'add' | 'delete' }[] = [];
 
-      while (index < currentEvents.length && currentEvents[index].time <= elapsed) {
+      const notesToToggle: {
+        note: number;
+        velocity: number;
+        type: "add" | "delete";
+      }[] = [];
+
+      while (
+        index < currentEvents.length &&
+        currentEvents[index].time <= elapsed
+      ) {
         const event = currentEvents[index];
         const type = event.type === "noteOn" ? "add" : "delete";
-        
-        notesToToggle.push({ 
-          note: event.note, 
+
+        notesToToggle.push({
+          note: event.note,
           velocity: event.velocity,
-          type 
+          type,
         });
 
-        if (type === 'add') {
+        if (type === "add") {
           onNoteOn?.(event.note, event.velocity);
         } else {
           onNoteOff?.(event.note);
@@ -97,10 +105,10 @@ export function useMidiPlayer(
       }
 
       if (changed) {
-        setActiveNotes(prev => {
+        setActiveNotes((prev) => {
           const next = new Set(prev);
           for (const toggle of notesToToggle) {
-            if (toggle.type === 'add') next.add(toggle.note);
+            if (toggle.type === "add") next.add(toggle.note);
             else next.delete(toggle.note);
           }
           return next;

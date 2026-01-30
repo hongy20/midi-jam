@@ -13,23 +13,26 @@ export function useActiveNotes(
   options?: {
     onNoteOn?: (note: number, velocity: number) => void;
     onNoteOff?: (note: number) => void;
-  }
+  },
 ): Set<number> {
   const [activeNotes, setActiveNotes] = useState<Set<number>>(new Set());
 
-  const handleNote = useCallback((event: MIDINoteEvent) => {
-    setActiveNotes((prev) => {
-      const next = new Set(prev);
-      if (event.type === "note-on") {
-        next.add(event.note);
-        options?.onNoteOn?.(event.note, event.velocity);
-      } else {
-        next.delete(event.note);
-        options?.onNoteOff?.(event.note);
-      }
-      return next;
-    });
-  }, [options]);
+  const handleNote = useCallback(
+    (event: MIDINoteEvent) => {
+      setActiveNotes((prev) => {
+        const next = new Set(prev);
+        if (event.type === "note-on") {
+          next.add(event.note);
+          options?.onNoteOn?.(event.note, event.velocity);
+        } else {
+          next.delete(event.note);
+          options?.onNoteOff?.(event.note);
+        }
+        return next;
+      });
+    },
+    [options],
+  );
 
   useMIDINotes(input, handleNote);
 

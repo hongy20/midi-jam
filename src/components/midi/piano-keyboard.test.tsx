@@ -13,7 +13,9 @@ describe("PianoKeyboard", () => {
   it("should highlight active keys", () => {
     const liveNotes = new Set([21]); // A0
     const playbackNotes = new Set([60, 108]); // middle C, C8
-    render(<PianoKeyboard liveNotes={liveNotes} playbackNotes={playbackNotes} />);
+    render(
+      <PianoKeyboard liveNotes={liveNotes} playbackNotes={playbackNotes} />,
+    );
 
     expect(screen.getByLabelText(/Note 21/i)).toHaveAttribute(
       "aria-pressed",

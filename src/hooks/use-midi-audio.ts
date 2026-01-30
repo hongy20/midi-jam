@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import * as Tone from "tone";
 
 /**
@@ -30,32 +30,35 @@ export function useMidiAudio() {
     };
   }, []);
 
-  const playNote = useCallback((midiNote: number, velocity: number) => {
-    if (isMuted || !polySynthRef.current) return;
-    
-    // Ensure AudioContext is started
-    if (Tone.getContext().state !== "running") {
-      Tone.start();
-    }
+  const playNote = useCallback(
+    (midiNote: number, velocity: number) => {
+      if (isMuted || !polySynthRef.current) return;
 
-    const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
-    polySynthRef.current.triggerAttack(frequency, Tone.now(), velocity);
-  }, [isMuted]);
+      // Ensure AudioContext is started
+      if (Tone.getContext().state !== "running") {
+        Tone.start();
+      }
+
+      const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
+      polySynthRef.current.triggerAttack(frequency, Tone.now(), velocity);
+    },
+    [isMuted],
+  );
 
   const stopNote = useCallback((midiNote: number) => {
     if (!polySynthRef.current) return;
-    
+
     const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
     polySynthRef.current.triggerRelease(frequency, Tone.now());
   }, []);
 
   const toggleMute = useCallback(() => {
-    setIsMuted(prev => !prev);
+    setIsMuted((prev) => !prev);
   }, []);
 
   // Effect to handle state changes in useMidiPlayer or live input
   // This is better handled by explicit calls from the player or device listener
-  
+
   return {
     playNote,
     stopNote,

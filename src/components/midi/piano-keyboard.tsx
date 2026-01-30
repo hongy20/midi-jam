@@ -9,9 +9,9 @@ interface PianoKeyboardProps {
  * A visual representation of a piano keyboard that highlights active notes.
  * Renders a full 88-key piano range (A0 to C8).
  */
-export function PianoKeyboard({ 
-  liveNotes = new Set(), 
-  playbackNotes = new Set() 
+export function PianoKeyboard({
+  liveNotes = new Set(),
+  playbackNotes = new Set(),
 }: PianoKeyboardProps) {
   // Standard 88-key piano range
   const START_NOTE = 21; // A0
@@ -51,20 +51,26 @@ export function PianoKeyboard({
   const getWhiteKeyColor = (note: number) => {
     const isLive = liveNotes.has(note);
     const isPlayback = playbackNotes.has(note);
-    
-    if (isLive && isPlayback) return "bg-indigo-500 shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] translate-y-[2px]";
-    if (isLive) return "bg-blue-400 shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] translate-y-[2px]";
-    if (isPlayback) return "bg-purple-400 shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] translate-y-[2px]";
+
+    if (isLive && isPlayback)
+      return "bg-indigo-500 shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] translate-y-[2px]";
+    if (isLive)
+      return "bg-blue-400 shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] translate-y-[2px]";
+    if (isPlayback)
+      return "bg-purple-400 shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] translate-y-[2px]";
     return "bg-white hover:bg-gray-50";
   };
 
   const getBlackKeyColor = (note: number) => {
     const isLive = liveNotes.has(note);
     const isPlayback = playbackNotes.has(note);
-    
-    if (isLive && isPlayback) return "bg-indigo-700 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] translate-y-[1px]";
-    if (isLive) return "bg-blue-600 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] translate-y-[1px]";
-    if (isPlayback) return "bg-purple-600 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] translate-y-[1px]";
+
+    if (isLive && isPlayback)
+      return "bg-indigo-700 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] translate-y-[1px]";
+    if (isLive)
+      return "bg-blue-600 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] translate-y-[1px]";
+    if (isPlayback)
+      return "bg-purple-600 shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)] translate-y-[1px]";
     return "bg-gray-900";
   };
 
