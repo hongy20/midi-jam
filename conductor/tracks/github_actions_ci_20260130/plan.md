@@ -2,16 +2,15 @@
 
 This plan outlines the steps to integrate GitHub Actions for Continuous Integration, ensuring code quality through automated linting, type-checking, and testing.
 
-## Phase 1: Local Script Setup
-Focuses on adding and verifying the necessary scripts in `package.json` to be used by the CI pipeline.
+## Phase 1: Local Script Setup [checkpoint: 6508ae1]
 
 - [x] **Task: Add `type-check` script to `package.json`** (64198b8)
-    - [ ] Add `"type-check": "next typegen && tsc --noEmit"` to the `scripts` section.
+    - [x] Add `"type-check": "next typegen && tsc --noEmit"` to the `scripts` section.
 - [x] **Task: Verify scripts locally** (b005fc3)
-    - [ ] Run `npm run lint` and ensure it passes.
-    - [ ] Run `npm run type-check` and ensure it passes.
-    - [ ] Run `npm run test` and ensure it passes.
-- [~] **Task: Conductor - User Manual Verification 'Phase 1: Local Script Setup' (Protocol in workflow.md)**
+    - [x] Run `npm run lint` and ensure it passes.
+    - [x] Run `npm run type-check` and ensure it passes.
+    - [x] Run `npm run test` and ensure it passes.
+- [x] **Task: Conductor - User Manual Verification 'Phase 1: Local Script Setup' (Protocol in workflow.md)** (6508ae1)
 
 ## Phase 2: GitHub Actions Configuration
 Focuses on creating the workflow file to automate the CI process.
