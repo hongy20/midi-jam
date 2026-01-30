@@ -5,11 +5,24 @@ import { PianoKeyboard } from "@/components/midi/piano-keyboard";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMIDIConnection } from "@/hooks/use-midi-connection";
 import { useMIDIInputs } from "@/hooks/use-midi-inputs";
+import { useMidiPlayer } from "@/hooks/use-midi-player";
+import { useMemo } from "react";
 
 export default function Home() {
   const { inputs, isLoading, error } = useMIDIInputs();
   const { selectedDevice, selectDevice } = useMIDIConnection(inputs);
-  const activeNotes = useActiveNotes(selectedDevice);
+  const liveActiveNotes = useActiveNotes(selectedDevice);
+  
+  // Placeholder for MIDI file events (Phase 3 will populate this)
+  const { activeNotes: playbackActiveNotes } = useMidiPlayer([]);
+
+  const combinedActiveNotes = useMemo(() => {
+    const combined = new Set(liveActiveNotes);
+    for (const note of playbackActiveNotes) {
+      combined.add(note);
+    }
+    return combined;
+  }, [liveActiveNotes, playbackActiveNotes]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -44,7 +57,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <PianoKeyboard activeNotes={activeNotes} />
+              <PianoKeyboard activeNotes={combinedActiveNotes} />
             </div>
           )}
         </section>
