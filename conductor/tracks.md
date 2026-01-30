@@ -6,3 +6,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [ ] **Track: Implement Core MIDI Connection and Basic Visualizer**
   *Link: [./tracks/midi_visualizer_20260130/](./tracks/midi_visualizer_20260130/)*
+
+---
+
+- [ ] **Track: improve the CI pipeline, by integrating Github Actions.**
+*Link: [./tracks/github_actions_ci_20260130/](./tracks/github_actions_ci_20260130/)*
