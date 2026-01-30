@@ -13,6 +13,8 @@ This document outlines the core technologies and tools used in the project.
 -   **Testing**: [Vitest](https://vitest.dev) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 -   **Continuous Integration**: [GitHub Actions](https://github.com/features/actions) for automated linting, type-checking, and testing.
 -   **Type Checking**: TypeScript `tsc` for static type analysis.
+-   **MIDI Parsing**: [@tonejs/midi](https://github.com/Tonejs/Midi) for processing binary MIDI files.
+-   **Audio Synthesis**: [Tone.js](https://tonejs.github.io/) for real-time browser-based instrument synthesis.
 
 ## Implementation Guidelines
 -   **Visual Effects**:
