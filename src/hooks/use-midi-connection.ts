@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface UseMIDIConnectionResult {
   selectedDevice: WebMidi.MIDIInput | null;
@@ -7,15 +7,30 @@ interface UseMIDIConnectionResult {
 
 /**
  * A React hook that manages the currently selected MIDI input device.
+ * @param availableInputs - The list of currently available MIDI input devices.
  * @returns An object containing the selected device and a function to select a device.
  */
-export function useMIDIConnection(): UseMIDIConnectionResult {
+export function useMIDIConnection(
+  availableInputs: WebMidi.MIDIInput[] = [],
+): UseMIDIConnectionResult {
   const [selectedDevice, setSelectedDevice] =
     useState<WebMidi.MIDIInput | null>(null);
 
   const selectDevice = (device: WebMidi.MIDIInput | null) => {
     setSelectedDevice(device);
   };
+
+  // Auto-deselect if the selected device is disconnected or no longer available
+  useEffect(() => {
+    if (selectedDevice) {
+      const isAvailable = availableInputs.some(
+        (input) => input.id === selectedDevice.id,
+      );
+      if (!isAvailable) {
+        setSelectedDevice(null);
+      }
+    }
+  }, [selectedDevice, availableInputs]);
 
   return { selectedDevice, selectDevice };
 }

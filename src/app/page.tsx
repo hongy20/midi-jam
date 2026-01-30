@@ -6,7 +6,7 @@ import { useMIDIInputs } from "@/hooks/use-midi-inputs";
 
 export default function Home() {
   const { inputs, isLoading, error } = useMIDIInputs();
-  const { selectedDevice, selectDevice } = useMIDIConnection();
+  const { selectedDevice, selectDevice } = useMIDIConnection(inputs);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
