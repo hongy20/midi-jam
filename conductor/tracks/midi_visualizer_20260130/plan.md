@@ -2,7 +2,7 @@
 
 This plan outlines the steps required to implement the core Web MIDI API connection and a basic visualizer, following the principles of Test-Driven Development (TDD) and the project's defined workflow.
 
-## Phase 1: Web MIDI API Connection
+## Phase 1: Web MIDI API Connection [checkpoint: 2b63032]
 
 - [x] Task: Setup Web MIDI API Access (00bb60a)
     - [x] Write Failing Tests: Create tests to ensure the browser environment supports Web MIDI API and can request access. These tests should initially fail, confirming the absence of the required functionality.
