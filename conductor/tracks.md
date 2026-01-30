@@ -9,5 +9,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: improve the CI pipeline, by integrating Github Actions.**
+- [x] **Track: improve the CI pipeline, by integrating Github Actions.**
 *Link: [./tracks/github_actions_ci_20260130/](./tracks/github_actions_ci_20260130/)*
