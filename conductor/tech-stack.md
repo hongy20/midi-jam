@@ -11,6 +11,8 @@ This document outlines the core technologies and tools used in the project.
 ## Tooling
 -   **Linting & Formatting**: [Biome](https://biomejs.dev)
 -   **Testing**: [Vitest](https://vitest.dev) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
+-   **Continuous Integration**: [GitHub Actions](https://github.com/features/actions) for automated linting, type-checking, and testing.
+-   **Type Checking**: TypeScript `tsc` for static type analysis.
 
 ## Implementation Guidelines
 -   **Visual Effects**:
