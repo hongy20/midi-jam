@@ -32,7 +32,7 @@
         - `height`: Proportional to the MIDI note duration.
         - `top`: Proportional to the time remaining until the note is played.
     - [ ] Use CSS transitions/animations for smooth vertical movement.
-- [ ] Task: Optimization & Synchronization
-    - [ ] Ensure the falldown effect stays in sync when the speed is changed.
-    - [ ] Optimize rendering to handle MIDI files with many simultaneous notes.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md)
+- [x] Task: Optimization & Synchronization (db5feb5)
+    - [x] Ensure the falldown effect stays in sync when the speed is changed.
+    - [x] Optimize rendering to handle MIDI files with many simultaneous notes.
+- [x] Task: Conductor - User Manual Verification 'Phase 4' (Protocol in workflow.md) (db5feb5)
