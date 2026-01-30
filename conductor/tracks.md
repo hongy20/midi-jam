@@ -4,5 +4,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [~] **Track: feature to support midi files and falldown visualizer**
+- [x] **Track: feature to support midi files and falldown visualizer**
 *Link: [./tracks/midi_files_visualizer_20260130/](./tracks/midi_files_visualizer_20260130/)*
