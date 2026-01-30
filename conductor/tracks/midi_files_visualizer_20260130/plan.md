@@ -18,7 +18,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md) (1611a79)
 
 ## Phase 3: MIDI Control UI
-- [ ] Task: Create `MidiControlCenter` component
+- [x] Task: Create `MidiControlCenter` component (e034243)
     - [ ] Implement the dropdown using the Server Action data.
     - [ ] Add Play/Pause/Stop/Speed controls with Tailwind styling.
     - [ ] Integrate the component into the main page layout.
