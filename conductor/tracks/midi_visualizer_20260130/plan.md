@@ -12,10 +12,10 @@ This plan outlines the steps required to implement the core Web MIDI API connect
     - [x] Write Failing Tests: Develop tests to verify that the application can correctly enumerate and display a list of all connected MIDI input devices. These tests should fail until the enumeration logic is implemented.
     - [x] Implement to Pass Tests: Implement the functionality to detect and list all available MIDI input devices, making them accessible for user selection.
     - [x] Refactor: Optimize the device listing mechanism, ensuring efficient updates and robust error handling for device changes.
-- [~] Task: Select and Connect to a MIDI Device
-    - [ ] Write Failing Tests: Create tests to simulate user selection and connection to a mock MIDI device, asserting that the application correctly establishes and manages the connection.
-    - [ ] Implement to Pass Tests: Develop the user interface and underlying logic that allows users to select a MIDI input device from the enumerated list and establish a connection.
-    - [ ] Refactor: Enhance the device connection stability, improve user feedback during connection/disconnection, and ensure seamless integration with the UI.
+- [x] Task: Select and Connect to a MIDI Device (afdc2d9)
+    - [x] Write Failing Tests: Create tests to simulate user selection and connection to a mock MIDI device, asserting that the application correctly establishes and manages the connection.
+    - [x] Implement to Pass Tests: Develop the user interface and underlying logic that allows users to select a MIDI input device from the enumerated list and establish a connection.
+    - [x] Refactor: Enhance the device connection stability, improve user feedback during connection/disconnection, and ensure seamless integration with the UI.
 - [ ] Task: Conductor - User Manual Verification 'Web MIDI API Connection' (Protocol in workflow.md)
 
 ## Phase 2: MIDI Input Processing and Basic Visualizer
