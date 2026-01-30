@@ -45,9 +45,10 @@ All tasks follow a strict lifecycle:
    - Resume implementation
 
 8. **Commit Code Changes:**
-   - Stage all code changes related to the task.
-   - Propose a clear, concise commit message e.g, `feat(ui): Create basic HTML structure for calculator`.
-   - Perform the commit.
+   - **Step 8.1: Verify Branch:** Before committing, check the current branch. The command `git rev-parse --abbrev-ref HEAD` can be used. If the current branch is the default branch (e.g., `main` or `master`), DO NOT commit. Create a new branch for the changes first.
+   - **Step 8.2: Stage Changes:** Stage all code changes related to the task.
+   - **Step 8.3: Propose Commit Message:** Propose a clear, concise commit message e.g, `feat(ui): Create basic HTML structure for calculator`.
+   - **Step 8.4: Perform the Commit:** Perform the commit.
 
 9. **Attach Task Summary with Git Notes:**
    - **Step 9.1: Get Commit Hash:** Obtain the hash of the *just-completed commit* (`git log -1 --format="%H"`).
