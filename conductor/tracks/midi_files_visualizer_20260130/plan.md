@@ -7,15 +7,15 @@
     - [x] Add regex-based formatting logic to convert filenames to human-readable strings.
 - [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md) (b48cc2d)
 
-## Phase 2: MIDI Parsing & Basic Playback
+## Phase 2: MIDI Parsing & Basic Playback [checkpoint: 1611a79]
 - [x] Task: Implement MIDI Parsing Service (1b6a606)
-    - [ ] Install `@tonejs/midi`.
-    - [ ] Create `src/lib/midi/midi-player.ts` to handle file fetching and parsing.
-    - [ ] Implement a custom scheduler/hook to emit MIDI events at the correct time based on the playback clock.
+    - [x] Install `@tonejs/midi`.
+    - [x] Create `src/lib/midi/midi-player.ts` to handle file fetching and parsing.
+    - [x] Implement a custom scheduler/hook to emit MIDI events at the correct time based on the playback clock.
 - [x] Task: Integrated Playback State (881a55f)
-    - [ ] Create `useMidiPlayer` hook to manage `isPlaying`, `currentTime`, and `speed`.
-    - [ ] Update `PianoKeyboard` to listen to the player's event stream.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
+    - [x] Create `useMidiPlayer` hook to manage `isPlaying`, `currentTime`, and `speed`.
+    - [x] Update `PianoKeyboard` to listen to the player's event stream.
+- [x] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md) (1611a79)
 
 ## Phase 3: MIDI Control UI
 - [ ] Task: Create `MidiControlCenter` component
