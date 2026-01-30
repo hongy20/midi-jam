@@ -1,11 +1,11 @@
 # Implementation Plan: MIDI File Support and Falldown Visualizer
 
-## Phase 1: Infrastructure & Server Integration
+## Phase 1: Infrastructure & Server Integration [checkpoint: b48cc2d]
 - [x] Task: Setup MIDI directory and Server Action (5714519)
-    - [ ] Create `public/midi/` directory.
-    - [ ] Implement `getMidiFiles` Server Action in `src/lib/action/midi.ts`.
-    - [ ] Add regex-based formatting logic to convert filenames to human-readable strings.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md)
+    - [x] Create `public/midi/` directory.
+    - [x] Implement `getMidiFiles` Server Action in `src/lib/action/midi.ts`.
+    - [x] Add regex-based formatting logic to convert filenames to human-readable strings.
+- [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md) (b48cc2d)
 
 ## Phase 2: MIDI Parsing & Basic Playback
 - [ ] Task: Implement MIDI Parsing Service
