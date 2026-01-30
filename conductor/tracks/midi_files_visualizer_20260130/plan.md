@@ -12,7 +12,7 @@
     - [ ] Install `@tonejs/midi`.
     - [ ] Create `src/lib/midi/midi-player.ts` to handle file fetching and parsing.
     - [ ] Implement a custom scheduler/hook to emit MIDI events at the correct time based on the playback clock.
-- [ ] Task: Integrated Playback State
+- [x] Task: Integrated Playback State (881a55f)
     - [ ] Create `useMidiPlayer` hook to manage `isPlaying`, `currentTime`, and `speed`.
     - [ ] Update `PianoKeyboard` to listen to the player's event stream.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2' (Protocol in workflow.md)
