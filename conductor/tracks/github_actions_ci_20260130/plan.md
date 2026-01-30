@@ -11,7 +11,7 @@ Focuses on adding and verifying the necessary scripts in `package.json` to be us
     - [ ] Run `npm run lint` and ensure it passes.
     - [ ] Run `npm run type-check` and ensure it passes.
     - [ ] Run `npm run test` and ensure it passes.
-- [ ] **Task: Conductor - User Manual Verification 'Phase 1: Local Script Setup' (Protocol in workflow.md)**
+- [~] **Task: Conductor - User Manual Verification 'Phase 1: Local Script Setup' (Protocol in workflow.md)**
 
 ## Phase 2: GitHub Actions Configuration
 Focuses on creating the workflow file to automate the CI process.
