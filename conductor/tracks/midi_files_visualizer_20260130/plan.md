@@ -25,7 +25,7 @@
 - [ ] Task: Conductor - User Manual Verification 'Phase 3' (Protocol in workflow.md)
 
 ## Phase 4: Falldown Visualizer (The Piano Roll)
-- [ ] Task: Implement `FalldownVisualizer` component
+- [x] Task: Implement `FalldownVisualizer` component (e4373b4)
     - [ ] Create a container that matches the horizontal scale of the 88-key `PianoKeyboard`.
     - [ ] Implement logic to calculate note positions:
         - `left`: Horizontal alignment with the piano key.
