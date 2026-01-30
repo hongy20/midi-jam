@@ -8,7 +8,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md) (b48cc2d)
 
 ## Phase 2: MIDI Parsing & Basic Playback
-- [ ] Task: Implement MIDI Parsing Service
+- [x] Task: Implement MIDI Parsing Service (1b6a606)
     - [ ] Install `@tonejs/midi`.
     - [ ] Create `src/lib/midi/midi-player.ts` to handle file fetching and parsing.
     - [ ] Implement a custom scheduler/hook to emit MIDI events at the correct time based on the playback clock.
