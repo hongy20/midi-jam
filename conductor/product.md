@@ -10,4 +10,5 @@ The application's core functionalities include:
 - Supporting MIDI file playback with an engaging "falldown" (piano roll) visual effect.
 - Allowing concurrent live jamming alongside MIDI file playback with visual distinction between inputs.
 - Displaying engaging visual feedback inspired by rhythm games (e.g., Guitar Hero) to enhance the learning experience.
+- Streamlining user interaction by automatically selecting MIDI devices or music files when only one option is available.
 - Providing a comprehensive learning platform for piano, with the architectural foresight to be extended to other MIDI instruments in the future.
