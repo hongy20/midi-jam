@@ -80,6 +80,13 @@ export default function Home() {
     [stop],
   );
 
+  // Auto-select if there is only one file available
+  useEffect(() => {
+    if (midiFiles.length === 1 && !selectedFile) {
+      handleSelectFile(midiFiles[0]);
+    }
+  }, [midiFiles, selectedFile, handleSelectFile]);
+
   return (
     <div className="min-h-screen bg-gray-50 p-8">
       <main className="max-w-4xl mx-auto space-y-12">

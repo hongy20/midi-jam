@@ -20,6 +20,13 @@ export function useMIDIConnection(
     setSelectedDevice(device);
   };
 
+  // Auto-select if there is only one device available and no device is selected
+  useEffect(() => {
+    if (selectedDevice === null && availableInputs.length === 1) {
+      setSelectedDevice(availableInputs[0]);
+    }
+  }, [availableInputs, selectedDevice]);
+
   // Auto-deselect if the selected device is disconnected or no longer available
   useEffect(() => {
     if (selectedDevice) {
