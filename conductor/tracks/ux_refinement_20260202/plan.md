@@ -5,7 +5,7 @@ This plan outlines the steps to refine the UI layout, fix playback desync and ha
 ## Phase 1: Layout Alignment & Selection UI [ ]
 Goal: Align top-bar elements and polish the selection overlay.
 
-- [ ] Task: Align `MidiHeader` and `PlaybackControls` heights
+- [x] Task: Align `MidiHeader` and `PlaybackControls` heights [59c83ec]
     - [ ] Stage the existing unstaged changes related to alignment.
     - [ ] Verify vertical alignment and consistent padding between the top-left status pill and top-right controls.
 - [ ] Task: Refactor Selection Overlay Styling
