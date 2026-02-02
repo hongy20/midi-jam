@@ -18,6 +18,7 @@ describe("getMidiFiles", () => {
       "Regular Song.mid",
     ];
 
+    // biome-ignore lint/suspicious/noExplicitAny: just give me a break
     vi.mocked(fs.readdir).mockResolvedValue(mockFiles as any);
 
     const result = await getMidiFiles();

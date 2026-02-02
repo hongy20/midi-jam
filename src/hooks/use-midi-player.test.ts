@@ -64,7 +64,13 @@ describe("useMidiPlayer", () => {
   it.skip("should trigger notes at correct times", () => {
     const onNoteOn = vi.fn();
     const events = [
-      { time: 1.0, type: "noteOn" as const, note: 60, velocity: 0.8 },
+      {
+        time: 1.0,
+        type: "noteOn" as const,
+        note: 60,
+        velocity: 0.8,
+        track: 0,
+      },
     ];
 
     const { result } = renderHook(() => useMidiPlayer(events, { onNoteOn }));

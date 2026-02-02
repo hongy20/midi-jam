@@ -4,8 +4,8 @@ import { FalldownVisualizer } from "./falldown-visualizer";
 
 describe("FalldownVisualizer", () => {
   const mockEvents = [
-    { time: 1.0, type: "noteOn" as const, note: 60, velocity: 0.8 },
-    { time: 2.0, type: "noteOff" as const, note: 60, velocity: 0 },
+    { time: 1.0, type: "noteOn" as const, note: 60, velocity: 0.8, track: 0 },
+    { time: 2.0, type: "noteOff" as const, note: 60, velocity: 0, track: 0 },
   ];
 
   it("should render correct number of visible notes", () => {

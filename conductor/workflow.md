@@ -90,6 +90,7 @@ All tasks follow a strict lifecycle:
 
 4.  **Propose a Detailed, Actionable Manual Verification Plan:**
     -   **CRITICAL:** To generate the plan, first analyze `product.md`, `product-guidelines.md`, and `plan.md` to determine the user-facing goals of the completed phase.
+    -   **AI AGENT INSTRUCTION:** You MUST automatically start the development server in the background (e.g., `npm run dev &`) before presenting the manual verification plan to the user, so it is ready for their testing.
     -   You **must** generate a step-by-step plan that walks the user through the verification process, including any necessary commands and specific, expected outcomes.
     -   The plan you present to the user **must** follow this format:
 

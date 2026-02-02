@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { DeviceSelector } from "@/components/midi/device-selector";
 import { FalldownVisualizer } from "@/components/midi/falldown-visualizer";
-import { MidiControlCenter } from "@/components/midi/midi-control-center";
+import { MidiHeader } from "@/components/midi/midi-header";
 import { PianoKeyboard } from "@/components/midi/piano-keyboard";
+import { PlaybackControls } from "@/components/midi/playback-controls";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMIDIConnection } from "@/hooks/use-midi-connection";
@@ -13,6 +13,7 @@ import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { getMidiFiles } from "@/lib/action/midi";
 import {
   getMidiEvents,
+  getNoteRange,
   loadMidiFile,
   type MidiEvent,
 } from "@/lib/midi/midi-player";
@@ -21,6 +22,8 @@ interface MidiFile {
   name: string;
   url: string;
 }
+
+const NOTE_RANGE_BUFFER = 4;
 
 export default function Home() {
   const {
@@ -43,6 +46,13 @@ export default function Home() {
   const [midiFiles, setMidiFiles] = useState<MidiFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<MidiFile | null>(null);
   const [midiEvents, setMidiEvents] = useState<MidiEvent[]>([]);
+  const [noteRange, setNoteRange] = useState<{
+    min: number;
+    max: number;
+  } | null>(null);
+
+  // UI State
+  const [isMinimized, setIsMinimized] = useState(false);
 
   const {
     activeNotes: playbackActiveNotes,
@@ -67,18 +77,40 @@ export default function Home() {
   const handleSelectFile = useCallback(
     async (file: MidiFile) => {
       setSelectedFile(file);
+      setIsMinimized(true); // Minimize on selection
       stop(); // Reset current playback
       try {
         const midi = await loadMidiFile(file.url);
         const events = getMidiEvents(midi);
         setMidiEvents(events);
+
+        // Calculate range with a small buffer
+        const range = getNoteRange(events);
+        if (range) {
+          setNoteRange({
+            min: Math.max(21, range.min - NOTE_RANGE_BUFFER),
+            max: Math.min(108, range.max + NOTE_RANGE_BUFFER),
+          });
+        } else {
+          setNoteRange(null);
+        }
       } catch (err) {
         console.error("Failed to load MIDI file:", err);
         setMidiEvents([]);
+        setNoteRange(null);
       }
     },
     [stop],
   );
+
+  const handleSelectDevice = (device: WebMidi.MIDIInput | null) => {
+    selectDevice(device);
+    if (device) {
+      setIsMinimized(true);
+      // Reset range for live jamming unless a file is also loaded
+      if (!selectedFile) setNoteRange(null);
+    }
+  };
 
   // Auto-select if there is only one file available
   useEffect(() => {
@@ -88,92 +120,82 @@ export default function Home() {
   }, [midiFiles, selectedFile, handleSelectFile]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <main className="max-w-4xl mx-auto space-y-12">
-        <header className="text-center space-y-4">
-          <h1 className="text-6xl font-black text-blue-600 tracking-tighter italic transform -rotate-2">
-            MIDI JAM
-          </h1>
-          <p className="text-xl text-gray-500 font-medium">
-            Step up to the stage and start jamming!
-          </p>
-        </header>
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Top Bar Controls */}
+      <MidiHeader
+        devices={inputs}
+        isLoading={isMidiLoading}
+        error={midiError}
+        selectedDevice={selectedDevice}
+        onSelectDevice={handleSelectDevice}
+        files={midiFiles}
+        selectedFile={selectedFile}
+        onSelectFile={handleSelectFile}
+        isMinimized={isMinimized}
+        onToggleMinimize={() => setIsMinimized(!isMinimized)}
+      />
 
-        <section className="bg-white p-8 rounded-[3rem] shadow-2xl border-4 border-gray-100 space-y-8">
-          <div className="space-y-8">
-            <h2 className="text-2xl font-bold text-gray-800 ml-2">
-              1. Setup Your Stage
-            </h2>
-            <DeviceSelector
-              devices={inputs}
-              isLoading={isMidiLoading}
-              error={midiError}
-              selectedDevice={selectedDevice}
-              onSelect={selectDevice}
-            />
-          </div>
+      <div
+        className={`fixed top-4 right-4 z-50 pointer-events-auto transition-all duration-500 ${
+          !isMinimized
+            ? "opacity-0 -translate-y-12 pointer-events-none"
+            : "opacity-100 translate-y-0"
+        }`}
+      >
+        <PlaybackControls
+          isPlaying={isPlaying}
+          onPlay={play}
+          onPause={pause}
+          onStop={stop}
+          speed={speed}
+          onSpeedChange={setSpeed}
+          isMuted={isMuted}
+          onToggleMute={toggleMute}
+        />
+      </div>
 
-          <div className="space-y-8 pt-8 border-t-4 border-gray-50">
-            <h2 className="text-2xl font-bold text-gray-800 ml-2">
-              2. Choose Your Track
-            </h2>
-            <MidiControlCenter
-              files={midiFiles}
-              selectedFile={selectedFile}
-              onSelectFile={handleSelectFile}
-              isPlaying={isPlaying}
-              onPlay={play}
-              onPause={pause}
-              onStop={stop}
-              speed={speed}
-              onSpeedChange={setSpeed}
-              isMuted={isMuted}
-              onToggleMute={toggleMute}
-            />
-          </div>
-
-          {(selectedDevice || selectedFile) && (
-            <div className="pt-8 border-t-4 border-gray-50 space-y-0 animate-in fade-in zoom-in duration-500">
-              <div className="flex items-center justify-between pb-6">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  {selectedFile ? selectedFile.name : "Your Keyboard"}
-                </h2>
-                <div className="flex gap-2">
-                  {selectedDevice && (
-                    <div className="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-bold flex items-center gap-2">
-                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                      LIVE
-                    </div>
-                  )}
-                  {isPlaying && (
-                    <div className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-bold flex items-center gap-2">
-                      <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" />
-                      PLAYING
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Integrated Visualizer Area */}
-              <div className="flex flex-col">
+      <main className="flex-1 flex flex-col pt-24">
+        {selectedDevice || selectedFile ? (
+          <div className="max-w-7xl mx-auto w-full px-4 animate-in fade-in duration-500 space-y-8">
+            {/* 3D Perspective Visualizer Area */}
+            <div className="relative [perspective:1200px] [perspective-origin:50%_25%] py-8 md:py-12">
+              <div
+                key={selectedFile?.url || "jam"}
+                className="flex flex-col gap-0 shadow-2xl rounded-[2rem] md:rounded-[3rem] overflow-hidden border-2 md:border-4 border-gray-100 bg-white animate-in zoom-in-95 fade-in duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(15deg)] md:[transform:rotateX(25deg)]"
+              >
                 <FalldownVisualizer
                   events={midiEvents}
                   currentTime={currentTime}
                   speed={speed}
-                  height={300}
+                  height={600}
+                  rangeStart={noteRange?.min}
+                  rangeEnd={noteRange?.max}
                 />
                 <PianoKeyboard
                   liveNotes={liveActiveNotes}
                   playbackNotes={playbackActiveNotes}
+                  rangeStart={noteRange?.min}
+                  rangeEnd={noteRange?.max}
                 />
               </div>
             </div>
-          )}
-        </section>
 
-        {!selectedDevice && !selectedFile && !isMidiLoading && (
-          <div className="text-center p-12 border-4 border-dashed border-gray-200 rounded-[3rem] text-gray-400">
-            <p className="text-xl font-medium">Waiting for some music...</p>
+            <div className="text-center pb-12">
+              <p className="text-gray-400 text-sm">
+                Use the top bar to change settings
+              </p>
+            </div>
+          </div>
+        ) : (
+          <div className="flex-1 flex items-center justify-center p-8">
+            <div className="text-center p-12 border-4 border-dashed border-gray-200 rounded-[3rem] text-gray-400 max-w-2xl">
+              <h2 className="text-3xl font-bold text-gray-300 mb-4">
+                Ready to Jam?
+              </h2>
+              <p className="text-xl font-medium">
+                Select a MIDI device or a song from the top menu to get started.
+              </p>
+            </div>
           </div>
         )}
       </main>
