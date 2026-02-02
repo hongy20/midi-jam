@@ -22,13 +22,13 @@ Goal: Split controls into selectors (top-left, collapsible) and playback control
 ## Phase 2: Responsive & Zoomable Keyboard
 Goal: Make the keyboard responsive to the viewport width and implement contextual zooming based on the MIDI file's note range.
 
-- [ ] Task: Update `PianoKeyboard` for responsiveness
-    - [ ] Remove `min-w-[1200px]` and `overflow-x-auto` from `PianoKeyboard`.
-    - [ ] Ensure key widths are calculated as percentages of the container width.
-- [ ] Task: Implement dynamic note range in `PianoKeyboard`
-    - [ ] Add `rangeStart` and `rangeEnd` props to `PianoKeyboard`.
-    - [ ] Update key rendering logic to only display keys within the specified range.
-    - [ ] Ensure black key positioning remains accurate with a dynamic range.
+- [x] Task: Update `PianoKeyboard` for responsiveness [84d0414]
+    - [x] Remove `min-w-[1200px]` and `overflow-x-auto` from `PianoKeyboard`.
+    - [x] Ensure key widths are calculated as percentages of the container width.
+- [x] Task: Implement dynamic note range in `PianoKeyboard` [84d0414]
+    - [x] Add `rangeStart` and `rangeEnd` props to `PianoKeyboard`.
+    - [x] Update key rendering logic to only display keys within the specified range.
+    - [x] Ensure black key positioning remains accurate with a dynamic range.
 - [ ] Task: Implement note range detection in `src/app/page.tsx`
     - [ ] Create a utility to analyze `midiEvents` and find the min/max note values.
     - [ ] Pass the detected range (plus a 2-3 note buffer) to `PianoKeyboard` and `FalldownVisualizer`.
