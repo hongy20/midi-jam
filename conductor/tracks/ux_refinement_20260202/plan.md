@@ -18,19 +18,19 @@ Goal: Align top-bar elements and polish the selection overlay.
     - [ ] Ensure playback doesn't automatically resume when the overlay closes unless it was playing before.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Layout Alignment' (Protocol in workflow.md) [1e54e4f]
 
-## Phase 2: C4 Marker & Time Display [ ]
+## Phase 2: C4 Marker & Time Display [checkpoint: 59a8501]
 Goal: Add learning aids and playback metadata to the UI.
 
-- [ ] Task: Update `PianoKeyboard` for C4 Marker
-    - [ ] Add a visual text label "C4" to the Middle C key (MIDI note 60).
-    - [ ] Ensure the label is legible against both white and black keys (if overlapping).
-- [ ] Task: Update Auto-Zoom Logic for C4
-    - [ ] Modify the range detection utility in `src/app/page.tsx` to always include note 60 (C4).
-    - [ ] Verify that narrow-range songs (e.g., all high notes) still show C4.
-- [ ] Task: Implement Time/Duration Display
-    - [ ] Create a small, non-intrusive display for `current_time / total_duration`.
-    - [ ] Position it at the top of the visualizer, visually below the `PlaybackControls`.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: UI Aids' (Protocol in workflow.md)
+- [x] Task: Update `PianoKeyboard` for C4 Marker [467668a]
+    - [x] Add a visual text label "C4" to the Middle C key (MIDI note 60).
+    - [x] Ensure the label is legible against both white and black keys (if overlapping).
+- [x] Task: Update Auto-Zoom Logic for C4 [467668a]
+    - [x] Modify the range detection utility in `src/app/page.tsx` to always include note 60 (C4).
+    - [x] Verify that narrow-range songs (e.g., all high notes) still show C4.
+- [x] Task: Implement Time/Duration Display [467668a]
+    - [x] Create a small, non-intrusive display for `current_time / total_duration`.
+    - [x] Position it at the top of the visualizer, visually below the `PlaybackControls`.
+- [x] Task: Conductor - User Manual Verification 'Phase 2: UI Aids' (Protocol in workflow.md) [467668a]
 
 ## Phase 3: Playback Reliability (Pause/Resume & Speed) [ ]
 Goal: Fix hanging notes and speed desync issues.
