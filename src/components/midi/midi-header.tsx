@@ -58,7 +58,7 @@ export function MidiHeader({
         data-testid="status-bar"
         onClick={onToggleMinimize}
         tabIndex={isMinimized ? 0 : -1}
-        className={`fixed top-4 left-4 z-50 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-5 py-2.5 cursor-pointer hover:scale-105 transition-all duration-500 ease-out ${
+        className={`fixed top-4 left-4 z-50 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-5 py-3 cursor-pointer hover:scale-105 transition-all duration-500 ease-out ${
           !isMinimized
             ? "opacity-0 -translate-x-12 pointer-events-none"
             : "opacity-100 translate-x-0"
