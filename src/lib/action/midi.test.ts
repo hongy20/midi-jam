@@ -18,9 +18,8 @@ describe("getMidiFiles", () => {
       "Regular Song.mid",
     ];
 
-    vi.mocked(fs.readdir).mockResolvedValue(
-      mockFiles as unknown as fs.Dirent[],
-    );
+    // biome-ignore lint/suspicious/noExplicitAny: just give me a break
+    vi.mocked(fs.readdir).mockResolvedValue(mockFiles as any);
 
     const result = await getMidiFiles();
 
