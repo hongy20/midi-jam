@@ -17,18 +17,10 @@ interface MidiHeaderProps {
   selectedDevice: WebMidi.MIDIInput | null;
   onSelectDevice: (device: WebMidi.MIDIInput | null) => void;
 
-  // Midi Control Center Props
+  // Midi Control Center Props (Selectors only)
   files: MidiFile[];
   selectedFile: MidiFile | null;
   onSelectFile: (file: MidiFile) => void;
-  isPlaying: boolean;
-  onPlay: () => void;
-  onPause: () => void;
-  onStop: () => void;
-  speed: number;
-  onSpeedChange: (speed: number) => void;
-  isMuted: boolean;
-  onToggleMute: () => void;
 
   // Header State
   isMinimized?: boolean;
@@ -44,91 +36,92 @@ export function MidiHeader({
   files,
   selectedFile,
   onSelectFile,
-  isPlaying,
-  onPlay,
-  onPause,
-  onStop,
-  speed,
-  onSpeedChange,
-  isMuted,
-  onToggleMute,
   isMinimized = false,
   onToggleMinimize,
 }: MidiHeaderProps) {
-  if (isMinimized) {
-    return (
+  return (
+    <>
+      {/* Backdrop overlay when expanded */}
+      <div
+        className={`fixed inset-0 bg-black/20 backdrop-blur-sm z-30 transition-opacity duration-500 ${
+          isMinimized ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
+        onClick={onToggleMinimize}
+      />
+
+      {/* Status Bar (Pill) - Minimized state - Top Left */}
       <div
         data-testid="status-bar"
         onClick={onToggleMinimize}
-        className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-white/90 backdrop-blur-md border border-gray-200 shadow-lg rounded-full px-6 py-3 cursor-pointer hover:scale-105 transition-all flex items-center gap-6"
+        className={`fixed top-4 left-4 z-50 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-5 py-2.5 cursor-pointer hover:scale-105 transition-all duration-500 ease-out ${
+          !isMinimized
+            ? "opacity-0 -translate-x-12 pointer-events-none"
+            : "opacity-100 translate-x-0"
+        } flex items-center gap-4`}
       >
         <div className="flex items-center gap-2 text-gray-700">
-          <Piano className="w-5 h-5 text-blue-500" />
-          <span className="font-bold text-sm">
-            {selectedDevice ? selectedDevice.name : "No Device"}
+          <Piano className="w-4 h-4 text-blue-500" />
+          <span className="font-bold text-xs">
+            {selectedDevice ? selectedDevice.name : "Connect MIDI"}
           </span>
         </div>
-        <div className="h-4 w-px bg-gray-300" />
+        <div className="h-3 w-px bg-gray-300" />
         <div className="flex items-center gap-2 text-gray-700">
-          <Music className="w-5 h-5 text-purple-500" />
-          <span className="font-bold text-sm">
-            {selectedFile ? selectedFile.name : "No Song"}
+          <Music className="w-4 h-4 text-purple-500" />
+          <span className="font-bold text-xs truncate max-w-[100px]">
+            {selectedFile ? selectedFile.name : "Select Song"}
           </span>
         </div>
-        <ChevronDown className="w-4 h-4 text-gray-400 ml-2" />
+        <ChevronDown className="w-4 h-4 text-gray-400 ml-1" />
       </div>
-    );
-  }
 
-  return (
-    <header className="relative w-full bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm z-40 transition-all duration-300">
-      <div className="max-w-7xl mx-auto p-6 space-y-6">
-        <div className="flex justify-between items-start">
-          <div>
-            <h1 className="text-4xl font-black text-blue-600 tracking-tighter italic transform -rotate-1">
-              MIDI JAM
-            </h1>
-          </div>
-          {onToggleMinimize && (
-            <button
-              onClick={onToggleMinimize}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
-              aria-label="Minimize header"
-            >
-              <ChevronUp className="w-6 h-6" />
-            </button>
-          )}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-4">
-            <DeviceSelector
-              devices={devices}
-              isLoading={isLoading}
-              error={error}
-              selectedDevice={selectedDevice}
-              onSelect={onSelectDevice}
-            />
+      {/* Full Header (Popup) - Expanded state */}
+      <header
+        className={`fixed top-0 left-0 w-full bg-white/95 backdrop-blur-2xl border-b border-gray-100 shadow-2xl z-40 transition-all duration-500 ease-in-out ${
+          isMinimized
+            ? "opacity-0 -translate-y-full pointer-events-none"
+            : "opacity-100 translate-y-0"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto p-6 space-y-6">
+          <div className="flex justify-between items-start">
+            <div>
+              <h1 className="text-4xl font-black text-blue-600 tracking-tighter italic transform -rotate-1">
+                MIDI JAM
+              </h1>
+            </div>
+            {onToggleMinimize && (
+              <button
+                onClick={onToggleMinimize}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+                aria-label="Minimize header"
+              >
+                <ChevronUp className="w-6 h-6" />
+              </button>
+            )}
           </div>
 
-          <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Backing Track</h2>
-            <MidiControlCenter
-              files={files}
-              selectedFile={selectedFile}
-              onSelectFile={onSelectFile}
-              isPlaying={isPlaying}
-              onPlay={onPlay}
-              onPause={onPause}
-              onStop={onStop}
-              speed={speed}
-              onSpeedChange={onSpeedChange}
-              isMuted={isMuted}
-              onToggleMute={onToggleMute}
-            />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <DeviceSelector
+                devices={devices}
+                isLoading={isLoading}
+                error={error}
+                selectedDevice={selectedDevice}
+                onSelect={onSelectDevice}
+              />
+            </div>
+
+            <div className="space-y-4">
+              <MidiControlCenter
+                files={files}
+                selectedFile={selectedFile}
+                onSelectFile={onSelectFile}
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }

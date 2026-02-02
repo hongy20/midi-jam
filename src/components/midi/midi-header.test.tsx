@@ -29,32 +29,26 @@ describe("MidiHeader", () => {
     files: [],
     selectedFile: null,
     onSelectFile: vi.fn(),
-    isPlaying: false,
-    onPlay: vi.fn(),
-    onPause: vi.fn(),
-    onStop: vi.fn(),
-    speed: 1,
-    onSpeedChange: vi.fn(),
-    isMuted: false,
-    onToggleMute: vi.fn(),
   };
 
   it("renders in expanded mode initially", () => {
     render(<MidiHeader {...mockProps} />);
     
-    // Should show full controls
-    expect(screen.getByTestId("device-selector")).toBeInTheDocument();
-    expect(screen.getByTestId("midi-control-center")).toBeInTheDocument();
+    // Status bar should be hidden (opacity-0)
+    expect(screen.getByTestId("status-bar")).toHaveClass("opacity-0");
     
-    // Should not show minimized status bar
-    expect(screen.queryByTestId("status-bar")).not.toBeInTheDocument();
+    // Header should be visible (opacity-100)
+    expect(screen.getByRole("banner")).toHaveClass("opacity-100");
   });
 
   it("renders status bar when minimized", () => {
     render(<MidiHeader {...mockProps} isMinimized={true} onToggleMinimize={vi.fn()} />);
 
-    expect(screen.getByTestId("status-bar")).toBeInTheDocument();
-    expect(screen.queryByTestId("device-selector")).not.toBeInTheDocument();
+    // Status bar should be visible
+    expect(screen.getByTestId("status-bar")).toHaveClass("opacity-100");
+    
+    // Header should be hidden
+    expect(screen.getByRole("banner")).toHaveClass("opacity-0");
   });
 
   it("displays correct status in minimized mode", () => {
@@ -68,8 +62,10 @@ describe("MidiHeader", () => {
 
     render(<MidiHeader {...props} />);
 
-    expect(screen.getByText("My Piano")).toBeInTheDocument();
-    expect(screen.getByText("Jazz Song")).toBeInTheDocument();
+    // Check within status bar specifically to avoid duplicate matches with hidden header
+    const statusBar = screen.getByTestId("status-bar");
+    expect(statusBar).toHaveTextContent("My Piano");
+    expect(statusBar).toHaveTextContent("Jazz Song");
   });
 
   it("calls onToggleMinimize when status bar is clicked", () => {
