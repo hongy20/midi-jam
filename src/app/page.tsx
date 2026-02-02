@@ -53,6 +53,7 @@ export default function Home() {
 
   // UI State
   const [isMinimized, setIsMinimized] = useState(false);
+  const [wasPlayingBeforeExpand, setWasPlayingBeforeExpand] = useState(false);
 
   const {
     activeNotes: playbackActiveNotes,
@@ -68,6 +69,25 @@ export default function Home() {
     onNoteOff: stopNote,
   });
 
+  const handleToggleMinimize = useCallback(() => {
+    if (isMinimized) {
+      // Expanding
+      if (isPlaying) {
+        setWasPlayingBeforeExpand(true);
+        pause();
+      } else {
+        setWasPlayingBeforeExpand(false);
+      }
+    } else {
+      // Collapsing
+      if (wasPlayingBeforeExpand) {
+        play();
+        setWasPlayingBeforeExpand(false);
+      }
+    }
+    setIsMinimized(!isMinimized);
+  }, [isMinimized, isPlaying, pause, play, wasPlayingBeforeExpand]);
+
   // Load file list
   useEffect(() => {
     getMidiFiles().then(setMidiFiles);
@@ -78,6 +98,7 @@ export default function Home() {
     async (file: MidiFile) => {
       setSelectedFile(file);
       setIsMinimized(true); // Minimize on selection
+      setWasPlayingBeforeExpand(false);
       stop(); // Reset current playback
       try {
         const midi = await loadMidiFile(file.url);
@@ -107,6 +128,7 @@ export default function Home() {
     selectDevice(device);
     if (device) {
       setIsMinimized(true);
+      setWasPlayingBeforeExpand(false);
       // Reset range for live jamming unless a file is also loaded
       if (!selectedFile) setNoteRange(null);
     }
@@ -132,7 +154,7 @@ export default function Home() {
         selectedFile={selectedFile}
         onSelectFile={handleSelectFile}
         isMinimized={isMinimized}
-        onToggleMinimize={() => setIsMinimized(!isMinimized)}
+        onToggleMinimize={handleToggleMinimize}
       />
 
       <div
