@@ -82,33 +82,34 @@ export function MidiHeader({
 
       {/* Full Header (Popup) - Expanded state */}
       <header
-        className={`fixed top-0 left-0 w-full bg-white/95 backdrop-blur-2xl border-b border-gray-100 shadow-2xl z-40 transition-all duration-500 ease-in-out ${
+        className={`fixed top-0 left-0 w-full bg-white/95 backdrop-blur-3xl border-b border-gray-100 shadow-2xl z-40 transition-all duration-700 cubic-bezier(0.4, 0, 0.2, 1) ${
           isMinimized
             ? "opacity-0 -translate-y-full pointer-events-none"
             : "opacity-100 translate-y-0"
         }`}
       >
-        <div className="max-w-7xl mx-auto p-6 space-y-6">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-4xl font-black text-blue-600 tracking-tighter italic transform -rotate-1">
+        <div className="max-w-7xl mx-auto px-6 py-10 space-y-10">
+          <div className="flex justify-between items-center border-b border-gray-100 pb-8">
+            <div className="space-y-1">
+              <h1 className="text-5xl font-black text-blue-600 tracking-tighter italic transform -rotate-1 select-none">
                 MIDI JAM
               </h1>
+              <p className="text-slate-500 font-semibold ml-1">The immersive way to learn piano.</p>
             </div>
             {onToggleMinimize && (
               <button
                 type="button"
                 onClick={onToggleMinimize}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
+                className="p-3 bg-slate-100 hover:bg-slate-200 rounded-full transition-all duration-300 text-slate-500 hover:text-slate-800 hover:rotate-180"
                 aria-label="Minimize header"
               >
-                <ChevronUp className="w-6 h-6" />
+                <ChevronUp className="w-8 h-8" />
               </button>
             )}
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="bg-slate-50/50 p-8 rounded-[2.5rem] border border-slate-200/50">
               <DeviceSelector
                 devices={devices}
                 isLoading={isLoading}
@@ -118,7 +119,7 @@ export function MidiHeader({
               />
             </div>
 
-            <div className="space-y-4">
+            <div className="bg-slate-50/50 p-8 rounded-[2.5rem] border border-slate-200/50">
               <MidiControlCenter
                 files={files}
                 selectedFile={selectedFile}
