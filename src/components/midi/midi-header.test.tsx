@@ -1,10 +1,14 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { MidiHeader } from "./midi-header";
 
 // Mock child components
 vi.mock("@/components/midi/device-selector", () => ({
-  DeviceSelector: ({ selectedDevice }: any) => (
+  DeviceSelector: ({
+    selectedDevice,
+  }: {
+    selectedDevice: { name: string } | null;
+  }) => (
     <div data-testid="device-selector">
       {selectedDevice ? selectedDevice.name : "No Device"}
     </div>
@@ -12,7 +16,11 @@ vi.mock("@/components/midi/device-selector", () => ({
 }));
 
 vi.mock("@/components/midi/midi-control-center", () => ({
-  MidiControlCenter: ({ selectedFile }: any) => (
+  MidiControlCenter: ({
+    selectedFile,
+  }: {
+    selectedFile: { name: string } | null;
+  }) => (
     <div data-testid="midi-control-center">
       {selectedFile ? selectedFile.name : "No File"}
     </div>
@@ -60,7 +68,10 @@ describe("MidiHeader", () => {
   it("displays correct status in minimized mode", () => {
     const props = {
       ...mockProps,
-      selectedDevice: { id: "1", name: "My Piano" } as any,
+      selectedDevice: {
+        id: "1",
+        name: "My Piano",
+      } as unknown as WebMidi.MIDIInput,
       selectedFile: { name: "Jazz Song", url: "jazz.mid" },
       isMinimized: true,
       onToggleMinimize: vi.fn(),

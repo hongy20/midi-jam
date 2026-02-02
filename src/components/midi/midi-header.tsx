@@ -42,17 +42,22 @@ export function MidiHeader({
   return (
     <>
       {/* Backdrop overlay when expanded */}
-      <div
+      <button
+        type="button"
         className={`fixed inset-0 bg-black/20 backdrop-blur-sm z-30 transition-opacity duration-500 ${
           isMinimized ? "opacity-0 pointer-events-none" : "opacity-100"
         }`}
         onClick={onToggleMinimize}
+        tabIndex={-1}
+        aria-label="Close menu"
       />
 
       {/* Status Bar (Pill) - Minimized state - Top Left */}
-      <div
+      <button
+        type="button"
         data-testid="status-bar"
         onClick={onToggleMinimize}
+        tabIndex={isMinimized ? 0 : -1}
         className={`fixed top-4 left-4 z-50 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-5 py-2.5 cursor-pointer hover:scale-105 transition-all duration-500 ease-out ${
           !isMinimized
             ? "opacity-0 -translate-x-12 pointer-events-none"
@@ -73,7 +78,7 @@ export function MidiHeader({
           </span>
         </div>
         <ChevronDown className="w-4 h-4 text-gray-400 ml-1" />
-      </div>
+      </button>
 
       {/* Full Header (Popup) - Expanded state */}
       <header
@@ -92,6 +97,7 @@ export function MidiHeader({
             </div>
             {onToggleMinimize && (
               <button
+                type="button"
                 onClick={onToggleMinimize}
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
                 aria-label="Minimize header"

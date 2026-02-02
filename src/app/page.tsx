@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { FalldownVisualizer } from "@/components/midi/falldown-visualizer";
 import { MidiHeader } from "@/components/midi/midi-header";
-import { PlaybackControls } from "@/components/midi/playback-controls";
 import { PianoKeyboard } from "@/components/midi/piano-keyboard";
+import { PlaybackControls } from "@/components/midi/playback-controls";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMIDIConnection } from "@/hooks/use-midi-connection";

@@ -18,7 +18,9 @@ describe("getMidiFiles", () => {
       "Regular Song.mid",
     ];
 
-    vi.mocked(fs.readdir).mockResolvedValue(mockFiles as any);
+    vi.mocked(fs.readdir).mockResolvedValue(
+      mockFiles as unknown as fs.Dirent[],
+    );
 
     const result = await getMidiFiles();
 

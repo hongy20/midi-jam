@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 
 interface PianoKeyboardProps {
   liveNotes?: Set<number>;
@@ -19,10 +19,10 @@ export const PianoKeyboard = memo(function PianoKeyboard({
   rangeStart = 21, // Default A0
   rangeEnd = 108, // Default C8
 }: PianoKeyboardProps) {
-  const isBlackKey = (note: number) => {
+  const isBlackKey = useCallback((note: number) => {
     const n = note % 12;
     return [1, 3, 6, 8, 10].includes(n);
-  };
+  }, []);
 
   // Memoize white keys calculation
   const whiteKeys = useMemo(() => {
@@ -33,7 +33,7 @@ export const PianoKeyboard = memo(function PianoKeyboard({
       }
     }
     return keys;
-  }, [rangeStart, rangeEnd]);
+  }, [rangeStart, rangeEnd, isBlackKey]);
 
   // Memoize black keys calculation
   const blackKeys = useMemo(() => {
@@ -44,7 +44,7 @@ export const PianoKeyboard = memo(function PianoKeyboard({
       }
     }
     return keys;
-  }, [rangeStart, rangeEnd]);
+  }, [rangeStart, rangeEnd, isBlackKey]);
 
   // Calculate position for black keys relative to white keys
   const getBlackKeyPosition = (note: number) => {

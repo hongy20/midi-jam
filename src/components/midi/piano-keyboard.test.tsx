@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { PianoKeyboard } from "./piano-keyboard";
 
 describe("PianoKeyboard Responsiveness and Zooming", () => {
@@ -8,7 +8,7 @@ describe("PianoKeyboard Responsiveness and Zooming", () => {
     // White keys: 60, 62, 64, 65, 67, 69, 71, 72 (8 keys)
     render(<PianoKeyboard rangeStart={60} rangeEnd={72} />);
 
-    const whiteKeys = screen.getAllByRole("button", { name: /note/i }).filter(
+    const _whiteKeys = screen.getAllByRole("button", { name: /note/i }).filter(
       (el) => !el.className.includes("bg-gray-900"), // Exclude black keys which use bg-gray-900 by default
     );
 

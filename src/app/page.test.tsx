@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import Home from "./page";
 
 // Mock child components
@@ -20,10 +20,20 @@ vi.mock("@/components/midi/piano-keyboard", () => ({
   PianoKeyboard: () => <div data-testid="piano-keyboard">PianoKeyboard</div>,
 }));
 vi.mock("@/components/midi/midi-header", () => ({
-  MidiHeader: ({ isMinimized, onToggleMinimize }: any) => (
+  MidiHeader: ({
+    isMinimized,
+    onToggleMinimize,
+  }: {
+    isMinimized: boolean;
+    onToggleMinimize: () => void;
+  }) => (
     <div data-testid="midi-header">
       MidiHeader
-      <button onClick={onToggleMinimize} data-testid="toggle-minimize">
+      <button
+        type="button"
+        onClick={onToggleMinimize}
+        data-testid="toggle-minimize"
+      >
         Toggle
       </button>
       {isMinimized ? "Minimized" : "Expanded"}
