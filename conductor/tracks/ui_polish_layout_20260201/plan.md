@@ -2,19 +2,22 @@
 
 This plan outlines the steps to overhaul the MIDI Jam UI, including a collapsible header, responsive keyboard zooming, and a 3D perspective visualizer.
 
-## Phase 1: Collapsible Header & Layout Restructuring
-Goal: Move MIDI and music controls to a top-fixed header that can collapse into a compact status bar.
+## Phase 1: Top Bar & Layout Restructuring
+Goal: Split controls into selectors (top-left, collapsible) and playback controls (top-right, persistent).
 
-- [x] Task: Create `MidiHeader` component with collapsible state [8485a77]
-    - [ ] Define `MidiHeader` to house `DeviceSelector` and `MidiControlCenter`.
-    - [ ] Implement `isMinimized` state triggered by selections.
-    - [ ] Create a "Status Bar" view for the minimized state (showing active device and file).
-    - [ ] Add toggle logic to expand/collapse the header.
-- [ ] Task: Refactor `src/app/page.tsx` layout
-    - [ ] Integrate `MidiHeader` at the top of the viewport.
-    - [ ] Adjust the main content area to accommodate the fixed header and occupy the remaining space.
-    - [ ] Ensure the background and general aesthetics match the new layout.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Collapsible Header' (Protocol in workflow.md)
+- [x] Task: Create `PlaybackControls` component [c59c195]
+    - [x] Extract Play, Stop, Mute, and Speed logic from `MidiControlCenter`.
+    - [x] Implement a compact, horizontal layout for the top-right position.
+- [x] Task: Refactor `MidiControlCenter` to `MusicSelector` [c59c195]
+    - [x] Remove playback controls, leaving only the file selection dropdown.
+- [x] Task: Update `MidiHeader` for top-left popup behavior [c59c195]
+    - [x] Reposition the minimized "Pill" to the top-left.
+    - [x] Remove playback-related props and logic.
+    - [x] Ensure the expanded popup only contains selectors.
+- [x] Task: Refactor `src/app/page.tsx` for the new Top Bar [c59c195]
+    - [x] Integrate `MidiHeader` (top-left) and `PlaybackControls` (top-right).
+    - [x] Ensure both remain fixed and accessible.
+- [ ] Task: Conductor - User Manual Verification 'Phase 1: Top Bar' (Protocol in workflow.md)
 
 ## Phase 2: Responsive & Zoomable Keyboard
 Goal: Make the keyboard responsive to the viewport width and implement contextual zooming based on the MIDI file's note range.
