@@ -13,6 +13,7 @@ import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { getMidiFiles } from "@/lib/action/midi";
 import {
   getMidiEvents,
+  getNoteRange,
   loadMidiFile,
   type MidiEvent,
 } from "@/lib/midi/midi-player";
@@ -21,6 +22,8 @@ interface MidiFile {
   name: string;
   url: string;
 }
+
+const NOTE_RANGE_BUFFER = 4;
 
 export default function Home() {
   const {
@@ -43,6 +46,7 @@ export default function Home() {
   const [midiFiles, setMidiFiles] = useState<MidiFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<MidiFile | null>(null);
   const [midiEvents, setMidiEvents] = useState<MidiEvent[]>([]);
+  const [noteRange, setNoteRange] = useState<{ min: number; max: number } | null>(null);
   
   // UI State
   const [isMinimized, setIsMinimized] = useState(false);
@@ -76,9 +80,21 @@ export default function Home() {
         const midi = await loadMidiFile(file.url);
         const events = getMidiEvents(midi);
         setMidiEvents(events);
+        
+        // Calculate range with a small buffer
+        const range = getNoteRange(events);
+        if (range) {
+          setNoteRange({
+            min: Math.max(21, range.min - NOTE_RANGE_BUFFER),
+            max: Math.min(108, range.max + NOTE_RANGE_BUFFER),
+          });
+        } else {
+          setNoteRange(null);
+        }
       } catch (err) {
         console.error("Failed to load MIDI file:", err);
         setMidiEvents([]);
+        setNoteRange(null);
       }
     },
     [stop],
@@ -86,7 +102,11 @@ export default function Home() {
   
   const handleSelectDevice = (device: WebMidi.MIDIInput | null) => {
     selectDevice(device);
-    if (device) setIsMinimized(true);
+    if (device) {
+      setIsMinimized(true);
+      // Reset range for live jamming unless a file is also loaded
+      if (!selectedFile) setNoteRange(null);
+    }
   };
 
   // Auto-select if there is only one file available
@@ -139,10 +159,14 @@ export default function Home() {
                 currentTime={currentTime}
                 speed={speed}
                 height={500}
+                rangeStart={noteRange?.min}
+                rangeEnd={noteRange?.max}
               />
               <PianoKeyboard
                 liveNotes={liveActiveNotes}
                 playbackNotes={playbackActiveNotes}
+                rangeStart={noteRange?.min}
+                rangeEnd={noteRange?.max}
               />
             </div>
             

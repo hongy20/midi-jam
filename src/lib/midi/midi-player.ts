@@ -5,6 +5,7 @@ export interface MidiEvent {
   type: "noteOn" | "noteOff";
   note: number;
   velocity: number;
+  track: number;
 }
 
 /**
@@ -27,22 +28,41 @@ export async function loadMidiFile(url: string): Promise<Midi> {
 export function getMidiEvents(midi: Midi): MidiEvent[] {
   const events: MidiEvent[] = [];
 
-  for (const track of midi.tracks) {
+  midi.tracks.forEach((track, trackIndex) => {
     for (const note of track.notes) {
       events.push({
         time: note.time,
         type: "noteOn",
         note: note.midi,
         velocity: note.velocity,
+        track: trackIndex,
       });
       events.push({
         time: note.time + note.duration,
         type: "noteOff",
         note: note.midi,
         velocity: 0,
+        track: trackIndex,
       });
     }
-  }
+  });
 
   return events.sort((a, b) => a.time - b.time);
+}
+
+/**
+ * Finds the minimum and maximum MIDI notes in a set of events.
+ */
+export function getNoteRange(events: MidiEvent[]): { min: number; max: number } | null {
+  if (events.length === 0) return null;
+
+  let min = 127;
+  let max = 0;
+
+  for (const event of events) {
+    if (event.note < min) min = event.note;
+    if (event.note > max) max = event.note;
+  }
+
+  return { min, max };
 }

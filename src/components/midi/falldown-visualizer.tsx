@@ -8,21 +8,22 @@ interface FalldownVisualizerProps {
   currentTime: number;
   speed: number;
   height?: number; // Visual height of the falling area
+  rangeStart?: number;
+  rangeEnd?: number;
 }
 
 /**
  * Visualizes MIDI notes falling from top to bottom.
- * Synchronized with the 88-key piano keyboard layout.
+ * Synchronized with the responsive piano keyboard layout.
  */
 export function FalldownVisualizer({
   events,
   currentTime,
   speed,
   height = 400,
+  rangeStart = 21,
+  rangeEnd = 108,
 }: FalldownVisualizerProps) {
-  // Constant mapping for 88 keys (21 to 108)
-  const START_NOTE = 21;
-  const END_NOTE = 108;
   const PIXELS_PER_SECOND = 100 * speed; // How fast the notes fall
   const LOOK_AHEAD_SECONDS = 4 / speed; // How many seconds of future notes to show
 
@@ -47,16 +48,18 @@ export function FalldownVisualizer({
         if (startTime !== undefined) {
           const duration = event.time - startTime;
 
-          // Only include if it's within our time window
+          // Only include if it's within our time window and within the visible range
           if (
             startTime + duration > currentTime &&
-            startTime < currentTime + LOOK_AHEAD_SECONDS
+            startTime < currentTime + LOOK_AHEAD_SECONDS &&
+            event.note >= rangeStart &&
+            event.note <= rangeEnd
           ) {
             const n = event.note % 12;
             const isBlack = [1, 3, 6, 8, 10].includes(n);
 
             notes.push({
-              id: `${event.note}-${startTime}`,
+              id: `${event.note}-${event.track}-${startTime}`,
               note: event.note,
               startTime,
               duration,
@@ -68,22 +71,21 @@ export function FalldownVisualizer({
       }
     }
     return notes;
-  }, [events, currentTime, LOOK_AHEAD_SECONDS]);
+  }, [events, currentTime, LOOK_AHEAD_SECONDS, rangeStart, rangeEnd]);
 
   // Horizontal position logic (must match PianoKeyboard)
-  const whiteKeysCount = 52;
-  const whiteKeyIndices = useMemo(() => {
+  const { whiteKeysCount, whiteKeyIndices } = useMemo(() => {
     const indices: Record<number, number> = {};
     let count = 0;
-    for (let i = START_NOTE; i <= END_NOTE; i++) {
+    for (let i = rangeStart; i <= rangeEnd; i++) {
       const n = i % 12;
       const isBlack = [1, 3, 6, 8, 10].includes(n);
       if (!isBlack) {
         indices[i] = count++;
       }
     }
-    return indices;
-  }, []);
+    return { whiteKeysCount: count, whiteKeyIndices: indices };
+  }, [rangeStart, rangeEnd]);
 
   const getHorizontalPosition = (note: number) => {
     const n = note % 12;
@@ -98,6 +100,7 @@ export function FalldownVisualizer({
     } else {
       // Find the white key to the left
       const leftWhiteKeyIndex = whiteKeyIndices[note - 1];
+      if (leftWhiteKeyIndex === undefined) return null;
       return {
         left: `${((leftWhiteKeyIndex + 0.7) / whiteKeysCount) * 100}%`,
         width: `${(1 / whiteKeysCount) * 0.6 * 100}%`,
@@ -110,9 +113,11 @@ export function FalldownVisualizer({
       className="relative overflow-hidden bg-gray-900/5 backdrop-blur-sm rounded-t-[3rem] border-x-4 border-t-4 border-gray-100"
       style={{ height: `${height}px` }}
     >
-      <div className="absolute inset-0 min-w-[1200px] mx-auto">
+      <div className="absolute inset-0 w-full mx-auto">
         {visibleNotes.map((note) => {
-          const { left, width } = getHorizontalPosition(note.note);
+          const pos = getHorizontalPosition(note.note);
+          if (!pos) return null;
+          const { left, width } = pos;
           // Distance from the bottom of the container
           // Bottom = (startTime - currentTime) * pixelsPerSecond
           const bottom = (note.startTime - currentTime) * PIXELS_PER_SECOND;
