@@ -153,9 +153,10 @@ export default function Home() {
         {(selectedDevice || selectedFile) ? (
           <div className="max-w-7xl mx-auto w-full px-4 animate-in fade-in duration-500 space-y-8">
             {/* 3D Perspective Visualizer Area */}
-            <div className="relative [perspective:1200px] [perspective-origin:50%_25%] py-12">
+            <div className="relative [perspective:1200px] [perspective-origin:50%_25%] py-8 md:py-12">
               <div 
-                className="flex flex-col gap-0 shadow-2xl rounded-[3rem] overflow-hidden border-4 border-gray-100 bg-white transition-transform duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(25deg)]"
+                key={selectedFile?.url || "jam"}
+                className="flex flex-col gap-0 shadow-2xl rounded-[2rem] md:rounded-[3rem] overflow-hidden border-2 md:border-4 border-gray-100 bg-white animate-in zoom-in-95 fade-in duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(15deg)] md:[transform:rotateX(25deg)]"
               >
                 <FalldownVisualizer
                   events={midiEvents}
