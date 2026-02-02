@@ -5,7 +5,7 @@ This plan outlines the steps to overhaul the MIDI Jam UI, including a collapsibl
 ## Phase 1: Collapsible Header & Layout Restructuring
 Goal: Move MIDI and music controls to a top-fixed header that can collapse into a compact status bar.
 
-- [ ] Task: Create `MidiHeader` component with collapsible state
+- [x] Task: Create `MidiHeader` component with collapsible state [8485a77]
     - [ ] Define `MidiHeader` to house `DeviceSelector` and `MidiControlCenter`.
     - [ ] Implement `isMinimized` state triggered by selections.
     - [ ] Create a "Status Bar" view for the minimized state (showing active device and file).
