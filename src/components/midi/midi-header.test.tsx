@@ -33,20 +33,26 @@ describe("MidiHeader", () => {
 
   it("renders in expanded mode initially", () => {
     render(<MidiHeader {...mockProps} />);
-    
+
     // Status bar should be hidden (opacity-0)
     expect(screen.getByTestId("status-bar")).toHaveClass("opacity-0");
-    
+
     // Header should be visible (opacity-100)
     expect(screen.getByRole("banner")).toHaveClass("opacity-100");
   });
 
   it("renders status bar when minimized", () => {
-    render(<MidiHeader {...mockProps} isMinimized={true} onToggleMinimize={vi.fn()} />);
+    render(
+      <MidiHeader
+        {...mockProps}
+        isMinimized={true}
+        onToggleMinimize={vi.fn()}
+      />,
+    );
 
     // Status bar should be visible
     expect(screen.getByTestId("status-bar")).toHaveClass("opacity-100");
-    
+
     // Header should be hidden
     expect(screen.getByRole("banner")).toHaveClass("opacity-0");
   });
@@ -70,7 +76,13 @@ describe("MidiHeader", () => {
 
   it("calls onToggleMinimize when status bar is clicked", () => {
     const toggleMock = vi.fn();
-    render(<MidiHeader {...mockProps} isMinimized={true} onToggleMinimize={toggleMock} />);
+    render(
+      <MidiHeader
+        {...mockProps}
+        isMinimized={true}
+        onToggleMinimize={toggleMock}
+      />,
+    );
 
     fireEvent.click(screen.getByTestId("status-bar"));
     expect(toggleMock).toHaveBeenCalled();

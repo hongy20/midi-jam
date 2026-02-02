@@ -17,9 +17,8 @@ export const PianoKeyboard = memo(function PianoKeyboard({
   liveNotes = new Set(),
   playbackNotes = new Set(),
   rangeStart = 21, // Default A0
-  rangeEnd = 108,  // Default C8
+  rangeEnd = 108, // Default C8
 }: PianoKeyboardProps) {
-  
   const isBlackKey = (note: number) => {
     const n = note % 12;
     return [1, 3, 6, 8, 10].includes(n);

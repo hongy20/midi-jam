@@ -16,7 +16,7 @@ describe("PlaybackControls", () => {
 
   it("renders playback buttons and speed selector", () => {
     render(<PlaybackControls {...mockProps} />);
-    
+
     expect(screen.getByLabelText("Play")).toBeInTheDocument();
     expect(screen.getByLabelText("Stop")).toBeInTheDocument();
     expect(screen.getByLabelText("Mute")).toBeInTheDocument();

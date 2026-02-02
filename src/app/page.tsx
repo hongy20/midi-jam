@@ -46,8 +46,11 @@ export default function Home() {
   const [midiFiles, setMidiFiles] = useState<MidiFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<MidiFile | null>(null);
   const [midiEvents, setMidiEvents] = useState<MidiEvent[]>([]);
-  const [noteRange, setNoteRange] = useState<{ min: number; max: number } | null>(null);
-  
+  const [noteRange, setNoteRange] = useState<{
+    min: number;
+    max: number;
+  } | null>(null);
+
   // UI State
   const [isMinimized, setIsMinimized] = useState(false);
 
@@ -80,7 +83,7 @@ export default function Home() {
         const midi = await loadMidiFile(file.url);
         const events = getMidiEvents(midi);
         setMidiEvents(events);
-        
+
         // Calculate range with a small buffer
         const range = getNoteRange(events);
         if (range) {
@@ -99,7 +102,7 @@ export default function Home() {
     },
     [stop],
   );
-  
+
   const handleSelectDevice = (device: WebMidi.MIDIInput | null) => {
     selectDevice(device);
     if (device) {
@@ -134,7 +137,9 @@ export default function Home() {
 
       <div
         className={`fixed top-4 right-4 z-50 pointer-events-auto transition-all duration-500 ${
-          !isMinimized ? "opacity-0 -translate-y-12 pointer-events-none" : "opacity-100 translate-y-0"
+          !isMinimized
+            ? "opacity-0 -translate-y-12 pointer-events-none"
+            : "opacity-100 translate-y-0"
         }`}
       >
         <PlaybackControls
@@ -150,11 +155,11 @@ export default function Home() {
       </div>
 
       <main className="flex-1 flex flex-col pt-24">
-        {(selectedDevice || selectedFile) ? (
+        {selectedDevice || selectedFile ? (
           <div className="max-w-7xl mx-auto w-full px-4 animate-in fade-in duration-500 space-y-8">
             {/* 3D Perspective Visualizer Area */}
             <div className="relative [perspective:1200px] [perspective-origin:50%_25%] py-8 md:py-12">
-              <div 
+              <div
                 key={selectedFile?.url || "jam"}
                 className="flex flex-col gap-0 shadow-2xl rounded-[2rem] md:rounded-[3rem] overflow-hidden border-2 md:border-4 border-gray-100 bg-white animate-in zoom-in-95 fade-in duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(15deg)] md:[transform:rotateX(25deg)]"
               >
@@ -174,16 +179,22 @@ export default function Home() {
                 />
               </div>
             </div>
-            
+
             <div className="text-center pb-12">
-               <p className="text-gray-400 text-sm">Use the top bar to change settings</p>
+              <p className="text-gray-400 text-sm">
+                Use the top bar to change settings
+              </p>
             </div>
           </div>
         ) : (
           <div className="flex-1 flex items-center justify-center p-8">
             <div className="text-center p-12 border-4 border-dashed border-gray-200 rounded-[3rem] text-gray-400 max-w-2xl">
-              <h2 className="text-3xl font-bold text-gray-300 mb-4">Ready to Jam?</h2>
-              <p className="text-xl font-medium">Select a MIDI device or a song from the top menu to get started.</p>
+              <h2 className="text-3xl font-bold text-gray-300 mb-4">
+                Ready to Jam?
+              </h2>
+              <p className="text-xl font-medium">
+                Select a MIDI device or a song from the top menu to get started.
+              </p>
             </div>
           </div>
         )}

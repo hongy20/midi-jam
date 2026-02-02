@@ -53,7 +53,9 @@ export function getMidiEvents(midi: Midi): MidiEvent[] {
 /**
  * Finds the minimum and maximum MIDI notes in a set of events.
  */
-export function getNoteRange(events: MidiEvent[]): { min: number; max: number } | null {
+export function getNoteRange(
+  events: MidiEvent[],
+): { min: number; max: number } | null {
   if (events.length === 0) return null;
 
   let min = 127;

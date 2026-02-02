@@ -9,7 +9,7 @@ describe("midi-player utilities", () => {
         { time: 1, type: "noteOn", note: 72, velocity: 0.5, track: 0 },
         { time: 2, type: "noteOn", note: 48, velocity: 0.5, track: 0 },
       ];
-      
+
       const range = getNoteRange(events);
       expect(range).toEqual({ min: 48, max: 72 });
     });
