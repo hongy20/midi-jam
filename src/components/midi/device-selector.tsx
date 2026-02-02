@@ -45,7 +45,7 @@ export function DeviceSelector({
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-bold">Select Your Instrument</h2>
       {devices.length === 0 ? (
-        <p className="p-4 bg-gray-100 rounded-xl text-gray-600">
+        <p className="p-4 bg-gray-100 rounded-2xl text-gray-600">
           No MIDI devices found. Please connect your instrument and try again.
         </p>
       ) : (
@@ -58,20 +58,18 @@ export function DeviceSelector({
                   type="button"
                   onClick={() => onSelect(isSelected ? null : device)}
                   aria-pressed={isSelected}
-                  className={`w-full p-4 text-left rounded-xl border-4 transition-all duration-200 transform active:scale-95 ${
+                  className={`w-full p-4 text-left rounded-2xl border-4 transition-all duration-200 transform active:scale-95 ${
                     isSelected
                       ? "border-blue-500 bg-blue-50 shadow-lg translate-y-[-2px]"
-                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+                      : "border-gray-100 hover:border-gray-200 hover:bg-gray-50"
                   }`}
                 >
-                  <div className="font-bold text-lg">
+                  <div className="font-bold text-lg leading-tight">
                     {device.name || "Unknown Device"}
                   </div>
-                  {device.manufacturer && (
-                    <div className="text-sm opacity-60">
-                      {device.manufacturer}
-                    </div>
-                  )}
+                  <div className="text-sm opacity-60 mt-1">
+                    {device.manufacturer || "Generic MIDI"}
+                  </div>
                 </button>
               </li>
             );

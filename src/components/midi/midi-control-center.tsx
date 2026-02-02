@@ -23,32 +23,32 @@ export function MidiControlCenter({
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold">Select Backing Track</h2>
-      <div className="w-full space-y-2">
-        <label
-          htmlFor="midi-file-select"
-          className="block text-sm font-bold text-gray-500 uppercase tracking-wider ml-1"
-        >
-          Music Library
-        </label>
-        <select
-          id="midi-file-select"
-          value={selectedFile?.url || ""}
-          onChange={(e) => {
-            const file = files.find((f) => f.url === e.target.value);
-            if (file) onSelectFile(file);
-          }}
-          className="w-full px-4 py-3 bg-white border-4 border-gray-100 rounded-2xl text-gray-700 font-bold focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all appearance-none cursor-pointer"
-        >
-          <option value="" disabled>
-            Choose a song to learn...
-          </option>
-          {files.map((file) => (
-            <option key={file.url} value={file.url}>
-              {file.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {files.map((file) => {
+          const isSelected = selectedFile?.url === file.url;
+          return (
+            <li key={file.url}>
+              <button
+                type="button"
+                onClick={() => onSelectFile(file)}
+                aria-pressed={isSelected}
+                className={`w-full p-4 text-left rounded-2xl border-4 transition-all duration-200 transform active:scale-95 ${
+                  isSelected
+                    ? "border-purple-500 bg-purple-50 shadow-lg translate-y-[-2px]"
+                    : "border-gray-100 hover:border-gray-200 hover:bg-gray-50"
+                }`}
+              >
+                <div className="font-bold text-lg leading-tight">
+                  {file.name}
+                </div>
+                <div className="text-sm opacity-60 mt-1">
+                  MIDI File
+                </div>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
