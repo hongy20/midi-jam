@@ -2,19 +2,21 @@
 
 This plan outlines the steps to refine the UI layout, fix playback desync and hanging notes, and enhance the visualizer with C4 markers and bar-lines.
 
-## Phase 1: Layout Alignment & Selection UI [ ]
+## Phase 1: Layout Alignment & Selection UI [checkpoint: ac7eb59]
 Goal: Align top-bar elements and polish the selection overlay.
 
 - [x] Task: Align `MidiHeader` and `PlaybackControls` heights [59c83ec]
     - [ ] Stage the existing unstaged changes related to alignment.
     - [ ] Verify vertical alignment and consistent padding between the top-left status pill and top-right controls.
 - [x] Task: Refactor Selection Overlay Styling [6798747]
+    - [x] Align font sizes, colors, and component heights for `DeviceSelector` and `MusicSelector`.
+    - [x] Adjust the layout of the expanded overlay for better symmetry and spacing.
     - [ ] Align font sizes, colors, and component heights for `DeviceSelector` and `MusicSelector`.
     - [ ] Adjust the layout of the expanded overlay for better symmetry and spacing.
 - [x] Task: Implement Auto-Pause on Overlay Open [f14f667]
     - [ ] Add logic to `MidiHeader` to trigger a pause when the overlay expands.
     - [ ] Ensure playback doesn't automatically resume when the overlay closes unless it was playing before.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Layout Alignment' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Layout Alignment' (Protocol in workflow.md) [1e54e4f]
 
 ## Phase 2: C4 Marker & Time Display [ ]
 Goal: Add learning aids and playback metadata to the UI.
