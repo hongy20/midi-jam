@@ -8,7 +8,7 @@ Goal: Align top-bar elements and polish the selection overlay.
 - [x] Task: Align `MidiHeader` and `PlaybackControls` heights [59c83ec]
     - [ ] Stage the existing unstaged changes related to alignment.
     - [ ] Verify vertical alignment and consistent padding between the top-left status pill and top-right controls.
-- [ ] Task: Refactor Selection Overlay Styling
+- [x] Task: Refactor Selection Overlay Styling [6798747]
     - [ ] Align font sizes, colors, and component heights for `DeviceSelector` and `MusicSelector`.
     - [ ] Adjust the layout of the expanded overlay for better symmetry and spacing.
 - [ ] Task: Implement Auto-Pause on Overlay Open
