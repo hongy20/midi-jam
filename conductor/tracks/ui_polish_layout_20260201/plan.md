@@ -19,7 +19,7 @@ Goal: Split controls into selectors (top-left, collapsible) and playback control
     - [x] Ensure both remain fixed and accessible.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Top Bar' (Protocol in workflow.md)
 
-## Phase 2: Responsive & Zoomable Keyboard
+## Phase 2: Responsive & Zoomable Keyboard [checkpoint: e2fc7d1]
 Goal: Make the keyboard responsive to the viewport width and implement contextual zooming based on the MIDI file's note range.
 
 - [x] Task: Update `PianoKeyboard` for responsiveness [84d0414]
@@ -29,11 +29,11 @@ Goal: Make the keyboard responsive to the viewport width and implement contextua
     - [x] Add `rangeStart` and `rangeEnd` props to `PianoKeyboard`.
     - [x] Update key rendering logic to only display keys within the specified range.
     - [x] Ensure black key positioning remains accurate with a dynamic range.
-- [ ] Task: Implement note range detection in `src/app/page.tsx`
-    - [ ] Create a utility to analyze `midiEvents` and find the min/max note values.
-    - [ ] Pass the detected range (plus a 2-3 note buffer) to `PianoKeyboard` and `FalldownVisualizer`.
-    - [ ] Default to full 88-key range (21-108) when no file is loaded.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Responsive Keyboard' (Protocol in workflow.md)
+- [x] Task: Implement note range detection in `src/app/page.tsx` [c1ad65e]
+    - [x] Create a utility to analyze `midiEvents` and find the min/max note values.
+    - [x] Pass the detected range (plus a 2-3 note buffer) to `PianoKeyboard` and `FalldownVisualizer`.
+    - [x] Default to full 88-key range (21-108) when no file is loaded.
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Responsive Keyboard' (Protocol in workflow.md) [e2fc7d1]
 
 ## Phase 3: 3D Projection & Visual Polish
 Goal: Implement a 3D perspective for the visualizer and ensure all elements are sharp and clear.
