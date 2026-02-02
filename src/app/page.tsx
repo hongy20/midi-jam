@@ -152,22 +152,26 @@ export default function Home() {
       <main className="flex-1 flex flex-col pt-24">
         {(selectedDevice || selectedFile) ? (
           <div className="max-w-7xl mx-auto w-full px-4 animate-in fade-in duration-500 space-y-8">
-            {/* Integrated Visualizer Area */}
-            <div className="flex flex-col gap-0 shadow-2xl rounded-[3rem] overflow-hidden border-4 border-gray-100 bg-white">
-              <FalldownVisualizer
-                events={midiEvents}
-                currentTime={currentTime}
-                speed={speed}
-                height={500}
-                rangeStart={noteRange?.min}
-                rangeEnd={noteRange?.max}
-              />
-              <PianoKeyboard
-                liveNotes={liveActiveNotes}
-                playbackNotes={playbackActiveNotes}
-                rangeStart={noteRange?.min}
-                rangeEnd={noteRange?.max}
-              />
+            {/* 3D Perspective Visualizer Area */}
+            <div className="relative [perspective:1200px] [perspective-origin:50%_25%] py-12">
+              <div 
+                className="flex flex-col gap-0 shadow-2xl rounded-[3rem] overflow-hidden border-4 border-gray-100 bg-white transition-transform duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(25deg)]"
+              >
+                <FalldownVisualizer
+                  events={midiEvents}
+                  currentTime={currentTime}
+                  speed={speed}
+                  height={600}
+                  rangeStart={noteRange?.min}
+                  rangeEnd={noteRange?.max}
+                />
+                <PianoKeyboard
+                  liveNotes={liveActiveNotes}
+                  playbackNotes={playbackActiveNotes}
+                  rangeStart={noteRange?.min}
+                  rangeEnd={noteRange?.max}
+                />
+              </div>
             </div>
             
             <div className="text-center pb-12">

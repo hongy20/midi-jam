@@ -126,7 +126,7 @@ export function FalldownVisualizer({
           return (
             <div
               key={note.id}
-              className={`absolute rounded-full transition-shadow duration-300 ${
+              className={`absolute rounded-full transition-shadow duration-300 will-change-transform ${
                 note.isBlack
                   ? "bg-purple-600 shadow-[0_0_15px_rgba(147,51,234,0.5)] border border-purple-400"
                   : "bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)] border border-blue-300"
@@ -134,8 +134,9 @@ export function FalldownVisualizer({
               style={{
                 left,
                 width,
-                bottom: `${bottom}px`,
                 height: `${rectHeight}px`,
+                transform: `translate3d(0, ${-bottom}px, 0)`,
+                bottom: 0,
               }}
             />
           );

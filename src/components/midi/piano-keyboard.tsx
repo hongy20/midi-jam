@@ -99,7 +99,7 @@ export const PianoKeyboard = memo(function PianoKeyboard({
               aria-label={`Note ${note}`}
               aria-pressed={liveNotes.has(note) || playbackNotes.has(note)}
               tabIndex={-1}
-              className={`flex-1 border-r border-gray-200 h-full transition-all duration-75 outline-none ${getWhiteKeyColor(note)}`}
+              className={`flex-1 border-r border-gray-200 h-full transition-all duration-75 outline-none will-change-transform ${getWhiteKeyColor(note)}`}
             />
           ))}
         </div>
@@ -122,7 +122,7 @@ export const PianoKeyboard = memo(function PianoKeyboard({
                   width: `${(1 / whiteKeys.length) * 0.6 * 100}%`,
                   position: "absolute",
                 }}
-                className={`h-2/3 z-10 rounded-b-md border border-black shadow-md transition-all duration-75 outline-none pointer-events-auto ${getBlackKeyColor(note)}`}
+                className={`h-2/3 z-10 rounded-b-md border border-black shadow-md transition-all duration-75 outline-none pointer-events-auto will-change-transform ${getBlackKeyColor(note)}`}
               />
             );
           })}
