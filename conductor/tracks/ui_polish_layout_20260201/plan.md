@@ -38,14 +38,14 @@ Goal: Make the keyboard responsive to the viewport width and implement contextua
 ## Phase 3: 3D Projection & Visual Polish
 Goal: Implement a 3D perspective for the visualizer and ensure all elements are sharp and clear.
 
-- [ ] Task: Create 3D Visualizer Container
-    - [ ] Implement a container with `perspective` and `transform-style: preserve-3d`.
-    - [ ] Apply 3D rotation/tilt to the `FalldownVisualizer` and `PianoKeyboard` to create the "track" effect.
-    - [ ] Configure the "vanishing point" to be centered/elevated.
-- [ ] Task: Optimize `FalldownVisualizer` for sharpness
-    - [ ] Synchronize `FalldownVisualizer` horizontal positioning with the keyboard's dynamic range.
-    - [ ] Use `will-change: transform` and `translate3d` for smooth, sharp animations.
-    - [ ] Audit sharpness; if CSS divs remain blurry under 3D transform, refactor core note rendering to SVG.
+- [x] Task: Create 3D Visualizer Container [38bb052]
+    - [x] Implement a container with `perspective` and `transform-style: preserve-3d`.
+    - [x] Apply 3D rotation/tilt to the `FalldownVisualizer` and `PianoKeyboard` to create the "track" effect.
+    - [x] Configure the "vanishing point" to be centered/elevated.
+- [x] Task: Optimize `FalldownVisualizer` for sharpness [38bb052]
+    - [x] Synchronize `FalldownVisualizer` horizontal positioning with the keyboard's dynamic range.
+    - [x] Use `will-change: transform` and `translate3d` for smooth, sharp animations.
+    - [x] Audit sharpness; if CSS divs remain blurry under 3D transform, refactor core note rendering to SVG.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: 3D Perspective' (Protocol in workflow.md)
 
 ## Phase 4: Final Refinement & Mobile Optimization
