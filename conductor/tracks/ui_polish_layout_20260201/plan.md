@@ -2,7 +2,7 @@
 
 This plan outlines the steps to overhaul the MIDI Jam UI, including a collapsible header, responsive keyboard zooming, and a 3D perspective visualizer.
 
-## Phase 1: Top Bar & Layout Restructuring
+## Phase 1: Top Bar & Layout Restructuring [checkpoint: 513d6dd]
 Goal: Split controls into selectors (top-left, collapsible) and playback controls (top-right, persistent).
 
 - [x] Task: Create `PlaybackControls` component [c59c195]
@@ -17,7 +17,7 @@ Goal: Split controls into selectors (top-left, collapsible) and playback control
 - [x] Task: Refactor `src/app/page.tsx` for the new Top Bar [c59c195]
     - [x] Integrate `MidiHeader` (top-left) and `PlaybackControls` (top-right).
     - [x] Ensure both remain fixed and accessible.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Top Bar' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Top Bar' (Protocol in workflow.md)
 
 ## Phase 2: Responsive & Zoomable Keyboard
 Goal: Make the keyboard responsive to the viewport width and implement contextual zooming based on the MIDI file's note range.
