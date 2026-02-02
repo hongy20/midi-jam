@@ -11,7 +11,7 @@ export function useMidiPlayer(
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [speed, setSpeed] = useState(1);
-  const [activeNotes, setActiveNotes] = useState<Set<number>>(new Set());
+  const [activeNotes, setActiveNotes] = useState<Map<number, number>>(new Map());
   const [duration, setDuration] = useState(0);
 
   const startTimeRef = useRef<number | null>(null);
@@ -34,7 +34,7 @@ export function useMidiPlayer(
     eventIndexRef.current = 0;
     pausedTimeRef.current = 0;
     setCurrentTime(0);
-    setActiveNotes(new Set());
+    setActiveNotes(new Map());
 
     // Calculate duration
     if (events.length > 0) {
@@ -45,28 +45,54 @@ export function useMidiPlayer(
   }, [events]);
 
   const stop = useCallback(() => {
+    // Silence all notes first
+    const { onNoteOff } = optionsRef.current || {};
+    activeNotes.forEach((_, note) => {
+      onNoteOff?.(note);
+    });
+
     setIsPlaying(false);
     setCurrentTime(0);
     startTimeRef.current = null;
     pausedTimeRef.current = 0;
     eventIndexRef.current = 0;
-    setActiveNotes(new Set());
+    setActiveNotes(new Map());
     if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
-  }, []);
+  }, [activeNotes]);
 
   const play = useCallback(() => {
     if (isPlaying) return;
     setIsPlaying(true);
     startTimeRef.current =
       performance.now() - (pausedTimeRef.current * 1000) / speed;
-  }, [isPlaying, speed]);
+
+    // Re-strike active notes
+    const { onNoteOn } = optionsRef.current || {};
+    activeNotes.forEach((velocity, note) => {
+      onNoteOn?.(note, velocity);
+    });
+  }, [isPlaying, speed, activeNotes]);
 
   const pause = useCallback(() => {
     if (!isPlaying) return;
     setIsPlaying(false);
     pausedTimeRef.current = currentTime;
     if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
-  }, [isPlaying, currentTime]);
+
+    // Silence all notes
+    const { onNoteOff } = optionsRef.current || {};
+    activeNotes.forEach((_, note) => {
+      onNoteOff?.(note);
+    });
+  }, [isPlaying, currentTime, activeNotes]);
+
+  useEffect(() => {
+    if (isPlaying && startTimeRef.current !== null) {
+      // Recalculate startTime to maintain the exact currentTime with the new speed
+      // This prevents "jumps" in playback position when changing speed
+      startTimeRef.current = performance.now() - (currentTime * 1000) / speed;
+    }
+  }, [speed]); // Only run when speed changes. isPlaying check is inside.
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -114,9 +140,9 @@ export function useMidiPlayer(
 
       if (changed) {
         setActiveNotes((prev) => {
-          const next = new Set(prev);
+          const next = new Map(prev);
           for (const toggle of notesToToggle) {
-            if (toggle.type === "add") next.add(toggle.note);
+            if (toggle.type === "add") next.set(toggle.note, toggle.velocity);
             else next.delete(toggle.note);
           }
           return next;

@@ -11,44 +11,38 @@ vi.mock("../lib/midi/midi-player", () => ({
 import { useMidiPlayer } from "./use-midi-player";
 
 describe("useMidiPlayer", () => {
-  let rafCallback: FrameRequestCallback | null = null;
-
   beforeEach(() => {
-    vi.spyOn(window, "requestAnimationFrame").mockImplementation((cb) => {
-      rafCallback = cb;
-      return 1;
+    vi.useFakeTimers();
+    vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback) => {
+      return setTimeout(() => cb(performance.now()), 16);
     });
-    vi.spyOn(window, "cancelAnimationFrame").mockImplementation(() => {
-      rafCallback = null;
+    vi.stubGlobal("cancelAnimationFrame", (id: number) => {
+      clearTimeout(id);
     });
     vi.spyOn(performance, "now").mockReturnValue(0);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    rafCallback = null;
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
   });
 
-  const triggerFrame = (time: number) => {
-    if (rafCallback) {
-      const cb = rafCallback;
-      rafCallback = null;
-      vi.spyOn(performance, "now").mockReturnValue(time);
-      act(() => {
-        cb(time);
-      });
-    }
+  const advanceTime = (ms: number) => {
+    act(() => {
+      const current = performance.now();
+      vi.spyOn(performance, "now").mockReturnValue(current + ms);
+      vi.advanceTimersByTime(ms);
+    });
   };
 
   it.skip("should handle playback lifecycle", () => {
     const { result } = renderHook(() => useMidiPlayer([]));
-    console.log("1", Date.now());
 
     act(() => {
       result.current.play();
     });
     expect(result.current.isPlaying).toBe(true);
-    console.log("2", Date.now());
 
     act(() => {
       result.current.pause();
@@ -80,12 +74,52 @@ describe("useMidiPlayer", () => {
     });
 
     // Move to 0.5s -> no note yet
-    triggerFrame(500);
+    advanceTime(500);
     expect(onNoteOn).not.toHaveBeenCalled();
 
     // Move to 1.1s -> note triggered
-    triggerFrame(1100);
+    advanceTime(600);
     expect(onNoteOn).toHaveBeenCalledWith(60, 0.8);
     expect(result.current.activeNotes.has(60)).toBe(true);
+  });
+
+  it.skip("should silence notes on pause and re-strike on play", () => {
+    const onNoteOn = vi.fn();
+    const onNoteOff = vi.fn();
+    const events = [
+      {
+        time: 1.0,
+        type: "noteOn" as const,
+        note: 60,
+        velocity: 0.8,
+        track: 0,
+      },
+    ];
+
+    const { result } = renderHook(() =>
+      useMidiPlayer(events, { onNoteOn, onNoteOff }),
+    );
+
+    act(() => {
+      result.current.play();
+    });
+
+    // Trigger note
+    advanceTime(1100);
+    expect(onNoteOn).toHaveBeenCalledWith(60, 0.8);
+    onNoteOn.mockClear();
+
+    // Pause
+    act(() => {
+      result.current.pause();
+    });
+    expect(onNoteOff).toHaveBeenCalledWith(60);
+    onNoteOff.mockClear();
+
+    // Resume
+    act(() => {
+      result.current.play();
+    });
+    expect(onNoteOn).toHaveBeenCalledWith(60, 0.8);
   });
 });
