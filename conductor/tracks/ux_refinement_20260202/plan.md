@@ -18,7 +18,7 @@ Goal: Align top-bar elements and polish the selection overlay.
     - [ ] Ensure playback doesn't automatically resume when the overlay closes unless it was playing before.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: Layout Alignment' (Protocol in workflow.md) [1e54e4f]
 
-## Phase 2: C4 Marker & Time Display [checkpoint: 59a8501]
+## Phase 2: C4 Marker & Time Display [checkpoint: 947b3cd]
 Goal: Add learning aids and playback metadata to the UI.
 
 - [x] Task: Update `PianoKeyboard` for C4 Marker [467668a]
