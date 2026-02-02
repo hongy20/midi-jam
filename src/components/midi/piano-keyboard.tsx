@@ -95,11 +95,17 @@ export const PianoKeyboard = memo(function PianoKeyboard({
             <button
               type="button"
               key={note}
-              aria-label={`Note ${note}`}
+              aria-label={note === 60 ? "Middle C (C4)" : `Note ${note}`}
               aria-pressed={liveNotes.has(note) || playbackNotes.has(note)}
               tabIndex={-1}
-              className={`flex-1 border-r border-gray-200 h-full transition-all duration-75 outline-none will-change-transform ${getWhiteKeyColor(note)}`}
-            />
+              className={`relative flex-1 border-r border-gray-200 h-full transition-all duration-75 outline-none font-bold text-[10px] text-gray-400 flex items-end justify-center pb-2 select-none will-change-transform ${getWhiteKeyColor(note)}`}
+            >
+              {note === 60 && (
+                <span className="bg-gray-100 px-1.5 py-0.5 rounded-md border border-gray-200 shadow-sm mb-1">
+                  C4
+                </span>
+              )}
+            </button>
           ))}
         </div>
 

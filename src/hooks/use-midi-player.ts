@@ -12,6 +12,7 @@ export function useMidiPlayer(
   const [currentTime, setCurrentTime] = useState(0);
   const [speed, setSpeed] = useState(1);
   const [activeNotes, setActiveNotes] = useState<Set<number>>(new Set());
+  const [duration, setDuration] = useState(0);
 
   const startTimeRef = useRef<number | null>(null);
   const pausedTimeRef = useRef<number>(0);
@@ -34,6 +35,13 @@ export function useMidiPlayer(
     pausedTimeRef.current = 0;
     setCurrentTime(0);
     setActiveNotes(new Set());
+
+    // Calculate duration
+    if (events.length > 0) {
+      setDuration(events[events.length - 1].time);
+    } else {
+      setDuration(0);
+    }
   }, [events]);
 
   const stop = useCallback(() => {
@@ -128,6 +136,7 @@ export function useMidiPlayer(
   return {
     isPlaying,
     currentTime,
+    duration,
     speed,
     activeNotes,
     play,

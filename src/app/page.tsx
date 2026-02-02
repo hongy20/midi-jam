@@ -59,6 +59,7 @@ export default function Home() {
     activeNotes: playbackActiveNotes,
     isPlaying,
     currentTime,
+    duration,
     speed,
     play,
     pause,
@@ -68,6 +69,12 @@ export default function Home() {
     onNoteOn: playNote,
     onNoteOff: stopNote,
   });
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
 
   const handleToggleMinimize = useCallback(() => {
     if (isMinimized) {
@@ -105,12 +112,12 @@ export default function Home() {
         const events = getMidiEvents(midi);
         setMidiEvents(events);
 
-        // Calculate range with a small buffer
+        // Calculate range with a small buffer, always including C4 (60)
         const range = getNoteRange(events);
         if (range) {
           setNoteRange({
-            min: Math.max(21, range.min - NOTE_RANGE_BUFFER),
-            max: Math.min(108, range.max + NOTE_RANGE_BUFFER),
+            min: Math.max(21, Math.min(60, range.min - NOTE_RANGE_BUFFER)),
+            max: Math.min(108, Math.max(60, range.max + NOTE_RANGE_BUFFER)),
           });
         } else {
           setNoteRange(null);
@@ -158,7 +165,7 @@ export default function Home() {
       />
 
       <div
-        className={`fixed top-4 right-4 z-50 pointer-events-auto transition-all duration-500 ${
+        className={`fixed top-4 right-4 z-50 pointer-events-auto transition-all duration-500 flex flex-col items-end gap-2 ${
           !isMinimized
             ? "opacity-0 -translate-y-12 pointer-events-none"
             : "opacity-100 translate-y-0"
@@ -174,6 +181,16 @@ export default function Home() {
           isMuted={isMuted}
           onToggleMute={toggleMute}
         />
+
+        {selectedFile && (
+          <div className="bg-white/80 backdrop-blur-md border border-gray-100 shadow-lg rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold text-slate-500 animate-in fade-in slide-in-from-top-2 duration-500">
+            <span className="text-blue-600 w-8 text-right">
+              {formatTime(currentTime)}
+            </span>
+            <div className="h-2 w-px bg-gray-200" />
+            <span className="w-8">{formatTime(duration)}</span>
+          </div>
+        )}
       </div>
 
       <main className="flex-1 flex flex-col pt-24">
