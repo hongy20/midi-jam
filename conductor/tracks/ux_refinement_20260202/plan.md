@@ -11,7 +11,7 @@ Goal: Align top-bar elements and polish the selection overlay.
 - [x] Task: Refactor Selection Overlay Styling [6798747]
     - [ ] Align font sizes, colors, and component heights for `DeviceSelector` and `MusicSelector`.
     - [ ] Adjust the layout of the expanded overlay for better symmetry and spacing.
-- [ ] Task: Implement Auto-Pause on Overlay Open
+- [x] Task: Implement Auto-Pause on Overlay Open [f14f667]
     - [ ] Add logic to `MidiHeader` to trigger a pause when the overlay expands.
     - [ ] Ensure playback doesn't automatically resume when the overlay closes unless it was playing before.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Layout Alignment' (Protocol in workflow.md)
