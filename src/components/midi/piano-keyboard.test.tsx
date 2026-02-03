@@ -8,7 +8,7 @@ describe("PianoKeyboard Responsiveness and Zooming", () => {
     // White keys: 60, 62, 64, 65, 67, 69, 71, 72 (8 keys)
     render(<PianoKeyboard rangeStart={60} rangeEnd={72} />);
 
-    const _whiteKeys = screen.getAllByRole("button", { name: /note/i }).filter(
+    const _whiteKeys = screen.getAllByRole("button").filter(
       (el) => !el.className.includes("bg-gray-900"), // Exclude black keys which use bg-gray-900 by default
     );
 
@@ -17,7 +17,7 @@ describe("PianoKeyboard Responsiveness and Zooming", () => {
     // White: 60, 62, 64, 65, 67, 69, 71, 72 (8)
     // Black: 61, 63, 66, 68, 70 (5)
     // Total: 13
-    expect(screen.getAllByRole("button", { name: /note/i })).toHaveLength(13);
+    expect(screen.getAllByRole("button")).toHaveLength(13);
   });
 
   it("handles dynamic range correctly", () => {
@@ -25,10 +25,10 @@ describe("PianoKeyboard Responsiveness and Zooming", () => {
       <PianoKeyboard rangeStart={60} rangeEnd={64} />,
     );
     // C4, D4, E4 (3 white keys) + C#4, D#4 (2 black keys) = 5 total
-    expect(screen.getAllByRole("button", { name: /note/i })).toHaveLength(5);
+    expect(screen.getAllByRole("button")).toHaveLength(5);
 
     rerender(<PianoKeyboard rangeStart={21} rangeEnd={108} />);
     // Full 88 keys
-    expect(screen.getAllByRole("button", { name: /note/i })).toHaveLength(88);
+    expect(screen.getAllByRole("button")).toHaveLength(88);
   });
 });

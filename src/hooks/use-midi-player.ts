@@ -6,17 +6,24 @@ export function useMidiPlayer(
   options?: {
     onNoteOn?: (note: number, velocity: number) => void;
     onNoteOff?: (note: number) => void;
+    onAllNotesOff?: () => void;
   },
 ) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [speed, setSpeed] = useState(1);
-  const [activeNotes, setActiveNotes] = useState<Set<number>>(new Set());
+  const [activeNotes, setActiveNotes] = useState<Map<number, number>>(
+    new Map(),
+  );
+  const [duration, setDuration] = useState(0);
 
   const startTimeRef = useRef<number | null>(null);
   const pausedTimeRef = useRef<number>(0);
   const eventIndexRef = useRef(0);
   const requestRef = useRef<number>(null);
+
+  // Ref to track active notes for stable callbacks (silencing/re-striking)
+  const activeNotesRef = useRef<Map<number, number>>(new Map());
 
   // Use refs for options to avoid re-triggering the effect
   const optionsRef = useRef(options);
@@ -25,7 +32,6 @@ export function useMidiPlayer(
   }, [options]);
 
   // Use a ref for events to avoid re-triggering the effect if the array identity changes
-  // but content remains the same (though usually we want to reset if events change)
   const eventsRef = useRef(events);
   useEffect(() => {
     eventsRef.current = events;
@@ -33,32 +39,78 @@ export function useMidiPlayer(
     eventIndexRef.current = 0;
     pausedTimeRef.current = 0;
     setCurrentTime(0);
-    setActiveNotes(new Set());
+    setActiveNotes(new Map());
+    activeNotesRef.current = new Map();
+
+    // Calculate duration
+    if (events.length > 0) {
+      setDuration(events[events.length - 1].time);
+    } else {
+      setDuration(0);
+    }
   }, [events]);
 
   const stop = useCallback(() => {
+    // Silence all notes first using ref
+    const { onNoteOff, onAllNotesOff } = optionsRef.current || {};
+
+    if (onAllNotesOff) {
+      onAllNotesOff();
+    } else {
+      activeNotesRef.current.forEach((_, note) => {
+        onNoteOff?.(note);
+      });
+    }
+
     setIsPlaying(false);
     setCurrentTime(0);
     startTimeRef.current = null;
     pausedTimeRef.current = 0;
     eventIndexRef.current = 0;
-    setActiveNotes(new Set());
+    setActiveNotes(new Map());
+    activeNotesRef.current = new Map();
     if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
-  }, []);
+  }, []); // No dependencies!
 
   const play = useCallback(() => {
     if (isPlaying) return;
     setIsPlaying(true);
     startTimeRef.current =
       performance.now() - (pausedTimeRef.current * 1000) / speed;
-  }, [isPlaying, speed]);
+
+    // Re-strike active notes using ref
+    const { onNoteOn } = optionsRef.current || {};
+    activeNotesRef.current.forEach((velocity, note) => {
+      onNoteOn?.(note, velocity);
+    });
+  }, [isPlaying, speed]); // currentTime and activeNotes removed
 
   const pause = useCallback(() => {
     if (!isPlaying) return;
     setIsPlaying(false);
     pausedTimeRef.current = currentTime;
     if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
-  }, [isPlaying, currentTime]);
+
+    // Silence all notes using ref
+    const { onNoteOff, onAllNotesOff } = optionsRef.current || {};
+
+    if (onAllNotesOff) {
+      onAllNotesOff();
+    } else {
+      activeNotesRef.current.forEach((_, note) => {
+        onNoteOff?.(note);
+      });
+    }
+  }, [isPlaying, currentTime]); // activeNotes removed
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Only run when speed changes. isPlaying check is inside.
+  useEffect(() => {
+    if (isPlaying && startTimeRef.current !== null) {
+      // Recalculate startTime to maintain the exact currentTime with the new speed
+      // This prevents "jumps" in playback position when changing speed
+      startTimeRef.current = performance.now() - (currentTime * 1000) / speed;
+    }
+  }, [speed]); // Only run when speed changes. isPlaying check is inside.
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -106,11 +158,12 @@ export function useMidiPlayer(
 
       if (changed) {
         setActiveNotes((prev) => {
-          const next = new Set(prev);
+          const next = new Map(prev);
           for (const toggle of notesToToggle) {
-            if (toggle.type === "add") next.add(toggle.note);
+            if (toggle.type === "add") next.set(toggle.note, toggle.velocity);
             else next.delete(toggle.note);
           }
+          activeNotesRef.current = next; // Sync the ref
           return next;
         });
         eventIndexRef.current = index;
@@ -128,6 +181,7 @@ export function useMidiPlayer(
   return {
     isPlaying,
     currentTime,
+    duration,
     speed,
     activeNotes,
     play,

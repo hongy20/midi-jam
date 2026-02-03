@@ -1,6 +1,5 @@
-"use client";
-
 import { Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
+import { memo } from "react";
 
 interface PlaybackControlsProps {
   isPlaying: boolean;
@@ -13,7 +12,7 @@ interface PlaybackControlsProps {
   onToggleMute: () => void;
 }
 
-export function PlaybackControls({
+export const PlaybackControls = memo(function PlaybackControls({
   isPlaying,
   onPlay,
   onPause,
@@ -26,7 +25,7 @@ export function PlaybackControls({
   const speeds = [0.5, 1.0, 1.5, 2.0];
 
   return (
-    <div className="flex items-center gap-2 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-4 py-2.5 pointer-events-auto">
+    <div className="flex items-center gap-2 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-4 py-1 pointer-events-auto">
       <div className="flex items-center gap-1 pr-2 border-r border-gray-200">
         <button
           type="button"
@@ -88,4 +87,4 @@ export function PlaybackControls({
       </div>
     </div>
   );
-}
+});

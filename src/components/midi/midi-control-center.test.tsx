@@ -16,14 +16,15 @@ describe("MidiControlCenter", () => {
 
   it("should render correctly", () => {
     render(<MidiControlCenter {...defaultProps} />);
-    expect(screen.getByLabelText(/music library/i)).toBeInTheDocument();
+    expect(screen.getByText(/Song One/i)).toBeInTheDocument();
+    expect(screen.getByText(/Song Two/i)).toBeInTheDocument();
   });
 
   it("should call onSelectFile when a file is selected", () => {
     render(<MidiControlCenter {...defaultProps} />);
 
-    const select = screen.getByLabelText(/music library/i);
-    fireEvent.change(select, { target: { value: "/midi/song1.mid" } });
+    const button = screen.getByText(/Song One/i).closest("button");
+    if (button) fireEvent.click(button);
 
     expect(defaultProps.onSelectFile).toHaveBeenCalledWith(mockFiles[0]);
   });

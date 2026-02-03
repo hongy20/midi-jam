@@ -21,34 +21,47 @@ export function MidiControlCenter({
   onSelectFile,
 }: MidiControlCenterProps) {
   return (
-    <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Select Backing Track</h2>
-      <div className="w-full space-y-2">
-        <label
-          htmlFor="midi-file-select"
-          className="block text-sm font-bold text-gray-500 uppercase tracking-wider ml-1"
-        >
-          Music Library
-        </label>
-        <select
-          id="midi-file-select"
-          value={selectedFile?.url || ""}
-          onChange={(e) => {
-            const file = files.find((f) => f.url === e.target.value);
-            if (file) onSelectFile(file);
-          }}
-          className="w-full px-4 py-3 bg-white border-4 border-gray-100 rounded-2xl text-gray-700 font-bold focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-400 transition-all appearance-none cursor-pointer"
-        >
-          <option value="" disabled>
-            Choose a song to learn...
-          </option>
-          {files.map((file) => (
-            <option key={file.url} value={file.url}>
-              {file.name}
-            </option>
-          ))}
-        </select>
-      </div>
+    <div className="space-y-6">
+      <h2 className="text-2xl font-black text-slate-800 tracking-tight">
+        Select Backing Track
+      </h2>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {files.map((file) => {
+          const isSelected = selectedFile?.url === file.url;
+          return (
+            <li key={file.url}>
+              <button
+                type="button"
+                onClick={() => onSelectFile(file)}
+                aria-pressed={isSelected}
+                className={`w-full p-5 text-left rounded-2xl border-2 transition-all duration-300 transform active:scale-[0.98] group ${
+                  isSelected
+                    ? "border-purple-500 bg-purple-50/50 shadow-md translate-y-[-2px]"
+                    : "border-gray-100 hover:border-purple-200 hover:bg-white hover:shadow-sm"
+                }`}
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div
+                      className={`font-bold text-lg leading-tight truncate ${isSelected ? "text-purple-700" : "text-slate-900"}`}
+                    >
+                      {file.name}
+                    </div>
+                    <div
+                      className={`text-sm font-semibold mt-1 ${isSelected ? "text-purple-600/70" : "text-slate-500"}`}
+                    >
+                      MIDI File
+                    </div>
+                  </div>
+                  <div
+                    className={`w-3 h-3 rounded-full transition-colors duration-300 ${isSelected ? "bg-purple-500 animate-pulse" : "bg-slate-200 group-hover:bg-purple-300"}`}
+                  />
+                </div>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
