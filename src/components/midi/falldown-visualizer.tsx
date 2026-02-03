@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState, useEffect, useRef } from "react";
 import type { NoteSpan } from "@/lib/midi/midi-player";
 
 interface FalldownVisualizerProps {
@@ -8,7 +8,7 @@ interface FalldownVisualizerProps {
   barLines?: number[];
   currentTime: number;
   speed: number;
-  height?: number; // Visual height of the falling area
+  height?: number; // Optional fallback or fixed height
   rangeStart?: number;
   rangeEnd?: number;
 }
@@ -22,12 +22,32 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
   barLines = [],
   currentTime,
   speed,
-  height = 400,
+  height: fixedHeight,
   rangeStart = 21,
   rangeEnd = 108,
 }: FalldownVisualizerProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [renderedHeight, setRenderedHeight] = useState(fixedHeight || 600);
+
+  // Track the actual rendered height for precise note calculations
+  useEffect(() => {
+    if (fixedHeight) return;
+    if (!containerRef.current) return;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setRenderedHeight(entry.contentRect.height);
+      }
+    });
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [fixedHeight]);
+
   const PIXELS_PER_SECOND = 100 * speed; // How fast the notes fall
-  const LOOK_AHEAD_SECONDS = 4 / speed; // How many seconds of future notes to show
+  
+  // Calculate look-ahead based on the current height to ensure notes start at the top
+  const LOOK_AHEAD_SECONDS = (renderedHeight / PIXELS_PER_SECOND) + 1; 
 
   // Efficient filtering: notes/barlines are sorted by time, so we can exit early
   const visibleBarLines = useMemo(() => {
@@ -45,21 +65,18 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
   const visibleNotes = useMemo(() => {
     const visible: NoteSpan[] = [];
     for (const span of spans) {
-      // span is visible if it ends after currentTime AND starts before LOOK_AHEAD
       const endTime = span.startTime + span.duration;
       if (endTime > currentTime && span.startTime < currentTime + LOOK_AHEAD_SECONDS) {
-        // Also check pitch range
         if (span.note >= rangeStart && span.note <= rangeEnd) {
           visible.push(span);
         }
       } else if (span.startTime >= currentTime + LOOK_AHEAD_SECONDS) {
-        break; // Early exit (spans are sorted by startTime)
+        break; // Early exit
       }
     }
     return visible;
   }, [spans, currentTime, LOOK_AHEAD_SECONDS, rangeStart, rangeEnd]);
 
-  // Horizontal position logic (must match PianoKeyboard)
   const { whiteKeysCount, whiteKeyIndices } = useMemo(() => {
     const indices: Record<number, number> = {};
     let count = 0;
@@ -85,7 +102,6 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
         width: `${(1 / whiteKeysCount) * 100}%`,
       };
     } else {
-      // Find the white key to the left
       const leftWhiteKeyIndex = whiteKeyIndices[note - 1];
       if (leftWhiteKeyIndex === undefined) return null;
       return {
@@ -97,8 +113,9 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
 
   return (
     <div
-      className="relative overflow-hidden bg-slate-950/10 backdrop-blur-sm rounded-t-[3rem] border-x-4 border-t-4 border-gray-100"
-      style={{ height: `${height}px` }}
+      ref={containerRef}
+      className="relative flex-1 min-h-0 overflow-hidden bg-slate-950/80 backdrop-blur-sm rounded-t-[1.5rem] border-x-4 border-t-4 border-slate-200/50"
+      style={fixedHeight ? { height: `${fixedHeight}px` } : {}}
     >
       <div className="absolute inset-0 w-full mx-auto">
         {/* Render Bar-lines */}
@@ -143,7 +160,6 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
         })}
       </div>
 
-      {/* Target Line */}
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 opacity-50 shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
     </div>
   );

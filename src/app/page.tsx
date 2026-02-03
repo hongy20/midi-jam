@@ -83,7 +83,6 @@ export default function Home() {
 
   const handleToggleMinimize = useCallback(() => {
     if (isMinimized) {
-      // Expanding
       if (isPlaying) {
         setWasPlayingBeforeExpand(true);
         pause();
@@ -91,7 +90,6 @@ export default function Home() {
         setWasPlayingBeforeExpand(false);
       }
     } else {
-      // Collapsing
       if (wasPlayingBeforeExpand) {
         play();
         setWasPlayingBeforeExpand(false);
@@ -109,9 +107,9 @@ export default function Home() {
   const handleSelectFile = useCallback(
     async (file: MidiFile) => {
       setSelectedFile(file);
-      setIsMinimized(true); // Minimize on selection
+      setIsMinimized(true);
       setWasPlayingBeforeExpand(false);
-      stop(); // Reset current playback
+      stop();
       try {
         const midi = await loadMidiFile(file.url);
         const events = getMidiEvents(midi);
@@ -119,13 +117,14 @@ export default function Home() {
         setNoteSpans(getNoteSpans(events));
         setBarLines(getBarLines(midi));
 
-        // Calculate range with a small buffer, always including C4 (60)
         const range = getNoteRange(events);
         if (range) {
-          setNoteRange({
-            min: Math.max(21, Math.min(60, range.min - NOTE_RANGE_BUFFER)),
-            max: Math.min(108, Math.max(60, range.max + NOTE_RANGE_BUFFER)),
-          });
+          let min = Math.max(21, Math.min(60, range.min - NOTE_RANGE_BUFFER));
+          let max = Math.min(108, Math.max(60, range.max + NOTE_RANGE_BUFFER));
+          const isBlack = (n: number) => [1, 3, 6, 8, 10].includes(n % 12);
+          if (isBlack(min)) min--;
+          if (isBlack(max)) max++;
+          setNoteRange({ min, max });
         } else {
           setNoteRange(null);
         }
@@ -144,12 +143,10 @@ export default function Home() {
     if (device) {
       setIsMinimized(true);
       setWasPlayingBeforeExpand(false);
-      // Reset range for live jamming unless a file is also loaded
       if (!selectedFile) setNoteRange(null);
     }
   };
 
-  // Auto-select if there is only one file available
   useEffect(() => {
     if (midiFiles.length === 1 && !selectedFile) {
       handleSelectFile(midiFiles[0]);
@@ -157,7 +154,7 @@ export default function Home() {
   }, [midiFiles, selectedFile, handleSelectFile]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="fixed inset-0 bg-slate-50 flex flex-col overflow-hidden">
       {/* Top Bar Controls */}
       <MidiHeader
         devices={inputs}
@@ -201,21 +198,20 @@ export default function Home() {
         )}
       </div>
 
-      <main className="flex-1 flex flex-col pt-24">
+      <main className="flex-1 relative w-full min-h-0">
         {selectedDevice || selectedFile ? (
-          <div className="max-w-7xl mx-auto w-full px-4 animate-in fade-in duration-500 space-y-8">
-            {/* 3D Perspective Visualizer Area */}
-            <div className="relative [perspective:1200px] [perspective-origin:50%_25%] py-8 md:py-12">
+          <div className="absolute inset-0 flex flex-col items-center justify-end overflow-hidden">
+            {/* 3D Immersive Stage */}
+            <div className="relative w-full h-[150%] [perspective:1200px] [perspective-origin:50%_20%] flex items-end justify-center px-4 pb-8">
               <div
                 key={selectedFile?.url || "jam"}
-                className="flex flex-col gap-0 shadow-2xl rounded-[2rem] md:rounded-[3rem] overflow-hidden border-2 md:border-4 border-gray-100 bg-white animate-in zoom-in-95 fade-in duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(15deg)] md:[transform:rotateX(25deg)]"
+                className="w-full h-full origin-bottom flex flex-col bg-transparent rounded-b-[1.5rem] overflow-hidden transition-transform duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(40deg)]"
               >
                 <FalldownVisualizer
                   spans={noteSpans}
                   barLines={barLines}
                   currentTime={currentTime}
                   speed={speed}
-                  height={600}
                   rangeStart={noteRange?.min}
                   rangeEnd={noteRange?.max}
                 />
@@ -227,17 +223,11 @@ export default function Home() {
                 />
               </div>
             </div>
-
-            <div className="text-center pb-12">
-              <p className="text-gray-400 text-sm">
-                Use the top bar to change settings
-              </p>
-            </div>
           </div>
         ) : (
-          <div className="flex-1 flex items-center justify-center p-8">
-            <div className="text-center p-12 border-4 border-dashed border-gray-200 rounded-[3rem] text-gray-400 max-w-2xl">
-              <h2 className="text-3xl font-bold text-gray-300 mb-4">
+          <div className="absolute inset-0 flex items-center justify-center p-8">
+            <div className="text-center p-12 border-4 border-dashed border-gray-200 rounded-[3rem] text-gray-400 max-w-2xl animate-in zoom-in-95 duration-700">
+              <h2 className="text-3xl font-bold text-gray-300 mb-4 uppercase tracking-tighter">
                 Ready to Jam?
               </h2>
               <p className="text-xl font-medium">

@@ -90,7 +90,7 @@ export const PianoKeyboard = memo(function PianoKeyboard({
         aria-label={`Piano keyboard (${rangeStart} to ${rangeEnd})`}
       >
         {/* Render white keys */}
-        <div className="flex w-full h-full border-2 border-gray-200 rounded-b-2xl overflow-hidden shadow-inner bg-gray-100">
+        <div className="flex w-full h-full rounded-b-[1.5rem] overflow-hidden shadow-inner bg-gray-100">
           {whiteKeys.map((note) => (
             <button
               type="button"
@@ -98,7 +98,7 @@ export const PianoKeyboard = memo(function PianoKeyboard({
               aria-label={note === 60 ? "Middle C (C4)" : `Note ${note}`}
               aria-pressed={liveNotes.has(note) || playbackNotes.has(note)}
               tabIndex={-1}
-              className={`relative flex-1 border-r border-gray-200 h-full transition-all duration-75 outline-none font-bold text-[10px] text-gray-400 flex items-end justify-center pb-2 select-none will-change-transform ${getWhiteKeyColor(note)}`}
+              className={`relative flex-1 border-r last:border-r-0 border-gray-200 h-full transition-all duration-75 outline-none font-bold text-[10px] text-gray-400 flex items-end justify-center pb-2 select-none will-change-transform ${getWhiteKeyColor(note)}`}
             >
               {note === 60 && (
                 <span className="text-gray-200 font-bold">
