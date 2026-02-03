@@ -16,7 +16,7 @@ Goal: Implement the core `demoMode` state and propagate it to the visual and aud
 ## Phase 2: UI Implementation [checkpoint: ]
 Goal: Create the toggle button and integrate it into the layout.
 
-- [ ] Task: Create Demo Toggle Button
+- [x] Task: Create Demo Toggle Button [38e075a]
     - [ ] Write Tests: Verify the button displays correctly in both active and inactive states.
     - [ ] Implement: Add the "Demo" toggle button to the time/duration pill container in `src/app/page.tsx`.
 - [ ] Task: Update `PlaybackControls` for Demo Mode
