@@ -5,9 +5,9 @@ This file tracks all major tracks for the project. Each track has its own detail
 ---
 
 - [x] **Track: feature: add a button to toggle demo mode**
-*Link: [./tracks/demo_mode_toggle_20260203/](./tracks/demo_mode_toggle_20260203/)*
+*Link: [./archive/demo_mode_toggle_20260203/](./archive/demo_mode_toggle_20260203/)*
 
 ---
 
 - [x] **Track: refactor: simplify audio logic (remove mute button) and support external MIDI output**
-*Link: [./tracks/audio_simplification_20260203/](./tracks/audio_simplification_20260203/)*
+*Link: [./archive/audio_simplification_20260203/](./archive/audio_simplification_20260203/)*
