@@ -77,11 +77,13 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
     return visible;
   }, [spans, currentTime, LOOK_AHEAD_SECONDS, rangeStart, rangeEnd]);
 
-  const { whiteKeysCount, whiteKeyIndices, whiteKeyNotes } = useMemo(() => {
+  const { whiteKeysCount, whiteKeyIndices, whiteKeyNotes, allNotesInRange } = useMemo(() => {
     const indices: Record<number, number> = {};
     const notes: number[] = [];
+    const all: number[] = [];
     let count = 0;
     for (let i = rangeStart; i <= rangeEnd; i++) {
+      all.push(i);
       const n = i % 12;
       const isBlack = [1, 3, 6, 8, 10].includes(n);
       if (!isBlack) {
@@ -89,7 +91,12 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
         notes.push(i);
       }
     }
-    return { whiteKeysCount: count, whiteKeyIndices: indices, whiteKeyNotes: notes };
+    return { 
+      whiteKeysCount: count, 
+      whiteKeyIndices: indices, 
+      whiteKeyNotes: notes,
+      allNotesInRange: all 
+    };
   }, [rangeStart, rangeEnd]);
 
   const getHorizontalPosition = (note: number) => {
@@ -116,21 +123,37 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
   return (
     <div
       ref={containerRef}
-      className="relative flex-1 min-h-0 overflow-hidden bg-slate-950/80 backdrop-blur-sm rounded-t-[1.5rem]"
+      className="relative flex-1 min-h-0 overflow-hidden bg-white/10 backdrop-blur-2xl rounded-t-[1.5rem] border-t border-x border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
       style={fixedHeight ? { height: `${fixedHeight}px` } : {}}
     >
       <div className="absolute inset-0 w-full mx-auto">
+        {/* Render Background Lanes */}
+        {allNotesInRange.map((note) => {
+          const pos = getHorizontalPosition(note);
+          if (!pos) return null;
+          const isBlack = [1, 3, 6, 8, 10].includes(note % 12);
+          return (
+            <div
+              key={`lane-${note}`}
+              className={`absolute top-0 bottom-0 pointer-events-none transition-colors duration-500 ${
+                isBlack ? "bg-black/10" : "bg-white/[0.02]"
+              }`}
+              style={{ left: pos.left, width: pos.width }}
+            />
+          );
+        })}
+
         {/* Render Vertical Key Lines (Background Grid) */}
         {whiteKeyNotes.map((note, i) => (
           <div
             key={`v-line-${note}`}
-            className="absolute top-0 bottom-0 w-px bg-white/10 border-r border-white/5 pointer-events-none"
+            className="absolute top-0 bottom-0 w-px bg-white/20 border-r border-white/10 pointer-events-none"
             style={{ left: `${(i / whiteKeysCount) * 100}%` }}
           />
         ))}
         {/* Rightmost edge line */}
         <div 
-          className="absolute top-0 bottom-0 w-px bg-white/10 border-r border-white/5 pointer-events-none"
+          className="absolute top-0 bottom-0 w-px bg-white/20 border-r border-white/10 pointer-events-none"
           style={{ left: "100%" }}
         />
 
@@ -140,7 +163,7 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
           return (
             <div
               key={`bar-${time}`}
-              className="absolute left-0 right-0 h-px bg-white/40 shadow-[0_0_8px_rgba(255,255,255,0.3)] will-change-transform"
+              className="absolute left-0 right-0 h-px bg-white/60 shadow-[0_0_10px_rgba(255,255,255,0.4)] will-change-transform"
               style={{
                 transform: `translate3d(0, ${-bottom}px, 0)`,
                 bottom: 0,

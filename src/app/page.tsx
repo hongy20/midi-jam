@@ -154,7 +154,14 @@ export default function Home() {
   }, [midiFiles, selectedFile, handleSelectFile]);
 
   return (
-    <div className="fixed inset-0 bg-slate-50 flex flex-col overflow-hidden">
+    <div className="fixed inset-0 bg-slate-950 flex flex-col overflow-hidden">
+      {/* Aurora Mesh Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse duration-[10s]" />
+        <div className="absolute top-[10%] -right-[10%] w-[60%] h-[60%] bg-purple-600/20 rounded-full blur-[120px] animate-pulse duration-[8s]" />
+        <div className="absolute -bottom-[20%] left-[20%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse duration-[12s]" />
+      </div>
+
       {/* Top Bar Controls */}
       <MidiHeader
         devices={inputs}
@@ -188,11 +195,11 @@ export default function Home() {
         />
 
         {selectedFile && (
-          <div className="bg-white/80 backdrop-blur-md border border-gray-100 shadow-lg rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold text-slate-400 animate-in fade-in slide-in-from-top-2 duration-500">
+          <div className="bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold text-slate-400 animate-in fade-in slide-in-from-top-2 duration-500">
             <span className="w-8 text-right">
               {formatTime(currentTime)}
             </span>
-            <div className="h-2 w-px bg-gray-200" />
+            <div className="h-2 w-px bg-slate-400/50" />
             <span className="w-8">{formatTime(duration)}</span>
           </div>
         )}
