@@ -2,7 +2,7 @@
 
 This plan covers the implementation of the "Demo Mode" feature, which links keyboard visual feedback with forced audio states.
 
-## Phase 1: State Logic & Component Props [checkpoint: ]
+## Phase 1: State Logic & Component Props [checkpoint: 99f7b55]
 Goal: Implement the core `demoMode` state and propagate it to the visual and audio logic.
 
 - [x] Task: Update `useMidiAudio` to support Demo Mode constraints [2db9a37]
