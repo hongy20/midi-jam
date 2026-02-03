@@ -2,7 +2,7 @@
 
 This plan refactors the audio system to use external MIDI hardware for playback when available and removes redundant UI controls.
 
-## Phase 1: MIDI Output Discovery & Routing [checkpoint: ]
+## Phase 1: MIDI Output Discovery & Routing [checkpoint: b76b256]
 Goal: Enable the application to discover and select MIDI output ports that match selected input devices.
 
 - [x] Task: Update MIDI library to support outputs [590977a]
