@@ -18,6 +18,9 @@ export function useMidiPlayer(
   const pausedTimeRef = useRef<number>(0);
   const eventIndexRef = useRef(0);
   const requestRef = useRef<number>(null);
+  
+  // Ref to track active notes for stable callbacks (silencing/re-striking)
+  const activeNotesRef = useRef<Map<number, number>>(new Map());
 
   // Use refs for options to avoid re-triggering the effect
   const optionsRef = useRef(options);
@@ -26,7 +29,6 @@ export function useMidiPlayer(
   }, [options]);
 
   // Use a ref for events to avoid re-triggering the effect if the array identity changes
-  // but content remains the same (though usually we want to reset if events change)
   const eventsRef = useRef(events);
   useEffect(() => {
     eventsRef.current = events;
@@ -35,6 +37,7 @@ export function useMidiPlayer(
     pausedTimeRef.current = 0;
     setCurrentTime(0);
     setActiveNotes(new Map());
+    activeNotesRef.current = new Map();
 
     // Calculate duration
     if (events.length > 0) {
@@ -45,9 +48,9 @@ export function useMidiPlayer(
   }, [events]);
 
   const stop = useCallback(() => {
-    // Silence all notes first
+    // Silence all notes first using ref
     const { onNoteOff } = optionsRef.current || {};
-    activeNotes.forEach((_, note) => {
+    activeNotesRef.current.forEach((_, note) => {
       onNoteOff?.(note);
     });
 
@@ -57,8 +60,9 @@ export function useMidiPlayer(
     pausedTimeRef.current = 0;
     eventIndexRef.current = 0;
     setActiveNotes(new Map());
+    activeNotesRef.current = new Map();
     if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
-  }, [activeNotes]);
+  }, []); // No dependencies!
 
   const play = useCallback(() => {
     if (isPlaying) return;
@@ -66,12 +70,12 @@ export function useMidiPlayer(
     startTimeRef.current =
       performance.now() - (pausedTimeRef.current * 1000) / speed;
 
-    // Re-strike active notes
+    // Re-strike active notes using ref
     const { onNoteOn } = optionsRef.current || {};
-    activeNotes.forEach((velocity, note) => {
+    activeNotesRef.current.forEach((velocity, note) => {
       onNoteOn?.(note, velocity);
     });
-  }, [isPlaying, speed, activeNotes]);
+  }, [isPlaying, speed]); // currentTime and activeNotes removed
 
   const pause = useCallback(() => {
     if (!isPlaying) return;
@@ -79,12 +83,12 @@ export function useMidiPlayer(
     pausedTimeRef.current = currentTime;
     if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
 
-    // Silence all notes
+    // Silence all notes using ref
     const { onNoteOff } = optionsRef.current || {};
-    activeNotes.forEach((_, note) => {
+    activeNotesRef.current.forEach((_, note) => {
       onNoteOff?.(note);
     });
-  }, [isPlaying, currentTime, activeNotes]);
+  }, [isPlaying, currentTime]); // activeNotes removed
 
   useEffect(() => {
     if (isPlaying && startTimeRef.current !== null) {
@@ -145,6 +149,7 @@ export function useMidiPlayer(
             if (toggle.type === "add") next.set(toggle.note, toggle.velocity);
             else next.delete(toggle.note);
           }
+          activeNotesRef.current = next; // Sync the ref
           return next;
         });
         eventIndexRef.current = index;

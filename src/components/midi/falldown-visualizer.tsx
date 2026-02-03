@@ -1,23 +1,15 @@
 "use client";
 
-import { useMemo } from "react";
+import { memo, useMemo } from "react";
 import type { MidiEvent } from "@/lib/midi/midi-player";
 
-interface FalldownVisualizerProps {
-  events: MidiEvent[];
-  barLines?: number[];
-  currentTime: number;
-  speed: number;
-  height?: number; // Visual height of the falling area
-  rangeStart?: number;
-  rangeEnd?: number;
-}
+// ... (keep interface)
 
 /**
  * Visualizes MIDI notes falling from top to bottom.
  * Synchronized with the responsive piano keyboard layout.
  */
-export function FalldownVisualizer({
+export const FalldownVisualizer = memo(function FalldownVisualizer({
   events,
   barLines = [],
   currentTime,
@@ -26,6 +18,8 @@ export function FalldownVisualizer({
   rangeStart = 21,
   rangeEnd = 108,
 }: FalldownVisualizerProps) {
+  // ... (keep body)
+});
   const PIXELS_PER_SECOND = 100 * speed; // How fast the notes fall
   const LOOK_AHEAD_SECONDS = 4 / speed; // How many seconds of future notes to show
 

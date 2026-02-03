@@ -1,33 +1,11 @@
 "use client";
 
+import { memo } from "react";
 import { ChevronDown, ChevronUp, Music, Piano } from "lucide-react";
-import { DeviceSelector } from "./device-selector";
-import { MidiControlCenter } from "./midi-control-center";
 
-interface MidiFile {
-  name: string;
-  url: string;
-}
+// ... (keep props interface)
 
-interface MidiHeaderProps {
-  // Device Selector Props
-  devices: WebMidi.MIDIInput[];
-  isLoading: boolean;
-  error?: string | null;
-  selectedDevice: WebMidi.MIDIInput | null;
-  onSelectDevice: (device: WebMidi.MIDIInput | null) => void;
-
-  // Midi Control Center Props (Selectors only)
-  files: MidiFile[];
-  selectedFile: MidiFile | null;
-  onSelectFile: (file: MidiFile) => void;
-
-  // Header State
-  isMinimized?: boolean;
-  onToggleMinimize?: () => void;
-}
-
-export function MidiHeader({
+export const MidiHeader = memo(function MidiHeader({
   devices,
   isLoading,
   error,
@@ -39,6 +17,8 @@ export function MidiHeader({
   isMinimized = false,
   onToggleMinimize,
 }: MidiHeaderProps) {
+  // ... (keep component body)
+});
   return (
     <>
       {/* Backdrop overlay when expanded */}

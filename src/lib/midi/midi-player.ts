@@ -88,15 +88,16 @@ export function getBarLines(midi: Midi): number[] {
   
   // denominator 4 = quarter note, 8 = eighth note, etc.
   // Tone.js MIDI duration/time is in seconds.
-  // We need to use tempo to calculate seconds per beat.
-  
-  // Simplification: Tone.js provides ticks and PPQ.
-  // 1 bar = beatsPerBar * PPQ ticks.
   const ppq = midi.header.ppq;
   const ticksPerBar = beatsPerBar * ppq * (4 / timeSignature.denominator);
   
+  // Safety guard: if ticksPerBar is 0 or negative, we can't calculate bar-lines accurately
+  if (ticksPerBar <= 0) return [];
+
   let currentTick = 0;
-  while (true) {
+  // Limit iterations to prevent runaway loops in case of corrupt duration metadata
+  const MAX_BARS = 10000; 
+  while (barLines.length < MAX_BARS) {
     const time = midi.header.ticksToSeconds(currentTick);
     if (time > duration) break;
     barLines.push(time);

@@ -1,5 +1,4 @@
-"use client";
-
+import { memo } from "react";
 import { Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
 
 interface PlaybackControlsProps {
@@ -13,7 +12,7 @@ interface PlaybackControlsProps {
   onToggleMute: () => void;
 }
 
-export function PlaybackControls({
+export const PlaybackControls = memo(function PlaybackControls({
   isPlaying,
   onPlay,
   onPause,
