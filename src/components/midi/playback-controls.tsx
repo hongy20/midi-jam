@@ -87,4 +87,4 @@ export const PlaybackControls = memo(function PlaybackControls({
       </div>
     </div>
   );
-}
+});

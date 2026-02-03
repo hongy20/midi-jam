@@ -3,7 +3,15 @@
 import { memo, useMemo } from "react";
 import type { MidiEvent } from "@/lib/midi/midi-player";
 
-// ... (keep interface)
+interface FalldownVisualizerProps {
+  events: MidiEvent[];
+  barLines?: number[];
+  currentTime: number;
+  speed: number;
+  height?: number; // Visual height of the falling area
+  rangeStart?: number;
+  rangeEnd?: number;
+}
 
 /**
  * Visualizes MIDI notes falling from top to bottom.
@@ -18,8 +26,6 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
   rangeStart = 21,
   rangeEnd = 108,
 }: FalldownVisualizerProps) {
-  // ... (keep body)
-});
   const PIXELS_PER_SECOND = 100 * speed; // How fast the notes fall
   const LOOK_AHEAD_SECONDS = 4 / speed; // How many seconds of future notes to show
 
@@ -166,4 +172,4 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 opacity-50 shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
     </div>
   );
-}
+});
