@@ -197,10 +197,11 @@ export default function Home() {
 
         {selectedFile && (
           <div className="bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold text-slate-400 animate-in fade-in slide-in-from-top-2 duration-500">
-            <span className="uppercase tracking-wider text-[10px] opacity-70">Remains</span>
-            <span className="w-10 text-right">
-              {formatTime(Math.max(0, duration - currentTime))}
+            <span className="w-8 text-right">
+              {formatTime(currentTime)}
             </span>
+            <div className="h-2 w-px bg-slate-400/50" />
+            <span className="w-8">{formatTime(duration)}</span>
           </div>
         )}
       </div>
