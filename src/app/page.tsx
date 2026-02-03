@@ -31,10 +31,14 @@ const NOTE_RANGE_BUFFER = 4;
 export default function Home() {
   const {
     inputs,
+    outputs,
     isLoading: isMidiLoading,
     error: midiError,
   } = useMIDIInputs();
-  const { selectedDevice, selectDevice } = useMIDIConnection(inputs);
+  const { selectedDevice, selectedOutput, selectDevice } = useMIDIConnection(
+    inputs,
+    outputs,
+  );
 
   const [demoMode, setDemoMode] = useState(true);
 
