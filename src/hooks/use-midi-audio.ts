@@ -4,10 +4,13 @@ import * as Tone from "tone";
 /**
  * Hook to handle MIDI audio synthesis using Tone.js.
  */
-export function useMidiAudio() {
+export function useMidiAudio(demoMode = true) {
   const polySynthRef = useRef<Tone.PolySynth | null>(null);
   const [isMuted, setIsMuted] = useState(false);
   const [_isReady, setIsReady] = useState(false);
+
+  // Enforce muted state based on demoMode
+  const effectiveIsMuted = demoMode ? isMuted : true;
 
   useEffect(() => {
     // Initialize synth
@@ -32,7 +35,7 @@ export function useMidiAudio() {
 
   const playNote = useCallback(
     (midiNote: number, velocity: number) => {
-      if (isMuted || !polySynthRef.current) return;
+      if (effectiveIsMuted || !polySynthRef.current) return;
 
       // Ensure AudioContext is started
       if (Tone.getContext().state !== "running") {
@@ -42,7 +45,7 @@ export function useMidiAudio() {
       const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
       polySynthRef.current.triggerAttack(frequency, Tone.now(), velocity);
     },
-    [isMuted],
+    [effectiveIsMuted],
   );
 
   const stopNote = useCallback((midiNote: number) => {
@@ -58,8 +61,9 @@ export function useMidiAudio() {
   }, []);
 
   const toggleMute = useCallback(() => {
+    if (!demoMode) return;
     setIsMuted((prev) => !prev);
-  }, []);
+  }, [demoMode]);
 
   // Effect to handle state changes in useMidiPlayer or live input
   // This is better handled by explicit calls from the player or device listener
@@ -68,7 +72,7 @@ export function useMidiAudio() {
     playNote,
     stopNote,
     stopAllNotes,
-    isMuted,
+    isMuted: effectiveIsMuted,
     toggleMute,
     setIsReady,
   };
