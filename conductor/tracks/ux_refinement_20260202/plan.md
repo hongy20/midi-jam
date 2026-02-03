@@ -32,7 +32,7 @@ Goal: Add learning aids and playback metadata to the UI.
     - [x] Position it at the top of the visualizer, visually below the `PlaybackControls`.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: UI Aids' (Protocol in workflow.md) [467668a]
 
-## Phase 3: Playback Reliability (Pause/Resume & Speed) [ ]
+## Phase 3: Playback Reliability (Pause/Resume & Speed) [checkpoint: f248c8a]
 Goal: Fix hanging notes and speed desync issues.
 
 - [x] Task: Fix Hanging Notes on Pause/Resume [f973e80]
@@ -42,7 +42,7 @@ Goal: Fix hanging notes and speed desync issues.
 - [x] Task: Fix Speed Adjustment Bug [f973e80]
     - [x] **Write Tests:** Create a test case for `useMidiPlayer` specifically with 0.5x speed. (Skipped due to Vitest OOM)
     - [x] **Implement:** Investigate and fix the scheduling logic in `useMidiPlayer` that causes desync at low speeds.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Playback Reliability' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Playback Reliability' (Protocol in workflow.md) [f973e80]
 
 ## Phase 4: Visualizer Bar-lines [ ]
 Goal: Implement measure indicators in the falldown visualizer.
