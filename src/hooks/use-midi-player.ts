@@ -12,14 +12,16 @@ export function useMidiPlayer(
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [speed, setSpeed] = useState(1);
-  const [activeNotes, setActiveNotes] = useState<Map<number, number>>(new Map());
+  const [activeNotes, setActiveNotes] = useState<Map<number, number>>(
+    new Map(),
+  );
   const [duration, setDuration] = useState(0);
 
   const startTimeRef = useRef<number | null>(null);
   const pausedTimeRef = useRef<number>(0);
   const eventIndexRef = useRef(0);
   const requestRef = useRef<number>(null);
-  
+
   // Ref to track active notes for stable callbacks (silencing/re-striking)
   const activeNotesRef = useRef<Map<number, number>>(new Map());
 
@@ -51,7 +53,7 @@ export function useMidiPlayer(
   const stop = useCallback(() => {
     // Silence all notes first using ref
     const { onNoteOff, onAllNotesOff } = optionsRef.current || {};
-    
+
     if (onAllNotesOff) {
       onAllNotesOff();
     } else {
@@ -91,7 +93,7 @@ export function useMidiPlayer(
 
     // Silence all notes using ref
     const { onNoteOff, onAllNotesOff } = optionsRef.current || {};
-    
+
     if (onAllNotesOff) {
       onAllNotesOff();
     } else {
@@ -101,6 +103,7 @@ export function useMidiPlayer(
     }
   }, [isPlaying, currentTime]); // activeNotes removed
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Only run when speed changes. isPlaying check is inside.
   useEffect(() => {
     if (isPlaying && startTimeRef.current !== null) {
       // Recalculate startTime to maintain the exact currentTime with the new speed

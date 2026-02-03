@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo, useState, useEffect, useRef } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import type { NoteSpan } from "@/lib/midi/midi-player";
 
 interface FalldownVisualizerProps {
@@ -45,9 +45,9 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
   }, [fixedHeight]);
 
   const PIXELS_PER_SECOND = 100 * speed; // How fast the notes fall
-  
+
   // Calculate look-ahead based on the current height to ensure notes start at the top
-  const LOOK_AHEAD_SECONDS = (renderedHeight / PIXELS_PER_SECOND) + 1; 
+  const LOOK_AHEAD_SECONDS = renderedHeight / PIXELS_PER_SECOND + 1;
 
   // Efficient filtering: notes/barlines are sorted by time, so we can exit early
   const visibleBarLines = useMemo(() => {
@@ -66,7 +66,10 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
     const visible: NoteSpan[] = [];
     for (const span of spans) {
       const endTime = span.startTime + span.duration;
-      if (endTime > currentTime && span.startTime < currentTime + LOOK_AHEAD_SECONDS) {
+      if (
+        endTime > currentTime &&
+        span.startTime < currentTime + LOOK_AHEAD_SECONDS
+      ) {
         if (span.note >= rangeStart && span.note <= rangeEnd) {
           visible.push(span);
         }
@@ -77,27 +80,28 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
     return visible;
   }, [spans, currentTime, LOOK_AHEAD_SECONDS, rangeStart, rangeEnd]);
 
-  const { whiteKeysCount, whiteKeyIndices, whiteKeyNotes, allNotesInRange } = useMemo(() => {
-    const indices: Record<number, number> = {};
-    const notes: number[] = [];
-    const all: number[] = [];
-    let count = 0;
-    for (let i = rangeStart; i <= rangeEnd; i++) {
-      all.push(i);
-      const n = i % 12;
-      const isBlack = [1, 3, 6, 8, 10].includes(n);
-      if (!isBlack) {
-        indices[i] = count++;
-        notes.push(i);
+  const { whiteKeysCount, whiteKeyIndices, whiteKeyNotes, allNotesInRange } =
+    useMemo(() => {
+      const indices: Record<number, number> = {};
+      const notes: number[] = [];
+      const all: number[] = [];
+      let count = 0;
+      for (let i = rangeStart; i <= rangeEnd; i++) {
+        all.push(i);
+        const n = i % 12;
+        const isBlack = [1, 3, 6, 8, 10].includes(n);
+        if (!isBlack) {
+          indices[i] = count++;
+          notes.push(i);
+        }
       }
-    }
-    return { 
-      whiteKeysCount: count, 
-      whiteKeyIndices: indices, 
-      whiteKeyNotes: notes,
-      allNotesInRange: all 
-    };
-  }, [rangeStart, rangeEnd]);
+      return {
+        whiteKeysCount: count,
+        whiteKeyIndices: indices,
+        whiteKeyNotes: notes,
+        allNotesInRange: all,
+      };
+    }, [rangeStart, rangeEnd]);
 
   const getHorizontalPosition = (note: number) => {
     const n = note % 12;
@@ -152,7 +156,7 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
           />
         ))}
         {/* Rightmost edge line */}
-        <div 
+        <div
           className="absolute top-0 bottom-0 w-px bg-white/20 border-r border-white/10 pointer-events-none"
           style={{ left: "100%" }}
         />

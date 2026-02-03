@@ -1,7 +1,7 @@
 "use client";
 
-import { memo } from "react";
 import { ChevronDown, ChevronUp, Music, Piano } from "lucide-react";
+import { memo } from "react";
 import { DeviceSelector } from "./device-selector";
 import { MidiControlCenter } from "./midi-control-center";
 
@@ -95,7 +95,9 @@ export const MidiHeader = memo(function MidiHeader({
               <h1 className="text-5xl font-black text-blue-600 tracking-tighter italic transform -rotate-1 select-none">
                 MIDI JAM
               </h1>
-              <p className="text-slate-500 font-semibold ml-1">The immersive way to learn piano.</p>
+              <p className="text-slate-500 font-semibold ml-1">
+                The immersive way to learn piano.
+              </p>
             </div>
             {onToggleMinimize && (
               <button

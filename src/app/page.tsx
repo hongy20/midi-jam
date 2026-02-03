@@ -37,7 +37,8 @@ export default function Home() {
   const { selectedDevice, selectDevice } = useMIDIConnection(inputs);
 
   // Audio setup
-  const { playNote, stopNote, stopAllNotes, isMuted, toggleMute } = useMidiAudio();
+  const { playNote, stopNote, stopAllNotes, isMuted, toggleMute } =
+    useMidiAudio();
 
   // Live input tracking
   const liveActiveNotes = useActiveNotes(selectedDevice, {
@@ -197,9 +198,7 @@ export default function Home() {
 
         {selectedFile && (
           <div className="bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold text-slate-400 animate-in fade-in slide-in-from-top-2 duration-500">
-            <span className="w-8 text-right">
-              {formatTime(currentTime)}
-            </span>
+            <span className="w-8 text-right">{formatTime(currentTime)}</span>
             <div className="h-2 w-px bg-slate-400/50" />
             <span className="w-8">{formatTime(duration)}</span>
           </div>
@@ -225,7 +224,7 @@ export default function Home() {
                 />
                 <PianoKeyboard
                   liveNotes={liveActiveNotes}
-                  playbackNotes={playbackActiveNotes}
+                  playbackNotes={new Set(playbackActiveNotes.keys())}
                   rangeStart={noteRange?.min}
                   rangeEnd={noteRange?.max}
                 />

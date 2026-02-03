@@ -43,7 +43,9 @@ export function DeviceSelector({
 
   return (
     <div className="flex flex-col gap-6">
-      <h2 className="text-2xl font-black text-slate-800 tracking-tight">Select Your Instrument</h2>
+      <h2 className="text-2xl font-black text-slate-800 tracking-tight">
+        Select Your Instrument
+      </h2>
       {devices.length === 0 ? (
         <p className="p-4 bg-gray-100 rounded-2xl text-gray-600">
           No MIDI devices found. Please connect your instrument and try again.
@@ -66,14 +68,20 @@ export function DeviceSelector({
                 >
                   <div className="flex items-center justify-between gap-4">
                     <div className="min-w-0 flex-1">
-                      <div className={`font-bold text-lg leading-tight truncate ${isSelected ? "text-blue-700" : "text-slate-900"}`}>
+                      <div
+                        className={`font-bold text-lg leading-tight truncate ${isSelected ? "text-blue-700" : "text-slate-900"}`}
+                      >
                         {device.name || "Unknown Device"}
                       </div>
-                      <div className={`text-sm font-semibold mt-1 truncate ${isSelected ? "text-blue-600/70" : "text-slate-500"}`}>
+                      <div
+                        className={`text-sm font-semibold mt-1 truncate ${isSelected ? "text-blue-600/70" : "text-slate-500"}`}
+                      >
                         {device.manufacturer || "Generic MIDI"}
                       </div>
                     </div>
-                    <div className={`w-3 h-3 rounded-full transition-colors duration-300 ${isSelected ? "bg-blue-500 animate-pulse" : "bg-slate-200 group-hover:bg-blue-300"}`} />
+                    <div
+                      className={`w-3 h-3 rounded-full transition-colors duration-300 ${isSelected ? "bg-blue-500 animate-pulse" : "bg-slate-200 group-hover:bg-blue-300"}`}
+                    />
                   </div>
                 </button>
               </li>

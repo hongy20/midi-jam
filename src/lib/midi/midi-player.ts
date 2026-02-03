@@ -123,34 +123,32 @@ export function getBarLines(midi: Midi): number[] {
   const duration = midi.duration;
 
   // Use the first time signature or default to 4/4
-  const ts = midi.header.timeSignatures[0] || {
-    numerator: 4,
-    denominator: 4,
-  };
+  const ts = midi.header.timeSignatures[0];
 
-  const numerator = ts.numerator || 4;
-  const denominator = ts.denominator || 4;
+  const numerator = ts?.timeSignature[0] ?? 4;
+  const denominator = ts?.timeSignature[1] ?? 4;
   const ppq = midi.header.ppq || 480;
 
   // 1 bar = beatsPerBar * PPQ * (4 / denominator)
   const ticksPerBar = numerator * ppq * (4 / denominator);
-  
+
   if (!Number.isFinite(ticksPerBar) || ticksPerBar <= 0) {
     return [];
   }
 
   let currentTick = 0;
   const MAX_BARS = 2000; // Realistic limit for a song
-  
+
   try {
-    while (currentTick < 1000000) { // Safety cap on total ticks
+    while (currentTick < 1000000) {
+      // Safety cap on total ticks
       const time = midi.header.ticksToSeconds(currentTick);
-      
+
       if (!Number.isFinite(time) || time > duration) break;
-      
+
       barLines.push(time);
       currentTick += ticksPerBar;
-      
+
       if (barLines.length >= MAX_BARS) {
         break;
       }

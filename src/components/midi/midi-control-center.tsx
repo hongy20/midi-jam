@@ -22,7 +22,9 @@ export function MidiControlCenter({
 }: MidiControlCenterProps) {
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-black text-slate-800 tracking-tight">Select Backing Track</h2>
+      <h2 className="text-2xl font-black text-slate-800 tracking-tight">
+        Select Backing Track
+      </h2>
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {files.map((file) => {
           const isSelected = selectedFile?.url === file.url;
@@ -40,14 +42,20 @@ export function MidiControlCenter({
               >
                 <div className="flex items-center justify-between gap-4">
                   <div className="min-w-0 flex-1">
-                    <div className={`font-bold text-lg leading-tight truncate ${isSelected ? "text-purple-700" : "text-slate-900"}`}>
+                    <div
+                      className={`font-bold text-lg leading-tight truncate ${isSelected ? "text-purple-700" : "text-slate-900"}`}
+                    >
                       {file.name}
                     </div>
-                    <div className={`text-sm font-semibold mt-1 ${isSelected ? "text-purple-600/70" : "text-slate-500"}`}>
+                    <div
+                      className={`text-sm font-semibold mt-1 ${isSelected ? "text-purple-600/70" : "text-slate-500"}`}
+                    >
                       MIDI File
                     </div>
                   </div>
-                  <div className={`w-3 h-3 rounded-full transition-colors duration-300 ${isSelected ? "bg-purple-500 animate-pulse" : "bg-slate-200 group-hover:bg-purple-300"}`} />
+                  <div
+                    className={`w-3 h-3 rounded-full transition-colors duration-300 ${isSelected ? "bg-purple-500 animate-pulse" : "bg-slate-200 group-hover:bg-purple-300"}`}
+                  />
                 </div>
               </button>
             </li>

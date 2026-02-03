@@ -56,11 +56,11 @@ export const PianoKeyboard = memo(function PianoKeyboard({
     return `${((leftWhiteKeyIndex + 0.7) / whiteKeys.length) * 100}%`;
   };
 
-  const getWhiteKeyColor = (note: number) => {
+  const getWhiteKeyColor = (_note: number) => {
     return "bg-white hover:bg-gray-50";
   };
 
-  const getBlackKeyColor = (note: number) => {
+  const getBlackKeyColor = (_note: number) => {
     return "bg-gray-900";
   };
 
@@ -73,9 +73,9 @@ export const PianoKeyboard = memo(function PianoKeyboard({
 
     // Base colors matching FalldownVisualizer
     const blue = "rgba(59,130,246,1)"; // blue-500
-    const blueOuter = "rgba(59,130,246,0.6)";
+    const _blueOuter = "rgba(59,130,246,0.6)";
     const purple = "rgba(147,51,234,1)"; // purple-600
-    const purpleOuter = "rgba(147,51,234,0.6)";
+    const _purpleOuter = "rgba(147,51,234,0.6)";
     const indigo = "rgba(99,102,241,1)"; // indigo-500
 
     if (isLive && isPlayback) {
@@ -94,7 +94,8 @@ export const PianoKeyboard = memo(function PianoKeyboard({
     const isPlayback = playbackNotes.has(note);
     const isBlack = isBlackKey(note);
 
-    if (isLive && isPlayback) return "from-indigo-500/60 via-indigo-500/20 to-transparent";
+    if (isLive && isPlayback)
+      return "from-indigo-500/60 via-indigo-500/20 to-transparent";
     if (isBlack) return "from-purple-600/60 via-purple-600/20 to-transparent";
     return "from-blue-500/60 via-blue-500/20 to-transparent";
   };
@@ -126,9 +127,13 @@ export const PianoKeyboard = memo(function PianoKeyboard({
                 className="relative flex-1 flex flex-col justify-end"
               >
                 {/* Flare at the base */}
-                <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-12 blur-md transition-opacity duration-150 ${isActive ? "opacity-100" : "opacity-0"} ${getFlareColor(note)}`} />
+                <div
+                  className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-12 blur-md transition-opacity duration-150 ${isActive ? "opacity-100" : "opacity-0"} ${getFlareColor(note)}`}
+                />
                 {/* The beam itself */}
-                <div className={`w-full h-full bg-gradient-to-t transition-opacity duration-150 ${getBeamClass(note)} ${isActive ? "opacity-100" : "opacity-0"}`} />
+                <div
+                  className={`w-full h-full bg-gradient-to-t transition-opacity duration-150 ${getBeamClass(note)} ${isActive ? "opacity-100" : "opacity-0"}`}
+                />
               </div>
             );
           })}
@@ -146,8 +151,10 @@ export const PianoKeyboard = memo(function PianoKeyboard({
               className={`relative flex-1 border-r last:border-r-0 border-gray-200 h-full transition-all duration-75 outline-none font-bold text-[10px] text-gray-400 flex items-end justify-center pb-2 select-none overflow-hidden will-change-transform ${getWhiteKeyColor(note)}`}
             >
               {/* Glow Overlay */}
-              <div className={`absolute inset-0 transition-opacity duration-75 pointer-events-none z-0 ${getGlowClass(note)}`} />
-              
+              <div
+                className={`absolute inset-0 transition-opacity duration-75 pointer-events-none z-0 ${getGlowClass(note)}`}
+              />
+
               {note === 60 && (
                 <span className="relative z-10 text-gray-200 font-bold">
                   C4
@@ -166,7 +173,10 @@ export const PianoKeyboard = memo(function PianoKeyboard({
             const isActive = liveNotes.has(note) || playbackNotes.has(note);
 
             return (
-              <div key={`black-container-${note}`} className="absolute inset-0 pointer-events-none">
+              <div
+                key={`black-container-${note}`}
+                className="absolute inset-0 pointer-events-none"
+              >
                 {/* Black key beam */}
                 <div
                   className="absolute -top-[800px] flex flex-col justify-end pointer-events-none"
@@ -177,11 +187,15 @@ export const PianoKeyboard = memo(function PianoKeyboard({
                   }}
                 >
                   {/* Flare for black key */}
-                  <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-12 blur-md transition-opacity duration-150 ${isActive ? "opacity-100" : "opacity-0"} ${getFlareColor(note)}`} />
+                  <div
+                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-12 blur-md transition-opacity duration-150 ${isActive ? "opacity-100" : "opacity-0"} ${getFlareColor(note)}`}
+                  />
                   {/* Beam for black key */}
-                  <div className={`w-full h-full bg-gradient-to-t transition-opacity duration-150 ${getBeamClass(note)} ${isActive ? "opacity-100" : "opacity-0"}`} />
+                  <div
+                    className={`w-full h-full bg-gradient-to-t transition-opacity duration-150 ${getBeamClass(note)} ${isActive ? "opacity-100" : "opacity-0"}`}
+                  />
                 </div>
-                
+
                 <button
                   type="button"
                   key={note}
@@ -195,7 +209,9 @@ export const PianoKeyboard = memo(function PianoKeyboard({
                   }}
                   className={`h-2/3 rounded-b-md border border-black shadow-md transition-all duration-75 outline-none pointer-events-auto overflow-hidden will-change-transform ${getBlackKeyColor(note)}`}
                 >
-                  <div className={`absolute inset-0 transition-opacity duration-75 pointer-events-none ${getGlowClass(note)}`} />
+                  <div
+                    className={`absolute inset-0 transition-opacity duration-75 pointer-events-none ${getGlowClass(note)}`}
+                  />
                 </button>
               </div>
             );

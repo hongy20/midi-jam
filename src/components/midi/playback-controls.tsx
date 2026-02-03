@@ -1,5 +1,5 @@
-import { memo } from "react";
 import { Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
+import { memo } from "react";
 
 interface PlaybackControlsProps {
   isPlaying: boolean;
