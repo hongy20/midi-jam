@@ -191,7 +191,7 @@ export default function Home() {
         />
 
         {selectedFile && (
-          <div className="bg-white/80 backdrop-blur-md border border-gray-100 shadow-lg rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold text-slate-500 animate-in fade-in slide-in-from-top-2 duration-500">
+          <div className="bg-white/80 backdrop-blur-md border border-gray-100 shadow-lg rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold text-slate-400 animate-in fade-in slide-in-from-top-2 duration-500">
             <span className="w-8 text-right">
               {formatTime(currentTime)}
             </span>
