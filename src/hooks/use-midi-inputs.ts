@@ -1,25 +1,32 @@
 import { useCallback, useEffect, useState } from "react";
 import { requestMIDIAccess } from "@/lib/midi/midi-access";
-import { getMIDIInputs, onMIDIDevicesChange } from "@/lib/midi/midi-devices";
+import {
+  getMIDIInputs,
+  getMIDIOutputs,
+  onMIDIDevicesChange,
+} from "@/lib/midi/midi-devices";
 
 interface UseMIDIInputsResult {
   inputs: WebMidi.MIDIInput[];
+  outputs: WebMidi.MIDIOutput[];
   isLoading: boolean;
   error: string | null;
 }
 
 /**
- * A React hook that manages MIDI input device discovery and connection.
- * @returns An object containing the list of available inputs, loading state, and any error.
+ * A React hook that manages MIDI input and output device discovery and connection.
+ * @returns An object containing the list of available inputs, outputs, loading state, and any error.
  */
 export function useMIDIInputs(): UseMIDIInputsResult {
   const [inputs, setInputs] = useState<WebMidi.MIDIInput[]>([]);
+  const [outputs, setOutputs] = useState<WebMidi.MIDIOutput[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [midiAccess, setMidiAccess] = useState<WebMidi.MIDIAccess | null>(null);
 
-  const updateInputs = useCallback((access: WebMidi.MIDIAccess) => {
+  const updateDevices = useCallback((access: WebMidi.MIDIAccess) => {
     setInputs(getMIDIInputs(access));
+    setOutputs(getMIDIOutputs(access));
   }, []);
 
   useEffect(() => {
@@ -31,7 +38,7 @@ export function useMIDIInputs(): UseMIDIInputsResult {
         if (!mounted) return;
 
         setMidiAccess(access);
-        updateInputs(access);
+        updateDevices(access);
         setIsLoading(false);
       } catch (err) {
         if (!mounted) return;
@@ -45,18 +52,18 @@ export function useMIDIInputs(): UseMIDIInputsResult {
     return () => {
       mounted = false;
     };
-  }, [updateInputs]);
+  }, [updateDevices]);
 
   useEffect(() => {
     if (!midiAccess) return;
 
     const handleDevicesChange = () => {
-      updateInputs(midiAccess);
+      updateDevices(midiAccess);
     };
 
     const unsubscribe = onMIDIDevicesChange(midiAccess, handleDevicesChange);
     return unsubscribe;
-  }, [midiAccess, updateInputs]);
+  }, [midiAccess, updateDevices]);
 
-  return { inputs, isLoading, error };
+  return { inputs, outputs, isLoading, error };
 }

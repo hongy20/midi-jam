@@ -23,16 +23,20 @@ describe("useMIDIInputs", () => {
     const { result } = renderHook(() => useMIDIInputs());
 
     expect(result.current.inputs).toEqual([]);
+    expect(result.current.outputs).toEqual([]);
     expect(result.current.isLoading).toBe(true);
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.inputs).toEqual([]);
+    expect(result.current.outputs).toEqual([]);
   });
 
-  it("should return inputs when they are available", async () => {
-    const mockInput = { id: "1", name: "Keyboard" };
+  it("should return inputs and outputs when they are available", async () => {
+    const mockInput = { id: "in-1", name: "Keyboard" };
+    const mockOutput = { id: "out-1", name: "Synth" };
     const mockMIDIAccess = {
-      inputs: new Map([["1", mockInput]]),
+      inputs: new Map([["in-1", mockInput]]),
+      outputs: new Map([["out-1", mockOutput]]),
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
     };
@@ -44,6 +48,7 @@ describe("useMIDIInputs", () => {
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.inputs).toEqual([mockInput]);
+    expect(result.current.outputs).toEqual([mockOutput]);
   });
 
   it("should handle errors when requesting access", async () => {

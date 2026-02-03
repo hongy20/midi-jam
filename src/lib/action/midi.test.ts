@@ -40,6 +40,8 @@ describe("getMidiFiles", () => {
 
   it("should handle errors gracefully", async () => {
     vi.mocked(fs.readdir).mockRejectedValue(new Error("Directory not found"));
+    // Avoid logging mocked errors during unit tests
+    vi.spyOn(console, "error").mockImplementation(() => {});
     const result = await getMidiFiles();
     expect(result).toEqual([]);
   });

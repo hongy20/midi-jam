@@ -8,6 +8,17 @@ export function getMIDIInputs(access: WebMidi.MIDIAccess): WebMidi.MIDIInput[] {
 }
 
 /**
+ * Retrieves an array of available MIDI output devices from the MIDIAccess object.
+ * @param access The MIDIAccess object obtained from the Web MIDI API.
+ * @returns An array of MIDIOutput objects.
+ */
+export function getMIDIOutputs(
+  access: WebMidi.MIDIAccess,
+): WebMidi.MIDIOutput[] {
+  return Array.from(access.outputs.values());
+}
+
+/**
  * Subscribes to MIDI device state change events (connection/disconnection).
  * @param access The MIDIAccess object.
  * @param callback The function to be called when a state change occurs.

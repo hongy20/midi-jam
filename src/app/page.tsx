@@ -31,16 +31,22 @@ const NOTE_RANGE_BUFFER = 4;
 export default function Home() {
   const {
     inputs,
+    outputs,
     isLoading: isMidiLoading,
     error: midiError,
   } = useMIDIInputs();
-  const { selectedDevice, selectDevice } = useMIDIConnection(inputs);
+  const { selectedDevice, selectedOutput, selectDevice } = useMIDIConnection(
+    inputs,
+    outputs,
+  );
 
   const [demoMode, setDemoMode] = useState(true);
 
   // Audio setup
-  const { playNote, stopNote, stopAllNotes, isMuted, toggleMute } =
-    useMidiAudio(demoMode);
+  const { playNote, stopNote, stopAllNotes, setIsReady } = useMidiAudio(
+    demoMode,
+    selectedOutput,
+  );
 
   // Live input tracking
   const liveActiveNotes = useActiveNotes(selectedDevice, {
@@ -194,8 +200,6 @@ export default function Home() {
           onStop={stop}
           speed={speed}
           onSpeedChange={setSpeed}
-          isMuted={isMuted}
-          onToggleMute={toggleMute}
           demoMode={demoMode}
           onToggleDemo={() => setDemoMode(!demoMode)}
         />
