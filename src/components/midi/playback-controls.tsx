@@ -10,6 +10,7 @@ interface PlaybackControlsProps {
   onSpeedChange: (speed: number) => void;
   isMuted: boolean;
   onToggleMute: () => void;
+  demoMode?: boolean;
 }
 
 export const PlaybackControls = memo(function PlaybackControls({
@@ -21,6 +22,7 @@ export const PlaybackControls = memo(function PlaybackControls({
   onSpeedChange,
   isMuted,
   onToggleMute,
+  demoMode = true,
 }: PlaybackControlsProps) {
   const speeds = [0.5, 1.0, 1.5, 2.0];
 
@@ -30,12 +32,17 @@ export const PlaybackControls = memo(function PlaybackControls({
         <button
           type="button"
           onClick={onToggleMute}
-          className={`p-2 rounded-full transition-all hover:bg-gray-100 ${
-            isMuted ? "text-red-500" : "text-gray-600"
+          disabled={!demoMode}
+          className={`p-2 rounded-full transition-all ${
+            !demoMode
+              ? "text-gray-300 opacity-50 cursor-not-allowed"
+              : isMuted
+                ? "hover:bg-gray-100 text-red-500"
+                : "hover:bg-gray-100 text-gray-600"
           }`}
-          aria-label={isMuted ? "Unmute" : "Mute"}
+          aria-label={!demoMode ? "Muted (Demo Off)" : isMuted ? "Unmute" : "Mute"}
         >
-          {isMuted ? (
+          {!demoMode || isMuted ? (
             <VolumeX className="w-4 h-4" />
           ) : (
             <Volume2 className="w-4 h-4" />

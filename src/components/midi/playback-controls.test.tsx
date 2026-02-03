@@ -39,4 +39,11 @@ describe("PlaybackControls", () => {
     fireEvent.click(screen.getByText("1.5x"));
     expect(mockProps.onSpeedChange).toHaveBeenCalledWith(1.5);
   });
+
+  it("disables mute button when demoMode is false", () => {
+    render(<PlaybackControls {...mockProps} demoMode={false} />);
+    const muteButton = screen.getByLabelText(/muted/i); 
+    expect(muteButton).toBeDisabled();
+    expect(muteButton).toHaveClass("opacity-50");
+  });
 });

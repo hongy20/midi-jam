@@ -198,6 +198,7 @@ export default function Home() {
           onSpeedChange={setSpeed}
           isMuted={isMuted}
           onToggleMute={toggleMute}
+          demoMode={demoMode}
         />
 
         {selectedFile && (
