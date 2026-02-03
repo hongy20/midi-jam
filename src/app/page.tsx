@@ -15,8 +15,10 @@ import {
   getBarLines,
   getMidiEvents,
   getNoteRange,
+  getNoteSpans,
   loadMidiFile,
   type MidiEvent,
+  type NoteSpan,
 } from "@/lib/midi/midi-player";
 
 interface MidiFile {
@@ -47,6 +49,7 @@ export default function Home() {
   const [midiFiles, setMidiFiles] = useState<MidiFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<MidiFile | null>(null);
   const [midiEvents, setMidiEvents] = useState<MidiEvent[]>([]);
+  const [noteSpans, setNoteSpans] = useState<NoteSpan[]>([]);
   const [barLines, setBarLines] = useState<number[]>([]);
   const [noteRange, setNoteRange] = useState<{
     min: number;
@@ -113,6 +116,7 @@ export default function Home() {
         const midi = await loadMidiFile(file.url);
         const events = getMidiEvents(midi);
         setMidiEvents(events);
+        setNoteSpans(getNoteSpans(events));
         setBarLines(getBarLines(midi));
 
         // Calculate range with a small buffer, always including C4 (60)
@@ -128,6 +132,7 @@ export default function Home() {
       } catch (err) {
         console.error("Failed to load MIDI file:", err);
         setMidiEvents([]);
+        setNoteSpans([]);
         setNoteRange(null);
       }
     },
@@ -206,7 +211,7 @@ export default function Home() {
                 className="flex flex-col gap-0 shadow-2xl rounded-[2rem] md:rounded-[3rem] overflow-hidden border-2 md:border-4 border-gray-100 bg-white animate-in zoom-in-95 fade-in duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(15deg)] md:[transform:rotateX(25deg)]"
               >
                 <FalldownVisualizer
-                  events={midiEvents}
+                  spans={noteSpans}
                   barLines={barLines}
                   currentTime={currentTime}
                   speed={speed}

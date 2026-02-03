@@ -1,10 +1,10 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import type { MidiEvent } from "@/lib/midi/midi-player";
+import type { NoteSpan } from "@/lib/midi/midi-player";
 
 interface FalldownVisualizerProps {
-  events: MidiEvent[];
+  spans: NoteSpan[];
   barLines?: number[];
   currentTime: number;
   speed: number;
@@ -18,7 +18,7 @@ interface FalldownVisualizerProps {
  * Synchronized with the responsive piano keyboard layout.
  */
 export const FalldownVisualizer = memo(function FalldownVisualizer({
-  events,
+  spans,
   barLines = [],
   currentTime,
   speed,
@@ -29,59 +29,35 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
   const PIXELS_PER_SECOND = 100 * speed; // How fast the notes fall
   const LOOK_AHEAD_SECONDS = 4 / speed; // How many seconds of future notes to show
 
-  // Filter bar-lines to only show those in view
+  // Efficient filtering: notes/barlines are sorted by time, so we can exit early
   const visibleBarLines = useMemo(() => {
-    return barLines.filter(
-      (time) =>
-        time >= currentTime && time < currentTime + LOOK_AHEAD_SECONDS,
-    );
-  }, [barLines, currentTime, LOOK_AHEAD_SECONDS]);
-
-  // Filter events to only show notes that are about to be played or are currently playing
-  const visibleNotes = useMemo(() => {
-    const notes: {
-      id: string;
-      note: number;
-      startTime: number;
-      duration: number;
-      isBlack: boolean;
-    }[] = [];
-
-    // Group noteOn/noteOff pairs into note spans
-    const activeNoteStarts = new Map<number, number>();
-
-    for (const event of events) {
-      if (event.type === "noteOn") {
-        activeNoteStarts.set(event.note, event.time);
-      } else if (event.type === "noteOff") {
-        const startTime = activeNoteStarts.get(event.note);
-        if (startTime !== undefined) {
-          const duration = event.time - startTime;
-
-          // Only include if it's within our time window and within the visible range
-          if (
-            startTime + duration > currentTime &&
-            startTime < currentTime + LOOK_AHEAD_SECONDS &&
-            event.note >= rangeStart &&
-            event.note <= rangeEnd
-          ) {
-            const n = event.note % 12;
-            const isBlack = [1, 3, 6, 8, 10].includes(n);
-
-            notes.push({
-              id: `${event.note}-${event.track}-${startTime}`,
-              note: event.note,
-              startTime,
-              duration,
-              isBlack,
-            });
-          }
-          activeNoteStarts.delete(event.note);
-        }
+    const visible: number[] = [];
+    for (const time of barLines) {
+      if (time >= currentTime && time < currentTime + LOOK_AHEAD_SECONDS) {
+        visible.push(time);
+      } else if (time >= currentTime + LOOK_AHEAD_SECONDS) {
+        break; // Early exit
       }
     }
-    return notes;
-  }, [events, currentTime, LOOK_AHEAD_SECONDS, rangeStart, rangeEnd]);
+    return visible;
+  }, [barLines, currentTime, LOOK_AHEAD_SECONDS]);
+
+  const visibleNotes = useMemo(() => {
+    const visible: NoteSpan[] = [];
+    for (const span of spans) {
+      // span is visible if it ends after currentTime AND starts before LOOK_AHEAD
+      const endTime = span.startTime + span.duration;
+      if (endTime > currentTime && span.startTime < currentTime + LOOK_AHEAD_SECONDS) {
+        // Also check pitch range
+        if (span.note >= rangeStart && span.note <= rangeEnd) {
+          visible.push(span);
+        }
+      } else if (span.startTime >= currentTime + LOOK_AHEAD_SECONDS) {
+        break; // Early exit (spans are sorted by startTime)
+      }
+    }
+    return visible;
+  }, [spans, currentTime, LOOK_AHEAD_SECONDS, rangeStart, rangeEnd]);
 
   // Horizontal position logic (must match PianoKeyboard)
   const { whiteKeysCount, whiteKeyIndices } = useMemo(() => {
@@ -103,6 +79,7 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
 
     if (!isBlack) {
       const index = whiteKeyIndices[note];
+      if (index === undefined) return null;
       return {
         left: `${(index / whiteKeysCount) * 100}%`,
         width: `${(1 / whiteKeysCount) * 100}%`,
@@ -120,7 +97,7 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
 
   return (
     <div
-      className="relative overflow-hidden bg-gray-900/5 backdrop-blur-sm rounded-t-[3rem] border-x-4 border-t-4 border-gray-100"
+      className="relative overflow-hidden bg-slate-950/10 backdrop-blur-sm rounded-t-[3rem] border-x-4 border-t-4 border-gray-100"
       style={{ height: `${height}px` }}
     >
       <div className="absolute inset-0 w-full mx-auto">
@@ -130,7 +107,7 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
           return (
             <div
               key={`bar-${time}`}
-              className="absolute left-0 right-0 h-px bg-white/20 border-t border-gray-400/10 will-change-transform"
+              className="absolute left-0 right-0 h-px bg-white/20 border-t border-white/5 will-change-transform"
               style={{
                 transform: `translate3d(0, ${-bottom}px, 0)`,
                 bottom: 0,
@@ -143,8 +120,6 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
           const pos = getHorizontalPosition(note.note);
           if (!pos) return null;
           const { left, width } = pos;
-          // Distance from the bottom of the container
-          // Bottom = (startTime - currentTime) * pixelsPerSecond
           const bottom = (note.startTime - currentTime) * PIXELS_PER_SECOND;
           const rectHeight = note.duration * PIXELS_PER_SECOND;
 

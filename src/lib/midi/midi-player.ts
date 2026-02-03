@@ -8,6 +8,16 @@ export interface MidiEvent {
   track: number;
 }
 
+export interface NoteSpan {
+  id: string;
+  note: number;
+  startTime: number;
+  duration: number;
+  velocity: number;
+  track: number;
+  isBlack: boolean;
+}
+
 /**
  * Fetches and parses a MIDI file from a URL.
  */
@@ -48,6 +58,43 @@ export function getMidiEvents(midi: Midi): MidiEvent[] {
   });
 
   return events.sort((a, b) => a.time - b.time);
+}
+
+/**
+ * Pre-processes MIDI events into duration-based NoteSpans for efficient rendering.
+ */
+export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
+  const spans: NoteSpan[] = [];
+  const activeNotes = new Map<number, { time: number; velocity: number }>();
+
+  for (const event of events) {
+    if (event.type === "noteOn") {
+      activeNotes.set(event.note, {
+        time: event.time,
+        velocity: event.velocity,
+      });
+    } else if (event.type === "noteOff") {
+      const start = activeNotes.get(event.note);
+      if (start !== undefined) {
+        const n = event.note % 12;
+        const isBlack = [1, 3, 6, 8, 10].includes(n);
+
+        spans.push({
+          id: `${event.note}-${event.track}-${start.time}`,
+          note: event.note,
+          startTime: start.time,
+          duration: event.time - start.time,
+          velocity: start.velocity,
+          track: event.track,
+          isBlack,
+        });
+        activeNotes.delete(event.note);
+      }
+    }
+  }
+
+  // Sort by startTime for efficient range filtering
+  return spans.sort((a, b) => a.startTime - b.startTime);
 }
 
 /**

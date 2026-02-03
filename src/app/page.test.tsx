@@ -77,11 +77,12 @@ const mockStop = vi.fn(() => {
 
 vi.mock("@/hooks/use-midi-player", () => ({
   useMidiPlayer: () => ({
-    activeNotes: new Set(),
+    activeNotes: new Map(),
     get isPlaying() {
       return mockIsPlaying;
     },
     currentTime: 0,
+    duration: 0,
     speed: 1,
     play: mockPlay,
     pause: mockPause,
