@@ -9,5 +9,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: refactor: simplify audio logic (remove mute button) and support external MIDI output**
+- [x] **Track: refactor: simplify audio logic (remove mute button) and support external MIDI output**
 *Link: [./tracks/audio_simplification_20260203/](./tracks/audio_simplification_20260203/)*
