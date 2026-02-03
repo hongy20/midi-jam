@@ -5,7 +5,7 @@ This plan covers the implementation of the "Demo Mode" feature, which links keyb
 ## Phase 1: State Logic & Component Props [checkpoint: ]
 Goal: Implement the core `demoMode` state and propagate it to the visual and audio logic.
 
-- [ ] Task: Update `useMidiAudio` to support Demo Mode constraints
+- [x] Task: Update `useMidiAudio` to support Demo Mode constraints [2db9a37]
     - [ ] Write Tests: Verify that when `demoMode` is false, audio remains muted even if toggle is attempted.
     - [ ] Implement: Add `demoMode` parameter to `useMidiAudio` to handle forced muting/disabling.
 - [ ] Task: Conditional Playback Visualization in `Home`
