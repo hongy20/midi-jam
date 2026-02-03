@@ -16,16 +16,16 @@ Goal: Enable the application to discover and select MIDI output ports that match
     - [ ] Implement: Update `src/hooks/use-midi-connection.ts` to manage a `selectedOutput` state that auto-matches the `selectedDevice`.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: MIDI Discovery' (Protocol in workflow.md) [7c8e724]
 
-## Phase 2: Refactor Audio Hook for External Output [checkpoint: ]
+## Phase 2: Refactor Audio Hook for External Output [checkpoint: 98a7bc6]
 Goal: Update `useMidiAudio` to route sound to either the browser synth or external hardware, tied strictly to Demo Mode.
 
 - [x] Task: Redesign `useMidiAudio` API and Logic [641e84b]
     - [x] Write Tests: Verify that when an output device is provided, MIDI messages are sent to it instead of triggering the synth.
     - [x] Write Tests: Verify that when `demoMode` is false, no sound is produced regardless of output type.
     - [x] Implement: Refactor `src/hooks/use-midi-audio.ts` to remove `isMuted` and support `selectedOutput` routing.
-- [x] Task: Conductor - User Manual Verification 'Phase 2: Audio Refactor' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Audio Refactor' (Protocol in workflow.md) [98a7bc6]
 
-## Phase 3: UI Cleanup & Test Alignment [checkpoint: ]
+## Phase 3: UI Cleanup & Test Alignment [checkpoint: 98a7bc6]
 Goal: Remove the mute button from the UI and update/delete outdated unit tests.
 
 - [x] Task: Remove Mute Toggle from UI [641e84b]
@@ -33,4 +33,4 @@ Goal: Remove the mute button from the UI and update/delete outdated unit tests.
     - [x] Implement: Remove volume icon and toggle logic from `src/components/midi/playback-controls.tsx`.
 - [x] Task: Clean up project-wide unit tests [641e84b]
     - [x] Implement: Update `src/app/page.test.tsx`, `src/hooks/use-midi-audio.test.ts`, and `src/components/midi/playback-controls.test.tsx` to align with the new single-toggle audio logic.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Cleanup' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Cleanup' (Protocol in workflow.md) [98a7bc6]
