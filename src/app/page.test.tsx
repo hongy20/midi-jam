@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import Home from "./page";
 
@@ -17,7 +17,7 @@ vi.mock("@/components/midi/falldown-visualizer", () => ({
   ),
 }));
 vi.mock("@/components/midi/piano-keyboard", () => ({
-  PianoKeyboard: (props: any) => (
+  PianoKeyboard: (props: unknown) => (
     <div data-testid="piano-keyboard" data-props={JSON.stringify(props)}>
       PianoKeyboard
     </div>
@@ -118,15 +118,20 @@ describe("Home Page Layout Refactor", () => {
     mockStop.mockClear();
   });
 
-  it("renders MidiHeader and PlaybackControls", () => {
-    render(<Home />);
+  it("renders MidiHeader and PlaybackControls", async () => {
+    await act(async () => {
+      render(<Home />);
+    });
 
     expect(screen.getByTestId("midi-header")).toBeInTheDocument();
     expect(screen.getByTestId("playback-controls")).toBeInTheDocument();
   });
 
-  it("should auto-pause when expanding and auto-resume if it was playing", () => {
-    const { rerender } = render(<Home />);
+  it("should auto-pause when expanding and auto-resume if it was playing", async () => {
+    const renderResult = await act(async () => {
+      return render(<Home />);
+    });
+    const { rerender } = renderResult;
 
     // 1. Start minimized
     const toggle = screen.getByTestId("toggle-minimize");
@@ -148,14 +153,16 @@ describe("Home Page Layout Refactor", () => {
     expect(mockPlay).toHaveBeenCalled();
   });
 
-  it("should toggle demo mode and affect PianoKeyboard props", () => {
+  it("should toggle demo mode and affect PianoKeyboard props", async () => {
     // We need to mock useMidiPlayer to return some active notes to see them being filtered
     // But currently the mock is static. Let's adjust it for this test.
-    render(<Home />);
-    
+    await act(async () => {
+      render(<Home />);
+    });
+
     const demoToggle = screen.getByTestId("toggle-demo");
     expect(screen.getByText(/DemoOn/)).toBeInTheDocument();
-    
+
     // Default: playbackNotes should be passed to PianoKeyboard (even if empty in mock)
     // To properly test filtering, we'd need a more dynamic useMidiPlayer mock.
     // But let's at least test that toggling works and the state is passed to MidiHeader.

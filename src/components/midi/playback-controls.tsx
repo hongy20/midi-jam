@@ -60,7 +60,9 @@ export const PlaybackControls = memo(function PlaybackControls({
                 ? "hover:bg-gray-100 text-red-500"
                 : "hover:bg-gray-100 text-gray-600"
           }`}
-          aria-label={!demoMode ? "Muted (Demo Off)" : isMuted ? "Unmute" : "Mute"}
+          aria-label={
+            !demoMode ? "Muted (Demo Off)" : isMuted ? "Unmute" : "Mute"
+          }
         >
           {!demoMode || isMuted ? (
             <VolumeX className="w-4 h-4" />

@@ -1,22 +1,22 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import * as Tone from "tone";
 import { useMidiAudio } from "./use-midi-audio";
 
 // Mock Tone.js
 vi.mock("tone", () => {
-  const PolySynth = vi.fn(function () {
-    return {
-      toDestination: vi.fn().mockReturnThis(),
-      dispose: vi.fn(),
-      triggerAttack: vi.fn(),
-      triggerRelease: vi.fn(),
-      releaseAll: vi.fn(),
-    };
-  });
+  const mockPolySynth = {
+    toDestination: vi.fn().mockReturnThis(),
+    dispose: vi.fn(),
+    triggerAttack: vi.fn(),
+    triggerRelease: vi.fn(),
+    releaseAll: vi.fn(),
+  };
 
   return {
-    PolySynth,
+    // biome-ignore lint/complexity/useArrowFunction: needs to be constructible
+    PolySynth: vi.fn().mockImplementation(function () {
+      return mockPolySynth;
+    }),
     Synth: vi.fn(),
     now: vi.fn().mockReturnValue(0),
     Frequency: vi.fn().mockImplementation(() => ({
@@ -35,7 +35,7 @@ describe("useMidiAudio", () => {
 
   it("should toggle mute status", () => {
     const { result } = renderHook(() => useMidiAudio());
-    
+
     act(() => {
       result.current.toggleMute();
     });
@@ -48,9 +48,12 @@ describe("useMidiAudio", () => {
   });
 
   it("should be forced to muted when demoMode is false", () => {
-    const { result, rerender } = renderHook(({ demoMode }) => useMidiAudio(demoMode), {
-      initialProps: { demoMode: true }
-    });
+    const { result, rerender } = renderHook(
+      ({ demoMode }) => useMidiAudio(demoMode),
+      {
+        initialProps: { demoMode: true },
+      },
+    );
 
     expect(result.current.isMuted).toBe(false);
 
