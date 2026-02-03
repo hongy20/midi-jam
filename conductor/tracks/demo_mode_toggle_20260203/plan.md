@@ -1,0 +1,33 @@
+# Implementation Plan: Demo Mode Toggle
+
+This plan covers the implementation of the "Demo Mode" feature, which links keyboard visual feedback with forced audio states.
+
+## Phase 1: State Logic & Component Props [checkpoint: ]
+Goal: Implement the core `demoMode` state and propagate it to the visual and audio logic.
+
+- [ ] Task: Update `useMidiAudio` to support Demo Mode constraints
+    - [ ] Write Tests: Verify that when `demoMode` is false, audio remains muted even if toggle is attempted.
+    - [ ] Implement: Add `demoMode` parameter to `useMidiAudio` to handle forced muting/disabling.
+- [ ] Task: Conditional Playback Visualization in `Home`
+    - [ ] Write Tests: Verify `PianoKeyboard` receives an empty set for `playbackNotes` when `demoMode` is off.
+    - [ ] Implement: Add `demoMode` state to `Home` component and conditionally pass `playbackNotes` to `PianoKeyboard`.
+- [ ] Task: Conductor - User Manual Verification 'Phase 1: State Logic' (Protocol in workflow.md)
+
+## Phase 2: UI Implementation [checkpoint: ]
+Goal: Create the toggle button and integrate it into the layout.
+
+- [ ] Task: Create Demo Toggle Button
+    - [ ] Write Tests: Verify the button displays correctly in both active and inactive states.
+    - [ ] Implement: Add the "Demo" toggle button to the time/duration pill container in `src/app/page.tsx`.
+- [ ] Task: Update `PlaybackControls` for Demo Mode
+    - [ ] Write Tests: Verify the volume icon reflects the "disabled" state when Demo Mode is off.
+    - [ ] Implement: Pass `demoMode` to `PlaybackControls` to visually disable/dim the mute toggle when applicable.
+- [ ] Task: Conductor - User Manual Verification 'Phase 2: UI Implementation' (Protocol in workflow.md)
+
+## Phase 3: Integration & Polish [checkpoint: ]
+Goal: Final end-to-end verification and refinement.
+
+- [ ] Task: End-to-End Demo Mode Verification
+    - [ ] Write Tests: Verify the transition between Demo Mode ON/OFF correctly switches both visuals and sound.
+    - [ ] Implement: Final bug fixes and style adjustments to ensure the button is perfectly aligned.
+- [ ] Task: Conductor - User Manual Verification 'Phase 3: Integration' (Protocol in workflow.md)
