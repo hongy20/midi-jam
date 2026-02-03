@@ -8,7 +8,7 @@ Goal: Enable the application to discover and select MIDI output ports that match
 - [x] Task: Update MIDI library to support outputs [590977a]
     - [ ] Write Tests: Verify `getMIDIOutputs` returns available output ports.
     - [ ] Implement: Add `getMIDIOutputs` to `src/lib/midi/midi-devices.ts`.
-- [ ] Task: Update MIDI input hook to include outputs
+- [x] Task: Update MIDI input hook to include outputs [60d9846]
     - [ ] Write Tests: Verify `useMIDIInputs` returns both inputs and outputs.
     - [ ] Implement: Modify `src/hooks/use-midi-inputs.ts` to fetch and return available outputs.
 - [ ] Task: Implement Auto-Output selection logic
