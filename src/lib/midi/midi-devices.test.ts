@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { getMIDIInputs, onMIDIDevicesChange } from "./midi-devices";
+import {
+  getMIDIInputs,
+  getMIDIOutputs,
+  onMIDIDevicesChange,
+} from "./midi-devices";
 
 describe("getMIDIInputs", () => {
   // ... existing tests ...
@@ -28,6 +32,35 @@ describe("getMIDIInputs", () => {
     expect(result).toHaveLength(2);
     expect(result).toContain(mockInput1);
     expect(result).toContain(mockInput2);
+  });
+});
+
+describe("getMIDIOutputs", () => {
+  it("should return an empty array if there are no MIDI outputs", () => {
+    const mockMIDIAccess = {
+      outputs: new Map(),
+    } as unknown as WebMidi.MIDIAccess;
+
+    expect(getMIDIOutputs(mockMIDIAccess)).toEqual([]);
+  });
+
+  it("should return an array of MIDI outputs", () => {
+    const mockOutput1 = { id: "1", name: "Output 1", manufacturer: "Brand A" };
+    const mockOutput2 = { id: "2", name: "Output 2", manufacturer: "Brand B" };
+
+    const mockOutputs = new Map([
+      ["1", mockOutput1],
+      ["2", mockOutput2],
+    ]);
+
+    const mockMIDIAccess = {
+      outputs: mockOutputs,
+    } as unknown as WebMidi.MIDIAccess;
+
+    const result = getMIDIOutputs(mockMIDIAccess);
+    expect(result).toHaveLength(2);
+    expect(result).toContain(mockOutput1);
+    expect(result).toContain(mockOutput2);
   });
 });
 
