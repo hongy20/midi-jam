@@ -27,7 +27,7 @@ Goal: Create the toggle button and integrate it into the layout.
 ## Phase 3: Integration & Polish [checkpoint: ]
 Goal: Final end-to-end verification and refinement.
 
-- [ ] Task: End-to-End Demo Mode Verification
+- [~] Task: End-to-End Demo Mode Verification
     - [ ] Write Tests: Verify the transition between Demo Mode ON/OFF correctly switches both visuals and sound.
     - [ ] Implement: Final bug fixes and style adjustments to ensure the button is perfectly aligned.
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Integration' (Protocol in workflow.md)
