@@ -52,6 +52,11 @@ export function useMidiAudio() {
     polySynthRef.current.triggerRelease(frequency, Tone.now());
   }, []);
 
+  const stopAllNotes = useCallback(() => {
+    if (!polySynthRef.current) return;
+    polySynthRef.current.releaseAll();
+  }, []);
+
   const toggleMute = useCallback(() => {
     setIsMuted((prev) => !prev);
   }, []);
@@ -62,6 +67,7 @@ export function useMidiAudio() {
   return {
     playNote,
     stopNote,
+    stopAllNotes,
     isMuted,
     toggleMute,
     setIsReady,

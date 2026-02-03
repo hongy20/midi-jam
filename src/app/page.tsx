@@ -37,7 +37,7 @@ export default function Home() {
   const { selectedDevice, selectDevice } = useMIDIConnection(inputs);
 
   // Audio setup
-  const { playNote, stopNote, isMuted, toggleMute } = useMidiAudio();
+  const { playNote, stopNote, stopAllNotes, isMuted, toggleMute } = useMidiAudio();
 
   // Live input tracking
   const liveActiveNotes = useActiveNotes(selectedDevice, {
@@ -73,6 +73,7 @@ export default function Home() {
   } = useMidiPlayer(midiEvents, {
     onNoteOn: playNote,
     onNoteOff: stopNote,
+    onAllNotesOff: stopAllNotes,
   });
 
   const formatTime = (seconds: number) => {

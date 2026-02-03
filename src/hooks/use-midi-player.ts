@@ -6,6 +6,7 @@ export function useMidiPlayer(
   options?: {
     onNoteOn?: (note: number, velocity: number) => void;
     onNoteOff?: (note: number) => void;
+    onAllNotesOff?: () => void;
   },
 ) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -49,10 +50,15 @@ export function useMidiPlayer(
 
   const stop = useCallback(() => {
     // Silence all notes first using ref
-    const { onNoteOff } = optionsRef.current || {};
-    activeNotesRef.current.forEach((_, note) => {
-      onNoteOff?.(note);
-    });
+    const { onNoteOff, onAllNotesOff } = optionsRef.current || {};
+    
+    if (onAllNotesOff) {
+      onAllNotesOff();
+    } else {
+      activeNotesRef.current.forEach((_, note) => {
+        onNoteOff?.(note);
+      });
+    }
 
     setIsPlaying(false);
     setCurrentTime(0);
@@ -84,10 +90,15 @@ export function useMidiPlayer(
     if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
 
     // Silence all notes using ref
-    const { onNoteOff } = optionsRef.current || {};
-    activeNotesRef.current.forEach((_, note) => {
-      onNoteOff?.(note);
-    });
+    const { onNoteOff, onAllNotesOff } = optionsRef.current || {};
+    
+    if (onAllNotesOff) {
+      onAllNotesOff();
+    } else {
+      activeNotesRef.current.forEach((_, note) => {
+        onNoteOff?.(note);
+      });
+    }
   }, [isPlaying, currentTime]); // activeNotes removed
 
   useEffect(() => {
