@@ -24,10 +24,10 @@ Goal: Create the toggle button and integrate it into the layout.
     - [ ] Implement: Pass `demoMode` to `PlaybackControls` to visually disable/dim the mute toggle when applicable.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: UI Implementation' (Protocol in workflow.md) [717de32]
 
-## Phase 3: Integration & Polish [checkpoint: ]
+## Phase 3: Integration & Polish [checkpoint: 4df2315]
 Goal: Final end-to-end verification and refinement.
 
-- [~] Task: End-to-End Demo Mode Verification
+- [x] Task: End-to-End Demo Mode Verification [4df2315]
     - [ ] Write Tests: Verify the transition between Demo Mode ON/OFF correctly switches both visuals and sound.
     - [ ] Implement: Final bug fixes and style adjustments to ensure the button is perfectly aligned.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Integration' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Integration' (Protocol in workflow.md) [4df2315]
