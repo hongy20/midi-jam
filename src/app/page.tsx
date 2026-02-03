@@ -196,23 +196,22 @@ export default function Home() {
 
         {selectedFile && (
           <div className="bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-4 py-1.5 flex items-center gap-2 text-xs font-bold text-slate-400 animate-in fade-in slide-in-from-top-2 duration-500">
-            <span className="w-8 text-right">
-              {formatTime(currentTime)}
+            <span className="uppercase tracking-wider text-[10px] opacity-70">Remains</span>
+            <span className="w-10 text-right">
+              {formatTime(Math.max(0, duration - currentTime))}
             </span>
-            <div className="h-2 w-px bg-slate-400/50" />
-            <span className="w-8">{formatTime(duration)}</span>
           </div>
         )}
       </div>
 
       <main className="flex-1 relative w-full min-h-0">
         {selectedDevice || selectedFile ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-end overflow-hidden">
+          <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden">
             {/* 3D Immersive Stage */}
-            <div className="relative w-full h-[150%] [perspective:1200px] [perspective-origin:50%_20%] flex items-end justify-center px-4 pb-8">
+            <div className="relative w-full h-[85vh] [perspective:1500px] [perspective-origin:50%_50%] flex items-center justify-center px-4">
               <div
                 key={selectedFile?.url || "jam"}
-                className="w-full h-full origin-bottom flex flex-col bg-transparent rounded-b-[1.5rem] overflow-hidden transition-transform duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(40deg)]"
+                className="w-full h-full flex flex-col bg-transparent rounded-[1.5rem] overflow-hidden transition-transform duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(25deg)_scale(0.9)]"
               >
                 <FalldownVisualizer
                   spans={noteSpans}
