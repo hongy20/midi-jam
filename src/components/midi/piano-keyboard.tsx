@@ -101,7 +101,7 @@ export const PianoKeyboard = memo(function PianoKeyboard({
               className={`relative flex-1 border-r border-gray-200 h-full transition-all duration-75 outline-none font-bold text-[10px] text-gray-400 flex items-end justify-center pb-2 select-none will-change-transform ${getWhiteKeyColor(note)}`}
             >
               {note === 60 && (
-                <span className="text-gray-50 font-bold">
+                <span className="text-gray-100 font-bold">
                   C4
                 </span>
               )}
