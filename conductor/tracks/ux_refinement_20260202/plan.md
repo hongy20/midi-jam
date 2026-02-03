@@ -44,12 +44,12 @@ Goal: Fix hanging notes and speed desync issues.
     - [x] **Implement:** Investigate and fix the scheduling logic in `useMidiPlayer` that causes desync at low speeds.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Playback Reliability' (Protocol in workflow.md) [f973e80]
 
-## Phase 4: Visualizer Bar-lines [ ]
+## Phase 4: Visualizer Bar-lines [checkpoint: b6028fd]
 Goal: Implement measure indicators in the falldown visualizer.
 
-- [ ] Task: Extract Tempo/Measure Map from MIDI
-    - [ ] Update the MIDI parsing service to calculate bar-line timestamps based on time signature and tempo events.
-- [ ] Task: Render Bar-lines in `FalldownVisualizer`
-    - [ ] Add a rendering layer for horizontal lines at the calculated measure intervals.
-    - [ ] Ensure lines are subtle and move in perfect sync with the falling notes.
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: Bar-lines' (Protocol in workflow.md)
+- [x] Task: Extract Tempo/Measure Map from MIDI [45e7c14]
+    - [x] Update the MIDI parsing service to calculate bar-line timestamps based on time signature and tempo events.
+- [x] Task: Render Bar-lines in `FalldownVisualizer` [b6028fd]
+    - [x] Add a rendering layer for horizontal lines at the calculated measure intervals.
+    - [x] Ensure lines are subtle and move in perfect sync with the falling notes.
+- [x] Task: Conductor - User Manual Verification 'Phase 4: Bar-lines' (Protocol in workflow.md) [b6028fd]
