@@ -19,7 +19,7 @@ Goal: Create the toggle button and integrate it into the layout.
 - [x] Task: Create Demo Toggle Button [38e075a]
     - [ ] Write Tests: Verify the button displays correctly in both active and inactive states.
     - [ ] Implement: Add the "Demo" toggle button to the time/duration pill container in `src/app/page.tsx`.
-- [ ] Task: Update `PlaybackControls` for Demo Mode
+- [x] Task: Update `PlaybackControls` for Demo Mode [71a0be2]
     - [ ] Write Tests: Verify the volume icon reflects the "disabled" state when Demo Mode is off.
     - [ ] Implement: Pass `demoMode` to `PlaybackControls` to visually disable/dim the mute toggle when applicable.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: UI Implementation' (Protocol in workflow.md)
