@@ -68,3 +68,40 @@ export function getNoteRange(
 
   return { min, max };
 }
+
+/**
+ * Calculates timestamps for bar-lines based on time signature and tempo events.
+ */
+export function getBarLines(midi: Midi): number[] {
+  const barLines: number[] = [];
+  const duration = midi.duration;
+
+  // For now, support a single time signature (the first one found)
+  // Standard MIDI files usually have them at the beginning.
+  // Default to 4/4 if none found.
+  const timeSignature = midi.header.timeSignatures[0] || {
+    numerator: 4,
+    denominator: 4,
+  };
+
+  const beatsPerBar = timeSignature.numerator;
+  
+  // denominator 4 = quarter note, 8 = eighth note, etc.
+  // Tone.js MIDI duration/time is in seconds.
+  // We need to use tempo to calculate seconds per beat.
+  
+  // Simplification: Tone.js provides ticks and PPQ.
+  // 1 bar = beatsPerBar * PPQ ticks.
+  const ppq = midi.header.ppq;
+  const ticksPerBar = beatsPerBar * ppq * (4 / timeSignature.denominator);
+  
+  let currentTick = 0;
+  while (true) {
+    const time = midi.header.ticksToSeconds(currentTick);
+    if (time > duration) break;
+    barLines.push(time);
+    currentTick += ticksPerBar;
+  }
+
+  return barLines;
+}

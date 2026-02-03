@@ -5,6 +5,7 @@ import type { MidiEvent } from "@/lib/midi/midi-player";
 
 interface FalldownVisualizerProps {
   events: MidiEvent[];
+  barLines?: number[];
   currentTime: number;
   speed: number;
   height?: number; // Visual height of the falling area
@@ -18,6 +19,7 @@ interface FalldownVisualizerProps {
  */
 export function FalldownVisualizer({
   events,
+  barLines = [],
   currentTime,
   speed,
   height = 400,
@@ -26,6 +28,14 @@ export function FalldownVisualizer({
 }: FalldownVisualizerProps) {
   const PIXELS_PER_SECOND = 100 * speed; // How fast the notes fall
   const LOOK_AHEAD_SECONDS = 4 / speed; // How many seconds of future notes to show
+
+  // Filter bar-lines to only show those in view
+  const visibleBarLines = useMemo(() => {
+    return barLines.filter(
+      (time) =>
+        time >= currentTime && time < currentTime + LOOK_AHEAD_SECONDS,
+    );
+  }, [barLines, currentTime, LOOK_AHEAD_SECONDS]);
 
   // Filter events to only show notes that are about to be played or are currently playing
   const visibleNotes = useMemo(() => {
@@ -114,6 +124,21 @@ export function FalldownVisualizer({
       style={{ height: `${height}px` }}
     >
       <div className="absolute inset-0 w-full mx-auto">
+        {/* Render Bar-lines */}
+        {visibleBarLines.map((time) => {
+          const bottom = (time - currentTime) * PIXELS_PER_SECOND;
+          return (
+            <div
+              key={`bar-${time}`}
+              className="absolute left-0 right-0 h-px bg-white/20 border-t border-gray-400/10 will-change-transform"
+              style={{
+                transform: `translate3d(0, ${-bottom}px, 0)`,
+                bottom: 0,
+              }}
+            />
+          );
+        })}
+
         {visibleNotes.map((note) => {
           const pos = getHorizontalPosition(note.note);
           if (!pos) return null;

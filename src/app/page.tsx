@@ -12,6 +12,7 @@ import { useMIDIInputs } from "@/hooks/use-midi-inputs";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { getMidiFiles } from "@/lib/action/midi";
 import {
+  getBarLines,
   getMidiEvents,
   getNoteRange,
   loadMidiFile,
@@ -46,6 +47,7 @@ export default function Home() {
   const [midiFiles, setMidiFiles] = useState<MidiFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<MidiFile | null>(null);
   const [midiEvents, setMidiEvents] = useState<MidiEvent[]>([]);
+  const [barLines, setBarLines] = useState<number[]>([]);
   const [noteRange, setNoteRange] = useState<{
     min: number;
     max: number;
@@ -111,6 +113,7 @@ export default function Home() {
         const midi = await loadMidiFile(file.url);
         const events = getMidiEvents(midi);
         setMidiEvents(events);
+        setBarLines(getBarLines(midi));
 
         // Calculate range with a small buffer, always including C4 (60)
         const range = getNoteRange(events);
@@ -204,6 +207,7 @@ export default function Home() {
               >
                 <FalldownVisualizer
                   events={midiEvents}
+                  barLines={barLines}
                   currentTime={currentTime}
                   speed={speed}
                   height={600}
