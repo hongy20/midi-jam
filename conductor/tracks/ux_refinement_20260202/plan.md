@@ -53,3 +53,14 @@ Goal: Implement measure indicators in the falldown visualizer.
     - [x] Add a rendering layer for horizontal lines at the calculated measure intervals.
     - [x] Ensure lines are subtle and move in perfect sync with the falling notes.
 - [x] Task: Conductor - User Manual Verification 'Phase 4: Bar-lines' (Protocol in workflow.md) [b6028fd]
+
+## Phase 5: Performance & Memory Optimization [checkpoint: d0aa16b]
+Goal: Resolve OOM issues and excessive re-renders.
+
+- [x] Task: Fix Infinite Loop in Bar-lines calculation [d0aa16b]
+    - [x] Add safety guards to `getBarLines` to prevent runaway loops.
+- [x] Task: Stabilize Hook Callbacks [d0aa16b]
+    - [x] Refactor `useMidiPlayer` to use refs for active notes, making `play`/`pause`/`stop` stable.
+- [x] Task: UI Memoization [d0aa16b]
+    - [x] Memoize `MidiHeader`, `PlaybackControls`, and `FalldownVisualizer` to reduce render pressure.
+- [x] Task: Conductor - User Manual Verification 'Phase 5: Performance' (Protocol in workflow.md) [d0aa16b]
