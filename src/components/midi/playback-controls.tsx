@@ -1,4 +1,4 @@
-import { Pause, Play, Square, Volume2, VolumeX } from "lucide-react";
+import { Pause, Play, Sparkles, Square, Volume2, VolumeX } from "lucide-react";
 import { memo } from "react";
 
 interface PlaybackControlsProps {
@@ -10,6 +10,8 @@ interface PlaybackControlsProps {
   onSpeedChange: (speed: number) => void;
   isMuted: boolean;
   onToggleMute: () => void;
+  demoMode?: boolean;
+  onToggleDemo?: () => void;
 }
 
 export const PlaybackControls = memo(function PlaybackControls({
@@ -21,21 +23,48 @@ export const PlaybackControls = memo(function PlaybackControls({
   onSpeedChange,
   isMuted,
   onToggleMute,
+  demoMode = true,
+  onToggleDemo,
 }: PlaybackControlsProps) {
   const speeds = [0.5, 1.0, 1.5, 2.0];
 
   return (
     <div className="flex items-center gap-2 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-4 py-1 pointer-events-auto">
       <div className="flex items-center gap-1 pr-2 border-r border-gray-200">
+        {onToggleDemo && (
+          <button
+            type="button"
+            onClick={onToggleDemo}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-[10px] uppercase tracking-wider transition-all duration-300 ${
+              demoMode
+                ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
+                : "bg-slate-100 text-slate-400"
+            }`}
+            aria-label={demoMode ? "Disable Demo Mode" : "Enable Demo Mode"}
+          >
+            <Sparkles
+              className={`w-3 h-3 ${demoMode ? "animate-pulse" : ""}`}
+            />
+            <span>Demo</span>
+          </button>
+        )}
+
         <button
           type="button"
           onClick={onToggleMute}
-          className={`p-2 rounded-full transition-all hover:bg-gray-100 ${
-            isMuted ? "text-red-500" : "text-gray-600"
+          disabled={!demoMode}
+          className={`p-2 rounded-full transition-all ${
+            !demoMode
+              ? "text-gray-300 opacity-50 cursor-not-allowed"
+              : isMuted
+                ? "hover:bg-gray-100 text-red-500"
+                : "hover:bg-gray-100 text-gray-600"
           }`}
-          aria-label={isMuted ? "Unmute" : "Mute"}
+          aria-label={
+            !demoMode ? "Muted (Demo Off)" : isMuted ? "Unmute" : "Mute"
+          }
         >
-          {isMuted ? (
+          {!demoMode || isMuted ? (
             <VolumeX className="w-4 h-4" />
           ) : (
             <Volume2 className="w-4 h-4" />

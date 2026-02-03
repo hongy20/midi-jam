@@ -36,9 +36,11 @@ export default function Home() {
   } = useMIDIInputs();
   const { selectedDevice, selectDevice } = useMIDIConnection(inputs);
 
+  const [demoMode, setDemoMode] = useState(true);
+
   // Audio setup
   const { playNote, stopNote, stopAllNotes, isMuted, toggleMute } =
-    useMidiAudio();
+    useMidiAudio(demoMode);
 
   // Live input tracking
   const liveActiveNotes = useActiveNotes(selectedDevice, {
@@ -194,6 +196,8 @@ export default function Home() {
           onSpeedChange={setSpeed}
           isMuted={isMuted}
           onToggleMute={toggleMute}
+          demoMode={demoMode}
+          onToggleDemo={() => setDemoMode(!demoMode)}
         />
 
         {selectedFile && (
@@ -224,7 +228,11 @@ export default function Home() {
                 />
                 <PianoKeyboard
                   liveNotes={liveActiveNotes}
-                  playbackNotes={new Set(playbackActiveNotes.keys())}
+                  playbackNotes={
+                    demoMode
+                      ? new Set(playbackActiveNotes.keys())
+                      : new Set<number>()
+                  }
                   rangeStart={noteRange?.min}
                   rangeEnd={noteRange?.max}
                 />

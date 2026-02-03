@@ -1,10 +1,10 @@
 # MIDI Jam 🎹
 
-MIDI Jam is a pioneer project in **agentic coding**, demonstrating the power of AI-driven development. It is built using the **Gemini CLI** and the [Conductor](https://github.com/gemini-cli-extensions/conductor) extension for a disciplined, step-by-step implementation.
+MIDI Jam is an experimental project exploring **agentic coding** and demonstrating the power of AI-driven development. It is built using the **Gemini CLI** and the [Conductor](https://github.com/gemini-cli-extensions/conductor) extension for a disciplined, step-by-step implementation.
 
 The project integrates advanced agent skills for **React best practices** and **web design guidelines**, while leveraging [embedded Next.js 16 documentation](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals) to ensure strict alignment with the latest APIs and high-performance patterns.
 
-Beyond its technical foundations, MIDI Jam is a fun, game-like web application designed to help kids learn musical instruments. It connects to digital instruments via the Web MIDI API, providing an immersive experience reminiscent of *Guitar Hero*.
+Beyond its technical foundations, MIDI Jam is a fun, game-like web application designed to help kids learn musical instruments. It connects to digital instruments via the Web MIDI API, providing an immersive experience reminiscent of _Guitar Hero_.
 
 ## ✨ Features
 
@@ -25,6 +25,7 @@ Beyond its technical foundations, MIDI Jam is a fun, game-like web application d
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/hongy20/midi-jam.git
    cd midi-jam
@@ -55,7 +56,7 @@ Open [https://localhost:3000](https://localhost:3000) in your browser.
 
 ## 🤖 Agentic Development
 
-This project follows a strict **Conductor** workflow. Development is broken down into "Tracks" with clear specifications and implementation plans. 
+This project follows a strict **Conductor** workflow. Development is broken down into "Tracks" with clear specifications and implementation plans.
 
 - **Linting**: `npm run lint`
 - **Auto-fix**: `npm run lint:fix`
