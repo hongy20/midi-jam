@@ -98,4 +98,20 @@ describe("MidiHeader", () => {
     fireEvent.click(screen.getByTestId("status-bar"));
     expect(toggleMock).toHaveBeenCalled();
   });
+
+  it("calls onToggleDemo when demo button is clicked", () => {
+    const toggleDemoMock = vi.fn();
+    render(
+      <MidiHeader
+        {...mockProps}
+        demoMode={true}
+        onToggleDemo={toggleDemoMock}
+      />,
+    );
+
+    // The demo button should be in the expanded header (role banner)
+    const demoButton = screen.getByRole("button", { name: /demo/i });
+    fireEvent.click(demoButton);
+    expect(toggleDemoMock).toHaveBeenCalled();
+  });
 });
