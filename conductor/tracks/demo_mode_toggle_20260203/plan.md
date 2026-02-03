@@ -13,7 +13,7 @@ Goal: Implement the core `demoMode` state and propagate it to the visual and aud
     - [ ] Implement: Add `demoMode` state to `Home` component and conditionally pass `playbackNotes` to `PianoKeyboard`.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: State Logic' (Protocol in workflow.md)
 
-## Phase 2: UI Implementation [checkpoint: 641e84b]
+## Phase 2: UI Implementation [checkpoint: 717de32]
 Goal: Create the toggle button and integrate it into the layout.
 
 - [x] Task: Create Demo Toggle Button [641e84b]
@@ -22,7 +22,7 @@ Goal: Create the toggle button and integrate it into the layout.
 - [x] Task: Update `PlaybackControls` for Demo Mode [71a0be2]
     - [ ] Write Tests: Verify the volume icon reflects the "disabled" state when Demo Mode is off.
     - [ ] Implement: Pass `demoMode` to `PlaybackControls` to visually disable/dim the mute toggle when applicable.
-- [x] Task: Conductor - User Manual Verification 'Phase 2: UI Implementation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: UI Implementation' (Protocol in workflow.md) [717de32]
 
 ## Phase 3: Integration & Polish [checkpoint: ]
 Goal: Final end-to-end verification and refinement.
