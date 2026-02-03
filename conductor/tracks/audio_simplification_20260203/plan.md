@@ -5,7 +5,7 @@ This plan refactors the audio system to use external MIDI hardware for playback 
 ## Phase 1: MIDI Output Discovery & Routing [checkpoint: ]
 Goal: Enable the application to discover and select MIDI output ports that match selected input devices.
 
-- [ ] Task: Update MIDI library to support outputs
+- [x] Task: Update MIDI library to support outputs [590977a]
     - [ ] Write Tests: Verify `getMIDIOutputs` returns available output ports.
     - [ ] Implement: Add `getMIDIOutputs` to `src/lib/midi/midi-devices.ts`.
 - [ ] Task: Update MIDI input hook to include outputs
