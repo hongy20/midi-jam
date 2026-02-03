@@ -12,6 +12,8 @@ describe("PlaybackControls", () => {
     onSpeedChange: vi.fn(),
     isMuted: false,
     onToggleMute: vi.fn(),
+    demoMode: true,
+    onToggleDemo: vi.fn(),
   };
 
   it("renders playback buttons and speed selector", () => {
@@ -20,6 +22,7 @@ describe("PlaybackControls", () => {
     expect(screen.getByLabelText("Play")).toBeInTheDocument();
     expect(screen.getByLabelText("Stop")).toBeInTheDocument();
     expect(screen.getByLabelText("Mute")).toBeInTheDocument();
+    expect(screen.getByLabelText(/demo/i)).toBeInTheDocument();
     expect(screen.getByText("1x")).toBeInTheDocument();
   });
 
@@ -27,6 +30,12 @@ describe("PlaybackControls", () => {
     render(<PlaybackControls {...mockProps} />);
     fireEvent.click(screen.getByLabelText("Play"));
     expect(mockProps.onPlay).toHaveBeenCalled();
+  });
+
+  it("calls onToggleDemo when demo button is clicked", () => {
+    render(<PlaybackControls {...mockProps} />);
+    fireEvent.click(screen.getByLabelText(/demo/i));
+    expect(mockProps.onToggleDemo).toHaveBeenCalled();
   });
 
   it("shows pause button when isPlaying is true", () => {

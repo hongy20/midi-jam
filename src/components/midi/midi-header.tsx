@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, ChevronUp, Music, Piano, Sparkles } from "lucide-react";
+import { ChevronDown, ChevronUp, Music, Piano } from "lucide-react";
 import { memo } from "react";
 import { DeviceSelector } from "./device-selector";
 import { MidiControlCenter } from "./midi-control-center";
@@ -26,10 +26,6 @@ interface MidiHeaderProps {
   // Header State
   isMinimized?: boolean;
   onToggleMinimize?: () => void;
-
-  // Demo Mode
-  demoMode?: boolean;
-  onToggleDemo?: () => void;
 }
 
 export const MidiHeader = memo(function MidiHeader({
@@ -43,8 +39,6 @@ export const MidiHeader = memo(function MidiHeader({
   onSelectFile,
   isMinimized = false,
   onToggleMinimize,
-  demoMode = true,
-  onToggleDemo,
 }: MidiHeaderProps) {
   return (
     <>
@@ -105,36 +99,16 @@ export const MidiHeader = memo(function MidiHeader({
                 The immersive way to learn piano.
               </p>
             </div>
-
-            <div className="flex items-center gap-6">
-              {onToggleDemo && (
-                <button
-                  type="button"
-                  onClick={onToggleDemo}
-                  className={`flex items-center gap-2 px-6 py-3 rounded-full font-black text-sm uppercase tracking-widest transition-all duration-300 shadow-lg ${
-                    demoMode
-                      ? "bg-blue-600 text-white shadow-blue-500/40 scale-105"
-                      : "bg-slate-100 text-slate-400 grayscale"
-                  }`}
-                >
-                  <Sparkles
-                    className={`w-4 h-4 ${demoMode ? "animate-pulse" : ""}`}
-                  />
-                  <span>Demo {demoMode ? "On" : "Off"}</span>
-                </button>
-              )}
-
-              {onToggleMinimize && (
-                <button
-                  type="button"
-                  onClick={onToggleMinimize}
-                  className="p-3 bg-slate-100 hover:bg-slate-200 rounded-full transition-all duration-300 text-slate-500 hover:text-slate-800 hover:rotate-180"
-                  aria-label="Minimize header"
-                >
-                  <ChevronUp className="w-8 h-8" />
-                </button>
-              )}
-            </div>
+            {onToggleMinimize && (
+              <button
+                type="button"
+                onClick={onToggleMinimize}
+                className="p-3 bg-slate-100 hover:bg-slate-200 rounded-full transition-all duration-300 text-slate-500 hover:text-slate-800 hover:rotate-180"
+                aria-label="Minimize header"
+              >
+                <ChevronUp className="w-8 h-8" />
+              </button>
+            )}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">

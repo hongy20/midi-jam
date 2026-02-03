@@ -178,8 +178,6 @@ export default function Home() {
         onSelectFile={handleSelectFile}
         isMinimized={isMinimized}
         onToggleMinimize={handleToggleMinimize}
-        demoMode={demoMode}
-        onToggleDemo={() => setDemoMode(!demoMode)}
       />
 
       <div
@@ -199,6 +197,7 @@ export default function Home() {
           isMuted={isMuted}
           onToggleMute={toggleMute}
           demoMode={demoMode}
+          onToggleDemo={() => setDemoMode(!demoMode)}
         />
 
         {selectedFile && (

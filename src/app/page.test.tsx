@@ -27,13 +27,9 @@ vi.mock("@/components/midi/midi-header", () => ({
   MidiHeader: ({
     isMinimized,
     onToggleMinimize,
-    demoMode,
-    onToggleDemo,
   }: {
     isMinimized: boolean;
     onToggleMinimize: () => void;
-    demoMode: boolean;
-    onToggleDemo: () => void;
   }) => (
     <div data-testid="midi-header">
       MidiHeader
@@ -44,17 +40,25 @@ vi.mock("@/components/midi/midi-header", () => ({
       >
         Toggle Minimize
       </button>
-      <button type="button" onClick={onToggleDemo} data-testid="toggle-demo">
-        Toggle Demo
-      </button>
       {isMinimized ? "Minimized" : "Expanded"}
-      {demoMode ? "DemoOn" : "DemoOff"}
     </div>
   ),
 }));
 vi.mock("@/components/midi/playback-controls", () => ({
-  PlaybackControls: () => (
-    <div data-testid="playback-controls">PlaybackControls</div>
+  PlaybackControls: ({
+    demoMode,
+    onToggleDemo,
+  }: {
+    demoMode: boolean;
+    onToggleDemo: () => void;
+  }) => (
+    <div data-testid="playback-controls">
+      PlaybackControls
+      <button type="button" onClick={onToggleDemo} data-testid="toggle-demo">
+        Toggle Demo
+      </button>
+      {demoMode ? "DemoOn" : "DemoOff"}
+    </div>
   ),
 }));
 
