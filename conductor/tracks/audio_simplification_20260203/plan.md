@@ -11,7 +11,7 @@ Goal: Enable the application to discover and select MIDI output ports that match
 - [x] Task: Update MIDI input hook to include outputs [60d9846]
     - [ ] Write Tests: Verify `useMIDIInputs` returns both inputs and outputs.
     - [ ] Implement: Modify `src/hooks/use-midi-inputs.ts` to fetch and return available outputs.
-- [ ] Task: Implement Auto-Output selection logic
+- [x] Task: Implement Auto-Output selection logic [7c8e724]
     - [ ] Write Tests: Verify `useMIDIConnection` correctly identifies a matching output for a selected input.
     - [ ] Implement: Update `src/hooks/use-midi-connection.ts` to manage a `selectedOutput` state that auto-matches the `selectedDevice`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: MIDI Discovery' (Protocol in workflow.md)
