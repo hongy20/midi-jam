@@ -59,8 +59,6 @@ export function useMidiAudio(
 
   const stopNote = useCallback(
     (midiNote: number) => {
-      if (!demoMode) return;
-
       if (outputDevice) {
         // Send Note Off to MIDI Output (Channel 1: 0x80)
         outputDevice.send([0x80, midiNote, 0]);
@@ -72,7 +70,7 @@ export function useMidiAudio(
       const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
       polySynthRef.current.triggerRelease(frequency, Tone.now());
     },
-    [demoMode, outputDevice],
+    [outputDevice],
   );
 
   const stopAllNotes = useCallback(() => {
@@ -85,6 +83,13 @@ export function useMidiAudio(
     if (!polySynthRef.current) return;
     polySynthRef.current.releaseAll();
   }, [outputDevice]);
+
+  // Silence all audio immediately when Demo Mode is turned off
+  useEffect(() => {
+    if (!demoMode) {
+      stopAllNotes();
+    }
+  }, [demoMode, stopAllNotes]);
 
   return {
     playNote,

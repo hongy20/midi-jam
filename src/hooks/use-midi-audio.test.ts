@@ -68,4 +68,20 @@ describe("useMidiAudio", () => {
     // Note On for note 60 (0x3C), channel 1 (0x90), velocity 0.8 -> ~102
     expect(mockOutput.send).toHaveBeenCalled();
   });
+
+  it("should immediately silence audio when demoMode toggles from true to false", () => {
+    const mockOutput = {
+      send: vi.fn(),
+    } as unknown as WebMidi.MIDIOutput;
+
+    const { rerender } = renderHook(({ demoMode }) => useMidiAudio(demoMode, mockOutput), {
+      initialProps: { demoMode: true }
+    });
+
+    // Toggle demoMode to false
+    rerender({ demoMode: false });
+
+    // Should send All Notes Off (0xB0, 123, 0)
+    expect(mockOutput.send).toHaveBeenCalledWith([0xb0, 123, 0]);
+  });
 });
