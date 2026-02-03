@@ -77,17 +77,19 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
     return visible;
   }, [spans, currentTime, LOOK_AHEAD_SECONDS, rangeStart, rangeEnd]);
 
-  const { whiteKeysCount, whiteKeyIndices } = useMemo(() => {
+  const { whiteKeysCount, whiteKeyIndices, whiteKeyNotes } = useMemo(() => {
     const indices: Record<number, number> = {};
+    const notes: number[] = [];
     let count = 0;
     for (let i = rangeStart; i <= rangeEnd; i++) {
       const n = i % 12;
       const isBlack = [1, 3, 6, 8, 10].includes(n);
       if (!isBlack) {
         indices[i] = count++;
+        notes.push(i);
       }
     }
-    return { whiteKeysCount: count, whiteKeyIndices: indices };
+    return { whiteKeysCount: count, whiteKeyIndices: indices, whiteKeyNotes: notes };
   }, [rangeStart, rangeEnd]);
 
   const getHorizontalPosition = (note: number) => {
@@ -114,10 +116,24 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
   return (
     <div
       ref={containerRef}
-      className="relative flex-1 min-h-0 overflow-hidden bg-slate-950/80 backdrop-blur-sm rounded-t-[1.5rem] border-x-4 border-t-4 border-slate-200/50"
+      className="relative flex-1 min-h-0 overflow-hidden bg-slate-950/80 backdrop-blur-sm rounded-t-[1.5rem]"
       style={fixedHeight ? { height: `${fixedHeight}px` } : {}}
     >
       <div className="absolute inset-0 w-full mx-auto">
+        {/* Render Vertical Key Lines (Background Grid) */}
+        {whiteKeyNotes.map((note, i) => (
+          <div
+            key={`v-line-${note}`}
+            className="absolute top-0 bottom-0 w-px bg-white/10 border-r border-white/5 pointer-events-none"
+            style={{ left: `${(i / whiteKeysCount) * 100}%` }}
+          />
+        ))}
+        {/* Rightmost edge line */}
+        <div 
+          className="absolute top-0 bottom-0 w-px bg-white/10 border-r border-white/5 pointer-events-none"
+          style={{ left: "100%" }}
+        />
+
         {/* Render Bar-lines */}
         {visibleBarLines.map((time) => {
           const bottom = (time - currentTime) * PIXELS_PER_SECOND;
@@ -143,7 +159,7 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
           return (
             <div
               key={note.id}
-              className={`absolute rounded-full transition-shadow duration-300 will-change-transform ${
+              className={`absolute rounded-md transition-shadow duration-300 will-change-transform ${
                 note.isBlack
                   ? "bg-purple-600 shadow-[0_0_15px_rgba(147,51,234,0.5)] border border-purple-400"
                   : "bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)] border border-blue-300"
@@ -159,8 +175,6 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
           );
         })}
       </div>
-
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-blue-400 opacity-50 shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
     </div>
   );
 });
