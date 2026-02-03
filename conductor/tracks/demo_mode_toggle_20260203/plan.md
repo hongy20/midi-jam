@@ -8,7 +8,7 @@ Goal: Implement the core `demoMode` state and propagate it to the visual and aud
 - [x] Task: Update `useMidiAudio` to support Demo Mode constraints [2db9a37]
     - [ ] Write Tests: Verify that when `demoMode` is false, audio remains muted even if toggle is attempted.
     - [ ] Implement: Add `demoMode` parameter to `useMidiAudio` to handle forced muting/disabling.
-- [ ] Task: Conditional Playback Visualization in `Home`
+- [x] Task: Conditional Playback Visualization in `Home` [156ee1c]
     - [ ] Write Tests: Verify `PianoKeyboard` receives an empty set for `playbackNotes` when `demoMode` is off.
     - [ ] Implement: Add `demoMode` state to `Home` component and conditionally pass `playbackNotes` to `PianoKeyboard`.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: State Logic' (Protocol in workflow.md)
