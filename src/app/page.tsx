@@ -43,8 +43,10 @@ export default function Home() {
   const [demoMode, setDemoMode] = useState(true);
 
   // Audio setup
-  const { playNote, stopNote, stopAllNotes, isMuted, toggleMute } =
-    useMidiAudio(demoMode);
+  const { playNote, stopNote, stopAllNotes, setIsReady } = useMidiAudio(
+    demoMode,
+    selectedOutput,
+  );
 
   // Live input tracking
   const liveActiveNotes = useActiveNotes(selectedDevice, {
@@ -198,8 +200,6 @@ export default function Home() {
           onStop={stop}
           speed={speed}
           onSpeedChange={setSpeed}
-          isMuted={isMuted}
-          onToggleMute={toggleMute}
           demoMode={demoMode}
           onToggleDemo={() => setDemoMode(!demoMode)}
         />

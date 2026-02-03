@@ -73,8 +73,8 @@ vi.mock("@/hooks/use-midi-audio", () => ({
   useMidiAudio: () => ({
     playNote: vi.fn(),
     stopNote: vi.fn(),
-    isMuted: false,
-    toggleMute: vi.fn(),
+    stopAllNotes: vi.fn(),
+    setIsReady: vi.fn(),
   }),
 }));
 vi.mock("@/hooks/use-active-notes", () => ({
