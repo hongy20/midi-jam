@@ -93,7 +93,6 @@ export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
     }
   }
 
-  // Sort by startTime for efficient range filtering
   return spans.sort((a, b) => a.startTime - b.startTime);
 }
 
@@ -123,32 +122,41 @@ export function getBarLines(midi: Midi): number[] {
   const barLines: number[] = [];
   const duration = midi.duration;
 
-  // For now, support a single time signature (the first one found)
-  // Standard MIDI files usually have them at the beginning.
-  // Default to 4/4 if none found.
-  const timeSignature = midi.header.timeSignatures[0] || {
+  // Use the first time signature or default to 4/4
+  const ts = midi.header.timeSignatures[0] || {
     numerator: 4,
     denominator: 4,
   };
 
-  const beatsPerBar = timeSignature.numerator;
+  const numerator = ts.numerator || 4;
+  const denominator = ts.denominator || 4;
+  const ppq = midi.header.ppq || 480;
+
+  // 1 bar = beatsPerBar * PPQ * (4 / denominator)
+  const ticksPerBar = numerator * ppq * (4 / denominator);
   
-  // denominator 4 = quarter note, 8 = eighth note, etc.
-  // Tone.js MIDI duration/time is in seconds.
-  const ppq = midi.header.ppq;
-  const ticksPerBar = beatsPerBar * ppq * (4 / timeSignature.denominator);
-  
-  // Safety guard: if ticksPerBar is 0 or negative, we can't calculate bar-lines accurately
-  if (ticksPerBar <= 0) return [];
+  if (!Number.isFinite(ticksPerBar) || ticksPerBar <= 0) {
+    return [];
+  }
 
   let currentTick = 0;
-  // Limit iterations to prevent runaway loops in case of corrupt duration metadata
-  const MAX_BARS = 10000; 
-  while (barLines.length < MAX_BARS) {
-    const time = midi.header.ticksToSeconds(currentTick);
-    if (time > duration) break;
-    barLines.push(time);
-    currentTick += ticksPerBar;
+  const MAX_BARS = 2000; // Realistic limit for a song
+  
+  try {
+    while (currentTick < 1000000) { // Safety cap on total ticks
+      const time = midi.header.ticksToSeconds(currentTick);
+      
+      if (!Number.isFinite(time) || time > duration) break;
+      
+      barLines.push(time);
+      currentTick += ticksPerBar;
+      
+      if (barLines.length >= MAX_BARS) {
+        break;
+      }
+    }
+  } catch (e) {
+    console.error("Error during bar-line generation:", e);
   }
 
   return barLines;

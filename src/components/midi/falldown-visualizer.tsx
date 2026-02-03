@@ -107,7 +107,7 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
           return (
             <div
               key={`bar-${time}`}
-              className="absolute left-0 right-0 h-px bg-white/20 border-t border-white/5 will-change-transform"
+              className="absolute left-0 right-0 h-px bg-white/40 shadow-[0_0_8px_rgba(255,255,255,0.3)] will-change-transform"
               style={{
                 transform: `translate3d(0, ${-bottom}px, 0)`,
                 bottom: 0,
