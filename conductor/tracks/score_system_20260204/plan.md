@@ -20,7 +20,7 @@ Create the user interface for displaying real-time feedback.
 - [x] Task: Integrate `use-score-engine` into `src/app/page.tsx` and pass the state to `ScoreHud`. 1628cba
 - [x] Task: Add CSS animations for accuracy text (fade out and move up). 1628cba
 - [ ] Task: Update `PianoKeyboard` or `FalldownVisualizer` if needed to show hit feedback (optional polish).
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: HUD & Feedback (UI)' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 2: HUD & Feedback (UI)' (Protocol in workflow.md) [checkpoint: 7997b0a]
 
 ## Phase 3: Persistence & Refinement
 Handle high scores and ensure stability.
