@@ -5,8 +5,11 @@ import { useMidiPlayer } from "./use-midi-player";
 
 // Mock the heavy dependency
 vi.mock("../lib/midi/midi-player", () => ({
-  loadMidiFile: vi.fn(),
   getMidiEvents: vi.fn(),
+}));
+
+vi.mock("../lib/midi/midi-loader", () => ({
+  loadMidiFile: vi.fn(),
 }));
 
 describe("useMidiPlayer Countdown", () => {

@@ -19,10 +19,10 @@ import {
   getMidiEvents,
   getNoteRange,
   getNoteSpans,
-  loadMidiFile,
   type MidiEvent,
   type NoteSpan,
 } from "@/lib/midi/midi-player";
+import { loadMidiFile } from "@/lib/midi/midi-loader";
 
 interface MidiFile {
   name: string;

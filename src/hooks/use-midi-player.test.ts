@@ -3,8 +3,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 // 1. Mock the heavy dependency BEFORE anything else is imported
 vi.mock("../lib/midi/midi-player", () => ({
-  loadMidiFile: vi.fn(),
   getMidiEvents: vi.fn(),
+}));
+
+vi.mock("../lib/midi/midi-loader", () => ({
+  loadMidiFile: vi.fn(),
 }));
 
 import type { MidiEvent } from "../lib/midi/midi-player";
