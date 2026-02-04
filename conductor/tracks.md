@@ -16,3 +16,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: feature: add 3 seconds count down before starting a music**
 *Link: [./archive/countdown_20260204/](./archive/countdown_20260204/)*
+
+---
+
+- [ ] **Track: Update speed controls to [0.75, 1, 1.25] with Turtle/Rabbit icons, set default demo mode to off, and fix countdown to be a consistent 4 real-time seconds.**
+*Link: [./tracks/speed_countdown_refinement_20260204/](./tracks/speed_countdown_refinement_20260204/)*
