@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as Tone from "tone";
+import {
+  MIDI_COMMAND_CONTROL_CHANGE,
+  MIDI_COMMAND_NOTE_OFF,
+  MIDI_COMMAND_NOTE_ON,
+  MIDI_CONTROLLER_ALL_NOTES_OFF,
+} from "@/lib/midi/constant";
 
 /**
  * Hook to handle MIDI audio synthesis using Tone.js or external MIDI output.
@@ -37,10 +43,10 @@ export function useMidiAudio(
       if (!demoMode) return;
 
       if (outputDevice) {
-        // Send Note On to MIDI Output (Channel 1: 0x90)
+        // Send Note On to MIDI Output
         // Velocity is normalized 0-1, MIDI needs 0-127
         const midiVelocity = Math.floor(velocity * 127);
-        outputDevice.send([0x90, midiNote, midiVelocity]);
+        outputDevice.send([MIDI_COMMAND_NOTE_ON, midiNote, midiVelocity]);
         return;
       }
 
@@ -60,8 +66,8 @@ export function useMidiAudio(
   const stopNote = useCallback(
     (midiNote: number) => {
       if (outputDevice) {
-        // Send Note Off to MIDI Output (Channel 1: 0x80)
-        outputDevice.send([0x80, midiNote, 0]);
+        // Send Note Off to MIDI Output
+        outputDevice.send([MIDI_COMMAND_NOTE_OFF, midiNote, 0]);
         return;
       }
 
@@ -75,8 +81,12 @@ export function useMidiAudio(
 
   const stopAllNotes = useCallback(() => {
     if (outputDevice) {
-      // Send All Notes Off (Controller 123) to MIDI Output
-      outputDevice.send([0xb0, 123, 0]);
+      // Send All Notes Off to MIDI Output
+      outputDevice.send([
+        MIDI_COMMAND_CONTROL_CHANGE,
+        MIDI_CONTROLLER_ALL_NOTES_OFF,
+        0,
+      ]);
       return;
     }
 

@@ -1,5 +1,10 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import {
+  MIDI_COMMAND_CONTROL_CHANGE,
+  MIDI_COMMAND_NOTE_ON,
+  MIDI_CONTROLLER_ALL_NOTES_OFF,
+} from "@/lib/midi/constant";
 import { useMidiAudio } from "./use-midi-audio";
 
 // Mock Tone.js
@@ -69,8 +74,12 @@ describe("useMidiAudio", () => {
       result.current.playNote(60, 0.8);
     });
 
-    // Note On for note 60 (0x3C), channel 1 (0x90), velocity 0.8 -> ~102
-    expect(mockOutput.send).toHaveBeenCalled();
+    // Note On for note 60 (0x3C), channel 1, velocity 0.8 -> ~101
+    expect(mockOutput.send).toHaveBeenCalledWith([
+      MIDI_COMMAND_NOTE_ON,
+      60,
+      expect.any(Number),
+    ]);
   });
 
   it("should immediately silence audio when demoMode toggles from true to false", () => {
@@ -88,7 +97,11 @@ describe("useMidiAudio", () => {
     // Toggle demoMode to false
     rerender({ demoMode: false });
 
-    // Should send All Notes Off (0xB0, 123, 0)
-    expect(mockOutput.send).toHaveBeenCalledWith([0xb0, 123, 0]);
+    // Should send All Notes Off
+    expect(mockOutput.send).toHaveBeenCalledWith([
+      MIDI_COMMAND_CONTROL_CHANGE,
+      MIDI_CONTROLLER_ALL_NOTES_OFF,
+      0,
+    ]);
   });
 });
