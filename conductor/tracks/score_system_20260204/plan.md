@@ -29,4 +29,4 @@ Handle high scores and ensure stability.
 - [x] Task: Add a "High Score" display in the `MidiHeader` or song selection list. b2e50d5
 - [x] Task: Verify that scoring is consistent across different playback speeds (0.75x, 1x, 1.25x). b2e50d5
 - [x] Task: Final integration testing and polish. b2e50d5
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Persistence & Refinement' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Persistence & Refinement' (Protocol in workflow.md) [checkpoint: 605e2fe]
