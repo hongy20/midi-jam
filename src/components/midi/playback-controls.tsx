@@ -101,7 +101,7 @@ export const PlaybackControls = memo(function PlaybackControls({
             onClick={() => onSpeedChange(s.value)}
             className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center justify-center min-w-[2.5rem] ${
               speed === s.value
-                ? "bg-gray-800 text-white"
+                ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                 : "text-gray-400 hover:bg-gray-100"
             }`}
             aria-label={`${s.value}x Speed`}
