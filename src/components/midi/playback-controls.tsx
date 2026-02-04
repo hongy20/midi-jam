@@ -1,4 +1,4 @@
-import { Pause, Play, Rabbit, Sparkles, Square, Turtle } from "lucide-react";
+import { Pause, Play, Rabbit, Snail, Sparkles, Square } from "lucide-react";
 import { memo } from "react";
 
 interface PlaybackControlsProps {
@@ -37,7 +37,7 @@ export const PlaybackControls = memo(function PlaybackControls({
   onToggleDemo,
 }: PlaybackControlsProps) {
   const speeds = [
-    { value: 0.75, label: <Turtle className="w-4 h-4" /> },
+    { value: 0.75, label: <Snail className="w-4 h-4" /> },
     { value: 1.0, label: "1x" },
     { value: 1.25, label: <Rabbit className="w-4 h-4" /> },
   ];
