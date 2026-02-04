@@ -63,7 +63,11 @@ export const PlaybackControls = memo(function PlaybackControls({
             <span>Demo</span>
           </button>
         )}
+      </div>
 
+      <div className="h-4 w-0.5 bg-gray-300 mx-1" />
+
+      <div className="flex items-center gap-1">
         <button
           type="button"
           onClick={isPlaying ? onPause : onPlay}
@@ -91,7 +95,7 @@ export const PlaybackControls = memo(function PlaybackControls({
         </button>
       </div>
 
-      <div className="h-4 w-px bg-gray-300 mx-1" />
+      <div className="h-4 w-0.5 bg-gray-300 mx-1" />
 
       <div className="flex items-center gap-1 pl-1">
         {speeds.map((s) => (
