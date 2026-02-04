@@ -1,4 +1,4 @@
-import { Pause, Play, Sparkles, Square } from "lucide-react";
+import { Pause, Play, Rabbit, Sparkles, Square, Turtle } from "lucide-react";
 import { memo } from "react";
 
 interface PlaybackControlsProps {
@@ -36,7 +36,11 @@ export const PlaybackControls = memo(function PlaybackControls({
 
   onToggleDemo,
 }: PlaybackControlsProps) {
-  const speeds = [0.5, 1.0, 1.5, 2.0];
+  const speeds = [
+    { value: 0.75, label: <Turtle className="w-4 h-4" /> },
+    { value: 1.0, label: "1x" },
+    { value: 1.25, label: <Rabbit className="w-4 h-4" /> },
+  ];
 
   return (
     <div className="flex items-center gap-2 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-4 py-1 pointer-events-auto">
@@ -87,19 +91,20 @@ export const PlaybackControls = memo(function PlaybackControls({
         </button>
       </div>
 
-      <div className="flex items-center gap-1 pl-1">
+      <div className="flex items-center gap-1 pl-1 border-l border-gray-200 ml-1">
         {speeds.map((s) => (
           <button
-            key={s}
+            key={s.value}
             type="button"
-            onClick={() => onSpeedChange(s)}
-            className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-              speed === s
+            onClick={() => onSpeedChange(s.value)}
+            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center justify-center min-w-[2.5rem] ${
+              speed === s.value
                 ? "bg-gray-800 text-white"
                 : "text-gray-400 hover:bg-gray-100"
             }`}
+            aria-label={`${s.value}x Speed`}
           >
-            {s}x
+            {s.label}
           </button>
         ))}
       </div>

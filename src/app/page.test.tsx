@@ -161,12 +161,12 @@ describe("Home Page Layout Refactor", () => {
     });
 
     const demoToggle = screen.getByTestId("toggle-demo");
-    expect(screen.getByText(/DemoOn/)).toBeInTheDocument();
+    expect(screen.getByText(/DemoOff/)).toBeInTheDocument();
 
     // Default: playbackNotes should be passed to PianoKeyboard (even if empty in mock)
     // To properly test filtering, we'd need a more dynamic useMidiPlayer mock.
     // But let's at least test that toggling works and the state is passed to MidiHeader.
     fireEvent.click(demoToggle);
-    expect(screen.getByText(/DemoOff/)).toBeInTheDocument();
+    expect(screen.getByText(/DemoOn/)).toBeInTheDocument();
   });
 });

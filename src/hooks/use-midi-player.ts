@@ -84,10 +84,14 @@ export function useMidiPlayer(
 
     if (currentTime < 0) {
       setIsCountdownActive(true);
+      // During countdown, we always progress at 1.0x speed
+      startTimeRef.current = performance.now() - currentTime * 1000;
+    } else {
+      setIsPlaying(true);
+      startTimeRef.current = performance.now() - (currentTime * 1000) / speed;
     }
 
     setIsPlaying(true);
-    startTimeRef.current = performance.now() - (currentTime * 1000) / speed;
 
     // Re-strike active notes using ref
     const { onNoteOn } = optionsRef.current || {};
@@ -116,7 +120,7 @@ export function useMidiPlayer(
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Only run when speed changes. isPlaying check is inside.
   useEffect(() => {
-    if (isPlaying && startTimeRef.current !== null) {
+    if (isPlaying && startTimeRef.current !== null && currentTime >= 0) {
       // Recalculate startTime to maintain the exact currentTime with the new speed
       // This prevents "jumps" in playback position when changing speed
       startTimeRef.current = performance.now() - (currentTime * 1000) / speed;
@@ -129,15 +133,28 @@ export function useMidiPlayer(
     const tick = (now: number) => {
       if (startTimeRef.current === null) return;
 
-      const elapsed = ((now - startTimeRef.current) / 1000) * speed;
+      let elapsed: number;
+      if (now < startTimeRef.current) {
+        // Progression is 1.0 real second per second during countdown
+        elapsed = (now - startTimeRef.current) / 1000;
+
+        // Transition from countdown to playback
+        if (elapsed >= 0) {
+          // Snap to 0 and recalculate startTimeRef for playback at current speed
+          elapsed = 0;
+          startTimeRef.current = now;
+          setIsCountdownActive(false);
+          setCountdownRemaining(0);
+        }
+      } else {
+        elapsed = ((now - startTimeRef.current) / 1000) * speed;
+      }
+
       setCurrentTime(elapsed);
 
       // Handle countdown state updates
       if (elapsed < 0) {
         setCountdownRemaining(Math.ceil(Math.abs(elapsed)));
-      } else if (isCountdownActive) {
-        setIsCountdownActive(false);
-        setCountdownRemaining(0);
       }
 
       // Process events - only if elapsed >= 0
@@ -197,7 +214,7 @@ export function useMidiPlayer(
     return () => {
       if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
     };
-  }, [isPlaying, speed, isCountdownActive]); // Added isCountdownActive to dependencies to ensure tick can update it
+  }, [isPlaying, speed]); // Removed activeNotes, events and isCountdownActive from dependencies to prevent effect loops
 
   return {
     isPlaying,

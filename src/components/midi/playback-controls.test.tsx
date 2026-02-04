@@ -44,7 +44,7 @@ describe("PlaybackControls", () => {
 
   it("calls onSpeedChange when a speed is selected", () => {
     render(<PlaybackControls {...mockProps} />);
-    fireEvent.click(screen.getByText("1.5x"));
-    expect(mockProps.onSpeedChange).toHaveBeenCalledWith(1.5);
+    fireEvent.click(screen.getByLabelText("0.75x Speed"));
+    expect(mockProps.onSpeedChange).toHaveBeenCalledWith(0.75);
   });
 });
