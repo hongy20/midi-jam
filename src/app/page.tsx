@@ -6,11 +6,13 @@ import { FalldownVisualizer } from "@/components/midi/falldown-visualizer";
 import { MidiHeader } from "@/components/midi/midi-header";
 import { PianoKeyboard } from "@/components/midi/piano-keyboard";
 import { PlaybackControls } from "@/components/midi/playback-controls";
+import { ScoreHud } from "@/components/midi/score-hud";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMIDIConnection } from "@/hooks/use-midi-connection";
 import { useMIDIInputs } from "@/hooks/use-midi-inputs";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
+import { useScoreEngine } from "@/hooks/use-score-engine";
 import { getMidiFiles } from "@/lib/action/midi";
 import {
   getBarLines,
@@ -87,6 +89,19 @@ export default function Home() {
     onNoteOff: stopNote,
     onAllNotesOff: stopAllNotes,
   });
+
+  const { score, combo, lastAccuracy, highScore, bestCombo } = useScoreEngine(
+    midiEvents,
+    currentTime,
+    demoMode
+      ? new Set([
+          ...Array.from(liveActiveNotes),
+          ...Array.from(playbackActiveNotes.keys()),
+        ])
+      : liveActiveNotes,
+    isPlaying,
+    selectedFile?.url,
+  );
 
   const formatTime = (seconds: number) => {
     const totalSeconds = Math.max(0, Math.floor(seconds));
@@ -229,6 +244,15 @@ export default function Home() {
           countdownRemaining={countdownRemaining}
           isActive={isCountdownActive}
         />
+        {selectedFile && isPlaying && (
+          <ScoreHud
+            score={score}
+            combo={combo}
+            lastAccuracy={lastAccuracy}
+            highScore={highScore}
+            bestCombo={bestCombo}
+          />
+        )}
         {selectedDevice || selectedFile ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden">
             {/* 3D Immersive Stage */}

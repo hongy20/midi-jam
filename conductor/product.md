@@ -10,6 +10,8 @@ The application's core functionalities include:
 - Supporting MIDI file playback with an engaging "falldown" (piano roll) visual effect set in a 3D perspective "track".
 - Enhancing playback with horizontal bar-lines to visualize musical measures.
 - Allowing concurrent live jamming alongside MIDI file playback with visual distinction between inputs.
+- Providing real-time performance feedback via a scoring system (0-100), combo counter, and accuracy notifications (e.g., "PERFECT", "GREAT").
+- Tracking personal progress with persistent high scores and best combos saved per musical track.
 - Ensuring robust playback reliability with auto-re-strike on resume and accurate speed adjustments.
 - Streamlining user interaction with a collapsible control header and automatic device/song selection.
 - Providing a comprehensive learning platform for piano, with the architectural foresight to be extended to other MIDI instruments in the future.
