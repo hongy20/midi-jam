@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { requestMIDIAccess } from "@/lib/midi/midi-access";
 import {
-  getMIDIInputs,
-  getMIDIOutputs,
-  onMIDIDevicesChange,
-} from "@/lib/midi/midi-devices";
+  getMIDIInputDevices,
+  getMIDIOutputDevices,
+  onMIDIDevicesStateChange,
+} from "@/lib/midi/midi-device";
 
 interface UseMIDIInputsResult {
   inputs: WebMidi.MIDIInput[];
@@ -25,8 +25,8 @@ export function useMIDIInputs(): UseMIDIInputsResult {
   const [midiAccess, setMidiAccess] = useState<WebMidi.MIDIAccess | null>(null);
 
   const updateDevices = useCallback((access: WebMidi.MIDIAccess) => {
-    setInputs(getMIDIInputs(access));
-    setOutputs(getMIDIOutputs(access));
+    setInputs(getMIDIInputDevices(access));
+    setOutputs(getMIDIOutputDevices(access));
   }, []);
 
   useEffect(() => {
@@ -61,7 +61,10 @@ export function useMIDIInputs(): UseMIDIInputsResult {
       updateDevices(midiAccess);
     };
 
-    const unsubscribe = onMIDIDevicesChange(midiAccess, handleDevicesChange);
+    const unsubscribe = onMIDIDevicesStateChange(
+      midiAccess,
+      handleDevicesChange,
+    );
     return unsubscribe;
   }, [midiAccess, updateDevices]);
 

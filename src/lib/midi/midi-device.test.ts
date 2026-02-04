@@ -1,18 +1,18 @@
 import { describe, expect, it, vi } from "vitest";
 import {
-  getMIDIInputs,
-  getMIDIOutputs,
-  onMIDIDevicesChange,
-} from "./midi-devices";
+  getMIDIInputDevices,
+  getMIDIOutputDevices,
+  onMIDIDevicesStateChange,
+} from "./midi-device";
 
-describe("getMIDIInputs", () => {
+describe("getMIDIInputDevices", () => {
   // ... existing tests ...
   it("should return an empty array if there are no MIDI inputs", () => {
     const mockMIDIAccess = {
       inputs: new Map(),
     } as unknown as WebMidi.MIDIAccess;
 
-    expect(getMIDIInputs(mockMIDIAccess)).toEqual([]);
+    expect(getMIDIInputDevices(mockMIDIAccess)).toEqual([]);
   });
 
   it("should return an array of MIDI inputs", () => {
@@ -28,20 +28,20 @@ describe("getMIDIInputs", () => {
       inputs: mockInputs,
     } as unknown as WebMidi.MIDIAccess;
 
-    const result = getMIDIInputs(mockMIDIAccess);
+    const result = getMIDIInputDevices(mockMIDIAccess);
     expect(result).toHaveLength(2);
     expect(result).toContain(mockInput1);
     expect(result).toContain(mockInput2);
   });
 });
 
-describe("getMIDIOutputs", () => {
+describe("getMIDIOutputDevices", () => {
   it("should return an empty array if there are no MIDI outputs", () => {
     const mockMIDIAccess = {
       outputs: new Map(),
     } as unknown as WebMidi.MIDIAccess;
 
-    expect(getMIDIOutputs(mockMIDIAccess)).toEqual([]);
+    expect(getMIDIOutputDevices(mockMIDIAccess)).toEqual([]);
   });
 
   it("should return an array of MIDI outputs", () => {
@@ -57,14 +57,14 @@ describe("getMIDIOutputs", () => {
       outputs: mockOutputs,
     } as unknown as WebMidi.MIDIAccess;
 
-    const result = getMIDIOutputs(mockMIDIAccess);
+    const result = getMIDIOutputDevices(mockMIDIAccess);
     expect(result).toHaveLength(2);
     expect(result).toContain(mockOutput1);
     expect(result).toContain(mockOutput2);
   });
 });
 
-describe("onMIDIDevicesChange", () => {
+describe("onMIDIDevicesStateChange", () => {
   it("should call the callback when a state change event occurs", () => {
     const mockMIDIAccess = {
       addEventListener: vi.fn(),
@@ -72,7 +72,7 @@ describe("onMIDIDevicesChange", () => {
     } as unknown as WebMidi.MIDIAccess;
 
     const callback = vi.fn();
-    const unsubscribe = onMIDIDevicesChange(mockMIDIAccess, callback);
+    const unsubscribe = onMIDIDevicesStateChange(mockMIDIAccess, callback);
 
     expect(mockMIDIAccess.addEventListener).toHaveBeenCalledWith(
       "statechange",
