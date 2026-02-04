@@ -59,7 +59,7 @@ export const MidiHeader = memo(function MidiHeader({
         data-testid="status-bar"
         onClick={onToggleMinimize}
         tabIndex={isMinimized ? 0 : -1}
-        className={`fixed top-4 left-4 z-50 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-5 py-3 cursor-pointer hover:scale-105 transition-all duration-500 ease-out ${
+        className={`fixed top-4 left-4 z-50 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-5 py-1 h-11 cursor-pointer hover:scale-105 transition-all duration-500 ease-out ${
           !isMinimized
             ? "opacity-0 -translate-x-12 pointer-events-none"
             : "opacity-100 translate-x-0"
@@ -71,7 +71,7 @@ export const MidiHeader = memo(function MidiHeader({
             {selectedDevice ? selectedDevice.name : "Connect MIDI"}
           </span>
         </div>
-        <div className="h-3 w-px bg-gray-300" />
+        <div className="h-4 w-0.5 bg-gray-300" />
         <div className="flex items-center gap-2 text-gray-700">
           <Music className="w-4 h-4 text-purple-500" />
           <span className="font-bold text-xs truncate max-w-[100px]">
