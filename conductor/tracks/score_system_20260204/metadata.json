@@ -1,8 +1,0 @@
-{
-  "track_id": "score_system_20260204",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-02-04T12:00:00Z",
-  "updated_at": "2026-02-04T12:00:00Z",
-  "description": "feature: introduce a score system with 0-100 points, chord weighting, accuracy thresholds, combo tracking, and HUD overlay."
-}
