@@ -49,7 +49,7 @@ export const PlaybackControls = memo(function PlaybackControls({
           <button
             type="button"
             onClick={onToggleDemo}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-[10px] uppercase tracking-wider transition-all duration-300 ${
+            className={`h-9 flex items-center gap-1.5 px-3 rounded-full font-black text-[10px] uppercase tracking-wider transition-all duration-300 ${
               demoMode
                 ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                 : "bg-slate-100 text-slate-400"
@@ -71,7 +71,7 @@ export const PlaybackControls = memo(function PlaybackControls({
         <button
           type="button"
           onClick={isPlaying ? onPause : onPlay}
-          className={`p-2 rounded-full transition-all ${
+          className={`w-9 h-9 flex items-center justify-center rounded-full transition-all ${
             isPlaying
               ? "bg-amber-100 text-amber-600 hover:bg-amber-200"
               : "bg-blue-100 text-blue-600 hover:bg-blue-200"
@@ -88,7 +88,7 @@ export const PlaybackControls = memo(function PlaybackControls({
         <button
           type="button"
           onClick={onStop}
-          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
+          className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
           aria-label="Stop"
         >
           <Square className="w-4 h-4 fill-current" />
@@ -103,7 +103,7 @@ export const PlaybackControls = memo(function PlaybackControls({
             key={s.value}
             type="button"
             onClick={() => onSpeedChange(s.value)}
-            className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all flex items-center justify-center min-w-[2.5rem] ${
+            className={`w-9 h-9 rounded-full text-xs font-black transition-all flex items-center justify-center ${
               speed === s.value
                 ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                 : "text-gray-400 hover:bg-gray-100"

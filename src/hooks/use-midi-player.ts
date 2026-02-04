@@ -137,25 +137,20 @@ export function useMidiPlayer(
       if (now < startTimeRef.current) {
         // Progression is 1.0 real second per second during countdown
         elapsed = (now - startTimeRef.current) / 1000;
-
-        // Transition from countdown to playback
-        if (elapsed >= 0) {
-          // Snap to 0 and recalculate startTimeRef for playback at current speed
-          elapsed = 0;
-          startTimeRef.current = now;
-          setIsCountdownActive(false);
-          setCountdownRemaining(0);
-        }
       } else {
         elapsed = ((now - startTimeRef.current) / 1000) * speed;
       }
 
-      setCurrentTime(elapsed);
-
       // Handle countdown state updates
       if (elapsed < 0) {
         setCountdownRemaining(Math.ceil(Math.abs(elapsed)));
+      } else {
+        // Ensure countdown is cleared once elapsed >= 0
+        setIsCountdownActive(false);
+        setCountdownRemaining(0);
       }
+
+      setCurrentTime(elapsed);
 
       // Process events - only if elapsed >= 0
       if (elapsed >= 0) {
