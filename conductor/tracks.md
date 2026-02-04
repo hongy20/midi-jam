@@ -14,5 +14,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: feature: add 3 seconds count down before starting a music**
+- [x] **Track: feature: add 3 seconds count down before starting a music**
 *Link: [./tracks/countdown_20260204/](./tracks/countdown_20260204/)*
