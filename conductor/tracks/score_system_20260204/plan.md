@@ -25,8 +25,8 @@ Create the user interface for displaying real-time feedback.
 ## Phase 3: Persistence & Refinement
 Handle high scores and ensure stability.
 
-- [ ] Task: Implement `localStorage` logic to save and load high scores/combos per MIDI file.
-- [ ] Task: Add a "High Score" display in the `MidiHeader` or song selection list.
-- [ ] Task: Verify that scoring is consistent across different playback speeds (0.75x, 1x, 1.25x).
-- [ ] Task: Final integration testing and polish.
+- [x] Task: Implement `localStorage` logic to save and load high scores/combos per MIDI file. b2e50d5
+- [x] Task: Add a "High Score" display in the `MidiHeader` or song selection list. b2e50d5
+- [x] Task: Verify that scoring is consistent across different playback speeds (0.75x, 1x, 1.25x). b2e50d5
+- [x] Task: Final integration testing and polish. b2e50d5
 - [ ] Task: Conductor - User Manual Verification 'Phase 3: Persistence & Refinement' (Protocol in workflow.md)
