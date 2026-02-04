@@ -11,7 +11,7 @@ Implement the core countdown logic, including timers, state transitions, and int
 - [x] Task: Ensure the actual MIDI playback start is delayed by 4 seconds when the countdown is triggered.
 - [x] Task: Conductor - User Manual Verification 'Phase 1: State Management & Logic' (Protocol in workflow.md)
 
-## Phase 2: Audio & Visual UI
+## Phase 2: Audio & Visual UI [checkpoint: 44841eb]
 Create the visual overlay and integrate the audio cues.
 
 - [x] Task: Create a `CountdownOverlay` component that displays "3, 2, 1, GO!" based on the countdown state.
