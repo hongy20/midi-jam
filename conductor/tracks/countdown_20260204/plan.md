@@ -2,7 +2,7 @@
 
 This plan outlines the steps to add a 4-second "3, 2, 1, GO!" countdown before MIDI playback starts from the beginning.
 
-## Phase 1: State Management & Logic
+## Phase 1: State Management & Logic [checkpoint: 1909658]
 Implement the core countdown logic, including timers, state transitions, and integration with the playback system.
 
 - [x] Task: Update `use-midi-player.ts` to include `countdownRemaining` and `isCountdownActive` state.
