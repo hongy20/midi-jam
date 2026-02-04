@@ -20,10 +20,10 @@ Create the visual overlay and integrate the audio cues.
 - [x] Task: Apply CSS animations for the countdown numbers (e.g., scale/fade transitions).
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Audio & Visual UI' (Protocol in workflow.md)
 
-## Phase 3: Visualizer Synchronization
-Ensure the falldown visualizer correctly accounts for the 4-second delay.
+## Phase 3: Visualizer Synchronization [checkpoint: b7aa19c]
+Ensure the falldown visualizer correctly accounts for the 4-second delay with smooth movement.
 
-- [ ] Task: Update `falldown-visualizer.tsx` to delay the rendering of falling notes until the countdown hits "GO!".
-- [ ] Task: Verify that the horizontal bar-lines and measure markers also respect the 4-second offset.
-- [ ] Task: Final integration testing to ensure audio, visuals, and MIDI playback are perfectly synchronized.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: Visualizer Synchronization' (Protocol in workflow.md)
+- [x] Task: Update `use-midi-player.ts` to support smooth countdown movement using negative `currentTime`.
+- [x] Task: Revert hiding logic in `falldown-visualizer.tsx` and ensure it renders notes during the countdown offset.
+- [x] Task: Update `page.tsx` UI to handle negative `currentTime` gracefully (e.g., showing 0:00).
+- [x] Task: Conductor - User Manual Verification 'Phase 3: Visualizer Synchronization' (Protocol in workflow.md)

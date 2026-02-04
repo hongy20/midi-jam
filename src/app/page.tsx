@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { CountdownOverlay } from "@/components/midi/countdown-overlay";
 import { FalldownVisualizer } from "@/components/midi/falldown-visualizer";
 import { MidiHeader } from "@/components/midi/midi-header";
 import { PianoKeyboard } from "@/components/midi/piano-keyboard";
 import { PlaybackControls } from "@/components/midi/playback-controls";
-import { CountdownOverlay } from "@/components/midi/countdown-overlay";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMIDIConnection } from "@/hooks/use-midi-connection";
@@ -89,8 +89,9 @@ export default function Home() {
   });
 
   const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
+    const totalSeconds = Math.max(0, Math.floor(seconds));
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
