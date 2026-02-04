@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { CountdownOverlay } from "@/components/midi/countdown-overlay";
 import { FalldownVisualizer } from "@/components/midi/falldown-visualizer";
 import { MidiHeader } from "@/components/midi/midi-header";
 import { PianoKeyboard } from "@/components/midi/piano-keyboard";
@@ -43,7 +44,7 @@ export default function Home() {
   const [demoMode, setDemoMode] = useState(true);
 
   // Audio setup
-  const { playNote, stopNote, stopAllNotes, setIsReady } = useMidiAudio(
+  const { playNote, stopNote, stopAllNotes, playCountdownBeep } = useMidiAudio(
     demoMode,
     selectedOutput,
   );
@@ -75,6 +76,8 @@ export default function Home() {
     currentTime,
     duration,
     speed,
+    countdownRemaining,
+    isCountdownActive,
     play,
     pause,
     stop,
@@ -86,8 +89,9 @@ export default function Home() {
   });
 
   const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
+    const totalSeconds = Math.max(0, Math.floor(seconds));
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
@@ -112,6 +116,13 @@ export default function Home() {
   useEffect(() => {
     getMidiFiles().then(setMidiFiles);
   }, []);
+
+  // Handle countdown beeps
+  useEffect(() => {
+    if (isCountdownActive && countdownRemaining > 0) {
+      playCountdownBeep(countdownRemaining === 1);
+    }
+  }, [isCountdownActive, countdownRemaining, playCountdownBeep]);
 
   // Handle file selection and parsing
   const handleSelectFile = useCallback(
@@ -214,6 +225,10 @@ export default function Home() {
       </div>
 
       <main className="flex-1 relative w-full min-h-0">
+        <CountdownOverlay
+          countdownRemaining={countdownRemaining}
+          isActive={isCountdownActive}
+        />
         {selectedDevice || selectedFile ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden">
             {/* 3D Immersive Stage */}

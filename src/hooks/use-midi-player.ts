@@ -9,16 +9,19 @@ export function useMidiPlayer(
     onAllNotesOff?: () => void;
   },
 ) {
+  const COUNTDOWN_DURATION = 4;
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
+  const [currentTime, setCurrentTime] = useState(-COUNTDOWN_DURATION);
   const [speed, setSpeed] = useState(1);
   const [activeNotes, setActiveNotes] = useState<Map<number, number>>(
     new Map(),
   );
   const [duration, setDuration] = useState(0);
+  const [countdownRemaining, setCountdownRemaining] = useState(0);
+  const [isCountdownActive, setIsCountdownActive] = useState(false);
 
   const startTimeRef = useRef<number | null>(null);
-  const pausedTimeRef = useRef<number>(0);
+  const pausedTimeRef = useRef<number>(-COUNTDOWN_DURATION);
   const eventIndexRef = useRef(0);
   const requestRef = useRef<number>(null);
 
@@ -37,10 +40,12 @@ export function useMidiPlayer(
     eventsRef.current = events;
     // Reset when events change
     eventIndexRef.current = 0;
-    pausedTimeRef.current = 0;
-    setCurrentTime(0);
+    pausedTimeRef.current = -COUNTDOWN_DURATION;
+    setCurrentTime(-COUNTDOWN_DURATION);
     setActiveNotes(new Map());
     activeNotesRef.current = new Map();
+    setIsCountdownActive(false);
+    setCountdownRemaining(0);
 
     // Calculate duration
     if (events.length > 0) {
@@ -63,9 +68,11 @@ export function useMidiPlayer(
     }
 
     setIsPlaying(false);
-    setCurrentTime(0);
+    setIsCountdownActive(false);
+    setCountdownRemaining(0);
+    setCurrentTime(-COUNTDOWN_DURATION);
     startTimeRef.current = null;
-    pausedTimeRef.current = 0;
+    pausedTimeRef.current = -COUNTDOWN_DURATION;
     eventIndexRef.current = 0;
     setActiveNotes(new Map());
     activeNotesRef.current = new Map();
@@ -74,16 +81,20 @@ export function useMidiPlayer(
 
   const play = useCallback(() => {
     if (isPlaying) return;
+
+    if (currentTime < 0) {
+      setIsCountdownActive(true);
+    }
+
     setIsPlaying(true);
-    startTimeRef.current =
-      performance.now() - (pausedTimeRef.current * 1000) / speed;
+    startTimeRef.current = performance.now() - (currentTime * 1000) / speed;
 
     // Re-strike active notes using ref
     const { onNoteOn } = optionsRef.current || {};
     activeNotesRef.current.forEach((velocity, note) => {
       onNoteOn?.(note, velocity);
     });
-  }, [isPlaying, speed]); // currentTime and activeNotes removed
+  }, [isPlaying, currentTime, speed]); // currentTime and activeNotes removed
 
   const pause = useCallback(() => {
     if (!isPlaying) return;
@@ -121,52 +132,62 @@ export function useMidiPlayer(
       const elapsed = ((now - startTimeRef.current) / 1000) * speed;
       setCurrentTime(elapsed);
 
-      // Process events
-      let index = eventIndexRef.current;
-      let changed = false;
-      const currentEvents = eventsRef.current;
-      const { onNoteOn, onNoteOff } = optionsRef.current || {};
-
-      const notesToToggle: {
-        note: number;
-        velocity: number;
-        type: "add" | "delete";
-      }[] = [];
-
-      while (
-        index < currentEvents.length &&
-        currentEvents[index].time <= elapsed
-      ) {
-        const event = currentEvents[index];
-        const type = event.type === "noteOn" ? "add" : "delete";
-
-        notesToToggle.push({
-          note: event.note,
-          velocity: event.velocity,
-          type,
-        });
-
-        if (type === "add") {
-          onNoteOn?.(event.note, event.velocity);
-        } else {
-          onNoteOff?.(event.note);
-        }
-
-        index++;
-        changed = true;
+      // Handle countdown state updates
+      if (elapsed < 0) {
+        setCountdownRemaining(Math.ceil(Math.abs(elapsed)));
+      } else if (isCountdownActive) {
+        setIsCountdownActive(false);
+        setCountdownRemaining(0);
       }
 
-      if (changed) {
-        setActiveNotes((prev) => {
-          const next = new Map(prev);
-          for (const toggle of notesToToggle) {
-            if (toggle.type === "add") next.set(toggle.note, toggle.velocity);
-            else next.delete(toggle.note);
+      // Process events - only if elapsed >= 0
+      if (elapsed >= 0) {
+        let index = eventIndexRef.current;
+        let changed = false;
+        const currentEvents = eventsRef.current;
+        const { onNoteOn, onNoteOff } = optionsRef.current || {};
+
+        const notesToToggle: {
+          note: number;
+          velocity: number;
+          type: "add" | "delete";
+        }[] = [];
+
+        while (
+          index < currentEvents.length &&
+          currentEvents[index].time <= elapsed
+        ) {
+          const event = currentEvents[index];
+          const type = event.type === "noteOn" ? "add" : "delete";
+
+          notesToToggle.push({
+            note: event.note,
+            velocity: event.velocity,
+            type,
+          });
+
+          if (type === "add") {
+            onNoteOn?.(event.note, event.velocity);
+          } else {
+            onNoteOff?.(event.note);
           }
-          activeNotesRef.current = next; // Sync the ref
-          return next;
-        });
-        eventIndexRef.current = index;
+
+          index++;
+          changed = true;
+        }
+
+        if (changed) {
+          setActiveNotes((prev) => {
+            const next = new Map(prev);
+            for (const toggle of notesToToggle) {
+              if (toggle.type === "add") next.set(toggle.note, toggle.velocity);
+              else next.delete(toggle.note);
+            }
+            activeNotesRef.current = next; // Sync the ref
+            return next;
+          });
+          eventIndexRef.current = index;
+        }
       }
 
       requestRef.current = requestAnimationFrame(tick);
@@ -176,7 +197,7 @@ export function useMidiPlayer(
     return () => {
       if (requestRef.current !== null) cancelAnimationFrame(requestRef.current);
     };
-  }, [isPlaying, speed]); // Removed activeNotes and events from dependencies to prevent effect loops
+  }, [isPlaying, speed, isCountdownActive]); // Added isCountdownActive to dependencies to ensure tick can update it
 
   return {
     isPlaying,
@@ -184,6 +205,8 @@ export function useMidiPlayer(
     duration,
     speed,
     activeNotes,
+    countdownRemaining,
+    isCountdownActive,
     play,
     pause,
     stop,

@@ -11,3 +11,8 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: refactor: simplify audio logic (remove mute button) and support external MIDI output**
 *Link: [./archive/audio_simplification_20260203/](./archive/audio_simplification_20260203/)*
+
+---
+
+- [x] **Track: feature: add 3 seconds count down before starting a music**
+*Link: [./archive/countdown_20260204/](./archive/countdown_20260204/)*

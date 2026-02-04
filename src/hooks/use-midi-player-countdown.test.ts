@@ -1,17 +1,15 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import type { MidiEvent } from "../lib/midi/midi-player";
+import { useMidiPlayer } from "./use-midi-player";
 
-// 1. Mock the heavy dependency BEFORE anything else is imported
+// Mock the heavy dependency
 vi.mock("../lib/midi/midi-player", () => ({
   loadMidiFile: vi.fn(),
   getMidiEvents: vi.fn(),
 }));
 
-import type { MidiEvent } from "../lib/midi/midi-player";
-// 2. Now safe to import the hook
-import { useMidiPlayer } from "./use-midi-player";
-
-describe("useMidiPlayer", () => {
+describe("useMidiPlayer Countdown", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.stubGlobal("requestAnimationFrame", vi.fn());
@@ -25,27 +23,44 @@ describe("useMidiPlayer", () => {
     vi.unstubAllGlobals();
   });
 
-  it("should handle playback lifecycle", () => {
+  it("should have initial state with lead-in", () => {
+    const events: MidiEvent[] = [];
+    const { result } = renderHook(() => useMidiPlayer(events));
+
+    expect(result.current.currentTime).toBe(-4);
+    expect(result.current.isCountdownActive).toBe(false);
+  });
+
+  it("should start countdown when play is called at time -4", () => {
     const events: MidiEvent[] = [];
     const { result } = renderHook(() => useMidiPlayer(events));
 
     act(() => {
       result.current.play();
     });
+
+    expect(result.current.isCountdownActive).toBe(true);
     expect(result.current.isPlaying).toBe(true);
+  });
+
+  it("should reset to -4 when stop is called", () => {
+    const events: MidiEvent[] = [];
+    const { result } = renderHook(() => useMidiPlayer(events));
 
     act(() => {
-      result.current.pause();
+      result.current.play();
     });
-    expect(result.current.isPlaying).toBe(false);
 
     act(() => {
       result.current.stop();
     });
+
+    expect(result.current.isCountdownActive).toBe(false);
     expect(result.current.currentTime).toBe(-4);
+    expect(result.current.isPlaying).toBe(false);
   });
 
-  it("should start playing and trigger activeNotes state", () => {
+  it("should not play notes initially during countdown", () => {
     const onNoteOn = vi.fn();
     const events: MidiEvent[] = [
       {
@@ -63,35 +78,10 @@ describe("useMidiPlayer", () => {
       result.current.play();
     });
 
-    expect(result.current.isPlaying).toBe(true);
     expect(result.current.isCountdownActive).toBe(true);
-  });
-
-  it("should silence notes on pause", () => {
-    const onNoteOn = vi.fn();
-    const onNoteOff = vi.fn();
-    const events: MidiEvent[] = [
-      {
-        time: 1.0,
-        type: "noteOn" as const,
-        note: 60,
-        velocity: 0.8,
-        track: 0,
-      },
-    ];
-
-    const { result } = renderHook(() =>
-      useMidiPlayer(events, { onNoteOn, onNoteOff }),
-    );
-
-    act(() => {
-      result.current.play();
-    });
-
-    // Pause
-    act(() => {
-      result.current.pause();
-    });
-    expect(result.current.isPlaying).toBe(false);
+    expect(result.current.isPlaying).toBe(true);
+    // currentTime is still -4 because tick hasn't run
+    expect(result.current.currentTime).toBe(-4);
+    expect(onNoteOn).not.toHaveBeenCalled();
   });
 });

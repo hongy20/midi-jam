@@ -84,6 +84,34 @@ export function useMidiAudio(
     polySynthRef.current.releaseAll();
   }, [outputDevice]);
 
+  const playCountdownBeep = useCallback((isFinal = false) => {
+    // Ensure AudioContext is started
+    if (Tone.getContext().state !== "running") {
+      Tone.start();
+    }
+
+    const synth = new Tone.MembraneSynth({
+      volume: -12,
+      pitchDecay: 0.05,
+      octaves: 4,
+      oscillator: {
+        type: "sine",
+      },
+      envelope: {
+        attack: 0.001,
+        decay: 0.2,
+        sustain: 0.01,
+        release: 1,
+      },
+    }).toDestination();
+
+    const note = isFinal ? "C5" : "C4";
+    synth.triggerAttackRelease(note, "8n");
+
+    // Dispose after play to avoid memory leaks
+    setTimeout(() => synth.dispose(), 1000);
+  }, []);
+
   // Silence all audio immediately when Demo Mode is turned off
   useEffect(() => {
     if (!demoMode) {
@@ -95,6 +123,7 @@ export function useMidiAudio(
     playNote,
     stopNote,
     stopAllNotes,
+    playCountdownBeep,
     setIsReady,
   };
 }
