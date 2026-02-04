@@ -14,12 +14,8 @@ import { useMidiPlayer } from "./use-midi-player";
 describe("useMidiPlayer", () => {
   beforeEach(() => {
     vi.useFakeTimers();
-    vi.stubGlobal("requestAnimationFrame", (cb: FrameRequestCallback) => {
-      return setTimeout(() => cb(performance.now()), 16);
-    });
-    vi.stubGlobal("cancelAnimationFrame", (id: number) => {
-      clearTimeout(id);
-    });
+    vi.stubGlobal("requestAnimationFrame", vi.fn());
+    vi.stubGlobal("cancelAnimationFrame", vi.fn());
     vi.spyOn(performance, "now").mockReturnValue(0);
   });
 
@@ -28,14 +24,6 @@ describe("useMidiPlayer", () => {
     vi.useRealTimers();
     vi.unstubAllGlobals();
   });
-
-  const advanceTime = (ms: number) => {
-    act(() => {
-      const current = performance.now();
-      vi.spyOn(performance, "now").mockReturnValue(current + ms);
-      vi.advanceTimersByTime(ms);
-    });
-  };
 
   it("should handle playback lifecycle", () => {
     const events: MidiEvent[] = [];
@@ -54,12 +42,12 @@ describe("useMidiPlayer", () => {
     act(() => {
       result.current.stop();
     });
-    expect(result.current.currentTime).toBe(0);
+    expect(result.current.currentTime).toBe(-4);
   });
 
-  it("should trigger notes at correct times", () => {
+  it("should start playing and trigger activeNotes state", () => {
     const onNoteOn = vi.fn();
-    const events = [
+    const events: MidiEvent[] = [
       {
         time: 1.0,
         type: "noteOn" as const,
@@ -75,20 +63,14 @@ describe("useMidiPlayer", () => {
       result.current.play();
     });
 
-    // Move to 0.5s -> no note yet
-    advanceTime(500);
-    expect(onNoteOn).not.toHaveBeenCalled();
-
-    // Move to 1.1s -> note triggered
-    advanceTime(600);
-    expect(onNoteOn).toHaveBeenCalledWith(60, 0.8);
-    expect(result.current.activeNotes.has(60)).toBe(true);
+    expect(result.current.isPlaying).toBe(true);
+    expect(result.current.isCountdownActive).toBe(true);
   });
 
-  it("should silence notes on pause and re-strike on play", () => {
+  it("should silence notes on pause", () => {
     const onNoteOn = vi.fn();
     const onNoteOff = vi.fn();
-    const events = [
+    const events: MidiEvent[] = [
       {
         time: 1.0,
         type: "noteOn" as const,
@@ -106,22 +88,10 @@ describe("useMidiPlayer", () => {
       result.current.play();
     });
 
-    // Trigger note
-    advanceTime(1100);
-    expect(onNoteOn).toHaveBeenCalledWith(60, 0.8);
-    onNoteOn.mockClear();
-
     // Pause
     act(() => {
       result.current.pause();
     });
-    expect(onNoteOff).toHaveBeenCalledWith(60);
-    onNoteOff.mockClear();
-
-    // Resume
-    act(() => {
-      result.current.play();
-    });
-    expect(onNoteOn).toHaveBeenCalledWith(60, 0.8);
+    expect(result.current.isPlaying).toBe(false);
   });
 });

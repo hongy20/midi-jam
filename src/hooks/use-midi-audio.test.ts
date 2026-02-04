@@ -4,17 +4,24 @@ import { useMidiAudio } from "./use-midi-audio";
 
 // Mock Tone.js
 vi.mock("tone", () => {
-  const PolySynth = vi.fn(() => ({
-    toDestination: vi.fn().mockReturnThis(),
-    dispose: vi.fn(),
-    triggerAttack: vi.fn(),
-    triggerRelease: vi.fn(),
-    releaseAll: vi.fn(),
-  }));
+  class MockPolySynth {
+    toDestination = vi.fn().mockReturnThis();
+    dispose = vi.fn();
+    triggerAttack = vi.fn();
+    triggerRelease = vi.fn();
+    releaseAll = vi.fn();
+  }
+
+  class MockMembraneSynth {
+    toDestination = vi.fn().mockReturnThis();
+    dispose = vi.fn();
+    triggerAttackRelease = vi.fn();
+  }
 
   return {
-    PolySynth,
+    PolySynth: MockPolySynth,
     Synth: vi.fn(),
+    MembraneSynth: MockMembraneSynth,
     now: vi.fn().mockReturnValue(0),
     Frequency: vi.fn().mockImplementation(() => ({
       toFrequency: vi.fn().mockReturnValue(440),
