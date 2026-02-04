@@ -13,7 +13,7 @@ import { useMIDIConnection } from "@/hooks/use-midi-connection";
 import { useMIDIInputs } from "@/hooks/use-midi-inputs";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { useScoreEngine } from "@/hooks/use-score-engine";
-import { getSoundTracks } from "@/lib/action/sound-tracks";
+import { getSoundTracks } from "@/lib/action/sound-track";
 import {
   getBarLines,
   getMidiEvents,

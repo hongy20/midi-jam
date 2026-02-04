@@ -106,7 +106,7 @@ vi.mock("@/hooks/use-midi-player", () => ({
     setSpeed: vi.fn(),
   }),
 }));
-vi.mock("@/lib/action/sound-tracks", () => ({
+vi.mock("@/lib/action/sound-track", () => ({
   getSoundTracks: vi.fn().mockResolvedValue([]),
 }));
 

@@ -6,7 +6,7 @@ This plan is a placeholder for the iterative refactoring process directed by the
 Perform code reviews and refactors as directed by the user.
 
 - [~] Task: Execute refactoring instructions provided by the user.
-    - [x] Rename `midi.ts` action module and `getMidiFiles` function to `sound-tracks`.
+    - [x] Rename `midi.ts` action module and `getMidiFiles` function to `sound-track` and `getSoundTracks`.
     - [x] Write/update unit tests for modified logic.
     - [x] Verify changes against project standards (Biome, TypeScript).
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Iterative Refactoring & Optimization' (Protocol in workflow.md)
