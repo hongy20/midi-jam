@@ -1,4 +1,4 @@
-import { Pause, Play, Sparkles, Square } from "lucide-react";
+import { Pause, Play, Rabbit, Snail, Sparkles, Square } from "lucide-react";
 import { memo } from "react";
 
 interface PlaybackControlsProps {
@@ -36,7 +36,11 @@ export const PlaybackControls = memo(function PlaybackControls({
 
   onToggleDemo,
 }: PlaybackControlsProps) {
-  const speeds = [0.5, 1.0, 1.5, 2.0];
+  const speeds = [
+    { value: 0.75, label: <Snail className="w-4 h-4" /> },
+    { value: 1.0, label: "1x" },
+    { value: 1.25, label: <Rabbit className="w-4 h-4" /> },
+  ];
 
   return (
     <div className="flex items-center gap-2 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-4 py-1 pointer-events-auto">
@@ -45,7 +49,7 @@ export const PlaybackControls = memo(function PlaybackControls({
           <button
             type="button"
             onClick={onToggleDemo}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-[10px] uppercase tracking-wider transition-all duration-300 ${
+            className={`h-9 flex items-center gap-1.5 px-3 rounded-full font-black text-[10px] uppercase tracking-wider transition-all duration-300 ${
               demoMode
                 ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                 : "bg-slate-100 text-slate-400"
@@ -59,11 +63,15 @@ export const PlaybackControls = memo(function PlaybackControls({
             <span>Demo</span>
           </button>
         )}
+      </div>
 
+      <div className="h-4 w-0.5 bg-gray-300 mx-1" />
+
+      <div className="flex items-center gap-1">
         <button
           type="button"
           onClick={isPlaying ? onPause : onPlay}
-          className={`p-2 rounded-full transition-all ${
+          className={`w-9 h-9 flex items-center justify-center rounded-full transition-all ${
             isPlaying
               ? "bg-amber-100 text-amber-600 hover:bg-amber-200"
               : "bg-blue-100 text-blue-600 hover:bg-blue-200"
@@ -80,26 +88,29 @@ export const PlaybackControls = memo(function PlaybackControls({
         <button
           type="button"
           onClick={onStop}
-          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
+          className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
           aria-label="Stop"
         >
           <Square className="w-4 h-4 fill-current" />
         </button>
       </div>
 
+      <div className="h-4 w-0.5 bg-gray-300 mx-1" />
+
       <div className="flex items-center gap-1 pl-1">
         {speeds.map((s) => (
           <button
-            key={s}
+            key={s.value}
             type="button"
-            onClick={() => onSpeedChange(s)}
-            className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-              speed === s
-                ? "bg-gray-800 text-white"
+            onClick={() => onSpeedChange(s.value)}
+            className={`w-9 h-9 rounded-full text-xs font-black transition-all flex items-center justify-center ${
+              speed === s.value
+                ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
                 : "text-gray-400 hover:bg-gray-100"
             }`}
+            aria-label={`${s.value}x Speed`}
           >
-            {s}x
+            {s.label}
           </button>
         ))}
       </div>
