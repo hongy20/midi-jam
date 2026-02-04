@@ -2,6 +2,7 @@
 
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
+import { isBlackKey } from "@/lib/midi/piano-logic";
 
 interface FalldownVisualizerProps {
   spans: NoteSpan[];
@@ -88,9 +89,7 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
       let count = 0;
       for (let i = rangeStart; i <= rangeEnd; i++) {
         all.push(i);
-        const n = i % 12;
-        const isBlack = [1, 3, 6, 8, 10].includes(n);
-        if (!isBlack) {
+        if (!isBlackKey(i)) {
           indices[i] = count++;
           notes.push(i);
         }
@@ -104,10 +103,7 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
     }, [rangeStart, rangeEnd]);
 
   const getHorizontalPosition = (note: number) => {
-    const n = note % 12;
-    const isBlack = [1, 3, 6, 8, 10].includes(n);
-
-    if (!isBlack) {
+    if (!isBlackKey(note)) {
       const index = whiteKeyIndices[note];
       if (index === undefined) return null;
       return {
@@ -135,12 +131,11 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
         {allNotesInRange.map((note) => {
           const pos = getHorizontalPosition(note);
           if (!pos) return null;
-          const isBlack = [1, 3, 6, 8, 10].includes(note % 12);
           return (
             <div
               key={`lane-${note}`}
               className={`absolute top-0 bottom-0 pointer-events-none transition-colors duration-500 ${
-                isBlack ? "bg-black/10" : "bg-white/[0.02]"
+                isBlackKey(note) ? "bg-black/10" : "bg-white/[0.02]"
               }`}
               style={{ left: pos.left, width: pos.width }}
             />

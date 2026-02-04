@@ -1,6 +1,7 @@
 "use client";
 
-import { memo, useCallback, useMemo } from "react";
+import { memo, useMemo } from "react";
+import { isBlackKey } from "@/lib/midi/piano-logic";
 
 interface PianoKeyboardProps {
   liveNotes?: Set<number>;
@@ -19,11 +20,6 @@ export const PianoKeyboard = memo(function PianoKeyboard({
   rangeStart = 21, // Default A0
   rangeEnd = 108, // Default C8
 }: PianoKeyboardProps) {
-  const isBlackKey = useCallback((note: number) => {
-    const n = note % 12;
-    return [1, 3, 6, 8, 10].includes(n);
-  }, []);
-
   // Memoize white keys calculation
   const whiteKeys = useMemo(() => {
     const keys: number[] = [];
@@ -33,7 +29,7 @@ export const PianoKeyboard = memo(function PianoKeyboard({
       }
     }
     return keys;
-  }, [rangeStart, rangeEnd, isBlackKey]);
+  }, [rangeStart, rangeEnd]);
 
   // Memoize black keys calculation
   const blackKeys = useMemo(() => {
@@ -44,7 +40,7 @@ export const PianoKeyboard = memo(function PianoKeyboard({
       }
     }
     return keys;
-  }, [rangeStart, rangeEnd, isBlackKey]);
+  }, [rangeStart, rangeEnd]);
 
   // Calculate position for black keys relative to white keys
   const getBlackKeyPosition = (note: number) => {

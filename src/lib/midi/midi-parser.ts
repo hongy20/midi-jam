@@ -1,5 +1,6 @@
 import type { Midi } from "@tonejs/midi";
 import { MIDI_MAX_NOTE, MIDI_MIN_NOTE } from "./constant";
+import { isBlackKey } from "./piano-logic";
 
 // Can we merge MidiEvent and MIDINoteEvent?
 export interface MidiEvent {
@@ -61,16 +62,13 @@ export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
     } else if (event.type === "noteOff") {
       const start = activeNotes.get(event.note);
       if (start !== undefined) {
-        const n = event.note % 12;
-        const isBlack = [1, 3, 6, 8, 10].includes(n);
-
         spans.push({
           id: `${event.note}-${start.time}`,
           note: event.note,
           startTime: start.time,
           duration: event.time - start.time,
           velocity: start.velocity,
-          isBlack,
+          isBlack: isBlackKey(event.note),
         });
         activeNotes.delete(event.note);
       }

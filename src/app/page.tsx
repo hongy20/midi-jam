@@ -28,6 +28,7 @@ import {
   type MidiEvent,
   type NoteSpan,
 } from "@/lib/midi/midi-parser";
+import { isBlackKey } from "@/lib/midi/piano-logic";
 
 interface MidiFile {
   name: string;
@@ -168,9 +169,8 @@ export default function Home() {
             PIANO_88_KEY_MAX,
             Math.max(MIDI_NOTE_C4, range.max + NOTE_RANGE_BUFFER),
           );
-          const isBlack = (n: number) => [1, 3, 6, 8, 10].includes(n % 12);
-          if (isBlack(min)) min--;
-          if (isBlack(max)) max++;
+          if (isBlackKey(min)) min--;
+          if (isBlackKey(max)) max++;
           setNoteRange({ min, max });
         } else {
           setNoteRange(null);
