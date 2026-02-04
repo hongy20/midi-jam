@@ -5,12 +5,12 @@ This plan covers the implementation of the scoring logic, combo counter, HUD ove
 ## Phase 1: Scoring Engine (Logic)
 Implement the core scoring and accuracy logic in a standalone hook.
 
-- [ ] Task: Create `src/hooks/use-score-engine.ts` to manage score, combo, and accuracy state.
-- [ ] Task: Implement `calculateNoteWeights` utility to pre-calculate the point value of each note in the MIDI events list based on chord density.
-- [ ] Task: Implement timing accuracy logic using real-time constants (`PERFECT_WINDOW`, etc.).
-- [ ] Task: Add logic to track "pending" notes and match user input (Note On/Off) to the closest expected MIDI note.
-- [ ] Task: Ensure notes during countdown (`currentTime < 0`) are ignored.
-- [ ] Task: Add unit tests for `use-score-engine.ts` covering various timing scenarios, chords, and combo resets.
+- [x] Task: Create `src/hooks/use-score-engine.ts` to manage score, combo, and accuracy state. a7587b5
+- [x] Task: Implement `calculateNoteWeights` utility to pre-calculate the point value of each note in the MIDI events list based on chord density. a7587b5
+- [x] Task: Implement timing accuracy logic using real-time constants (`PERFECT_WINDOW`, etc.). a7587b5
+- [x] Task: Add logic to track "pending" notes and match user input (Note On/Off) to the closest expected MIDI note. a7587b5
+- [x] Task: Ensure notes during countdown (`currentTime < 0`) are ignored. a7587b5
+- [x] Task: Add unit tests for `use-score-engine.ts` covering various timing scenarios, chords, and combo resets. a7587b5
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Scoring Engine (Logic)' (Protocol in workflow.md)
 
 ## Phase 2: HUD & Feedback (UI)
