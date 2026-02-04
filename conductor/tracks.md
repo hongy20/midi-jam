@@ -24,5 +24,5 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [ ] **Track: feature: introduce a score system with chord weighting, accuracy thresholds, and combo tracking.**
+- [x] **Track: feature: introduce a score system with chord weighting, accuracy thresholds, and combo tracking.**
 *Link: [./tracks/score_system_20260204/](./tracks/score_system_20260204/)*
