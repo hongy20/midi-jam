@@ -91,7 +91,9 @@ export const PlaybackControls = memo(function PlaybackControls({
         </button>
       </div>
 
-      <div className="flex items-center gap-1 pl-1 border-l border-gray-200 ml-1">
+      <div className="h-4 w-px bg-gray-300 mx-1" />
+
+      <div className="flex items-center gap-1 pl-1">
         {speeds.map((s) => (
           <button
             key={s.value}
