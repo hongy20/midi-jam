@@ -106,8 +106,8 @@ vi.mock("@/hooks/use-midi-player", () => ({
     setSpeed: vi.fn(),
   }),
 }));
-vi.mock("@/lib/action/midi", () => ({
-  getMidiFiles: vi.fn().mockResolvedValue([]),
+vi.mock("@/lib/action/sound-tracks", () => ({
+  getSoundTracks: vi.fn().mockResolvedValue([]),
 }));
 
 describe("Home Page Layout Refactor", () => {

@@ -26,7 +26,7 @@ function formatFilename(filename: string): string {
     .join(" ");
 }
 
-export async function getMidiFiles() {
+export async function getSoundTracks() {
   try {
     const midiDir = path.join(process.cwd(), "public", "midi");
     const files = await fs.readdir(midiDir);

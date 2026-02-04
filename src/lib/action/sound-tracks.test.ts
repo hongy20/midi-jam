@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import { describe, expect, it, vi } from "vitest";
-import { getMidiFiles } from "./midi";
+import { getSoundTracks } from "./sound-tracks";
 
 vi.mock("node:fs/promises", () => ({
   default: {
@@ -8,7 +8,7 @@ vi.mock("node:fs/promises", () => ({
   },
 }));
 
-describe("getMidiFiles", () => {
+describe("getSoundTracks", () => {
   it("should return a list of formatted midi file objects", async () => {
     const mockFiles = [
       "my_cool_song.mid",
@@ -18,10 +18,11 @@ describe("getMidiFiles", () => {
       "Regular Song.mid",
     ];
 
-    // biome-ignore lint/suspicious/noExplicitAny: just give me a break
-    vi.mocked(fs.readdir).mockResolvedValue(mockFiles as any);
+    vi.mocked(
+      fs.readdir as unknown as () => Promise<string[]>,
+    ).mockResolvedValue(mockFiles);
 
-    const result = await getMidiFiles();
+    const result = await getSoundTracks();
 
     expect(result).toEqual([
       { name: "Dance Of The Sugar Plum", url: "/midi/DanceOfTheSugarPlum.mid" },
@@ -34,7 +35,7 @@ describe("getMidiFiles", () => {
 
   it("should return an empty array if the directory is empty", async () => {
     vi.mocked(fs.readdir).mockResolvedValue([]);
-    const result = await getMidiFiles();
+    const result = await getSoundTracks();
     expect(result).toEqual([]);
   });
 
@@ -42,7 +43,7 @@ describe("getMidiFiles", () => {
     vi.mocked(fs.readdir).mockRejectedValue(new Error("Directory not found"));
     // Avoid logging mocked errors during unit tests
     vi.spyOn(console, "error").mockImplementation(() => {});
-    const result = await getMidiFiles();
+    const result = await getSoundTracks();
     expect(result).toEqual([]);
   });
 });

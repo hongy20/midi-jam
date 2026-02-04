@@ -13,7 +13,7 @@ import { useMIDIConnection } from "@/hooks/use-midi-connection";
 import { useMIDIInputs } from "@/hooks/use-midi-inputs";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { useScoreEngine } from "@/hooks/use-score-engine";
-import { getMidiFiles } from "@/lib/action/midi";
+import { getSoundTracks } from "@/lib/action/sound-tracks";
 import {
   getBarLines,
   getMidiEvents,
@@ -129,7 +129,7 @@ export default function Home() {
 
   // Load file list
   useEffect(() => {
-    getMidiFiles().then(setMidiFiles);
+    getSoundTracks().then(setMidiFiles);
   }, []);
 
   // Handle countdown beeps
