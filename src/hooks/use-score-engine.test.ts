@@ -112,8 +112,8 @@ describe("useScoreEngine", () => {
     );
 
     act(() => {
-       // Move time past POOR_WINDOW (1.0 + 0.25 = 1.25)
-      rerender({ currentTime: 1.3, liveNotes: new Set<number>() });
+       // Move time past POOR_WINDOW (1.0 + 0.60 = 1.60)
+      rerender({ currentTime: 1.7, liveNotes: new Set<number>() });
     });
 
     expect(result.current.combo).toBe(0);

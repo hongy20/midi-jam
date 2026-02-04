@@ -1,9 +1,9 @@
 import type { MidiEvent } from "./midi-player";
 
-export const PERFECT_WINDOW = 0.050; // 50ms
-export const GREAT_WINDOW = 0.100;  // 100ms
-export const GOOD_WINDOW = 0.150;   // 150ms
-export const POOR_WINDOW = 0.250;   // 250ms
+export const PERFECT_WINDOW = 0.150; // 150ms
+export const GREAT_WINDOW = 0.300;  // 300ms
+export const GOOD_WINDOW = 0.450;   // 450ms
+export const POOR_WINDOW = 0.600;   // 600ms
 
 export interface NoteWeight {
   eventId: number;
