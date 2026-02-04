@@ -16,9 +16,9 @@ Implement the core scoring and accuracy logic in a standalone hook.
 ## Phase 2: HUD & Feedback (UI)
 Create the user interface for displaying real-time feedback.
 
-- [ ] Task: Create `src/components/midi/score-hud.tsx` to display score, combo, and accuracy text (e.g., "PERFECT").
-- [ ] Task: Integrate `use-score-engine` into `src/app/page.tsx` and pass the state to `ScoreHud`.
-- [ ] Task: Add CSS animations for accuracy text (fade out and move up).
+- [x] Task: Create `src/components/midi/score-hud.tsx` to display score, combo, and accuracy text (e.g., "PERFECT"). 1628cba
+- [x] Task: Integrate `use-score-engine` into `src/app/page.tsx` and pass the state to `ScoreHud`. 1628cba
+- [x] Task: Add CSS animations for accuracy text (fade out and move up). 1628cba
 - [ ] Task: Update `PianoKeyboard` or `FalldownVisualizer` if needed to show hit feedback (optional polish).
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: HUD & Feedback (UI)' (Protocol in workflow.md)
 
