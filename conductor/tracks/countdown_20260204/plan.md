@@ -14,11 +14,11 @@ Implement the core countdown logic, including timers, state transitions, and int
 ## Phase 2: Audio & Visual UI
 Create the visual overlay and integrate the audio cues.
 
-- [ ] Task: Create a `CountdownOverlay` component that displays "3, 2, 1, GO!" based on the countdown state.
-- [ ] Task: Integrate `CountdownOverlay` into the main page layout, ensuring it is centered and non-blocking.
-- [ ] Task: Update `use-midi-audio.ts` (or a dedicated hook) to play "beep" sounds synchronized with the countdown steps.
-- [ ] Task: Apply CSS animations for the countdown numbers (e.g., scale/fade transitions).
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Audio & Visual UI' (Protocol in workflow.md)
+- [x] Task: Create a `CountdownOverlay` component that displays "3, 2, 1, GO!" based on the countdown state.
+- [x] Task: Integrate `CountdownOverlay` into the main page layout, ensuring it is centered and non-blocking.
+- [x] Task: Update `use-midi-audio.ts` (or a dedicated hook) to play "beep" sounds synchronized with the countdown steps.
+- [x] Task: Apply CSS animations for the countdown numbers (e.g., scale/fade transitions).
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Audio & Visual UI' (Protocol in workflow.md)
 
 ## Phase 3: Visualizer Synchronization
 Ensure the falldown visualizer correctly accounts for the 4-second delay.
