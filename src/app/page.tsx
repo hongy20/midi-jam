@@ -14,6 +14,11 @@ import { useMIDIInputs } from "@/hooks/use-midi-inputs";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { useScoreEngine } from "@/hooks/use-score-engine";
 import { getSoundTracks } from "@/lib/action/sound-track";
+import {
+  MIDI_NOTE_C4,
+  PIANO_88_KEY_MAX,
+  PIANO_88_KEY_MIN,
+} from "@/lib/midi/constant";
 import { loadMidiFile } from "@/lib/midi/midi-loader";
 import {
   getBarLines,
@@ -155,8 +160,14 @@ export default function Home() {
 
         const range = getNoteRange(events);
         if (range) {
-          let min = Math.max(21, Math.min(60, range.min - NOTE_RANGE_BUFFER));
-          let max = Math.min(108, Math.max(60, range.max + NOTE_RANGE_BUFFER));
+          let min = Math.max(
+            PIANO_88_KEY_MIN,
+            Math.min(MIDI_NOTE_C4, range.min - NOTE_RANGE_BUFFER),
+          );
+          let max = Math.min(
+            PIANO_88_KEY_MAX,
+            Math.max(MIDI_NOTE_C4, range.max + NOTE_RANGE_BUFFER),
+          );
           const isBlack = (n: number) => [1, 3, 6, 8, 10].includes(n % 12);
           if (isBlack(min)) min--;
           if (isBlack(max)) max++;

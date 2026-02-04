@@ -1,4 +1,5 @@
 import type { Midi } from "@tonejs/midi";
+import { MIDI_MAX_NOTE, MIDI_MIN_NOTE } from "./constant";
 
 // Can we merge MidiEvent and MIDINoteEvent?
 export interface MidiEvent {
@@ -87,8 +88,8 @@ export function getNoteRange(
 ): { min: number; max: number } | null {
   if (events.length === 0) return null;
 
-  let min = 127;
-  let max = 0;
+  let min = MIDI_MAX_NOTE;
+  let max = MIDI_MIN_NOTE;
 
   for (const event of events) {
     if (event.note < min) min = event.note;

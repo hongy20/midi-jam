@@ -18,3 +18,19 @@ export const MIDI_COMMAND_CONTROL_CHANGE = 0xb0;
 
 /** All Notes Off controller number */
 export const MIDI_CONTROLLER_ALL_NOTES_OFF = 123;
+
+/** Theoretical minimum MIDI note value */
+export const MIDI_MIN_NOTE = 0;
+
+/** Theoretical maximum MIDI note value */
+export const MIDI_MAX_NOTE = 127;
+
+/** Standard 88-key piano minimum MIDI note (A0) */
+export const PIANO_88_KEY_MIN = 21;
+
+/** Standard 88-key piano maximum MIDI note (C8) */
+export const PIANO_88_KEY_MAX = 108;
+
+/** Middle C MIDI note */
+export const MIDI_NOTE_C4 = 60;
+
