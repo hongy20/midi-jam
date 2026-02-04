@@ -7,9 +7,17 @@ interface ScoreHudProps {
   score: number;
   combo: number;
   lastAccuracy: Accuracy;
+  highScore: number;
+  bestCombo: number;
 }
 
-export function ScoreHud({ score, combo, lastAccuracy }: ScoreHudProps) {
+export function ScoreHud({
+  score,
+  combo,
+  lastAccuracy,
+  highScore,
+  bestCombo,
+}: ScoreHudProps) {
   const [accuracyDisplay, setAccuracyDisplay] = useState<{
     text: string;
     id: number;
@@ -43,12 +51,34 @@ export function ScoreHud({ score, combo, lastAccuracy }: ScoreHudProps) {
         <div className="text-6xl font-black text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] tabular-nums">
           {score.toFixed(1)}
         </div>
-        
-        {combo >= 2 && (
-          <div className="bg-white/90 backdrop-blur-md px-6 py-1 rounded-full text-slate-900 font-black text-xl shadow-xl animate-in zoom-in duration-300">
-            {combo}x COMBO
+
+        <div className="flex items-center gap-4 mt-1">
+          {combo >= 2 && (
+            <div className="bg-white/90 backdrop-blur-md px-6 py-1 rounded-full text-slate-900 font-black text-xl shadow-xl animate-in zoom-in duration-300">
+              {combo}x COMBO
+            </div>
+          )}
+
+          <div className="flex flex-col items-center bg-black/40 backdrop-blur-sm border border-white/10 px-3 py-1 rounded-xl text-white shadow-lg">
+            <span className="text-[10px] font-bold uppercase tracking-widest opacity-60">
+              High Score
+            </span>
+            <span className="text-sm font-black tabular-nums">
+              {highScore.toFixed(1)}
+            </span>
           </div>
-        )}
+
+          {bestCombo > 0 && (
+            <div className="flex flex-col items-center bg-black/40 backdrop-blur-sm border border-white/10 px-3 py-1 rounded-xl text-white shadow-lg">
+              <span className="text-[10px] font-bold uppercase tracking-widest opacity-60">
+                Best Combo
+              </span>
+              <span className="text-sm font-black tabular-nums">
+                {bestCombo}x
+              </span>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

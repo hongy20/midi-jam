@@ -10,14 +10,14 @@ describe("useScoreEngine", () => {
   ];
 
   it("should initialize with zero score and combo", () => {
-    const { result } = renderHook(() => useScoreEngine(mockEvents, -4, new Set()));
+    const { result } = renderHook(() => useScoreEngine(mockEvents, -4, new Set(), true));
     expect(result.current.score).toBe(0);
     expect(result.current.combo).toBe(0);
   });
 
   it("should not award points during countdown", () => {
     const { result, rerender } = renderHook(
-      ({ currentTime, liveNotes }) => useScoreEngine(mockEvents, currentTime, liveNotes),
+      ({ currentTime, liveNotes }) => useScoreEngine(mockEvents, currentTime, liveNotes, true),
       { initialProps: { currentTime: -1, liveNotes: new Set<number>() } }
     );
 
@@ -30,7 +30,7 @@ describe("useScoreEngine", () => {
 
   it("should award points for accurate press", () => {
     const { result, rerender } = renderHook(
-      ({ currentTime, liveNotes }) => useScoreEngine(mockEvents, currentTime, liveNotes),
+      ({ currentTime, liveNotes }) => useScoreEngine(mockEvents, currentTime, liveNotes, true),
       { initialProps: { currentTime: 0, liveNotes: new Set<number>() } }
     );
 
@@ -46,7 +46,7 @@ describe("useScoreEngine", () => {
 
   it("should reset combo on wrong key", () => {
     const { result, rerender } = renderHook(
-      ({ currentTime, liveNotes }) => useScoreEngine(mockEvents, currentTime, liveNotes),
+      ({ currentTime, liveNotes }) => useScoreEngine(mockEvents, currentTime, liveNotes, true),
       { initialProps: { currentTime: 0, liveNotes: new Set<number>() } }
     );
 
@@ -75,7 +75,7 @@ describe("useScoreEngine", () => {
     // Press points for 60: 17.1875
 
     const { result, rerender } = renderHook(
-      ({ currentTime, liveNotes }) => useScoreEngine(chordEvents, currentTime, liveNotes),
+      ({ currentTime, liveNotes }) => useScoreEngine(chordEvents, currentTime, liveNotes, true),
       { initialProps: { currentTime: 0, liveNotes: new Set<number>() } }
     );
 
@@ -88,7 +88,7 @@ describe("useScoreEngine", () => {
 
   it("should award points for hold and release", () => {
     const { result, rerender } = renderHook(
-      ({ currentTime, liveNotes }) => useScoreEngine(mockEvents, currentTime, liveNotes),
+      ({ currentTime, liveNotes }) => useScoreEngine(mockEvents, currentTime, liveNotes, true),
       { initialProps: { currentTime: 0, liveNotes: new Set<number>() } }
     );
 
@@ -107,7 +107,7 @@ describe("useScoreEngine", () => {
 
   it("should reset combo and set accuracy to MISS when a note is missed", () => {
     const { result, rerender } = renderHook(
-      ({ currentTime, liveNotes }) => useScoreEngine(mockEvents, currentTime, liveNotes),
+      ({ currentTime, liveNotes }) => useScoreEngine(mockEvents, currentTime, liveNotes, true),
       { initialProps: { currentTime: 0, liveNotes: new Set<number>() } }
     );
 
@@ -118,5 +118,23 @@ describe("useScoreEngine", () => {
 
     expect(result.current.combo).toBe(0);
     expect(result.current.lastAccuracy).toBe("MISS");
+  });
+
+  it("should reset score and combo when isPlaying becomes false", () => {
+    const { result, rerender } = renderHook(
+      ({ currentTime, liveNotes, isPlaying }) => useScoreEngine(mockEvents, currentTime, liveNotes, isPlaying),
+      { initialProps: { currentTime: 0, liveNotes: new Set<number>(), isPlaying: true } }
+    );
+
+    act(() => {
+      rerender({ currentTime: 1.0, liveNotes: new Set([60]), isPlaying: true });
+    });
+    expect(result.current.score).toBe(50);
+
+    act(() => {
+      rerender({ currentTime: 1.0, liveNotes: new Set([60]), isPlaying: false });
+    });
+    expect(result.current.score).toBe(0);
+    expect(result.current.combo).toBe(0);
   });
 });

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import type { MidiEvent } from "../lib/midi/midi-player";
 import { calculateNoteWeights, PERFECT_WINDOW, GREAT_WINDOW, GOOD_WINDOW, POOR_WINDOW } from "../lib/midi/score-logic";
+import { scoreStorage } from "../lib/score/score-storage";
 
 export type Accuracy = "PERFECT" | "GREAT" | "GOOD" | "POOR" | "MISS" | null;
 
@@ -8,11 +9,16 @@ export function useScoreEngine(
   midiEvents: MidiEvent[],
   currentTime: number,
   liveActiveNotes: Set<number>,
+  isPlaying: boolean,
+  midiId: string | null = null,
 ) {
   const [score, setScore] = useState(0);
   const [combo, setCombo] = useState(0);
   const [maxCombo, setMaxCombo] = useState(0);
   const [lastAccuracy, setLastAccuracy] = useState<Accuracy>(null);
+  
+  const [highScore, setHighScore] = useState(0);
+  const [bestCombo, setBestCombo] = useState(0);
 
   const eventWeights = useMemo(() => calculateNoteWeights(midiEvents), [midiEvents]);
   
@@ -23,19 +29,50 @@ export function useScoreEngine(
   // Map<eventIdx, { startTime: number, note: number }>
   const activeHitsRef = useRef<Map<number, { startTime: number, note: number }>>(new Map());
 
-  // Reset when midiEvents change
+  // Reset when midiEvents change or isPlaying becomes false
   useEffect(() => {
-    setScore(0);
-    setCombo(0);
-    setMaxCombo(0);
-    setLastAccuracy(null);
-    processedNotesRef.current = new Set();
-    prevLiveNotesRef.current = new Set();
-    activeHitsRef.current = new Map();
-  }, [midiEvents]);
+    if (!isPlaying) {
+      setScore(0);
+      setCombo(0);
+      setMaxCombo(0);
+      setLastAccuracy(null);
+      processedNotesRef.current = new Set();
+      prevLiveNotesRef.current = new Set();
+      activeHitsRef.current = new Map();
+    }
+  }, [midiEvents, isPlaying]);
+
+  // Load high scores
+  useEffect(() => {
+    if (midiId) {
+      scoreStorage.getScore(midiId).then((data) => {
+        setHighScore(data.highScore);
+        setBestCombo(data.bestCombo);
+      });
+    } else {
+      setHighScore(0);
+      setBestCombo(0);
+    }
+  }, [midiId]);
+
+  // Save when high scores are updated
+  useEffect(() => {
+    if (midiId && isPlaying && (score > highScore || maxCombo > bestCombo)) {
+      const newHighScore = Math.max(score, highScore);
+      const newBestCombo = Math.max(maxCombo, bestCombo);
+      
+      setHighScore(newHighScore);
+      setBestCombo(newBestCombo);
+      
+      scoreStorage.saveScore(midiId, {
+        highScore: newHighScore,
+        bestCombo: newBestCombo,
+      });
+    }
+  }, [score, maxCombo, midiId, highScore, bestCombo, isPlaying]);
 
   useEffect(() => {
-    if (currentTime < 0) return;
+    if (currentTime < 0 || !isPlaying) return;
 
     const newPresses = Array.from(liveActiveNotes).filter(n => !prevLiveNotesRef.current.has(n));
     const newReleases = Array.from(prevLiveNotesRef.current).filter(n => !liveActiveNotes.has(n));
@@ -162,5 +199,7 @@ export function useScoreEngine(
     combo,
     maxCombo,
     lastAccuracy,
+    highScore,
+    bestCombo,
   };
 }

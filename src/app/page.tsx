@@ -90,12 +90,17 @@ export default function Home() {
     onAllNotesOff: stopAllNotes,
   });
 
-  const { score, combo, lastAccuracy } = useScoreEngine(
+  const { score, combo, lastAccuracy, highScore, bestCombo } = useScoreEngine(
     midiEvents,
     currentTime,
     demoMode
-      ? new Set([...Array.from(liveActiveNotes), ...Array.from(playbackActiveNotes.keys())])
+      ? new Set([
+          ...Array.from(liveActiveNotes),
+          ...Array.from(playbackActiveNotes.keys()),
+        ])
       : liveActiveNotes,
+    isPlaying,
+    selectedFile?.url,
   );
 
   const formatTime = (seconds: number) => {
@@ -244,6 +249,8 @@ export default function Home() {
             score={score}
             combo={combo}
             lastAccuracy={lastAccuracy}
+            highScore={highScore}
+            bestCombo={bestCombo}
           />
         )}
         {selectedDevice || selectedFile ? (
