@@ -11,7 +11,6 @@ describe("FalldownVisualizer", () => {
       duration: 1.0,
       isBlack: false,
       velocity: 0.8,
-      track: 0,
     },
   ];
 

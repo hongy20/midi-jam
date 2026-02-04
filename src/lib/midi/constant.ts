@@ -1,9 +1,9 @@
 /**
  * MIDI Command Constants
- * 
- * MIDI status bytes are composed of a command type (high 4 bits) 
+ *
+ * MIDI status bytes are composed of a command type (high 4 bits)
  * and a channel number (low 4 bits, 0-15).
- * 
+ *
  * These constants represent the command types for Channel 1 (0).
  */
 

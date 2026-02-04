@@ -6,7 +6,6 @@ export interface MidiEvent {
   type: "noteOn" | "noteOff";
   note: number;
   velocity: number;
-  track: number; // TODO: get rid of this property
 }
 
 export interface NoteSpan {
@@ -15,7 +14,6 @@ export interface NoteSpan {
   startTime: number;
   duration: number;
   velocity: number;
-  track: number;
   isBlack: boolean;
 }
 
@@ -26,21 +24,19 @@ export interface NoteSpan {
 export function getMidiEvents(midi: Midi): MidiEvent[] {
   const events: MidiEvent[] = [];
 
-  midi.tracks.forEach((track, trackIndex) => {
+  midi.tracks.forEach((track) => {
     for (const note of track.notes) {
       events.push({
         time: note.time,
         type: "noteOn",
         note: note.midi,
         velocity: note.velocity,
-        track: trackIndex,
       });
       events.push({
         time: note.time + note.duration,
         type: "noteOff",
         note: note.midi,
         velocity: 0,
-        track: trackIndex,
       });
     }
   });
@@ -68,12 +64,11 @@ export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
         const isBlack = [1, 3, 6, 8, 10].includes(n);
 
         spans.push({
-          id: `${event.note}-${event.track}-${start.time}`,
+          id: `${event.note}-${start.time}`,
           note: event.note,
           startTime: start.time,
           duration: event.time - start.time,
           velocity: start.velocity,
-          track: event.track,
           isBlack,
         });
         activeNotes.delete(event.note);

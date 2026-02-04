@@ -56,7 +56,6 @@ describe("useMidiPlayer", () => {
         type: "noteOn" as const,
         note: 60,
         velocity: 0.8,
-        track: 0,
       },
     ];
 
@@ -79,7 +78,6 @@ describe("useMidiPlayer", () => {
         type: "noteOn" as const,
         note: 60,
         velocity: 0.8,
-        track: 0,
       },
     ];
 

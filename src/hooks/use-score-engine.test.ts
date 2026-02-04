@@ -5,8 +5,8 @@ import { useScoreEngine } from "./use-score-engine";
 
 describe("useScoreEngine", () => {
   const mockEvents: MidiEvent[] = [
-    { time: 1.0, type: "noteOn", note: 60, velocity: 100, track: 0 },
-    { time: 2.0, type: "noteOff", note: 60, velocity: 0, track: 0 },
+    { time: 1.0, type: "noteOn", note: 60, velocity: 100 },
+    { time: 2.0, type: "noteOff", note: 60, velocity: 0 },
   ];
 
   it("should initialize with zero score and combo", () => {
@@ -68,9 +68,9 @@ describe("useScoreEngine", () => {
 
   it("should handle chord weighting", () => {
     const chordEvents: MidiEvent[] = [
-      { time: 1.0, type: "noteOn", note: 60, velocity: 100, track: 0 },
-      { time: 1.0, type: "noteOn", note: 64, velocity: 100, track: 0 },
-      { time: 2.0, type: "noteOn", note: 67, velocity: 100, track: 0 },
+      { time: 1.0, type: "noteOn", note: 60, velocity: 100 },
+      { time: 1.0, type: "noteOn", note: 64, velocity: 100 },
+      { time: 2.0, type: "noteOn", note: 67, velocity: 100 },
     ];
     // Chord (60, 64) at t=1.0, Single note (67) at t=2.0
     // Multiplier for chord = 1 + (2-1)*0.1 = 1.1

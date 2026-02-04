@@ -5,9 +5,9 @@ describe("midi-parser utilities", () => {
   describe("getNoteRange", () => {
     it("returns the correct range for a set of events", () => {
       const events: MidiEvent[] = [
-        { time: 0, type: "noteOn", note: 60, velocity: 0.5, track: 0 },
-        { time: 1, type: "noteOn", note: 72, velocity: 0.5, track: 0 },
-        { time: 2, type: "noteOn", note: 48, velocity: 0.5, track: 0 },
+        { time: 0, type: "noteOn", note: 60, velocity: 0.5 },
+        { time: 1, type: "noteOn", note: 72, velocity: 0.5 },
+        { time: 2, type: "noteOn", note: 48, velocity: 0.5 },
       ];
 
       const range = getNoteRange(events);
@@ -20,7 +20,7 @@ describe("midi-parser utilities", () => {
 
     it("handles a single note", () => {
       const events: MidiEvent[] = [
-        { time: 0, type: "noteOn", note: 60, velocity: 0.5, track: 0 },
+        { time: 0, type: "noteOn", note: 60, velocity: 0.5 },
       ];
       expect(getNoteRange(events)).toEqual({ min: 60, max: 60 });
     });
