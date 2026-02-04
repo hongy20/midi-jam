@@ -11,7 +11,7 @@ Implement the core scoring and accuracy logic in a standalone hook.
 - [x] Task: Add logic to track "pending" notes and match user input (Note On/Off) to the closest expected MIDI note. a7587b5
 - [x] Task: Ensure notes during countdown (`currentTime < 0`) are ignored. a7587b5
 - [x] Task: Add unit tests for `use-score-engine.ts` covering various timing scenarios, chords, and combo resets. a7587b5
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Scoring Engine (Logic)' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Scoring Engine (Logic)' (Protocol in workflow.md) [checkpoint: aa21313]
 
 ## Phase 2: HUD & Feedback (UI)
 Create the user interface for displaying real-time feedback.
