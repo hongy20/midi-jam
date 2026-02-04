@@ -1,3 +1,6 @@
+export const MIDI_COMMAND_NOTE_ON = 0x90;
+export const MIDI_COMMAND_NOTE_OFF = 0x80;
+
 export type MIDINoteEvent = {
   type: "note-on" | "note-off";
   note: number;
@@ -20,7 +23,7 @@ export function subscribeToNotes(
     // Mask out the channel bits (lower 4 bits) to get the command type
     const command = status & 0xf0;
 
-    if (command === 0x90) {
+    if (command === MIDI_COMMAND_NOTE_ON) {
       // Note On
       if (velocity === 0) {
         // Note On with velocity 0 is actually Note Off
@@ -28,21 +31,15 @@ export function subscribeToNotes(
       } else {
         callback({ type: "note-on", note, velocity });
       }
-    } else if (command === 0x80) {
+    } else if (command === MIDI_COMMAND_NOTE_OFF) {
       // Note Off
       callback({ type: "note-off", note, velocity: velocity || 0 });
     }
   };
 
-  input.addEventListener(
-    "midimessage",
-    handleMIDIMessage as (event: Event) => void,
-  );
+  input.addEventListener("midimessage", handleMIDIMessage);
 
   return () => {
-    input.removeEventListener(
-      "midimessage",
-      handleMIDIMessage as (event: Event) => void,
-    );
+    input.removeEventListener("midimessage", handleMIDIMessage);
   };
 }
