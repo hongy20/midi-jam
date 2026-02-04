@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import type { NoteSpan } from "@/lib/midi/midi-player";
+import type { NoteSpan } from "@/lib/midi/midi-parser";
 
 interface FalldownVisualizerProps {
   spans: NoteSpan[];

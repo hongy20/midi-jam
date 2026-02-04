@@ -1,10 +1,10 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { MidiEvent } from "../lib/midi/midi-player";
+import type { MidiEvent } from "../lib/midi/midi-parser";
 import { useMidiPlayer } from "./use-midi-player";
 
 // Mock the heavy dependency
-vi.mock("../lib/midi/midi-player", () => ({
+vi.mock("../lib/midi/midi-parser", () => ({
   getMidiEvents: vi.fn(),
 }));
 

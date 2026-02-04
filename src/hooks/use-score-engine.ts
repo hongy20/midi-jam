@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { MidiEvent } from "../lib/midi/midi-player";
+import type { MidiEvent } from "../lib/midi/midi-parser";
 import {
   calculateNoteWeights,
   GOOD_WINDOW,

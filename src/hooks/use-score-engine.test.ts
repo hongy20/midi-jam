@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import type { MidiEvent } from "../lib/midi/midi-player";
+import type { MidiEvent } from "../lib/midi/midi-parser";
 import { useScoreEngine } from "./use-score-engine";
 
 describe("useScoreEngine", () => {

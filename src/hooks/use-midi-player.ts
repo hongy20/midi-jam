@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { MidiEvent } from "../lib/midi/midi-player";
+import type { MidiEvent } from "../lib/midi/midi-parser";
 
 export function useMidiPlayer(
   events: MidiEvent[],

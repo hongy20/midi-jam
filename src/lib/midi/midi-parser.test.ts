@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { getNoteRange, type MidiEvent } from "./midi-player";
+import { getNoteRange, type MidiEvent } from "./midi-parser";
 
-describe("midi-player utilities", () => {
+describe("midi-parser utilities", () => {
   describe("getNoteRange", () => {
     it("returns the correct range for a set of events", () => {
       const events: MidiEvent[] = [

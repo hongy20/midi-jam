@@ -1,11 +1,12 @@
 import type { Midi } from "@tonejs/midi";
 
+// Can we merge MidiEvent and MIDINoteEvent?
 export interface MidiEvent {
   time: number;
   type: "noteOn" | "noteOff";
   note: number;
   velocity: number;
-  track: number;
+  track: number; // TODO: get rid of this property
 }
 
 export interface NoteSpan {

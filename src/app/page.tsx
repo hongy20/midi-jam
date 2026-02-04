@@ -14,6 +14,7 @@ import { useMIDIInputs } from "@/hooks/use-midi-inputs";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { useScoreEngine } from "@/hooks/use-score-engine";
 import { getSoundTracks } from "@/lib/action/sound-track";
+import { loadMidiFile } from "@/lib/midi/midi-loader";
 import {
   getBarLines,
   getMidiEvents,
@@ -21,8 +22,7 @@ import {
   getNoteSpans,
   type MidiEvent,
   type NoteSpan,
-} from "@/lib/midi/midi-player";
-import { loadMidiFile } from "@/lib/midi/midi-loader";
+} from "@/lib/midi/midi-parser";
 
 interface MidiFile {
   name: string;

@@ -1,4 +1,4 @@
-import type { MidiEvent } from "./midi-player";
+import type { MidiEvent } from "./midi-parser";
 
 export const PERFECT_WINDOW = 0.15; // 150ms
 export const GREAT_WINDOW = 0.3; // 300ms
