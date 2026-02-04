@@ -40,7 +40,7 @@ describe("subscribeToNotes", () => {
     );
   });
 
-  it("should call the callback for Note Off messages (0x80)", () => {
+  it("should call the callback for Note Off messages", () => {
     const mockInput = {
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
