@@ -7,6 +7,7 @@ vi.mock("../lib/midi/midi-player", () => ({
   getMidiEvents: vi.fn(),
 }));
 
+import type { MidiEvent } from "../lib/midi/midi-player";
 // 2. Now safe to import the hook
 import { useMidiPlayer } from "./use-midi-player";
 
@@ -36,8 +37,9 @@ describe("useMidiPlayer", () => {
     });
   };
 
-  it.skip("should handle playback lifecycle", () => {
-    const { result } = renderHook(() => useMidiPlayer([]));
+  it("should handle playback lifecycle", () => {
+    const events: MidiEvent[] = [];
+    const { result } = renderHook(() => useMidiPlayer(events));
 
     act(() => {
       result.current.play();
@@ -55,7 +57,7 @@ describe("useMidiPlayer", () => {
     expect(result.current.currentTime).toBe(0);
   });
 
-  it.skip("should trigger notes at correct times", () => {
+  it("should trigger notes at correct times", () => {
     const onNoteOn = vi.fn();
     const events = [
       {
@@ -83,7 +85,7 @@ describe("useMidiPlayer", () => {
     expect(result.current.activeNotes.has(60)).toBe(true);
   });
 
-  it.skip("should silence notes on pause and re-strike on play", () => {
+  it("should silence notes on pause and re-strike on play", () => {
     const onNoteOn = vi.fn();
     const onNoteOff = vi.fn();
     const events = [

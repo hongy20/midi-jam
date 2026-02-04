@@ -5,11 +5,11 @@ This plan outlines the steps to add a 4-second "3, 2, 1, GO!" countdown before M
 ## Phase 1: State Management & Logic
 Implement the core countdown logic, including timers, state transitions, and integration with the playback system.
 
-- [ ] Task: Update `use-midi-player.ts` to include `countdownRemaining` and `isCountdownActive` state.
-- [ ] Task: Modify the `play` function in `use-midi-player.ts` to trigger the countdown only when `currentTime === 0`.
-- [ ] Task: Implement the countdown timer logic with support for pause and stop interruptions.
-- [ ] Task: Ensure the actual MIDI playback start is delayed by 4 seconds when the countdown is triggered.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: State Management & Logic' (Protocol in workflow.md)
+- [x] Task: Update `use-midi-player.ts` to include `countdownRemaining` and `isCountdownActive` state.
+- [x] Task: Modify the `play` function in `use-midi-player.ts` to trigger the countdown only when `currentTime === 0`.
+- [x] Task: Implement the countdown timer logic with support for pause and stop interruptions.
+- [x] Task: Ensure the actual MIDI playback start is delayed by 4 seconds when the countdown is triggered.
+- [x] Task: Conductor - User Manual Verification 'Phase 1: State Management & Logic' (Protocol in workflow.md)
 
 ## Phase 2: Audio & Visual UI
 Create the visual overlay and integrate the audio cues.

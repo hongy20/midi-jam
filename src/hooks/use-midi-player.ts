@@ -16,6 +16,8 @@ export function useMidiPlayer(
     new Map(),
   );
   const [duration, setDuration] = useState(0);
+  const [countdownRemaining, setCountdownRemaining] = useState(0);
+  const [isCountdownActive, setIsCountdownActive] = useState(false);
 
   const startTimeRef = useRef<number | null>(null);
   const pausedTimeRef = useRef<number>(0);
@@ -41,6 +43,8 @@ export function useMidiPlayer(
     setCurrentTime(0);
     setActiveNotes(new Map());
     activeNotesRef.current = new Map();
+    setIsCountdownActive(false);
+    setCountdownRemaining(0);
 
     // Calculate duration
     if (events.length > 0) {
@@ -63,6 +67,8 @@ export function useMidiPlayer(
     }
 
     setIsPlaying(false);
+    setIsCountdownActive(false);
+    setCountdownRemaining(0);
     setCurrentTime(0);
     startTimeRef.current = null;
     pausedTimeRef.current = 0;
@@ -73,7 +79,16 @@ export function useMidiPlayer(
   }, []); // No dependencies!
 
   const play = useCallback(() => {
-    if (isPlaying) return;
+    if (isPlaying || isCountdownActive) return;
+
+    if (currentTime === 0) {
+      setIsCountdownActive(true);
+      if (countdownRemaining === 0) {
+        setCountdownRemaining(4);
+      }
+      return;
+    }
+
     setIsPlaying(true);
     startTimeRef.current =
       performance.now() - (pausedTimeRef.current * 1000) / speed;
@@ -83,9 +98,13 @@ export function useMidiPlayer(
     activeNotesRef.current.forEach((velocity, note) => {
       onNoteOn?.(note, velocity);
     });
-  }, [isPlaying, speed]); // currentTime and activeNotes removed
+  }, [isPlaying, isCountdownActive, currentTime, countdownRemaining, speed]); // currentTime and activeNotes removed
 
   const pause = useCallback(() => {
+    if (isCountdownActive) {
+      setIsCountdownActive(false);
+      return;
+    }
     if (!isPlaying) return;
     setIsPlaying(false);
     pausedTimeRef.current = currentTime;
@@ -101,7 +120,27 @@ export function useMidiPlayer(
         onNoteOff?.(note);
       });
     }
-  }, [isPlaying, currentTime]); // activeNotes removed
+  }, [isPlaying, isCountdownActive, currentTime]); // activeNotes removed
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (!isCountdownActive) return;
+
+    const intervalId = setInterval(() => {
+      setCountdownRemaining((prev) => {
+        if (prev <= 1) {
+          clearInterval(intervalId);
+          setIsCountdownActive(false);
+          setIsPlaying(true);
+          startTimeRef.current = performance.now();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [isCountdownActive]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Only run when speed changes. isPlaying check is inside.
   useEffect(() => {
@@ -184,6 +223,8 @@ export function useMidiPlayer(
     duration,
     speed,
     activeNotes,
+    countdownRemaining,
+    isCountdownActive,
     play,
     pause,
     stop,

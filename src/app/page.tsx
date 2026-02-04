@@ -43,7 +43,7 @@ export default function Home() {
   const [demoMode, setDemoMode] = useState(true);
 
   // Audio setup
-  const { playNote, stopNote, stopAllNotes, setIsReady } = useMidiAudio(
+  const { playNote, stopNote, stopAllNotes } = useMidiAudio(
     demoMode,
     selectedOutput,
   );
