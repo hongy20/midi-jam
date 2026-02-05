@@ -5,12 +5,12 @@ import { MidiHeader } from "./midi-header";
 // Mock child components
 vi.mock("@/components/midi/device-selector", () => ({
   DeviceSelector: ({
-    selectedDevice,
+    selectedMIDIInput,
   }: {
-    selectedDevice: { name: string } | null;
+    selectedMIDIInput: { name: string } | null;
   }) => (
     <div data-testid="device-selector">
-      {selectedDevice ? selectedDevice.name : "No Device"}
+      {selectedMIDIInput ? selectedMIDIInput.name : "No Device"}
     </div>
   ),
 }));
@@ -32,8 +32,8 @@ describe("MidiHeader", () => {
     devices: [],
     isLoading: false,
     error: null,
-    selectedDevice: null,
-    onSelectDevice: vi.fn(),
+    selectedMIDIInput: null,
+    onSelectMIDIInput: vi.fn(),
     files: [],
     selectedFile: null,
     onSelectFile: vi.fn(),
@@ -68,7 +68,7 @@ describe("MidiHeader", () => {
   it("displays correct status in minimized mode", () => {
     const props = {
       ...mockProps,
-      selectedDevice: {
+      selectedMIDIInput: {
         id: "1",
         name: "My Piano",
       } as unknown as WebMidi.MIDIInput,

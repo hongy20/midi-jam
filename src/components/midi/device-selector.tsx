@@ -4,7 +4,7 @@ interface DeviceSelectorProps {
   devices: WebMidi.MIDIInput[];
   isLoading: boolean;
   error?: string | null;
-  selectedDevice: WebMidi.MIDIInput | null;
+  selectedMIDIInput: WebMidi.MIDIInput | null;
   onSelect: (device: WebMidi.MIDIInput | null) => void;
 }
 
@@ -15,7 +15,7 @@ export function DeviceSelector({
   devices,
   isLoading,
   error,
-  selectedDevice,
+  selectedMIDIInput,
   onSelect,
 }: DeviceSelectorProps) {
   if (isLoading) {
@@ -53,7 +53,7 @@ export function DeviceSelector({
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {devices.map((device) => {
-            const isSelected = selectedDevice?.id === device.id;
+            const isSelected = selectedMIDIInput?.id === device.id;
             return (
               <li key={device.id}>
                 <button

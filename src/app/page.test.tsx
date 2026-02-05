@@ -66,8 +66,11 @@ vi.mock("@/components/midi/playback-controls", () => ({
 vi.mock("@/hooks/use-midi-devices", () => ({
   useMIDIDevices: () => ({ inputs: [], isLoading: false, error: null }),
 }));
-vi.mock("@/hooks/use-midi-connection", () => ({
-  useMIDIConnection: () => ({ selectedDevice: null, selectDevice: vi.fn() }),
+vi.mock("@/hooks/use-midi-selection", () => ({
+  useMIDISelection: () => ({
+    selectedMIDIInput: null,
+    selectMIDIInput: vi.fn(),
+  }),
 }));
 vi.mock("@/hooks/use-midi-audio", () => ({
   useMidiAudio: () => ({

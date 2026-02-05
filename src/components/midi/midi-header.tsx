@@ -15,8 +15,8 @@ interface MidiHeaderProps {
   devices: WebMidi.MIDIInput[];
   isLoading: boolean;
   error?: string | null;
-  selectedDevice: WebMidi.MIDIInput | null;
-  onSelectDevice: (device: WebMidi.MIDIInput | null) => void;
+  selectedMIDIInput: WebMidi.MIDIInput | null;
+  onSelectMIDIInput: (device: WebMidi.MIDIInput | null) => void;
 
   // Midi Control Center Props (Selectors only)
   files: MidiFile[];
@@ -32,8 +32,8 @@ export const MidiHeader = memo(function MidiHeader({
   devices,
   isLoading,
   error,
-  selectedDevice,
-  onSelectDevice,
+  selectedMIDIInput,
+  onSelectMIDIInput,
   files,
   selectedFile,
   onSelectFile,
@@ -68,7 +68,7 @@ export const MidiHeader = memo(function MidiHeader({
         <div className="flex items-center gap-2 text-gray-700">
           <Piano className="w-4 h-4 text-blue-500" />
           <span className="font-bold text-xs">
-            {selectedDevice ? selectedDevice.name : "Connect MIDI"}
+            {selectedMIDIInput ? selectedMIDIInput.name : "Connect MIDI"}
           </span>
         </div>
         <div className="h-4 w-0.5 bg-gray-300" />
@@ -117,8 +117,8 @@ export const MidiHeader = memo(function MidiHeader({
                 devices={devices}
                 isLoading={isLoading}
                 error={error}
-                selectedDevice={selectedDevice}
-                onSelect={onSelectDevice}
+                selectedMIDIInput={selectedMIDIInput}
+                onSelect={onSelectMIDIInput}
               />
             </div>
 

@@ -9,9 +9,9 @@ import { PlaybackControls } from "@/components/midi/playback-controls";
 import { ScoreHud } from "@/components/midi/score-hud";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
-import { useMIDIConnection } from "@/hooks/use-midi-connection";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
+import { useMIDISelection } from "@/hooks/use-midi-selection";
 import { useScoreEngine } from "@/hooks/use-score-engine";
 import { getSoundTracks } from "@/lib/action/sound-track";
 import { isBlackKey } from "@/lib/device/piano";
@@ -44,21 +44,19 @@ export default function Home() {
     isLoading: isMidiLoading,
     error: midiError,
   } = useMIDIDevices();
-  const { selectedDevice, selectedOutput, selectDevice } = useMIDIConnection(
-    inputs,
-    outputs,
-  );
+  const { selectedMIDIInput, selectedMIDIOutput, selectMIDIInput } =
+    useMIDISelection(inputs, outputs);
 
   const [demoMode, setDemoMode] = useState(false);
 
   // Audio setup
   const { playNote, stopNote, stopAllNotes, playCountdownBeep } = useMidiAudio(
     demoMode,
-    selectedOutput,
+    selectedMIDIOutput,
   );
 
   // Live input tracking
-  const liveActiveNotes = useActiveNotes(selectedDevice, {
+  const liveActiveNotes = useActiveNotes(selectedMIDIInput, {
     onNoteOn: playNote,
     onNoteOff: stopNote,
   });
@@ -185,8 +183,8 @@ export default function Home() {
     [stop],
   );
 
-  const handleSelectDevice = (device: WebMidi.MIDIInput | null) => {
-    selectDevice(device);
+  const handleSelectMIDIInput = (device: WebMidi.MIDIInput | null) => {
+    selectMIDIInput(device);
     if (device) {
       setIsMinimized(true);
       setWasPlayingBeforeExpand(false);
@@ -214,8 +212,8 @@ export default function Home() {
         devices={inputs}
         isLoading={isMidiLoading}
         error={midiError}
-        selectedDevice={selectedDevice}
-        onSelectDevice={handleSelectDevice}
+        selectedMIDIInput={selectedMIDIInput}
+        onSelectMIDIInput={handleSelectMIDIInput}
         files={midiFiles}
         selectedFile={selectedFile}
         onSelectFile={handleSelectFile}
@@ -264,7 +262,7 @@ export default function Home() {
             bestCombo={bestCombo}
           />
         )}
-        {selectedDevice || selectedFile ? (
+        {selectedMIDIInput || selectedFile ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden">
             {/* 3D Immersive Stage */}
             <div className="relative w-full h-[85vh] [perspective:1500px] [perspective-origin:50%_50%] flex items-center justify-center px-4">

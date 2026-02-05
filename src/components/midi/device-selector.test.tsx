@@ -13,7 +13,7 @@ describe("DeviceSelector", () => {
       <DeviceSelector
         devices={[]}
         isLoading={true}
-        selectedDevice={null}
+        selectedMIDIInput={null}
         onSelect={vi.fn()}
       />,
     );
@@ -28,7 +28,7 @@ describe("DeviceSelector", () => {
         devices={[]}
         isLoading={false}
         error="Access denied"
-        selectedDevice={null}
+        selectedMIDIInput={null}
         onSelect={vi.fn()}
       />,
     );
@@ -40,7 +40,7 @@ describe("DeviceSelector", () => {
       <DeviceSelector
         devices={mockDevices}
         isLoading={false}
-        selectedDevice={null}
+        selectedMIDIInput={null}
         onSelect={vi.fn()}
       />,
     );
@@ -54,7 +54,7 @@ describe("DeviceSelector", () => {
       <DeviceSelector
         devices={mockDevices}
         isLoading={false}
-        selectedDevice={null}
+        selectedMIDIInput={null}
         onSelect={onSelect}
       />,
     );
@@ -68,7 +68,7 @@ describe("DeviceSelector", () => {
       <DeviceSelector
         devices={mockDevices}
         isLoading={false}
-        selectedDevice={mockDevices[0]}
+        selectedMIDIInput={mockDevices[0]}
         onSelect={vi.fn()}
       />,
     );
