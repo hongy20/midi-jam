@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { MidiEvent } from "../lib/midi/midi-parser";
-import {
-  calculateNoteWeights,
-  GOOD_WINDOW,
-  GREAT_WINDOW,
-  PERFECT_WINDOW,
-  POOR_WINDOW,
-} from "../lib/midi/score-logic";
+import { calculateNoteWeights } from "../lib/score/score-engine";
 import { scoreStorage } from "../lib/score/score-storage";
+
+const PERFECT_WINDOW = 0.15; // 150ms
+const GREAT_WINDOW = 0.3; // 300ms
+const GOOD_WINDOW = 0.45; // 450ms
+const POOR_WINDOW = 0.6; // 600ms
 
 export type Accuracy = "PERFECT" | "GREAT" | "GOOD" | "POOR" | "MISS" | null;
 

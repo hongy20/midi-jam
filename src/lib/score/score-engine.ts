@@ -1,32 +1,10 @@
-import type { MidiEvent } from "./midi-parser";
-
-export const PERFECT_WINDOW = 0.15; // 150ms
-export const GREAT_WINDOW = 0.3; // 300ms
-export const GOOD_WINDOW = 0.45; // 450ms
-export const POOR_WINDOW = 0.6; // 600ms
-
-export interface NoteWeight {
-  eventId: number;
-  weight: number;
-  points: number;
-}
+import type { MidiEvent } from "../midi/midi-parser";
 
 /**
  * Calculates weighted points for each note in a list of MIDI events.
  * Chords get a multiplier.
  */
 export function calculateNoteWeights(events: MidiEvent[]): Map<number, number> {
-  const noteOnEvents = events.filter((e) => e.type === "noteOn");
-  if (noteOnEvents.length === 0) return new Map();
-
-  // Group by time to identify chords
-  const timeGroups = new Map<number, number[]>();
-  noteOnEvents.forEach((e, index) => {
-    const group = timeGroups.get(e.time) || [];
-    group.push(index);
-    timeGroups.set(e.time, group);
-  });
-
   // Group all NoteOn events by time
   const noteOnsByTime: Record<number, number[]> = {};
   events.forEach((e, i) => {
@@ -35,6 +13,8 @@ export function calculateNoteWeights(events: MidiEvent[]): Map<number, number> {
       noteOnsByTime[e.time].push(i);
     }
   });
+
+  if (Object.keys(noteOnsByTime).length === 0) return new Map();
 
   const finalWeights = new Map<number, number>();
   let totalWeight = 0;
