@@ -1,8 +1,8 @@
 import type { Midi } from "@tonejs/midi";
+import { isBlackKey } from "../device/piano";
 import { MIDI_MAX_NOTE, MIDI_MIN_NOTE } from "./constant";
-import { isBlackKey } from "./piano-logic";
 
-// Can we merge MidiEvent and MIDINoteEvent?
+// FIXME: Can we merge MidiEvent and MIDINoteEvent?
 export interface MidiEvent {
   time: number;
   type: "noteOn" | "noteOff";

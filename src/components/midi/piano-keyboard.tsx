@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import { isBlackKey } from "@/lib/midi/piano-logic";
+import { isBlackKey } from "@/lib/device/piano";
 
 interface PianoKeyboardProps {
   liveNotes?: Set<number>;

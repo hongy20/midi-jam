@@ -1,8 +1,8 @@
 "use client";
 
 import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { isBlackKey } from "@/lib/device/piano";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
-import { isBlackKey } from "@/lib/midi/piano-logic";
 
 interface FalldownVisualizerProps {
   spans: NoteSpan[];

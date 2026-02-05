@@ -33,4 +33,3 @@ export const PIANO_88_KEY_MAX = 108;
 
 /** Middle C MIDI note */
 export const MIDI_NOTE_C4 = 60;
-

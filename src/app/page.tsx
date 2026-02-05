@@ -14,6 +14,7 @@ import { useMIDIInputs } from "@/hooks/use-midi-inputs";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { useScoreEngine } from "@/hooks/use-score-engine";
 import { getSoundTracks } from "@/lib/action/sound-track";
+import { isBlackKey } from "@/lib/device/piano";
 import {
   MIDI_NOTE_C4,
   PIANO_88_KEY_MAX,
@@ -28,7 +29,6 @@ import {
   type MidiEvent,
   type NoteSpan,
 } from "@/lib/midi/midi-parser";
-import { isBlackKey } from "@/lib/midi/piano-logic";
 
 interface MidiFile {
   name: string;
