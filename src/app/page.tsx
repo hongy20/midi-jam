@@ -10,7 +10,7 @@ import { ScoreHud } from "@/components/midi/score-hud";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMIDIConnection } from "@/hooks/use-midi-connection";
-import { useMIDIInputs } from "@/hooks/use-midi-inputs";
+import { useMIDIDevices } from "@/hooks/use-midi-devices";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { useScoreEngine } from "@/hooks/use-score-engine";
 import { getSoundTracks } from "@/lib/action/sound-track";
@@ -43,7 +43,7 @@ export default function Home() {
     outputs,
     isLoading: isMidiLoading,
     error: midiError,
-  } = useMIDIInputs();
+  } = useMIDIDevices();
   const { selectedDevice, selectedOutput, selectDevice } = useMIDIConnection(
     inputs,
     outputs,

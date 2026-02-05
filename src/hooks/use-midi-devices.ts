@@ -6,7 +6,7 @@ import {
   onMIDIDevicesStateChange,
 } from "@/lib/midi/midi-device";
 
-interface UseMIDIInputsResult {
+interface UseMIDIDevicesResult {
   inputs: WebMidi.MIDIInput[];
   outputs: WebMidi.MIDIOutput[];
   isLoading: boolean;
@@ -17,7 +17,7 @@ interface UseMIDIInputsResult {
  * A React hook that manages MIDI input and output device discovery and connection.
  * @returns An object containing the list of available inputs, outputs, loading state, and any error.
  */
-export function useMIDIInputs(): UseMIDIInputsResult {
+export function useMIDIDevices(): UseMIDIDevicesResult {
   const [inputs, setInputs] = useState<WebMidi.MIDIInput[]>([]);
   const [outputs, setOutputs] = useState<WebMidi.MIDIOutput[]>([]);
   const [isLoading, setIsLoading] = useState(true);

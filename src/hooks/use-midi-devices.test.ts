@@ -1,11 +1,11 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import * as midiAccess from "@/lib/midi/midi-access";
-import { useMIDIInputs } from "./use-midi-inputs";
+import { useMIDIDevices } from "./use-midi-devices";
 
 vi.mock("@/lib/midi/midi-access");
 
-describe("useMIDIInputs", () => {
+describe("useMIDIDevices", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -20,7 +20,7 @@ describe("useMIDIInputs", () => {
       mockMIDIAccess as unknown as WebMidi.MIDIAccess,
     );
 
-    const { result } = renderHook(() => useMIDIInputs());
+    const { result } = renderHook(() => useMIDIDevices());
 
     expect(result.current.inputs).toEqual([]);
     expect(result.current.outputs).toEqual([]);
@@ -44,7 +44,7 @@ describe("useMIDIInputs", () => {
       mockMIDIAccess as unknown as WebMidi.MIDIAccess,
     );
 
-    const { result } = renderHook(() => useMIDIInputs());
+    const { result } = renderHook(() => useMIDIDevices());
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.inputs).toEqual([mockInput]);
@@ -56,7 +56,7 @@ describe("useMIDIInputs", () => {
       new Error("Access denied"),
     );
 
-    const { result } = renderHook(() => useMIDIInputs());
+    const { result } = renderHook(() => useMIDIDevices());
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.error).toBe("Access denied");
