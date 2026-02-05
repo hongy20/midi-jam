@@ -4,7 +4,7 @@ import {
   getMIDIInputDevices,
   getMIDIOutputDevices,
   onMIDIDevicesStateChange,
-} from "@/lib/midi/midi-device";
+} from "@/lib/midi/midi-devices";
 
 interface UseMIDIDevicesResult {
   inputs: WebMidi.MIDIInput[];

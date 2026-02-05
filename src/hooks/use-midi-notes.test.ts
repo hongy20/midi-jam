@@ -36,7 +36,7 @@ describe("useMIDINotes", () => {
   it("should not add listener if input is null", () => {
     const onNote = vi.fn();
     renderHook(() => useMIDINotes(null, onNote));
-    // No errors thrown
+    expect(onNote).not.toHaveBeenCalled();
   });
 
   it("should clean up listener on unmount", () => {
