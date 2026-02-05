@@ -2,14 +2,14 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { isBlackKey } from "@/lib/device/piano";
+import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 
 interface FalldownVisualizerProps {
   spans: NoteSpan[];
-  barLines?: number[];
+  barLines: number[];
   currentTime: number;
   speed: number;
-  height?: number; // Optional fallback or fixed height
   rangeStart?: number;
   rangeEnd?: number;
 }
@@ -20,19 +20,17 @@ interface FalldownVisualizerProps {
  */
 export const FalldownVisualizer = ({
   spans,
-  barLines = [],
+  barLines,
   currentTime,
   speed,
-  height: fixedHeight,
-  rangeStart = 21,
-  rangeEnd = 108,
+  rangeStart = PIANO_88_KEY_MIN,
+  rangeEnd = PIANO_88_KEY_MAX,
 }: FalldownVisualizerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [renderedHeight, setRenderedHeight] = useState(fixedHeight || 600);
+  const [renderedHeight, setRenderedHeight] = useState(600);
 
   // Track the actual rendered height for precise note calculations
   useEffect(() => {
-    if (fixedHeight) return;
     if (!containerRef.current) return;
 
     const observer = new ResizeObserver((entries) => {
@@ -43,7 +41,7 @@ export const FalldownVisualizer = ({
 
     observer.observe(containerRef.current);
     return () => observer.disconnect();
-  }, [fixedHeight]);
+  }, []);
 
   const PIXELS_PER_SECOND = 100 * speed; // How fast the notes fall
 
@@ -123,8 +121,7 @@ export const FalldownVisualizer = ({
   return (
     <div
       ref={containerRef}
-      className="relative flex-1 min-h-0 overflow-hidden bg-white/10 backdrop-blur-2xl rounded-t-[1.5rem] border-t border-x border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
-      style={fixedHeight ? { height: `${fixedHeight}px` } : {}}
+      className="relative flex-1 min-h-0 overflow-hidden bg-white/10 backdrop-blur-2xl rounded-t-3xl border-t border-x border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
     >
       <div className="absolute inset-0 w-full mx-auto">
         {/* Render Background Lanes */}
@@ -135,7 +132,7 @@ export const FalldownVisualizer = ({
             <div
               key={`lane-${note}`}
               className={`absolute top-0 bottom-0 pointer-events-none transition-colors duration-500 ${
-                isBlackKey(note) ? "bg-black/10" : "bg-white/[0.02]"
+                isBlackKey(note) ? "bg-black/10" : "bg-white/2"
               }`}
               style={{ left: pos.left, width: pos.width }}
             />

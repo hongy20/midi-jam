@@ -17,7 +17,12 @@ describe("FalldownVisualizer", () => {
   it("should render correct number of visible notes", () => {
     // At t=0, the note is in the look-ahead window
     const { container } = render(
-      <FalldownVisualizer spans={mockSpans} currentTime={0} speed={1} />,
+      <FalldownVisualizer
+        spans={mockSpans}
+        currentTime={0}
+        speed={1}
+        barLines={[]}
+      />,
     );
 
     const notes = container.querySelectorAll(".absolute.rounded-md");
@@ -27,7 +32,12 @@ describe("FalldownVisualizer", () => {
   it("should hide notes that have already passed", () => {
     // At t=3, the note (ending at t=2) should be gone
     const { container } = render(
-      <FalldownVisualizer spans={mockSpans} currentTime={3} speed={1} />,
+      <FalldownVisualizer
+        spans={mockSpans}
+        currentTime={3}
+        speed={1}
+        barLines={[]}
+      />,
     );
 
     const notes = container.querySelectorAll(".absolute.rounded-md");
