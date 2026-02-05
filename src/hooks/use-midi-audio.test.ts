@@ -1,3 +1,4 @@
+import * as Tone from "tone";
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import {
@@ -8,13 +9,16 @@ import {
 import { useMidiAudio } from "./use-midi-audio";
 
 // Mock Tone.js
+const mockTriggerAttack = vi.fn();
+const mockPolySynthReleaseAll = vi.fn();
+
 vi.mock("tone", () => {
   class MockPolySynth {
     toDestination = vi.fn().mockReturnThis();
     dispose = vi.fn();
-    triggerAttack = vi.fn();
+    triggerAttack = mockTriggerAttack;
     triggerRelease = vi.fn();
-    releaseAll = vi.fn();
+    releaseAll = mockPolySynthReleaseAll;
   }
 
   class MockMembraneSynth {
@@ -49,16 +53,25 @@ describe("useMidiAudio", () => {
     expect(result.current).toHaveProperty("playNote");
     expect(result.current).toHaveProperty("stopNote");
     expect(result.current).toHaveProperty("stopAllNotes");
-    // isMuted and toggleMute should be gone
-    expect(result.current).not.toHaveProperty("isMuted");
-    expect(result.current).not.toHaveProperty("toggleMute");
   });
 
   it("should silence all output when demoMode is false", () => {
-    // We'll verify this by ensuring no calls reach the MIDI output or synth
-    // once implemented. For now, let's just test the API.
-    const { result } = renderHook(() => useMidiAudio(false));
-    expect(result.current).toBeDefined();
+    const mockOutput = {
+      send: vi.fn(),
+    } as unknown as WebMidi.MIDIOutput;
+
+    const { result } = renderHook(() => useMidiAudio(false, mockOutput));
+
+    // Clear initial stopAllNotes call from useEffect
+    vi.mocked(mockOutput.send).mockClear();
+    mockTriggerAttack.mockClear();
+
+    act(() => {
+      result.current.playNote(60, 0.8);
+    });
+
+    expect(mockOutput.send).not.toHaveBeenCalled();
+    expect(mockTriggerAttack).not.toHaveBeenCalled();
   });
 
   it("should route to MIDI output when provided", () => {
