@@ -3,27 +3,27 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import Home from "./page";
 
 // Mock child components
-vi.mock("@/components/midi/device-selector", () => ({
+vi.mock("@/components/device-selector", () => ({
   DeviceSelector: () => <div data-testid="device-selector">DeviceSelector</div>,
 }));
-vi.mock("@/components/midi/sound-track-selector", () => ({
+vi.mock("@/components/sound-track-selector", () => ({
   SoundTrackSelector: () => (
     <div data-testid="sound-track-selector">SoundTrackSelector</div>
   ),
 }));
-vi.mock("@/components/midi/falldown-visualizer", () => ({
+vi.mock("@/components/falldown-visualizer", () => ({
   FalldownVisualizer: () => (
     <div data-testid="falldown-visualizer">FalldownVisualizer</div>
   ),
 }));
-vi.mock("@/components/midi/piano-keyboard", () => ({
+vi.mock("@/components/piano-keyboard", () => ({
   PianoKeyboard: (props: unknown) => (
     <div data-testid="piano-keyboard" data-props={JSON.stringify(props)}>
       PianoKeyboard
     </div>
   ),
 }));
-vi.mock("@/components/midi/midi-control-room", () => ({
+vi.mock("@/components/midi-control-room", () => ({
   MidiControlRoom: ({
     isMinimized,
     onToggleMinimize,
@@ -44,7 +44,7 @@ vi.mock("@/components/midi/midi-control-room", () => ({
     </div>
   ),
 }));
-vi.mock("@/components/midi/playback-controls", () => ({
+vi.mock("@/components/playback-controls", () => ({
   PlaybackControls: ({
     demoMode,
     onToggleDemo,

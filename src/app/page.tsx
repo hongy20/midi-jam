@@ -1,13 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CountdownOverlay } from "@/components/midi/countdown-overlay";
-import { FalldownVisualizer } from "@/components/midi/falldown-visualizer";
-import { MidiControlRoom } from "@/components/midi/midi-control-room";
-import { PianoKeyboard } from "@/components/midi/piano-keyboard";
-import { PlaybackControls } from "@/components/midi/playback-controls";
-import { ScoreHud } from "@/components/midi/score-hud";
-import type { MidiFile } from "@/components/midi/sound-track-selector";
+import { CountdownOverlay } from "@/components/countdown-overlay";
+import { FalldownVisualizer } from "@/components/falldown-visualizer";
+import { MidiControlRoom } from "@/components/midi-control-room";
+import { PianoKeyboard } from "@/components/piano-keyboard";
+import { PlaybackControls } from "@/components/playback-controls";
+import { ScoreHud } from "@/components/score-hud";
+import type { MidiFile } from "@/components/sound-track-selector";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
