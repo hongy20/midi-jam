@@ -2,10 +2,15 @@
 
 import { useMemo } from "react";
 import { isBlackKey } from "@/lib/device/piano";
+import {
+  MIDI_NOTE_C4,
+  PIANO_88_KEY_MAX,
+  PIANO_88_KEY_MIN,
+} from "@/lib/midi/constant";
 
 interface PianoKeyboardProps {
-  liveNotes?: Set<number>;
-  playbackNotes?: Set<number>;
+  liveNotes: Set<number>;
+  playbackNotes: Set<number>;
   rangeStart?: number;
   rangeEnd?: number;
 }
@@ -15,10 +20,10 @@ interface PianoKeyboardProps {
  * Supports dynamic note ranges for zooming.
  */
 export const PianoKeyboard = ({
-  liveNotes = new Set(),
-  playbackNotes = new Set(),
-  rangeStart = 21, // Default A0
-  rangeEnd = 108, // Default C8
+  liveNotes,
+  playbackNotes,
+  rangeStart = PIANO_88_KEY_MIN,
+  rangeEnd = PIANO_88_KEY_MAX,
 }: PianoKeyboardProps) => {
   // Memoize white keys calculation
   const whiteKeys = useMemo(() => {
@@ -52,11 +57,11 @@ export const PianoKeyboard = ({
     return `${((leftWhiteKeyIndex + 0.7) / whiteKeys.length) * 100}%`;
   };
 
-  const getWhiteKeyColor = (_note: number) => {
+  const getWhiteKeyColor = () => {
     return "bg-white hover:bg-gray-50";
   };
 
-  const getBlackKeyColor = (_note: number) => {
+  const getBlackKeyColor = () => {
     return "bg-gray-900";
   };
 
@@ -69,9 +74,7 @@ export const PianoKeyboard = ({
 
     // Base colors matching FalldownVisualizer
     const blue = "rgba(59,130,246,1)"; // blue-500
-    const _blueOuter = "rgba(59,130,246,0.6)";
     const purple = "rgba(147,51,234,1)"; // purple-600
-    const _purpleOuter = "rgba(147,51,234,0.6)";
     const indigo = "rgba(99,102,241,1)"; // indigo-500
 
     if (isLive && isPlayback) {
@@ -114,7 +117,7 @@ export const PianoKeyboard = ({
         aria-label={`Piano keyboard (${rangeStart} to ${rangeEnd})`}
       >
         {/* Active Note Beams (Shoot upward) */}
-        <div className="absolute inset-0 -top-[800px] pointer-events-none z-0 flex">
+        <div className="absolute inset-0 -top-200 pointer-events-none z-0 flex">
           {whiteKeys.map((note) => {
             const isActive = liveNotes.has(note) || playbackNotes.has(note);
             return (
@@ -128,7 +131,7 @@ export const PianoKeyboard = ({
                 />
                 {/* The beam itself */}
                 <div
-                  className={`w-full h-full bg-gradient-to-t transition-opacity duration-150 ${getBeamClass(note)} ${isActive ? "opacity-100" : "opacity-0"}`}
+                  className={`w-full h-full bg-linear-to-t transition-opacity duration-150 ${getBeamClass(note)} ${isActive ? "opacity-100" : "opacity-0"}`}
                 />
               </div>
             );
@@ -136,23 +139,25 @@ export const PianoKeyboard = ({
         </div>
 
         {/* Render white keys */}
-        <div className="flex w-full h-full rounded-b-[1.5rem] overflow-hidden shadow-inner bg-gray-100 z-10">
+        <div className="flex w-full h-full rounded-b-3xl overflow-hidden shadow-inner bg-gray-100 z-10">
           {whiteKeys.map((note) => (
             <button
               type="button"
               key={note}
-              aria-label={note === 60 ? "Middle C (C4)" : `Note ${note}`}
+              aria-label={
+                note === MIDI_NOTE_C4 ? "Middle C (C4)" : `Note ${note}`
+              }
               aria-pressed={liveNotes.has(note) || playbackNotes.has(note)}
               tabIndex={-1}
-              className={`relative flex-1 border-r last:border-r-0 border-gray-200 h-full transition-all duration-75 outline-none font-bold text-[10px] text-gray-400 flex items-end justify-center pb-2 select-none overflow-hidden will-change-transform ${getWhiteKeyColor(note)}`}
+              className={`relative flex-1 border-r last:border-r-0 border-gray-200 h-full transition-all duration-75 outline-none font-bold text-[10px] text-gray-400 flex items-end justify-center pb-2 select-none overflow-hidden will-change-transform ${getWhiteKeyColor()}`}
             >
               {/* Glow Overlay */}
               <div
                 className={`absolute inset-0 transition-opacity duration-75 pointer-events-none z-0 ${getGlowClass(note)}`}
               />
 
-              {note === 60 && (
-                <span className="relative z-10 text-gray-200 font-bold">
+              {note === MIDI_NOTE_C4 && (
+                <span className="relative z-10 text-gray-400 font-bold">
                   C4
                 </span>
               )}
@@ -175,7 +180,7 @@ export const PianoKeyboard = ({
               >
                 {/* Black key beam */}
                 <div
-                  className="absolute -top-[800px] flex flex-col justify-end pointer-events-none"
+                  className="absolute -top-200 flex flex-col justify-end pointer-events-none"
                   style={{
                     left,
                     width: `${(1 / whiteKeys.length) * 0.6 * 100}%`,
@@ -188,7 +193,7 @@ export const PianoKeyboard = ({
                   />
                   {/* Beam for black key */}
                   <div
-                    className={`w-full h-full bg-gradient-to-t transition-opacity duration-150 ${getBeamClass(note)} ${isActive ? "opacity-100" : "opacity-0"}`}
+                    className={`w-full h-full bg-linear-to-t transition-opacity duration-150 ${getBeamClass(note)} ${isActive ? "opacity-100" : "opacity-0"}`}
                   />
                 </div>
 
@@ -203,7 +208,7 @@ export const PianoKeyboard = ({
                     width: `${(1 / whiteKeys.length) * 0.6 * 100}%`,
                     position: "absolute",
                   }}
-                  className={`h-2/3 rounded-b-md border border-black shadow-md transition-all duration-75 outline-none pointer-events-auto overflow-hidden will-change-transform ${getBlackKeyColor(note)}`}
+                  className={`h-2/3 rounded-b-md border border-black shadow-md transition-all duration-75 outline-none pointer-events-auto overflow-hidden will-change-transform ${getBlackKeyColor()}`}
                 >
                   <div
                     className={`absolute inset-0 transition-opacity duration-75 pointer-events-none ${getGlowClass(note)}`}
