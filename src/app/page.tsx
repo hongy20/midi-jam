@@ -144,41 +144,44 @@ export default function Home() {
   }, [isCountdownActive, countdownRemaining, playCountdownBeep]);
 
   // Handle file selection and parsing
-  const handleSelectFile = async (file: MidiFile) => {
-    setSelectedFile(file);
-    setIsMinimized(true);
-    setWasPlayingBeforeExpand(false);
-    stop();
-    try {
-      const midi = await loadMidiFile(file.url);
-      const events = getMidiEvents(midi);
-      setMidiEvents(events);
-      setNoteSpans(getNoteSpans(events));
-      setBarLines(getBarLines(midi));
+  const handleSelectFile = useCallback(
+    async (file: MidiFile) => {
+      setSelectedFile(file);
+      setIsMinimized(true);
+      setWasPlayingBeforeExpand(false);
+      stop();
+      try {
+        const midi = await loadMidiFile(file.url);
+        const events = getMidiEvents(midi);
+        setMidiEvents(events);
+        setNoteSpans(getNoteSpans(events));
+        setBarLines(getBarLines(midi));
 
-      const range = getNoteRange(events);
-      if (range) {
-        let min = Math.max(
-          PIANO_88_KEY_MIN,
-          Math.min(MIDI_NOTE_C4, range.min - NOTE_RANGE_BUFFER),
-        );
-        let max = Math.min(
-          PIANO_88_KEY_MAX,
-          Math.max(MIDI_NOTE_C4, range.max + NOTE_RANGE_BUFFER),
-        );
-        if (isBlackKey(min)) min--;
-        if (isBlackKey(max)) max++;
-        setNoteRange({ min, max });
-      } else {
+        const range = getNoteRange(events);
+        if (range) {
+          let min = Math.max(
+            PIANO_88_KEY_MIN,
+            Math.min(MIDI_NOTE_C4, range.min - NOTE_RANGE_BUFFER),
+          );
+          let max = Math.min(
+            PIANO_88_KEY_MAX,
+            Math.max(MIDI_NOTE_C4, range.max + NOTE_RANGE_BUFFER),
+          );
+          if (isBlackKey(min)) min--;
+          if (isBlackKey(max)) max++;
+          setNoteRange({ min, max });
+        } else {
+          setNoteRange(null);
+        }
+      } catch (err) {
+        console.error("Failed to load MIDI file:", err);
+        setMidiEvents([]);
+        setNoteSpans([]);
         setNoteRange(null);
       }
-    } catch (err) {
-      console.error("Failed to load MIDI file:", err);
-      setMidiEvents([]);
-      setNoteSpans([]);
-      setNoteRange(null);
-    }
-  };
+    },
+    [stop],
+  );
 
   const handleSelectMIDIInput = (device: WebMidi.MIDIInput | null) => {
     selectMIDIInput(device);
@@ -262,10 +265,10 @@ export default function Home() {
         {selectedMIDIInput || selectedFile ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden">
             {/* 3D Immersive Stage */}
-            <div className="relative w-full h-[85vh] [perspective:1500px] [perspective-origin:50%_50%] flex items-center justify-center px-4">
+            <div className="relative w-full h-[85vh] perspective-[1500px] perspective-origin-[50%_50%] flex items-center justify-center px-4">
               <div
                 key={selectedFile?.url || "jam"}
-                className="w-full h-full flex flex-col bg-transparent rounded-[1.5rem] overflow-hidden transition-transform duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(25deg)_scale(0.9)]"
+                className="w-full h-full flex flex-col bg-transparent rounded-3xl overflow-hidden transition-transform duration-1000 ease-out transform-3d transform-[rotateX(25deg)_scale(0.9)]"
               >
                 <FalldownVisualizer
                   spans={noteSpans}

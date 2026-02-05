@@ -6,9 +6,9 @@ import Home from "./page";
 vi.mock("@/components/midi/device-selector", () => ({
   DeviceSelector: () => <div data-testid="device-selector">DeviceSelector</div>,
 }));
-vi.mock("@/components/midi/midi-control-center", () => ({
-  MidiControlCenter: () => (
-    <div data-testid="midi-control-center">MidiControlCenter</div>
+vi.mock("@/components/midi/sound-track-selector", () => ({
+  SoundTrackSelector: () => (
+    <div data-testid="sound-track-selector">SoundTrackSelector</div>
   ),
 }));
 vi.mock("@/components/midi/falldown-visualizer", () => ({

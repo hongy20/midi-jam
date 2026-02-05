@@ -3,7 +3,7 @@
 import { ChevronDown, ChevronUp, Music, Piano } from "lucide-react";
 import { memo } from "react";
 import { DeviceSelector } from "./device-selector";
-import { MidiControlCenter } from "./midi-control-center";
+import { SoundTrackSelector } from "./sound-track-selector";
 
 interface MidiFile {
   name: string;
@@ -123,7 +123,7 @@ export const MidiHeader = memo(function MidiHeader({
             </div>
 
             <div className="bg-slate-50/50 p-8 rounded-[2.5rem] border border-slate-200/50">
-              <MidiControlCenter
+              <SoundTrackSelector
                 files={files}
                 selectedFile={selectedFile}
                 onSelectFile={onSelectFile}

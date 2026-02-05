@@ -15,13 +15,13 @@ vi.mock("@/components/midi/device-selector", () => ({
   ),
 }));
 
-vi.mock("@/components/midi/midi-control-center", () => ({
-  MidiControlCenter: ({
+vi.mock("@/components/midi/sound-track-selector", () => ({
+  SoundTrackSelector: ({
     selectedFile,
   }: {
     selectedFile: { name: string } | null;
   }) => (
-    <div data-testid="midi-control-center">
+    <div data-testid="sound-track-selector">
       {selectedFile ? selectedFile.name : "No File"}
     </div>
   ),

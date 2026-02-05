@@ -5,7 +5,7 @@ interface MidiFile {
   url: string;
 }
 
-interface MidiControlCenterProps {
+interface SoundTrackSelectorProps {
   files: MidiFile[];
   selectedFile: MidiFile | null;
   onSelectFile: (file: MidiFile) => void;
@@ -15,11 +15,11 @@ interface MidiControlCenterProps {
  * A selector for MIDI files.
  * Simplified to focus only on file selection.
  */
-export function MidiControlCenter({
+export function SoundTrackSelector({
   files,
   selectedFile,
   onSelectFile,
-}: MidiControlCenterProps) {
+}: SoundTrackSelectorProps) {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-black text-slate-800 tracking-tight">
@@ -36,7 +36,7 @@ export function MidiControlCenter({
                 aria-pressed={isSelected}
                 className={`w-full p-5 text-left rounded-2xl border-2 transition-all duration-300 transform active:scale-[0.98] group ${
                   isSelected
-                    ? "border-purple-500 bg-purple-50/50 shadow-md translate-y-[-2px]"
+                    ? "border-purple-500 bg-purple-50/50 shadow-md -translate-y-0.5"
                     : "border-gray-100 hover:border-purple-200 hover:bg-white hover:shadow-sm"
                 }`}
               >

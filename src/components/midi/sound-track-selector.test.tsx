@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { MidiControlCenter } from "./midi-control-center";
+import { SoundTrackSelector } from "./sound-track-selector";
 
-describe("MidiControlCenter", () => {
+describe("SoundTrackSelector", () => {
   const mockFiles = [
     { name: "Song One", url: "/midi/song1.mid" },
     { name: "Song Two", url: "/midi/song2.mid" },
@@ -15,13 +15,13 @@ describe("MidiControlCenter", () => {
   };
 
   it("should render correctly", () => {
-    render(<MidiControlCenter {...defaultProps} />);
+    render(<SoundTrackSelector {...defaultProps} />);
     expect(screen.getByText(/Song One/i)).toBeInTheDocument();
     expect(screen.getByText(/Song Two/i)).toBeInTheDocument();
   });
 
   it("should call onSelectFile when a file is selected", () => {
-    render(<MidiControlCenter {...defaultProps} />);
+    render(<SoundTrackSelector {...defaultProps} />);
 
     const button = screen.getByText(/Song One/i).closest("button");
     if (button) fireEvent.click(button);
