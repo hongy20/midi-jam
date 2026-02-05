@@ -23,16 +23,16 @@ vi.mock("@/components/midi/piano-keyboard", () => ({
     </div>
   ),
 }));
-vi.mock("@/components/midi/midi-header", () => ({
-  MidiHeader: ({
+vi.mock("@/components/midi/midi-control-room", () => ({
+  MidiControlRoom: ({
     isMinimized,
     onToggleMinimize,
   }: {
     isMinimized: boolean;
     onToggleMinimize: () => void;
   }) => (
-    <div data-testid="midi-header">
-      MidiHeader
+    <div data-testid="midi-control-room">
+      MidiControlRoom
       <button
         type="button"
         onClick={onToggleMinimize}
@@ -120,12 +120,12 @@ describe("Home Page Layout Refactor", () => {
     mockStop.mockClear();
   });
 
-  it("renders MidiHeader and PlaybackControls", async () => {
+  it("renders MidiControlRoom and PlaybackControls", async () => {
     await act(async () => {
       render(<Home />);
     });
 
-    expect(screen.getByTestId("midi-header")).toBeInTheDocument();
+    expect(screen.getByTestId("midi-control-room")).toBeInTheDocument();
     expect(screen.getByTestId("playback-controls")).toBeInTheDocument();
   });
 
@@ -167,7 +167,7 @@ describe("Home Page Layout Refactor", () => {
 
     // Default: playbackNotes should be passed to PianoKeyboard (even if empty in mock)
     // To properly test filtering, we'd need a more dynamic useMidiPlayer mock.
-    // But let's at least test that toggling works and the state is passed to MidiHeader.
+    // But let's at least test that toggling works and the state is passed to MidiControlRoom.
     fireEvent.click(demoToggle);
     expect(screen.getByText(/DemoOn/)).toBeInTheDocument();
   });

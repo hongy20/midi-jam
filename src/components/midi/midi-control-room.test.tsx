@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { MidiHeader } from "./midi-header";
+import { MidiControlRoom } from "./midi-control-room";
 
 // Mock child components
 vi.mock("@/components/midi/device-selector", () => ({
@@ -27,9 +27,9 @@ vi.mock("@/components/midi/sound-track-selector", () => ({
   ),
 }));
 
-describe("MidiHeader", () => {
+describe("MidiControlRoom", () => {
   const mockProps = {
-    devices: [],
+    inputs: [],
     isLoading: false,
     error: null,
     selectedMIDIInput: null,
@@ -40,7 +40,7 @@ describe("MidiHeader", () => {
   };
 
   it("renders in expanded mode initially", () => {
-    render(<MidiHeader {...mockProps} />);
+    render(<MidiControlRoom {...mockProps} />);
 
     // Status bar should be hidden (opacity-0)
     expect(screen.getByTestId("status-bar")).toHaveClass("opacity-0");
@@ -51,7 +51,7 @@ describe("MidiHeader", () => {
 
   it("renders status bar when minimized", () => {
     render(
-      <MidiHeader
+      <MidiControlRoom
         {...mockProps}
         isMinimized={true}
         onToggleMinimize={vi.fn()}
@@ -77,7 +77,7 @@ describe("MidiHeader", () => {
       onToggleMinimize: vi.fn(),
     };
 
-    render(<MidiHeader {...props} />);
+    render(<MidiControlRoom {...props} />);
 
     // Check within status bar specifically to avoid duplicate matches with hidden header
     const statusBar = screen.getByTestId("status-bar");
@@ -88,7 +88,7 @@ describe("MidiHeader", () => {
   it("calls onToggleMinimize when status bar is clicked", () => {
     const toggleMock = vi.fn();
     render(
-      <MidiHeader
+      <MidiControlRoom
         {...mockProps}
         isMinimized={true}
         onToggleMinimize={toggleMock}

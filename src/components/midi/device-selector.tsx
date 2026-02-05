@@ -1,7 +1,7 @@
 "use client";
 
 interface DeviceSelectorProps {
-  devices: WebMidi.MIDIInput[];
+  inputs: WebMidi.MIDIInput[];
   isLoading: boolean;
   error?: string | null;
   selectedMIDIInput: WebMidi.MIDIInput | null;
@@ -12,7 +12,7 @@ interface DeviceSelectorProps {
  * A component that displays a list of available MIDI devices and allows selection.
  */
 export function DeviceSelector({
-  devices,
+  inputs,
   isLoading,
   error,
   selectedMIDIInput,
@@ -48,19 +48,19 @@ export function DeviceSelector({
       <h2 className="text-2xl font-black text-slate-800 tracking-tight">
         Select Your Instrument
       </h2>
-      {devices.length === 0 ? (
+      {inputs.length === 0 ? (
         <p className="p-4 bg-gray-100 rounded-2xl text-gray-600">
           No MIDI devices found. Please connect your instrument and try again.
         </p>
       ) : (
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {devices.map((device) => {
-            const isSelected = selectedMIDIInput?.id === device.id;
+          {inputs.map((input) => {
+            const isSelected = selectedMIDIInput?.id === input.id;
             return (
-              <li key={device.id}>
+              <li key={input.id}>
                 <button
                   type="button"
-                  onClick={() => onSelect(isSelected ? null : device)}
+                  onClick={() => onSelect(isSelected ? null : input)}
                   aria-pressed={isSelected}
                   className={`w-full p-5 text-left rounded-2xl border-2 transition-all duration-300 transform active:scale-[0.98] group ${
                     isSelected
@@ -73,12 +73,12 @@ export function DeviceSelector({
                       <div
                         className={`font-bold text-lg leading-tight truncate ${isSelected ? "text-blue-700" : "text-slate-900"}`}
                       >
-                        {device.name || "Unknown Device"}
+                        {input.name || "Unknown Device"}
                       </div>
                       <div
                         className={`text-sm font-semibold mt-1 truncate ${isSelected ? "text-blue-600/70" : "text-slate-500"}`}
                       >
-                        {device.manufacturer || "Generic MIDI"}
+                        {input.manufacturer || "Generic MIDI"}
                       </div>
                     </div>
                     <div

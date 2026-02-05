@@ -11,7 +11,7 @@ describe("DeviceSelector", () => {
   it("should render a loading state", () => {
     render(
       <DeviceSelector
-        devices={[]}
+        inputs={[]}
         isLoading={true}
         selectedMIDIInput={null}
         onSelect={vi.fn()}
@@ -25,7 +25,7 @@ describe("DeviceSelector", () => {
   it("should render an error state", () => {
     render(
       <DeviceSelector
-        devices={[]}
+        inputs={[]}
         isLoading={false}
         error="Access denied"
         selectedMIDIInput={null}
@@ -38,7 +38,7 @@ describe("DeviceSelector", () => {
   it("should render a list of devices", () => {
     render(
       <DeviceSelector
-        devices={mockDevices}
+        inputs={mockDevices}
         isLoading={false}
         selectedMIDIInput={null}
         onSelect={vi.fn()}
@@ -52,7 +52,7 @@ describe("DeviceSelector", () => {
     const onSelect = vi.fn();
     render(
       <DeviceSelector
-        devices={mockDevices}
+        inputs={mockDevices}
         isLoading={false}
         selectedMIDIInput={null}
         onSelect={onSelect}
@@ -66,7 +66,7 @@ describe("DeviceSelector", () => {
   it("should highlight the selected device", () => {
     render(
       <DeviceSelector
-        devices={mockDevices}
+        inputs={mockDevices}
         isLoading={false}
         selectedMIDIInput={mockDevices[0]}
         onSelect={vi.fn()}

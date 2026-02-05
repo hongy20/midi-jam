@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { CountdownOverlay } from "@/components/midi/countdown-overlay";
 import { FalldownVisualizer } from "@/components/midi/falldown-visualizer";
-import { MidiHeader } from "@/components/midi/midi-header";
+import { MidiControlRoom } from "@/components/midi/midi-control-room";
 import { PianoKeyboard } from "@/components/midi/piano-keyboard";
 import { PlaybackControls } from "@/components/midi/playback-controls";
 import { ScoreHud } from "@/components/midi/score-hud";
@@ -208,8 +208,8 @@ export default function Home() {
       </div>
 
       {/* Top Bar Controls */}
-      <MidiHeader
-        devices={inputs}
+      <MidiControlRoom
+        inputs={inputs}
         isLoading={isMidiLoading}
         error={midiError}
         selectedMIDIInput={selectedMIDIInput}

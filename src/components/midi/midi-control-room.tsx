@@ -1,18 +1,12 @@
 "use client";
 
 import { ChevronDown, ChevronUp, Music, Piano } from "lucide-react";
-import { memo } from "react";
 import { DeviceSelector } from "./device-selector";
-import { SoundTrackSelector } from "./sound-track-selector";
+import { type MidiFile, SoundTrackSelector } from "./sound-track-selector";
 
-interface MidiFile {
-  name: string;
-  url: string;
-}
-
-interface MidiHeaderProps {
+interface MidiControlRoomProps {
   // Device Selector Props
-  devices: WebMidi.MIDIInput[];
+  inputs: WebMidi.MIDIInput[];
   isLoading: boolean;
   error?: string | null;
   selectedMIDIInput: WebMidi.MIDIInput | null;
@@ -28,8 +22,8 @@ interface MidiHeaderProps {
   onToggleMinimize?: () => void;
 }
 
-export const MidiHeader = memo(function MidiHeader({
-  devices,
+export const MidiControlRoom = ({
+  inputs,
   isLoading,
   error,
   selectedMIDIInput,
@@ -39,7 +33,7 @@ export const MidiHeader = memo(function MidiHeader({
   onSelectFile,
   isMinimized = false,
   onToggleMinimize,
-}: MidiHeaderProps) {
+}: MidiControlRoomProps) => {
   return (
     <>
       {/* Backdrop overlay when expanded */}
@@ -59,7 +53,7 @@ export const MidiHeader = memo(function MidiHeader({
         data-testid="status-bar"
         onClick={onToggleMinimize}
         tabIndex={isMinimized ? 0 : -1}
-        className={`fixed top-4 left-4 z-50 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-5 py-1 h-[46px] cursor-pointer hover:scale-105 transition-all duration-500 ease-out ${
+        className={`fixed top-4 left-4 z-50 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-5 py-1 h-11.5 cursor-pointer hover:scale-105 transition-all duration-500 ease-out ${
           !isMinimized
             ? "opacity-0 -translate-x-12 pointer-events-none"
             : "opacity-100 translate-x-0"
@@ -74,7 +68,7 @@ export const MidiHeader = memo(function MidiHeader({
         <div className="h-4 w-0.5 bg-gray-300" />
         <div className="flex items-center gap-2 text-gray-700">
           <Music className="w-4 h-4 text-purple-500" />
-          <span className="font-bold text-xs truncate max-w-[100px]">
+          <span className="font-bold text-xs truncate max-w-25">
             {selectedFile ? selectedFile.name : "Select Song"}
           </span>
         </div>
@@ -114,7 +108,7 @@ export const MidiHeader = memo(function MidiHeader({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div className="bg-slate-50/50 p-8 rounded-[2.5rem] border border-slate-200/50">
               <DeviceSelector
-                devices={devices}
+                inputs={inputs}
                 isLoading={isLoading}
                 error={error}
                 selectedMIDIInput={selectedMIDIInput}
@@ -134,4 +128,4 @@ export const MidiHeader = memo(function MidiHeader({
       </header>
     </>
   );
-});
+};

@@ -1,6 +1,6 @@
 "use client";
 
-interface MidiFile {
+export interface MidiFile {
   name: string;
   url: string;
 }
