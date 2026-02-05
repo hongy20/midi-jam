@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import * as Tone from "tone";
 import {
   MIDI_COMMAND_CONTROL_CHANGE,
@@ -15,7 +15,6 @@ export function useMidiAudio(
   outputDevice: WebMidi.MIDIOutput | null = null,
 ) {
   const polySynthRef = useRef<Tone.PolySynth | null>(null);
-  const [_isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     // Initialize synth
@@ -134,6 +133,5 @@ export function useMidiAudio(
     stopNote,
     stopAllNotes,
     playCountdownBeep,
-    setIsReady,
   };
 }
