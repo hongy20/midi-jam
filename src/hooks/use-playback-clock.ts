@@ -67,11 +67,12 @@ export function usePlaybackClock({
 
   // When speed changes, we need to adjust the start time reference
   // to prevent the playback position from jumping.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: We only want to re-anchor when speed actually changes.
   useEffect(() => {
     if (isPlaying && startTimeRef.current !== null && currentTime >= 0) {
       startTimeRef.current = performance.now() - (currentTime * 1000) / speed;
     }
-  }, [speed, currentTime, isPlaying]);
+  }, [speed]);
 
   useEffect(() => {
     if (!isPlaying) {
