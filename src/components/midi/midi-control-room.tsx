@@ -10,9 +10,9 @@ interface MidiControlRoomProps {
   isLoading: boolean;
   error?: string | null;
   selectedMIDIInput: WebMidi.MIDIInput | null;
-  onSelectMIDIInput: (device: WebMidi.MIDIInput | null) => void;
+  onSelectMIDIInput: (input: WebMidi.MIDIInput | null) => void;
 
-  // Midi Control Center Props (Selectors only)
+  // Sound Track Selector Props
   files: MidiFile[];
   selectedFile: MidiFile | null;
   onSelectFile: (file: MidiFile) => void;

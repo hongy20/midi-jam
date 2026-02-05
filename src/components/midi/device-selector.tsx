@@ -5,7 +5,7 @@ interface DeviceSelectorProps {
   isLoading: boolean;
   error?: string | null;
   selectedMIDIInput: WebMidi.MIDIInput | null;
-  onSelect: (device: WebMidi.MIDIInput | null) => void;
+  onSelect: (input: WebMidi.MIDIInput | null) => void;
 }
 
 /**

@@ -38,12 +38,7 @@ interface MidiFile {
 const NOTE_RANGE_BUFFER = 4;
 
 export default function Home() {
-  const {
-    inputs,
-    outputs,
-    isLoading: isMidiLoading,
-    error: midiError,
-  } = useMIDIDevices();
+  const { inputs, outputs, isLoading, error } = useMIDIDevices();
   const { selectedMIDIInput, selectedMIDIOutput, selectMIDIInput } =
     useMIDISelection(inputs, outputs);
 
@@ -183,9 +178,9 @@ export default function Home() {
     [stop],
   );
 
-  const handleSelectMIDIInput = (device: WebMidi.MIDIInput | null) => {
-    selectMIDIInput(device);
-    if (device) {
+  const handleSelectMIDIInput = (input: WebMidi.MIDIInput | null) => {
+    selectMIDIInput(input);
+    if (input) {
       setIsMinimized(true);
       setWasPlayingBeforeExpand(false);
       if (!selectedFile) setNoteRange(null);
@@ -210,8 +205,8 @@ export default function Home() {
       {/* Top Bar Controls */}
       <MidiControlRoom
         inputs={inputs}
-        isLoading={isMidiLoading}
-        error={midiError}
+        isLoading={isLoading}
+        error={error}
         selectedMIDIInput={selectedMIDIInput}
         onSelectMIDIInput={handleSelectMIDIInput}
         files={midiFiles}
