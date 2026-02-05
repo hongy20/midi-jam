@@ -5,7 +5,7 @@ export interface MidiFile {
   url: string;
 }
 
-interface SoundTrackSelectorProps {
+export interface SoundTrackSelectorProps {
   files: MidiFile[];
   selectedFile: MidiFile | null;
   onSelectFile: (file: MidiFile) => void;

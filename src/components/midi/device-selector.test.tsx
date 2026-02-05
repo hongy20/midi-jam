@@ -14,7 +14,7 @@ describe("DeviceSelector", () => {
         inputs={[]}
         isLoading={true}
         selectedMIDIInput={null}
-        onSelect={vi.fn()}
+        onSelectMIDIInput={vi.fn()}
       />,
     );
     expect(
@@ -29,7 +29,7 @@ describe("DeviceSelector", () => {
         isLoading={false}
         error="Access denied"
         selectedMIDIInput={null}
-        onSelect={vi.fn()}
+        onSelectMIDIInput={vi.fn()}
       />,
     );
     expect(screen.getByText(/Error: Access denied/i)).toBeInTheDocument();
@@ -41,26 +41,26 @@ describe("DeviceSelector", () => {
         inputs={mockDevices}
         isLoading={false}
         selectedMIDIInput={null}
-        onSelect={vi.fn()}
+        onSelectMIDIInput={vi.fn()}
       />,
     );
     expect(screen.getByText("Device 1")).toBeInTheDocument();
     expect(screen.getByText("Device 2")).toBeInTheDocument();
   });
 
-  it("should call onSelect when a device is clicked", () => {
-    const onSelect = vi.fn();
+  it("should call onSelectMIDIInput when a device is clicked", () => {
+    const onSelectMIDIInput = vi.fn();
     render(
       <DeviceSelector
         inputs={mockDevices}
         isLoading={false}
         selectedMIDIInput={null}
-        onSelect={onSelect}
+        onSelectMIDIInput={onSelectMIDIInput}
       />,
     );
 
     fireEvent.click(screen.getByText("Device 1"));
-    expect(onSelect).toHaveBeenCalledWith(mockDevices[0]);
+    expect(onSelectMIDIInput).toHaveBeenCalledWith(mockDevices[0]);
   });
 
   it("should highlight the selected device", () => {
@@ -69,7 +69,7 @@ describe("DeviceSelector", () => {
         inputs={mockDevices}
         isLoading={false}
         selectedMIDIInput={mockDevices[0]}
-        onSelect={vi.fn()}
+        onSelectMIDIInput={vi.fn()}
       />,
     );
 

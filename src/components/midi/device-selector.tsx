@@ -1,11 +1,11 @@
 "use client";
 
-interface DeviceSelectorProps {
+export interface DeviceSelectorProps {
   inputs: WebMidi.MIDIInput[];
   isLoading: boolean;
   error?: string | null;
   selectedMIDIInput: WebMidi.MIDIInput | null;
-  onSelect: (input: WebMidi.MIDIInput | null) => void;
+  onSelectMIDIInput: (input: WebMidi.MIDIInput | null) => void;
 }
 
 /**
@@ -16,7 +16,7 @@ export function DeviceSelector({
   isLoading,
   error,
   selectedMIDIInput,
-  onSelect,
+  onSelectMIDIInput,
 }: DeviceSelectorProps) {
   if (isLoading) {
     return (
@@ -60,7 +60,7 @@ export function DeviceSelector({
               <li key={input.id}>
                 <button
                   type="button"
-                  onClick={() => onSelect(isSelected ? null : input)}
+                  onClick={() => onSelectMIDIInput(isSelected ? null : input)}
                   aria-pressed={isSelected}
                   className={`w-full p-5 text-left rounded-2xl border-2 transition-all duration-300 transform active:scale-[0.98] group ${
                     isSelected

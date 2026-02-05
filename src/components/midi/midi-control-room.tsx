@@ -1,22 +1,15 @@
 "use client";
 
 import { ChevronDown, ChevronUp, Music, Piano } from "lucide-react";
-import { DeviceSelector } from "./device-selector";
-import { type MidiFile, SoundTrackSelector } from "./sound-track-selector";
+import { DeviceSelector, type DeviceSelectorProps } from "./device-selector";
+import {
+  SoundTrackSelector,
+  type SoundTrackSelectorProps,
+} from "./sound-track-selector";
 
-interface MidiControlRoomProps {
-  // Device Selector Props
-  inputs: WebMidi.MIDIInput[];
-  isLoading: boolean;
-  error?: string | null;
-  selectedMIDIInput: WebMidi.MIDIInput | null;
-  onSelectMIDIInput: (input: WebMidi.MIDIInput | null) => void;
-
-  // Sound Track Selector Props
-  files: MidiFile[];
-  selectedFile: MidiFile | null;
-  onSelectFile: (file: MidiFile) => void;
-
+interface MidiControlRoomProps
+  extends DeviceSelectorProps,
+    SoundTrackSelectorProps {
   // Header State
   isMinimized?: boolean;
   onToggleMinimize?: () => void;
@@ -112,7 +105,7 @@ export const MidiControlRoom = ({
                 isLoading={isLoading}
                 error={error}
                 selectedMIDIInput={selectedMIDIInput}
-                onSelect={onSelectMIDIInput}
+                onSelectMIDIInput={onSelectMIDIInput}
               />
             </div>
 
