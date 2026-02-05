@@ -1,7 +1,12 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+"use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
 import { isBlackKey } from "@/lib/device/piano";
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
+import { BackgroundGrid } from "./BackgroundGrid";
+import { VisibleBarLines } from "./VisibleBarLines";
+import { VisibleNotes } from "./VisibleNotes";
 
 interface FalldownVisualizerProps {
   spans: NoteSpan[];
@@ -11,104 +16,6 @@ interface FalldownVisualizerProps {
   rangeStart?: number;
   rangeEnd?: number;
 }
-
-/**
- * A memoized background component to prevent re-rendering lanes and grid lines
- * on every frame update of the falling notes.
- */
-const BackgroundGrid = memo(
-  ({
-    allNotesInRange,
-    whiteKeyNotes,
-    getHorizontalPosition,
-    whiteKeysCount,
-    containerWidth,
-  }: {
-    allNotesInRange: number[];
-    whiteKeyNotes: number[];
-    getHorizontalPosition: (note: number) => {
-      leftRatio: number;
-      widthRatio: number;
-    } | null;
-    whiteKeysCount: number;
-    containerWidth: number;
-  }) => (
-    <div className="absolute inset-0 w-full mx-auto pointer-events-none">
-      {/* Render Background Lanes */}
-      {allNotesInRange.map((note) => {
-        const pos = getHorizontalPosition(note);
-        if (!pos) return null;
-        return (
-          <div
-            key={`lane-${note}`}
-            className={`absolute top-0 bottom-0 transition-colors duration-500 ${
-              isBlackKey(note) ? "bg-black/10" : "bg-white/2"
-            }`}
-            style={{
-              width: `${pos.widthRatio * containerWidth}px`,
-              transform: `translate3d(${pos.leftRatio * containerWidth}px, 0, 0)`,
-            }}
-          />
-        );
-      })}
-
-      {/* Render Vertical Key Lines (Background Grid) */}
-      {whiteKeyNotes.map((note, i) => (
-        <div
-          key={`v-line-${note}`}
-          className="absolute top-0 bottom-0 w-px bg-white/20 border-r border-white/10"
-          style={{
-            transform: `translate3d(${(i / whiteKeysCount) * containerWidth}px, 0, 0)`,
-          }}
-        />
-      ))}
-      {/* Rightmost edge line */}
-      <div
-        className="absolute top-0 bottom-0 w-px bg-white/20 border-r border-white/10"
-        style={{ transform: `translate3d(${containerWidth}px, 0, 0)` }}
-      />
-    </div>
-  ),
-);
-
-/**
- * Individual note component, memoized to avoid re-rendering unless position/size changes.
- */
-const NoteItem = memo(
-  ({
-    note,
-    left,
-    width,
-    pixelsPerSecond,
-  }: {
-    note: NoteSpan;
-    left: number;
-    width: number;
-    pixelsPerSecond: number;
-  }) => {
-    const bottom = note.startTime * pixelsPerSecond;
-    const height = note.duration * pixelsPerSecond;
-
-    return (
-      <div
-        className={`absolute rounded-md transition-shadow duration-300 will-change-transform ${
-          note.isBlack
-            ? "bg-purple-600 shadow-[0_0_15px_rgba(147,51,234,0.5)] border border-purple-400"
-            : "bg-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.5)] border border-blue-300"
-        }`}
-        style={{
-          width: `${width}px`,
-          height: `${height}px`,
-          transform: `translate3d(${left}px, ${-bottom}px, 0)`,
-          // Transform origin is bottom-left to match our coordinate system.
-          transformOrigin: "bottom left",
-          bottom: 0,
-          left: 0,
-        }}
-      />
-    );
-  },
-);
 
 /**
  * Visualizes MIDI notes falling from top to bottom.
@@ -245,33 +152,17 @@ export const FalldownVisualizer = ({
           willChange: "transform",
         }}
       >
-        {/* Render Bar-lines */}
-        {visibleBarLines.map((time) => (
-          <div
-            key={`bar-${time}`}
-            className="absolute left-0 right-0 h-px bg-white/60 shadow-[0_0_10px_rgba(255,255,255,0.4)]"
-            style={{
-              bottom: 0,
-              // Position bar line relative to container bottom using pixels
-              transform: `translate3d(0, ${-time * PIXELS_PER_SECOND}px, 0)`,
-            }}
-          />
-        ))}
+        <VisibleBarLines
+          visibleBarLines={visibleBarLines}
+          pixelsPerSecond={PIXELS_PER_SECOND}
+        />
 
-        {/* Render Notes */}
-        {visibleNotes.map((note) => {
-          const pos = getHorizontalPosition(note.note);
-          if (!pos) return null;
-          return (
-            <NoteItem
-              key={note.id}
-              note={note}
-              left={pos.leftRatio * dimensions.width}
-              width={pos.widthRatio * dimensions.width}
-              pixelsPerSecond={PIXELS_PER_SECOND}
-            />
-          );
-        })}
+        <VisibleNotes
+          visibleNotes={visibleNotes}
+          getHorizontalPosition={getHorizontalPosition}
+          containerWidth={dimensions.width}
+          pixelsPerSecond={PIXELS_PER_SECOND}
+        />
       </div>
     </div>
   );
