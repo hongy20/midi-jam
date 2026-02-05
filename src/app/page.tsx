@@ -114,7 +114,7 @@ export default function Home() {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const handleToggleMinimize = useCallback(() => {
+  const handleToggleMinimize = () => {
     if (isMinimized) {
       if (isPlaying) {
         setWasPlayingBeforeExpand(true);
@@ -129,7 +129,7 @@ export default function Home() {
       }
     }
     setIsMinimized(!isMinimized);
-  }, [isMinimized, isPlaying, pause, play, wasPlayingBeforeExpand]);
+  };
 
   // Load file list
   useEffect(() => {
@@ -144,44 +144,41 @@ export default function Home() {
   }, [isCountdownActive, countdownRemaining, playCountdownBeep]);
 
   // Handle file selection and parsing
-  const handleSelectFile = useCallback(
-    async (file: MidiFile) => {
-      setSelectedFile(file);
-      setIsMinimized(true);
-      setWasPlayingBeforeExpand(false);
-      stop();
-      try {
-        const midi = await loadMidiFile(file.url);
-        const events = getMidiEvents(midi);
-        setMidiEvents(events);
-        setNoteSpans(getNoteSpans(events));
-        setBarLines(getBarLines(midi));
+  const handleSelectFile = async (file: MidiFile) => {
+    setSelectedFile(file);
+    setIsMinimized(true);
+    setWasPlayingBeforeExpand(false);
+    stop();
+    try {
+      const midi = await loadMidiFile(file.url);
+      const events = getMidiEvents(midi);
+      setMidiEvents(events);
+      setNoteSpans(getNoteSpans(events));
+      setBarLines(getBarLines(midi));
 
-        const range = getNoteRange(events);
-        if (range) {
-          let min = Math.max(
-            PIANO_88_KEY_MIN,
-            Math.min(MIDI_NOTE_C4, range.min - NOTE_RANGE_BUFFER),
-          );
-          let max = Math.min(
-            PIANO_88_KEY_MAX,
-            Math.max(MIDI_NOTE_C4, range.max + NOTE_RANGE_BUFFER),
-          );
-          if (isBlackKey(min)) min--;
-          if (isBlackKey(max)) max++;
-          setNoteRange({ min, max });
-        } else {
-          setNoteRange(null);
-        }
-      } catch (err) {
-        console.error("Failed to load MIDI file:", err);
-        setMidiEvents([]);
-        setNoteSpans([]);
+      const range = getNoteRange(events);
+      if (range) {
+        let min = Math.max(
+          PIANO_88_KEY_MIN,
+          Math.min(MIDI_NOTE_C4, range.min - NOTE_RANGE_BUFFER),
+        );
+        let max = Math.min(
+          PIANO_88_KEY_MAX,
+          Math.max(MIDI_NOTE_C4, range.max + NOTE_RANGE_BUFFER),
+        );
+        if (isBlackKey(min)) min--;
+        if (isBlackKey(max)) max++;
+        setNoteRange({ min, max });
+      } else {
         setNoteRange(null);
       }
-    },
-    [stop],
-  );
+    } catch (err) {
+      console.error("Failed to load MIDI file:", err);
+      setMidiEvents([]);
+      setNoteSpans([]);
+      setNoteRange(null);
+    }
+  };
 
   const handleSelectMIDIInput = (device: WebMidi.MIDIInput | null) => {
     selectMIDIInput(device);

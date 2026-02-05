@@ -21,7 +21,9 @@ export function DeviceSelector({
   if (isLoading) {
     return (
       <div className="p-4 text-center animate-pulse">
-        <p className="text-lg font-medium">Searching for MIDI devices...</p>
+        <p className="text-lg font-medium text-slate-600">
+          Searching for MIDI devices...
+        </p>
       </div>
     );
   }
@@ -62,7 +64,7 @@ export function DeviceSelector({
                   aria-pressed={isSelected}
                   className={`w-full p-5 text-left rounded-2xl border-2 transition-all duration-300 transform active:scale-[0.98] group ${
                     isSelected
-                      ? "border-blue-500 bg-blue-50/50 shadow-md translate-y-[-2px]"
+                      ? "border-blue-500 bg-blue-50/50 shadow-md -translate-y-0.5"
                       : "border-gray-200 hover:border-blue-200 hover:bg-white hover:shadow-sm"
                   }`}
                 >
