@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo } from "react";
+import { useMemo } from "react";
 import { isBlackKey } from "@/lib/device/piano";
 
 interface PianoKeyboardProps {
@@ -14,12 +14,12 @@ interface PianoKeyboardProps {
  * A responsive visual representation of a piano keyboard.
  * Supports dynamic note ranges for zooming.
  */
-export const PianoKeyboard = memo(function PianoKeyboard({
+export const PianoKeyboard = ({
   liveNotes = new Set(),
   playbackNotes = new Set(),
   rangeStart = 21, // Default A0
   rangeEnd = 108, // Default C8
-}: PianoKeyboardProps) {
+}: PianoKeyboardProps) => {
   // Memoize white keys calculation
   const whiteKeys = useMemo(() => {
     const keys: number[] = [];
@@ -216,4 +216,4 @@ export const PianoKeyboard = memo(function PianoKeyboard({
       </div>
     </div>
   );
-});
+};

@@ -7,6 +7,7 @@ import { MidiControlRoom } from "@/components/midi/midi-control-room";
 import { PianoKeyboard } from "@/components/midi/piano-keyboard";
 import { PlaybackControls } from "@/components/midi/playback-controls";
 import { ScoreHud } from "@/components/midi/score-hud";
+import type { MidiFile } from "@/components/midi/sound-track-selector";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
@@ -29,11 +30,6 @@ import {
   type MidiEvent,
   type NoteSpan,
 } from "@/lib/midi/midi-parser";
-
-interface MidiFile {
-  name: string;
-  url: string;
-}
 
 const NOTE_RANGE_BUFFER = 4;
 

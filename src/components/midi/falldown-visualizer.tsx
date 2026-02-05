@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { isBlackKey } from "@/lib/device/piano";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 
@@ -18,7 +18,7 @@ interface FalldownVisualizerProps {
  * Visualizes MIDI notes falling from top to bottom.
  * Synchronized with the responsive piano keyboard layout.
  */
-export const FalldownVisualizer = memo(function FalldownVisualizer({
+export const FalldownVisualizer = ({
   spans,
   barLines = [],
   currentTime,
@@ -26,7 +26,7 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
   height: fixedHeight,
   rangeStart = 21,
   rangeEnd = 108,
-}: FalldownVisualizerProps) {
+}: FalldownVisualizerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [renderedHeight, setRenderedHeight] = useState(fixedHeight || 600);
 
@@ -199,4 +199,4 @@ export const FalldownVisualizer = memo(function FalldownVisualizer({
       </div>
     </div>
   );
-});
+};

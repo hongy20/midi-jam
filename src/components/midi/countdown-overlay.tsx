@@ -1,16 +1,14 @@
 "use client";
 
-import { memo } from "react";
-
 interface CountdownOverlayProps {
   countdownRemaining: number;
   isActive: boolean;
 }
 
-export const CountdownOverlay = memo(function CountdownOverlay({
+export const CountdownOverlay = ({
   countdownRemaining,
   isActive,
-}: CountdownOverlayProps) {
+}: CountdownOverlayProps) => {
   if (!isActive || countdownRemaining === 0) return null;
 
   const getDisplayText = () => {
@@ -40,4 +38,4 @@ export const CountdownOverlay = memo(function CountdownOverlay({
       </div>
     </div>
   );
-});
+};

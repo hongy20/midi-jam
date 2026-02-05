@@ -1,41 +1,26 @@
 import { Pause, Play, Rabbit, Snail, Sparkles, Square } from "lucide-react";
-import { memo } from "react";
 
 interface PlaybackControlsProps {
   isPlaying: boolean;
-
   onPlay: () => void;
-
   onPause: () => void;
-
   onStop: () => void;
-
   speed: number;
-
   onSpeedChange: (speed: number) => void;
-
-  demoMode?: boolean;
-
-  onToggleDemo?: () => void;
+  demoMode: boolean;
+  onToggleDemo: () => void;
 }
 
-export const PlaybackControls = memo(function PlaybackControls({
+export const PlaybackControls = ({
   isPlaying,
-
   onPlay,
-
   onPause,
-
   onStop,
-
   speed,
-
   onSpeedChange,
-
-  demoMode = true,
-
+  demoMode,
   onToggleDemo,
-}: PlaybackControlsProps) {
+}: PlaybackControlsProps) => {
   const speeds = [
     { value: 0.75, label: <Snail className="w-4 h-4" /> },
     { value: 1.0, label: "1x" },
@@ -116,4 +101,4 @@ export const PlaybackControls = memo(function PlaybackControls({
       </div>
     </div>
   );
-});
+};
