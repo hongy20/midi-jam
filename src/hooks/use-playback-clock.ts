@@ -19,7 +19,10 @@ export function usePlaybackClock({
   const [currentTime, setCurrentTime] = useState(initialTime);
   const [speed, setSpeed] = useState(1);
 
+  // A ref to the `performance.now()` timestamp when playback was last started or resumed.
+  // This is used as the anchor for calculating the `currentTime`.
   const startTimeRef = useRef<number | null>(null);
+  // A ref to the ID returned by `requestAnimationFrame` to manage the animation loop.
   const requestRef = useRef<number | null>(null);
 
   const onTickRef = useRef(onTick);
