@@ -88,15 +88,26 @@ export const PlaybackControls = ({
     };
   }, [isExpanded, handleCollapse]);
 
-  const handleIconInteraction = useCallback(() => {
+  // Actions wrapped with timer reset
+  const onToggleDemoWithReset = () => {
     resetCollapseTimer();
-  }, [resetCollapseTimer]);
+    onToggleDemo();
+  };
 
-  // Filtered interaction handler for the container - only resets timer if an icon (button) is targeted
-  const handleContainerInteraction = (e: React.MouseEvent) => {
-    if ((e.target as HTMLElement).closest("button")) {
-      handleIconInteraction();
-    }
+  const onPlayPauseWithReset = () => {
+    resetCollapseTimer();
+    if (isPlaying) onPause();
+    else onPlay();
+  };
+
+  const onStopWithReset = () => {
+    resetCollapseTimer();
+    onStop();
+  };
+
+  const onSpeedChangeWithReset = (s: number) => {
+    resetCollapseTimer();
+    onSpeedChange(s);
   };
 
   return (
@@ -114,8 +125,6 @@ export const PlaybackControls = ({
 
       {/* Controls Container */}
       <div
-        onMouseMove={handleContainerInteraction}
-        onClick={handleContainerInteraction}
         className={`
           flex items-center gap-2 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-4 py-1 pointer-events-auto
           transition-all duration-500 ease-in-out
@@ -130,7 +139,8 @@ export const PlaybackControls = ({
         <div className="flex items-center gap-1 pr-2 border-r border-gray-200">
           <button
             type="button"
-            onClick={onToggleDemo}
+            onClick={onToggleDemoWithReset}
+            onMouseEnter={resetCollapseTimer}
             className={`h-9 flex items-center gap-1.5 px-3 rounded-full font-black text-[10px] uppercase tracking-wider transition-all duration-300 ${
               demoMode
                 ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
@@ -150,7 +160,8 @@ export const PlaybackControls = ({
         <div className="flex items-center gap-1">
           <button
             type="button"
-            onClick={isPlaying ? onPause : onPlay}
+            onClick={onPlayPauseWithReset}
+            onMouseEnter={resetCollapseTimer}
             className={`w-9 h-9 flex items-center justify-center rounded-full transition-all ${
               isPlaying
                 ? "bg-amber-100 text-amber-600 hover:bg-amber-200"
@@ -167,7 +178,8 @@ export const PlaybackControls = ({
 
           <button
             type="button"
-            onClick={onStop}
+            onClick={onStopWithReset}
+            onMouseEnter={resetCollapseTimer}
             className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
             aria-label="Stop"
           >
@@ -182,7 +194,8 @@ export const PlaybackControls = ({
             <button
               key={s.value}
               type="button"
-              onClick={() => onSpeedChange(s.value)}
+              onClick={() => onSpeedChangeWithReset(s.value)}
+              onMouseEnter={resetCollapseTimer}
               className={`w-9 h-9 rounded-full text-xs font-black transition-all flex items-center justify-center ${
                 speed === s.value
                   ? "bg-blue-600 text-white shadow-md shadow-blue-500/20"
