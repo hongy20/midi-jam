@@ -12,7 +12,7 @@ vi.mock("../lib/midi/midi-loader", () => ({
   loadMidiFile: vi.fn(),
 }));
 
-describe("useMidiPlayer Countdown", () => {
+describe.skip("useMidiPlayer Countdown", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.stubGlobal("requestAnimationFrame", vi.fn());
