@@ -1,5 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+import { MIDI_COMMAND_NOTE_ON } from "@/lib/midi/constant";
 import { useMIDINotes } from "./use-midi-notes";
 
 describe("useMIDINotes", () => {
@@ -22,7 +23,7 @@ describe("useMIDINotes", () => {
 
     // Simulate Note On
     midiMessageHandler({
-      data: new Uint8Array([0x90, 60, 100]),
+      data: new Uint8Array([MIDI_COMMAND_NOTE_ON, 60, 100]),
     } as WebMidi.MIDIMessageEvent);
 
     expect(onNote).toHaveBeenCalledWith({
@@ -35,7 +36,7 @@ describe("useMIDINotes", () => {
   it("should not add listener if input is null", () => {
     const onNote = vi.fn();
     renderHook(() => useMIDINotes(null, onNote));
-    // No errors thrown
+    expect(onNote).not.toHaveBeenCalled();
   });
 
   it("should clean up listener on unmount", () => {

@@ -1,0 +1,390 @@
+.container {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  grid-template-columns: repeat(var(--piano-visible-units, 156), 1fr);
+  grid-template-rows: 1fr;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.lane {
+  grid-row: 1;
+  height: 100%;
+  border-right: 1px solid rgba(255, 255, 255, 0.03);
+  box-sizing: border-box;
+}
+
+.lane[data-black="true"] {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-right-color: rgba(255, 255, 255, 0.05);
+}
+
+.lane[data-black="false"] {
+  background-color: transparent;
+}
+
+/* Beam Effects */
+.beam {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 800px;
+  opacity: 0;
+  transition: opacity 150ms;
+  pointer-events: none;
+  z-index: 40;
+  grid-row: 1;
+}
+
+.beam[data-active="true"] {
+  opacity: 1;
+}
+
+/* Perfect Hit Intensification */
+.beam[data-source="both"] {
+  filter: brightness(1.3);
+}
+
+.flare {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 3rem;
+  filter: blur(12px);
+  z-index: 1;
+  transition: background-color 300ms;
+}
+
+/* Match colors to falling notes */
+.beam[data-black="false"] .flare {
+  background-color: #3b82f6;
+} /* White Keys -> Blue */
+.beam[data-black="true"] .flare {
+  background-color: #9333ea;
+} /* Black Keys -> Purple */
+
+/* "Both" state intensified glow */
+.beam[data-source="both"] .flare {
+  filter: blur(16px);
+  animation: pulse-intense 1s infinite;
+}
+
+@keyframes pulse-intense {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+.beamLine {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* White Key BeamLine (Blue) */
+.beam[data-black="false"] .beamLine {
+  background: linear-gradient(
+    to top,
+    rgba(59, 130, 246, 0.6),
+    rgba(59, 130, 246, 0.2),
+    transparent
+  );
+}
+
+/* Black Key BeamLine (Purple) */
+.beam[data-black="true"] .beamLine {
+  background: linear-gradient(
+    to top,
+    rgba(147, 51, 234, 0.6),
+    rgba(147, 51, 234, 0.2),
+    transparent
+  );
+}
+
+/* Indigo tint for "both" state to maintain the "perfect hit" look */
+.beam[data-source="both"] .beamLine {
+  background: linear-gradient(
+    to top,
+    rgba(99, 102, 241, 0.7),
+    rgba(99, 102, 241, 0.3),
+    transparent
+  );
+}
+.note-21 {
+  grid-column: calc(36 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-22 {
+  grid-column: calc(38 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-23 {
+  grid-column: calc(39 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-24 {
+  grid-column: calc(42 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-25 {
+  grid-column: calc(44 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-26 {
+  grid-column: calc(45 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-27 {
+  grid-column: calc(47 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-28 {
+  grid-column: calc(48 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-29 {
+  grid-column: calc(51 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-30 {
+  grid-column: calc(53 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-31 {
+  grid-column: calc(54 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-32 {
+  grid-column: calc(56 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-33 {
+  grid-column: calc(57 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-34 {
+  grid-column: calc(59 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-35 {
+  grid-column: calc(60 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-36 {
+  grid-column: calc(63 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-37 {
+  grid-column: calc(65 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-38 {
+  grid-column: calc(66 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-39 {
+  grid-column: calc(68 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-40 {
+  grid-column: calc(69 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-41 {
+  grid-column: calc(72 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-42 {
+  grid-column: calc(74 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-43 {
+  grid-column: calc(75 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-44 {
+  grid-column: calc(77 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-45 {
+  grid-column: calc(78 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-46 {
+  grid-column: calc(80 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-47 {
+  grid-column: calc(81 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-48 {
+  grid-column: calc(84 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-49 {
+  grid-column: calc(86 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-50 {
+  grid-column: calc(87 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-51 {
+  grid-column: calc(89 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-52 {
+  grid-column: calc(90 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-53 {
+  grid-column: calc(93 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-54 {
+  grid-column: calc(95 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-55 {
+  grid-column: calc(96 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-56 {
+  grid-column: calc(98 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-57 {
+  grid-column: calc(99 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-58 {
+  grid-column: calc(101 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-59 {
+  grid-column: calc(102 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-60 {
+  grid-column: calc(105 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-61 {
+  grid-column: calc(107 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-62 {
+  grid-column: calc(108 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-63 {
+  grid-column: calc(110 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-64 {
+  grid-column: calc(111 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-65 {
+  grid-column: calc(114 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-66 {
+  grid-column: calc(116 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-67 {
+  grid-column: calc(117 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-68 {
+  grid-column: calc(119 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-69 {
+  grid-column: calc(120 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-70 {
+  grid-column: calc(122 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-71 {
+  grid-column: calc(123 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-72 {
+  grid-column: calc(126 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-73 {
+  grid-column: calc(128 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-74 {
+  grid-column: calc(129 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-75 {
+  grid-column: calc(131 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-76 {
+  grid-column: calc(132 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-77 {
+  grid-column: calc(135 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-78 {
+  grid-column: calc(137 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-79 {
+  grid-column: calc(138 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-80 {
+  grid-column: calc(140 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-81 {
+  grid-column: calc(141 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-82 {
+  grid-column: calc(143 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-83 {
+  grid-column: calc(144 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-84 {
+  grid-column: calc(147 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-85 {
+  grid-column: calc(149 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-86 {
+  grid-column: calc(150 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-87 {
+  grid-column: calc(152 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-88 {
+  grid-column: calc(153 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-89 {
+  grid-column: calc(156 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-90 {
+  grid-column: calc(158 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-91 {
+  grid-column: calc(159 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-92 {
+  grid-column: calc(161 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-93 {
+  grid-column: calc(162 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-94 {
+  grid-column: calc(164 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-95 {
+  grid-column: calc(165 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-96 {
+  grid-column: calc(168 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-97 {
+  grid-column: calc(170 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-98 {
+  grid-column: calc(171 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-99 {
+  grid-column: calc(173 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-100 {
+  grid-column: calc(174 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-101 {
+  grid-column: calc(177 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-102 {
+  grid-column: calc(179 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-103 {
+  grid-column: calc(180 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-104 {
+  grid-column: calc(182 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-105 {
+  grid-column: calc(183 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-106 {
+  grid-column: calc(185 - var(--piano-start-unit) + 1) / span 2;
+}
+.note-107 {
+  grid-column: calc(186 - var(--piano-start-unit) + 1) / span 3;
+}
+.note-108 {
+  grid-column: calc(189 - var(--piano-start-unit) + 1) / span 3;
+}

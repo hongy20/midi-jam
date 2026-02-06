@@ -1,0 +1,79 @@
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { DeviceSelector } from "./device-selector";
+
+describe("DeviceSelector", () => {
+  const mockDevices = [
+    { id: "1", name: "Device 1" },
+    { id: "2", name: "Device 2" },
+  ] as WebMidi.MIDIInput[];
+
+  it("should render a loading state", () => {
+    render(
+      <DeviceSelector
+        inputs={[]}
+        isLoading={true}
+        selectedMIDIInput={null}
+        onSelectMIDIInput={vi.fn()}
+      />,
+    );
+    expect(
+      screen.getByText(/Searching for MIDI devices.../i),
+    ).toBeInTheDocument();
+  });
+
+  it("should render an error state", () => {
+    render(
+      <DeviceSelector
+        inputs={[]}
+        isLoading={false}
+        error="Access denied"
+        selectedMIDIInput={null}
+        onSelectMIDIInput={vi.fn()}
+      />,
+    );
+    expect(screen.getByText(/Error: Access denied/i)).toBeInTheDocument();
+  });
+
+  it("should render a list of devices", () => {
+    render(
+      <DeviceSelector
+        inputs={mockDevices}
+        isLoading={false}
+        selectedMIDIInput={null}
+        onSelectMIDIInput={vi.fn()}
+      />,
+    );
+    expect(screen.getByText("Device 1")).toBeInTheDocument();
+    expect(screen.getByText("Device 2")).toBeInTheDocument();
+  });
+
+  it("should call onSelectMIDIInput when a device is clicked", () => {
+    const onSelectMIDIInput = vi.fn();
+    render(
+      <DeviceSelector
+        inputs={mockDevices}
+        isLoading={false}
+        selectedMIDIInput={null}
+        onSelectMIDIInput={onSelectMIDIInput}
+      />,
+    );
+
+    fireEvent.click(screen.getByText("Device 1"));
+    expect(onSelectMIDIInput).toHaveBeenCalledWith(mockDevices[0]);
+  });
+
+  it("should highlight the selected device", () => {
+    render(
+      <DeviceSelector
+        inputs={mockDevices}
+        isLoading={false}
+        selectedMIDIInput={mockDevices[0]}
+        onSelectMIDIInput={vi.fn()}
+      />,
+    );
+
+    const selectedButton = screen.getByText("Device 1").closest("button");
+    expect(selectedButton).toHaveAttribute("aria-pressed", "true");
+  });
+});

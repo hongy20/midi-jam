@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import type { MIDINoteEvent } from "@/lib/midi/midi-listener";
 import { useMIDINotes } from "./use-midi-notes";
 
@@ -17,22 +17,19 @@ export function useActiveNotes(
 ): Set<number> {
   const [activeNotes, setActiveNotes] = useState<Set<number>>(new Set());
 
-  const handleNote = useCallback(
-    (event: MIDINoteEvent) => {
-      setActiveNotes((prev) => {
-        const next = new Set(prev);
-        if (event.type === "note-on") {
-          next.add(event.note);
-          options?.onNoteOn?.(event.note, event.velocity);
-        } else {
-          next.delete(event.note);
-          options?.onNoteOff?.(event.note);
-        }
-        return next;
-      });
-    },
-    [options],
-  );
+  const handleNote = (event: MIDINoteEvent) => {
+    setActiveNotes((prev) => {
+      const next = new Set(prev);
+      if (event.type === "note-on") {
+        next.add(event.note);
+        options?.onNoteOn?.(event.note, event.velocity);
+      } else {
+        next.delete(event.note);
+        options?.onNoteOff?.(event.note);
+      }
+      return next;
+    });
+  };
 
   useMIDINotes(input, handleNote);
 

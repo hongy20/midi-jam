@@ -1,5 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import * as Tone from "tone";
+import {
+  MIDI_COMMAND_CONTROL_CHANGE,
+  MIDI_COMMAND_NOTE_OFF,
+  MIDI_COMMAND_NOTE_ON,
+  MIDI_CONTROLLER_ALL_NOTES_OFF,
+} from "@/lib/midi/constant";
 
 /**
  * Hook to handle MIDI audio synthesis using Tone.js or external MIDI output.
@@ -9,7 +15,6 @@ export function useMidiAudio(
   outputDevice: WebMidi.MIDIOutput | null = null,
 ) {
   const polySynthRef = useRef<Tone.PolySynth | null>(null);
-  const [_isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     // Initialize synth
@@ -32,51 +37,49 @@ export function useMidiAudio(
     };
   }, []);
 
-  const playNote = useCallback(
-    (midiNote: number, velocity: number) => {
-      if (!demoMode) return;
+  const playNote = (midiNote: number, velocity: number) => {
+    if (!demoMode) return;
 
-      if (outputDevice) {
-        // Send Note On to MIDI Output (Channel 1: 0x90)
-        // Velocity is normalized 0-1, MIDI needs 0-127
-        const midiVelocity = Math.floor(velocity * 127);
-        outputDevice.send([0x90, midiNote, midiVelocity]);
-        return;
-      }
+    if (outputDevice) {
+      // Send Note On to MIDI Output
+      // Velocity is normalized 0-1, MIDI needs 0-127
+      const midiVelocity = Math.floor(velocity * 127);
+      outputDevice.send([MIDI_COMMAND_NOTE_ON, midiNote, midiVelocity]);
+      return;
+    }
 
-      if (!polySynthRef.current) return;
+    if (!polySynthRef.current) return;
 
-      // Ensure AudioContext is started
-      if (Tone.getContext().state !== "running") {
-        Tone.start();
-      }
+    // Ensure AudioContext is started
+    if (Tone.getContext().state !== "running") {
+      Tone.start();
+    }
 
-      const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
-      polySynthRef.current.triggerAttack(frequency, Tone.now(), velocity);
-    },
-    [demoMode, outputDevice],
-  );
+    const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
+    polySynthRef.current.triggerAttack(frequency, Tone.now(), velocity);
+  };
 
-  const stopNote = useCallback(
-    (midiNote: number) => {
-      if (outputDevice) {
-        // Send Note Off to MIDI Output (Channel 1: 0x80)
-        outputDevice.send([0x80, midiNote, 0]);
-        return;
-      }
+  const stopNote = (midiNote: number) => {
+    if (outputDevice) {
+      // Send Note Off to MIDI Output
+      outputDevice.send([MIDI_COMMAND_NOTE_OFF, midiNote, 0]);
+      return;
+    }
 
-      if (!polySynthRef.current) return;
+    if (!polySynthRef.current) return;
 
-      const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
-      polySynthRef.current.triggerRelease(frequency, Tone.now());
-    },
-    [outputDevice],
-  );
+    const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
+    polySynthRef.current.triggerRelease(frequency, Tone.now());
+  };
 
   const stopAllNotes = useCallback(() => {
     if (outputDevice) {
-      // Send All Notes Off (Controller 123) to MIDI Output
-      outputDevice.send([0xb0, 123, 0]);
+      // Send All Notes Off to MIDI Output
+      outputDevice.send([
+        MIDI_COMMAND_CONTROL_CHANGE,
+        MIDI_CONTROLLER_ALL_NOTES_OFF,
+        0,
+      ]);
       return;
     }
 
@@ -84,7 +87,7 @@ export function useMidiAudio(
     polySynthRef.current.releaseAll();
   }, [outputDevice]);
 
-  const playCountdownBeep = useCallback((isFinal = false) => {
+  const playCountdownBeep = (isFinal = false) => {
     // Ensure AudioContext is started
     if (Tone.getContext().state !== "running") {
       Tone.start();
@@ -110,7 +113,7 @@ export function useMidiAudio(
 
     // Dispose after play to avoid memory leaks
     setTimeout(() => synth.dispose(), 1000);
-  }, []);
+  };
 
   // Silence all audio immediately when Demo Mode is turned off
   useEffect(() => {
@@ -124,6 +127,5 @@ export function useMidiAudio(
     stopNote,
     stopAllNotes,
     playCountdownBeep,
-    setIsReady,
   };
 }

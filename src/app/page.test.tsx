@@ -3,36 +3,36 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import Home from "./page";
 
 // Mock child components
-vi.mock("@/components/midi/device-selector", () => ({
+vi.mock("@/components/device-selector", () => ({
   DeviceSelector: () => <div data-testid="device-selector">DeviceSelector</div>,
 }));
-vi.mock("@/components/midi/midi-control-center", () => ({
-  MidiControlCenter: () => (
-    <div data-testid="midi-control-center">MidiControlCenter</div>
+vi.mock("@/components/sound-track-selector", () => ({
+  SoundTrackSelector: () => (
+    <div data-testid="sound-track-selector">SoundTrackSelector</div>
   ),
 }));
-vi.mock("@/components/midi/falldown-visualizer", () => ({
+vi.mock("@/components/falldown-visualizer", () => ({
   FalldownVisualizer: () => (
     <div data-testid="falldown-visualizer">FalldownVisualizer</div>
   ),
 }));
-vi.mock("@/components/midi/piano-keyboard", () => ({
+vi.mock("@/components/piano-keyboard", () => ({
   PianoKeyboard: (props: unknown) => (
     <div data-testid="piano-keyboard" data-props={JSON.stringify(props)}>
       PianoKeyboard
     </div>
   ),
 }));
-vi.mock("@/components/midi/midi-header", () => ({
-  MidiHeader: ({
+vi.mock("@/components/midi-control-room", () => ({
+  MidiControlRoom: ({
     isMinimized,
     onToggleMinimize,
   }: {
     isMinimized: boolean;
     onToggleMinimize: () => void;
   }) => (
-    <div data-testid="midi-header">
-      MidiHeader
+    <div data-testid="midi-control-room">
+      MidiControlRoom
       <button
         type="button"
         onClick={onToggleMinimize}
@@ -44,7 +44,7 @@ vi.mock("@/components/midi/midi-header", () => ({
     </div>
   ),
 }));
-vi.mock("@/components/midi/playback-controls", () => ({
+vi.mock("@/components/playback-controls", () => ({
   PlaybackControls: ({
     demoMode,
     onToggleDemo,
@@ -63,18 +63,20 @@ vi.mock("@/components/midi/playback-controls", () => ({
 }));
 
 // Mock hooks
-vi.mock("@/hooks/use-midi-inputs", () => ({
-  useMIDIInputs: () => ({ inputs: [], isLoading: false, error: null }),
+vi.mock("@/hooks/use-midi-devices", () => ({
+  useMIDIDevices: () => ({ inputs: [], isLoading: false, error: null }),
 }));
-vi.mock("@/hooks/use-midi-connection", () => ({
-  useMIDIConnection: () => ({ selectedDevice: null, selectDevice: vi.fn() }),
+vi.mock("@/hooks/use-midi-selection", () => ({
+  useMIDISelection: () => ({
+    selectedMIDIInput: null,
+    selectMIDIInput: vi.fn(),
+  }),
 }));
 vi.mock("@/hooks/use-midi-audio", () => ({
   useMidiAudio: () => ({
     playNote: vi.fn(),
     stopNote: vi.fn(),
     stopAllNotes: vi.fn(),
-    setIsReady: vi.fn(),
   }),
 }));
 vi.mock("@/hooks/use-active-notes", () => ({
@@ -106,8 +108,8 @@ vi.mock("@/hooks/use-midi-player", () => ({
     setSpeed: vi.fn(),
   }),
 }));
-vi.mock("@/lib/action/midi", () => ({
-  getMidiFiles: vi.fn().mockResolvedValue([]),
+vi.mock("@/lib/action/sound-track", () => ({
+  getSoundTracks: vi.fn().mockResolvedValue([]),
 }));
 
 describe("Home Page Layout Refactor", () => {
@@ -118,12 +120,12 @@ describe("Home Page Layout Refactor", () => {
     mockStop.mockClear();
   });
 
-  it("renders MidiHeader and PlaybackControls", async () => {
+  it("renders MidiControlRoom and PlaybackControls", async () => {
     await act(async () => {
       render(<Home />);
     });
 
-    expect(screen.getByTestId("midi-header")).toBeInTheDocument();
+    expect(screen.getByTestId("midi-control-room")).toBeInTheDocument();
     expect(screen.getByTestId("playback-controls")).toBeInTheDocument();
   });
 
@@ -165,7 +167,7 @@ describe("Home Page Layout Refactor", () => {
 
     // Default: playbackNotes should be passed to PianoKeyboard (even if empty in mock)
     // To properly test filtering, we'd need a more dynamic useMidiPlayer mock.
-    // But let's at least test that toggling works and the state is passed to MidiHeader.
+    // But let's at least test that toggling works and the state is passed to MidiControlRoom.
     fireEvent.click(demoToggle);
     expect(screen.getByText(/DemoOn/)).toBeInTheDocument();
   });

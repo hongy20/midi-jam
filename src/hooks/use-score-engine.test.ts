@@ -1,12 +1,12 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import type { MidiEvent } from "../lib/midi/midi-player";
+import type { MidiEvent } from "../lib/midi/midi-parser";
 import { useScoreEngine } from "./use-score-engine";
 
 describe("useScoreEngine", () => {
   const mockEvents: MidiEvent[] = [
-    { time: 1.0, type: "noteOn", note: 60, velocity: 100, track: 0 },
-    { time: 2.0, type: "noteOff", note: 60, velocity: 0, track: 0 },
+    { time: 1.0, type: "noteOn", note: 60, velocity: 100 },
+    { time: 2.0, type: "noteOff", note: 60, velocity: 0 },
   ];
 
   it("should initialize with zero score and combo", () => {
@@ -45,7 +45,7 @@ describe("useScoreEngine", () => {
     // 100 points total, 1 note, press is 50%
     expect(result.current.score).toBe(50);
     expect(result.current.combo).toBe(1);
-    expect(result.current.lastAccuracy).toBe("PERFECT");
+    expect(result.current.lastAccuracy?.type).toBe("PERFECT");
   });
 
   it("should reset combo on wrong key", () => {
@@ -68,9 +68,9 @@ describe("useScoreEngine", () => {
 
   it("should handle chord weighting", () => {
     const chordEvents: MidiEvent[] = [
-      { time: 1.0, type: "noteOn", note: 60, velocity: 100, track: 0 },
-      { time: 1.0, type: "noteOn", note: 64, velocity: 100, track: 0 },
-      { time: 2.0, type: "noteOn", note: 67, velocity: 100, track: 0 },
+      { time: 1.0, type: "noteOn", note: 60, velocity: 100 },
+      { time: 1.0, type: "noteOn", note: 64, velocity: 100 },
+      { time: 2.0, type: "noteOn", note: 67, velocity: 100 },
     ];
     // Chord (60, 64) at t=1.0, Single note (67) at t=2.0
     // Multiplier for chord = 1 + (2-1)*0.1 = 1.1
@@ -125,7 +125,7 @@ describe("useScoreEngine", () => {
     });
 
     expect(result.current.combo).toBe(0);
-    expect(result.current.lastAccuracy).toBe("MISS");
+    expect(result.current.lastAccuracy?.type).toBe("MISS");
   });
 
   it("should reset score and combo when isPlaying becomes false", () => {

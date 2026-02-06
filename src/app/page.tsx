@@ -1,58 +1,53 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { CountdownOverlay } from "@/components/midi/countdown-overlay";
-import { FalldownVisualizer } from "@/components/midi/falldown-visualizer";
-import { MidiHeader } from "@/components/midi/midi-header";
-import { PianoKeyboard } from "@/components/midi/piano-keyboard";
-import { PlaybackControls } from "@/components/midi/playback-controls";
-import { ScoreHud } from "@/components/midi/score-hud";
+import { CountdownOverlay } from "@/components/countdown-overlay";
+import { FalldownVisualizer } from "@/components/falldown-visualizer";
+import { MidiControlRoom } from "@/components/midi-control-room";
+import { PianoKeyboard } from "@/components/piano-keyboard";
+import { PlaybackControls } from "@/components/playback-controls";
+import { ScoreHud } from "@/components/score-hud";
+import type { MidiFile } from "@/components/sound-track-selector";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
-import { useMIDIConnection } from "@/hooks/use-midi-connection";
-import { useMIDIInputs } from "@/hooks/use-midi-inputs";
+import { useMIDIDevices } from "@/hooks/use-midi-devices";
 import { useMidiPlayer } from "@/hooks/use-midi-player";
+import { useMIDISelection } from "@/hooks/use-midi-selection";
 import { useScoreEngine } from "@/hooks/use-score-engine";
-import { getMidiFiles } from "@/lib/action/midi";
+import { getSoundTracks } from "@/lib/action/sound-track";
+import { getNoteUnitOffset, isBlackKey } from "@/lib/device/piano";
+import {
+  MIDI_NOTE_C4,
+  PIANO_88_KEY_MAX,
+  PIANO_88_KEY_MIN,
+} from "@/lib/midi/constant";
+import { loadMidiFile } from "@/lib/midi/midi-loader";
 import {
   getBarLines,
   getMidiEvents,
   getNoteRange,
   getNoteSpans,
-  loadMidiFile,
   type MidiEvent,
   type NoteSpan,
-} from "@/lib/midi/midi-player";
-
-interface MidiFile {
-  name: string;
-  url: string;
-}
+} from "@/lib/midi/midi-parser";
 
 const NOTE_RANGE_BUFFER = 4;
 
 export default function Home() {
-  const {
-    inputs,
-    outputs,
-    isLoading: isMidiLoading,
-    error: midiError,
-  } = useMIDIInputs();
-  const { selectedDevice, selectedOutput, selectDevice } = useMIDIConnection(
-    inputs,
-    outputs,
-  );
+  const { inputs, outputs, isLoading, error } = useMIDIDevices();
+  const { selectedMIDIInput, selectedMIDIOutput, selectMIDIInput } =
+    useMIDISelection(inputs, outputs);
 
   const [demoMode, setDemoMode] = useState(false);
 
   // Audio setup
   const { playNote, stopNote, stopAllNotes, playCountdownBeep } = useMidiAudio(
     demoMode,
-    selectedOutput,
+    selectedMIDIOutput,
   );
 
   // Live input tracking
-  const liveActiveNotes = useActiveNotes(selectedDevice, {
+  const liveActiveNotes = useActiveNotes(selectedMIDIInput, {
     onNoteOn: playNote,
     onNoteOff: stopNote,
   });
@@ -103,6 +98,13 @@ export default function Home() {
     selectedFile?.url,
   );
 
+  const min = noteRange?.min ?? PIANO_88_KEY_MIN;
+  const max = noteRange?.max ?? PIANO_88_KEY_MAX;
+  const minUnit = getNoteUnitOffset(min);
+  const maxUnit = getNoteUnitOffset(max) + (isBlackKey(max) ? 2 : 3);
+  const startUnit = minUnit;
+  const visibleUnits = maxUnit - minUnit;
+
   const formatTime = (seconds: number) => {
     const totalSeconds = Math.max(0, Math.floor(seconds));
     const mins = Math.floor(totalSeconds / 60);
@@ -110,7 +112,7 @@ export default function Home() {
     return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const handleToggleMinimize = useCallback(() => {
+  const handleToggleMinimize = () => {
     if (isMinimized) {
       if (isPlaying) {
         setWasPlayingBeforeExpand(true);
@@ -125,11 +127,11 @@ export default function Home() {
       }
     }
     setIsMinimized(!isMinimized);
-  }, [isMinimized, isPlaying, pause, play, wasPlayingBeforeExpand]);
+  };
 
   // Load file list
   useEffect(() => {
-    getMidiFiles().then(setMidiFiles);
+    getSoundTracks().then(setMidiFiles);
   }, []);
 
   // Handle countdown beeps
@@ -155,11 +157,16 @@ export default function Home() {
 
         const range = getNoteRange(events);
         if (range) {
-          let min = Math.max(21, Math.min(60, range.min - NOTE_RANGE_BUFFER));
-          let max = Math.min(108, Math.max(60, range.max + NOTE_RANGE_BUFFER));
-          const isBlack = (n: number) => [1, 3, 6, 8, 10].includes(n % 12);
-          if (isBlack(min)) min--;
-          if (isBlack(max)) max++;
+          let min = Math.max(
+            PIANO_88_KEY_MIN,
+            Math.min(MIDI_NOTE_C4, range.min - NOTE_RANGE_BUFFER),
+          );
+          let max = Math.min(
+            PIANO_88_KEY_MAX,
+            Math.max(MIDI_NOTE_C4, range.max + NOTE_RANGE_BUFFER),
+          );
+          if (isBlackKey(min)) min--;
+          if (isBlackKey(max)) max++;
           setNoteRange({ min, max });
         } else {
           setNoteRange(null);
@@ -174,9 +181,9 @@ export default function Home() {
     [stop],
   );
 
-  const handleSelectDevice = (device: WebMidi.MIDIInput | null) => {
-    selectDevice(device);
-    if (device) {
+  const handleSelectMIDIInput = (input: WebMidi.MIDIInput | null) => {
+    selectMIDIInput(input);
+    if (input) {
       setIsMinimized(true);
       setWasPlayingBeforeExpand(false);
       if (!selectedFile) setNoteRange(null);
@@ -199,12 +206,12 @@ export default function Home() {
       </div>
 
       {/* Top Bar Controls */}
-      <MidiHeader
-        devices={inputs}
-        isLoading={isMidiLoading}
-        error={midiError}
-        selectedDevice={selectedDevice}
-        onSelectDevice={handleSelectDevice}
+      <MidiControlRoom
+        inputs={inputs}
+        isLoading={isLoading}
+        error={error}
+        selectedMIDIInput={selectedMIDIInput}
+        onSelectMIDIInput={handleSelectMIDIInput}
         files={midiFiles}
         selectedFile={selectedFile}
         onSelectFile={handleSelectFile}
@@ -253,19 +260,31 @@ export default function Home() {
             bestCombo={bestCombo}
           />
         )}
-        {selectedDevice || selectedFile ? (
+        {selectedMIDIInput || selectedFile ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center overflow-hidden">
             {/* 3D Immersive Stage */}
-            <div className="relative w-full h-[85vh] [perspective:1500px] [perspective-origin:50%_50%] flex items-center justify-center px-4">
+            <div className="relative w-full h-[85vh] perspective-[1500px] perspective-origin-[50%_50%] flex items-center justify-center px-4">
               <div
                 key={selectedFile?.url || "jam"}
-                className="w-full h-full flex flex-col bg-transparent rounded-[1.5rem] overflow-hidden transition-transform duration-1000 ease-out [transform-style:preserve-3d] [transform:rotateX(25deg)_scale(0.9)]"
+                className="w-full h-full flex flex-col bg-transparent rounded-3xl overflow-hidden transition-transform duration-1000 ease-out transform-3d transform-[rotateX(25deg)_scale(0.9)]"
+                style={
+                  {
+                    "--piano-start-unit": startUnit,
+                    "--piano-visible-units": visibleUnits,
+                  } as React.CSSProperties
+                }
               >
                 <FalldownVisualizer
                   spans={noteSpans}
                   barLines={barLines}
                   currentTime={currentTime}
                   speed={speed}
+                  liveNotes={liveActiveNotes}
+                  playbackNotes={
+                    demoMode
+                      ? new Set(playbackActiveNotes.keys())
+                      : new Set<number>()
+                  }
                   rangeStart={noteRange?.min}
                   rangeEnd={noteRange?.max}
                 />
