@@ -116,10 +116,7 @@ export const FalldownVisualizer = ({
           willChange: "transform",
         }}
       >
-        <BarLines
-          barLines={barLines}
-          pixelsPerSecond={PIXELS_PER_SECOND}
-        />
+        <BarLines barLines={barLines} pixelsPerSecond={PIXELS_PER_SECOND} />
 
         <NoteSpans
           spans={spans}

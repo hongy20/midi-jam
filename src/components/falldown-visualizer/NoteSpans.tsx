@@ -65,10 +65,10 @@ export const NoteSpans = memo(
         {spans.map((note) => {
           // Filter by range - this is relatively static compared to time filtering
           if (note.note < rangeStart || note.note > rangeEnd) return null;
-          
+
           const pos = getHorizontalPosition(note.note);
           if (!pos) return null;
-          
+
           return (
             <NoteItem
               key={note.id}
