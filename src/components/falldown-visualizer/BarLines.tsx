@@ -1,11 +1,9 @@
-import { memo } from "react";
-
 interface BarLinesProps {
   barLines: number[];
   pixelsPerSecond: number;
 }
 
-export const BarLines = memo(({ barLines, pixelsPerSecond }: BarLinesProps) => {
+export const BarLines = ({ barLines, pixelsPerSecond }: BarLinesProps) => {
   return (
     <>
       {barLines.map((time) => (
@@ -21,6 +19,4 @@ export const BarLines = memo(({ barLines, pixelsPerSecond }: BarLinesProps) => {
       ))}
     </>
   );
-});
-
-BarLines.displayName = "BarLines";
+};
