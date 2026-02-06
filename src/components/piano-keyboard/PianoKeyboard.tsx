@@ -20,11 +20,27 @@ interface PianoKeyboardProps {
  * Static piano keys that only re-render when the range changes.
  */
 const PianoKeys = ({ notes }: { notes: number[] }) => {
+  const NOTE_NAMES = [
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B",
+  ];
+
   return (
     <>
       {notes.map((note) => {
         const isBlack = isBlackKey(note);
         const noteClass = styles[`note-${note}`];
+        const noteName = `${NOTE_NAMES[note % 12]}${Math.floor(note / 12) - 1}`;
 
         return (
           <button
@@ -32,7 +48,7 @@ const PianoKeys = ({ notes }: { notes: number[] }) => {
             type="button"
             className={`${styles.key} ${noteClass}`}
             data-black={isBlack}
-            aria-label={`Note ${note} Key`}
+            aria-label={`${noteName} ${isBlack ? "Black" : "White"} Key`}
             tabIndex={-1}
           >
             {!isBlack && note === MIDI_NOTE_C4 && (
@@ -59,13 +75,13 @@ const KeyGlows = ({
   rangeStart: number;
   rangeEnd: number;
 }) => {
-  const activeNotesInRange = useMemo(() => {
-    const active = new Set([
-      ...Array.from(liveNotes),
-      ...Array.from(playbackNotes),
-    ]);
-    return Array.from(active).filter((n) => n >= rangeStart && n <= rangeEnd);
-  }, [liveNotes, playbackNotes, rangeStart, rangeEnd]);
+  const active = new Set([
+    ...Array.from(liveNotes),
+    ...Array.from(playbackNotes),
+  ]);
+  const activeNotesInRange = Array.from(active).filter(
+    (n) => n >= rangeStart && n <= rangeEnd,
+  );
 
   return (
     <>
@@ -101,13 +117,10 @@ export const PianoKeyboard = ({
   rangeStart = PIANO_88_KEY_MIN,
   rangeEnd = PIANO_88_KEY_MAX,
 }: PianoKeyboardProps) => {
-  const visibleNotes = useMemo(() => {
-    const list = [];
-    for (let n = rangeStart; n <= rangeEnd; n++) {
-      list.push(n);
-    }
-    return list;
-  }, [rangeStart, rangeEnd]);
+  const visibleNotes = [];
+  for (let n = rangeStart; n <= rangeEnd; n++) {
+    visibleNotes.push(n);
+  }
 
   return (
     <div className="flex flex-col w-full select-none relative z-50">

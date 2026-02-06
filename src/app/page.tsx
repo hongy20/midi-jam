@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CountdownOverlay } from "@/components/countdown-overlay";
 import { FalldownVisualizer } from "@/components/falldown-visualizer";
 import { MidiControlRoom } from "@/components/midi-control-room";
@@ -98,16 +98,12 @@ export default function Home() {
     selectedFile?.url,
   );
 
-  const { startUnit, visibleUnits } = useMemo(() => {
-    const min = noteRange?.min ?? PIANO_88_KEY_MIN;
-    const max = noteRange?.max ?? PIANO_88_KEY_MAX;
-    const minUnit = getNoteUnitOffset(min);
-    const maxUnit = getNoteUnitOffset(max) + (isBlackKey(max) ? 2 : 3);
-    return {
-      startUnit: minUnit,
-      visibleUnits: maxUnit - minUnit,
-    };
-  }, [noteRange]);
+  const min = noteRange?.min ?? PIANO_88_KEY_MIN;
+  const max = noteRange?.max ?? PIANO_88_KEY_MAX;
+  const minUnit = getNoteUnitOffset(min);
+  const maxUnit = getNoteUnitOffset(max) + (isBlackKey(max) ? 2 : 3);
+  const startUnit = minUnit;
+  const visibleUnits = maxUnit - minUnit;
 
   const formatTime = (seconds: number) => {
     const totalSeconds = Math.max(0, Math.floor(seconds));

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface UsePlaybackClockOptions {
   duration: number;
@@ -30,7 +30,7 @@ export function usePlaybackClock({
     onTickRef.current = onTick;
   }, [onTick]);
 
-  const stop = useCallback(() => {
+  const stop = () => {
     setIsPlaying(false);
     setCurrentTime(initialTime);
     startTimeRef.current = null;
@@ -38,9 +38,9 @@ export function usePlaybackClock({
       cancelAnimationFrame(requestRef.current);
       requestRef.current = null;
     }
-  }, [initialTime]);
+  };
 
-  const play = useCallback(() => {
+  const play = () => {
     if (isPlaying) return;
     setIsPlaying(true);
     // This is the core of pause/resume and speed correction. It sets the
@@ -52,9 +52,9 @@ export function usePlaybackClock({
     } else {
       startTimeRef.current = performance.now() - (currentTime * 1000) / speed;
     }
-  }, [isPlaying, currentTime, speed]);
+  };
 
-  const pause = useCallback(() => {
+  const pause = () => {
     if (!isPlaying) return;
     setIsPlaying(false);
     // The current time is already frozen in the `currentTime` state,
@@ -63,7 +63,7 @@ export function usePlaybackClock({
       cancelAnimationFrame(requestRef.current);
       requestRef.current = null;
     }
-  }, [isPlaying]);
+  };
 
   // When speed changes, we need to adjust the start time reference
   // to prevent the playback position from jumping.

@@ -32,10 +32,7 @@ export function useScoreEngine(
   const [highScore, setHighScore] = useState(0);
   const [bestCombo, setBestCombo] = useState(0);
 
-  const eventWeights = useMemo(
-    () => calculateNoteWeights(midiEvents),
-    [midiEvents],
-  );
+  const eventWeights = calculateNoteWeights(midiEvents);
 
   const processedNotesRef = useRef<Set<number>>(new Set());
   const prevLiveNotesRef = useRef<Set<number>>(new Set());

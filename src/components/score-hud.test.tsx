@@ -11,7 +11,7 @@ describe("ScoreHud", () => {
         lastAccuracy={null}
         highScore={500}
         bestCombo={10}
-      />
+      />,
     );
 
     expect(screen.getByText("123.4")).toBeInTheDocument();
@@ -27,7 +27,7 @@ describe("ScoreHud", () => {
         lastAccuracy={null}
         highScore={0}
         bestCombo={0}
-      />
+      />,
     );
 
     expect(screen.getByText("5x COMBO")).toBeInTheDocument();
@@ -41,7 +41,7 @@ describe("ScoreHud", () => {
         lastAccuracy={null}
         highScore={0}
         bestCombo={0}
-      />
+      />,
     );
 
     expect(screen.queryByText("1x COMBO")).not.toBeInTheDocument();
@@ -55,7 +55,7 @@ describe("ScoreHud", () => {
         lastAccuracy={{ type: "PERFECT", id: 123 }}
         highScore={0}
         bestCombo={0}
-      />
+      />,
     );
 
     expect(screen.getByText("PERFECT!")).toBeInTheDocument();

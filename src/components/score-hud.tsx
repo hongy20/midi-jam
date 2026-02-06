@@ -21,17 +21,19 @@ const AccuracyFeedback = ({
   if (!accuracy || !accuracy.type) return <div className="h-16" />;
 
   return (
-    <div className="h-16 flex items-center justify-center">
+    <output
+      className="h-16 flex items-center justify-center"
+      aria-live="polite"
+    >
       <div
         key={accuracy.id}
         className="text-4xl font-black tracking-tighter italic text-white animate-accuracy-pop"
       >
         {accuracy.type}!
       </div>
-    </div>
+    </output>
   );
 };
-
 /**
  * Static-ish stats like high score and best combo.
  */

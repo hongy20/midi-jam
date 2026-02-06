@@ -41,13 +41,13 @@ const BeamEffects = ({
   playbackNotes: Set<number>;
 }) => {
   // Identify all unique active notes in the current range
-  const activeNotesInRange = useMemo(() => {
-    const active = new Set([
-      ...Array.from(liveNotes),
-      ...Array.from(playbackNotes),
-    ]);
-    return Array.from(active).filter((n) => n >= rangeStart && n <= rangeEnd);
-  }, [liveNotes, playbackNotes, rangeStart, rangeEnd]);
+  const active = new Set([
+    ...Array.from(liveNotes),
+    ...Array.from(playbackNotes),
+  ]);
+  const activeNotesInRange = Array.from(active).filter(
+    (n) => n >= rangeStart && n <= rangeEnd,
+  );
 
   return (
     <>
@@ -86,13 +86,10 @@ export const BackgroundGrid = ({
   liveNotes,
   playbackNotes,
 }: BackgroundGridProps) => {
-  const notes = useMemo(() => {
-    const list = [];
-    for (let n = rangeStart; n <= rangeEnd; n++) {
-      list.push(n);
-    }
-    return list;
-  }, [rangeStart, rangeEnd]);
+  const notes = [];
+  for (let n = rangeStart; n <= rangeEnd; n++) {
+    notes.push(n);
+  }
 
   return (
     <div className={styles.container}>

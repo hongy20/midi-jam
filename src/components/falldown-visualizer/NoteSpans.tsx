@@ -8,7 +8,7 @@ interface NoteItemProps {
 }
 
 /**
- * Individual note component, memoized to avoid re-rendering unless position/size changes.
+ * Individual note component.
  */
 const NoteItem = ({ note, left, width, pixelsPerSecond }: NoteItemProps) => {
   const bottom = note.startTime * pixelsPerSecond;

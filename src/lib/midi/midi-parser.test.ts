@@ -1,6 +1,11 @@
-import { describe, expect, it } from "vitest";
-import { getMidiEvents, getNoteSpans, getNoteRange, getBarLines } from "./midi-parser";
 import type { Midi } from "@tonejs/midi";
+import { describe, expect, it } from "vitest";
+import {
+  getBarLines,
+  getMidiEvents,
+  getNoteRange,
+  getNoteSpans,
+} from "./midi-parser";
 
 describe("midi-parser", () => {
   const mockMidi = {

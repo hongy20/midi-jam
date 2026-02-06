@@ -52,43 +52,37 @@ export const FalldownVisualizer = ({
 
   const PIXELS_PER_SECOND = 100 * speed;
 
-  const { whiteKeysCount, whiteKeyIndices } = useMemo(() => {
-    const indices: Record<number, number> = {};
-    let count = 0;
-    for (let i = rangeStart; i <= rangeEnd; i++) {
-      if (!isBlackKey(i)) {
-        indices[i] = count++;
-      }
+  const indices: Record<number, number> = {};
+  let whiteKeysCount = 0;
+  for (let i = rangeStart; i <= rangeEnd; i++) {
+    if (!isBlackKey(i)) {
+      indices[i] = whiteKeysCount++;
     }
-    return {
-      whiteKeysCount: count,
-      whiteKeyIndices: indices,
-    };
-  }, [rangeStart, rangeEnd]);
+  }
 
-  const getHorizontalPosition = useMemo(() => {
-    return (note: number) => {
-      if (!isBlackKey(note)) {
-        const index = whiteKeyIndices[note];
-        if (index === undefined) return null;
-        return {
-          leftRatio: index / whiteKeysCount,
-          widthRatio: 1 / whiteKeysCount,
-        };
-      }
-      const leftWhiteKeyIndex = whiteKeyIndices[note - 1];
-      if (leftWhiteKeyIndex === undefined) return null;
+  const getHorizontalPosition = (note: number) => {
+    if (!isBlackKey(note)) {
+      const index = indices[note];
+      if (index === undefined) return null;
       return {
-        leftRatio: (leftWhiteKeyIndex + 0.7) / whiteKeysCount,
-        widthRatio: (1 / whiteKeysCount) * 0.6,
+        leftRatio: index / whiteKeysCount,
+        widthRatio: 1 / whiteKeysCount,
       };
+    }
+    const leftWhiteKeyIndex = indices[note - 1];
+    if (leftWhiteKeyIndex === undefined) return null;
+    return {
+      leftRatio: (leftWhiteKeyIndex + 0.7) / whiteKeysCount,
+      widthRatio: (1 / whiteKeysCount) * 0.6,
     };
-  }, [whiteKeyIndices, whiteKeysCount]);
+  };
 
   return (
     <div
       ref={containerRef}
       className="relative flex-1 min-h-0 overflow-hidden bg-white/10 backdrop-blur-2xl rounded-t-3xl border-t border-x border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
+      role="img"
+      aria-label="MIDI notes falling down synchronized with the piano keyboard"
     >
       <BackgroundGrid
         rangeStart={rangeStart}
