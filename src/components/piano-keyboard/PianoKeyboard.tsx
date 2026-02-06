@@ -17,9 +17,83 @@ interface PianoKeyboardProps {
 }
 
 /**
+ * Static piano keys that only re-render when the range changes.
+ */
+const PianoKeys = ({ notes }: { notes: number[] }) => {
+  return (
+    <>
+      {notes.map((note) => {
+        const isBlack = isBlackKey(note);
+        const noteClass = styles[`note-${note}`];
+
+        return (
+          <button
+            key={`key-${note}`}
+            type="button"
+            className={`${styles.key} ${noteClass}`}
+            data-black={isBlack}
+            aria-label={`Note ${note} Key`}
+            tabIndex={-1}
+          >
+            {!isBlack && note === MIDI_NOTE_C4 && (
+              <span className={styles.label}>C4</span>
+            )}
+          </button>
+        );
+      })}
+    </>
+  );
+};
+
+/**
+ * Dynamic glow effects that only render for active notes.
+ */
+const KeyGlows = ({
+  liveNotes,
+  playbackNotes,
+  rangeStart,
+  rangeEnd,
+}: {
+  liveNotes: Set<number>;
+  playbackNotes: Set<number>;
+  rangeStart: number;
+  rangeEnd: number;
+}) => {
+  const activeNotesInRange = useMemo(() => {
+    const active = new Set([
+      ...Array.from(liveNotes),
+      ...Array.from(playbackNotes),
+    ]);
+    return Array.from(active).filter((n) => n >= rangeStart && n <= rangeEnd);
+  }, [liveNotes, playbackNotes, rangeStart, rangeEnd]);
+
+  return (
+    <>
+      {activeNotesInRange.map((note) => {
+        const isLive = liveNotes.has(note);
+        const isPlayback = playbackNotes.has(note);
+        const source =
+          isLive && isPlayback ? "both" : isLive ? "live" : "playback";
+        const isBlack = isBlackKey(note);
+        const noteClass = styles[`note-${note}`];
+
+        return (
+          <div
+            key={`glow-${note}`}
+            className={`${styles.glow} ${noteClass}`}
+            data-active="true"
+            data-black={isBlack}
+            data-source={source}
+          />
+        );
+      })}
+    </>
+  );
+};
+
+/**
  * A responsive visual representation of a piano keyboard.
- * Optimized via a pure CSS Grid with zero-math React rendering.
- * Alignment variables are provided by the parent container.
+ * Separates static key layout from dynamic visual feedback for high performance.
  */
 export const PianoKeyboard = ({
   liveNotes,
@@ -35,15 +109,6 @@ export const PianoKeyboard = ({
     return list;
   }, [rangeStart, rangeEnd]);
 
-  const getSource = (note: number) => {
-    const isLive = liveNotes.has(note);
-    const isPlayback = playbackNotes.has(note);
-    if (isLive && isPlayback) return "both";
-    if (isLive) return "live";
-    if (isPlayback) return "playback";
-    return "none";
-  };
-
   return (
     <div className="flex flex-col w-full select-none relative z-50">
       <div
@@ -51,37 +116,13 @@ export const PianoKeyboard = ({
         role="img"
         aria-label={`Piano keyboard (${rangeStart} to ${rangeEnd})`}
       >
-        {visibleNotes.map((note) => {
-          const source = getSource(note);
-          const active = source !== "none";
-          const noteClass = styles[`note-${note}`];
-          const isBlack = isBlackKey(note);
-
-          return (
-            <div key={note} className="contents">
-              {/* Piano Key */}
-              <button
-                type="button"
-                className={`${styles.key} ${noteClass}`}
-                data-black={isBlack}
-                aria-pressed={active}
-                aria-label={`Note ${note} Key`}
-                tabIndex={-1}
-              >
-                <div
-                  className={styles.glow}
-                  data-active={active}
-                  data-source={source}
-                />
-
-                {/* C4 Label positioned on the key */}
-                {!isBlack && note === MIDI_NOTE_C4 && (
-                  <span className={styles.label}>C4</span>
-                )}
-              </button>
-            </div>
-          );
-        })}
+        <PianoKeys notes={visibleNotes} />
+        <KeyGlows
+          liveNotes={liveNotes}
+          playbackNotes={playbackNotes}
+          rangeStart={rangeStart}
+          rangeEnd={rangeEnd}
+        />
       </div>
     </div>
   );
