@@ -23,5 +23,5 @@ Finalize the refactoring track once the user is satisfied with the codebase stat
     - [x] Biome linting and formatting check.
     - [x] TypeScript type-checking (`tsc`).
     - [x] Verify overall test coverage (>80%).
-- [~] Task: Final performance and accessibility audit.
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Final Quality Sweep & Track Completion' (Protocol in workflow.md)
+- [x] Task: Final performance and accessibility audit. [4b1bde4]
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Final Quality Sweep & Track Completion' (Protocol in workflow.md) [a4c325a]
