@@ -15,3 +15,15 @@ export function isBlackKey(midiNote: number): boolean {
   const n = midiNote % 12;
   return BLACK_KEY_INDICES.includes(n);
 }
+
+// 21 units per octave (3 units per white key, 2 per black key)
+export const PIANO_OFFSETS = [0, 2, 3, 5, 6, 9, 11, 12, 14, 15, 17, 18];
+
+/**
+ * Calculates the horizontal unit offset for a MIDI note in a 21-unit-per-octave grid.
+ */
+export function getNoteUnitOffset(note: number): number {
+  const octave = Math.floor(note / 12);
+  const semitone = note % 12;
+  return octave * 21 + PIANO_OFFSETS[semitone];
+}

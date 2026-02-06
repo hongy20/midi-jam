@@ -1,65 +1,66 @@
-import { memo } from "react";
 import { isBlackKey } from "@/lib/device/piano";
+import styles from "./background-grid.module.css";
 
 interface BackgroundGridProps {
-  allNotesInRange: number[];
-  whiteKeyNotes: number[];
-  getHorizontalPosition: (note: number) => {
-    leftRatio: number;
-    widthRatio: number;
-  } | null;
-  whiteKeysCount: number;
-  containerWidth: number;
+  rangeStart: number;
+  rangeEnd: number;
+  liveNotes: Set<number>;
+  playbackNotes: Set<number>;
 }
 
 /**
- * A memoized background component to prevent re-rendering lanes and grid lines
- * on every frame update of the falling notes.
+ * A background component that renders semitone-aligned lanes and note beams.
+ * Alignment is handled via the shared high-resolution CSS Grid.
  */
-export const BackgroundGrid = memo(
-  ({
-    allNotesInRange,
-    whiteKeyNotes,
-    getHorizontalPosition,
-    whiteKeysCount,
-    containerWidth,
-  }: BackgroundGridProps) => (
-    <div className="absolute inset-0 w-full mx-auto pointer-events-none">
-      {/* Render Background Lanes */}
-      {allNotesInRange.map((note) => {
-        const pos = getHorizontalPosition(note);
-        if (!pos) return null;
+export const BackgroundGrid = ({
+  rangeStart,
+  rangeEnd,
+  liveNotes,
+  playbackNotes,
+}: BackgroundGridProps) => {
+  const notes = [];
+  for (let n = rangeStart; n <= rangeEnd; n++) {
+    notes.push(n);
+  }
+
+  const getSource = (note: number) => {
+    const isLive = liveNotes.has(note);
+    const isPlayback = playbackNotes.has(note);
+    if (isLive && isPlayback) return "both";
+    if (isLive) return "live";
+    if (isPlayback) return "playback";
+    return "none";
+  };
+
+  return (
+    <div className={styles.container}>
+      {notes.map((note) => {
+        const source = getSource(note);
+        const active = source !== "none";
+        const isBlack = isBlackKey(note);
+        const noteClass = styles[`note-${note}`];
+
         return (
-          <div
-            key={`lane-${note}`}
-            className={`absolute top-0 bottom-0 transition-colors duration-500 ${
-              isBlackKey(note) ? "bg-black/10" : "bg-white/2"
-            }`}
-            style={{
-              width: `${pos.widthRatio * containerWidth}px`,
-              transform: `translate3d(${pos.leftRatio * containerWidth}px, 0, 0)`,
-            }}
-          />
+          <div key={note} className="contents">
+            {/* Background Lane */}
+            <div
+              className={`${styles.lane} ${noteClass}`}
+              data-black={isBlack}
+            />
+
+            {/* Note Beam Effect (Colored by key type) */}
+            <div
+              className={`${styles.beam} ${noteClass}`}
+              data-active={active}
+              data-black={isBlack}
+              data-source={source}
+            >
+              <div className={styles.flare} data-source={source} />
+              <div className={styles.beamLine} data-source={source} />
+            </div>
+          </div>
         );
       })}
-
-      {/* Render Vertical Key Lines (Background Grid) */}
-      {whiteKeyNotes.map((note, i) => (
-        <div
-          key={`v-line-${note}`}
-          className="absolute top-0 bottom-0 w-px bg-white/20 border-r border-white/10"
-          style={{
-            transform: `translate3d(${(i / whiteKeysCount) * containerWidth}px, 0, 0)`,
-          }}
-        />
-      ))}
-      {/* Rightmost edge line */}
-      <div
-        className="absolute top-0 bottom-0 w-px bg-white/20 border-r border-white/10"
-        style={{ transform: `translate3d(${containerWidth}px, 0, 0)` }}
-      />
     </div>
-  ),
-);
-
-BackgroundGrid.displayName = "BackgroundGrid";
+  );
+};

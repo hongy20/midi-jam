@@ -21,6 +21,8 @@ describe("FalldownVisualizer", () => {
         currentTime={0}
         speed={1}
         barLines={[]}
+        liveNotes={new Set()}
+        playbackNotes={new Set()}
       />,
     );
 
@@ -36,6 +38,8 @@ describe("FalldownVisualizer", () => {
         currentTime={3}
         speed={1}
         barLines={[]}
+        liveNotes={new Set()}
+        playbackNotes={new Set()}
       />,
     );
 

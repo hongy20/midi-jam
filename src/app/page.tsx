@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { CountdownOverlay } from "@/components/countdown-overlay";
 import { FalldownVisualizer } from "@/components/falldown-visualizer";
 import { MidiControlRoom } from "@/components/midi-control-room";
@@ -15,7 +15,7 @@ import { useMidiPlayer } from "@/hooks/use-midi-player";
 import { useMIDISelection } from "@/hooks/use-midi-selection";
 import { useScoreEngine } from "@/hooks/use-score-engine";
 import { getSoundTracks } from "@/lib/action/sound-track";
-import { isBlackKey } from "@/lib/device/piano";
+import { getNoteUnitOffset, isBlackKey } from "@/lib/device/piano";
 import {
   MIDI_NOTE_C4,
   PIANO_88_KEY_MAX,
@@ -97,6 +97,17 @@ export default function Home() {
     isPlaying,
     selectedFile?.url,
   );
+
+  const { startUnit, visibleUnits } = useMemo(() => {
+    const min = noteRange?.min ?? PIANO_88_KEY_MIN;
+    const max = noteRange?.max ?? PIANO_88_KEY_MAX;
+    const minUnit = getNoteUnitOffset(min);
+    const maxUnit = getNoteUnitOffset(max) + (isBlackKey(max) ? 2 : 3);
+    return {
+      startUnit: minUnit,
+      visibleUnits: maxUnit - minUnit,
+    };
+  }, [noteRange]);
 
   const formatTime = (seconds: number) => {
     const totalSeconds = Math.max(0, Math.floor(seconds));
@@ -260,12 +271,24 @@ export default function Home() {
               <div
                 key={selectedFile?.url || "jam"}
                 className="w-full h-full flex flex-col bg-transparent rounded-3xl overflow-hidden transition-transform duration-1000 ease-out transform-3d transform-[rotateX(25deg)_scale(0.9)]"
+                style={
+                  {
+                    "--piano-start-unit": startUnit,
+                    "--piano-visible-units": visibleUnits,
+                  } as React.CSSProperties
+                }
               >
                 <FalldownVisualizer
                   spans={noteSpans}
                   barLines={barLines}
                   currentTime={currentTime}
                   speed={speed}
+                  liveNotes={liveActiveNotes}
+                  playbackNotes={
+                    demoMode
+                      ? new Set(playbackActiveNotes.keys())
+                      : new Set<number>()
+                  }
                   rangeStart={noteRange?.min}
                   rangeEnd={noteRange?.max}
                 />

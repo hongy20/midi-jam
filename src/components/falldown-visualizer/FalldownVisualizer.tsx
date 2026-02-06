@@ -13,6 +13,8 @@ interface FalldownVisualizerProps {
   barLines: number[];
   currentTime: number;
   speed: number;
+  liveNotes: Set<number>;
+  playbackNotes: Set<number>;
   rangeStart?: number;
   rangeEnd?: number;
 }
@@ -26,6 +28,8 @@ export const FalldownVisualizer = ({
   barLines,
   currentTime,
   speed,
+  liveNotes,
+  playbackNotes,
   rangeStart = PIANO_88_KEY_MIN,
   rangeEnd = PIANO_88_KEY_MAX,
 }: FalldownVisualizerProps) => {
@@ -48,26 +52,19 @@ export const FalldownVisualizer = ({
 
   const PIXELS_PER_SECOND = 100 * speed;
 
-  const { whiteKeysCount, whiteKeyIndices, whiteKeyNotes, allNotesInRange } =
-    useMemo(() => {
-      const indices: Record<number, number> = {};
-      const notes: number[] = [];
-      const all: number[] = [];
-      let count = 0;
-      for (let i = rangeStart; i <= rangeEnd; i++) {
-        all.push(i);
-        if (!isBlackKey(i)) {
-          indices[i] = count++;
-          notes.push(i);
-        }
+  const { whiteKeysCount, whiteKeyIndices } = useMemo(() => {
+    const indices: Record<number, number> = {};
+    let count = 0;
+    for (let i = rangeStart; i <= rangeEnd; i++) {
+      if (!isBlackKey(i)) {
+        indices[i] = count++;
       }
-      return {
-        whiteKeysCount: count,
-        whiteKeyIndices: indices,
-        whiteKeyNotes: notes,
-        allNotesInRange: all,
-      };
-    }, [rangeStart, rangeEnd]);
+    }
+    return {
+      whiteKeysCount: count,
+      whiteKeyIndices: indices,
+    };
+  }, [rangeStart, rangeEnd]);
 
   const getHorizontalPosition = useMemo(() => {
     return (note: number) => {
@@ -94,11 +91,10 @@ export const FalldownVisualizer = ({
       className="relative flex-1 min-h-0 overflow-hidden bg-white/10 backdrop-blur-2xl rounded-t-3xl border-t border-x border-white/20 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)]"
     >
       <BackgroundGrid
-        allNotesInRange={allNotesInRange}
-        whiteKeyNotes={whiteKeyNotes}
-        getHorizontalPosition={getHorizontalPosition}
-        whiteKeysCount={whiteKeysCount}
-        containerWidth={dimensions.width}
+        rangeStart={rangeStart}
+        rangeEnd={rangeEnd}
+        liveNotes={liveNotes}
+        playbackNotes={playbackNotes}
       />
 
       {/* 

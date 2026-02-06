@@ -16,19 +16,10 @@ interface PianoKeyboardProps {
   rangeEnd?: number;
 }
 
-// 21 units per octave (3 units per white key, 2 per black key)
-const OFFSETS = [0, 2, 3, 5, 6, 9, 11, 12, 14, 15, 17, 18];
-
-const getNoteUnit = (note: number) => {
-  const octave = Math.floor(note / 12);
-  const semitone = note % 12;
-  return octave * 21 + OFFSETS[semitone];
-};
-
 /**
  * A responsive visual representation of a piano keyboard.
  * Optimized via a pure CSS Grid with zero-math React rendering.
- * C4 label is positioned on top of the corresponding white key.
+ * Alignment variables are provided by the parent container.
  */
 export const PianoKeyboard = ({
   liveNotes,
@@ -36,19 +27,12 @@ export const PianoKeyboard = ({
   rangeStart = PIANO_88_KEY_MIN,
   rangeEnd = PIANO_88_KEY_MAX,
 }: PianoKeyboardProps) => {
-  const { visibleNotes, startUnit, visibleUnits } = useMemo(() => {
+  const visibleNotes = useMemo(() => {
     const list = [];
-    const minUnit = getNoteUnit(rangeStart);
-    const maxUnit = getNoteUnit(rangeEnd) + (isBlackKey(rangeEnd) ? 2 : 3);
-
     for (let n = rangeStart; n <= rangeEnd; n++) {
       list.push(n);
     }
-    return {
-      visibleNotes: list,
-      startUnit: minUnit,
-      visibleUnits: maxUnit - minUnit,
-    };
+    return list;
   }, [rangeStart, rangeEnd]);
 
   const getSource = (note: number) => {
@@ -64,12 +48,6 @@ export const PianoKeyboard = ({
     <div className="flex flex-col w-full select-none">
       <div
         className={styles.container}
-        style={
-          {
-            "--piano-start-unit": startUnit,
-            "--piano-visible-units": visibleUnits,
-          } as React.CSSProperties
-        }
         role="img"
         aria-label={`Piano keyboard (${rangeStart} to ${rangeEnd})`}
       >
@@ -81,15 +59,6 @@ export const PianoKeyboard = ({
 
           return (
             <div key={note} className="contents">
-              {/* Note Beam Effect */}
-              <div
-                className={`${styles.beam} ${noteClass}`}
-                data-active={active}
-              >
-                <div className={styles.flare} data-source={source} />
-                <div className={styles.beamLine} data-source={source} />
-              </div>
-
               {/* Piano Key */}
               <button
                 type="button"
