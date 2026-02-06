@@ -14,8 +14,7 @@ describe("FalldownVisualizer", () => {
     },
   ];
 
-  it("should render correct number of visible notes", () => {
-    // At t=0, the note is in the look-ahead window
+  it("should render notes from the spans array", () => {
     const { container } = render(
       <FalldownVisualizer
         spans={mockSpans}
@@ -29,8 +28,8 @@ describe("FalldownVisualizer", () => {
     expect(notes.length).toBe(1);
   });
 
-  it("should hide notes that have already passed", () => {
-    // At t=3, the note (ending at t=2) should be gone
+  it("should render all notes regardless of current time (delegating visibility to CSS)", () => {
+    // Even at t=3, the note (ending at t=2) should still be in the DOM
     const { container } = render(
       <FalldownVisualizer
         spans={mockSpans}
@@ -41,6 +40,6 @@ describe("FalldownVisualizer", () => {
     );
 
     const notes = container.querySelectorAll(".absolute.rounded-md");
-    expect(notes.length).toBe(0);
+    expect(notes.length).toBe(1);
   });
 });

@@ -5,8 +5,8 @@ import { isBlackKey } from "@/lib/device/piano";
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import { BackgroundGrid } from "./BackgroundGrid";
-import { VisibleBarLines } from "./VisibleBarLines";
-import { VisibleNotes } from "./VisibleNotes";
+import { BarLines } from "./BarLines";
+import { NoteSpans } from "./NoteSpans";
 
 interface FalldownVisualizerProps {
   spans: NoteSpan[];
@@ -19,7 +19,7 @@ interface FalldownVisualizerProps {
 
 /**
  * Visualizes MIDI notes falling from top to bottom.
- * Optimized using a moving container and transform-only updates for high performance.
+ * Optimized using a static full-track render and a moving container for high performance.
  */
 export const FalldownVisualizer = ({
   spans,
@@ -47,41 +47,6 @@ export const FalldownVisualizer = ({
   }, []);
 
   const PIXELS_PER_SECOND = 100 * speed;
-  const LOOK_AHEAD_SECONDS = dimensions.height / PIXELS_PER_SECOND + 1;
-
-  // Optimized filtering
-  const visibleBarLines = useMemo(() => {
-    const visible: number[] = [];
-    const endTimeLimit = currentTime;
-    const startTimeLimit = currentTime + LOOK_AHEAD_SECONDS;
-
-    for (const time of barLines) {
-      if (time >= endTimeLimit && time < startTimeLimit) {
-        visible.push(time);
-      } else if (time >= startTimeLimit) {
-        break;
-      }
-    }
-    return visible;
-  }, [barLines, currentTime, LOOK_AHEAD_SECONDS]);
-
-  const visibleNotes = useMemo(() => {
-    const visible: NoteSpan[] = [];
-    const endTimeLimit = currentTime;
-    const startTimeLimit = currentTime + LOOK_AHEAD_SECONDS;
-
-    for (const span of spans) {
-      const endTime = span.startTime + span.duration;
-      if (endTime > endTimeLimit && span.startTime < startTimeLimit) {
-        if (span.note >= rangeStart && span.note <= rangeEnd) {
-          visible.push(span);
-        }
-      } else if (span.startTime >= startTimeLimit) {
-        break;
-      }
-    }
-    return visible;
-  }, [spans, currentTime, LOOK_AHEAD_SECONDS, rangeStart, rangeEnd]);
 
   const { whiteKeysCount, whiteKeyIndices, whiteKeyNotes, allNotesInRange } =
     useMemo(() => {
@@ -137,9 +102,9 @@ export const FalldownVisualizer = ({
       />
 
       {/* 
-        The Moving Container: This is the core performance win. 
-        Instead of updating every note's position each frame, we move this single container.
-        The notes inside have static positions relative to the start of the song.
+        The Moving Container: Core performance optimization.
+        Instead of dynamically adding/removing notes from the DOM, we render the whole track
+        and move it via transform.
       */}
       <div
         className="absolute w-full pointer-events-none"
@@ -147,21 +112,22 @@ export const FalldownVisualizer = ({
           bottom: 0,
           left: 0,
           height: "100%",
-          // Move the entire content down based on elapsed time.
           transform: `translate3d(0, ${currentTime * PIXELS_PER_SECOND}px, 0)`,
           willChange: "transform",
         }}
       >
-        <VisibleBarLines
-          visibleBarLines={visibleBarLines}
+        <BarLines
+          barLines={barLines}
           pixelsPerSecond={PIXELS_PER_SECOND}
         />
 
-        <VisibleNotes
-          visibleNotes={visibleNotes}
+        <NoteSpans
+          spans={spans}
           getHorizontalPosition={getHorizontalPosition}
           containerWidth={dimensions.width}
           pixelsPerSecond={PIXELS_PER_SECOND}
+          rangeStart={rangeStart}
+          rangeEnd={rangeEnd}
         />
       </div>
     </div>
