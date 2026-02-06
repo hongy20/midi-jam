@@ -45,7 +45,7 @@ describe("useScoreEngine", () => {
     // 100 points total, 1 note, press is 50%
     expect(result.current.score).toBe(50);
     expect(result.current.combo).toBe(1);
-    expect(result.current.lastAccuracy).toBe("PERFECT");
+    expect(result.current.lastAccuracy?.type).toBe("PERFECT");
   });
 
   it("should reset combo on wrong key", () => {
@@ -125,7 +125,7 @@ describe("useScoreEngine", () => {
     });
 
     expect(result.current.combo).toBe(0);
-    expect(result.current.lastAccuracy).toBe("MISS");
+    expect(result.current.lastAccuracy?.type).toBe("MISS");
   });
 
   it("should reset score and combo when isPlaying becomes false", () => {

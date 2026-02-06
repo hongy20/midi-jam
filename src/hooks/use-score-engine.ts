@@ -10,6 +10,10 @@ const POOR_WINDOW = 0.6; // 600ms
 
 export type Accuracy = "PERFECT" | "GREAT" | "GOOD" | "POOR" | "MISS" | null;
 
+/**
+ * High-performance scoring engine.
+ * Optimized to isolation timing logic from state updates and minimize per-frame calculations.
+ */
 export function useScoreEngine(
   midiEvents: MidiEvent[],
   currentTime: number,
@@ -20,7 +24,10 @@ export function useScoreEngine(
   const [score, setScore] = useState(0);
   const [combo, setCombo] = useState(0);
   const [maxCombo, setMaxCombo] = useState(0);
-  const [lastAccuracy, setLastAccuracy] = useState<Accuracy>(null);
+  const [lastAccuracy, setLastAccuracy] = useState<{
+    type: Accuracy;
+    id: number;
+  } | null>(null);
 
   const [highScore, setHighScore] = useState(0);
   const [bestCombo, setBestCombo] = useState(0);
@@ -32,12 +39,15 @@ export function useScoreEngine(
 
   const processedNotesRef = useRef<Set<number>>(new Set());
   const prevLiveNotesRef = useRef<Set<number>>(new Set());
-
-  // Track currently active MIDI notes that were successfully hit
-  // Map<eventIdx, { startTime: number, note: number }>
   const activeHitsRef = useRef<
     Map<number, { startTime: number; note: number }>
   >(new Map());
+
+  // Use a ref for currentTime to allow event-driven logic to access it without depending on it
+  const currentTimeRef = useRef(currentTime);
+  useEffect(() => {
+    currentTimeRef.current = currentTime;
+  }, [currentTime]);
 
   // Reset when isPlaying becomes false
   useEffect(() => {
@@ -81,9 +91,11 @@ export function useScoreEngine(
     }
   }, [score, maxCombo, midiId, highScore, bestCombo, isPlaying]);
 
+  // Event-driven scoring logic (Triggers only on note press/release)
   useEffect(() => {
-    if (currentTime < 0 || !isPlaying) return;
+    if (!isPlaying) return;
 
+    const currentT = currentTimeRef.current;
     const newPresses = Array.from(liveActiveNotes).filter(
       (n) => !prevLiveNotesRef.current.has(n),
     );
@@ -102,7 +114,7 @@ export function useScoreEngine(
           e.note === note &&
           !processedNotesRef.current.has(i)
         ) {
-          const diff = Math.abs(currentTime - e.time);
+          const diff = Math.abs(currentT - e.time);
           if (diff < POOR_WINDOW && diff < minDiff) {
             minDiff = diff;
             bestMatchIdx = i;
@@ -131,26 +143,22 @@ export function useScoreEngine(
           multiplier = 0.2;
         }
 
-        setLastAccuracy(accuracy);
+        setLastAccuracy({ type: accuracy, id: Date.now() });
 
         if (multiplier > 0.2) {
-          // GOOD or better
-          setScore((s) => s + points * multiplier * 0.5); // Press is 50%
+          setScore((s) => s + points * multiplier * 0.5);
           setCombo((c) => {
             const next = c + 1;
             setMaxCombo((m) => Math.max(m, next));
             return next;
           });
-          // Track for release
           activeHitsRef.current.set(bestMatchIdx, {
-            startTime: currentTime,
+            startTime: currentT,
             note,
           });
         } else {
           setCombo(0);
-          if (multiplier > 0) {
-            setScore((s) => s + points * multiplier * 0.5);
-          }
+          if (multiplier > 0) setScore((s) => s + points * multiplier * 0.5);
         }
       } else {
         setCombo(0);
@@ -159,7 +167,6 @@ export function useScoreEngine(
 
     // Handle Releases
     for (const note of newReleases) {
-      // Find which active hit this release corresponds to
       let hitIdx = -1;
       activeHitsRef.current.forEach((val, idx) => {
         if (val.note === note) hitIdx = idx;
@@ -170,7 +177,6 @@ export function useScoreEngine(
         if (!hit) continue;
         activeHitsRef.current.delete(hitIdx);
 
-        // Find corresponding NoteOff event
         let noteOffIdx = -1;
         for (let i = hitIdx + 1; i < midiEvents.length; i++) {
           if (midiEvents[i].note === note && midiEvents[i].type === "noteOff") {
@@ -182,7 +188,7 @@ export function useScoreEngine(
         if (noteOffIdx !== -1) {
           const noteOffEvent = midiEvents[noteOffIdx];
           const points = eventWeights.get(hitIdx) || 0;
-          const diff = Math.abs(currentTime - noteOffEvent.time);
+          const diff = Math.abs(currentT - noteOffEvent.time);
 
           let releaseMultiplier = 0;
           if (diff <= PERFECT_WINDOW) releaseMultiplier = 1.0;
@@ -190,39 +196,44 @@ export function useScoreEngine(
           else if (diff <= GOOD_WINDOW) releaseMultiplier = 0.5;
           else if (diff <= POOR_WINDOW) releaseMultiplier = 0.2;
 
-          // Also check if held long enough
           const expectedDuration = noteOffEvent.time - midiEvents[hitIdx].time;
-          const actualDuration = currentTime - hit.startTime;
+          const actualDuration = currentT - hit.startTime;
           const durationRatio = Math.min(
             1.0,
             actualDuration / expectedDuration,
           );
 
-          if (durationRatio < 0.8) {
-            // Released too early
-            setCombo(0);
-          }
-
+          if (durationRatio < 0.8) setCombo(0);
           setScore((s) => s + points * releaseMultiplier * 0.5 * durationRatio);
         }
       }
     }
 
+    prevLiveNotesRef.current = new Set(liveActiveNotes);
+  }, [liveActiveNotes, midiEvents, eventWeights, isPlaying]);
+
+  // Throttled miss detection (Runs every frame but uses a lighter check)
+  useEffect(() => {
+    if (!isPlaying) return;
+
     // Detect misses (notes passed their POOR_WINDOW)
+    // Optimization: Only iterate through events near the current time
+    const lookBehind = currentTime - POOR_WINDOW - 1;
+
     midiEvents.forEach((e, i) => {
       if (
+        e.time > lookBehind &&
+        e.time < currentTime &&
         e.type === "noteOn" &&
         !processedNotesRef.current.has(i) &&
         currentTime > e.time + POOR_WINDOW
       ) {
         processedNotesRef.current.add(i);
         setCombo(0);
-        setLastAccuracy("MISS");
+        setLastAccuracy({ type: "MISS", id: Date.now() });
       }
     });
-
-    prevLiveNotesRef.current = new Set(liveActiveNotes);
-  }, [currentTime, liveActiveNotes, midiEvents, eventWeights, isPlaying]);
+  }, [currentTime, midiEvents, isPlaying]);
 
   return {
     score,

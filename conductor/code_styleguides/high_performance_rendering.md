@@ -15,7 +15,14 @@ This document outlines key architectural principles and performance patterns lea
     - **Layer Separation**: Split components into a **Static Layer** (rendered once or on range change) and a **Dynamic Layer** (rendered only for active events).
     - **Active-Only Rendering**: In the dynamic layer, only render elements for nodes that are *currently* active. Do not render a full set of elements and toggle their visibility.
 
-## 3. Composite-Only Visual Updates
+## 3. React Compiler & Memoization
+- **Principle**: Trust the **React Compiler** to handle performance optimizations. Avoid manual memoization unless necessary for stable identities in non-compiler-aware contexts.
+- **Implementation**:
+    - **Do not use `memo()`**: The compiler automatically handles component-level memoization.
+    - **Avoid `useMemo()` and `useCallback()`**: Only use them if you need a stable identity for a dependency that the compiler cannot infer (e.g., a non-primitive passed to a legacy library or a complex hook dependency).
+    - **Architectural over Manual**: Focus on architectural separation (like Static vs Dynamic layers) which helps the compiler perform better, rather than manually wrapping code in hooks.
+
+## 4. Composite-Only Visual Updates
 - **Principle**: Use GPU-accelerated CSS properties to prevent layout reflows and heavy repaints.
 - **Implementation**:
     - Use **Data Attributes** (e.g., `data-active="true"`) to trigger visual states.

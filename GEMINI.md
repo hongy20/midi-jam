@@ -36,6 +36,7 @@ The following scripts are available to run, build, and maintain the application.
 # Development Conventions
 
 - **Performance**: This project follows strict "Native-First" rendering principles. Refer to [High-Performance Rendering](./conductor/code_styleguides/high_performance_rendering.md) for guidelines on CSS Grid layouts, layer separation, and composite-only updates.
+- **React Compiler**: The project has the **React Compiler** enabled (`next.config.ts`). Avoid using manual memoization hooks (`memo`, `useMemo`, `useCallback`) unless absolutely necessary for stable identities.
 - **Code Quality**: All code is linted and formatted using **Biome**. It's recommended to run `npm run lint:fix` before committing changes.
 - **Type Safety**: The project uses **TypeScript**. Please adhere to static typing and avoid using `any` where possible.
 - **Commit Messages**: While not explicitly defined, the project history suggests a preference for **Conventional Commits**. Please follow this convention for new commits (e.g., `feat(midi): ...`, `fix(ui): ...`).

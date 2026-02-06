@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Menu,
   Pause,
@@ -8,6 +10,7 @@ import {
   Square,
 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import styles from "./playback-controls.module.css";
 
 interface PlaybackControlsProps {
   isPlaying: boolean;
@@ -20,6 +23,10 @@ interface PlaybackControlsProps {
   onToggleDemo: () => void;
 }
 
+/**
+ * High-performance Playback Controls.
+ * Uses CSS Data Attributes for transitions to minimize layout reflows.
+ */
 export const PlaybackControls = ({
   isPlaying,
   onPlay,
@@ -88,58 +95,29 @@ export const PlaybackControls = ({
     };
   }, [isExpanded, handleCollapse]);
 
-  // Actions wrapped with timer reset
-  const onToggleDemoWithReset = () => {
-    resetCollapseTimer();
-    onToggleDemo();
-  };
-
-  const onPlayPauseWithReset = () => {
-    resetCollapseTimer();
-    if (isPlaying) onPause();
-    else onPlay();
-  };
-
-  const onStopWithReset = () => {
-    resetCollapseTimer();
-    onStop();
-  };
-
-  const onSpeedChangeWithReset = (s: number) => {
-    resetCollapseTimer();
-    onSpeedChange(s);
-  };
-
   return (
     <div ref={containerRef} className="relative flex items-center justify-end">
       {/* Mobile Toggle Button (Sandwich) */}
       <button
         type="button"
         onClick={handleToggleExpand}
+        data-hidden={isExpanded}
         aria-expanded={isExpanded}
         aria-label="Toggle playback controls"
-        className={`md:hidden w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full transition-all duration-300 z-50 ${isExpanded ? "opacity-0 pointer-events-none scale-75" : "opacity-100"}`}
+        className={styles.toggleButton}
       >
         <Menu className="w-6 h-6 text-slate-600" />
       </button>
 
       {/* Controls Container */}
-      <div
-        className={`
-          flex items-center gap-2 bg-white/90 backdrop-blur-md border border-gray-200 shadow-xl rounded-full px-4 py-1 pointer-events-auto
-          transition-all duration-500 ease-in-out
-          ${
-            isExpanded
-              ? "opacity-100 translate-x-0 pointer-events-auto flex"
-              : "opacity-0 translate-x-8 pointer-events-none hidden md:flex md:opacity-100 md:translate-x-0 md:pointer-events-auto"
-          }
-          absolute right-0 md:relative md:right-auto
-        `}
-      >
+      <div className={styles.container} data-expanded={isExpanded}>
         <div className="flex items-center gap-1 pr-2 border-r border-gray-200">
           <button
             type="button"
-            onClick={onToggleDemoWithReset}
+            onClick={() => {
+              resetCollapseTimer();
+              onToggleDemo();
+            }}
             onMouseEnter={resetCollapseTimer}
             className={`h-9 flex items-center gap-1.5 px-3 rounded-full font-black text-[10px] uppercase tracking-wider transition-all duration-300 ${
               demoMode
@@ -160,7 +138,10 @@ export const PlaybackControls = ({
         <div className="flex items-center gap-1">
           <button
             type="button"
-            onClick={onPlayPauseWithReset}
+            onClick={() => {
+              resetCollapseTimer();
+              isPlaying ? onPause() : onPlay();
+            }}
             onMouseEnter={resetCollapseTimer}
             className={`w-9 h-9 flex items-center justify-center rounded-full transition-all ${
               isPlaying
@@ -178,7 +159,10 @@ export const PlaybackControls = ({
 
           <button
             type="button"
-            onClick={onStopWithReset}
+            onClick={() => {
+              resetCollapseTimer();
+              onStop();
+            }}
             onMouseEnter={resetCollapseTimer}
             className="w-9 h-9 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all"
             aria-label="Stop"
@@ -194,7 +178,10 @@ export const PlaybackControls = ({
             <button
               key={s.value}
               type="button"
-              onClick={() => onSpeedChangeWithReset(s.value)}
+              onClick={() => {
+                resetCollapseTimer();
+                onSpeedChange(s.value);
+              }}
               onMouseEnter={resetCollapseTimer}
               className={`w-9 h-9 rounded-full text-xs font-black transition-all flex items-center justify-center ${
                 speed === s.value
