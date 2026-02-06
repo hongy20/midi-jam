@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { PianoKeyboard } from "./piano-keyboard";
+import { PianoKeyboard } from "./PianoKeyboard";
 
 describe("PianoKeyboard Responsiveness and Zooming", () => {
   it("renders correct number of white keys for a specific range", () => {
