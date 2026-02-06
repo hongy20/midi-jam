@@ -45,7 +45,7 @@ export const PianoKeyboard = ({
   };
 
   return (
-    <div className="flex flex-col w-full select-none">
+    <div className="flex flex-col w-full select-none relative z-50">
       <div
         className={styles.container}
         role="img"
