@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { isBlackKey } from "@/lib/device/piano";
 import {
   MIDI_NOTE_C4,

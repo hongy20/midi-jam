@@ -1,5 +1,4 @@
 import { renderHook } from "@testing-library/react";
-import * as Tone from "tone";
 import { describe, expect, it, vi } from "vitest";
 import { useMidiAudio } from "./use-midi-audio";
 
@@ -14,8 +13,14 @@ vi.mock("tone", () => {
     triggerAttackRelease: vi.fn(),
   };
 
+  class PolySynthMock {
+    constructor() {
+      Object.assign(this, mockSynth);
+    }
+  }
+
   return {
-    PolySynth: vi.fn().mockImplementation(() => mockSynth),
+    PolySynth: vi.fn(PolySynthMock),
     Synth: {},
     Frequency: vi.fn(() => ({
       toFrequency: vi.fn(() => 440),
@@ -23,7 +28,7 @@ vi.mock("tone", () => {
     now: vi.fn(() => 0),
     start: vi.fn(),
     getContext: vi.fn(() => ({ state: "running" })),
-    MembraneSynth: vi.fn().mockImplementation(() => mockSynth),
+    MembraneSynth: vi.fn(PolySynthMock),
   };
 });
 

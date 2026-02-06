@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { MidiEvent } from "../lib/midi/midi-parser";
 import { calculateNoteWeights } from "../lib/score/score-engine";
 import { scoreStorage } from "../lib/score/score-storage";

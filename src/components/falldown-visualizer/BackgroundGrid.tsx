@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { isBlackKey } from "@/lib/device/piano";
 import styles from "./background-grid.module.css";
 
