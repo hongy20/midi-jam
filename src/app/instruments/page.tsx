@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useSelection } from "@/context/selection-context";
+import { useGameNavigation } from "@/hooks/use-game-navigation";
 
 const INSTRUMENTS = [
   { id: "piano", name: "Grand Piano", description: "Classic and rich sound" },
@@ -21,7 +21,9 @@ const INSTRUMENTS = [
 export default function InstrumentsPage() {
   const { navigate } = useGameNavigation();
   const { setInstrument, selectedInstrument } = useSelection();
-  const [selected, setSelected] = useState<string | null>(selectedInstrument?.id || null);
+  const [selected, setSelected] = useState<string | null>(
+    selectedInstrument?.id || null,
+  );
 
   const handleContinue = () => {
     if (selected) {
@@ -57,16 +59,18 @@ export default function InstrumentsPage() {
             key={inst.id}
             type="button"
             onClick={() => setSelected(inst.id)}
-            className={`p-8 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-4 ${selected === inst.id
-              ? "bg-white border-white scale-105 shadow-[0_0_50px_rgba(255,255,255,0.2)]"
-              : "bg-slate-900/50 border-slate-800 hover:border-slate-700 text-slate-400"
-              }`}
+            className={`p-8 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-4 ${
+              selected === inst.id
+                ? "bg-white border-white scale-105 shadow-[0_0_50px_rgba(255,255,255,0.2)]"
+                : "bg-slate-900/50 border-slate-800 hover:border-slate-700 text-slate-400"
+            }`}
           >
             <div
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center ${selected === inst.id
-                ? "bg-slate-950 text-white"
-                : "bg-slate-800 text-slate-500"
-                }`}
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center ${
+                selected === inst.id
+                  ? "bg-slate-950 text-white"
+                  : "bg-slate-800 text-slate-500"
+              }`}
             >
               {/* Simple Icon Placeholder */}
               <div className="w-6 h-6 border-2 border-current rounded" />
@@ -90,10 +94,11 @@ export default function InstrumentsPage() {
           type="button"
           onClick={handleContinue}
           disabled={!selected}
-          className={`px-12 py-4 rounded-full text-xl font-bold transition-all ${selected
-            ? "bg-white text-slate-950 hover:scale-105 active:scale-95 shadow-xl"
-            : "bg-slate-900 text-slate-700 cursor-not-allowed"
-            }`}
+          className={`px-12 py-4 rounded-full text-xl font-bold transition-all ${
+            selected
+              ? "bg-white text-slate-950 hover:scale-105 active:scale-95 shadow-xl"
+              : "bg-slate-900 text-slate-700 cursor-not-allowed"
+          }`}
         >
           CONTINUE
         </button>

@@ -2,8 +2,8 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useSelection } from "@/context/selection-context";
+import { useGameNavigation } from "@/hooks/use-game-navigation";
 
 export function NavigationGuard({ children }: { children: React.ReactNode }) {
   const { navigate } = useGameNavigation();
@@ -19,7 +19,10 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
 
     if (isTracksPage && !selectedInstrument) {
       navigate("/");
-    } else if ((isGamePage || isResultsPage) && (!selectedInstrument || !selectedTrack)) {
+    } else if (
+      (isGamePage || isResultsPage) &&
+      (!selectedInstrument || !selectedTrack)
+    ) {
       navigate("/");
     }
   }, [pathname, selectedInstrument, selectedTrack, navigate]);

@@ -1,16 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelection } from "@/context/selection-context";
+import { useGameNavigation } from "@/hooks/use-game-navigation";
 
 export default function GamePage() {
   const { navigate } = useGameNavigation();
-  const { selectedInstrument, selectedTrack, gameSession, setGameSession } = useSelection();
+  const { selectedInstrument, selectedTrack, gameSession, setGameSession } =
+    useSelection();
 
   const [timeLeft, setTimeLeft] = useState(gameSession?.timeLeft ?? 15);
   const [isPaused, setIsPaused] = useState(gameSession?.isPaused ?? false);
-  const [showOverlay, setShowOverlay] = useState(gameSession?.isPaused ?? false);
+  const [showOverlay, setShowOverlay] = useState(
+    gameSession?.isPaused ?? false,
+  );
   const overlayRef = useRef<HTMLDivElement>(null);
 
   // Sync state to context for persistence during navigation
@@ -38,11 +41,13 @@ export default function GamePage() {
   }, [timeLeft, navigate, setGameSession]);
 
   // Handle Pause
-  const handleTogglePause = () => {
-    const nextPaused = !isPaused;
-    setIsPaused(nextPaused);
-    setShowOverlay(nextPaused);
-  };
+  const handleTogglePause = useCallback(() => {
+    setIsPaused((prev) => {
+      const nextPaused = !prev;
+      setShowOverlay(nextPaused);
+      return nextPaused;
+    });
+  }, []);
 
   // Handle Restart
   const handleRestart = () => {
@@ -71,7 +76,7 @@ export default function GamePage() {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("app:browser-back", handleBrowserBack);
     };
-  }, [isPaused]);
+  }, [isPaused, handleTogglePause]);
 
   return (
     <div className="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center overflow-hidden">
@@ -100,8 +105,9 @@ export default function GamePage() {
               Time Remaining
             </span>
             <span
-              className={`text-4xl font-black tabular-nums transition-colors duration-300 ${timeLeft < 5 ? "text-red-500 animate-pulse" : "text-white"
-                }`}
+              className={`text-4xl font-black tabular-nums transition-colors duration-300 ${
+                timeLeft < 5 ? "text-red-500 animate-pulse" : "text-white"
+              }`}
             >
               {Math.floor(timeLeft / 60)}:
               {(timeLeft % 60).toString().padStart(2, "0")}
@@ -114,8 +120,9 @@ export default function GamePage() {
             className="w-14 h-14 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-colors group"
           >
             <div
-              className={`flex gap-1.5 transition-transform duration-300 ${isPaused ? "scale-90" : "group-hover:scale-110"
-                }`}
+              className={`flex gap-1.5 transition-transform duration-300 ${
+                isPaused ? "scale-90" : "group-hover:scale-110"
+              }`}
             >
               <div className="w-2 h-6 bg-white rounded-full" />
               <div className="w-2 h-6 bg-white rounded-full" />
@@ -129,10 +136,6 @@ export default function GamePage() {
         <div
           className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-xl flex items-center justify-center animate-in fade-in duration-300"
           ref={overlayRef}
-          onKeyDown={(e) => {
-            // Modal focus trap logic placeholder
-            if (e.key === "Escape") handleTogglePause();
-          }}
         >
           <div className="text-center flex flex-col gap-6 max-w-sm w-full p-8 animate-in zoom-in-95 duration-300">
             <h1 className="text-6xl font-black text-white italic uppercase tracking-tighter mb-4">

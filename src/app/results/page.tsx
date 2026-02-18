@@ -1,7 +1,7 @@
 "use client";
 
-import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useSelection } from "@/context/selection-context";
+import { useGameNavigation } from "@/hooks/use-game-navigation";
 
 export default function ResultsPage() {
   const { navigate } = useGameNavigation();

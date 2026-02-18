@@ -1,11 +1,16 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import WelcomePage from "./page";
+import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
+import WelcomePage from "./page";
 
 // Mock the hook
 vi.mock("@/hooks/use-game-navigation", () => ({
   useGameNavigation: vi.fn(),
+}));
+
+vi.mock("@/context/selection-context", () => ({
+  useSelection: vi.fn(),
 }));
 
 describe("Welcome Page", () => {
@@ -13,6 +18,15 @@ describe("Welcome Page", () => {
     vi.mocked(useGameNavigation).mockReturnValue({
       navigate: vi.fn(),
       goBack: vi.fn(),
+    });
+    vi.mocked(useSelection).mockReturnValue({
+      selectedInstrument: null,
+      selectedTrack: null,
+      gameSession: null,
+      setInstrument: vi.fn(),
+      setTrack: vi.fn(),
+      setGameSession: vi.fn(),
+      clearSelection: vi.fn(),
     });
 
     render(<WelcomePage />);
@@ -28,6 +42,15 @@ describe("Welcome Page", () => {
       navigate: mockNavigate,
       goBack: vi.fn(),
     });
+    vi.mocked(useSelection).mockReturnValue({
+      selectedInstrument: null,
+      selectedTrack: null,
+      gameSession: null,
+      setInstrument: vi.fn(),
+      setTrack: vi.fn(),
+      setGameSession: vi.fn(),
+      clearSelection: vi.fn(),
+    });
 
     render(<WelcomePage />);
     fireEvent.click(screen.getByRole("button", { name: /START JAM/i }));
@@ -40,9 +63,18 @@ describe("Welcome Page", () => {
       navigate: mockNavigate,
       goBack: vi.fn(),
     });
+    vi.mocked(useSelection).mockReturnValue({
+      selectedInstrument: null,
+      selectedTrack: null,
+      gameSession: null,
+      setInstrument: vi.fn(),
+      setTrack: vi.fn(),
+      setGameSession: vi.fn(),
+      clearSelection: vi.fn(),
+    });
 
     render(<WelcomePage />);
     fireEvent.click(screen.getByRole("button", { name: /Settings/i }));
-    expect(mockNavigate).toHaveBeenCalledWith("/settings");
+    expect(mockNavigate).toHaveBeenCalledWith("/settings?from=/");
   });
 });

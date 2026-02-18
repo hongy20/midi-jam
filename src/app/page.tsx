@@ -1,11 +1,11 @@
 "use client";
 
-import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useSelection } from "@/context/selection-context";
+import { useGameNavigation } from "@/hooks/use-game-navigation";
 
 export default function WelcomePage() {
   const { navigate } = useGameNavigation();
-  const { setGameSession, clearSelection } = useSelection();
+  const { clearSelection } = useSelection();
 
   const handleStart = () => {
     clearSelection(); // Fresh start for everything

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useSelection } from "@/context/selection-context";
+import { useGameNavigation } from "@/hooks/use-game-navigation";
 
 const TRACKS = [
   {
@@ -28,7 +28,9 @@ const TRACKS = [
 export default function TracksPage() {
   const { navigate } = useGameNavigation();
   const { setTrack, selectedTrack } = useSelection();
-  const [selected, setSelected] = useState<string | null>(selectedTrack?.id || null);
+  const [selected, setSelected] = useState<string | null>(
+    selectedTrack?.id || null,
+  );
 
   const handlePlay = () => {
     if (selected) {
@@ -76,17 +78,19 @@ export default function TracksPage() {
             key={track.id}
             type="button"
             onClick={() => setSelected(track.id)}
-            className={`w-full p-6 rounded-3xl border-2 transition-all duration-300 text-left flex items-center justify-between ${selected === track.id
-              ? "bg-white border-white scale-[1.02] shadow-[0_0_50px_rgba(255,255,255,0.15)]"
-              : "bg-slate-900/50 border-slate-800 hover:border-slate-700 text-slate-400"
-              }`}
+            className={`w-full p-6 rounded-3xl border-2 transition-all duration-300 text-left flex items-center justify-between ${
+              selected === track.id
+                ? "bg-white border-white scale-[1.02] shadow-[0_0_50px_rgba(255,255,255,0.15)]"
+                : "bg-slate-900/50 border-slate-800 hover:border-slate-700 text-slate-400"
+            }`}
           >
             <div className="flex items-center gap-6">
               <div
-                className={`w-12 h-12 rounded-full flex items-center justify-center ${selected === track.id
-                  ? "bg-slate-950 text-white"
-                  : "bg-slate-800 text-slate-500"
-                  }`}
+                className={`w-12 h-12 rounded-full flex items-center justify-center ${
+                  selected === track.id
+                    ? "bg-slate-950 text-white"
+                    : "bg-slate-800 text-slate-500"
+                }`}
               >
                 <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-current border-b-[6px] border-b-transparent ml-1" />
               </div>
@@ -103,10 +107,11 @@ export default function TracksPage() {
             </div>
 
             <span
-              className={`text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full ${selected === track.id
-                ? "bg-slate-100 text-slate-950"
-                : "bg-slate-800 text-slate-500"
-                }`}
+              className={`text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full ${
+                selected === track.id
+                  ? "bg-slate-100 text-slate-950"
+                  : "bg-slate-800 text-slate-500"
+              }`}
             >
               {track.difficulty}
             </span>
@@ -119,10 +124,11 @@ export default function TracksPage() {
           type="button"
           onClick={handlePlay}
           disabled={!selected}
-          className={`px-12 py-4 rounded-full text-xl font-bold transition-all ${selected
-            ? "bg-white text-slate-950 hover:scale-105 active:scale-95 shadow-xl"
-            : "bg-slate-900 text-slate-700 cursor-not-allowed"
-            }`}
+          className={`px-12 py-4 rounded-full text-xl font-bold transition-all ${
+            selected
+              ? "bg-white text-slate-950 hover:scale-105 active:scale-95 shadow-xl"
+              : "bg-slate-900 text-slate-700 cursor-not-allowed"
+          }`}
         >
           LET&apos;S PLAY
         </button>
