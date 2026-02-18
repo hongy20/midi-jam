@@ -35,7 +35,6 @@ body {
   scrollbar-width: none;
 }
 
-
 @keyframes countdown-pulse {
   0% {
     transform: scale(0.5);
