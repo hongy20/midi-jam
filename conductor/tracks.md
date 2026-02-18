@@ -24,7 +24,7 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [/] **Track: feature: basic navigations**
+- [x] **Track: feature: basic navigations**
 *Link: [./tracks/basic_navigations_20260218/](./tracks/basic_navigations_20260218/)*
 
 ---
