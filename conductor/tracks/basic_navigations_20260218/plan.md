@@ -1,25 +1,25 @@
 # Implementation Plan - Basic Navigations
 
 ## Phase 1: Preparation
-- [ ] Task: Move `src/app/page.tsx` content to `src/app/archive-player/page.tsx` (Temporary archive).
-- [ ] Task: Ensure imports in the `archive-player` page are correct.
+- [x] Task: Move `src/app/page.tsx` content to `src/app/archive-player/page.tsx` (Temporary archive). 5e8581c
+- [x] Task: Ensure imports in the `archive-player` page are correct. 5e8581c
 
 ## Phase 2: Core Skeleton & UX Components
-- [ ] Task: Create a Reusable `NavigationLayout` component with:
+- [x] Task: Create a Reusable `NavigationLayout` component with:
   - Simple breadcrumb/progress indicator.
-  - Consistent layout wrapper for game-like views.
-- [ ] Task: Create new root `src/app/page.tsx` (Welcome).
-- [ ] Task: Create `src/app/instruments/page.tsx` (Step 1/2).
-- [ ] Task: Create `src/app/tracks/page.tsx` (Step 2/2).
-- [ ] Task: Create `src/app/game/page.tsx` with:
+  - Consistent layout wrapper for game-like views. 5e8581c
+- [x] Task: Create new root `src/app/page.tsx` (Welcome). 5e8581c
+- [x] Task: Create `src/app/instruments/page.tsx` (Step 1/2). 5e8581c
+- [x] Task: Create `src/app/tracks/page.tsx` (Step 2/2). 5e8581c
+- [x] Task: Create `src/app/game/page.tsx` with:
   - 15s countdown and Pause Overlay.
-  - Keyboard focus trap logic for the overlay.
-- [ ] Task: Create `src/app/results/page.tsx` with "Play Again", "Next Song", and "Main Menu".
-- [ ] Task: Create `src/app/settings/page.tsx`.
+  - Keyboard focus trap logic for the overlay. 5e8581c
+- [x] Task: Create `src/app/results/page.tsx` with "Play Again", "Next Song", and "Main Menu". 5e8581c
+- [x] Task: Create `src/app/settings/page.tsx`. 5e8581c
 
 ## Phase 3: History & Navigation Hijacking
-- [ ] Task: Implement a custom navigation hook (`useGameNavigation`) using `router.replace`.
-- [ ] Task: Implement `popstate` trapping to map browser back/forward to in-app logic.
-- [ ] Task: Add `window.onbeforeunload` logic for reload safeguards.
-- [ ] Task: Implement "Route Guarding" for session integrity.
-- [ ] Task: Add simple CSS transition animations between screens.
+- [x] Task: Implement a custom navigation hook (`useGameNavigation`) using `router.replace`. 5e8581c
+- [-] Task: Implement `popstate` trapping to map browser back/forward to in-app logic (Skipped).
+- [-] Task: Add `window.onbeforeunload` logic for reload safeguards (Skipped).
+- [x] Task: Implement "Route Guarding" for session integrity. 5e8581c
+- [x] Task: Add simple CSS transition animations between screens. 5e8581c
