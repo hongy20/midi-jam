@@ -1,9 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
 
-export default function SettingsPage() {
+const BackButton = () => {
   const { goBack } = useGameNavigation();
   const searchParams = useSearchParams();
   const from = searchParams.get("from") || "/";
@@ -12,6 +13,18 @@ export default function SettingsPage() {
     goBack(from);
   };
 
+  return (
+    <button
+      type="button"
+      onClick={handleBack}
+      className="px-8 py-3 bg-white text-slate-950 rounded-full font-bold text-sm tracking-widest uppercase hover:scale-105 transition-transform"
+    >
+      Back
+    </button>
+  );
+};
+
+export default function SettingsPage() {
   return (
     <div className="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center p-6 overflow-hidden">
       {/* Background Subtle Mesh */}
@@ -23,13 +36,9 @@ export default function SettingsPage() {
         <h1 className="text-4xl font-black text-white italic uppercase tracking-tighter">
           Settings
         </h1>
-        <button
-          type="button"
-          onClick={handleBack}
-          className="px-8 py-3 bg-white text-slate-950 rounded-full font-bold text-sm tracking-widest uppercase hover:scale-105 transition-transform"
-        >
-          Back
-        </button>
+        <Suspense>
+          <BackButton />
+        </Suspense>
       </header>
 
       <main className="relative z-10 w-full max-w-2xl flex flex-col gap-6">
