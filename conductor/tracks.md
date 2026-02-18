@@ -21,3 +21,10 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 - [x] **Track: Update speed controls to [0.75, 1, 1.25] with Turtle/Rabbit icons, set default demo mode to off, and fix countdown to be a consistent 4 real-time seconds.**
 *Link: [./archive/speed_countdown_refinement_20260204/](./archive/speed_countdown_refinement_20260204/)*
+
+---
+
+- [/] **Track: feature: basic navigations**
+*Link: [./tracks/basic_navigations_20260218/](./tracks/basic_navigations_20260218/)*
+
+---
