@@ -1,174 +1,80 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
-import Home from "./page";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { useSelection } from "@/context/selection-context";
+import { useGameNavigation } from "@/hooks/use-game-navigation";
+import WelcomePage from "./page";
 
-// Mock child components
-vi.mock("@/components/device-selector", () => ({
-  DeviceSelector: () => <div data-testid="device-selector">DeviceSelector</div>,
-}));
-vi.mock("@/components/sound-track-selector", () => ({
-  SoundTrackSelector: () => (
-    <div data-testid="sound-track-selector">SoundTrackSelector</div>
-  ),
-}));
-vi.mock("@/components/falldown-visualizer", () => ({
-  FalldownVisualizer: () => (
-    <div data-testid="falldown-visualizer">FalldownVisualizer</div>
-  ),
-}));
-vi.mock("@/components/piano-keyboard", () => ({
-  PianoKeyboard: (props: unknown) => (
-    <div data-testid="piano-keyboard" data-props={JSON.stringify(props)}>
-      PianoKeyboard
-    </div>
-  ),
-}));
-vi.mock("@/components/midi-control-room", () => ({
-  MidiControlRoom: ({
-    isMinimized,
-    onToggleMinimize,
-  }: {
-    isMinimized: boolean;
-    onToggleMinimize: () => void;
-  }) => (
-    <div data-testid="midi-control-room">
-      MidiControlRoom
-      <button
-        type="button"
-        onClick={onToggleMinimize}
-        data-testid="toggle-minimize"
-      >
-        Toggle Minimize
-      </button>
-      {isMinimized ? "Minimized" : "Expanded"}
-    </div>
-  ),
-}));
-vi.mock("@/components/playback-controls", () => ({
-  PlaybackControls: ({
-    demoMode,
-    onToggleDemo,
-  }: {
-    demoMode: boolean;
-    onToggleDemo: () => void;
-  }) => (
-    <div data-testid="playback-controls">
-      PlaybackControls
-      <button type="button" onClick={onToggleDemo} data-testid="toggle-demo">
-        Toggle Demo
-      </button>
-      {demoMode ? "DemoOn" : "DemoOff"}
-    </div>
-  ),
+// Mock the hook
+vi.mock("@/hooks/use-game-navigation", () => ({
+  useGameNavigation: vi.fn(),
 }));
 
-// Mock hooks
-vi.mock("@/hooks/use-midi-devices", () => ({
-  useMIDIDevices: () => ({ inputs: [], isLoading: false, error: null }),
-}));
-vi.mock("@/hooks/use-midi-selection", () => ({
-  useMIDISelection: () => ({
-    selectedMIDIInput: null,
-    selectMIDIInput: vi.fn(),
-  }),
-}));
-vi.mock("@/hooks/use-midi-audio", () => ({
-  useMidiAudio: () => ({
-    playNote: vi.fn(),
-    stopNote: vi.fn(),
-    stopAllNotes: vi.fn(),
-  }),
-}));
-vi.mock("@/hooks/use-active-notes", () => ({
-  useActiveNotes: () => new Set(),
-}));
-let mockIsPlaying = false;
-const mockPlay = vi.fn(() => {
-  mockIsPlaying = true;
-});
-const mockPause = vi.fn(() => {
-  mockIsPlaying = false;
-});
-const mockStop = vi.fn(() => {
-  mockIsPlaying = false;
-});
-
-vi.mock("@/hooks/use-midi-player", () => ({
-  useMidiPlayer: () => ({
-    activeNotes: new Map(),
-    get isPlaying() {
-      return mockIsPlaying;
-    },
-    currentTime: 0,
-    duration: 0,
-    speed: 1,
-    play: mockPlay,
-    pause: mockPause,
-    stop: mockStop,
-    setSpeed: vi.fn(),
-  }),
-}));
-vi.mock("@/lib/action/sound-track", () => ({
-  getSoundTracks: vi.fn().mockResolvedValue([]),
+vi.mock("@/context/selection-context", () => ({
+  useSelection: vi.fn(),
 }));
 
-describe("Home Page Layout Refactor", () => {
-  beforeEach(() => {
-    mockIsPlaying = false;
-    mockPlay.mockClear();
-    mockPause.mockClear();
-    mockStop.mockClear();
-  });
-
-  it("renders MidiControlRoom and PlaybackControls", async () => {
-    await act(async () => {
-      render(<Home />);
+describe("Welcome Page", () => {
+  it("renders the title and start button", () => {
+    vi.mocked(useGameNavigation).mockReturnValue({
+      navigate: vi.fn(),
+      goBack: vi.fn(),
+    });
+    vi.mocked(useSelection).mockReturnValue({
+      selectedInstrument: null,
+      selectedTrack: null,
+      gameSession: null,
+      setInstrument: vi.fn(),
+      setTrack: vi.fn(),
+      setGameSession: vi.fn(),
+      clearSelection: vi.fn(),
     });
 
-    expect(screen.getByTestId("midi-control-room")).toBeInTheDocument();
-    expect(screen.getByTestId("playback-controls")).toBeInTheDocument();
+    render(<WelcomePage />);
+    expect(screen.getByText(/Midi Jam/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /START JAM/i }),
+    ).toBeInTheDocument();
   });
 
-  it("should auto-pause when expanding and auto-resume if it was playing", async () => {
-    const renderResult = await act(async () => {
-      return render(<Home />);
+  it("navigates to instruments on start click", () => {
+    const mockNavigate = vi.fn();
+    vi.mocked(useGameNavigation).mockReturnValue({
+      navigate: mockNavigate,
+      goBack: vi.fn(),
     });
-    const { rerender } = renderResult;
+    vi.mocked(useSelection).mockReturnValue({
+      selectedInstrument: null,
+      selectedTrack: null,
+      gameSession: null,
+      setInstrument: vi.fn(),
+      setTrack: vi.fn(),
+      setGameSession: vi.fn(),
+      clearSelection: vi.fn(),
+    });
 
-    // 1. Start minimized
-    const toggle = screen.getByTestId("toggle-minimize");
-    fireEvent.click(toggle); // isMinimized becomes true (now Minimized)
-    expect(screen.getByText(/Minimized/)).toBeInTheDocument();
-
-    // 2. Start playing and trigger rerender
-    mockIsPlaying = true;
-    rerender(<Home />);
-
-    // 3. Expand header (isMinimized becomes false)
-    fireEvent.click(toggle);
-    expect(screen.getByText(/Expanded/)).toBeInTheDocument();
-    expect(mockPause).toHaveBeenCalled();
-
-    // 4. Collapse header (isMinimized becomes true)
-    fireEvent.click(toggle);
-    expect(screen.getByText(/Minimized/)).toBeInTheDocument();
-    expect(mockPlay).toHaveBeenCalled();
+    render(<WelcomePage />);
+    fireEvent.click(screen.getByRole("button", { name: /START JAM/i }));
+    expect(mockNavigate).toHaveBeenCalledWith("/instruments");
   });
 
-  it("should toggle demo mode and affect PianoKeyboard props", async () => {
-    // We need to mock useMidiPlayer to return some active notes to see them being filtered
-    // But currently the mock is static. Let's adjust it for this test.
-    await act(async () => {
-      render(<Home />);
+  it("navigates to settings on settings click", () => {
+    const mockNavigate = vi.fn();
+    vi.mocked(useGameNavigation).mockReturnValue({
+      navigate: mockNavigate,
+      goBack: vi.fn(),
+    });
+    vi.mocked(useSelection).mockReturnValue({
+      selectedInstrument: null,
+      selectedTrack: null,
+      gameSession: null,
+      setInstrument: vi.fn(),
+      setTrack: vi.fn(),
+      setGameSession: vi.fn(),
+      clearSelection: vi.fn(),
     });
 
-    const demoToggle = screen.getByTestId("toggle-demo");
-    expect(screen.getByText(/DemoOff/)).toBeInTheDocument();
-
-    // Default: playbackNotes should be passed to PianoKeyboard (even if empty in mock)
-    // To properly test filtering, we'd need a more dynamic useMidiPlayer mock.
-    // But let's at least test that toggling works and the state is passed to MidiControlRoom.
-    fireEvent.click(demoToggle);
-    expect(screen.getByText(/DemoOn/)).toBeInTheDocument();
+    render(<WelcomePage />);
+    fireEvent.click(screen.getByRole("button", { name: /Settings/i }));
+    expect(mockNavigate).toHaveBeenCalledWith("/settings?from=/");
   });
 });
