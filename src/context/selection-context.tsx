@@ -28,10 +28,14 @@ interface SelectionContextType {
   selectedTrack: Track | null;
   gameSession: GameSession | null;
   sessionResults: SessionResults | null;
+  speed: number;
+  demoMode: boolean;
   setInstrument: (instrument: Instrument) => void;
   setTrack: (track: Track) => void;
   setGameSession: (session: GameSession | null) => void;
   setSessionResults: (results: SessionResults | null) => void;
+  setSpeed: (speed: number) => void;
+  setDemoMode: (enabled: boolean) => void;
   clearSelection: () => void;
 }
 
@@ -47,6 +51,8 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
   const [sessionResults, setSessionResults] = useState<SessionResults | null>(
     null,
   );
+  const [speed, setSpeed] = useState<number>(1.0);
+  const [demoMode, setDemoMode] = useState<boolean>(false);
 
   const setInstrument = (instrument: Instrument) =>
     setSelectedInstrument(instrument);
@@ -56,6 +62,8 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
     setSelectedTrack(null);
     setGameSession(null);
     setSessionResults(null);
+    setSpeed(1.0);
+    setDemoMode(false);
   };
 
   return (
@@ -65,10 +73,14 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
         selectedTrack,
         gameSession,
         sessionResults,
+        speed,
+        demoMode,
         setInstrument,
         setTrack,
         setGameSession,
         setSessionResults,
+        setSpeed,
+        setDemoMode,
         clearSelection,
       }}
     >
