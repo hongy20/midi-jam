@@ -13,5 +13,5 @@ The application's core functionalities include:
 - Providing real-time performance feedback via a scoring system (0-100), combo counter, and accuracy notifications (e.g., "PERFECT", "GREAT").
 - Tracking personal progress with persistent high scores and best combos saved per musical track.
 - Ensuring robust playback reliability with auto-re-strike on resume and accurate speed adjustments.
-- Streamlining user interaction with a collapsible control header and automatic device/song selection.
+- Streamlining user interaction with a collapsible control header and intent-driven device and song selection.
 - Providing a comprehensive learning platform for piano, with the architectural foresight to be extended to other MIDI instruments in the future.
