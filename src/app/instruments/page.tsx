@@ -23,6 +23,16 @@ export default function InstrumentsPage() {
   }, [lastInputId, selected]);
 
   useEffect(() => {
+    // If a device is disconnected and was selected, unselect it.
+    if (selected && !inputs.some((input) => input.id === selected)) {
+      setSelected(null);
+      if (lastInputId === selected) {
+        setLastInputId(null);
+      }
+    }
+  }, [inputs, selected, lastInputId]);
+
+  useEffect(() => {
     // Attach listener to all inputs to detect activity
     const handlers = new Map<string, (e: Event) => void>();
 
@@ -69,11 +79,10 @@ export default function InstrumentsPage() {
           type="button"
           onClick={handleContinue}
           disabled={!selected}
-          className={`px-12 py-4 rounded-full text-xl font-black tracking-wider transition-all duration-300 ${
-            selected
+          className={`px-12 py-4 rounded-full text-xl font-black tracking-wider transition-all duration-300 ${selected
               ? "bg-foreground text-background hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.4)] cursor-pointer"
               : "bg-foreground/10 text-foreground/40 cursor-not-allowed"
-          }`}
+            }`}
         >
           CONTINUE ▶️
         </button>
@@ -104,25 +113,22 @@ export default function InstrumentsPage() {
                 key={inst.id}
                 type="button"
                 onClick={() => setSelected(inst.id)}
-                className={`group relative p-6 sm:p-8 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-4 overflow-hidden ${
-                  isSelected
+                className={`group relative p-6 sm:p-8 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-4 overflow-hidden ${isSelected
                     ? "bg-foreground border-foreground scale-[1.02] shadow-[0_0_40px_rgba(255,255,255,0.2)]"
                     : "bg-foreground/5 border-foreground/10 hover:border-foreground/30 hover:bg-foreground/10"
-                }`}
+                  }`}
               >
                 {/* Active Pulse Background */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 transition-opacity duration-300 ${
-                    isActive ? "opacity-100" : "opacity-0"
-                  }`}
+                  className={`absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0"
+                    }`}
                 />
 
                 <div
-                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center transition-colors relative z-10 ${
-                    isSelected
+                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center transition-colors relative z-10 ${isSelected
                       ? "bg-background text-foreground"
                       : "bg-background/50 text-foreground/60"
-                  }`}
+                    }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

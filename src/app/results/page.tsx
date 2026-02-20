@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+
 import { NavigationLayout } from "@/components/navigation-layout";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
