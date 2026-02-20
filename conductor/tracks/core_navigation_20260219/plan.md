@@ -14,6 +14,6 @@
 - [x] Task: Update `src/app/settings/page.tsx` with the 3-step speed slider and global theme toggle.
 
 ## Phase 3: Refinement & Validation
-- [ ] Task: Audit all pages for "History Neutrality" and `NavigationGuard` compliance.
-- [ ] Task: Verify responsive behavior specifically for mobile landscape and tablet landscape.
-- [ ] Task: Conductor - User Manual Verification 'Core Navigation Pages' (Protocol in workflow.md)
+- [x] Task: Audit all pages for "History Neutrality" and `NavigationGuard` compliance.
+- [x] Task: Verify responsive behavior specifically for mobile landscape and tablet landscape.
+- [x] Task: Conductor - User Manual Verification 'Core Navigation Pages' (Protocol in workflow.md)
