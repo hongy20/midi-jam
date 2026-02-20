@@ -17,13 +17,21 @@ interface GameSession {
   isPaused: boolean;
 }
 
+interface SessionResults {
+  score: number;
+  accuracy: number;
+  combo: number;
+}
+
 interface SelectionContextType {
   selectedInstrument: Instrument | null;
   selectedTrack: Track | null;
   gameSession: GameSession | null;
+  sessionResults: SessionResults | null;
   setInstrument: (instrument: Instrument) => void;
   setTrack: (track: Track) => void;
   setGameSession: (session: GameSession | null) => void;
+  setSessionResults: (results: SessionResults | null) => void;
   clearSelection: () => void;
 }
 
@@ -36,6 +44,9 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
     useState<Instrument | null>(null);
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
   const [gameSession, setGameSession] = useState<GameSession | null>(null);
+  const [sessionResults, setSessionResults] = useState<SessionResults | null>(
+    null,
+  );
 
   const setInstrument = (instrument: Instrument) =>
     setSelectedInstrument(instrument);
@@ -44,6 +55,7 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
     setSelectedInstrument(null);
     setSelectedTrack(null);
     setGameSession(null);
+    setSessionResults(null);
   };
 
   return (
@@ -52,9 +64,11 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
         selectedInstrument,
         selectedTrack,
         gameSession,
+        sessionResults,
         setInstrument,
         setTrack,
         setGameSession,
+        setSessionResults,
         clearSelection,
       }}
     >
