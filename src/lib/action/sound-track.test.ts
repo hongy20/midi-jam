@@ -25,11 +25,41 @@ describe("getSoundTracks", () => {
     const result = await getSoundTracks();
 
     expect(result).toEqual([
-      { id: "DanceOfTheSugarPlum.mid", name: "Dance Of The Sugar Plum", artist: "Unknown Artist", difficulty: "Medium", url: "/midi/DanceOfTheSugarPlum.mid" },
-      { id: "kebab-case-song.mid", name: "Kebab Case Song", artist: "Unknown Artist", difficulty: "Medium", url: "/midi/kebab-case-song.mid" },
-      { id: "lowerCamelCase.mid", name: "Lower Camel Case", artist: "Unknown Artist", difficulty: "Medium", url: "/midi/lowerCamelCase.mid" },
-      { id: "my_cool_song.mid", name: "My Cool Song", artist: "Unknown Artist", difficulty: "Medium", url: "/midi/my_cool_song.mid" },
-      { id: "Regular Song.mid", name: "Regular Song", artist: "Unknown Artist", difficulty: "Medium", url: "/midi/Regular Song.mid" },
+      {
+        id: "DanceOfTheSugarPlum.mid",
+        name: "Dance Of The Sugar Plum",
+        artist: "Unknown Artist",
+        difficulty: "Medium",
+        url: "/midi/DanceOfTheSugarPlum.mid",
+      },
+      {
+        id: "kebab-case-song.mid",
+        name: "Kebab Case Song",
+        artist: "Unknown Artist",
+        difficulty: "Medium",
+        url: "/midi/kebab-case-song.mid",
+      },
+      {
+        id: "lowerCamelCase.mid",
+        name: "Lower Camel Case",
+        artist: "Unknown Artist",
+        difficulty: "Medium",
+        url: "/midi/lowerCamelCase.mid",
+      },
+      {
+        id: "my_cool_song.mid",
+        name: "My Cool Song",
+        artist: "Unknown Artist",
+        difficulty: "Medium",
+        url: "/midi/my_cool_song.mid",
+      },
+      {
+        id: "Regular Song.mid",
+        name: "Regular Song",
+        artist: "Unknown Artist",
+        difficulty: "Medium",
+        url: "/midi/Regular Song.mid",
+      },
     ]);
   });
 
@@ -42,7 +72,7 @@ describe("getSoundTracks", () => {
   it("should handle errors gracefully", async () => {
     vi.mocked(fs.readdir).mockRejectedValue(new Error("Directory not found"));
     // Avoid logging mocked errors during unit tests
-    vi.spyOn(console, "error").mockImplementation(() => { });
+    vi.spyOn(console, "error").mockImplementation(() => {});
     const result = await getSoundTracks();
     expect(result).toEqual([]);
   });

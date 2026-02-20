@@ -58,7 +58,10 @@ export default function InstrumentsPage() {
     if (selected) {
       const instrument = inputs.find((i) => i.id === selected);
       if (instrument) {
-        setInstrument({ id: instrument.id, name: instrument.name ?? "Unknown Instrument" });
+        setInstrument({
+          id: instrument.id,
+          name: instrument.name ?? "Unknown Instrument",
+        });
       } else {
         // Fallback or explicit mapping? No, we require a matched instrument from API or keep fallback.
         // What if user had previously selected something not in the list?
