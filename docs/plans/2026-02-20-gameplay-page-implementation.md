@@ -2,92 +2,82 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Implement a new scroll-driven gameplay page that renders a MIDI-based note lane, drives lane motion via Web Animations + JS `ScrollTimeline`, supports demo playback via IntersectionObserver, and scores live MIDI input against the parsed MIDI model, with a future-proof instrument visualizer and lightweight HUD, optimized for Android Chrome performance.
+**Goal:** Refactor the existing `/game` page to implement a new scroll-driven gameplay experience. This includes rendering a MIDI-based note lane, driving lane motion via Web Animations + JS `ScrollTimeline`, supporting demo playback via IntersectionObserver, and scoring live MIDI input against the parsed MIDI model. We will preserve the existing navigation logic (pause, restart, quit) and optimize for Android Chrome performance.
 
-**Architecture:** The gameplay page consumes selection and settings (MIDI devices, track, instrument, demoMode) from global context, owns lane playback and scoring state, and composes three main pieces: `LaneStage` (visual lane + target line), `InstrumentVisualizer` (instrument-specific UI, default keyboard), and `ScoreHudLite` (aggregated scoring + progress). Lane motion is controlled by a Web Animations motion object on the lane scroll container, while a JS `ScrollTimeline` bound to that container provides canonical song time and progress for scoring and UI.
+**Architecture:** The `GamePage` (at `src/app/game/page.tsx`) consumes selection and settings (MIDI devices, track, instrument, demoMode) from global context, owns lane playback and scoring state, and composes three main pieces: `LaneStage` (visual lane + target line), `InstrumentVisualizer` (instrument-specific UI, default keyboard), and `ScoreHudLite` (aggregated scoring + progress). Lane motion is controlled by a Web Animations motion object on the lane scroll container, while a JS `ScrollTimeline` bound to that container provides canonical song time and progress for scoring and UI.
 
 **Tech Stack:** Next.js App Router (TypeScript, React 19), Tailwind CSS 4, Web MIDI API, Web Animations API, CSS ScrollTimeline (JS API), Vitest, Testing Library, Biome.
 
 ---
 
-### Task 1: Review existing archive player and hooks
+### Task 1: Review existing gameplay page and hooks
 
 **Files:**
-- Read: `src/app/archive-player/page.tsx`
+- Read: `src/app/game/page.tsx`
 - Read: `src/hooks/use-active-notes.ts` (or similar)
 - Read: `src/hooks/use-midi-player.ts`, `src/hooks/use-score-engine.ts`, and related MIDI hooks
 
-**Step 1: Review archive player composition**
+**Step 1: Review current game page composition**
 
-- Open `src/app/archive-player/page.tsx` and identify:
+- Open `src/app/game/page.tsx` and identify:
   - Which hooks manage MIDI devices, audio, and scoring.
-  - How `FalldownVisualizer`, `PianoKeyboard`, and `ScoreHud` are wired together.
+  - How placeholders are currently wired.
+  - Current state management for timer and navigation in `GamePage`.
 
-**Step 2: Identify reusable pieces**
+**Step 2: Identify reusable pieces and refactor strategy**
 
-- Note which hooks and utilities should be reused or adapted in the new gameplay page (e.g. `useActiveNotes`, score engine logic, MIDI loader/parser).
+- Note which hooks and utilities should be reused or adapted.
+- Plan how to integrate the new lane logic while keeping the existing `isPaused`, `handleTogglePause`, and navigation logic in `GamePage`.
 
 **Step 3: Document findings**
 
-- Add brief inline comments or a short note in `docs/plans/2026-02-20-gameplay-page-design.md` if any assumptions differ from the design (e.g. additional hooks discovered).
+- Add brief inline comments or a short note in `docs/plans/2026-02-20-gameplay-page-design.md` if any assumptions differ from the design.
 
 ---
 
-### Task 2: Scaffold `GamePlayPage` route
+### Task 2: Refactor `GamePage` structure
 
 **Files:**
-- Create: `src/app/gameplay/page.tsx`
-- Test: `src/app/gameplay/page.test.tsx`
+- Modify: `src/app/game/page.tsx`
+- Test: `src/app/game/page.test.tsx` (create if missing or update)
 
-**Step 1: Create minimal page component**
+**Step 1: Clean up placeholder UI**
 
-- Add `src/app/gameplay/page.tsx` with:
-  - `"use client";`
-  - A placeholder `GamePlayPage` React component that renders a simple `<main>` with text like "Gameplay Page (WIP)".
+- Remove the placeholder "JAMMING" text and related background mesh if they conflict with the new design.
+- Prepare the slots for `LaneStage`, `InstrumentVisualizer`, and `ScoreHudLite`.
 
-**Step 2: Add smoke test for the route**
+**Step 2: Ensure navigation state is preserved**
 
-- Create `src/app/gameplay/page.test.tsx` using Testing Library:
-  - Render the page component.
-  - Assert that the placeholder text is present.
+- Verify `isPaused`, `timeLeft`, and `showOverlay` are correctly wired to the new playback components (once implemented).
 
-**Step 3: Run tests**
+**Step 3: Update/Create smoke tests**
 
-- Run: `npm test`
-- Expected: New test passes.
+- Ensure tests verify that the page still renders and responds to the pause toggle.
 
 ---
 
-### Task 3: Wire `GamePlayPage` to global context (settings, track, instrument, demo mode)
+### Task 3: Wire `GamePage` to global context and new logic
 
 **Files:**
-- Modify: `src/app/gameplay/page.tsx`
-- Read/Use: any existing settings/selection hooks (e.g. `src/hooks/use-midi-selection.ts`, track/instrument selection hooks)
+- Modify: `src/app/game/page.tsx`
+- Read/Use: existing settings/selection hooks
 
-**Step 1: Import context hooks**
+**Step 1: Expand context consumption**
 
-- Import existing hooks that expose:
+- Ensure `GamePage` correctly consumes:
   - Selected MIDI input/output.
-  - Selected track / MIDI file (and potentially parsed data).
+  - Selected track / MIDI file (parsed via `useMIDIPlayer` or similar).
   - Instrument metadata.
-  - `demoMode` flag (from settings page).
+  - `demoMode` flag.
 
-**Step 2: Consume context in `GamePlayPage`**
+**Step 2: Handle edge cases**
 
-- In `GamePlayPage`, call these hooks and handle edge cases:
-  - If no track is selected, render an instructional message instead of gameplay.
-  - If no MIDI device is available, render a friendly warning but still allow demo mode if possible.
+- If no track is selected, render an instructional message instead of the game lane.
+- If no MIDI device is available, show a warning but allow demo mode.
 
-**Step 3: Replace placeholder layout**
+**Step 3: Integrate initial HUD placeholders**
 
-- Replace the placeholder text with a basic structure:
-  - A full-screen container.
-  - Slots (or placeholder `<div>`s) for `LaneStage`, `InstrumentVisualizer`, and `ScoreHudLite`.
-
-**Step 4: Run tests**
-
-- Update `page.test.tsx` to assert that when track/context hooks are mocked with valid data, the placeholders render.
-- Run: `npm test`
+- Replace existing timer UI with `ScoreHudLite` placeholders if they provide more relevant information (score, combo, etc.).
 
 ---
 

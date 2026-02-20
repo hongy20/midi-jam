@@ -2,7 +2,7 @@
 
 ## Context and Goals
 
-We are introducing a new **gameplay page** for MIDI-based instrument practice that replaces the previous `archive-player` implementation, which had performance issues and crashes on mobile (especially Android Chrome). The new design:
+We are introducing a new **gameplay experience** for MIDI-based instrument practice that replaces the previous implementation, which had performance issues and crashes on mobile (especially Android Chrome). The new design:
 
 - Targets **Android Chrome** as the primary environment (Web MIDI not available on iOS Safari).
 - Prioritizes **mobile performance** and **strict visual ↔ scoring sync**.
@@ -27,27 +27,25 @@ Owned outside the gameplay page (e.g. in a session/settings provider):
 
 These are exposed via hooks/context (e.g. `useSessionSettings`, `useTrackSelection`).
 
-### `GamePlayPage` (new gameplay route)
+### `GamePage` (existing route refactor)
 
-Consumes from context:
+Located at `src/app/game/page.tsx`. We will refactor this page to:
 
-- Selected MIDI input/output
-- Selected track / parsed MIDI model (note spans, total duration)
-- Instrument metadata
-- `demoMode` (read-only; no local toggle)
-
-Owns locally:
-
-- Lane playback state: **play / pause / stop / speed**
-- Web Animations **motion object** that drives lane scroll
-- JS **`ScrollTimeline`** that converts scroll position into **current time in song / progress**
-- Scoring state derived from **model notes** + **live MIDI input**
-
-Renders:
-
-- `LaneStage` – scroll-driven note lane + fixed target line band
-- `InstrumentVisualizer` – selected from instrument metadata (default: keyboard)
-- `ScoreHudLite` – minimal HUD (score, combo, last hit quality, progress)
+- Retain existing **navigation logic** (pause overlay, restart, quit, auto-navigation to results).
+- Consume from context:
+  - Selected MIDI input/output
+  - Selected track / parsed MIDI model (note spans, total duration)
+  - Instrument metadata
+  - `demoMode` (read-only; no local toggle)
+- Own locally:
+  - Lane playback state: **play / pause / stop / speed** (synced with the page's `isPaused` state).
+  - Web Animations **motion object** that drives lane scroll.
+  - JS **`ScrollTimeline`** that converts scroll position into **current time in song / progress**.
+  - Scoring state derived from **model notes** + **live MIDI input**.
+- Renders:
+  - `LaneStage` – scroll-driven note lane + fixed target line band.
+  - `InstrumentVisualizer` – selected from instrument metadata (default: keyboard).
+  - `ScoreHudLite` – minimal HUD (score, combo, last hit quality, progress), potentially integrated with the existing header UI.
 
 ---
 
