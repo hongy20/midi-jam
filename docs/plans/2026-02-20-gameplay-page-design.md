@@ -264,19 +264,22 @@ This abstraction allows us to:
 
 ### Overall Layout
 
-- Full-screen container (`fixed inset-0`).
-- Middle section:
+The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning and zero unexpected scrollbars:
 
-  - `LaneStage` in a perspective wrapper to create a “falling toward the instrument” 3D-feel.
+- **Row 1 (Status Bar): `h-20` (Fixed)**
+  - Left: `ScoreHudLite` (Score, Combo, Last Hit Quality).
+  - Right: Pause Button.
+- **Row 2 (Gameplay Lane): `1fr` (Flexible)**
+  - Contains `LaneStage` with `overflow: hidden`.
+  - **Target Line**: A 1px thin horizontal line fixed at the bottom of this row (`bottom-0`). This line is the hit zone and acts as the `IntersectionObserver` root. It does **not** scroll with the lane.
+  - **Falling Notes**: Rendered as vertical bars within this row.
+- **Row 3 (Instrument): `auto` (Fixed to Instrument height)**
+  - Contains `InstrumentVisualizer`.
+  - Displays the **full standard range** of the instrument (e.g., all 88 keys for piano); no dynamic range shifting or cropping based on song content.
 
-- Bottom:
-
-  - `InstrumentVisualizer` pinned to the viewport bottom, spanning horizontally.
-
-All heavy visual motion is confined to:
-
-- The lane container’s scroll (via Web Animations).
-- CSS effects driven by ScrollTimeline (no React re-render per frame).
+**Visual Constraints:**
+- **No 3D perspective**: The layout is strictly 2D for maximum performance and alignment.
+- **Performance**: High-performance rendering principles (CSS Grid, layer separation) are strictly followed.
 
 ---
 

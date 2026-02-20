@@ -117,22 +117,22 @@
 - `LaneStage` props:
   - Model notes (parsed note spans).
   - Total duration.
-  - Range of pitches (for horizontal positioning).
   - Optional className.
 - Render:
-  - A scrollable container (`#lane-scroll`) with fixed height.
-  - A tall inner lane where note `<div>`s are absolutely positioned using `lane-geometry` utilities.
-  - A fixed-position target line band near the bottom.
+  - A container taking up its grid cell (`1fr`).
+  - A scrollable container (`#lane-scroll`) with `overflow: hidden`.
+  - A tall inner lane where note `<div>`s are absolutely positioned.
+  - **Target Line**: A 1px thin horizontal line absolute at `bottom-0` of the component (not scrolling).
 
 **Step 2: Basic render test**
 
 - In `lane-stage.test.tsx`:
   - Render `LaneStage` with a small set of fake notes.
-  - Assert that the expected number of note elements and target line are in the DOM.
+  - Assert that the expected number of note elements and the 1px target line are in the DOM.
 
-**Step 3: Integrate into `GamePlayPage`**
+**Step 3: Integrate into `GamePage`**
 
-- Import `LaneStage` into `page.tsx` and pass in parsed notes and duration from the selected track (mock or placeholder parser call).
+- Import `LaneStage` into `page.tsx` and place it in the middle row of the CSS grid.
 
 **Step 4: Run tests**
 
@@ -262,8 +262,8 @@
 - `getInstrumentVisualizerConfig(instrumentId: string)`:
   - For `"piano"`, return:
     - Component: existing `PianoKeyboard`.
-    - Pitch → key index mapping.
-  - For unknown instruments, default to the `"piano"` config for now.
+    - Note range: Full standard range (88 keys).
+  - For unknown instruments, default to the `"piano"` config.
 
 **Step 2: Implement `InstrumentVisualizer`**
 
@@ -271,18 +271,17 @@
   - `instrumentId` (string).
   - Sets of live and demo notes.
 - Behavior:
-  - Use `getInstrumentVisualizerConfig` to choose the component + mapping.
-  - Render the chosen component with the correct active note sets.
+  - Use `getInstrumentVisualizerConfig` to choose the component.
+  - Render the chosen component with the **full standard range** (no dynamic cropping).
 
 **Step 3: Add tests**
 
 - In `instrument-visualizer.test.tsx`:
-  - Verify that `"piano"` id renders the `PianoKeyboard`.
-  - Verify that unknown ids fall back to `PianoKeyboard`.
+  - Verify that the component renders with its full default range.
 
-**Step 4: Integrate into `GamePlayPage`**
+**Step 4: Integrate into `GamePage`**
 
-- Import and render `InstrumentVisualizer`, passing instrument id and active note sets.
+- Import and render `InstrumentVisualizer` in the bottom row of the CSS grid.
 
 ---
 
@@ -297,20 +296,15 @@
 - Props:
   - `score`, `combo`, `lastHitQuality`, `progress`.
 - Layout:
-  - Small, fixed overlay with:
-    - Score number.
-    - Current combo.
-    - Last hit quality label.
-    - Progress bar and percentage text.
+  - Designed to sit in the top row of the grid.
+  - **Left-aligned section**: Score, Combo, and Last Hit Quality label.
+  - **Progress indicator**: Integrated progress bar or percentage.
+  - (The Pause button will be handled in `GamePage` next to the HUD).
 
 **Step 2: Basic render tests**
 
 - In `score-hud-lite.test.tsx`:
-  - Render with sample props and assert they appear correctly.
-
-**Step 3: Integrate into `GamePlayPage`**
-
-- Feed props from `useLaneScoreEngine` and ScrollTimeline progress.
+  - Render with sample props and assert they appear correctly on the left side of the component.
 
 ---
 
@@ -353,4 +347,27 @@
     - Demo mode plays notes as they cross the target line.
     - Scoring responds correctly to early/late hits and misses.
     - HUD updates are responsive and do not cause visible jank.
+
+### Task 12: Browser Support Check on Welcome Page
+
+**Files:**
+- Modify: `src/app/page.tsx`
+
+**Step 1: Implement browser support check**
+
+- Check for:
+  - `navigator.requestMIDIAccess` (Web MIDI API)
+  - `window.ScrollTimeline` (ScrollTimeline API)
+- If not supported:
+  - Disable "START JAM" button.
+  - Show a message indicating the browser is not supported and recommending Android Chrome.
+
+### Task 13: Clean up legacy files
+
+**Files:**
+- Delete: `src/hooks/use-midi-player.ts`
+- Delete: `src/hooks/use-playback-clock.ts`
+- Delete: `src/hooks/use-score-engine.ts` (if fully replaced by `use-lane-score-engine.ts`)
+- Delete: `src/app/archive-player/` (Archived gameplay page and tests)
+- Delete: Any other unused legacy components or hooks identified during the refactor.
 
