@@ -26,6 +26,27 @@ function formatFilename(filename: string): string {
     .join(" ");
 }
 
+const METADATA: Record<
+  string,
+  { title: string; artist: string; difficulty: string }
+> = {
+  "Golden Kpop Demon Hunters.mid": {
+    title: "Golden",
+    artist: "Kpop Demon Hunters",
+    difficulty: "Hard",
+  },
+  "What It Sounds Like - KPop Demon Hunters.mid": {
+    title: "What It Sounds Like",
+    artist: "Kpop Demon Hunters",
+    difficulty: "Medium",
+  },
+  "yung kai - blue.mid": {
+    title: "Blue",
+    artist: "Yung Kai",
+    difficulty: "Easy",
+  },
+};
+
 export async function getSoundTracks() {
   try {
     const midiDir = path.join(process.cwd(), "public", "midi");
@@ -33,10 +54,16 @@ export async function getSoundTracks() {
 
     const midiFiles = files
       .filter((file) => file.endsWith(".mid") || file.endsWith(".midi"))
-      .map((file) => ({
-        name: formatFilename(file),
-        url: `/midi/${file}`,
-      }))
+      .map((file) => {
+        const metadata = METADATA[file];
+        return {
+          id: file, // use file as ID
+          name: metadata?.title || formatFilename(file),
+          artist: metadata?.artist || "Unknown Artist",
+          difficulty: metadata?.difficulty || "Medium",
+          url: `/midi/${file}`,
+        };
+      })
       .sort((a, b) => a.name.localeCompare(b.name));
 
     return midiFiles;

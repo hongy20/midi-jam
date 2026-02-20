@@ -8,7 +8,7 @@ export default function WelcomePage() {
   const { clearSelection } = useSelection();
 
   const handleStart = () => {
-    clearSelection(); // Fresh start for everything
+    clearSelection();
     navigate("/instruments");
   };
 
@@ -17,43 +17,78 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center overflow-hidden">
-      {/* Aurora Mesh Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] bg-blue-600/20 rounded-full blur-[120px] animate-pulse duration-[10s]" />
-        <div className="absolute top-[10%] -right-[10%] w-[60%] h-[60%] bg-purple-600/20 rounded-full blur-[120px] animate-pulse duration-[8s]" />
-        <div className="absolute -bottom-[20%] left-[20%] w-[50%] h-[50%] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse duration-[12s]" />
+    <div className="fixed inset-0 grid grid-rows-[1fr_auto_1fr] md:grid-rows-[1fr_auto_1fr] place-items-center overflow-hidden bg-background text-foreground transition-colors duration-500">
+      {/* Background Layer: Static/Composite-only */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-30">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] h-[150vh] bg-[radial-gradient(circle,rgba(255,255,255,0.1)_0%,transparent_50%)] animate-[spin_60s_linear_infinite]" />
       </div>
 
-      <main className="relative z-10 text-center animate-in fade-in zoom-in-95 duration-1000">
-        <h1 className="text-6xl md:text-8xl font-black text-white mb-6 tracking-tighter uppercase italic">
-          Midi Jam
-        </h1>
-        <p className="text-xl md:text-2xl text-slate-400 mb-12 font-medium">
-          The ultimate immersive piano experience
-        </p>
+      {/* Top Spacer */}
+      <div className="w-full h-full" />
 
-        <div className="flex flex-col items-center gap-4">
+      {/* Main Content Area */}
+      <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-4 animate-slide-up w-full max-w-4xl">
+        <div className="mb-8 relative">
+          <h1 className="text-6xl sm:text-7xl md:text-9xl font-black mb-4 tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent transform transition-transform hover:scale-105 select-none drop-shadow-2xl">
+            MIDI JAM
+          </h1>
+          <div className="absolute -inset-4 bg-foreground/20 blur-3xl -z-10 rounded-full animate-pulse px-4" />
+        </div>
+
+        <div className="flex items-center gap-3 text-sm sm:text-base md:text-xl text-foreground/80 font-medium mb-12 bg-foreground/10 px-6 py-3 rounded-full backdrop-blur-sm border border-foreground/20 shadow-lg">
+          <svg
+            aria-label="Volume Warning"
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="animate-pulse text-foreground/90"
+          >
+            <title>Volume</title>
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+          </svg>
+          <span className="tracking-wide">
+            WARNING: AUDIO MAY BE LOUD. CONNECT HEADPHONES/SPEAKERS.
+          </span>
+        </div>
+
+        {/* Navigation Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full max-w-lg mb-8">
           <button
             type="button"
             onClick={handleStart}
-            className="px-12 py-4 bg-white text-slate-950 text-xl font-bold rounded-full hover:scale-105 active:scale-95 transition-transform shadow-[0_0_40px_rgba(255,255,255,0.3)]"
+            className="col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 bg-foreground text-background text-xl sm:text-2xl font-black rounded-2xl sm:rounded-3xl hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] overflow-hidden flex items-center justify-center gap-3"
           >
-            START JAM
+            <span className="relative z-10">START JAM</span>
+            <span className="relative z-10 text-2xl group-hover:translate-x-1 transition-transform">
+              ▶️
+            </span>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-background/20 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
           </button>
 
           <button
             type="button"
             onClick={handleSettings}
-            className="text-slate-500 hover:text-white transition-colors text-sm font-bold uppercase tracking-widest"
+            className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 px-6 py-4 rounded-xl border-2 border-foreground/20 text-foreground hover:bg-foreground/10 hover:border-foreground/40 transition-all font-bold tracking-widest uppercase text-sm"
           >
-            Settings
+            Settings <span className="text-xl">⚙️</span>
           </button>
         </div>
       </main>
 
-      <footer className="absolute bottom-8 text-slate-600 text-[10px] uppercase tracking-widest font-bold">
-        Inspired by performance • Built for precision
+      {/* Bottom Spacer / Footer */}
+      <footer className="w-full flex items-end justify-center pb-8 z-10">
+        <p className="text-foreground/40 text-[10px] sm:text-xs uppercase tracking-[0.3em] font-bold">
+          The ultimate immersive piano experience
+        </p>
       </footer>
     </div>
   );

@@ -12,6 +12,7 @@ interface NavigationLayoutProps {
   onBack?: () => void;
   backLabel?: string;
   accentColor?: "blue" | "purple" | "green";
+  hideHeaderIcon?: boolean;
 }
 
 export function NavigationLayout({

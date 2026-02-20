@@ -23,9 +23,11 @@ describe("Welcome Page", () => {
       selectedInstrument: null,
       selectedTrack: null,
       gameSession: null,
+      sessionResults: null,
       setInstrument: vi.fn(),
       setTrack: vi.fn(),
       setGameSession: vi.fn(),
+      setSessionResults: vi.fn(),
       clearSelection: vi.fn(),
     });
 
@@ -46,9 +48,11 @@ describe("Welcome Page", () => {
       selectedInstrument: null,
       selectedTrack: null,
       gameSession: null,
+      sessionResults: null,
       setInstrument: vi.fn(),
       setTrack: vi.fn(),
       setGameSession: vi.fn(),
+      setSessionResults: vi.fn(),
       clearSelection: vi.fn(),
     });
 
@@ -67,9 +71,11 @@ describe("Welcome Page", () => {
       selectedInstrument: null,
       selectedTrack: null,
       gameSession: null,
+      sessionResults: null,
       setInstrument: vi.fn(),
       setTrack: vi.fn(),
       setGameSession: vi.fn(),
+      setSessionResults: vi.fn(),
       clearSelection: vi.fn(),
     });
 
