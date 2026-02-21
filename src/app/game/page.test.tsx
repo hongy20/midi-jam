@@ -82,10 +82,13 @@ describe("Game Page", () => {
       score: 0,
       combo: 0,
       lastHitQuality: null,
+      resetScore: vi.fn(),
     });
-    (useLaneTimeline as any).mockReturnValue({
+    vi.mocked(useLaneTimeline).mockReturnValue({
       getCurrentTimeMs: () => 0,
       getProgress: () => 0,
+      resetTimeline: vi.fn(),
+      motion: null,
     });
   });
 

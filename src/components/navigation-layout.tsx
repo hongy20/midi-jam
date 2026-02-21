@@ -42,8 +42,9 @@ export function NavigationLayout({
                   {Array.from({ length: totalSteps }).map((_, i) => (
                     <div
                       key={`step-${i + 1}`}
-                      className={`h-1 w-6 rounded-full transition-all duration-500 ${i + 1 <= step ? "bg-accent-primary" : "bg-foreground/10"
-                        }`}
+                      className={`h-1 w-6 rounded-full transition-all duration-500 ${
+                        i + 1 <= step ? "bg-accent-primary" : "bg-foreground/10"
+                      }`}
                     />
                   ))}
                 </div>
