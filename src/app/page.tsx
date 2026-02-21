@@ -7,17 +7,16 @@ import { useGameNavigation } from "@/hooks/use-game-navigation";
 export default function WelcomePage() {
   const { navigate } = useGameNavigation();
   const { clearSelection } = useSelection();
-  const [isSupported, setIsSupported] = useState<boolean | null>(null);
+  const [isSupported, setIsSupported] = useState<boolean>(false);
 
   useEffect(() => {
     const hasWebMidi = "requestMIDIAccess" in navigator;
     const hasScrollTimeline = "ScrollTimeline" in window;
     setIsSupported(hasWebMidi && hasScrollTimeline);
+    clearSelection();
   }, []);
 
   const handleStart = () => {
-    if (!isSupported) return;
-    clearSelection();
     navigate("/instruments");
   };
 
@@ -44,7 +43,7 @@ export default function WelcomePage() {
           <div className="absolute -inset-4 bg-foreground/20 blur-3xl -z-10 rounded-full animate-pulse px-4" />
         </div>
 
-        {isSupported === false && (
+        {!isSupported && (
           <div className="flex flex-col items-center gap-2 text-red-500 font-bold mb-8 animate-bounce">
             <span className="bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20">
               UNSUPPORTED BROWSER
@@ -86,9 +85,9 @@ export default function WelcomePage() {
           <button
             type="button"
             onClick={handleStart}
-            disabled={isSupported === false}
+            disabled={!isSupported}
             className={`col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 bg-foreground text-background text-xl sm:text-2xl font-black rounded-2xl sm:rounded-3xl transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)] overflow-hidden flex items-center justify-center gap-3 ${
-              isSupported === false
+              !isSupported
                 ? "opacity-20 cursor-not-allowed grayscale"
                 : "hover:scale-[1.03] active:scale-[0.97] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]"
             }`}
