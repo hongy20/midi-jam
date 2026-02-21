@@ -30,10 +30,6 @@ interface SelectionContextType {
   // MIDI Device Selection
   selectedMIDIInput: WebMidi.MIDIInput | null;
   selectedMIDIOutput: WebMidi.MIDIOutput | null;
-  availableInputs: WebMidi.MIDIInput[];
-  availableOutputs: WebMidi.MIDIOutput[];
-  isLoadingDevices: boolean;
-  midiError: string | null;
   setTrack: (track: Track) => void;
   setGameSession: (session: GameSession | null) => void;
   setSessionResults: (results: SessionResults | null) => void;
@@ -81,10 +77,6 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
         demoMode,
         selectedMIDIInput,
         selectedMIDIOutput,
-        availableInputs: inputs,
-        availableOutputs: outputs,
-        isLoadingDevices: isLoading,
-        midiError: error,
         setTrack,
         setGameSession,
         setSessionResults,
