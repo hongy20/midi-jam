@@ -13,7 +13,6 @@ export function InstrumentVisualizer({
   liveNotes,
   demoNotes,
 }: InstrumentVisualizerProps) {
-
   const Instrument = getInstrumentVisualizer(instrumentId);
 
   return (

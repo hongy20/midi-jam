@@ -52,8 +52,6 @@ export default function ResultsPage() {
       title="Performance Summary"
       step={0}
       totalSteps={0}
-      accentColor="primary"
-      hideHeaderIcon={true}
       footer={
         <div className="flex flex-col sm:flex-row gap-4 w-full px-4 sm:px-0 z-20">
           <button

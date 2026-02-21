@@ -76,7 +76,6 @@ export default function InstrumentsPage() {
       title="Select Your Instrument"
       step={1}
       totalSteps={2}
-      accentColor="primary"
       footer={
         <button
           type="button"

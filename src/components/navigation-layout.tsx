@@ -11,8 +11,6 @@ interface NavigationLayoutProps {
   footer?: ReactNode;
   onBack?: () => void;
   backLabel?: string;
-  accentColor?: "blue" | "purple" | "green" | "primary";
-  hideHeaderIcon?: boolean;
 }
 
 export function NavigationLayout({
@@ -23,34 +21,12 @@ export function NavigationLayout({
   footer,
   onBack,
   backLabel,
-  accentColor = "primary",
 }: NavigationLayoutProps) {
-  const accentClasses = {
-    blue: "text-blue-500 bg-blue-600/10",
-    purple: "text-purple-500 bg-purple-600/10",
-    green: "text-green-500 bg-green-600/10",
-    primary: "text-accent-primary bg-accent-primary/10",
-  };
-
   return (
     <div className="fixed inset-0 bg-background flex flex-col items-center justify-center p-6 overflow-hidden animate-fade-in transition-colors duration-500">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div
-          className={`absolute ${
-            accentColor === "blue" || accentColor === "primary"
-              ? "top-[20%] right-[10%]"
-              : "bottom-[10%] left-[10%]"
-          } w-[60%] h-[60%] rounded-full blur-[120px] ${
-            accentColor === "blue"
-              ? "bg-blue-600/10"
-              : accentColor === "purple"
-                ? "bg-purple-600/10"
-                : accentColor === "green"
-                  ? "bg-green-600/10"
-                  : "bg-accent-primary/5"
-          }`}
-        />
+        <div className="absolute top-[20%] right-[10%] w-[60%] h-[60%] rounded-full blur-[120px] bg-accent-primary/5" />
       </div>
 
       <div className="relative z-10 w-full max-w-4xl flex flex-col h-full max-h-[85vh] animate-slide-up">
@@ -59,26 +35,15 @@ export function NavigationLayout({
           <div className="flex flex-col">
             {step && totalSteps && (
               <div className="flex items-center gap-3 mb-2">
-                <span
-                  className={`font-bold uppercase tracking-widest text-[10px] sm:text-xs ${accentClasses[accentColor].split(" ")[0]}`}
-                >
+                <span className="font-bold uppercase tracking-widest text-[10px] sm:text-xs text-accent-primary">
                   Step {step} of {totalSteps}
                 </span>
                 <div className="flex gap-1">
                   {Array.from({ length: totalSteps }).map((_, i) => (
                     <div
                       key={`step-${i + 1}`}
-                      className={`h-1 w-6 rounded-full transition-all duration-500 ${
-                        i + 1 <= step
-                          ? accentColor === "blue"
-                            ? "bg-blue-500"
-                            : accentColor === "purple"
-                              ? "bg-purple-500"
-                              : accentColor === "green"
-                                ? "bg-green-500"
-                                : "bg-accent-primary"
-                          : "bg-foreground/10"
-                      }`}
+                      className={`h-1 w-6 rounded-full transition-all duration-500 ${i + 1 <= step ? "bg-accent-primary" : "bg-foreground/10"
+                        }`}
                     />
                   ))}
                 </div>

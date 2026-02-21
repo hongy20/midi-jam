@@ -69,10 +69,11 @@ export default function WelcomePage() {
             type="button"
             onClick={handleStart}
             disabled={!isSupported}
-            className={`col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 bg-foreground text-background text-xl sm:text-2xl font-black rounded-2xl sm:rounded-3xl transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)] overflow-hidden flex items-center justify-center gap-3 ${!isSupported
+            className={`col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 bg-foreground text-background text-xl sm:text-2xl font-black rounded-2xl sm:rounded-3xl transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)] overflow-hidden flex items-center justify-center gap-3 ${
+              !isSupported
                 ? "opacity-20 cursor-not-allowed grayscale"
                 : "hover:scale-[1.03] active:scale-[0.97] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]"
-              }`}
+            }`}
           >
             <span className="relative z-10">START JAM</span>
             <span className="relative z-10 text-2xl group-hover:translate-x-1 transition-transform">
