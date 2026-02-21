@@ -26,7 +26,7 @@ export default function GamePage() {
     selectedMIDIOutput,
   } = useSelection();
 
-  const trackUrl = selectedTrack ? `/midi/${selectedTrack.id}` : null;
+  const trackUrl = selectedTrack?.url || null;
   const {
     events,
     spans,

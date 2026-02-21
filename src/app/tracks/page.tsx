@@ -36,7 +36,7 @@ export default function TracksPage() {
     if (selected) {
       const track = tracks.find((t) => t.id === selected);
       if (track) {
-        setTrack({ id: track.id, name: track.name });
+        setTrack({ id: track.id, name: track.name, url: track.url });
       }
       navigate("/game");
     }

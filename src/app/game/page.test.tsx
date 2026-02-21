@@ -50,7 +50,7 @@ describe("Game Page", () => {
     });
     vi.mocked(useSelection).mockReturnValue({
       selectedInstrument: { id: "piano", name: "Piano" },
-      selectedTrack: { id: "track-1.mid", name: "Test Track" },
+      selectedTrack: { id: "track-1.mid", name: "Test Track", url: "/midi/track-1.mid" },
       gameSession: null,
       sessionResults: null,
       speed: 1.0,
