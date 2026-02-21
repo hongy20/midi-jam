@@ -191,13 +191,14 @@ export default function GamePage() {
         />
       </footer>
 
-      <PauseOverlay
-        isVisible={showOverlay}
-        onResume={handleTogglePause}
-        onRestart={handleRestart}
-        onSettings={() => navigate("/settings?from=/game")}
-        onQuit={handleQuit}
-      />
+      {showOverlay &&
+        <PauseOverlay
+          onResume={handleTogglePause}
+          onRestart={handleRestart}
+          onSettings={() => navigate("/settings?from=/game")}
+          onQuit={handleQuit}
+        />
+      }
     </div>
   );
 }

@@ -1,7 +1,8 @@
 "use client";
 
+import { LogOut, Play, RotateCcw, Settings } from "lucide-react";
+
 interface PauseOverlayProps {
-  isVisible: boolean;
   onResume: () => void;
   onRestart: () => void;
   onSettings: () => void;
@@ -9,13 +10,13 @@ interface PauseOverlayProps {
 }
 
 export function PauseOverlay({
-  isVisible,
   onResume,
   onRestart,
   onSettings,
   onQuit,
 }: PauseOverlayProps) {
-  if (!isVisible) return null;
+  const buttonClass =
+    "flex items-center justify-center gap-3 w-full py-3.5 sm:py-4 bg-foreground/10 text-foreground border border-foreground/20 rounded-full font-bold text-lg sm:text-xl transition-all hover:bg-foreground/20 hover:scale-[1.02] active:scale-[0.98]";
 
   return (
     <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-2xl flex items-center justify-center animate-in fade-in duration-300 p-4">
@@ -24,32 +25,27 @@ export function PauseOverlay({
           Paused
         </h1>
 
-        <button
-          type="button"
-          onClick={onResume}
-          className="w-full py-3.5 sm:py-4 bg-foreground text-background rounded-full font-black text-lg sm:text-xl hover:scale-105 transition-transform shadow-[0_0_40px_rgba(255,255,255,0.2)]"
-        >
+        <button type="button" onClick={onResume} className={buttonClass}>
+          <Play className="w-5 h-5 fill-current" />
           RESUME
         </button>
-        <button
-          type="button"
-          onClick={onRestart}
-          className="w-full py-3.5 sm:py-4 bg-foreground/10 text-foreground border border-foreground/20 rounded-full font-bold text-lg sm:text-xl hover:bg-foreground/20 flex items-center justify-center transition-colors"
-        >
+
+        <button type="button" onClick={onRestart} className={buttonClass}>
+          <RotateCcw className="w-5 h-5" />
           RESTART
         </button>
-        <button
-          type="button"
-          onClick={onSettings}
-          className="w-full py-3.5 sm:py-4 bg-foreground/10 text-foreground border border-foreground/20 rounded-full font-bold text-lg sm:text-xl hover:bg-foreground/20 transition-colors"
-        >
-          SETTINGS ⚙️
+
+        <button type="button" onClick={onSettings} className={buttonClass}>
+          <Settings className="w-5 h-5" />
+          SETTINGS
         </button>
+
         <button
           type="button"
           onClick={onQuit}
-          className="w-full py-3.5 sm:py-4 text-red-500 rounded-full font-bold text-lg sm:text-xl hover:bg-red-500/10 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)] transition-all mt-4"
+          className={`${buttonClass} text-red-500 border-red-500/20 hover:bg-red-500/10 hover:border-red-500/40 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]`}
         >
+          <LogOut className="w-5 h-5" />
           QUIT GAME
         </button>
       </div>
