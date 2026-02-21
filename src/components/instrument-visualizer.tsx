@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
-import { getInstrumentVisualizerConfig } from "@/lib/instrument/visualizer-config";
+import { getInstrumentVisualizer } from "@/lib/device/visualizer";
 
 interface InstrumentVisualizerProps {
   instrumentId: string;
@@ -14,15 +13,12 @@ export function InstrumentVisualizer({
   liveNotes,
   demoNotes,
 }: InstrumentVisualizerProps) {
-  const config = useMemo(
-    () => getInstrumentVisualizerConfig(instrumentId),
-    [instrumentId],
-  );
-  const { Component } = config;
+
+  const Instrument = getInstrumentVisualizer(instrumentId);
 
   return (
     <div className="w-full h-full flex items-end">
-      <Component liveNotes={liveNotes} playbackNotes={demoNotes} />
+      <Instrument liveNotes={liveNotes} playbackNotes={demoNotes} />
     </div>
   );
 }
