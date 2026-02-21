@@ -1,34 +1,38 @@
-import { getNoteLayout } from "@/lib/gameplay/lane-geometry";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import gridStyles from "./background-lane.module.css";
 import styles from "./track-lane.module.css";
 
 interface TrackLaneProps {
   spans: NoteSpan[];
-  laneHeight: number;
-  targetY: number;
-  maxScroll: number;
+  viewportHeight: number;
+  totalDurationMs: number;
 }
 
 /**
  * Renders the extremely tall inner lane containing all note blocks for the track.
- * Horizontal positioning is handled by the shared CSS grid system.
+ * Vertical positioning is now percentage-based relative to the total track duration
+ * plus a 2000ms lookahead/padding.
  */
 export function TrackLane({
   spans,
-  laneHeight,
-  targetY,
-  maxScroll,
+  viewportHeight,
+  totalDurationMs,
 }: TrackLaneProps) {
+  // The lane represents total track time + 2000ms lead-in/padding
+  const totalTrackMs = totalDurationMs + 2000;
+  const ratio = viewportHeight / 2000;
+  const laneHeight = totalTrackMs * ratio;
+
   return (
     <div className={styles.container} style={{ height: `${laneHeight}px` }}>
       {spans.map((span) => {
-        const { top, height } = getNoteLayout(
-          span.startTime * 1000,
-          (span.startTime + span.duration) * 1000,
-          targetY,
-          maxScroll,
-        );
+        const startTimeMs = span.startTime * 1000;
+        const endTimeMs = (span.startTime + span.duration) * 1000;
+
+        // Proportional positioning: t=0 is at 100% (bottom), t=totalDurationMs is atリードout.
+        // top% = (totalTrackMs - endTimeMs) / totalTrackMs * 100
+        const topPercent = ((totalTrackMs - endTimeMs) / totalTrackMs) * 100;
+        const heightPercent = ((endTimeMs - startTimeMs) / totalTrackMs) * 100;
 
         const pitchClass = gridStyles[`note-${span.note}`];
 
@@ -41,8 +45,8 @@ export function TrackLane({
               span.isBlack ? styles.black : styles.white
             }`}
             style={{
-              top: `${top}px`,
-              height: `${height}px`,
+              top: `${topPercent}%`,
+              height: `${heightPercent}%`,
             }}
           />
         );

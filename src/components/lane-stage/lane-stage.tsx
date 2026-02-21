@@ -3,10 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDemoPlayback } from "@/hooks/use-demo-playback";
 import { getNoteUnitOffset, isBlackKey } from "@/lib/device/piano";
-import {
-  getLaneHeight,
-  LANE_PIXELS_PER_MS,
-} from "@/lib/gameplay/lane-geometry";
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import { BackgroundLane } from "./background-lane";
@@ -54,14 +50,6 @@ export function LaneStage({
   }, []);
 
   const { height: viewportHeight } = dimensions;
-  const targetY = viewportHeight - 1; // Target line at the very bottom
-
-  const laneHeight = useMemo(() => {
-    if (viewportHeight === 0) return 0;
-    return getLaneHeight(totalDurationMs, viewportHeight);
-  }, [totalDurationMs, viewportHeight]);
-
-  const maxScroll = totalDurationMs * LANE_PIXELS_PER_MS;
 
   useDemoPlayback({
     containerRef: scrollRef,
@@ -85,7 +73,7 @@ export function LaneStage({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full h-full overflow-hidden bg-background/5`}
+      className="relative w-full h-full overflow-hidden bg-background/5"
       style={
         {
           "--piano-start-unit": startUnit,
@@ -102,9 +90,8 @@ export function LaneStage({
       >
         <TrackLane
           spans={spans}
-          laneHeight={laneHeight}
-          targetY={targetY}
-          maxScroll={maxScroll}
+          viewportHeight={viewportHeight}
+          totalDurationMs={totalDurationMs}
         />
       </div>
 
