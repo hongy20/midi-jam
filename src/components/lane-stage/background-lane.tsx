@@ -1,14 +1,14 @@
 import { isBlackKey } from "@/lib/device/piano";
-import styles from "./background-lanes.module.css";
+import styles from "./background-lane.module.css";
 
-interface BackgroundLanesProps {
+interface BackgroundLaneProps {
   notes: number[];
 }
 
 /**
  * Static lanes matching the piano keys.
  */
-export function BackgroundLanes({ notes }: BackgroundLanesProps) {
+export function BackgroundLane({ notes }: BackgroundLaneProps) {
   return (
     <div className={styles.container}>
       {notes.map((note) => (
