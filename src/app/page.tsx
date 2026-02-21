@@ -1,13 +1,22 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
 
 export default function WelcomePage() {
   const { navigate } = useGameNavigation();
   const { clearSelection } = useSelection();
+  const [isSupported, setIsSupported] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const hasWebMidi = "requestMIDIAccess" in navigator;
+    const hasScrollTimeline = "ScrollTimeline" in window;
+    setIsSupported(hasWebMidi && hasScrollTimeline);
+  }, []);
 
   const handleStart = () => {
+    if (!isSupported) return;
     clearSelection();
     navigate("/instruments");
   };
@@ -34,6 +43,18 @@ export default function WelcomePage() {
           </h1>
           <div className="absolute -inset-4 bg-foreground/20 blur-3xl -z-10 rounded-full animate-pulse px-4" />
         </div>
+
+        {isSupported === false && (
+          <div className="flex flex-col items-center gap-2 text-red-500 font-bold mb-8 animate-bounce">
+            <span className="bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20">
+              UNSUPPORTED BROWSER
+            </span>
+            <p className="text-xs text-red-500/60 max-w-xs">
+              This app requires Web MIDI and ScrollTimeline APIs. Please use
+              Android Chrome or a modern Chromium browser.
+            </p>
+          </div>
+        )}
 
         <div className="flex items-center gap-3 text-sm sm:text-base md:text-xl text-foreground/80 font-medium mb-12 bg-foreground/10 px-6 py-3 rounded-full backdrop-blur-sm border border-foreground/20 shadow-lg">
           <svg
@@ -65,7 +86,12 @@ export default function WelcomePage() {
           <button
             type="button"
             onClick={handleStart}
-            className="col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 bg-foreground text-background text-xl sm:text-2xl font-black rounded-2xl sm:rounded-3xl hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] overflow-hidden flex items-center justify-center gap-3"
+            disabled={isSupported === false}
+            className={`col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 bg-foreground text-background text-xl sm:text-2xl font-black rounded-2xl sm:rounded-3xl transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)] overflow-hidden flex items-center justify-center gap-3 ${
+              isSupported === false
+                ? "opacity-20 cursor-not-allowed grayscale"
+                : "hover:scale-[1.03] active:scale-[0.97] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]"
+            }`}
           >
             <span className="relative z-10">START JAM</span>
             <span className="relative z-10 text-2xl group-hover:translate-x-1 transition-transform">

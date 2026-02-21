@@ -52,7 +52,7 @@ export default function ResultsPage() {
       title="Performance Summary"
       step={0}
       totalSteps={0}
-      accentColor="blue"
+      accentColor="primary"
       hideHeaderIcon={true}
       footer={
         <div className="flex flex-col sm:flex-row gap-4 w-full px-4 sm:px-0 z-20">
@@ -84,7 +84,7 @@ export default function ResultsPage() {
     >
       <div className="w-full h-full max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 z-20">
         <header className="text-center mb-8 w-full animate-slide-up">
-          <span className="text-blue-500 font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-2 sm:mb-4 block drop-shadow-md">
+          <span className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-2 sm:mb-4 block drop-shadow-md">
             Song Complete
           </span>
           <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-foreground italic uppercase tracking-tighter drop-shadow-xl bg-gradient-to-tr from-foreground to-foreground/50 bg-clip-text text-transparent">
@@ -105,7 +105,7 @@ export default function ResultsPage() {
             </span>
 
             {/* Decorative background glow behind score */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-blue-500/10 blur-[80px] rounded-full -z-10 group-hover:bg-blue-400/20 transition-colors duration-500" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-accent-primary/10 blur-[80px] rounded-full -z-10 group-hover:bg-accent-primary/20 transition-colors duration-500" />
           </div>
 
           <div className="bg-foreground/5 backdrop-blur-3xl border border-foreground/10 p-5 sm:p-8 rounded-[1.5rem] sm:rounded-[2.5rem] flex flex-col col-span-1 lg:col-span-2 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:bg-foreground/10 transition-colors">

@@ -76,7 +76,7 @@ export default function InstrumentsPage() {
       title="Select Your Instrument"
       step={1}
       totalSteps={2}
-      accentColor="blue"
+      accentColor="primary"
       footer={
         <button
           type="button"
@@ -125,7 +125,7 @@ export default function InstrumentsPage() {
               >
                 {/* Active Pulse Background */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 transition-opacity duration-300 ${
+                  className={`absolute inset-0 bg-gradient-to-tr from-accent-primary/20 to-transparent transition-opacity duration-300 ${
                     isActive ? "opacity-100" : "opacity-0"
                   }`}
                 />

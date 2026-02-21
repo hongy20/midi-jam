@@ -1,6 +1,8 @@
 "use client";
 
 import { createContext, type ReactNode, useContext, useState } from "react";
+import { useMIDIDevices } from "@/hooks/use-midi-devices";
+import { useMIDISelection } from "@/hooks/use-midi-selection";
 
 interface Instrument {
   id: string;
@@ -13,7 +15,7 @@ interface Track {
 }
 
 interface GameSession {
-  timeLeft: number;
+  timeLeft?: number;
   isPaused: boolean;
 }
 
@@ -30,12 +32,20 @@ interface SelectionContextType {
   sessionResults: SessionResults | null;
   speed: number;
   demoMode: boolean;
+  // MIDI Device Selection
+  selectedMIDIInput: WebMidi.MIDIInput | null;
+  selectedMIDIOutput: WebMidi.MIDIOutput | null;
+  availableInputs: WebMidi.MIDIInput[];
+  availableOutputs: WebMidi.MIDIOutput[];
+  isLoadingDevices: boolean;
+  midiError: string | null;
   setInstrument: (instrument: Instrument) => void;
   setTrack: (track: Track) => void;
   setGameSession: (session: GameSession | null) => void;
   setSessionResults: (results: SessionResults | null) => void;
   setSpeed: (speed: number) => void;
   setDemoMode: (enabled: boolean) => void;
+  selectMIDIInput: (input: WebMidi.MIDIInput | null) => void;
   clearSelection: () => void;
 }
 
@@ -54,6 +64,11 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
   const [speed, setSpeed] = useState<number>(1.0);
   const [demoMode, setDemoMode] = useState<boolean>(false);
 
+  // MIDI Devices
+  const { inputs, outputs, isLoading, error } = useMIDIDevices();
+  const { selectedMIDIInput, selectedMIDIOutput, selectMIDIInput } =
+    useMIDISelection(inputs, outputs);
+
   const setInstrument = (instrument: Instrument) =>
     setSelectedInstrument(instrument);
   const setTrack = (track: Track) => setSelectedTrack(track);
@@ -64,6 +79,7 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
     setSessionResults(null);
     setSpeed(1.0);
     setDemoMode(false);
+    selectMIDIInput(null);
   };
 
   return (
@@ -75,12 +91,19 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
         sessionResults,
         speed,
         demoMode,
+        selectedMIDIInput,
+        selectedMIDIOutput,
+        availableInputs: inputs,
+        availableOutputs: outputs,
+        isLoadingDevices: isLoading,
+        midiError: error,
         setInstrument,
         setTrack,
         setGameSession,
         setSessionResults,
         setSpeed,
         setDemoMode,
+        selectMIDIInput,
         clearSelection,
       }}
     >

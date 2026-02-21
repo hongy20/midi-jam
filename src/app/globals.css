@@ -4,22 +4,25 @@
 :root {
   --background: #000000;
   --foreground: #00ffcc;
-  /* Add more neon variables later */
+  --accent-primary: #00ffcc;
 }
 
 :root[data-theme="dark"] {
   --background: #121212;
   --foreground: #ededed;
+  --accent-primary: #ededed; /* Neutral accent for dark theme */
 }
 
 :root[data-theme="light"] {
   --background: #ffffff;
   --foreground: #171717;
+  --accent-primary: #2563eb; /* A slightly different blue for light */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-accent-primary: var(--accent-primary);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

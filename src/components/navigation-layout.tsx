@@ -11,7 +11,7 @@ interface NavigationLayoutProps {
   footer?: ReactNode;
   onBack?: () => void;
   backLabel?: string;
-  accentColor?: "blue" | "purple" | "green";
+  accentColor?: "blue" | "purple" | "green" | "primary";
   hideHeaderIcon?: boolean;
 }
 
@@ -23,21 +23,22 @@ export function NavigationLayout({
   footer,
   onBack,
   backLabel,
-  accentColor = "blue",
+  accentColor = "primary",
 }: NavigationLayoutProps) {
   const accentClasses = {
     blue: "text-blue-500 bg-blue-600/10",
     purple: "text-purple-500 bg-purple-600/10",
     green: "text-green-500 bg-green-600/10",
+    primary: "text-accent-primary bg-accent-primary/10",
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center p-6 overflow-hidden animate-fade-in">
+    <div className="fixed inset-0 bg-background flex flex-col items-center justify-center p-6 overflow-hidden animate-fade-in transition-colors duration-500">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div
           className={`absolute ${
-            accentColor === "blue"
+            accentColor === "blue" || accentColor === "primary"
               ? "top-[20%] right-[10%]"
               : "bottom-[10%] left-[10%]"
           } w-[60%] h-[60%] rounded-full blur-[120px] ${
@@ -45,7 +46,9 @@ export function NavigationLayout({
               ? "bg-blue-600/10"
               : accentColor === "purple"
                 ? "bg-purple-600/10"
-                : "bg-green-600/10"
+                : accentColor === "green"
+                  ? "bg-green-600/10"
+                  : "bg-accent-primary/5"
           }`}
         />
       </div>
@@ -71,15 +74,17 @@ export function NavigationLayout({
                             ? "bg-blue-500"
                             : accentColor === "purple"
                               ? "bg-purple-500"
-                              : "bg-green-500"
-                          : "bg-slate-800"
+                              : accentColor === "green"
+                                ? "bg-green-500"
+                                : "bg-accent-primary"
+                          : "bg-foreground/10"
                       }`}
                     />
                   ))}
                 </div>
               </div>
             )}
-            <h1 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tighter">
+            <h1 className="text-3xl sm:text-4xl font-black text-foreground uppercase tracking-tighter">
               {title}
             </h1>
           </div>
@@ -88,7 +93,7 @@ export function NavigationLayout({
             <button
               type="button"
               onClick={onBack}
-              className="group flex items-center gap-2 px-4 py-2 border border-slate-800 rounded-full text-slate-400 font-bold text-[10px] sm:text-xs uppercase hover:text-white hover:border-slate-600 transition-all active:scale-95"
+              className="group flex items-center gap-2 px-4 py-2 border border-foreground/10 rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
             >
               <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
               {backLabel || "Back"}

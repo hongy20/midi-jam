@@ -1,8 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { InstrumentVisualizer } from "@/components/instrument-visualizer";
+import { LaneStage } from "@/components/lane-stage";
+import { ScoreHudLite } from "@/components/score-hud-lite";
 import { useSelection } from "@/context/selection-context";
+import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
+import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
+import { useLaneTimeline } from "@/hooks/use-lane-timeline";
+import { useMidiAudio } from "@/hooks/use-midi-audio";
+import { useMidiTrack } from "@/hooks/use-midi-track";
 
 export default function GamePage() {
   const { navigate } = useGameNavigation();
@@ -12,49 +20,81 @@ export default function GamePage() {
     gameSession,
     setGameSession,
     setSessionResults,
+    speed,
+    demoMode,
+    selectedMIDIInput,
+    selectedMIDIOutput,
   } = useSelection();
 
-  const [timeLeft, setTimeLeft] = useState(gameSession?.timeLeft ?? 15);
+  const trackUrl = selectedTrack ? `/midi/${selectedTrack.id}` : null;
+  const {
+    events,
+    spans,
+    duration,
+    isLoading: isTrackLoading,
+  } = useMidiTrack(trackUrl);
+
+  const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
+  const liveActiveNotes = useActiveNotes(selectedMIDIInput);
+
   const [isPaused, setIsPaused] = useState(gameSession?.isPaused ?? false);
   const [showOverlay, setShowOverlay] = useState(
     gameSession?.isPaused ?? false,
   );
-  const overlayRef = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(0);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const { getCurrentTimeMs, getProgress, resetTimeline } = useLaneTimeline({
+    containerRef: scrollRef,
+    totalDurationMs: duration,
+    speed,
+    isPaused,
+  });
+
+  const { score, combo, lastHitQuality, resetScore } = useLaneScoreEngine({
+    midiInput: selectedMIDIInput,
+    modelEvents: events,
+    getCurrentTimeMs,
+    isPlaying: !isPaused && duration > 0,
+  });
 
   // Sync state to context for persistence during navigation
   useEffect(() => {
-    setGameSession({ timeLeft, isPaused });
-  }, [timeLeft, isPaused, setGameSession]);
+    setGameSession({ isPaused });
+  }, [isPaused, setGameSession]);
 
-  // Timer logic
+  // Update progress UI
   useEffect(() => {
-    if (isPaused || timeLeft <= 0) return;
-
+    if (isPaused) return;
     const interval = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
-
+      setProgress(getProgress());
+    }, 100);
     return () => clearInterval(interval);
-  }, [isPaused, timeLeft]);
+  }, [isPaused, getProgress]);
 
   // Auto-navigate on completion
   useEffect(() => {
-    if (timeLeft <= 0) {
-      // Generate randomized results for the demo
-      const randomAccuracy = Math.floor(Math.random() * (100 - 30 + 1) + 30); // 30-100%
-      const randomScore = Math.floor(Math.random() * 9000) + 1000;
-      const randomCombo = Math.floor(Math.random() * 200) + 10;
-
+    if (progress >= 0.999 || (duration > 0 && getCurrentTimeMs() >= duration)) {
       setSessionResults({
-        score: randomScore,
-        accuracy: randomAccuracy,
-        combo: randomCombo,
+        score,
+        accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
+        combo,
       });
 
       setGameSession(null); // Clear session on finish
       navigate("/results");
     }
-  }, [timeLeft, navigate, setGameSession, setSessionResults]);
+  }, [
+    progress,
+    duration,
+    getCurrentTimeMs,
+    navigate,
+    setGameSession,
+    setSessionResults,
+    score,
+    combo,
+    events.length,
+  ]);
 
   // Handle Pause
   const handleTogglePause = useCallback(() => {
@@ -67,12 +107,19 @@ export default function GamePage() {
 
   // Handle Restart
   const handleRestart = () => {
-    setTimeLeft(15);
+    resetTimeline();
+    resetScore();
     setIsPaused(false);
     setShowOverlay(false);
+    setProgress(0);
   };
 
   const handleQuit = () => {
+    setSessionResults({
+      score,
+      accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
+      combo,
+    });
     setGameSession(null);
     navigate("/results");
   };
@@ -86,7 +133,6 @@ export default function GamePage() {
     };
 
     const handleBrowserBack = () => {
-      console.log("Game pausing due to browser back");
       if (!isPaused) handleTogglePause();
     };
 
@@ -99,81 +145,101 @@ export default function GamePage() {
     };
   }, [isPaused, handleTogglePause]);
 
+  if (!selectedTrack) {
+    return (
+      <div className="fixed inset-0 bg-background text-foreground flex flex-col items-center justify-center p-8 text-center">
+        <h1 className="text-4xl font-black uppercase italic tracking-tighter mb-4">
+          No Track Selected
+        </h1>
+        <p className="text-foreground/60 mb-8 max-w-md">
+          Please go back and select a track to start jamming.
+        </p>
+        <button
+          type="button"
+          onClick={() => navigate("/tracks")}
+          className="px-8 py-4 bg-foreground text-background font-bold rounded-full hover:scale-105 transition-transform"
+        >
+          SELECT TRACK
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="fixed inset-0 bg-background text-foreground flex flex-col items-center justify-center overflow-hidden transition-colors duration-500">
-      {/* Background Mesh */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vh] bg-[radial-gradient(circle,rgba(255,255,255,0.05)_0%,transparent_60%)] animate-[spin_40s_linear_infinite]" />
-      </div>
-
-      {/* Game Stage Area (Placeholder) */}
-      <div className="absolute inset-0 flex flex-col items-center justify-end pb-[10vh] sm:pb-[20vh] z-10">
-        <div className="w-full h-1 bg-foreground/10 absolute top-1/2 -translate-y-1/2 backdrop-blur-sm" />
-        <div className="text-foreground/5 font-black text-[15vw] select-none pointer-events-none tracking-tighter uppercase italic z-0 animate-pulse">
-          JAMMING
-        </div>
-      </div>
-
-      {/* Top UI */}
-      <header className="absolute top-0 w-full p-4 sm:p-8 flex justify-between items-start z-20 layout-padding">
-        <div className="flex flex-col max-w-[50%]">
-          <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] sm:tracking-widest text-[10px] sm:text-xs mb-1 truncate">
-            {selectedInstrument?.name || "Instrument"}
-          </span>
-          <h2 className="text-xl sm:text-2xl font-black text-foreground uppercase tracking-tighter truncate">
-            {selectedTrack?.name || "Track"}
-          </h2>
+    <div className="fixed inset-0 bg-background text-foreground overflow-hidden transition-colors duration-500 grid grid-rows-[auto_1fr_auto]">
+      {/* Row 1: Status Bar (Fixed height) */}
+      <header className="h-20 w-full p-4 sm:p-8 flex justify-between items-center z-20 layout-padding bg-background/50 backdrop-blur-md border-b border-foreground/5">
+        <div className="flex items-center gap-4 flex-1">
+          <div className="flex flex-col">
+            <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-0.5">
+              {selectedInstrument?.name || "Instrument"} • {selectedTrack.name}
+            </span>
+            <ScoreHudLite
+              score={score}
+              combo={combo}
+              lastHitQuality={lastHitQuality}
+              progress={progress}
+            />
+          </div>
         </div>
 
         <div className="flex items-center gap-4 sm:gap-8">
-          <div className="flex flex-col items-end hidden sm:flex">
-            <span className="text-foreground/50 font-bold uppercase tracking-widest text-[10px]">
-              Time Remaining
-            </span>
-            <span
-              className={`text-3xl sm:text-4xl font-black tabular-nums transition-colors duration-300 ${
-                timeLeft < 5 ? "text-red-500 animate-pulse" : "text-foreground"
-              }`}
-            >
-              {Math.floor(timeLeft / 60)}:
-              {(timeLeft % 60).toString().padStart(2, "0")}
-            </span>
-          </div>
-
-          <div className="sm:hidden flex items-center pr-2">
-            <span
-              className={`text-2xl font-black tabular-nums transition-colors duration-300 ${
-                timeLeft < 5 ? "text-red-500 animate-pulse" : "text-foreground"
-              }`}
-            >
-              {Math.floor(timeLeft / 60)}:
-              {(timeLeft % 60).toString().padStart(2, "0")}
-            </span>
-          </div>
+          {!selectedMIDIInput && !demoMode && (
+            <div className="text-[10px] font-bold text-yellow-500 uppercase tracking-widest animate-pulse hidden lg:block">
+              No Input Device - Connect MIDI or Play Demo
+            </div>
+          )}
 
           <button
             type="button"
             onClick={handleTogglePause}
-            className="w-12 h-12 sm:w-14 sm:h-14 bg-foreground/10 hover:bg-foreground/20 rounded-full flex items-center justify-center transition-colors group backdrop-blur-md border border-foreground/10 shadow-lg"
+            className="w-12 h-12 bg-foreground/10 hover:bg-foreground/20 rounded-full flex items-center justify-center transition-colors group backdrop-blur-md border border-foreground/10 shadow-lg"
           >
             <div
-              className={`flex gap-1 sm:gap-1.5 transition-transform duration-300 ${
+              className={`flex gap-1 transition-transform duration-300 ${
                 isPaused ? "scale-90" : "group-hover:scale-110"
               }`}
             >
-              <div className="w-1.5 sm:w-2 h-5 sm:h-6 bg-foreground rounded-full" />
-              <div className="w-1.5 sm:w-2 h-5 sm:h-6 bg-foreground rounded-full" />
+              <div className="w-1.5 h-5 bg-foreground rounded-full" />
+              <div className="w-1.5 h-5 bg-foreground rounded-full" />
             </div>
           </button>
         </div>
       </header>
 
+      {/* Row 2: Gameplay Lane (Flexible) */}
+      <main className="relative w-full h-full overflow-hidden">
+        {isTrackLoading ? (
+          <div className="flex flex-col items-center justify-center h-full gap-4">
+            <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+            <span className="font-bold uppercase tracking-widest text-xs">
+              Loading Track...
+            </span>
+          </div>
+        ) : (
+          <LaneStage
+            spans={spans}
+            totalDurationMs={duration}
+            scrollRef={scrollRef}
+            demoMode={demoMode}
+            onNoteOn={playNote}
+            onNoteOff={stopNote}
+          />
+        )}
+      </main>
+
+      {/* Row 3: Instrument (Fixed height based on content) */}
+      <footer className="w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
+        <InstrumentVisualizer
+          instrumentId={selectedInstrument?.id || "piano"}
+          liveNotes={liveActiveNotes}
+          demoNotes={new Set()}
+        />
+      </footer>
+
       {/* Pause Overlay */}
       {showOverlay && (
-        <div
-          className="fixed inset-0 z-50 bg-background/80 backdrop-blur-2xl flex items-center justify-center animate-in fade-in duration-300 p-4"
-          ref={overlayRef}
-        >
+        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-2xl flex items-center justify-center animate-in fade-in duration-300 p-4">
           <div className="text-center flex flex-col gap-4 sm:gap-6 w-full max-w-[320px] sm:max-w-sm animate-in zoom-in-95 duration-300">
             <h1 className="text-5xl sm:text-6xl font-black text-foreground italic uppercase tracking-tighter mb-2 sm:mb-4 bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent">
               Paused
@@ -189,7 +255,7 @@ export default function GamePage() {
             <button
               type="button"
               onClick={handleRestart}
-              className="w-full py-3.5 sm:py-4 bg-foreground/10 text-foreground border border-foreground/20 rounded-full font-bold text-lg sm:text-xl hover:bg-foreground/20 flexitems-center justify-center transition-colors"
+              className="w-full py-3.5 sm:py-4 bg-foreground/10 text-foreground border border-foreground/20 rounded-full font-bold text-lg sm:text-xl hover:bg-foreground/20 flex items-center justify-center transition-colors"
             >
               RESTART
             </button>

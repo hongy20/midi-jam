@@ -14,6 +14,18 @@ vi.mock("@/context/selection-context", () => ({
 }));
 
 describe("Welcome Page", () => {
+  beforeEach(() => {
+    // Mock Web MIDI and ScrollTimeline support
+    Object.defineProperty(navigator, "requestMIDIAccess", {
+      value: vi.fn(),
+      configurable: true,
+    });
+    Object.defineProperty(window, "ScrollTimeline", {
+      value: vi.fn(),
+      configurable: true,
+    });
+  });
+
   it("renders the title and start button", () => {
     vi.mocked(useGameNavigation).mockReturnValue({
       navigate: vi.fn(),
@@ -24,10 +36,21 @@ describe("Welcome Page", () => {
       selectedTrack: null,
       gameSession: null,
       sessionResults: null,
+      speed: 1.0,
+      demoMode: false,
+      selectedMIDIInput: null,
+      selectedMIDIOutput: null,
+      availableInputs: [],
+      availableOutputs: [],
+      isLoadingDevices: false,
+      midiError: null,
       setInstrument: vi.fn(),
       setTrack: vi.fn(),
       setGameSession: vi.fn(),
       setSessionResults: vi.fn(),
+      setSpeed: vi.fn(),
+      setDemoMode: vi.fn(),
+      selectMIDIInput: vi.fn(),
       clearSelection: vi.fn(),
     });
 
@@ -49,10 +72,21 @@ describe("Welcome Page", () => {
       selectedTrack: null,
       gameSession: null,
       sessionResults: null,
+      speed: 1.0,
+      demoMode: false,
+      selectedMIDIInput: null,
+      selectedMIDIOutput: null,
+      availableInputs: [],
+      availableOutputs: [],
+      isLoadingDevices: false,
+      midiError: null,
       setInstrument: vi.fn(),
       setTrack: vi.fn(),
       setGameSession: vi.fn(),
       setSessionResults: vi.fn(),
+      setSpeed: vi.fn(),
+      setDemoMode: vi.fn(),
+      selectMIDIInput: vi.fn(),
       clearSelection: vi.fn(),
     });
 
@@ -72,10 +106,21 @@ describe("Welcome Page", () => {
       selectedTrack: null,
       gameSession: null,
       sessionResults: null,
+      speed: 1.0,
+      demoMode: false,
+      selectedMIDIInput: null,
+      selectedMIDIOutput: null,
+      availableInputs: [],
+      availableOutputs: [],
+      isLoadingDevices: false,
+      midiError: null,
       setInstrument: vi.fn(),
       setTrack: vi.fn(),
       setGameSession: vi.fn(),
       setSessionResults: vi.fn(),
+      setSpeed: vi.fn(),
+      setDemoMode: vi.fn(),
+      selectMIDIInput: vi.fn(),
       clearSelection: vi.fn(),
     });
 

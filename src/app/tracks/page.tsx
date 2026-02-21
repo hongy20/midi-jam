@@ -58,7 +58,7 @@ export default function TracksPage() {
       title="Select Soundtrack"
       step={2}
       totalSteps={2}
-      accentColor="purple"
+      accentColor="primary"
       onBack={handleBack}
       backLabel="Instrument Setup"
       footer={
