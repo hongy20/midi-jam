@@ -1,5 +1,6 @@
 "use client";
 
+import { Pause } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { InstrumentVisualizer } from "@/components/instrument-visualizer";
 import { LaneStage } from "@/components/lane-stage";
@@ -153,13 +154,8 @@ export default function GamePage() {
             onClick={handleTogglePause}
             className="w-12 h-12 bg-foreground/10 hover:bg-foreground/20 rounded-full flex items-center justify-center transition-colors group backdrop-blur-md border border-foreground/10 shadow-lg"
           >
-            <div
-              className={`flex gap-1 transition-transform duration-300 ${
-                isPaused ? "scale-90" : "group-hover:scale-110"
-              }`}
-            >
-              <div className="w-1.5 h-5 bg-foreground rounded-full" />
-              <div className="w-1.5 h-5 bg-foreground rounded-full" />
+            <div className="transition-transform duration-300 group-hover:scale-110">
+              <Pause className="w-6 h-6 fill-current" />
             </div>
           </button>
         </div>
