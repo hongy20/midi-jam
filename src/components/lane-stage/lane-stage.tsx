@@ -10,55 +10,26 @@ import {
 } from "@/lib/gameplay/lane-geometry";
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
+import { BackgroundLanes } from "./background-lanes";
 
 interface LaneStageProps {
   spans: NoteSpan[];
   totalDurationMs: number;
   scrollRef: React.RefObject<HTMLDivElement | null>;
-  demoMode?: boolean;
-  onNoteOn?: (note: number, velocity: number) => void;
-  onNoteOff?: (note: number) => void;
-  className?: string;
+  demoMode: boolean;
+  onNoteOn: (note: number, velocity: number) => void;
+  onNoteOff: (note: number) => void;
   rangeStart?: number;
   rangeEnd?: number;
 }
-
-/**
- * Static lanes matching the piano keys.
- */
-const BackgroundLanes = ({ notes }: { notes: number[] }) => {
-  return (
-    <div
-      className="absolute inset-0 grid pointer-events-none opacity-[0.03]"
-      style={{
-        gridTemplateColumns: "repeat(var(--piano-visible-units, 156), 1fr)",
-      }}
-    >
-      {notes.map((note) => (
-        <div
-          key={`lane-${note}`}
-          className="h-full border-r border-foreground"
-          data-black={isBlackKey(note)}
-          style={{
-            gridColumn: `calc(${getNoteUnitOffset(note)} - var(--piano-start-unit) + 1) / span ${isBlackKey(note) ? 2 : 3}`,
-            backgroundColor: isBlackKey(note)
-              ? "rgba(0,0,0,0.2)"
-              : "transparent",
-          }}
-        />
-      ))}
-    </div>
-  );
-};
 
 export function LaneStage({
   spans,
   totalDurationMs,
   scrollRef,
-  demoMode = false,
-  onNoteOn = () => {},
-  onNoteOff = () => {},
-  className = "",
+  demoMode,
+  onNoteOn = () => { },
+  onNoteOff = () => { },
   rangeStart = PIANO_88_KEY_MIN,
   rangeEnd = PIANO_88_KEY_MAX,
 }: LaneStageProps) {
@@ -114,7 +85,7 @@ export function LaneStage({
   return (
     <div
       ref={containerRef}
-      className={`relative w-full h-full overflow-hidden bg-background/5 ${className}`}
+      className={`relative w-full h-full overflow-hidden bg-background/5`}
       style={
         {
           "--piano-start-unit": startUnit,
@@ -122,10 +93,8 @@ export function LaneStage({
         } as React.CSSProperties
       }
     >
-      {/* Background Grid */}
       <BackgroundLanes notes={visibleNotes} />
 
-      {/* Scroll Container */}
       <div
         ref={scrollRef}
         id="lane-scroll"
@@ -146,11 +115,10 @@ export function LaneStage({
                 key={span.id}
                 data-pitch={span.note}
                 data-note-id={span.id}
-                className={`absolute rounded-sm border border-foreground/20 shadow-sm transition-opacity duration-300 ${
-                  span.isBlack
-                    ? "bg-foreground/40 z-10"
-                    : "bg-foreground/20 z-0"
-                }`}
+                className={`absolute rounded-sm border border-foreground/20 shadow-sm transition-opacity duration-300 ${span.isBlack
+                  ? "bg-foreground/40 z-10"
+                  : "bg-foreground/20 z-0"
+                  }`}
                 style={{
                   top: `${top}px`,
                   height: `${height}px`,

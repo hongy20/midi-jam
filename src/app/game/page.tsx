@@ -2,7 +2,7 @@
 
 import { Pause } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { LaneStage } from "@/components/lane-stage";
+import { LaneStage } from "@/components/lane-stage/lane-stage";
 import { PauseOverlay } from "@/components/pause-overlay";
 import { ScoreHudLite } from "@/components/score-hud-lite";
 import { VirtualInstrument } from "@/components/virtual-instrument";
@@ -185,7 +185,7 @@ export default function GamePage() {
       {/* Row 3: Instrument (Fixed height based on content) */}
       <footer className="w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
         <VirtualInstrument
-          input={selectedMIDIInput}
+          inputDevice={selectedMIDIInput}
           liveNotes={liveActiveNotes}
           playbackNotes={new Set()}
         />

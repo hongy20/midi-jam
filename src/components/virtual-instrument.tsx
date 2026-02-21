@@ -3,7 +3,7 @@
 import { PianoKeyboard } from "./piano-keyboard";
 
 interface VirtualInstrumentProps {
-  input: WebMidi.MIDIInput;
+  inputDevice: WebMidi.MIDIInput;
   liveNotes: Set<number>;
   playbackNotes: Set<number>;
 }
