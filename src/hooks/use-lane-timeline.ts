@@ -17,7 +17,6 @@ export function useLaneTimeline({
   const timelineRef = useRef<any>(null); // ScrollTimeline
   const [_progress, setProgress] = useState(0);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Re-initialize when dimensions or duration change
   useEffect(() => {
     const container = containerRef.current;
     if (!container || totalDurationMs <= 0) return;

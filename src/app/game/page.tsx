@@ -11,7 +11,6 @@ import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
-import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMidiTrack } from "@/hooks/use-midi-track";
 import styles from "./page.module.css";
 
@@ -23,14 +22,11 @@ export default function GamePage() {
     setGameSession,
     setSessionResults,
     speed,
-    demoMode,
     selectedMIDIInput,
-    selectedMIDIOutput,
   } = useSelection();
 
   const { events, spans, duration, isLoading } = useMidiTrack();
 
-  const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
 
   const [isPaused, setIsPaused] = useState(gameSession?.isPaused ?? false);
@@ -176,9 +172,6 @@ export default function GamePage() {
             spans={spans}
             totalDurationMs={duration}
             scrollRef={scrollRef}
-            demoMode={demoMode}
-            onNoteOn={playNote}
-            onNoteOff={stopNote}
           />
         )}
       </main>

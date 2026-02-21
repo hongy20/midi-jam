@@ -7,14 +7,13 @@ import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import { BackgroundLane } from "./background-lane";
 import { TrackLane } from "./track-lane";
+import { useSelection } from "@/context/selection-context";
+import { useMidiAudio } from "@/hooks/use-midi-audio";
 
 interface LaneStageProps {
   spans: NoteSpan[];
   totalDurationMs: number;
   scrollRef: React.RefObject<HTMLDivElement | null>;
-  demoMode: boolean;
-  onNoteOn: (note: number, velocity: number) => void;
-  onNoteOff: (note: number) => void;
   rangeStart?: number;
   rangeEnd?: number;
 }
@@ -23,19 +22,22 @@ export function LaneStage({
   spans,
   totalDurationMs,
   scrollRef,
-  demoMode,
-  onNoteOn = () => {},
-  onNoteOff = () => {},
   rangeStart = PIANO_88_KEY_MIN,
   rangeEnd = PIANO_88_KEY_MAX,
 }: LaneStageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const {
+    demoMode,
+    selectedMIDIOutput,
+  } = useSelection();
+
+  const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
 
   useDemoPlayback({
     containerRef: scrollRef,
     demoMode,
-    onNoteOn,
-    onNoteOff,
+    onNoteOn: playNote,
+    onNoteOff: stopNote,
   });
 
   const visibleNotes = useMemo(() => {
