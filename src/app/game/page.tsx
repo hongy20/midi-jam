@@ -2,10 +2,10 @@
 
 import { Pause } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { InstrumentVisualizer } from "@/components/instrument-visualizer";
 import { LaneStage } from "@/components/lane-stage";
 import { PauseOverlay } from "@/components/pause-overlay";
 import { ScoreHudLite } from "@/components/score-hud-lite";
+import { VirtualInstrument } from "@/components/virtual-instrument";
 import { useSelection } from "@/context/selection-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
@@ -184,21 +184,21 @@ export default function GamePage() {
 
       {/* Row 3: Instrument (Fixed height based on content) */}
       <footer className="w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
-        <InstrumentVisualizer
-          instrumentId={selectedMIDIInput?.id || "piano"}
+        <VirtualInstrument
+          input={selectedMIDIInput}
           liveNotes={liveActiveNotes}
-          demoNotes={new Set()}
+          playbackNotes={new Set()}
         />
       </footer>
 
-      {showOverlay &&
+      {showOverlay && (
         <PauseOverlay
           onResume={handleTogglePause}
           onRestart={handleRestart}
           onSettings={() => navigate("/settings?from=/game")}
           onQuit={handleQuit}
         />
-      }
+      )}
     </div>
   );
 }

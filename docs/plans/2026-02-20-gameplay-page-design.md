@@ -44,7 +44,7 @@ Located at `src/app/game/page.tsx`. We will refactor this page to:
   - Scoring state derived from **model notes** + **live MIDI input**.
 - Renders:
   - `LaneStage` – scroll-driven note lane + fixed target line band.
-  - `InstrumentVisualizer` – selected from instrument metadata (default: keyboard).
+  - `VirtualInstrument` – selected from instrument metadata (default: keyboard).
   - `ScoreHudLite` – minimal HUD (score, combo, last hit quality, progress), potentially integrated with the existing header UI.
 
 ---
@@ -213,7 +213,7 @@ All UI and scoring logic that depend on song time use this value instead of a se
 ### Instrument Metadata
 
 - From the settings/context, we read an **instrument id** (e.g. `"piano"`, `"drums"`).
-- A utility, e.g. `getInstrumentVisualizerConfig(instrumentId)`, will:
+- A utility, e.g. `getVirtualInstrumentConfig(instrumentId)`, will:
 
   - Select the appropriate **visualizer component**:
 
@@ -225,7 +225,7 @@ All UI and scoring logic that depend on song time use this value instead of a se
     - For piano: which key index each MIDI pitch maps to.
     - For drums: which pad / drum element a pitch triggers.
 
-### `InstrumentVisualizer` Component
+### `VirtualInstrument` Component
 
 - Props:
 
@@ -274,7 +274,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
   - **Target Line**: A 1px thin horizontal line fixed at the bottom of this row (`bottom-0`). This line is the hit zone and acts as the `IntersectionObserver` root. It does **not** scroll with the lane.
   - **Falling Notes**: Rendered as vertical bars within this row.
 - **Row 3 (Instrument): `auto` (Fixed to Instrument height)**
-  - Contains `InstrumentVisualizer`.
+  - Contains `VirtualInstrument`.
   - Displays the **full standard range** of the instrument (e.g., all 88 keys for piano); no dynamic range shifting or cropping based on song content.
 
 **Visual Constraints:**

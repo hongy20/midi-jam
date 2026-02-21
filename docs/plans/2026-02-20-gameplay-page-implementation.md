@@ -4,7 +4,7 @@
 
 **Goal:** Refactor the existing `/game` page to implement a new scroll-driven gameplay experience. This includes rendering a MIDI-based note lane, driving lane motion via Web Animations + JS `ScrollTimeline`, supporting demo playback via IntersectionObserver, and scoring live MIDI input against the parsed MIDI model. We will preserve the existing navigation logic (pause, restart, quit) and optimize for Android Chrome performance.
 
-**Architecture:** The `GamePage` (at `src/app/game/page.tsx`) consumes selection and settings (MIDI devices, track, instrument, demoMode) from global context, owns lane playback and scoring state, and composes three main pieces: `LaneStage` (visual lane + target line), `InstrumentVisualizer` (instrument-specific UI, default keyboard), and `ScoreHudLite` (aggregated scoring + progress). Lane motion is controlled by a Web Animations motion object on the lane scroll container, while a JS `ScrollTimeline` bound to that container provides canonical song time and progress for scoring and UI.
+**Architecture:** The `GamePage` (at `src/app/game/page.tsx`) consumes selection and settings (MIDI devices, track, instrument, demoMode) from global context, owns lane playback and scoring state, and composes three main pieces: `LaneStage` (visual lane + target line), `VirtualInstrument` (instrument-specific UI, default keyboard), and `ScoreHudLite` (aggregated scoring + progress). Lane motion is controlled by a Web Animations motion object on the lane scroll container, while a JS `ScrollTimeline` bound to that container provides canonical song time and progress for scoring and UI.
 
 **Tech Stack:** Next.js App Router (TypeScript, React 19), Tailwind CSS 4, Web MIDI API, Web Animations API, CSS ScrollTimeline (JS API), Vitest, Testing Library, Biome.
 
@@ -44,7 +44,7 @@
 **Step 1: Clean up placeholder UI**
 
 - Remove the placeholder "JAMMING" text and related background mesh if they conflict with the new design.
-- Prepare the slots for `LaneStage`, `InstrumentVisualizer`, and `ScoreHudLite`.
+- Prepare the slots for `LaneStage`, `VirtualInstrument`, and `ScoreHudLite`.
 
 **Step 2: Ensure navigation state is preserved**
 
@@ -250,38 +250,38 @@
 
 ---
 
-### Task 9: Implement `InstrumentVisualizer` abstraction and default keyboard
+### Task 9: Implement `VirtualInstrument` abstraction and default keyboard
 
 **Files:**
 - Create: `src/lib/instrument/visualizer-config.ts`
-- Create: `src/components/instrument-visualizer.tsx`
-- Test: `src/components/instrument-visualizer.test.tsx`
+- Create: `src/components/virtual-instrument.tsx`
+- Test: `src/components/virtual-instrument.test.tsx`
 
 **Step 1: Implement config utility**
 
-- `getInstrumentVisualizerConfig(instrumentId: string)`:
+- `getVirtualInstrumentConfig(instrumentId: string)`:
   - For `"piano"`, return:
     - Component: existing `PianoKeyboard`.
     - Note range: Full standard range (88 keys).
   - For unknown instruments, default to the `"piano"` config.
 
-**Step 2: Implement `InstrumentVisualizer`**
+**Step 2: Implement `VirtualInstrument`**
 
 - Props:
   - `instrumentId` (string).
   - Sets of live and demo notes.
 - Behavior:
-  - Use `getInstrumentVisualizerConfig` to choose the component.
+  - Use `getVirtualInstrumentConfig` to choose the component.
   - Render the chosen component with the **full standard range** (no dynamic cropping).
 
 **Step 3: Add tests**
 
-- In `instrument-visualizer.test.tsx`:
+- In `virtual-instrument.test.tsx`:
   - Verify that the component renders with its full default range.
 
 **Step 4: Integrate into `GamePage`**
 
-- Import and render `InstrumentVisualizer` in the bottom row of the CSS grid.
+- Import and render `VirtualInstrument` in the bottom row of the CSS grid.
 
 ---
 
@@ -323,7 +323,7 @@
   - Selected MIDI input/output.
 - Compose:
   - `LaneStage` (with note data, totalDurationMs, demo playback options).
-  - `InstrumentVisualizer` (with live and demo active notes).
+  - `VirtualInstrument` (with live and demo active notes).
   - `ScoreHudLite` (with data from scoring hook).
 
 **Step 2: Run test suite**
