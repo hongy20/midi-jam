@@ -26,12 +26,7 @@ export default function GamePage() {
     selectedMIDIOutput,
   } = useSelection();
 
-  const {
-    events,
-    spans,
-    duration,
-    isLoading,
-  } = useMidiTrack();
+  const { events, spans, duration, isLoading } = useMidiTrack();
 
   const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
@@ -135,9 +130,9 @@ export default function GamePage() {
   }
 
   return (
-    <div className="fixed inset-0 bg-background text-foreground overflow-hidden transition-colors duration-500 grid grid-rows-[auto_1fr_auto]">
+    <div className="fixed inset-0 grid grid-rows-[auto_1fr_auto]">
       {/* Row 1: Status Bar (Fixed height) */}
-      <header className="h-20 w-full p-4 sm:p-8 flex justify-between items-center z-20 layout-padding bg-background/50 backdrop-blur-md border-b border-foreground/5">
+      <header className="h-20 w-full p-4 sm:p-8 flex justify-between items-center layout-padding bg-background/50 backdrop-blur-md border-b border-foreground/5">
         <div className="flex items-center gap-4 flex-1">
           <div className="flex flex-col">
             <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-0.5">
@@ -159,8 +154,9 @@ export default function GamePage() {
             className="w-12 h-12 bg-foreground/10 hover:bg-foreground/20 rounded-full flex items-center justify-center transition-colors group backdrop-blur-md border border-foreground/10 shadow-lg"
           >
             <div
-              className={`flex gap-1 transition-transform duration-300 ${isPaused ? "scale-90" : "group-hover:scale-110"
-                }`}
+              className={`flex gap-1 transition-transform duration-300 ${
+                isPaused ? "scale-90" : "group-hover:scale-110"
+              }`}
             >
               <div className="w-1.5 h-5 bg-foreground rounded-full" />
               <div className="w-1.5 h-5 bg-foreground rounded-full" />

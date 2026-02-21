@@ -53,7 +53,7 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
   const [demoMode, setDemoMode] = useState<boolean>(false);
 
   // MIDI Devices
-  const { inputs, outputs, isLoading, error } = useMIDIDevices();
+  const { inputs, outputs } = useMIDIDevices();
   const { selectedMIDIInput, selectedMIDIOutput, selectMIDIInput } =
     useMIDISelection(inputs, outputs);
 

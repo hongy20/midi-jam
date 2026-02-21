@@ -60,7 +60,7 @@ export function ScoreHudLite({
 
       {/* Progress Bar */}
       <div className="flex-1 max-w-[200px] hidden sm:flex flex-col gap-1">
-        <div className="flex justify-between items-end">
+        <div className="flex justify-between items-end gap-1">
           <span className="text-[10px] text-foreground/40 font-bold uppercase tracking-widest leading-none">
             Progress
           </span>
@@ -70,8 +70,8 @@ export function ScoreHudLite({
         </div>
         <div className="h-1.5 w-full bg-foreground/10 rounded-full overflow-hidden">
           <div
-            className="h-full bg-foreground transition-all duration-300 ease-out"
-            style={{ width: `${percentage}%` }}
+            className="h-full w-full bg-foreground origin-left"
+            style={{ transform: `scaleX(${progress})` }}
           />
         </div>
       </div>
