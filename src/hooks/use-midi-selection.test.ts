@@ -14,12 +14,12 @@ describe("useMIDISelection", () => {
     expect(result.current.selectedMIDIOutput).toBeNull();
   });
 
-  it("should auto-select if there is only one device available and find matching output", () => {
+  it("should NOT auto-select even if there is only one device available", () => {
     const { result } = renderHook(() =>
       useMIDISelection([mockDevice1], [mockOutput1, mockOutput2]),
     );
-    expect(result.current.selectedMIDIInput).toBe(mockDevice1);
-    expect(result.current.selectedMIDIOutput).toBe(mockOutput1);
+    expect(result.current.selectedMIDIInput).toBeNull();
+    expect(result.current.selectedMIDIOutput).toBeNull();
   });
 
   it("should update selectedMIDIOutput when a device is selected", () => {
