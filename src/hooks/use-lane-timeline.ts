@@ -17,51 +17,77 @@ export function useLaneTimeline({
   const timelineRef = useRef<any>(null); // ScrollTimeline
   const [_progress, setProgress] = useState(0);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Re-initialize when dimensions or duration change
   useEffect(() => {
     const container = containerRef.current;
     if (!container || totalDurationMs <= 0) return;
 
-    // 1. Initialize ScrollTimeline
-    // Note: This API might not be available in all browsers,
-    // but the design assumes it's available (Android Chrome).
-    if (typeof window !== "undefined" && "ScrollTimeline" in window) {
-      try {
-        timelineRef.current = new (window as any).ScrollTimeline({
-          source: container,
-          axis: "block",
-        });
-      } catch (e) {
-        console.error("Failed to initialize ScrollTimeline:", e);
+    let cleanup: (() => void) | undefined;
+
+    const setupAnimation = () => {
+      if (cleanup) cleanup();
+
+      const scrollHeight = container.scrollHeight;
+      const clientHeight = container.clientHeight;
+      const maxScroll = scrollHeight - clientHeight;
+
+      if (maxScroll <= 0) return;
+
+      // 1. Initialize ScrollTimeline
+      if (typeof window !== "undefined" && "ScrollTimeline" in window) {
+        try {
+          timelineRef.current = new (window as any).ScrollTimeline({
+            source: container,
+            axis: "block",
+          });
+        } catch (e) {
+          console.error("Failed to initialize ScrollTimeline:", e);
+        }
       }
+
+      // 2. Initialize Motion Animation
+      // For falling notes, we scroll from maxScroll down to 0.
+      container.scrollTop = maxScroll;
+      const motion = container.animate(
+        [{ scrollTop: maxScroll }, { scrollTop: 0 }],
+        {
+          duration: totalDurationMs / speed,
+          fill: "forwards",
+          easing: "linear",
+        },
+      );
+
+      motion.pause();
+      if (isPaused) {
+        motion.pause();
+      } else {
+        motion.play();
+      }
+      motion.playbackRate = speed;
+      motionRef.current = motion;
+
+      cleanup = () => {
+        motion.cancel();
+      };
+    };
+
+    // Use ResizeObserver on the first child (the tall inner lane)
+    // to detect when the content is actually sized.
+    const content = container.firstElementChild;
+    if (content) {
+      const observer = new ResizeObserver(() => {
+        setupAnimation();
+      });
+      observer.observe(content);
+      return () => {
+        observer.disconnect();
+        if (cleanup) cleanup();
+      };
     }
 
-    // 2. Initialize Motion Animation
-    const scrollHeight = container.scrollHeight;
-    const clientHeight = container.clientHeight;
-    const maxScroll = scrollHeight - clientHeight;
-
-    if (maxScroll <= 0) return;
-
-    // We animate the scrollTop by animating a dummy property or using a
-    // custom effect. Web Animations API can animate scrollTop on some browsers,
-    // but a more robust way is to animate a CSS variable or use a keyframe on
-    // the container's scroll position if supported.
-
-    // Modern Chrome supports animating scrollTop directly
-    const motion = container.animate(
-      [{ scrollTop: 0 }, { scrollTop: maxScroll }],
-      {
-        duration: totalDurationMs / speed,
-        fill: "forwards",
-        easing: "linear",
-      },
-    );
-
-    motion.pause(); // Start paused
-    motionRef.current = motion;
-
+    setupAnimation();
     return () => {
-      motion.cancel();
+      if (cleanup) cleanup();
     };
   }, [containerRef, totalDurationMs, speed]);
 
@@ -85,43 +111,31 @@ export function useLaneTimeline({
   }, [speed]);
 
   const getCurrentTimeMs = useCallback(() => {
-    if (timelineRef.current) {
-      // If ScrollTimeline is available, use its currentTime
-      // With timeRange = totalDurationMs, it should give ms.
-      // Wait, we didn't set timeRange in the constructor above.
-      // If we don't set it, it returns a percentage or pixel value.
-
-      const currentTime = timelineRef.current.currentTime;
-      if (currentTime && typeof currentTime.value === "number") {
-        // ScrollTimeline currentTime might be in percent
-        return (currentTime.value / 100) * totalDurationMs;
-      }
-    }
-
-    // Fallback: use motion.currentTime
-    // Since motion.duration = totalDurationMs / speed,
-    // and motion.playbackRate = speed,
-    // motion.currentTime * speed should give the song time?
-    // Actually, motion.currentTime is the "effective" time in the animation.
     if (motionRef.current) {
-      return ((motionRef.current.currentTime as number) || 0) * speed;
+      // Animation currentTime is in ms, 0 to (totalDurationMs / speed).
+      // Since playbackRate = speed, the "effective" time is currentTime * speed.
+      const currentTime = (motionRef.current.currentTime as number) || 0;
+      return currentTime * speed;
     }
 
     return 0;
-  }, [totalDurationMs, speed]);
+  }, [speed]);
 
   const getProgress = useCallback(() => {
     const time = getCurrentTimeMs();
-    return totalDurationMs > 0 ? time / totalDurationMs : 0;
+    return totalDurationMs > 0 ? Math.min(1, time / totalDurationMs) : 0;
   }, [getCurrentTimeMs, totalDurationMs]);
 
   const resetTimeline = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
     if (motionRef.current) {
       motionRef.current.currentTime = 0;
     }
-    if (containerRef.current) {
-      containerRef.current.scrollTop = 0;
-    }
+
+    const maxScroll = container.scrollHeight - container.clientHeight;
+    container.scrollTop = maxScroll;
     setProgress(0);
   }, [containerRef]);
 

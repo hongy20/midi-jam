@@ -3,7 +3,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDemoPlayback } from "@/hooks/use-demo-playback";
 import { getNoteUnitOffset, isBlackKey } from "@/lib/device/piano";
-import { getLaneHeight, getNoteLayout } from "@/lib/gameplay/lane-geometry";
+import {
+  getLaneHeight,
+  getNoteLayout,
+  LANE_PIXELS_PER_MS,
+} from "@/lib/gameplay/lane-geometry";
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 
@@ -83,8 +87,10 @@ export function LaneStage({
 
   const laneHeight = useMemo(() => {
     if (viewportHeight === 0) return 0;
-    return getLaneHeight(totalDurationMs, targetY, viewportHeight);
-  }, [totalDurationMs, targetY, viewportHeight]);
+    return getLaneHeight(totalDurationMs, viewportHeight);
+  }, [totalDurationMs, viewportHeight]);
+
+  const maxScroll = totalDurationMs * LANE_PIXELS_PER_MS;
 
   useDemoPlayback({
     containerRef: scrollRef,
@@ -132,6 +138,7 @@ export function LaneStage({
               span.startTime * 1000,
               (span.startTime + span.duration) * 1000,
               targetY,
+              maxScroll,
             );
 
             return (
