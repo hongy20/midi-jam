@@ -8,11 +8,11 @@ import { useMIDIDevices } from "@/hooks/use-midi-devices";
 
 export default function InstrumentsPage() {
   const { navigate } = useGameNavigation();
-  const { setInstrument, selectedInstrument } = useSelection();
+  const { selectMIDIInput, selectedMIDIInput } = useSelection();
   const { inputs, isLoading, error } = useMIDIDevices();
 
   const [selected, setSelected] = useState<string | null>(
-    selectedInstrument?.id || null,
+    selectedMIDIInput?.id || null,
   );
   const [lastInputId, setLastInputId] = useState<string | null>(null);
 
@@ -58,14 +58,7 @@ export default function InstrumentsPage() {
     if (selected) {
       const instrument = inputs.find((i) => i.id === selected);
       if (instrument) {
-        setInstrument({
-          id: instrument.id,
-          name: instrument.name ?? "Unknown Instrument",
-        });
-      } else {
-        // Fallback or explicit mapping? No, we require a matched instrument from API or keep fallback.
-        // What if user had previously selected something not in the list?
-        // the spec says we use Web MIDI API to populate devices
+        selectMIDIInput(instrument);
       }
       navigate("/tracks");
     }

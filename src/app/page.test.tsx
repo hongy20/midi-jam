@@ -32,7 +32,6 @@ describe("Welcome Page", () => {
       goBack: vi.fn(),
     });
     vi.mocked(useSelection).mockReturnValue({
-      selectedInstrument: null,
       selectedTrack: null,
       gameSession: null,
       sessionResults: null,
@@ -44,7 +43,6 @@ describe("Welcome Page", () => {
       availableOutputs: [],
       isLoadingDevices: false,
       midiError: null,
-      setInstrument: vi.fn(),
       setTrack: vi.fn(),
       setGameSession: vi.fn(),
       setSessionResults: vi.fn(),
@@ -68,7 +66,6 @@ describe("Welcome Page", () => {
       goBack: vi.fn(),
     });
     vi.mocked(useSelection).mockReturnValue({
-      selectedInstrument: null,
       selectedTrack: null,
       gameSession: null,
       sessionResults: null,
@@ -80,7 +77,6 @@ describe("Welcome Page", () => {
       availableOutputs: [],
       isLoadingDevices: false,
       midiError: null,
-      setInstrument: vi.fn(),
       setTrack: vi.fn(),
       setGameSession: vi.fn(),
       setSessionResults: vi.fn(),
@@ -102,7 +98,6 @@ describe("Welcome Page", () => {
       goBack: vi.fn(),
     });
     vi.mocked(useSelection).mockReturnValue({
-      selectedInstrument: null,
       selectedTrack: null,
       gameSession: null,
       sessionResults: null,
@@ -114,7 +109,6 @@ describe("Welcome Page", () => {
       availableOutputs: [],
       isLoadingDevices: false,
       midiError: null,
-      setInstrument: vi.fn(),
       setTrack: vi.fn(),
       setGameSession: vi.fn(),
       setSessionResults: vi.fn(),

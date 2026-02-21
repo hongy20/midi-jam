@@ -16,7 +16,6 @@ import { useMidiTrack } from "@/hooks/use-midi-track";
 export default function GamePage() {
   const { navigate } = useGameNavigation();
   const {
-    selectedInstrument,
     selectedTrack,
     gameSession,
     setGameSession,
@@ -164,7 +163,7 @@ export default function GamePage() {
         <div className="flex items-center gap-4 flex-1">
           <div className="flex flex-col">
             <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-0.5">
-              {selectedInstrument?.name || "Instrument"} • {selectedTrack.name}
+              {selectedMIDIInput?.name || "Instrument"} • {selectedTrack.name}
             </span>
             <ScoreHudLite
               score={score}
@@ -223,7 +222,7 @@ export default function GamePage() {
       {/* Row 3: Instrument (Fixed height based on content) */}
       <footer className="w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
         <InstrumentVisualizer
-          instrumentId={selectedInstrument?.id || "piano"}
+          instrumentId={selectedMIDIInput?.id || "piano"}
           liveNotes={liveActiveNotes}
           demoNotes={new Set()}
         />

@@ -49,7 +49,6 @@ describe("Game Page", () => {
       goBack: vi.fn(),
     });
     vi.mocked(useSelection).mockReturnValue({
-      selectedInstrument: { id: "piano", name: "Piano" },
       selectedTrack: {
         id: "track-1.mid",
         name: "Test Track",
@@ -59,10 +58,9 @@ describe("Game Page", () => {
       sessionResults: null,
       speed: 1.0,
       demoMode: false,
-      selectedMIDIInput: null,
+      selectedMIDIInput: { id: "piano", name: "Piano" } as any,
       selectedMIDIOutput: null,
       midiError: null,
-      setInstrument: vi.fn(),
       setTrack: vi.fn(),
       setGameSession: mockSetGameSession,
       setSessionResults: vi.fn(),
@@ -104,16 +102,14 @@ describe("Game Page", () => {
 
   it("navigates to welcome page when track is missing", () => {
     vi.mocked(useSelection).mockReturnValue({
-      selectedInstrument: { id: "piano", name: "Piano" },
       selectedTrack: null,
       gameSession: null,
       sessionResults: null,
       speed: 1.0,
       demoMode: false,
-      selectedMIDIInput: null,
+      selectedMIDIInput: { id: "piano", name: "Piano" } as any,
       selectedMIDIOutput: null,
       midiError: null,
-      setInstrument: vi.fn(),
       setTrack: vi.fn(),
       setGameSession: mockSetGameSession,
       setSessionResults: vi.fn(),
