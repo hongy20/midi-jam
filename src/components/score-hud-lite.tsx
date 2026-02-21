@@ -44,7 +44,6 @@ export function ScoreHudLite({
       <div className="min-w-[80px] flex items-center justify-center">
         {lastHitQuality && (
           <span
-            key={Date.now()} // Force re-animation
             className={`text-lg font-black uppercase italic tracking-tighter animate-bounce ${
               lastHitQuality === "perfect"
                 ? "text-yellow-400"
