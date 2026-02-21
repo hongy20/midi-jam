@@ -28,8 +28,8 @@ export function LaneStage({
   totalDurationMs,
   scrollRef,
   demoMode,
-  onNoteOn = () => { },
-  onNoteOff = () => { },
+  onNoteOn = () => {},
+  onNoteOff = () => {},
   rangeStart = PIANO_88_KEY_MIN,
   rangeEnd = PIANO_88_KEY_MAX,
 }: LaneStageProps) {
@@ -115,10 +115,11 @@ export function LaneStage({
                 key={span.id}
                 data-pitch={span.note}
                 data-note-id={span.id}
-                className={`absolute rounded-sm border border-foreground/20 shadow-sm transition-opacity duration-300 ${span.isBlack
-                  ? "bg-foreground/40 z-10"
-                  : "bg-foreground/20 z-0"
-                  }`}
+                className={`absolute rounded-sm border border-foreground/20 shadow-sm transition-opacity duration-300 ${
+                  span.isBlack
+                    ? "bg-foreground/40 z-10"
+                    : "bg-foreground/20 z-0"
+                }`}
                 style={{
                   top: `${top}px`,
                   height: `${height}px`,
