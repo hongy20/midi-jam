@@ -26,13 +26,12 @@ export default function GamePage() {
     selectedMIDIOutput,
   } = useSelection();
 
-  const trackUrl = selectedTrack?.url || null;
   const {
     events,
     spans,
     duration,
-    isLoading: isTrackLoading,
-  } = useMidiTrack(trackUrl);
+    isLoading,
+  } = useMidiTrack();
 
   const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
@@ -124,35 +123,14 @@ export default function GamePage() {
     navigate("/results");
   };
 
-  // Keyboard support (Esc to pause) and Browser-back trapping
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        handleTogglePause();
-      }
-    };
-
-    const handleBrowserBack = () => {
-      if (!isPaused) handleTogglePause();
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("app:browser-back", handleBrowserBack);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("app:browser-back", handleBrowserBack);
-    };
-  }, [isPaused, handleTogglePause]);
-
   // Redirect to welcome if no track is selected
   useEffect(() => {
-    if (!selectedTrack) {
+    if (!selectedTrack || !selectedMIDIInput) {
       navigate("/");
     }
-  }, [selectedTrack, navigate]);
+  }, [selectedTrack, selectedMIDIInput, navigate]);
 
-  if (!selectedTrack) {
+  if (!selectedTrack || !selectedMIDIInput) {
     return null;
   }
 
@@ -163,7 +141,7 @@ export default function GamePage() {
         <div className="flex items-center gap-4 flex-1">
           <div className="flex flex-col">
             <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-0.5">
-              {selectedMIDIInput?.name || "Instrument"} • {selectedTrack.name}
+              {selectedMIDIInput.name} • {selectedTrack.name}
             </span>
             <ScoreHudLite
               score={score}
@@ -175,21 +153,14 @@ export default function GamePage() {
         </div>
 
         <div className="flex items-center gap-4 sm:gap-8">
-          {!selectedMIDIInput && !demoMode && (
-            <div className="text-[10px] font-bold text-yellow-500 uppercase tracking-widest animate-pulse hidden lg:block">
-              No Input Device - Connect MIDI or Play Demo
-            </div>
-          )}
-
           <button
             type="button"
             onClick={handleTogglePause}
             className="w-12 h-12 bg-foreground/10 hover:bg-foreground/20 rounded-full flex items-center justify-center transition-colors group backdrop-blur-md border border-foreground/10 shadow-lg"
           >
             <div
-              className={`flex gap-1 transition-transform duration-300 ${
-                isPaused ? "scale-90" : "group-hover:scale-110"
-              }`}
+              className={`flex gap-1 transition-transform duration-300 ${isPaused ? "scale-90" : "group-hover:scale-110"
+                }`}
             >
               <div className="w-1.5 h-5 bg-foreground rounded-full" />
               <div className="w-1.5 h-5 bg-foreground rounded-full" />
@@ -200,7 +171,7 @@ export default function GamePage() {
 
       {/* Row 2: Gameplay Lane (Flexible) */}
       <main className="relative w-full h-full overflow-hidden">
-        {isTrackLoading ? (
+        {isLoading ? (
           <div className="flex flex-col items-center justify-center h-full gap-4">
             <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
             <span className="font-bold uppercase tracking-widest text-xs">

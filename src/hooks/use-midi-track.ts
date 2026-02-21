@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSelection } from "@/context/selection-context";
 import { loadMidiFile } from "@/lib/midi/midi-loader";
 import {
   getMidiEvents,
@@ -16,9 +17,12 @@ interface UseMidiTrackResult {
 }
 
 /**
- * Hook to load and parse a MIDI track.
+ * Hook to load and parse the currently selected MIDI track.
  */
-export function useMidiTrack(url: string | null): UseMidiTrackResult {
+export function useMidiTrack(): UseMidiTrackResult {
+  const { selectedTrack } = useSelection();
+  const url = selectedTrack?.url || null;
+
   const [events, setEvents] = useState<MidiEvent[]>([]);
   const [spans, setSpans] = useState<NoteSpan[]>([]);
   const [duration, setDuration] = useState(0);
