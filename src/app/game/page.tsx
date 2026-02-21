@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { InstrumentVisualizer } from "@/components/instrument-visualizer";
 import { LaneStage } from "@/components/lane-stage";
+import { PauseOverlay } from "@/components/pause-overlay";
 import { ScoreHudLite } from "@/components/score-hud-lite";
 import { useSelection } from "@/context/selection-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
@@ -145,24 +146,15 @@ export default function GamePage() {
     };
   }, [isPaused, handleTogglePause]);
 
+  // Redirect to welcome if no track is selected
+  useEffect(() => {
+    if (!selectedTrack) {
+      navigate("/");
+    }
+  }, [selectedTrack, navigate]);
+
   if (!selectedTrack) {
-    return (
-      <div className="fixed inset-0 bg-background text-foreground flex flex-col items-center justify-center p-8 text-center">
-        <h1 className="text-4xl font-black uppercase italic tracking-tighter mb-4">
-          No Track Selected
-        </h1>
-        <p className="text-foreground/60 mb-8 max-w-md">
-          Please go back and select a track to start jamming.
-        </p>
-        <button
-          type="button"
-          onClick={() => navigate("/tracks")}
-          className="px-8 py-4 bg-foreground text-background font-bold rounded-full hover:scale-105 transition-transform"
-        >
-          SELECT TRACK
-        </button>
-      </div>
-    );
+    return null;
   }
 
   return (
@@ -237,45 +229,13 @@ export default function GamePage() {
         />
       </footer>
 
-      {/* Pause Overlay */}
-      {showOverlay && (
-        <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-2xl flex items-center justify-center animate-in fade-in duration-300 p-4">
-          <div className="text-center flex flex-col gap-4 sm:gap-6 w-full max-w-[320px] sm:max-w-sm animate-in zoom-in-95 duration-300">
-            <h1 className="text-5xl sm:text-6xl font-black text-foreground italic uppercase tracking-tighter mb-2 sm:mb-4 bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent">
-              Paused
-            </h1>
-
-            <button
-              type="button"
-              onClick={handleTogglePause}
-              className="w-full py-3.5 sm:py-4 bg-foreground text-background rounded-full font-black text-lg sm:text-xl hover:scale-105 transition-transform shadow-[0_0_40px_rgba(255,255,255,0.2)]"
-            >
-              RESUME
-            </button>
-            <button
-              type="button"
-              onClick={handleRestart}
-              className="w-full py-3.5 sm:py-4 bg-foreground/10 text-foreground border border-foreground/20 rounded-full font-bold text-lg sm:text-xl hover:bg-foreground/20 flex items-center justify-center transition-colors"
-            >
-              RESTART
-            </button>
-            <button
-              type="button"
-              onClick={() => navigate("/settings?from=/game")}
-              className="w-full py-3.5 sm:py-4 bg-foreground/10 text-foreground border border-foreground/20 rounded-full font-bold text-lg sm:text-xl hover:bg-foreground/20 transition-colors"
-            >
-              SETTINGS ⚙️
-            </button>
-            <button
-              type="button"
-              onClick={handleQuit}
-              className="w-full py-3.5 sm:py-4 text-red-500 rounded-full font-bold text-lg sm:text-xl hover:bg-red-500/10 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)] transition-all mt-4"
-            >
-              QUIT GAME
-            </button>
-          </div>
-        </div>
-      )}
+      <PauseOverlay
+        isVisible={showOverlay}
+        onResume={handleTogglePause}
+        onRestart={handleRestart}
+        onSettings={() => navigate("/settings?from=/game")}
+        onQuit={handleQuit}
+      />
     </div>
   );
 }

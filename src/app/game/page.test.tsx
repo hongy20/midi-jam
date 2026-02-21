@@ -102,7 +102,7 @@ describe("Game Page", () => {
     expect(screen.getByText(/Test Track/)).toBeInTheDocument();
   });
 
-  it("shows no track selected message when track is missing", () => {
+  it("navigates to welcome page when track is missing", () => {
     vi.mocked(useSelection).mockReturnValue({
       selectedInstrument: { id: "piano", name: "Piano" },
       selectedTrack: null,
@@ -121,7 +121,7 @@ describe("Game Page", () => {
     } as any);
 
     render(<GamePage />);
-    expect(screen.getByText(/No Track Selected/i)).toBeInTheDocument();
+    expect(mockNavigate).toHaveBeenCalledWith("/");
   });
 
   it("shows loading state when track is loading", () => {
