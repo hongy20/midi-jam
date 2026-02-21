@@ -1,5 +1,6 @@
 "use client";
 
+import { Volume2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
@@ -14,7 +15,7 @@ export default function WelcomePage() {
     const hasScrollTimeline = "ScrollTimeline" in window;
     setIsSupported(hasWebMidi && hasScrollTimeline);
     clearSelection();
-  }, []);
+  }, [clearSelection]);
 
   const handleStart = () => {
     navigate("/instruments");
@@ -36,7 +37,7 @@ export default function WelcomePage() {
 
       {/* Main Content Area */}
       <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-4 animate-slide-up w-full max-w-4xl">
-        <div className="mb-8 relative">
+        <div className="mb-8 w-full relative">
           <h1 className="text-6xl sm:text-7xl md:text-9xl font-black mb-4 tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent transform transition-transform hover:scale-105 select-none drop-shadow-2xl">
             MIDI JAM
           </h1>
@@ -56,25 +57,7 @@ export default function WelcomePage() {
         )}
 
         <div className="flex items-center gap-3 text-sm sm:text-base md:text-xl text-foreground/80 font-medium mb-12 bg-foreground/10 px-6 py-3 rounded-full backdrop-blur-sm border border-foreground/20 shadow-lg">
-          <svg
-            aria-label="Volume Warning"
-            role="img"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="animate-pulse text-foreground/90"
-          >
-            <title>Volume</title>
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-          </svg>
+          <Volume2 className="animate-pulse text-foreground/90 w-6 h-6" />
           <span className="tracking-wide">
             WARNING: AUDIO MAY BE LOUD. CONNECT HEADPHONES/SPEAKERS.
           </span>
@@ -86,11 +69,10 @@ export default function WelcomePage() {
             type="button"
             onClick={handleStart}
             disabled={!isSupported}
-            className={`col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 bg-foreground text-background text-xl sm:text-2xl font-black rounded-2xl sm:rounded-3xl transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)] overflow-hidden flex items-center justify-center gap-3 ${
-              !isSupported
+            className={`col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 bg-foreground text-background text-xl sm:text-2xl font-black rounded-2xl sm:rounded-3xl transition-all duration-300 shadow-[0_0_40px_rgba(255,255,255,0.2)] overflow-hidden flex items-center justify-center gap-3 ${!isSupported
                 ? "opacity-20 cursor-not-allowed grayscale"
                 : "hover:scale-[1.03] active:scale-[0.97] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)]"
-            }`}
+              }`}
           >
             <span className="relative z-10">START JAM</span>
             <span className="relative z-10 text-2xl group-hover:translate-x-1 transition-transform">
