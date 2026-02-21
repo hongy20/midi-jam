@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { useDemoPlayback } from "@/hooks/use-demo-playback";
 import { getNoteUnitOffset, isBlackKey } from "@/lib/device/piano";
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
@@ -30,26 +30,6 @@ export function LaneStage({
   rangeEnd = PIANO_88_KEY_MAX,
 }: LaneStageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    const observer = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      if (entry) {
-        setDimensions({
-          width: entry.contentRect.width,
-          height: entry.contentRect.height,
-        });
-      }
-    });
-
-    observer.observe(containerRef.current);
-    return () => observer.disconnect();
-  }, []);
-
-  const { height: viewportHeight } = dimensions;
 
   useDemoPlayback({
     containerRef: scrollRef,
@@ -88,11 +68,7 @@ export function LaneStage({
         id="lane-scroll"
         className="absolute inset-0 overflow-hidden"
       >
-        <TrackLane
-          spans={spans}
-          viewportHeight={viewportHeight}
-          totalDurationMs={totalDurationMs}
-        />
+        <TrackLane spans={spans} totalDurationMs={totalDurationMs} />
       </div>
 
       {/* Target Line (Fixed) */}

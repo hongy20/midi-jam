@@ -3,6 +3,7 @@
   width: 100%;
   position: relative;
   grid-template-columns: repeat(var(--piano-visible-units, 156), 1fr);
+  height: calc(var(--lane-height) * (var(--total-duration-ms) / 2000 + 1));
 }
 
 .note {

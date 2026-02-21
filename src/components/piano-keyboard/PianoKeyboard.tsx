@@ -126,7 +126,7 @@ export const PianoKeyboard = ({
   const visibleUnits = endUnit - startUnit;
 
   return (
-    <div className="flex flex-col w-full select-none relative z-50">
+    <div className="flex flex-col w-full h-full select-none relative z-50">
       <div
         className={styles.container}
         style={

@@ -4,7 +4,6 @@ import styles from "./track-lane.module.css";
 
 interface TrackLaneProps {
   spans: NoteSpan[];
-  viewportHeight: number;
   totalDurationMs: number;
 }
 
@@ -12,19 +11,17 @@ interface TrackLaneProps {
  * Renders the extremely tall inner lane containing all note blocks for the track.
  * Vertical positioning is now percentage-based relative to the total track duration
  * plus a 2000ms lookahead/padding.
+ * Total height is handled in CSS using variables.
  */
-export function TrackLane({
-  spans,
-  viewportHeight,
-  totalDurationMs,
-}: TrackLaneProps) {
+export function TrackLane({ spans, totalDurationMs }: TrackLaneProps) {
   // The lane represents total track time + 2000ms lead-in/padding
   const totalTrackMs = totalDurationMs + 2000;
-  const ratio = viewportHeight / 2000;
-  const laneHeight = totalTrackMs * ratio;
 
   return (
-    <div className={styles.container} style={{ height: `${laneHeight}px` }}>
+    <div
+      className={styles.container}
+      style={{ "--total-duration-ms": totalDurationMs } as React.CSSProperties}
+    >
       {spans.map((span) => {
         const startTimeMs = span.startTime * 1000;
         const endTimeMs = (span.startTime + span.duration) * 1000;

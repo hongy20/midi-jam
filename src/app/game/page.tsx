@@ -13,6 +13,7 @@ import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMidiTrack } from "@/hooks/use-midi-track";
+import styles from "./page.module.css";
 
 export default function GamePage() {
   const { navigate } = useGameNavigation();
@@ -131,9 +132,9 @@ export default function GamePage() {
   }
 
   return (
-    <div className="fixed inset-0 grid grid-rows-[auto_1fr_auto]">
+    <div className={styles.container}>
       {/* Row 1: Status Bar (Fixed height) */}
-      <header className="h-20 w-full p-4 sm:p-8 flex justify-between items-center layout-padding bg-background/50 backdrop-blur-md border-b border-foreground/5">
+      <header className="h-[var(--header-height)] w-full p-4 sm:p-8 flex justify-between items-center layout-padding bg-background/50 backdrop-blur-md border-b border-foreground/5">
         <div className="flex items-center gap-4 flex-1">
           <div className="flex flex-col">
             <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-0.5">
@@ -183,7 +184,7 @@ export default function GamePage() {
       </main>
 
       {/* Row 3: Instrument (Fixed height based on content) */}
-      <footer className="w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
+      <footer className="h-[var(--footer-height)] w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
         <VirtualInstrument
           inputDevice={selectedMIDIInput}
           liveNotes={liveActiveNotes}

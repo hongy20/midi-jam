@@ -1,0 +1,22 @@
+.container {
+  --header-height: 5rem;
+  --footer-height: 151px;
+  --lane-height: calc(100dvh - var(--header-height) - var(--footer-height));
+
+  position: fixed;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background-color: var(--background);
+  color: var(--foreground);
+  overflow: hidden;
+  transition:
+    color 500ms,
+    background-color 500ms;
+}
+
+@media (max-height: 600px) {
+  .container {
+    --footer-height: 91px;
+  }
+}
