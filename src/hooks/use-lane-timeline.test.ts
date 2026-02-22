@@ -18,6 +18,19 @@ describe("useLaneTimeline hook", () => {
       unobserve() {}
       disconnect() {}
     };
+
+    // Mock ScrollTimeline
+    global.ScrollTimeline = class ScrollTimeline {
+      source: Element | Document | undefined;
+      axis: string | undefined;
+      constructor(options?: ScrollTimelineOptions) {
+        this.source = options?.source;
+        this.axis = options?.axis;
+      }
+      get currentTime() {
+        return null;
+      }
+    };
   });
 
   afterEach(() => {
