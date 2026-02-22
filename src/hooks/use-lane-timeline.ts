@@ -100,12 +100,10 @@ export function useLaneTimeline({
     const container = containerRef.current;
     if (!container) return;
 
-    if (typeof window !== "undefined" && "ScrollTimeline" in window) {
-      timelineRef.current = new window.ScrollTimeline({
-        source: container,
-        axis: "block",
-      });
-    }
+    timelineRef.current = new ScrollTimeline({
+      source: container,
+      axis: "block",
+    });
 
     return () => {
       timelineRef.current = null;
@@ -116,16 +114,33 @@ export function useLaneTimeline({
     return currentTimeMsRef.current;
   }, []);
 
+  // const getProgress = useCallback(() => {
+  //   if (timelineRef.current?.currentTime) {
+  //     const val = timelineRef.current.currentTime;
+  //     if (typeof val === "number") {
+  //       return 1 - val / 100;
+  //     }
+  //     if (val && typeof val.value === "number") {
+  //       return 1 - val.value / 100;
+  //     }
+  //   }
+  //   return totalDurationMs > 0
+  //     ? Math.min(1, currentTimeMsRef.current / totalDurationMs)
+  //     : 0;
+  // }, [totalDurationMs]);
+
   const getProgress = useCallback(() => {
-    if (timelineRef.current?.currentTime) {
-      const val = timelineRef.current.currentTime;
-      if (typeof val === "number") {
-        return 1 - val / 100;
-      }
-      if (val && typeof val.value === "number") {
-        return 1 - val.value / 100;
-      }
+    const val = timelineRef.current?.currentTime;
+
+    if (typeof val === "number") {
+      return 1 - val / 100;
     }
+
+    if (val) {
+      const percent = val.to("percent").value; // value: number
+      return 1 - percent / 100;
+    }
+
     return totalDurationMs > 0
       ? Math.min(1, currentTimeMsRef.current / totalDurationMs)
       : 0;
