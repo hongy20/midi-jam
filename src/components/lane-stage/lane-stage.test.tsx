@@ -4,12 +4,17 @@ import { LaneStage } from "./lane-stage";
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
-  callback: any;
-  constructor(callback: any) {
+  callback: ResizeObserverCallback;
+  constructor(callback: ResizeObserverCallback) {
     this.callback = callback;
   }
   observe(_el: HTMLElement) {
-    this.callback([{ contentRect: { width: 1000, height: 600 } }]);
+    const entry = {
+      contentRect: { width: 1000, height: 600 },
+      target: _el,
+    } as unknown as ResizeObserverEntry;
+
+    this.callback([entry], this); // 👈 pass observer
   }
   unobserve() {}
   disconnect() {}

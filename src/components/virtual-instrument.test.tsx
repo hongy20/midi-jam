@@ -11,7 +11,7 @@ describe("VirtualInstrument", () => {
   it("renders PianoKeyboard", () => {
     render(
       <VirtualInstrument
-        input={{} as any}
+        inputDevice={{} as WebMidi.MIDIInput}
         liveNotes={new Set()}
         playbackNotes={new Set()}
       />,

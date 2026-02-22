@@ -12,11 +12,11 @@ describe("useLaneTimeline hook", () => {
       constructor(callback: ResizeObserverCallback) {
         this.callback = callback;
       }
-      observe(target: Element) {
+      observe(_target: Element) {
         this.callback([], this);
       }
-      unobserve() { }
-      disconnect() { }
+      unobserve() {}
+      disconnect() {}
     };
   });
 
@@ -30,7 +30,7 @@ describe("useLaneTimeline hook", () => {
       scrollHeight: 1000,
       clientHeight: 400,
       scrollTop: 600, // maxScroll
-    } as any;
+    } as HTMLDivElement;
     const containerRef = { current: container };
 
     renderHook(() =>
@@ -57,7 +57,7 @@ describe("useLaneTimeline hook", () => {
       scrollHeight: 1000,
       clientHeight: 400,
       scrollTop: 600,
-    } as any;
+    } as HTMLDivElement;
     const containerRef = { current: container };
 
     const { rerender } = renderHook(
@@ -94,7 +94,7 @@ describe("useLaneTimeline hook", () => {
       scrollHeight: 1000,
       clientHeight: 400,
       scrollTop: 0,
-    } as any;
+    } as HTMLDivElement;
     const containerRef = { current: container };
 
     const { result } = renderHook(() =>

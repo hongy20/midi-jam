@@ -1,5 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { MIDINoteEvent } from "@/lib/midi/midi-listener";
+import type { MidiEvent } from "@/lib/midi/midi-parser";
 import { useLaneScoreEngine } from "./use-lane-score-engine";
 import { useMIDINotes } from "./use-midi-notes";
 
@@ -10,21 +12,21 @@ vi.mock("./use-midi-notes", () => ({
 describe("useLaneScoreEngine hook", () => {
   const modelEvents = [
     { type: "noteOn", note: 60, time: 1, velocity: 0.7 }, // 1000ms
-  ] as any;
+  ] as MidiEvent[];
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("increases score and combo on perfect hit", () => {
-    let onNoteCallback: any;
+    let onNoteCallback: (event: MIDINoteEvent) => void;
     vi.mocked(useMIDINotes).mockImplementation((_input, cb) => {
       onNoteCallback = cb;
     });
 
     const { result } = renderHook(() =>
       useLaneScoreEngine({
-        midiInput: {} as any,
+        midiInput: {} as WebMidi.MIDIInput,
         modelEvents,
         getCurrentTimeMs: () => 1000,
         isPlaying: true,
@@ -41,14 +43,14 @@ describe("useLaneScoreEngine hook", () => {
   });
 
   it("resets combo on miss (wrong note)", () => {
-    let onNoteCallback: any;
+    let onNoteCallback: (event: MIDINoteEvent) => void;
     vi.mocked(useMIDINotes).mockImplementation((_input, cb) => {
       onNoteCallback = cb;
     });
 
     const { result } = renderHook(() =>
       useLaneScoreEngine({
-        midiInput: {} as any,
+        midiInput: {} as WebMidi.MIDIInput,
         modelEvents,
         getCurrentTimeMs: () => 1000,
         isPlaying: true,

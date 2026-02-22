@@ -58,14 +58,16 @@ describe("Game Page", () => {
       sessionResults: null,
       speed: 1.0,
       demoMode: false,
-      selectedMIDIInput: { id: "piano", name: "Piano" } as any,
+      selectedMIDIInput: { id: "piano", name: "Piano" } as WebMidi.MIDIInput,
       selectedMIDIOutput: null,
-      midiError: null,
       setTrack: vi.fn(),
+      setSpeed: vi.fn(),
+      setDemoMode: vi.fn(),
+      selectMIDIInput: vi.fn(),
       setGameSession: mockSetGameSession,
       setSessionResults: vi.fn(),
       clearSelection: vi.fn(),
-    } as any);
+    });
     vi.mocked(useMidiTrack).mockReturnValue({
       events: [],
       spans: [],
@@ -107,14 +109,16 @@ describe("Game Page", () => {
       sessionResults: null,
       speed: 1.0,
       demoMode: false,
-      selectedMIDIInput: { id: "piano", name: "Piano" } as any,
+      selectedMIDIInput: { id: "piano", name: "Piano" } as WebMidi.MIDIInput,
       selectedMIDIOutput: null,
-      midiError: null,
       setTrack: vi.fn(),
+      setSpeed: vi.fn(),
+      setDemoMode: vi.fn(),
+      selectMIDIInput: vi.fn(),
       setGameSession: mockSetGameSession,
       setSessionResults: vi.fn(),
       clearSelection: vi.fn(),
-    } as any);
+    });
 
     render(<GamePage />);
     expect(mockNavigate).toHaveBeenCalledWith("/");

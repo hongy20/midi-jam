@@ -17,7 +17,7 @@ export function useLaneTimeline({
   const rafIdRef = useRef<number | null>(null);
   const lastTimestampRef = useRef<number | null>(null);
   const maxScrollRef = useRef(0);
-  const timelineRef = useRef<any>(null);
+  const timelineRef = useRef<ScrollTimeline | null>(null);
 
   const loop = useCallback(
     (now: number) => {
@@ -37,7 +37,10 @@ export function useLaneTimeline({
         currentTimeMsRef.current += deltaTime * speed;
       }
 
-      const t = totalDurationMs > 0 ? Math.min(currentTimeMsRef.current / totalDurationMs, 1) : 0;
+      const t =
+        totalDurationMs > 0
+          ? Math.min(currentTimeMsRef.current / totalDurationMs, 1)
+          : 0;
       container.scrollTop = (1 - t) * maxScrollRef.current;
 
       if (t < 1) {
@@ -80,7 +83,10 @@ export function useLaneTimeline({
     const ro = new ResizeObserver(() => {
       maxScrollRef.current = container.scrollHeight - container.clientHeight;
       // Initialize or update the static scroll if paused/finished
-      const t = totalDurationMs > 0 ? Math.min(currentTimeMsRef.current / totalDurationMs, 1) : 0;
+      const t =
+        totalDurationMs > 0
+          ? Math.min(currentTimeMsRef.current / totalDurationMs, 1)
+          : 0;
       container.scrollTop = (1 - t) * maxScrollRef.current;
     });
 
@@ -95,7 +101,7 @@ export function useLaneTimeline({
     if (!container) return;
 
     if (typeof window !== "undefined" && "ScrollTimeline" in window) {
-      timelineRef.current = new (window as any).ScrollTimeline({
+      timelineRef.current = new window.ScrollTimeline({
         source: container,
         axis: "block",
       });
@@ -111,7 +117,7 @@ export function useLaneTimeline({
   }, []);
 
   const getProgress = useCallback(() => {
-    if (timelineRef.current && timelineRef.current.currentTime) {
+    if (timelineRef.current?.currentTime) {
       const val = timelineRef.current.currentTime;
       if (typeof val === "number") {
         return 1 - val / 100;
