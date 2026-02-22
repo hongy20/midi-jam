@@ -1,50 +1,62 @@
-import { renderHook } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { act, renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useLaneTimeline } from "./use-lane-timeline";
 
 describe("useLaneTimeline hook", () => {
-  const mockAnimate = vi.fn();
-  const mockCancel = vi.fn();
-  const mockPlay = vi.fn();
-  const mockPause = vi.fn();
-
   beforeEach(() => {
-    vi.clearAllMocks();
-    mockAnimate.mockReturnValue({
-      play: mockPlay,
-      pause: mockPause,
-      cancel: mockCancel,
-      currentTime: 0,
-      playbackRate: 1,
-    });
+    vi.useFakeTimers();
+
+    // Mock ResizeObserver to immediately call its callback
+    global.ResizeObserver = class ResizeObserver {
+      callback: ResizeObserverCallback;
+      constructor(callback: ResizeObserverCallback) {
+        this.callback = callback;
+      }
+      observe(target: Element) {
+        this.callback([], this);
+      }
+      unobserve() { }
+      disconnect() { }
+    };
   });
 
-  it("initializes animation on mount", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+  });
+
+  it("updates scrollTop as time passes", () => {
     const container = {
-      animate: mockAnimate,
       scrollHeight: 1000,
-      clientHeight: 500,
+      clientHeight: 400,
+      scrollTop: 600, // maxScroll
     } as any;
     const containerRef = { current: container };
 
     renderHook(() =>
       useLaneTimeline({
         containerRef,
-        totalDurationMs: 10000,
+        totalDurationMs: 1000,
         speed: 1,
-        isPaused: true,
+        isPaused: false,
       }),
     );
 
-    expect(mockAnimate).toHaveBeenCalled();
-    expect(mockPause).toHaveBeenCalled();
+    // Advance time by 500ms
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+
+    // Progress 0.5, scrollTop should be around 300
+    expect(container.scrollTop).toBeLessThan(600);
+    expect(container.scrollTop).toBeGreaterThan(0);
   });
 
-  it("plays animation when isPaused is false", () => {
+  it("pauses updates when isPaused is true", () => {
     const container = {
-      animate: mockAnimate,
       scrollHeight: 1000,
-      clientHeight: 500,
+      clientHeight: 400,
+      scrollTop: 600,
     } as any;
     const containerRef = { current: container };
 
@@ -52,16 +64,59 @@ describe("useLaneTimeline hook", () => {
       ({ isPaused }) =>
         useLaneTimeline({
           containerRef,
-          totalDurationMs: 10000,
+          totalDurationMs: 1000,
           speed: 1,
           isPaused,
         }),
       {
-        initialProps: { isPaused: true },
+        initialProps: { isPaused: false },
       },
     );
 
-    rerender({ isPaused: false });
-    expect(mockPlay).toHaveBeenCalled();
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+    const scrollAfterSomeTime = container.scrollTop;
+    expect(scrollAfterSomeTime).toBeLessThan(600);
+
+    rerender({ isPaused: true });
+
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
+
+    // Should remain same as when it was paused
+    expect(container.scrollTop).toBe(scrollAfterSomeTime);
+  });
+
+  it("resets timeline correctly", () => {
+    const container = {
+      scrollHeight: 1000,
+      clientHeight: 400,
+      scrollTop: 0,
+    } as any;
+    const containerRef = { current: container };
+
+    const { result } = renderHook(() =>
+      useLaneTimeline({
+        containerRef,
+        totalDurationMs: 1000,
+        speed: 1,
+        isPaused: false,
+      }),
+    );
+
+    act(() => {
+      vi.advanceTimersByTime(500);
+    });
+
+    expect(container.scrollTop).not.toBe(600);
+
+    act(() => {
+      result.current.resetTimeline();
+    });
+
+    expect(container.scrollTop).toBe(600); // maxScroll
+    expect(result.current.getCurrentTimeMs()).toBe(0);
   });
 });

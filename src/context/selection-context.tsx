@@ -50,7 +50,7 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
     null,
   );
   const [speed, setSpeed] = useState<number>(1.0);
-  const [demoMode, setDemoMode] = useState<boolean>(false);
+  const [demoMode, setDemoMode] = useState<boolean>(true);
 
   // MIDI Devices
   const { inputs, outputs } = useMIDIDevices();
@@ -63,7 +63,7 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
     setGameSession(null);
     setSessionResults(null);
     setSpeed(1.0);
-    setDemoMode(false);
+    setDemoMode(true);
     selectMIDIInput(null);
   };
 

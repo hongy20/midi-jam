@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 interface UseLaneTimelineProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -13,135 +13,131 @@ export function useLaneTimeline({
   speed,
   isPaused,
 }: UseLaneTimelineProps) {
-  const motionRef = useRef<Animation | null>(null);
-  const timelineRef = useRef<any>(null); // ScrollTimeline
-  const [_progress, setProgress] = useState(0);
+  const currentTimeMsRef = useRef(0);
+  const rafIdRef = useRef<number | null>(null);
+  const lastTimestampRef = useRef<number | null>(null);
+  const maxScrollRef = useRef(0);
+  const timelineRef = useRef<any>(null);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container || totalDurationMs <= 0) return;
+  const loop = useCallback(
+    (now: number) => {
+      const container = containerRef.current;
+      if (!container) return;
 
-    let cleanup: (() => void) | undefined;
-
-    const setupAnimation = () => {
-      if (cleanup) cleanup();
-
-      const scrollHeight = container.scrollHeight;
-      const clientHeight = container.clientHeight;
-      const maxScroll = scrollHeight - clientHeight;
-
-      if (maxScroll <= 0) return;
-
-      // 1. Initialize ScrollTimeline
-      if (typeof window !== "undefined" && "ScrollTimeline" in window) {
-        try {
-          timelineRef.current = new (window as any).ScrollTimeline({
-            source: container,
-            axis: "block",
-          });
-        } catch (e) {
-          console.error("Failed to initialize ScrollTimeline:", e);
-        }
-      }
-
-      // 2. Initialize Motion Animation
-      // For falling notes, we scroll from maxScroll down to 0.
-      container.scrollTop = maxScroll;
-      const motion = container.animate(
-        [{ scrollTop: maxScroll }, { scrollTop: 0 }],
-        {
-          duration: totalDurationMs / speed,
-          fill: "forwards",
-          easing: "linear",
-        },
-      );
-
-      motion.pause();
       if (isPaused) {
-        motion.pause();
-      } else {
-        motion.play();
+        lastTimestampRef.current = null;
+        return;
       }
-      motion.playbackRate = speed;
-      motionRef.current = motion;
 
-      cleanup = () => {
-        motion.cancel();
-      };
-    };
+      if (lastTimestampRef.current === null) {
+        lastTimestampRef.current = now;
+      } else {
+        const deltaTime = now - lastTimestampRef.current;
+        lastTimestampRef.current = now;
+        currentTimeMsRef.current += deltaTime * speed;
+      }
 
-    // Use ResizeObserver on the first child (the tall inner lane)
-    // to detect when the content is actually sized.
-    const content = container.firstElementChild;
-    if (content) {
-      const observer = new ResizeObserver(() => {
-        setupAnimation();
-      });
-      observer.observe(content);
-      return () => {
-        observer.disconnect();
-        if (cleanup) cleanup();
-      };
-    }
+      const t = totalDurationMs > 0 ? Math.min(currentTimeMsRef.current / totalDurationMs, 1) : 0;
+      container.scrollTop = (1 - t) * maxScrollRef.current;
 
-    setupAnimation();
-    return () => {
-      if (cleanup) cleanup();
-    };
-  }, [containerRef, totalDurationMs, speed]);
+      if (t < 1) {
+        rafIdRef.current = requestAnimationFrame(loop);
+      }
+    },
+    [isPaused, speed, totalDurationMs, containerRef],
+  );
 
-  // Handle Play/Pause
+  // Handle Play/Pause and loop initialization
   useEffect(() => {
-    const motion = motionRef.current;
-    if (!motion) return;
-
-    if (isPaused) {
-      motion.pause();
+    if (
+      !isPaused &&
+      totalDurationMs > 0 &&
+      currentTimeMsRef.current < totalDurationMs
+    ) {
+      rafIdRef.current = requestAnimationFrame(loop);
     } else {
-      motion.play();
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
+      lastTimestampRef.current = null;
     }
-  }, [isPaused]);
 
-  // Sync speed
+    return () => {
+      if (rafIdRef.current !== null) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
+      lastTimestampRef.current = null;
+    };
+  }, [isPaused, totalDurationMs, loop]);
+
+  // Handle ResizeObserver to maintain correct maxScrollTop
   useEffect(() => {
-    const motion = motionRef.current;
-    if (!motion) return;
-    motion.playbackRate = speed;
-  }, [speed]);
-
-  const getCurrentTimeMs = useCallback(() => {
-    if (motionRef.current) {
-      // Animation currentTime is in ms, 0 to (totalDurationMs / speed).
-      // Since playbackRate = speed, the "effective" time is currentTime * speed.
-      const currentTime = (motionRef.current.currentTime as number) || 0;
-      return currentTime * speed;
-    }
-
-    return 0;
-  }, [speed]);
-
-  const getProgress = useCallback(() => {
-    const time = getCurrentTimeMs();
-    return totalDurationMs > 0 ? Math.min(1, time / totalDurationMs) : 0;
-  }, [getCurrentTimeMs, totalDurationMs]);
-
-  const resetTimeline = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    if (motionRef.current) {
-      motionRef.current.currentTime = 0;
+    const ro = new ResizeObserver(() => {
+      maxScrollRef.current = container.scrollHeight - container.clientHeight;
+      // Initialize or update the static scroll if paused/finished
+      const t = totalDurationMs > 0 ? Math.min(currentTimeMsRef.current / totalDurationMs, 1) : 0;
+      container.scrollTop = (1 - t) * maxScrollRef.current;
+    });
+
+    ro.observe(container);
+
+    return () => ro.disconnect();
+  }, [containerRef, totalDurationMs]);
+
+  // Handle ScrollTimeline for progress
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    if (typeof window !== "undefined" && "ScrollTimeline" in window) {
+      timelineRef.current = new (window as any).ScrollTimeline({
+        source: container,
+        axis: "block",
+      });
     }
 
-    const maxScroll = container.scrollHeight - container.clientHeight;
-    container.scrollTop = maxScroll;
-    setProgress(0);
+    return () => {
+      timelineRef.current = null;
+    };
+  }, [containerRef]);
+
+  const getCurrentTimeMs = useCallback(() => {
+    return currentTimeMsRef.current;
+  }, []);
+
+  const getProgress = useCallback(() => {
+    if (timelineRef.current && timelineRef.current.currentTime) {
+      const val = timelineRef.current.currentTime;
+      if (typeof val === "number") {
+        return 1 - val / 100;
+      }
+      if (val && typeof val.value === "number") {
+        return 1 - val.value / 100;
+      }
+    }
+    return totalDurationMs > 0
+      ? Math.min(1, currentTimeMsRef.current / totalDurationMs)
+      : 0;
+  }, [totalDurationMs]);
+
+  const resetTimeline = useCallback(() => {
+    currentTimeMsRef.current = 0;
+    lastTimestampRef.current = null;
+    const container = containerRef.current;
+    if (container) {
+      container.scrollTop = maxScrollRef.current;
+    }
   }, [containerRef]);
 
   return {
     getCurrentTimeMs,
     getProgress,
-    motion: motionRef.current,
+    motion: null,
     resetTimeline,
   };
 }
