@@ -38,3 +38,8 @@ next-env.d.ts
 
 # certificates
 certificates
+
+# Exclude the generated integration layer (Symlinks)
+# We regenerate these via setup-antigravity.sh
+.antigravity/skills/
+.antigravity/rules/
