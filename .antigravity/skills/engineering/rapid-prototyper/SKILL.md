@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/engineering/rapid-prototyper.md
+../../../../.claude/agents/engineering/rapid-prototyper.md

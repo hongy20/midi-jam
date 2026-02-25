@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/design/ux-researcher.md
+../../../../.claude/agents/design/ux-researcher.md

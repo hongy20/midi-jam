@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/testing/workflow-optimizer.md
+../../../../.claude/agents/testing/workflow-optimizer.md

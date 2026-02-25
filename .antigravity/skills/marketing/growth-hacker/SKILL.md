@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/marketing/growth-hacker.md
+../../../../.claude/agents/marketing/growth-hacker.md

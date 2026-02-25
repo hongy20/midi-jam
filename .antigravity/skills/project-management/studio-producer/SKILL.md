@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/project-management/studio-producer.md
+../../../../.claude/agents/project-management/studio-producer.md

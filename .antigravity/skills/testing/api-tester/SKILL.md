@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/testing/api-tester.md
+../../../../.claude/agents/testing/api-tester.md

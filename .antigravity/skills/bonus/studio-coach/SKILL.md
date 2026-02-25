@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/bonus/studio-coach.md
+../../../../.claude/agents/bonus/studio-coach.md

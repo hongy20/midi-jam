@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/engineering/test-writer-fixer.md
+../../../../.claude/agents/engineering/test-writer-fixer.md

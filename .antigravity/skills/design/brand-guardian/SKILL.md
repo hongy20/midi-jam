@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/design/brand-guardian.md
+../../../../.claude/agents/design/brand-guardian.md

@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/engineering/mobile-app-builder.md
+../../../../.claude/agents/engineering/mobile-app-builder.md

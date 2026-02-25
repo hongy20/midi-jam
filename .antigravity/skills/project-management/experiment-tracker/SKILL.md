@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/project-management/experiment-tracker.md
+../../../../.claude/agents/project-management/experiment-tracker.md

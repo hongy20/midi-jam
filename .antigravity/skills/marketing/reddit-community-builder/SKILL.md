@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/marketing/reddit-community-builder.md
+../../../../.claude/agents/marketing/reddit-community-builder.md

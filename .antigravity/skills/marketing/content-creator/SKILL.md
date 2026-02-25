@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/marketing/content-creator.md
+../../../../.claude/agents/marketing/content-creator.md

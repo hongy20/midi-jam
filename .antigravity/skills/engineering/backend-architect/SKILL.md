@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/engineering/backend-architect.md
+../../../../.claude/agents/engineering/backend-architect.md

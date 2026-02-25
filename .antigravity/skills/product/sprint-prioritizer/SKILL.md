@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/product/sprint-prioritizer.md
+../../../../.claude/agents/product/sprint-prioritizer.md

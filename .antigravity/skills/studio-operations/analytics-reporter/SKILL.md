@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/studio-operations/analytics-reporter.md
+../../../../.claude/agents/studio-operations/analytics-reporter.md

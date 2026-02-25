@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/design/visual-storyteller.md
+../../../../.claude/agents/design/visual-storyteller.md

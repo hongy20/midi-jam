@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/studio-operations/infrastructure-maintainer.md
+../../../../.claude/agents/studio-operations/infrastructure-maintainer.md

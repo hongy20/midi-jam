@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/design/whimsy-injector.md
+../../../../.claude/agents/design/whimsy-injector.md

@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/testing/tool-evaluator.md
+../../../../.claude/agents/testing/tool-evaluator.md

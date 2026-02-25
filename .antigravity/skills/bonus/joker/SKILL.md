@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/bonus/joker.md
+../../../../.claude/agents/bonus/joker.md

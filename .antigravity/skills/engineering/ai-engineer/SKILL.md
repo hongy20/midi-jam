@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/engineering/ai-engineer.md
+../../../../.claude/agents/engineering/ai-engineer.md

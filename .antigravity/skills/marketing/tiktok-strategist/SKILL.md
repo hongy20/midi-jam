@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/marketing/tiktok-strategist.md
+../../../../.claude/agents/marketing/tiktok-strategist.md

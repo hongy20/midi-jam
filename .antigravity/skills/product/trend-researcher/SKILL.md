@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/product/trend-researcher.md
+../../../../.claude/agents/product/trend-researcher.md

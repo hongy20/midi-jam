@@ -10,6 +10,8 @@
     "lint:fix": "biome check --write",
     "type-check": "next typegen && tsc --noEmit",
     "sync-agents": "./sync-agents.sh",
+    "setup-antigravity": "./setup-antigravity.sh",
+    "init-ai": "npm run sync-agents && npm run setup-antigravity",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },

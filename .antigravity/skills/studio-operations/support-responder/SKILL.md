@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/studio-operations/support-responder.md
+../../../../.claude/agents/studio-operations/support-responder.md

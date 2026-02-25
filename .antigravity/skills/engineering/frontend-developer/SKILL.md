@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/engineering/frontend-developer.md
+../../../../.claude/agents/engineering/frontend-developer.md

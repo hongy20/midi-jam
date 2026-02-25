@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/testing/performance-benchmarker.md
+../../../../.claude/agents/testing/performance-benchmarker.md

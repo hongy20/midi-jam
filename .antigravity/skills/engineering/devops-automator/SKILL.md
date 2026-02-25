@@ -1,1 +1,1 @@
-/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/engineering/devops-automator.md
+../../../../.claude/agents/engineering/devops-automator.md
