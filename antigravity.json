@@ -1,0 +1,6 @@
+{
+    "agent": {
+        "skillsPath": ".antigravity/skills",
+        "rulesPath": ".antigravity/rules"
+    }
+}

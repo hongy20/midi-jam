@@ -1,0 +1,1 @@
+/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/project-management/project-shipper.md

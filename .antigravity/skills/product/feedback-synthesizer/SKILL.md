@@ -1,0 +1,1 @@
+/Users/yanhong/Github/hongy20/midi-jam/.claude/agents/product/feedback-synthesizer.md
