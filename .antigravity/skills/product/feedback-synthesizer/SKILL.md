@@ -1,1 +1,0 @@
-../../../../.claude/agents/product/feedback-synthesizer.md

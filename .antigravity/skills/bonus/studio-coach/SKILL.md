@@ -1,1 +1,0 @@
-../../../../.claude/agents/bonus/studio-coach.md

@@ -1,1 +1,0 @@
-../../../../.claude/agents/studio-operations/analytics-reporter.md

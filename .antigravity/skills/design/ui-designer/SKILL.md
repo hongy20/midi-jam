@@ -1,1 +1,0 @@
-../../../../.claude/agents/design/ui-designer.md

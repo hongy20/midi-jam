@@ -1,1 +1,0 @@
-../../../../.claude/agents/engineering/devops-automator.md

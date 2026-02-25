@@ -1,1 +1,0 @@
-../../../../.claude/agents/product/trend-researcher.md

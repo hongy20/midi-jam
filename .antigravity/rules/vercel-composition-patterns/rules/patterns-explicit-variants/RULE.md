@@ -1,1 +1,0 @@
-../../../../../../.agents/skills/vercel-composition-patterns/rules/patterns-explicit-variants.md

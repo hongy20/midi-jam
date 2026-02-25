@@ -1,1 +1,0 @@
-../../../../../../.agents/skills/vercel-react-best-practices/rules/server-dedup-props.md

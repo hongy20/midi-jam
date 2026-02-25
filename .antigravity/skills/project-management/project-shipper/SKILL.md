@@ -1,1 +1,0 @@
-../../../../.claude/agents/project-management/project-shipper.md
