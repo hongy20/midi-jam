@@ -1,46 +1,84 @@
 #!/bin/bash
 # Configuration
-SOURCE_DIR=".claude/agents"
-SKILLS_DIR=".antigravity/skills"
+CLAUDE_AGENTS_DIR=".claude/agents"
+EXTERNAL_SKILLS_DIR=".agents/skills" # Source from skills.sh
+AG_SKILLS_DIR=".antigravity/skills"  # Personas
+AG_RULES_DIR=".antigravity/rules"    # Playbooks/Rules
 
-echo "🔗 Setting up Antigravity Skills..."
-
-# 1. Clear existing mappings to prevent broken/stale links
-rm -rf "$SKILLS_DIR"
-mkdir -p "$SKILLS_DIR"
-
-# 2. Get the absolute path of the source root to calculate relative links easily
-# (Using 'pwd' ensures we know where we are starting from)
 PROJECT_ROOT=$(pwd)
 
-# 3. Find all .md files and map them
-find "$SOURCE_DIR" -name "*.md" | while read -r agent_file; do
-    # Skip top-level README
-    if [[ "$agent_file" == "$SOURCE_DIR/README.md" ]]; then continue; fi
+echo "🔗 Starting Antigravity Configuration..."
+
+# --- PART 1: Map Personas (The "Who") ---
+echo "👤 Mapping Personas from Claude Agents..."
+rm -rf "$AG_SKILLS_DIR"
+mkdir -p "$AG_SKILLS_DIR"
+
+find "$CLAUDE_AGENTS_DIR" -name "*.md" | while read -r agent_file; do
+    if [[ "$agent_file" == "$CLAUDE_AGENTS_DIR/README.md" ]]; then continue; fi
     
-    # Calculate paths
-    rel_path=${agent_file#$SOURCE_DIR/}      # e.g., engineering/frontend.md
-    skill_rel_dir="${rel_path%.md}"          # e.g., engineering/frontend
-    target_skill_dir="$SKILLS_DIR/$skill_rel_dir"
+    rel_path=${agent_file#$CLAUDE_AGENTS_DIR/}
+    skill_rel_dir="${rel_path%.md}"
+    target_dir="$AG_SKILLS_DIR/$skill_rel_dir"
     
-    # Create the nested folder
-    mkdir -p "$target_skill_dir"
+    mkdir -p "$target_dir"
+    cd "$target_dir"
     
-    # --- THE RELIABLE LINKING LOGIC ---
-    # We move INTO the target folder so the relative path is simple to calculate
-    cd "$target_skill_dir"
-    
-    # Calculate how many levels up to get to PROJECT_ROOT from THIS folder
-    # engineering/frontend is 2 levels deep, so we need 2 (depth) + 2 (.antigravity/skills) = 4 levels
+    # Calculate depth for symlink
     depth=$(echo "$skill_rel_dir" | tr -cd '/' | wc -c)
-    backtrack="../../.." # Base: one for skill-folder, two for .antigravity/skills
+    backtrack="../../.." 
     for ((i=0; i<depth; i++)); do backtrack="../$backtrack"; done
     
-    # Link SKILL.md to the source file
     ln -sf "$backtrack/$agent_file" "SKILL.md"
-    
-    # Go back to project root for the next iteration
     cd "$PROJECT_ROOT"
 done
 
-echo "🚀 Antigravity setup complete. Skills mapped and folders preserved."
+# --- PART 2: Map External Skills as Rules (The "How") ---
+echo "📜 Mapping External Skills to Antigravity Rules..."
+rm -rf "$AG_RULES_DIR"
+mkdir -p "$AG_RULES_DIR"
+
+if [ -d "$EXTERNAL_SKILLS_DIR" ]; then
+    find "$EXTERNAL_SKILLS_DIR" -name "*.md" | while read -r skill_file; do
+        rel_path=${skill_file#$EXTERNAL_SKILLS_DIR/}
+        base_name=$(basename "$skill_file" .md)
+        dir_name=$(dirname "$rel_path")
+
+        # 1. Determine the Target Folder
+        # If it's a 'standard' entry file, we collapse it into the parent folder
+        if [[ "$base_name" == "SKILL" || "$base_name" == "index" || "$base_name" == "AGENTS" ]]; then
+            [[ "$dir_name" == "." ]] && target_rule_dir="$AG_RULES_DIR" || target_rule_dir="$AG_RULES_DIR/$dir_name"
+            skill_rel_dir="$dir_name"
+        else
+            target_rule_dir="$AG_RULES_DIR/${rel_path%.md}"
+            skill_rel_dir="${rel_path%.md}"
+        fi
+
+        mkdir -p "$target_rule_dir"
+        
+        # 2. Determine the Target Filename
+        # Antigravity's "Main" rule file should be RULE.md. 
+        # We prioritize SKILL.md for this name, then index.md.
+        # AGENTS.md stays as AGENTS.md to provide extra context.
+        target_filename="RULE.md"
+        [[ "$base_name" == "AGENTS" ]] && target_filename="AGENTS.md"
+        # If it's a specific sub-rule file, name it RULE.md so it's selectable
+        [[ "$base_name" != "SKILL" && "$base_name" != "index" && "$base_name" != "AGENTS" ]] && target_filename="RULE.md"
+
+        # 3. Create the link
+        depth=$(echo "$skill_rel_dir" | tr -cd '/' | wc -c)
+        backtrack="../../.." 
+        [[ "$skill_rel_dir" == "." || -z "$skill_rel_dir" ]] && depth=-1 # Adjust for root
+        for ((i=0; i<=depth; i++)); do backtrack="../$backtrack"; done
+        
+        cd "$target_rule_dir"
+        ln -sf "$backtrack/$skill_file" "$target_filename"
+        cd "$PROJECT_ROOT"
+        
+        echo "   ✅ Linked: $rel_path -> $target_rule_dir/$target_filename"
+    done
+else
+    echo "   ℹ️ No external skills found."
+fi
+
+echo "🚀 Setup complete! Personas are in /skills, Playbooks are in /rules."

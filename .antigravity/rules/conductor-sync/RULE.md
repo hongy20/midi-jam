@@ -1,0 +1,1 @@
+../../../../.agents/skills/conductor-sync/SKILL.md

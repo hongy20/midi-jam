@@ -1,0 +1,1 @@
+../../../../../../.agents/skills/vercel-composition-patterns/rules/patterns-children-over-render-props.md

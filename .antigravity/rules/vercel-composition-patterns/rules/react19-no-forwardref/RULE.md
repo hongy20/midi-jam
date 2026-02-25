@@ -1,0 +1,1 @@
+../../../../../../.agents/skills/vercel-composition-patterns/rules/react19-no-forwardref.md

@@ -1,0 +1,1 @@
+../../../../../../.agents/skills/vercel-composition-patterns/rules/architecture-compound-components.md
