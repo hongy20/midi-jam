@@ -69,9 +69,6 @@ export function LaneStage({
       >
         <TrackLane spans={spans} originalDurationMs={originalDurationMs} />
       </div>
-
-      {/* Target Line (Fixed) */}
-      <div className="absolute bottom-0 left-0 w-full h-px bg-foreground/40 shadow-[0_0_10px_rgba(255,255,255,0.2)] z-20 pointer-events-none" />
     </div>
   );
 }
