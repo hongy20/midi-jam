@@ -36,3 +36,6 @@ export const MIDI_NOTE_C4 = 60;
 
 /** Default lead-in time before notes hit the target line */
 export const LEAD_IN_DEFAULT_MS = 2000;
+
+/** Default lead-out time before the game auto-completes */
+export const LEAD_OUT_DEFAULT_MS = 2000;

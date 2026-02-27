@@ -1,4 +1,4 @@
-import { LEAD_IN_DEFAULT_MS } from "@/lib/midi/constant";
+import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import gridStyles from "./background-lane.module.css";
 import styles from "./track-lane.module.css";
@@ -15,8 +15,9 @@ interface TrackLaneProps {
  * Total height is handled in CSS using variables.
  */
 export function TrackLane({ spans, originalDurationMs }: TrackLaneProps) {
-  // The lane represents total track time + lead-in/padding
-  const totalTrackMs = originalDurationMs + LEAD_IN_DEFAULT_MS;
+  // The lane represents total track time + lead-in/padding + lead-out
+  const totalTrackMs =
+    originalDurationMs + LEAD_IN_DEFAULT_MS + LEAD_OUT_DEFAULT_MS;
 
   return (
     <div
