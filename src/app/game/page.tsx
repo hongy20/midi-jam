@@ -12,6 +12,7 @@ import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
 import { useMidiTrack } from "@/hooks/use-midi-track";
+import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "@/lib/midi/constant";
 import styles from "./page.module.css";
 
 export default function GamePage() {
@@ -25,7 +26,12 @@ export default function GamePage() {
     selectedMIDIInput,
   } = useSelection();
 
-  const { events, spans, duration, isLoading } = useMidiTrack();
+  const {
+    events,
+    spans,
+    duration: originalDurationMs,
+    isLoading,
+  } = useMidiTrack();
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
 
@@ -36,9 +42,13 @@ export default function GamePage() {
   const [progress, setProgress] = useState(0);
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  const totalDurationMs =
+    originalDurationMs > 0
+      ? originalDurationMs + LEAD_IN_DEFAULT_MS + LEAD_OUT_DEFAULT_MS
+      : 0;
   const { getCurrentTimeMs, getProgress, resetTimeline } = useLaneTimeline({
     containerRef: scrollRef,
-    totalDurationMs: duration,
+    totalDurationMs,
     speed,
     isPaused,
   });
@@ -47,7 +57,7 @@ export default function GamePage() {
     midiInput: selectedMIDIInput,
     modelEvents: events,
     getCurrentTimeMs,
-    isPlaying: !isPaused && duration > 0,
+    isPlaying: !isPaused && originalDurationMs > 0,
   });
 
   // Sync state to context for persistence during navigation
@@ -66,7 +76,10 @@ export default function GamePage() {
 
   // Auto-navigate on completion
   useEffect(() => {
-    if (progress >= 0.999 || (duration > 0 && getCurrentTimeMs() >= duration)) {
+    if (
+      progress >= 0.999 ||
+      (totalDurationMs > 0 && getCurrentTimeMs() >= totalDurationMs)
+    ) {
       setSessionResults({
         score,
         accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
@@ -78,7 +91,7 @@ export default function GamePage() {
     }
   }, [
     progress,
-    duration,
+    totalDurationMs,
     getCurrentTimeMs,
     navigate,
     setGameSession,
@@ -170,7 +183,7 @@ export default function GamePage() {
         ) : (
           <LaneStage
             spans={spans}
-            totalDurationMs={duration}
+            originalDurationMs={originalDurationMs}
             scrollRef={scrollRef}
           />
         )}

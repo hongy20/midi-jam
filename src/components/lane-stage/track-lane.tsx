@@ -1,32 +1,35 @@
+import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import gridStyles from "./background-lane.module.css";
 import styles from "./track-lane.module.css";
 
 interface TrackLaneProps {
   spans: NoteSpan[];
-  totalDurationMs: number;
+  originalDurationMs: number;
 }
 
 /**
  * Renders the extremely tall inner lane containing all note blocks for the track.
  * Vertical positioning is now percentage-based relative to the total track duration
- * plus a 2000ms lookahead/padding.
+ * plus a lead-in/padding.
  * Total height is handled in CSS using variables.
  */
-export function TrackLane({ spans, totalDurationMs }: TrackLaneProps) {
-  // The lane represents total track time + 2000ms lead-in/padding
-  const totalTrackMs = totalDurationMs + 2000;
+export function TrackLane({ spans, originalDurationMs }: TrackLaneProps) {
+  // The lane represents total track time + lead-in/padding + lead-out
+  const totalTrackMs =
+    originalDurationMs + LEAD_IN_DEFAULT_MS + LEAD_OUT_DEFAULT_MS;
 
   return (
     <div
       className={styles.container}
-      style={{ "--total-duration-ms": totalDurationMs } as React.CSSProperties}
+      style={{ "--total-duration-ms": totalTrackMs } as React.CSSProperties}
     >
       {spans.map((span) => {
-        const startTimeMs = span.startTime * 1000;
-        const endTimeMs = (span.startTime + span.duration) * 1000;
+        const startTimeMs = span.startTime * 1000 + LEAD_IN_DEFAULT_MS;
+        const endTimeMs =
+          (span.startTime + span.duration) * 1000 + LEAD_IN_DEFAULT_MS;
 
-        // Proportional positioning: t=0 is at 100% (bottom), t=totalDurationMs is atリードout.
+        // Proportional positioning: t=0 is at 100% (bottom), t=originalDurationMs is atリードout.
         // top% = (totalTrackMs - endTimeMs) / totalTrackMs * 100
         const topPercent = ((totalTrackMs - endTimeMs) / totalTrackMs) * 100;
         const heightPercent = ((endTimeMs - startTimeMs) / totalTrackMs) * 100;

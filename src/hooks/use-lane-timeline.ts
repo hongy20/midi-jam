@@ -143,7 +143,6 @@ export function useLaneTimeline({
   return {
     getCurrentTimeMs,
     getProgress,
-    motion: null,
     resetTimeline,
   };
 }
