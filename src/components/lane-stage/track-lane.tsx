@@ -1,3 +1,4 @@
+import { LEAD_IN_DEFAULT_MS } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import gridStyles from "./background-lane.module.css";
 import styles from "./track-lane.module.css";
@@ -10,12 +11,12 @@ interface TrackLaneProps {
 /**
  * Renders the extremely tall inner lane containing all note blocks for the track.
  * Vertical positioning is now percentage-based relative to the total track duration
- * plus a 2000ms lookahead/padding.
+ * plus a lead-in/padding.
  * Total height is handled in CSS using variables.
  */
 export function TrackLane({ spans, totalDurationMs }: TrackLaneProps) {
-  // The lane represents total track time + 2000ms lead-in/padding
-  const totalTrackMs = totalDurationMs + 2000;
+  // The lane represents total track time + lead-in/padding
+  const totalTrackMs = totalDurationMs + LEAD_IN_DEFAULT_MS;
 
   return (
     <div

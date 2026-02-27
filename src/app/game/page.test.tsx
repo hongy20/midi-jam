@@ -92,7 +92,6 @@ describe("Game Page", () => {
       getCurrentTimeMs: () => 0,
       getProgress: () => 0,
       resetTimeline: vi.fn(),
-      motion: null,
     });
   });
 

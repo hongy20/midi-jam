@@ -2,14 +2,14 @@ import { useCallback, useEffect, useRef } from "react";
 
 interface UseLaneTimelineProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
-  totalDurationMs: number;
+  originalTrackDurationMs: number;
   speed: number;
   isPaused: boolean;
 }
 
 export function useLaneTimeline({
   containerRef,
-  totalDurationMs,
+  originalTrackDurationMs,
   speed,
   isPaused,
 }: UseLaneTimelineProps) {
@@ -38,8 +38,8 @@ export function useLaneTimeline({
       }
 
       const t =
-        totalDurationMs > 0
-          ? Math.min(currentTimeMsRef.current / totalDurationMs, 1)
+        originalTrackDurationMs > 0
+          ? Math.min(currentTimeMsRef.current / originalTrackDurationMs, 1)
           : 0;
       container.scrollTop = (1 - t) * maxScrollRef.current;
 
@@ -47,15 +47,15 @@ export function useLaneTimeline({
         rafIdRef.current = requestAnimationFrame(loop);
       }
     },
-    [isPaused, speed, totalDurationMs, containerRef],
+    [isPaused, speed, originalTrackDurationMs, containerRef],
   );
 
   // Handle Play/Pause and loop initialization
   useEffect(() => {
     if (
       !isPaused &&
-      totalDurationMs > 0 &&
-      currentTimeMsRef.current < totalDurationMs
+      originalTrackDurationMs > 0 &&
+      currentTimeMsRef.current < originalTrackDurationMs
     ) {
       rafIdRef.current = requestAnimationFrame(loop);
     } else {
@@ -73,7 +73,7 @@ export function useLaneTimeline({
       }
       lastTimestampRef.current = null;
     };
-  }, [isPaused, totalDurationMs, loop]);
+  }, [isPaused, originalTrackDurationMs, loop]);
 
   // Handle ResizeObserver to maintain correct maxScrollTop
   useEffect(() => {
@@ -84,8 +84,8 @@ export function useLaneTimeline({
       maxScrollRef.current = container.scrollHeight - container.clientHeight;
       // Initialize or update the static scroll if paused/finished
       const t =
-        totalDurationMs > 0
-          ? Math.min(currentTimeMsRef.current / totalDurationMs, 1)
+        originalTrackDurationMs > 0
+          ? Math.min(currentTimeMsRef.current / originalTrackDurationMs, 1)
           : 0;
       container.scrollTop = (1 - t) * maxScrollRef.current;
     });
@@ -93,7 +93,7 @@ export function useLaneTimeline({
     ro.observe(container);
 
     return () => ro.disconnect();
-  }, [containerRef, totalDurationMs]);
+  }, [containerRef, originalTrackDurationMs]);
 
   // Handle ScrollTimeline for progress
   useEffect(() => {
@@ -126,10 +126,10 @@ export function useLaneTimeline({
       return 1 - percent / 100;
     }
 
-    return totalDurationMs > 0
-      ? Math.min(1, currentTimeMsRef.current / totalDurationMs)
+    return originalTrackDurationMs > 0
+      ? Math.min(1, currentTimeMsRef.current / originalTrackDurationMs)
       : 0;
-  }, [totalDurationMs]);
+  }, [originalTrackDurationMs]);
 
   const resetTimeline = useCallback(() => {
     currentTimeMsRef.current = 0;
@@ -143,7 +143,6 @@ export function useLaneTimeline({
   return {
     getCurrentTimeMs,
     getProgress,
-    motion: null,
     resetTimeline,
   };
 }

@@ -12,6 +12,7 @@ import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
 import { useMidiTrack } from "@/hooks/use-midi-track";
+import { LEAD_IN_DEFAULT_MS } from "@/lib/midi/constant";
 import styles from "./page.module.css";
 
 export default function GamePage() {
@@ -36,9 +37,10 @@ export default function GamePage() {
   const [progress, setProgress] = useState(0);
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  const totalDurationMs = duration > 0 ? duration + LEAD_IN_DEFAULT_MS : 0;
   const { getCurrentTimeMs, getProgress, resetTimeline } = useLaneTimeline({
     containerRef: scrollRef,
-    totalDurationMs: duration,
+    originalTrackDurationMs: totalDurationMs,
     speed,
     isPaused,
   });
@@ -66,7 +68,10 @@ export default function GamePage() {
 
   // Auto-navigate on completion
   useEffect(() => {
-    if (progress >= 0.999 || (duration > 0 && getCurrentTimeMs() >= duration)) {
+    if (
+      progress >= 0.999 ||
+      (totalDurationMs > 0 && getCurrentTimeMs() >= totalDurationMs)
+    ) {
       setSessionResults({
         score,
         accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
@@ -78,7 +83,7 @@ export default function GamePage() {
     }
   }, [
     progress,
-    duration,
+    totalDurationMs,
     getCurrentTimeMs,
     navigate,
     setGameSession,

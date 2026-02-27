@@ -51,7 +51,7 @@ export function useDemoPlayback({
         // Target area is a 1px band at the bottom of the viewport.
         // Margin order: top, right, bottom, left.
         // We want the intersection area to be only the bottom edge.
-        rootMargin: "0px 0px -99% 0px", // Top is shifted down by 99%
+        rootMargin: "-99% 0px 0px 0px", // Top is shifted down by 99%
         threshold: [0, 1],
       },
     );

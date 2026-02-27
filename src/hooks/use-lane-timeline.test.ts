@@ -49,7 +49,7 @@ describe("useLaneTimeline hook", () => {
     renderHook(() =>
       useLaneTimeline({
         containerRef,
-        totalDurationMs: 1000,
+        originalTrackDurationMs: 1000,
         speed: 1,
         isPaused: false,
       }),
@@ -77,7 +77,7 @@ describe("useLaneTimeline hook", () => {
       ({ isPaused }) =>
         useLaneTimeline({
           containerRef,
-          totalDurationMs: 1000,
+          originalTrackDurationMs: 1000,
           speed: 1,
           isPaused,
         }),
@@ -113,7 +113,7 @@ describe("useLaneTimeline hook", () => {
     const { result } = renderHook(() =>
       useLaneTimeline({
         containerRef,
-        totalDurationMs: 1000,
+        originalTrackDurationMs: 1000,
         speed: 1,
         isPaused: false,
       }),

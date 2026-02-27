@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { LEAD_IN_DEFAULT_MS } from "@/lib/midi/constant";
 import type { MidiEvent } from "@/lib/midi/midi-parser";
 import { useMIDINotes } from "./use-midi-notes";
 
@@ -53,7 +54,8 @@ export function useLaneScoreEngine({
           continue;
         if (processedNotesRef.current.has(i)) continue;
 
-        const delta = Math.abs(currentTimeMs - modelEvent.time * 1000);
+        const targetTimeMs = modelEvent.time * 1000 + LEAD_IN_DEFAULT_MS;
+        const delta = Math.abs(currentTimeMs - targetTimeMs);
         if (delta < minDelta) {
           minDelta = delta;
           bestMatchIdx = i;
@@ -99,7 +101,8 @@ export function useLaneScoreEngine({
         if (processedNotesRef.current.has(i)) continue;
 
         // If note is more than GOOD_THRESHOLD past the target line
-        if (currentTimeMs > modelEvent.time * 1000 + GOOD_THRESHOLD) {
+        const targetTimeMs = modelEvent.time * 1000 + LEAD_IN_DEFAULT_MS;
+        if (currentTimeMs > targetTimeMs + GOOD_THRESHOLD) {
           processedNotesRef.current.add(i);
           setLastHitQuality("miss");
           setCombo(0);

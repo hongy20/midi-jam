@@ -33,3 +33,6 @@ export const PIANO_88_KEY_MAX = 108;
 
 /** Middle C MIDI note */
 export const MIDI_NOTE_C4 = 60;
+
+/** Default lead-in time before notes hit the target line */
+export const LEAD_IN_DEFAULT_MS = 2000;
