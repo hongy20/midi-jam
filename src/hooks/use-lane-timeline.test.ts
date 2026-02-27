@@ -13,11 +13,11 @@ describe("useLaneTimeline hook", () => {
         this.callback = callback;
       }
       observe(_target: Element) {
-        this.callback([], this as any);
+        this.callback([], this as unknown as ResizeObserver);
       }
       unobserve() {}
       disconnect() {}
-    } as any;
+    } as unknown as typeof ResizeObserver;
   });
 
   afterEach(() => {
@@ -32,7 +32,7 @@ describe("useLaneTimeline hook", () => {
       pause: vi.fn(),
       cancel: vi.fn(),
       playbackRate: 1,
-      playState: 'running',
+      playState: "running",
       currentTime: 0,
     };
     const animateMock = vi.fn().mockReturnValue(mockAnimation);
@@ -54,11 +54,8 @@ describe("useLaneTimeline hook", () => {
     );
 
     expect(animateMock).toHaveBeenCalledWith(
-        [
-            { transform: `translateY(-600px)` },
-            { transform: `translateY(0px)` }
-        ],
-        { duration: 1000, fill: "both", easing: "linear" }
+      [{ transform: `translateY(-600px)` }, { transform: `translateY(0px)` }],
+      { duration: 1000, fill: "both", easing: "linear" },
     );
     expect(mockAnimation.play).toHaveBeenCalled();
   });
@@ -69,7 +66,7 @@ describe("useLaneTimeline hook", () => {
       pause: vi.fn(),
       cancel: vi.fn(),
       playbackRate: 1,
-      playState: 'running',
+      playState: "running",
       currentTime: 0,
     };
     const animateMock = vi.fn().mockReturnValue(mockAnimation);
@@ -102,12 +99,12 @@ describe("useLaneTimeline hook", () => {
   });
 
   it("resets timeline correctly", () => {
-     const mockAnimation = {
+    const mockAnimation = {
       play: vi.fn(),
       pause: vi.fn(),
       cancel: vi.fn(),
       playbackRate: 1,
-      playState: 'running',
+      playState: "running",
       currentTime: 500,
     };
     const animateMock = vi.fn().mockReturnValue(mockAnimation);
@@ -136,4 +133,3 @@ describe("useLaneTimeline hook", () => {
     expect(mockAnimation.play).toHaveBeenCalledTimes(2); // Initial + reset
   });
 });
-

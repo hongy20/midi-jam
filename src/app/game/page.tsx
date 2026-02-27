@@ -57,7 +57,7 @@ export default function GamePage() {
     totalDurationMs,
     speed,
     isPaused,
-    onFinish: onFinishProxy
+    onFinish: onFinishProxy,
   });
 
   const { score, combo, lastHitQuality, resetScore } = useLaneScoreEngine({
