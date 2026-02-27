@@ -13,37 +13,35 @@ describe("useLaneTimeline hook", () => {
         this.callback = callback;
       }
       observe(_target: Element) {
-        this.callback([], this);
+        this.callback([], this as any);
       }
       unobserve() {}
       disconnect() {}
-    };
-
-    // Mock ScrollTimeline
-    global.ScrollTimeline = class ScrollTimeline {
-      source: Element | Document | undefined;
-      axis: string | undefined;
-      constructor(options?: ScrollTimelineOptions) {
-        this.source = options?.source;
-        this.axis = options?.axis;
-      }
-      get currentTime() {
-        return null;
-      }
-    };
+    } as any;
   });
 
   afterEach(() => {
     vi.useRealTimers();
     vi.unstubAllGlobals();
+    vi.clearAllMocks();
   });
 
-  it("updates scrollTop as time passes", () => {
+  it("initializes and plays Web Animation", () => {
+    const mockAnimation = {
+      play: vi.fn(),
+      pause: vi.fn(),
+      cancel: vi.fn(),
+      playbackRate: 1,
+      playState: 'running',
+      currentTime: 0,
+    };
+    const animateMock = vi.fn().mockReturnValue(mockAnimation);
+
     const container = {
       scrollHeight: 1000,
       clientHeight: 400,
-      scrollTop: 600, // maxScroll
-    } as HTMLDivElement;
+      querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
+    } as unknown as HTMLDivElement;
     const containerRef = { current: container };
 
     renderHook(() =>
@@ -55,22 +53,32 @@ describe("useLaneTimeline hook", () => {
       }),
     );
 
-    // Advance time by 500ms
-    act(() => {
-      vi.advanceTimersByTime(500);
-    });
-
-    // Progress 0.5, scrollTop should be around 300
-    expect(container.scrollTop).toBeLessThan(600);
-    expect(container.scrollTop).toBeGreaterThan(0);
+    expect(animateMock).toHaveBeenCalledWith(
+        [
+            { transform: `translateY(-600px)` },
+            { transform: `translateY(0px)` }
+        ],
+        { duration: 1000, fill: "both", easing: "linear" }
+    );
+    expect(mockAnimation.play).toHaveBeenCalled();
   });
 
-  it("pauses updates when isPaused is true", () => {
+  it("pauses animation when isPaused is true", () => {
+    const mockAnimation = {
+      play: vi.fn(),
+      pause: vi.fn(),
+      cancel: vi.fn(),
+      playbackRate: 1,
+      playState: 'running',
+      currentTime: 0,
+    };
+    const animateMock = vi.fn().mockReturnValue(mockAnimation);
+
     const container = {
       scrollHeight: 1000,
       clientHeight: 400,
-      scrollTop: 600,
-    } as HTMLDivElement;
+      querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
+    } as unknown as HTMLDivElement;
     const containerRef = { current: container };
 
     const { rerender } = renderHook(
@@ -86,28 +94,29 @@ describe("useLaneTimeline hook", () => {
       },
     );
 
-    act(() => {
-      vi.advanceTimersByTime(250);
-    });
-    const scrollAfterSomeTime = container.scrollTop;
-    expect(scrollAfterSomeTime).toBeLessThan(600);
+    expect(mockAnimation.play).toHaveBeenCalled();
 
     rerender({ isPaused: true });
 
-    act(() => {
-      vi.advanceTimersByTime(250);
-    });
-
-    // Should remain same as when it was paused
-    expect(container.scrollTop).toBe(scrollAfterSomeTime);
+    expect(mockAnimation.pause).toHaveBeenCalled();
   });
 
   it("resets timeline correctly", () => {
+     const mockAnimation = {
+      play: vi.fn(),
+      pause: vi.fn(),
+      cancel: vi.fn(),
+      playbackRate: 1,
+      playState: 'running',
+      currentTime: 500,
+    };
+    const animateMock = vi.fn().mockReturnValue(mockAnimation);
+
     const container = {
       scrollHeight: 1000,
       clientHeight: 400,
-      scrollTop: 0,
-    } as HTMLDivElement;
+      querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
+    } as unknown as HTMLDivElement;
     const containerRef = { current: container };
 
     const { result } = renderHook(() =>
@@ -120,16 +129,11 @@ describe("useLaneTimeline hook", () => {
     );
 
     act(() => {
-      vi.advanceTimersByTime(500);
-    });
-
-    expect(container.scrollTop).not.toBe(600);
-
-    act(() => {
       result.current.resetTimeline();
     });
 
-    expect(container.scrollTop).toBe(600); // maxScroll
-    expect(result.current.getCurrentTimeMs()).toBe(0);
+    expect(mockAnimation.currentTime).toBe(0);
+    expect(mockAnimation.play).toHaveBeenCalledTimes(2); // Initial + reset
   });
 });
+

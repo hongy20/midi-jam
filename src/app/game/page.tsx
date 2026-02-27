@@ -46,11 +46,18 @@ export default function GamePage() {
     originalDurationMs > 0
       ? originalDurationMs + LEAD_IN_DEFAULT_MS + LEAD_OUT_DEFAULT_MS
       : 0;
+  const handleFinishRef = useRef<() => void>(() => {});
+
+  const onFinishProxy = useCallback(() => {
+    handleFinishRef.current();
+  }, []);
+
   const { getCurrentTimeMs, getProgress, resetTimeline } = useLaneTimeline({
     containerRef: scrollRef,
     totalDurationMs,
     speed,
     isPaused,
+    onFinish: onFinishProxy
   });
 
   const { score, combo, lastHitQuality, resetScore } = useLaneScoreEngine({
@@ -59,6 +66,16 @@ export default function GamePage() {
     getCurrentTimeMs,
     isPlaying: !isPaused && originalDurationMs > 0,
   });
+
+  handleFinishRef.current = () => {
+    setSessionResults({
+      score,
+      accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
+      combo,
+    });
+    setGameSession(null);
+    navigate("/results");
+  };
 
   // Sync state to context for persistence during navigation
   useEffect(() => {
@@ -74,32 +91,7 @@ export default function GamePage() {
     return () => clearInterval(interval);
   }, [isPaused, getProgress]);
 
-  // Auto-navigate on completion
-  useEffect(() => {
-    if (
-      progress >= 0.999 ||
-      (totalDurationMs > 0 && getCurrentTimeMs() >= totalDurationMs)
-    ) {
-      setSessionResults({
-        score,
-        accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
-        combo,
-      });
-
-      setGameSession(null); // Clear session on finish
-      navigate("/results");
-    }
-  }, [
-    progress,
-    totalDurationMs,
-    getCurrentTimeMs,
-    navigate,
-    setGameSession,
-    setSessionResults,
-    score,
-    combo,
-    events.length,
-  ]);
+  // Auto-navigate on completion is now handled by handleFinish callback from hook
 
   // Handle Pause
   const handleTogglePause = useCallback(() => {

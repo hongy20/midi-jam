@@ -21,6 +21,7 @@ export function TrackLane({ spans, originalDurationMs }: TrackLaneProps) {
 
   return (
     <div
+      id="track-lane"
       className={styles.container}
       style={{ "--total-duration-ms": totalTrackMs } as React.CSSProperties}
     >
