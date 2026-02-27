@@ -17,6 +17,23 @@ vi.mock("@/hooks/use-demo-playback", () => ({
   useDemoPlayback: vi.fn(),
 }));
 
+vi.mock("@/hooks/use-midi-devices", () => ({
+  useMIDIDevices: () => ({
+    inputs: [],
+    outputs: [],
+    isLoading: false,
+    error: null,
+  }),
+}));
+
+vi.mock("@/hooks/use-midi-selection", () => ({
+  useMIDISelection: () => ({
+    selectedMIDIInput: { name: "Mock Input" } as unknown as WebMidi.MIDIInput,
+    selectedMIDIOutput: null,
+    selectMIDIInput: vi.fn(),
+  }),
+}));
+
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
   callback: ResizeObserverCallback;

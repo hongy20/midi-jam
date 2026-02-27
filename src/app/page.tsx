@@ -12,8 +12,7 @@ export default function WelcomePage() {
 
   useEffect(() => {
     const hasWebMidi = "requestMIDIAccess" in navigator;
-    const hasScrollTimeline = "ScrollTimeline" in window;
-    setIsSupported(hasWebMidi && hasScrollTimeline);
+    setIsSupported(hasWebMidi);
     clearSelection();
   }, [clearSelection]);
 
@@ -50,8 +49,8 @@ export default function WelcomePage() {
               UNSUPPORTED BROWSER
             </span>
             <p className="text-xs text-red-500/60 max-w-xs">
-              This app requires Web MIDI and ScrollTimeline APIs. Please use
-              Android Chrome or a modern Chromium browser.
+              This app requires Web MIDI API. Please use Android Chrome or a
+              modern Chromium browser.
             </p>
           </div>
         )}

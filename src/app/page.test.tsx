@@ -15,12 +15,8 @@ vi.mock("@/context/selection-context", () => ({
 
 describe("Welcome Page", () => {
   beforeEach(() => {
-    // Mock Web MIDI and ScrollTimeline support
+    // Mock Web MIDI support
     Object.defineProperty(navigator, "requestMIDIAccess", {
-      value: vi.fn(),
-      configurable: true,
-    });
-    Object.defineProperty(window, "ScrollTimeline", {
       value: vi.fn(),
       configurable: true,
     });
