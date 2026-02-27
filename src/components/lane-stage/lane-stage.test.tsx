@@ -1,6 +1,21 @@
 import { queryByAttribute, render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+import { SelectionProvider } from "@/context/selection-context";
 import { LaneStage } from "./lane-stage";
+
+// Mock Tone.js-dependent hooks to avoid Web Audio API errors in jsdom
+vi.mock("@/hooks/use-midi-audio", () => ({
+  useMidiAudio: () => ({
+    playNote: vi.fn(),
+    stopNote: vi.fn(),
+    stopAllNotes: vi.fn(),
+    playCountdownBeep: vi.fn(),
+  }),
+}));
+
+vi.mock("@/hooks/use-demo-playback", () => ({
+  useDemoPlayback: vi.fn(),
+}));
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -44,11 +59,13 @@ describe("LaneStage", () => {
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };
     const { container } = render(
-      <LaneStage
-        spans={mockSpans}
-        totalDurationMs={totalDurationMs}
-        scrollRef={scrollRef}
-      />,
+      <SelectionProvider>
+        <LaneStage
+          spans={mockSpans}
+          totalDurationMs={totalDurationMs}
+          scrollRef={scrollRef}
+        />
+      </SelectionProvider>,
     );
     const note60 = queryByAttribute("data-pitch", container, "60");
     const note61 = queryByAttribute("data-pitch", container, "61");
