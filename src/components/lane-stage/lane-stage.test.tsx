@@ -54,7 +54,7 @@ describe("LaneStage", () => {
       isBlack: true,
     },
   ];
-  const totalDurationMs = 2000;
+  const originalDurationMs = 2000;
 
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };
@@ -62,7 +62,7 @@ describe("LaneStage", () => {
       <SelectionProvider>
         <LaneStage
           spans={mockSpans}
-          totalDurationMs={totalDurationMs}
+          originalDurationMs={originalDurationMs}
           scrollRef={scrollRef}
         />
       </SelectionProvider>,

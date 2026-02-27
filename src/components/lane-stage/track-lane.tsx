@@ -5,7 +5,7 @@ import styles from "./track-lane.module.css";
 
 interface TrackLaneProps {
   spans: NoteSpan[];
-  totalDurationMs: number;
+  originalDurationMs: number;
 }
 
 /**
@@ -14,20 +14,21 @@ interface TrackLaneProps {
  * plus a lead-in/padding.
  * Total height is handled in CSS using variables.
  */
-export function TrackLane({ spans, totalDurationMs }: TrackLaneProps) {
+export function TrackLane({ spans, originalDurationMs }: TrackLaneProps) {
   // The lane represents total track time + lead-in/padding
-  const totalTrackMs = totalDurationMs + LEAD_IN_DEFAULT_MS;
+  const totalTrackMs = originalDurationMs + LEAD_IN_DEFAULT_MS;
 
   return (
     <div
       className={styles.container}
-      style={{ "--total-duration-ms": totalDurationMs } as React.CSSProperties}
+      style={{ "--total-duration-ms": totalTrackMs } as React.CSSProperties}
     >
       {spans.map((span) => {
-        const startTimeMs = span.startTime * 1000;
-        const endTimeMs = (span.startTime + span.duration) * 1000;
+        const startTimeMs = span.startTime * 1000 + LEAD_IN_DEFAULT_MS;
+        const endTimeMs =
+          (span.startTime + span.duration) * 1000 + LEAD_IN_DEFAULT_MS;
 
-        // Proportional positioning: t=0 is at 100% (bottom), t=totalDurationMs is atリードout.
+        // Proportional positioning: t=0 is at 100% (bottom), t=originalDurationMs is atリードout.
         // top% = (totalTrackMs - endTimeMs) / totalTrackMs * 100
         const topPercent = ((totalTrackMs - endTimeMs) / totalTrackMs) * 100;
         const heightPercent = ((endTimeMs - startTimeMs) / totalTrackMs) * 100;

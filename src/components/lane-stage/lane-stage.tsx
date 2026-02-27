@@ -12,7 +12,7 @@ import { TrackLane } from "./track-lane";
 
 interface LaneStageProps {
   spans: NoteSpan[];
-  totalDurationMs: number;
+  originalDurationMs: number;
   scrollRef: React.RefObject<HTMLDivElement | null>;
   rangeStart?: number;
   rangeEnd?: number;
@@ -20,7 +20,7 @@ interface LaneStageProps {
 
 export function LaneStage({
   spans,
-  totalDurationMs,
+  originalDurationMs,
   scrollRef,
   rangeStart = PIANO_88_KEY_MIN,
   rangeEnd = PIANO_88_KEY_MAX,
@@ -67,7 +67,7 @@ export function LaneStage({
         id="lane-scroll"
         className="absolute inset-0 overflow-hidden"
       >
-        <TrackLane spans={spans} totalDurationMs={totalDurationMs} />
+        <TrackLane spans={spans} originalDurationMs={originalDurationMs} />
       </div>
 
       {/* Target Line (Fixed) */}

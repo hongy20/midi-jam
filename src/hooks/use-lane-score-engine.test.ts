@@ -28,7 +28,7 @@ describe("useLaneScoreEngine hook", () => {
       useLaneScoreEngine({
         midiInput: {} as WebMidi.MIDIInput,
         modelEvents,
-        getCurrentTimeMs: () => 1000,
+        getCurrentTimeMs: () => 3000,
         isPlaying: true,
       }),
     );
@@ -52,7 +52,7 @@ describe("useLaneScoreEngine hook", () => {
       useLaneScoreEngine({
         midiInput: {} as WebMidi.MIDIInput,
         modelEvents,
-        getCurrentTimeMs: () => 1000,
+        getCurrentTimeMs: () => 3000,
         isPlaying: true,
       }),
     );
