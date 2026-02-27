@@ -1,0 +1,26 @@
+.container {
+  display: grid;
+  width: 100%;
+  position: relative;
+  grid-template-columns: repeat(var(--piano-visible-units, 156), 1fr);
+  height: calc(var(--lane-height) * (var(--total-duration-ms) / 2000 + 1));
+}
+
+.note {
+  position: absolute;
+  width: 100%;
+  border-radius: 0.125rem;
+  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  transition: opacity 300ms;
+}
+
+.white {
+  background-color: color-mix(in srgb, currentColor 20%, transparent);
+  z-index: 0;
+}
+
+.black {
+  background-color: color-mix(in srgb, currentColor 40%, transparent);
+  z-index: 10;
+}

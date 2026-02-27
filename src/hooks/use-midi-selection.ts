@@ -25,13 +25,6 @@ export function useMIDISelection(
     setSelectedMIDIInput(input);
   };
 
-  // Auto-select if there is only one device available and no device is selected
-  useEffect(() => {
-    if (selectedMIDIInput === null && availableInputs.length === 1) {
-      setSelectedMIDIInput(availableInputs[0]);
-    }
-  }, [availableInputs, selectedMIDIInput]);
-
   // Handle selectedMIDIOutput matching
   useEffect(() => {
     if (!selectedMIDIInput) {

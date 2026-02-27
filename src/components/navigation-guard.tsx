@@ -8,7 +8,7 @@ import { useGameNavigation } from "@/hooks/use-game-navigation";
 export function NavigationGuard({ children }: { children: React.ReactNode }) {
   const { navigate } = useGameNavigation();
   const pathname = usePathname();
-  const { selectedInstrument, selectedTrack } = useSelection();
+  const { selectedMIDIInput, selectedTrack } = useSelection();
 
   // 1. Route Guarding
   useEffect(() => {
@@ -17,15 +17,15 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
     const isGamePage = pathname === "/game";
     const isResultsPage = pathname === "/results";
 
-    if (isTracksPage && !selectedInstrument) {
+    if (isTracksPage && !selectedMIDIInput) {
       navigate("/");
     } else if (
       (isGamePage || isResultsPage) &&
-      (!selectedInstrument || !selectedTrack)
+      (!selectedMIDIInput || !selectedTrack)
     ) {
       navigate("/");
     }
-  }, [pathname, selectedInstrument, selectedTrack, navigate]);
+  }, [pathname, selectedMIDIInput, selectedTrack, navigate]);
 
   return <>{children}</>;
 }

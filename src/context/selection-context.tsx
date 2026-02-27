@@ -1,19 +1,17 @@
 "use client";
 
 import { createContext, type ReactNode, useContext, useState } from "react";
-
-interface Instrument {
-  id: string;
-  name: string;
-}
+import { useMIDIDevices } from "@/hooks/use-midi-devices";
+import { useMIDISelection } from "@/hooks/use-midi-selection";
 
 interface Track {
   id: string;
   name: string;
+  url: string;
 }
 
 interface GameSession {
-  timeLeft: number;
+  timeLeft?: number;
   isPaused: boolean;
 }
 
@@ -24,14 +22,20 @@ interface SessionResults {
 }
 
 interface SelectionContextType {
-  selectedInstrument: Instrument | null;
   selectedTrack: Track | null;
   gameSession: GameSession | null;
   sessionResults: SessionResults | null;
-  setInstrument: (instrument: Instrument) => void;
+  speed: number;
+  demoMode: boolean;
+  // MIDI Device Selection
+  selectedMIDIInput: WebMidi.MIDIInput | null;
+  selectedMIDIOutput: WebMidi.MIDIOutput | null;
   setTrack: (track: Track) => void;
   setGameSession: (session: GameSession | null) => void;
   setSessionResults: (results: SessionResults | null) => void;
+  setSpeed: (speed: number) => void;
+  setDemoMode: (enabled: boolean) => void;
+  selectMIDIInput: (input: WebMidi.MIDIInput | null) => void;
   clearSelection: () => void;
 }
 
@@ -40,35 +44,45 @@ const SelectionContext = createContext<SelectionContextType | undefined>(
 );
 
 export function SelectionProvider({ children }: { children: ReactNode }) {
-  const [selectedInstrument, setSelectedInstrument] =
-    useState<Instrument | null>(null);
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
   const [gameSession, setGameSession] = useState<GameSession | null>(null);
   const [sessionResults, setSessionResults] = useState<SessionResults | null>(
     null,
   );
+  const [speed, setSpeed] = useState<number>(1.0);
+  const [demoMode, setDemoMode] = useState<boolean>(true);
 
-  const setInstrument = (instrument: Instrument) =>
-    setSelectedInstrument(instrument);
+  // MIDI Devices
+  const { inputs, outputs } = useMIDIDevices();
+  const { selectedMIDIInput, selectedMIDIOutput, selectMIDIInput } =
+    useMIDISelection(inputs, outputs);
+
   const setTrack = (track: Track) => setSelectedTrack(track);
   const clearSelection = () => {
-    setSelectedInstrument(null);
     setSelectedTrack(null);
     setGameSession(null);
     setSessionResults(null);
+    setSpeed(1.0);
+    setDemoMode(true);
+    selectMIDIInput(null);
   };
 
   return (
     <SelectionContext.Provider
       value={{
-        selectedInstrument,
         selectedTrack,
         gameSession,
         sessionResults,
-        setInstrument,
+        speed,
+        demoMode,
+        selectedMIDIInput,
+        selectedMIDIOutput,
         setTrack,
         setGameSession,
         setSessionResults,
+        setSpeed,
+        setDemoMode,
+        selectMIDIInput,
         clearSelection,
       }}
     >

@@ -1,7 +1,8 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
+import { useSelection } from "@/context/selection-context";
 import { useTheme } from "@/context/theme-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
 
@@ -32,13 +33,14 @@ const BackButton = () => {
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
-
-  // Local state for other settings
-  const [speed, setSpeed] = useState<"Slow" | "Normal" | "Fast">("Normal");
-  const [demoMode, setDemoMode] = useState<boolean>(false);
+  const { speed, setSpeed, demoMode, setDemoMode } = useSelection();
 
   const themeOptions = ["neon", "dark", "light"] as const;
-  const speedOptions = ["Slow", "Normal", "Fast"] as const;
+  const speedOptions = [
+    { label: "Slow", value: 0.5 },
+    { label: "Normal", value: 1.0 },
+    { label: "Fast", value: 2.0 },
+  ] as const;
 
   return (
     <div className="fixed inset-0 bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden transition-colors duration-500">
@@ -98,16 +100,16 @@ export default function SettingsPage() {
           <div className="flex items-center gap-2 sm:gap-4 flex-wrap bg-background/50 p-2 rounded-full border border-foreground/10 self-stretch sm:self-auto justify-center">
             {speedOptions.map((opt) => (
               <button
-                key={opt}
+                key={opt.label}
                 type="button"
-                onClick={() => setSpeed(opt)}
+                onClick={() => setSpeed(opt.value)}
                 className={`px-4 sm:px-6 py-2 rounded-full font-black text-xs sm:text-sm uppercase tracking-widest transition-all ${
-                  speed === opt
+                  speed === opt.value
                     ? "bg-foreground text-background shadow-md scale-[1.05]"
                     : "text-foreground/60 hover:text-foreground"
                 }`}
               >
-                {opt}
+                {opt.label}
               </button>
             ))}
           </div>

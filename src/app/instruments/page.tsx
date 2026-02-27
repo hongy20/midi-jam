@@ -8,11 +8,11 @@ import { useMIDIDevices } from "@/hooks/use-midi-devices";
 
 export default function InstrumentsPage() {
   const { navigate } = useGameNavigation();
-  const { setInstrument, selectedInstrument } = useSelection();
+  const { selectMIDIInput, selectedMIDIInput } = useSelection();
   const { inputs, isLoading, error } = useMIDIDevices();
 
   const [selected, setSelected] = useState<string | null>(
-    selectedInstrument?.id || null,
+    selectedMIDIInput?.id || null,
   );
   const [lastInputId, setLastInputId] = useState<string | null>(null);
 
@@ -58,14 +58,7 @@ export default function InstrumentsPage() {
     if (selected) {
       const instrument = inputs.find((i) => i.id === selected);
       if (instrument) {
-        setInstrument({
-          id: instrument.id,
-          name: instrument.name ?? "Unknown Instrument",
-        });
-      } else {
-        // Fallback or explicit mapping? No, we require a matched instrument from API or keep fallback.
-        // What if user had previously selected something not in the list?
-        // the spec says we use Web MIDI API to populate devices
+        selectMIDIInput(instrument);
       }
       navigate("/tracks");
     }
@@ -76,7 +69,6 @@ export default function InstrumentsPage() {
       title="Select Your Instrument"
       step={1}
       totalSteps={2}
-      accentColor="blue"
       footer={
         <button
           type="button"
@@ -125,7 +117,7 @@ export default function InstrumentsPage() {
               >
                 {/* Active Pulse Background */}
                 <div
-                  className={`absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 transition-opacity duration-300 ${
+                  className={`absolute inset-0 bg-gradient-to-tr from-accent-primary/20 to-transparent transition-opacity duration-300 ${
                     isActive ? "opacity-100" : "opacity-0"
                   }`}
                 />
