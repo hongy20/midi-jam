@@ -38,6 +38,3 @@ next-env.d.ts
 
 # certificates
 certificates
-
-# git worktrees
-.worktrees/
