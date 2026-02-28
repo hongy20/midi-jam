@@ -8,6 +8,8 @@ The project is built using the following technologies:
 - **Language**: TypeScript
 - **UI Library**: [React](https://react.dev) (v19)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com) (v4)
+- **Audio**: [Tone.js](https://tonejs.github.io) for synthesis and MIDI processing.
+- **Testing**: [Vitest](https://vitest.dev) for unit and component testing.
 - **Tooling**: [Biome](https://biomejs.dev) for linting and formatting.
 
 # Building and Running
@@ -20,7 +22,7 @@ The following scripts are available to run, build, and maintain the application.
   npm run dev
   ```
 
-  Open [http://localhost:3000](http://localhost:3000) to view the application.
+  Open [https://localhost:3000](https://localhost:3000) to view the application.
 
 - **Creating a production build:**
 
@@ -29,8 +31,28 @@ The following scripts are available to run, build, and maintain the application.
   ```
 
 - **Running the production server:**
+
   ```bash
   npm run start
+  ```
+
+- **Linting and Formatting:**
+
+  ```bash
+  npm run lint
+  npm run lint:fix
+  ```
+
+- **Type Checking:**
+
+  ```bash
+  npm run type-check
+  ```
+
+- **Running Tests:**
+
+  ```bash
+  npm test
   ```
 
 # Development Conventions

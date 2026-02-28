@@ -12,6 +12,7 @@ import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
 import { useMidiTrack } from "@/hooks/use-midi-track";
+import { useWakeLock } from "@/hooks/use-wake-lock";
 import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "@/lib/midi/constant";
 import styles from "./page.module.css";
 
@@ -48,6 +49,10 @@ export default function GamePage() {
       : 0;
   const handleFinishRef = useRef<() => void>(() => {});
 
+  const isPlaying = !isPaused && originalDurationMs > 0;
+
+  useWakeLock(isPlaying);
+
   const onFinishProxy = useCallback(() => {
     handleFinishRef.current();
   }, []);
@@ -64,7 +69,7 @@ export default function GamePage() {
     midiInput: selectedMIDIInput,
     modelEvents: events,
     getCurrentTimeMs,
-    isPlaying: !isPaused && originalDurationMs > 0,
+    isPlaying,
   });
 
   handleFinishRef.current = () => {
