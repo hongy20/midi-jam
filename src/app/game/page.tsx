@@ -106,6 +106,8 @@ export default function GamePage() {
   useDemoPlayback({
     containerRef: scrollRef,
     demoMode,
+    isLoading,
+    spans,
     onNoteOn: handleNoteOn,
     onNoteOff: handleNoteOff,
   });

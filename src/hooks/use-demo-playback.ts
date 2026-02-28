@@ -1,8 +1,11 @@
 import { useEffect } from "react";
+import type { NoteSpan } from "@/lib/midi/midi-parser";
 
 interface UseDemoPlaybackProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   demoMode: boolean;
+  isLoading: boolean;
+  spans: NoteSpan[];
   onNoteOn: (note: number, velocity: number) => void;
   onNoteOff: (note: number) => void;
 }
@@ -10,16 +13,14 @@ interface UseDemoPlaybackProps {
 export function useDemoPlayback({
   containerRef,
   demoMode,
+  isLoading,
+  spans,
   onNoteOn,
   onNoteOff,
 }: UseDemoPlaybackProps) {
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || !demoMode) return;
-
-    // The IntersectionObserver will observe notes inside the scroll container.
-    // The root is the viewport of the LaneStage.
-    // We want to trigger when a note hits the bottom 1px of the viewport.
+    if (!container || !demoMode || isLoading || spans.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -27,31 +28,16 @@ export function useDemoPlayback({
           const pitch = Number(entry.target.getAttribute("data-pitch"));
           if (Number.isNaN(pitch)) continue;
 
-          // isIntersecting is true when any part of the note is in the 1px band.
-          // Since notes fall downwards, entering the band from top means the
-          // bottom of the note hit the target line (Note On).
-          // Leaving the band from the bottom means the top of the note
-          // passed the target line (Note Off).
-
           if (entry.isIntersecting) {
-            onNoteOn(pitch, 0.7); // Use a default velocity for demo
+            onNoteOn(pitch, 0.7);
           } else {
-            // Only stop if the note has actually passed the target line
-            // (i.e., its bounding rect is below the root's bounding rect).
-            // Actually, IntersectionObserver triggers on entry and exit.
-            // If it's not intersecting, it could be above or below.
-            // But since they only fall down, if it was intersecting and now
-            // isn't, it must have passed through (or we scrolled back, which we don't).
             onNoteOff(pitch);
           }
         }
       },
       {
         root: container,
-        // Target area is a 1px band at the bottom of the viewport.
-        // Margin order: top, right, bottom, left.
-        // We want the intersection area to be only the bottom edge.
-        rootMargin: "-99% 0px 0px 0px", // Top is shifted down by 99%
+        rootMargin: "-99% 0px 0px 0px",
         threshold: [0, 1],
       },
     );
@@ -62,11 +48,8 @@ export function useDemoPlayback({
       observer.observe(note);
     });
 
-    // Also need to observe new notes if they are added dynamically,
-    // but here spans are mostly static after track load.
-
     return () => {
       observer.disconnect();
     };
-  }, [containerRef, demoMode, onNoteOn, onNoteOff]);
+  }, [containerRef, demoMode, isLoading, spans, onNoteOn, onNoteOff]);
 }
