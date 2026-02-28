@@ -8,9 +8,11 @@ import { ScoreHudLite } from "@/components/score-hud-lite";
 import { VirtualInstrument } from "@/components/virtual-instrument";
 import { useSelection } from "@/context/selection-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
+import { useDemoPlayback } from "@/hooks/use-demo-playback";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
+import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useMidiTrack } from "@/hooks/use-midi-track";
 import { useWakeLock } from "@/hooks/use-wake-lock";
 import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "@/lib/midi/constant";
@@ -24,7 +26,9 @@ export default function GamePage() {
     setGameSession,
     setSessionResults,
     speed,
+    demoMode,
     selectedMIDIInput,
+    selectedMIDIOutput,
   } = useSelection();
 
   const {
@@ -35,6 +39,7 @@ export default function GamePage() {
   } = useMidiTrack();
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
+  const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
 
   const [isPaused, setIsPaused] = useState(gameSession?.isPaused ?? false);
   const [showOverlay, setShowOverlay] = useState(
@@ -70,6 +75,41 @@ export default function GamePage() {
     modelEvents: events,
     getCurrentTimeMs,
     isPlaying,
+  });
+
+  const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
+
+  const handleNoteOn = useCallback(
+    (note: number, velocity: number) => {
+      setPlaybackNotes((prev) => {
+        const next = new Set(prev);
+        next.add(note);
+        return next;
+      });
+      playNote(note, velocity);
+    },
+    [playNote],
+  );
+
+  const handleNoteOff = useCallback(
+    (note: number) => {
+      setPlaybackNotes((prev) => {
+        const next = new Set(prev);
+        next.delete(note);
+        return next;
+      });
+      stopNote(note);
+    },
+    [stopNote],
+  );
+
+  useDemoPlayback({
+    containerRef: scrollRef,
+    demoMode,
+    isLoading,
+    spans,
+    onNoteOn: handleNoteOn,
+    onNoteOff: handleNoteOff,
   });
 
   handleFinishRef.current = () => {
@@ -191,7 +231,7 @@ export default function GamePage() {
         <VirtualInstrument
           inputDevice={selectedMIDIInput}
           liveNotes={liveActiveNotes}
-          playbackNotes={new Set()}
+          playbackNotes={playbackNotes}
         />
       </footer>
 

@@ -3,20 +3,6 @@ import { describe, expect, it, vi } from "vitest";
 import { SelectionProvider } from "@/context/selection-context";
 import { LaneStage } from "./lane-stage";
 
-// Mock Tone.js-dependent hooks to avoid Web Audio API errors in jsdom
-vi.mock("@/hooks/use-midi-audio", () => ({
-  useMidiAudio: () => ({
-    playNote: vi.fn(),
-    stopNote: vi.fn(),
-    stopAllNotes: vi.fn(),
-    playCountdownBeep: vi.fn(),
-  }),
-}));
-
-vi.mock("@/hooks/use-demo-playback", () => ({
-  useDemoPlayback: vi.fn(),
-}));
-
 vi.mock("@/hooks/use-midi-devices", () => ({
   useMIDIDevices: () => ({
     inputs: [],
