@@ -11,8 +11,8 @@ import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
-import { useWakeLock } from "@/hooks/use-wake-lock";
 import { useMidiTrack } from "@/hooks/use-midi-track";
+import { useWakeLock } from "@/hooks/use-wake-lock";
 import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "@/lib/midi/constant";
 import styles from "./page.module.css";
 

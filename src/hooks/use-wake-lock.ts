@@ -14,7 +14,7 @@ export function useWakeLock(isActive: boolean) {
   const wakeLockRef = useRef<WakeLockSentinel | null>(null);
 
   const requestWakeLock = useCallback(async () => {
-    if (typeof navigator === "undefined" || !("wakeLock" in navigator)) {
+    if (typeof navigator === "undefined" || !navigator.wakeLock) {
       return;
     }
 
