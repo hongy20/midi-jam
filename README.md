@@ -8,11 +8,15 @@ Beyond its technical foundations, MIDI Jam is a fun, game-like web application d
 
 ## ✨ Features
 
-- **3D Perspective "Track"**: A dynamic visualizer that brings music to life.
-- **Contextual Keyboard Zooming**: Automatically adjusts to the range of the song being played.
-- **Real-time MIDI Connectivity**: Connect your digital piano or MIDI controller via USB.
-- **Responsive Design**: Works across mobile, tablet, and desktop devices.
-- **Agentic Implementation**: Developed using spec-driven development workflows.
+- **3D Perspective "Track"**: A dynamic visualizer that brings music to life with "Guitar Hero" style mechanics.
+- **Contextual Keyboard Zooming**: Automatically adjusts the piano range (21 to 108) to the specific song being played.
+- **Real-time MIDI Connectivity**: Zero-latency connectivity with digital pianos and MIDI controllers via Web MIDI API.
+- **Interactive Score & Combo System**: Real-time feedback on hit quality (Perfect, Great, OK, Miss) with combo multipliers.
+- **Responsive Design**: Optimized for mobile, tablet, and desktop with performance-first rendering.
+- **Visual Themes**: Support for Neon, Dark, and Light modes to suit your play style.
+- **Demo Mode**: Allows auto-playing tracks for previewing without a MIDI instrument.
+- **Performance Summary**: Detailed results page with accuracy, rank (S to D), and total score.
+- **Agentic Implementation**: Developed using spec-driven development workflows with Conductor.
 
 ## 🚀 Getting Started
 
