@@ -23,18 +23,18 @@ export function NavigationLayout({
   backLabel,
 }: NavigationLayoutProps) {
   return (
-    <div className="fixed inset-0 bg-background flex flex-col items-center justify-center p-6 overflow-hidden animate-fade-in transition-colors duration-500">
+    <div className="fixed inset-0 bg-background flex flex-col items-center justify-center p-6 landscape:p-4 overflow-hidden animate-fade-in transition-colors duration-500">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[20%] right-[10%] w-[60%] h-[60%] rounded-full blur-[120px] bg-accent-primary/5" />
       </div>
 
-      <div className="relative z-10 w-full max-w-4xl flex flex-col h-full max-h-[85vh] animate-slide-up">
+      <div className="relative z-10 w-full max-w-5xl flex flex-col h-full animate-slide-up">
         {/* Header */}
-        <header className="flex items-center justify-between mb-8 flex-shrink-0">
+        <header className="flex items-center justify-between mb-8 landscape:mb-2 flex-shrink-0">
           <div className="flex flex-col">
             {step && totalSteps && (
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-3 mb-2 landscape:mb-0.5">
                 <span className="font-bold uppercase tracking-widest text-[10px] sm:text-xs text-accent-primary">
                   Step {step} of {totalSteps}
                 </span>
@@ -50,7 +50,7 @@ export function NavigationLayout({
                 </div>
               </div>
             )}
-            <h1 className="text-3xl sm:text-4xl font-black text-foreground uppercase tracking-tighter">
+            <h1 className="text-3xl sm:text-4xl landscape:text-2xl font-black text-foreground uppercase tracking-tighter">
               {title}
             </h1>
           </div>
@@ -68,13 +68,13 @@ export function NavigationLayout({
         </header>
 
         {/* Content */}
-        <main className="flex-grow overflow-y-auto overflow-x-hidden no-scrollbar py-4 px-8 -mx-8">
+        <main className="flex-grow overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8">
           {children}
         </main>
 
         {/* Footer */}
         {footer && (
-          <footer className="mt-8 flex justify-end flex-shrink-0">
+          <footer className="mt-8 landscape:mt-2 flex justify-end flex-shrink-0">
             {footer}
           </footer>
         )}
