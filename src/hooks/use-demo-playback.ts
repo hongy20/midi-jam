@@ -22,16 +22,38 @@ export function useDemoPlayback({
     const container = containerRef.current;
     if (!container || !demoMode || isLoading || spans.length === 0) return;
 
+    const activeCounts = new Map<number, number>();
+
     const observer = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
+        // Partition entries to process exits (Off) before entries (On)
+        const exits = entries.filter((e) => !e.isIntersecting);
+        const entriesIn = entries.filter((e) => e.isIntersecting);
+
+        // Process exits (Off) first
+        for (const entry of exits) {
           const pitch = Number(entry.target.getAttribute("data-pitch"));
           if (Number.isNaN(pitch)) continue;
 
-          if (entry.isIntersecting) {
+          const currentCount = activeCounts.get(pitch) || 0;
+          if (currentCount > 0) {
+            const nextCount = currentCount - 1;
+            activeCounts.set(pitch, nextCount);
+            if (nextCount === 0) {
+              onNoteOff(pitch);
+            }
+          }
+        }
+
+        // Process entries (On) second
+        for (const entry of entriesIn) {
+          const pitch = Number(entry.target.getAttribute("data-pitch"));
+          if (Number.isNaN(pitch)) continue;
+
+          const currentCount = activeCounts.get(pitch) || 0;
+          activeCounts.set(pitch, currentCount + 1);
+          if (currentCount === 0) {
             onNoteOn(pitch, 0.7);
-          } else {
-            onNoteOff(pitch);
           }
         }
       },
