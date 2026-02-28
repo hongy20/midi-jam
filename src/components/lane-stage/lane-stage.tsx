@@ -1,9 +1,6 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { useSelection } from "@/context/selection-context";
-import { useDemoPlayback } from "@/hooks/use-demo-playback";
-import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { getNoteUnitOffset, isBlackKey } from "@/lib/device/piano";
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
@@ -26,16 +23,6 @@ export function LaneStage({
   rangeEnd = PIANO_88_KEY_MAX,
 }: LaneStageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { demoMode, selectedMIDIOutput } = useSelection();
-
-  const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
-
-  useDemoPlayback({
-    containerRef: scrollRef,
-    demoMode,
-    onNoteOn: playNote,
-    onNoteOff: stopNote,
-  });
 
   const visibleNotes = useMemo(() => {
     const notes = [];
