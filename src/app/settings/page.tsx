@@ -44,7 +44,7 @@ export default function SettingsPage() {
   ] as const;
 
   return (
-    <div className="w-[100dvw] h-[100dvh] bg-background text-foreground grid grid-rows-[auto_1fr_auto] p-4 sm:p-6 overflow-hidden transition-colors duration-500">
+    <div className="w-[100dvw] h-[100dvh] bg-background text-foreground grid grid-rows-[auto_minmax(0,1fr)_auto] p-4 sm:p-6 overflow-hidden transition-colors duration-500">
       {/* Background Subtle Mesh */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-0 left-0 w-full h-full bg-foreground/5" />

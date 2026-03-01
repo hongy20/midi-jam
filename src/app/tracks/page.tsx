@@ -55,13 +55,13 @@ export default function TracksPage() {
   };
 
   return (
-    <div className={`w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden ${styles.animateFadeIn} transition-colors duration-500`}>
+    <div className={`w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_minmax(0,1fr)_auto] p-6 landscape:p-4 overflow-hidden ${styles.animateFadeIn} transition-colors duration-500`}>
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[20%] right-[10%] w-[60%] h-[60%] rounded-full blur-[120px] bg-accent-primary/5" />
       </div>
 
-      <div className={`relative z-10 w-full max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] h-full ${styles.animateSlideUp}`}>
+      <div className={`relative z-10 w-full max-w-5xl mx-auto grid grid-rows-[auto_minmax(0,1fr)_auto] h-full ${styles.animateSlideUp}`}>
         {/* Header */}
         <header className="py-4 landscape:py-2 flex items-center justify-between flex-shrink-0">
           <h1 className="text-3xl sm:text-4xl landscape:text-2xl font-black text-foreground uppercase tracking-tighter">
