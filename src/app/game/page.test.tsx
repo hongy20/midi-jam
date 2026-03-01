@@ -95,6 +95,64 @@ describe("Game Page", () => {
     });
   });
 
+  it("navigates to results page when the timeline finishes", () => {
+    let capturedOnFinish: (() => void) | undefined;
+    vi.mocked(useLaneTimeline).mockImplementation(({ onFinish }) => {
+      capturedOnFinish = onFinish;
+      return {
+        getCurrentTimeMs: () => 0,
+        getProgress: () => 0,
+        resetTimeline: vi.fn(),
+      };
+    });
+
+    const mockSetSessionResults = vi.fn();
+    vi.mocked(useSelection).mockReturnValue({
+      selectedTrack: { id: "t1", name: "Track 1", url: "url" },
+      gameSession: null,
+      sessionResults: null,
+      speed: 1.0,
+      demoMode: false,
+      selectedMIDIInput: { id: "p1", name: "Piano" } as WebMidi.MIDIInput,
+      selectedMIDIOutput: null,
+      setTrack: vi.fn(),
+      setSpeed: vi.fn(),
+      setDemoMode: vi.fn(),
+      selectMIDIInput: vi.fn(),
+      setGameSession: mockSetGameSession,
+      setSessionResults: mockSetSessionResults,
+      clearSelection: vi.fn(),
+    });
+
+    vi.mocked(useLaneScoreEngine).mockReturnValue({
+      score: 1500,
+      combo: 42,
+      lastHitQuality: "perfect",
+      resetScore: vi.fn(),
+    });
+
+    vi.mocked(useMidiTrack).mockReturnValue({
+      events: new Array(10).fill({}), // 10 events
+      spans: [],
+      duration: 100,
+      isLoading: false,
+      error: null,
+    });
+
+    render(<GamePage />);
+
+    // Simulate timeline finish
+    expect(capturedOnFinish).toBeDefined();
+    capturedOnFinish?.();
+
+    expect(mockSetSessionResults).toHaveBeenCalledWith({
+      score: 1500,
+      accuracy: expect.any(Number),
+      combo: 42,
+    });
+    expect(mockNavigate).toHaveBeenCalledWith("/results");
+  });
+
   it("renders the track and instrument names", () => {
     render(<GamePage />);
     expect(screen.getByText(/Piano/)).toBeInTheDocument();

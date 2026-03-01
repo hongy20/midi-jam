@@ -1,20 +1,35 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { HitQuality } from "@/hooks/use-lane-score-engine";
 
 interface ScoreHudLiteProps {
   score: number;
   combo: number;
   lastHitQuality: HitQuality;
-  progress: number;
+  getProgress: () => number;
+  isPaused: boolean;
 }
 
 export function ScoreHudLite({
   score,
   combo,
   lastHitQuality,
-  progress,
+  getProgress,
+  isPaused,
 }: ScoreHudLiteProps) {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      setProgress(getProgress());
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [isPaused, getProgress]);
+
   const percentage = Math.floor(progress * 100);
 
   return (
