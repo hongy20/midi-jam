@@ -1,22 +1,27 @@
 # MIDI Jam 🎹
 
-Midi Jam is an experimental project exploring **agentic coding** and demonstrating the power of AI-driven development. It is built using the **Gemini CLI** and a suite of specialized agent skills for a disciplined, high-performance implementation.
+Midi Jam is an experimental project exploring **agentic coding** and demonstrating the power of AI-driven development. It is primarily built using the **Gemini CLI**, along with **Antigravity** and **Cursor** (as quotas allow), utilizing a suite of specialized agent skills for a disciplined, high-performance implementation.
 
 ## Core Features
 
 - **MIDI Connectivity**: Seamless connection to digital instruments via USB-A/Web MIDI API.
 - **88-Key Piano Visualizer**: High-performance, responsive visualizer with real-time feedback.
-- **3D Falldown Visuals**: Immersive piano roll visualizer for MIDI file playback.
+- **Falldown Visuals**: Immersive piano roll visualizer for MIDI file playback.
 - **Scoring System**: Real-time accuracy tracking, combo counters, and persistent high scores.
 - **Playful UX**: Designed for an engaging and fun learning experience.
+- **Future Roadmap**: Support for digital drumset visualization and other MIDI instruments.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 22.x or higher
-- A MIDI-compatible keyboard or controller (connected via USB)
-- A modern browser with Web MIDI support (Chrome, Edge, etc.)
+- **Node.js**: Implemented with Node 24 (other versions like 22.x+ may also work).
+- **MIDI Hardware**: A MIDI-compatible keyboard, drumset, or controller (connected via USB).
+- **Browser**: A modern browser with Web MIDI support (Chrome, Edge, etc.).
+
+### MIDI Resources
+
+You can find and download MIDI files to play along with at sites like [Online Sequencer](https://onlinesequencer.net/sequences).
 
 ### Installation
 
