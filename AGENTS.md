@@ -25,6 +25,7 @@ To maintain stable 60fps, we offload layout and animations to the browser's comp
 
 ### 3. Styling & Architecture
 - **CSS Modules**: Keep `globals.css` clean and generic, containing only styles for `html`, `body`, and theme-related custom CSS properties. Page-specific styles must use `page.module.css`, and component-specific styles must use `[component-name].module.css`.
+- **Assets (SVG)**: Load icons directly from `lucide-react`. If an icon is not available, save it as a standalone `.svg` file and import it. **NEVER use inline SVG strings.**
 
 # Standard Workflow (Superpowers)
 

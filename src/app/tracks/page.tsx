@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
@@ -105,7 +105,7 @@ export default function TracksPage() {
                           : "bg-foreground/10 text-foreground/50"
                       }`}
                     >
-                      <div className="w-0 h-0 border-t-[6px] border-t-transparent border-l-[10px] border-l-current border-b-[6px] border-b-transparent ml-1" />
+                      <Play className="w-5 h-5 fill-current" />
                     </div>
                     <div className="flex flex-col min-w-0">
                       <span

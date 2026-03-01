@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Piano } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
@@ -131,24 +131,7 @@ export default function InstrumentsPage() {
                           : "bg-background/50 text-foreground/60"
                       }`}
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="sm:w-7 sm:h-7 landscape:w-5 landscape:h-5"
-                      >
-                        <title>Piano</title>
-                        <path d="M4 2v20l2-2 2 2 2-2 2 2 2-2 2 2 2-2 2 2V2z" />
-                        <path d="M8 2v8" />
-                        <path d="M12 2v8" />
-                        <path d="M16 2v8" />
-                      </svg>
+                      <Piano className="w-6 h-6 sm:w-7 sm:h-7 landscape:w-5 landscape:h-5" />
                     </div>
 
                     <div className="flex flex-col relative z-10 min-w-0">

@@ -1,5 +1,6 @@
 "use client";
 
+import { Play, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
@@ -24,7 +25,7 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="w-[100dvw] h-[100dvh] grid grid-rows-[1fr_auto_1fr] landscape:grid-rows-[0.5fr_auto_0.5fr] place-items-center overflow-hidden bg-background text-foreground">
+    <div className="w-[100dvw] h-[100dvh] bg-background text-foreground grid grid-rows-[auto_1fr_auto] p-4 sm:p-6 overflow-hidden transition-colors duration-500">
       {/* Top Spacer */}
       <header className="w-full h-full" />
 
@@ -62,9 +63,7 @@ export default function WelcomePage() {
             }`}
           >
             <span className="relative z-10">START JAM</span>
-            <span className="relative z-10 text-2xl landscape:text-lg">
-              ▶️
-            </span>
+            <Play className="relative z-10 w-6 h-6 sm:w-8 sm:h-8 fill-current" />
           </button>
 
           <button
@@ -72,7 +71,7 @@ export default function WelcomePage() {
             onClick={handleSettings}
             className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 px-6 py-4 landscape:py-2 rounded-xl border-2 border-foreground/20 text-foreground font-bold tracking-widest uppercase text-sm landscape:text-xs"
           >
-            Settings <span className="text-xl landscape:text-sm">⚙️</span>
+            Settings <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </main>

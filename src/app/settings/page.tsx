@@ -1,5 +1,6 @@
 "use client";
 
+import { LogOut, Settings } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { useSelection } from "@/context/selection-context";
@@ -24,9 +25,9 @@ const BackButton = () => {
       <button
         type="button"
         onClick={() => navigate("/")}
-        className="px-6 py-3 bg-foreground text-background rounded-full font-bold text-sm tracking-widest uppercase hover:scale-105 transition-transform"
+        className="group px-6 py-3 bg-foreground text-background rounded-full font-bold text-sm tracking-widest uppercase hover:scale-105 transition-all flex items-center gap-2"
       >
-        EXIT 🚪
+        EXIT <LogOut className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
       </button>
     </div>
   );
@@ -51,8 +52,8 @@ export default function SettingsPage() {
       </div>
 
       <header className="relative z-10 w-full max-w-4xl mx-auto flex flex-row items-center justify-between py-4 landscape:py-2 gap-4 flex-shrink-0">
-        <h1 className="text-4xl sm:text-5xl landscape:text-3xl font-black italic uppercase tracking-tighter drop-shadow-md">
-          Settings ⚙️
+        <h1 className="text-4xl sm:text-5xl landscape:text-3xl font-black italic uppercase tracking-tighter drop-shadow-md flex items-center gap-3">
+          Settings <Settings className="w-8 h-8 sm:w-10 sm:h-10 animate-[spin_10s_linear_infinite]" />
         </h1>
         <Suspense>
           <BackButton />
