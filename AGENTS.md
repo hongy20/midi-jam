@@ -26,7 +26,9 @@ To maintain stable 60fps, we offload layout and animations to the browser's comp
 ### 3. Styling & Architecture
 - **CSS Modules**: Keep `globals.css` clean and generic, containing only styles for `html`, `body`, and theme-related custom CSS properties. Page-specific styles must use `page.module.css`, and component-specific styles must use `[component-name].module.css`.
 - **Assets & Icons**: Load icons directly from `lucide-react`. If an icon is not available, save it as a standalone `.svg` file and import it. **NEVER use inline SVG strings or emojis.**
-- **DOM Optimization**: Avoid the pattern of using a `div` (or div-like tag) with only one child `div` (or div-like tag). Merge them into a single element to keep the DOM tree shallow and clean.
+- **DOM Optimization**:
+  - Avoid the pattern of using a `div` (or div-like tag) with only one child `div` (or div-like tag). Merge them into a single element to keep the DOM tree shallow and clean.
+  - Avoid empty `div` elements (e.g., used only for spacing or decoration) unless there is a specific technical reason that cannot be achieved with parent styling or pseudo-elements.
 
 # Standard Workflow (Superpowers)
 
