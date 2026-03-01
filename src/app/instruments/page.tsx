@@ -101,7 +101,7 @@ export default function InstrumentsPage() {
               </div>
             )}
 
-            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-12 ${styles.noScrollbar}`}>
+            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-12 ${styles.noScrollbar}`}>
               {inputs.map((inst) => {
                 const isSelected = selected === inst.id;
                 const isActive = lastInputId === inst.id;
@@ -111,7 +111,7 @@ export default function InstrumentsPage() {
                     key={inst.id}
                     type="button"
                     onClick={() => setSelected(inst.id)}
-                    className={`group relative p-6 sm:p-8 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-4 overflow-hidden ${
+                    className={`group relative p-5 sm:p-8 landscape:p-4 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-3 sm:gap-4 overflow-hidden ${
                       isSelected
                         ? "bg-foreground border-foreground scale-[1.02] shadow-[0_0_40px_rgba(255,255,255,0.2)]"
                         : "bg-foreground/5 border-foreground/10 hover:border-foreground/30 hover:bg-foreground/10"
@@ -125,7 +125,7 @@ export default function InstrumentsPage() {
                     />
 
                     <div
-                      className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center transition-colors relative z-10 ${
+                      className={`w-12 h-12 sm:w-16 sm:h-16 landscape:w-10 landscape:h-10 rounded-2xl flex items-center justify-center transition-colors relative z-10 ${
                         isSelected
                           ? "bg-background text-foreground"
                           : "bg-background/50 text-foreground/60"
@@ -133,14 +133,15 @@ export default function InstrumentsPage() {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="28"
-                        height="28"
+                        width="24"
+                        height="24"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        className="sm:w-7 sm:h-7 landscape:w-5 landscape:h-5"
                       >
                         <title>Piano</title>
                         <path d="M4 2v20l2-2 2 2 2-2 2 2 2-2 2 2 2-2 2 2V2z" />
@@ -150,15 +151,15 @@ export default function InstrumentsPage() {
                       </svg>
                     </div>
 
-                    <div className="flex flex-col relative z-10">
+                    <div className="flex flex-col relative z-10 min-w-0">
                       <span
-                        className={`text-xl font-bold truncate ${isSelected ? "text-background" : "text-foreground"}`}
+                        className={`text-lg sm:text-xl landscape:text-base font-bold truncate ${isSelected ? "text-background" : "text-foreground"}`}
                         title={inst.name || "Unknown Device"}
                       >
                         {inst.name || "Unknown Device"}
                       </span>
                       <span
-                        className={`text-sm font-medium mt-1 ${isSelected ? "text-background/70" : "text-foreground/50"}`}
+                        className={`text-xs sm:text-sm font-medium mt-0.5 sm:mt-1 ${isSelected ? "text-background/70" : "text-foreground/50"}`}
                       >
                         {inst.manufacturer || "Generic MIDI Input"}
                       </span>
@@ -191,6 +192,5 @@ export default function InstrumentsPage() {
           </button>
         </footer>
       </div>
-    </div>
   );
 }
