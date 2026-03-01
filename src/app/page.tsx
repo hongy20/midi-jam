@@ -24,7 +24,7 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="w-[100dvw] h-[100dvh] grid grid-rows-[auto_minmax(0,1fr)_auto] landscape:grid-rows-[auto_minmax(0,1fr)_auto] place-items-center overflow-hidden bg-background text-foreground">
+    <div className="w-[100dvw] h-[100dvh] grid grid-rows-[1fr_auto_1fr] landscape:grid-rows-[0.5fr_auto_0.5fr] place-items-center overflow-hidden bg-background text-foreground">
       {/* Top Spacer */}
       <header className="w-full h-full" />
 
