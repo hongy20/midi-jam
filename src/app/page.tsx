@@ -25,7 +25,7 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="fixed inset-0 grid grid-rows-[1fr_auto_1fr] landscape:grid-rows-[0.5fr_auto_0.5fr] place-items-center overflow-hidden bg-background text-foreground transition-colors duration-500">
+    <div className="w-[100dvw] h-[100dvh] grid grid-rows-[1fr_auto_1fr] landscape:grid-rows-[0.5fr_auto_0.5fr] place-items-center overflow-hidden bg-background text-foreground transition-colors duration-500">
       {/* Background Layer: Static/Composite-only */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-30">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] h-[150vh] bg-[radial-gradient(circle,rgba(255,255,255,0.1)_0%,transparent_50%)] animate-[spin_60s_linear_infinite]" />
