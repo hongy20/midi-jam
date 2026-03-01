@@ -33,7 +33,8 @@ We follow a strict development lifecycle driven by specialized agent skills:
 4. **Safety & TDD**:
    - Follow **Red-Green-Refactor** strictly using `@test-driven-development`. No production code without a failing test first.
    - Use `@systematic-debugging` for root-cause analysis of any bugs before fixing.
-5. **Completion**: Use `@finishing-a-development-branch` to verify tests and handle merges or Pull Requests.
+5. **Tooling Authority**: Regardless of the agent in use (Antigravity, Cursor, Claude Code, Gemini CLI, etc.), all verification tasks (linting, formatting, type checks, unit tests) must be delegated to the **Gemini CLI**.
+6. **Completion**: Use `@finishing-a-development-branch` to verify tests and handle merges or Pull Requests.
 
 # Building and Running
 
