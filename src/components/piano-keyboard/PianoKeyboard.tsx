@@ -1,5 +1,6 @@
 "use client";
 
+import { memo, useMemo } from "react";
 import { getNoteUnitOffset, isBlackKey } from "@/lib/device/piano";
 import {
   MIDI_NOTE_C4,
@@ -17,8 +18,9 @@ interface PianoKeyboardProps {
 
 /**
  * Static piano keys that only re-render when the range changes.
+ * Memoized to prevent re-renders when active notes change.
  */
-const PianoKeys = ({ notes }: { notes: number[] }) => {
+const PianoKeys = memo(({ notes }: { notes: number[] }) => {
   const NOTE_NAMES = [
     "C",
     "C#",
@@ -58,7 +60,9 @@ const PianoKeys = ({ notes }: { notes: number[] }) => {
       })}
     </>
   );
-};
+});
+
+PianoKeys.displayName = "PianoKeys";
 
 /**
  * Dynamic glow effects that only render for active notes.
@@ -116,10 +120,13 @@ export const PianoKeyboard = ({
   rangeStart = PIANO_88_KEY_MIN,
   rangeEnd = PIANO_88_KEY_MAX,
 }: PianoKeyboardProps) => {
-  const visibleNotes = [];
-  for (let n = rangeStart; n <= rangeEnd; n++) {
-    visibleNotes.push(n);
-  }
+  const visibleNotes = useMemo(() => {
+    const notes = [];
+    for (let n = rangeStart; n <= rangeEnd; n++) {
+      notes.push(n);
+    }
+    return notes;
+  }, [rangeStart, rangeEnd]);
 
   const startUnit = getNoteUnitOffset(rangeStart);
   const endUnit = getNoteUnitOffset(rangeEnd) + (isBlackKey(rangeEnd) ? 2 : 3);
