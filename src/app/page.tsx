@@ -84,9 +84,9 @@ export default function WelcomePage() {
       </main>
 
       {/* Bottom Spacer / Footer */}
-      <footer className="w-full flex items-end justify-center pb-8 landscape:pb-2 z-10">
-        <p className="text-foreground/40 text-[10px] sm:text-xs uppercase tracking-[0.3em] font-bold">
-          The ultimate immersive piano experience
+      <footer className="w-full flex items-center justify-center pb-8 landscape:pb-2 z-10">
+        <p className="text-foreground/40 text-[10px] sm:text-xs uppercase tracking-[0.3em] font-bold text-center">
+          The ultimate immersive musical experience
         </p>
       </footer>
     </div>
