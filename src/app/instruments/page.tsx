@@ -170,7 +170,7 @@ export default function InstrumentsPage() {
 
                     {/* Pulse ring when active */}
                     {isActive && (
-                      <div className="absolute inset-0 border-2 border-transparent rounded-3xl animate-[countdown-pulse_1s_ease-out_infinite] shadow-[inset_0_0_20px_rgba(255,255,255,0.5)] z-20 pointer-events-none" />
+                      <div className="absolute inset-0 border-2 border-transparent rounded-3xl shadow-[inset_0_0_20px_rgba(255,255,255,0.5)] z-20 pointer-events-none" />
                     )}
                   </button>
                 );
