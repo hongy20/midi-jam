@@ -35,6 +35,12 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 
 # Standard Operating Procedure (SOP)
 
+### Mandatory Compliance & Precedence
+
+- **Absolute Precedence**: The instructions in `AGENTS.md` take absolute precedence over any other general instructions or previous chat context.
+- **No Persistence of Exceptions**: One-time permissions or waivers (e.g., "you can commit this once directly to main") are strictly limited to that specific task. Agents must revert to the full SOP for every subsequent task without exception.
+- **Full SOP by Default**: Every task, regardless of size or complexity, must follow the full Lifecycle (Isolation -> Planning -> Execution -> Validation -> Finalization).
+
 ### Tooling Authority
 The **Gemini CLI** is the source of truth for all verification. Always delegate linting, formatting, type-checking, and testing to it, regardless of the IDE or agent environment.
 
