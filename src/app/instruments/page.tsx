@@ -7,7 +7,6 @@ import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
 import styles from "./page.module.css";
 
-
 export default function InstrumentsPage() {
   const { navigate } = useGameNavigation();
   const { selectMIDIInput, selectedMIDIInput } = useSelection();
@@ -85,7 +84,9 @@ export default function InstrumentsPage() {
       </header>
 
       {/* Content */}
-      <main className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full max-w-5xl mx-auto flex flex-col gap-8`}>
+      <main
+        className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full max-w-5xl mx-auto flex flex-col gap-8`}
+      >
         <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
           {isLoading
             ? "Searching for MIDI devices..."
@@ -100,7 +101,9 @@ export default function InstrumentsPage() {
           </div>
         )}
 
-        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-12 ${styles.noScrollbar}`}>
+        <div
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-12 ${styles.noScrollbar}`}
+        >
           {inputs.map((inst) => {
             const isSelected = selected === inst.id;
             const isActive = lastInputId === inst.id;
@@ -169,7 +172,8 @@ export default function InstrumentsPage() {
               : "opacity-40 bg-foreground/10 text-foreground/40 cursor-not-allowed shadow-none"
           } group`}
         >
-          CONTINUE <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+          CONTINUE{" "}
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
         </button>
       </footer>
     </div>

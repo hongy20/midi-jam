@@ -27,7 +27,8 @@ const BackButton = () => {
         onClick={() => navigate("/")}
         className="group px-6 py-3 bg-foreground text-background rounded-full font-bold text-sm tracking-widest uppercase hover:scale-105 transition-all flex items-center gap-2"
       >
-        EXIT <LogOut className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        EXIT{" "}
+        <LogOut className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
       </button>
     </div>
   );
@@ -48,14 +49,17 @@ export default function SettingsPage() {
     <div className="w-[100dvw] h-[100dvh] overflow-hidden max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4">
       <header className="w-full flex flex-row items-center justify-between py-[var(--header-py)] gap-4 flex-shrink-0">
         <h1 className="text-[var(--h1-size)] font-black italic uppercase tracking-tighter drop-shadow-md flex items-center gap-3 text-foreground">
-          Settings <Settings className="w-8 h-8 sm:w-10 sm:h-10 animate-[spin_10s_linear_infinite]" />
+          Settings{" "}
+          <Settings className="w-8 h-8 sm:w-10 sm:h-10 animate-[spin_10s_linear_infinite]" />
         </h1>
         <Suspense>
           <BackButton />
         </Suspense>
       </header>
 
-      <main className={`w-full grid grid-cols-1 landscape:grid-cols-2 gap-3 sm:gap-6 overflow-y-auto ${styles.noScrollbar} py-4`}>
+      <main
+        className={`w-full grid grid-cols-1 landscape:grid-cols-2 gap-3 sm:gap-6 overflow-y-auto ${styles.noScrollbar} py-4`}
+      >
         {/* Setting Item: Theme */}
         <div className="bg-foreground/5 backdrop-blur-md border border-foreground/10 p-6 sm:p-8 landscape:p-4 rounded-[1.5rem] sm:rounded-[2rem] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
           <div className="flex flex-col flex-1">

@@ -45,7 +45,7 @@ export default function ResultsPage() {
     return "Keep Practicing!";
   };
 
-  const rank = getRank(stats.accuracy);
+  const _rank = getRank(stats.accuracy);
   const titleLabel = getAccuracyLabel(stats.accuracy);
 
   return (
@@ -58,7 +58,9 @@ export default function ResultsPage() {
       </header>
 
       {/* Content */}
-      <main className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full h-full max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 landscape:mt-0 landscape:justify-start z-20`}>
+      <main
+        className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full h-full max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 landscape:mt-0 landscape:justify-start z-20`}
+      >
         <div className="text-center mb-8 landscape:mb-4 w-full">
           <span className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-2 sm:mb-4 landscape:mb-1 block drop-shadow-md">
             Song Complete
