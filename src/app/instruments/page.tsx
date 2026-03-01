@@ -1,7 +1,7 @@
 "use client";
 
+import { ArrowLeft, ChevronRight, Piano } from "lucide-react";
 import { useEffect, useState } from "react";
-import { NavigationLayout } from "@/components/navigation-layout";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
@@ -65,27 +65,28 @@ export default function InstrumentsPage() {
   };
 
   return (
-    <NavigationLayout
-      title="Select Your Instrument"
-      step={1}
-      totalSteps={2}
-      footer={
+    <div className="w-[100dvw] h-[100dvh] overflow-hidden max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4">
+      {/* Header */}
+      <header className="flex items-center justify-between py-[var(--header-py)] flex-shrink-0">
+        <h1 className="text-[var(--h1-size)] font-black text-foreground uppercase tracking-tighter">
+          Select Your Instrument
+        </h1>
+
         <button
           type="button"
-          onClick={handleContinue}
-          disabled={!selected}
-          className={`px-12 py-4 rounded-full text-xl font-black tracking-wider transition-all duration-300 ${
-            selected
-              ? "bg-foreground text-background hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.4)] cursor-pointer"
-              : "bg-foreground/10 text-foreground/40 cursor-not-allowed"
-          }`}
+          onClick={() => navigate("/")}
+          className="group flex items-center gap-2 px-4 py-2 bg-foreground/5 border border-foreground/10 rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
         >
-          CONTINUE ▶️
+          <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+          Main Menu
         </button>
-      }
-    >
-      <div className="w-full max-w-5xl mx-auto flex flex-col gap-8 h-full">
-        <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium animate-fade-in">
+      </header>
+
+      {/* Content */}
+      <main
+        className={`overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full max-w-5xl mx-auto flex flex-col gap-8`}
+      >
+        <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
           {isLoading
             ? "Searching for MIDI devices..."
             : inputs.length > 0
@@ -99,7 +100,9 @@ export default function InstrumentsPage() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto no-scrollbar pb-12">
+        <div
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-12 no-scrollbar`}
+        >
           {inputs.map((inst) => {
             const isSelected = selected === inst.id;
             const isActive = lastInputId === inst.id;
@@ -109,7 +112,7 @@ export default function InstrumentsPage() {
                 key={inst.id}
                 type="button"
                 onClick={() => setSelected(inst.id)}
-                className={`group relative p-6 sm:p-8 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-4 overflow-hidden ${
+                className={`group relative p-5 sm:p-8 landscape:p-4 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-3 sm:gap-4 overflow-hidden ${
                   isSelected
                     ? "bg-foreground border-foreground scale-[1.02] shadow-[0_0_40px_rgba(255,255,255,0.2)]"
                     : "bg-foreground/5 border-foreground/10 hover:border-foreground/30 hover:bg-foreground/10"
@@ -123,40 +126,24 @@ export default function InstrumentsPage() {
                 />
 
                 <div
-                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center transition-colors relative z-10 ${
+                  className={`w-12 h-12 sm:w-16 sm:h-16 landscape:w-10 landscape:h-10 rounded-2xl flex items-center justify-center transition-colors relative z-10 ${
                     isSelected
                       ? "bg-background text-foreground"
                       : "bg-background/50 text-foreground/60"
                   }`}
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="28"
-                    height="28"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <title>Piano</title>
-                    <path d="M4 2v20l2-2 2 2 2-2 2 2 2-2 2 2 2-2 2 2V2z" />
-                    <path d="M8 2v8" />
-                    <path d="M12 2v8" />
-                    <path d="M16 2v8" />
-                  </svg>
+                  <Piano className="w-6 h-6 sm:w-7 sm:h-7 landscape:w-5 landscape:h-5" />
                 </div>
 
-                <div className="flex flex-col relative z-10">
+                <div className="flex flex-col relative z-10 min-w-0">
                   <span
-                    className={`text-xl font-bold truncate ${isSelected ? "text-background" : "text-foreground"}`}
+                    className={`text-lg sm:text-xl landscape:text-base font-bold truncate ${isSelected ? "text-background" : "text-foreground"}`}
                     title={inst.name || "Unknown Device"}
                   >
                     {inst.name || "Unknown Device"}
                   </span>
                   <span
-                    className={`text-sm font-medium mt-1 ${isSelected ? "text-background/70" : "text-foreground/50"}`}
+                    className={`text-xs sm:text-sm font-medium mt-0.5 sm:mt-1 ${isSelected ? "text-background/70" : "text-foreground/50"}`}
                   >
                     {inst.manufacturer || "Generic MIDI Input"}
                   </span>
@@ -164,13 +151,30 @@ export default function InstrumentsPage() {
 
                 {/* Pulse ring when active */}
                 {isActive && (
-                  <div className="absolute inset-0 border-2 border-transparent rounded-3xl animate-[countdown-pulse_1s_ease-out_infinite] shadow-[inset_0_0_20px_rgba(255,255,255,0.5)] z-20 pointer-events-none" />
+                  <div className="absolute inset-0 border-2 border-transparent rounded-3xl shadow-[inset_0_0_20px_rgba(255,255,255,0.5)] z-20 pointer-events-none" />
                 )}
               </button>
             );
           })}
         </div>
-      </div>
-    </NavigationLayout>
+      </main>
+
+      {/* Footer */}
+      <footer className="flex items-center justify-end py-[var(--footer-py)] flex-shrink-0">
+        <button
+          type="button"
+          onClick={handleContinue}
+          disabled={!selected}
+          className={`px-[var(--btn-px)] py-[var(--btn-py)] rounded-full font-black text-[var(--btn-text)] uppercase tracking-wider transition-all duration-300 flex items-center gap-2 ${
+            selected
+              ? "bg-foreground text-background hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.4)] cursor-pointer"
+              : "opacity-40 bg-foreground/10 text-foreground/40 cursor-not-allowed shadow-none"
+          } group`}
+        >
+          CONTINUE{" "}
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
+        </button>
+      </footer>
+    </div>
   );
 }

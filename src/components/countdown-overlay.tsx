@@ -32,7 +32,7 @@ export const CountdownOverlay = ({
     <div className="fixed inset-0 flex items-center justify-center pointer-events-none z-50">
       <div
         key={countdownRemaining}
-        className="text-8xl md:text-9xl font-black text-foreground drop-shadow-[0_5px_25px_rgba(0,0,0,0.8)] animate-countdown"
+        className="text-8xl md:text-9xl font-black text-foreground drop-shadow-[0_5px_25px_rgba(0,0,0,0.8)]"
       >
         {displayText}
       </div>

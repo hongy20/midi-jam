@@ -3,8 +3,8 @@
   --footer-height: 151px;
   --lane-height: calc(100dvh - var(--header-height) - var(--footer-height));
 
-  position: fixed;
-  inset: 0;
+  width: 100dvw;
+  height: 100dvh;
   display: grid;
   grid-template-rows: auto 1fr auto;
   background-color: var(--background);
