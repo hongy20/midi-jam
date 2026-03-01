@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Play } from "lucide-react";
+import { ArrowLeft, Dices, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
@@ -79,13 +79,13 @@ export default function TracksPage() {
         </header>
 
         {/* Content */}
-        <main className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0`}>
+        <main className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0 grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 gap-3 sm:gap-6 pb-12 w-full`}>
           {isLoading ? (
-            <div className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium">
+            <div className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium col-span-full">
               Loading soundtracks...
             </div>
           ) : (
-            <div className={`grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 gap-3 sm:gap-6 pb-12 w-full ${styles.noScrollbar}`}>
+            <>
               {tracks.map((track) => (
                 <button
                   key={track.id}
@@ -140,7 +140,7 @@ export default function TracksPage() {
                   </span>
                 </button>
               ))}
-            </div>
+            </>
           )}
         </main>
 
@@ -150,21 +150,21 @@ export default function TracksPage() {
             <button
               type="button"
               onClick={handleSurprise}
-              className="flex-1 px-4 sm:px-8 py-4 bg-foreground/10 text-foreground font-black rounded-full hover:bg-foreground/20 hover:scale-[1.02] active:scale-95 transition-all text-sm sm:text-lg"
+              className="flex-1 px-4 sm:px-8 py-3 sm:py-4 bg-foreground/10 text-foreground font-black rounded-full hover:bg-foreground/20 hover:scale-[1.02] active:scale-95 transition-all text-sm sm:text-lg flex items-center justify-center gap-2"
             >
-              SURPRISE 🎲
+              SURPRISE <Dices className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
             <button
               type="button"
               onClick={handlePlay}
               disabled={!selected}
-              className={`flex-[2] px-8 sm:px-12 py-4 rounded-full text-lg sm:text-xl font-black transition-all ${
+              className={`flex-[2] px-8 sm:px-12 py-3 sm:py-4 rounded-full text-lg sm:text-xl font-black transition-all flex items-center justify-center gap-2 ${
                 selected
                   ? "bg-foreground text-background hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.2)] cursor-pointer"
                   : "bg-foreground/10 text-foreground/40 cursor-not-allowed"
               }`}
             >
-              PLAY ▶️
+              PLAY <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current" />
             </button>
           </div>
         </footer>
