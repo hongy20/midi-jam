@@ -67,7 +67,7 @@ export default function InstrumentsPage() {
   };
 
   return (
-    <div className={`w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden ${styles.animateFadeIn} transition-colors duration-500 max-w-5xl mx-auto h-full ${styles.animateSlideUp}`}>
+    <div className={`w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden max-w-5xl mx-auto h-full`}>
       {/* Header */}
       <header className="py-4 landscape:py-2 flex items-center justify-between flex-shrink-0">
           <h1 className="text-3xl sm:text-4xl landscape:text-2xl font-black text-foreground uppercase tracking-tighter">
@@ -86,7 +86,7 @@ export default function InstrumentsPage() {
 
         {/* Content */}
         <main className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full max-w-5xl mx-auto flex flex-col gap-8`}>
-          <p className={`text-center text-foreground/60 text-lg sm:text-xl font-medium ${styles.animateFadeIn}`}>
+          <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
             {isLoading
               ? "Searching for MIDI devices..."
               : inputs.length > 0
