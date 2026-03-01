@@ -27,12 +27,14 @@ To maintain stable 60fps, we offload layout to the browser's native engine:
 
 We follow a strict development lifecycle driven by specialized agent skills:
 
-1. **Planning**: Use `@writing-plans` to draft comprehensive, bite-sized tasks for any multi-step feature or refactor.
-2. **Execution**: Implement tasks using `@subagent-driven-development` (step-by-step with review) or `@executing-plans` (batch execution).
-3. **Safety & TDD**:
+1. **Isolation**: Before making any changes to the repository (including creating plan files), check if you are on the default branch (`main`). If so, create a new feature branch with a descriptive name.
+2. **Planning**: Use `@writing-plans` to draft comprehensive, bite-sized tasks for any multi-step feature or refactor.
+3. **Execution**: Implement tasks using `@subagent-driven-development` (step-by-step with review) or `@executing-plans` (batch execution).
+4. **Safety & TDD**:
    - Follow **Red-Green-Refactor** strictly using `@test-driven-development`. No production code without a failing test first.
    - Use `@systematic-debugging` for root-cause analysis of any bugs before fixing.
-4. **Completion**: Use `@finishing-a-development-branch` to verify tests and handle merges or Pull Requests.
+5. **Tooling Authority**: Regardless of the agent in use (Antigravity, Cursor, Claude Code, Gemini CLI, etc.), all verification tasks (linting, formatting, type checks, unit tests) must be delegated to the **Gemini CLI**.
+6. **Completion**: Use `@finishing-a-development-branch` to verify tests and handle merges or Pull Requests.
 
 # Building and Running
 
