@@ -43,13 +43,13 @@ export default function SettingsPage() {
   ] as const;
 
   return (
-    <div className="fixed inset-0 bg-background text-foreground flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden transition-colors duration-500">
+    <div className="w-[100dvw] h-[100dvh] bg-background text-foreground grid grid-rows-[auto_1fr_auto] p-4 sm:p-6 overflow-hidden transition-colors duration-500">
       {/* Background Subtle Mesh */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-0 left-0 w-full h-full bg-foreground/5" />
       </div>
 
-      <header className="relative z-10 w-full max-w-4xl flex flex-row items-center justify-between mb-4 landscape:mb-2 gap-4">
+      <header className="relative z-10 w-full max-w-4xl mx-auto flex flex-row items-center justify-between py-4 landscape:py-2 gap-4 flex-shrink-0">
         <h1 className="text-4xl sm:text-5xl landscape:text-3xl font-black italic uppercase tracking-tighter drop-shadow-md">
           Settings ⚙️
         </h1>
@@ -58,7 +58,7 @@ export default function SettingsPage() {
         </Suspense>
       </header>
 
-      <main className="relative z-10 w-full max-w-5xl grid grid-cols-1 landscape:grid-cols-2 gap-3 sm:gap-6 animate-slide-up">
+      <main className="relative z-10 w-full max-w-5xl mx-auto grid grid-cols-1 landscape:grid-cols-2 gap-3 sm:gap-6 animate-slide-up overflow-y-auto no-scrollbar py-4">
         {/* Setting Item: Theme */}
         <div className="bg-foreground/5 backdrop-blur-md border border-foreground/10 p-6 sm:p-8 landscape:p-4 rounded-[1.5rem] sm:rounded-[2rem] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
           <div className="flex flex-col flex-1">
@@ -145,7 +145,7 @@ export default function SettingsPage() {
         </div>
       </main>
 
-      <footer className="absolute bottom-6 sm:bottom-12 text-foreground/40 text-[8px] sm:text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.5em] font-black w-full text-center">
+      <footer className="relative z-10 py-6 text-foreground/40 text-[8px] sm:text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.5em] font-black w-full text-center flex-shrink-0">
         Midi Jam v0.1.0 • Experimental Build
       </footer>
     </div>
