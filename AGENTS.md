@@ -46,7 +46,7 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
 
 ### Development Lifecycle
 1. **Isolation**: Never work directly on `main`. Always create a descriptive feature branch after obtaining user approval.
-2. **Planning**: Use `@writing-plans` to break down features into bite-sized, verifiable tasks.
+2. **Planning**: Use `@writing-plans` to draft comprehensive, bite-sized tasks for any multi-step feature or refactor. **The resulting plan file (in `docs/plans/`) MUST be committed to the repository immediately after creation.**
 3. **Execution**: Use `@subagent-driven-development` or `@executing-plans` for systematic implementation.
 4. **Safety & TDD**:
    - **Red-Green-Refactor**: No production code without a failing test first (`@test-driven-development`).
