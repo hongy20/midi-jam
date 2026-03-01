@@ -21,7 +21,6 @@ To maintain stable 60fps, we offload layout to the browser's native engine:
 
 ### 2. Immersive UX & Style
 - **Playful Tone**: User-facing text and documentation should be playful and encouraging.
-- **Smart Defaults**: Minimize user friction by automatically selecting MIDI devices upon input and streamlining song selection.
 - **Dynamic Visuals**: Use an engaging "track" for MIDI playback visualization that responds to real-time input across different instrument types.
 
 # Standard Workflow (Superpowers)
