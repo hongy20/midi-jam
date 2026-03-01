@@ -63,7 +63,10 @@ export function useLaneScoreEngine({
         if (targetTimeMs > currentTimeMs + GOOD_THRESHOLD) break;
 
         // If it's the correct note and not processed, check if it's the best match
-        if (modelEvent.note === event.note && !processedNotesRef.current.has(i)) {
+        if (
+          modelEvent.note === event.note &&
+          !processedNotesRef.current.has(i)
+        ) {
           if (delta < minDelta) {
             minDelta = delta;
             bestMatchIdx = i;
@@ -106,7 +109,10 @@ export function useLaneScoreEngine({
         const modelEvent = modelEvents[i];
         if (modelEvent.type !== "noteOn") {
           // Advance window for noteOff events too if we've passed them
-          if (modelEvent.time * 1000 + LEAD_IN_DEFAULT_MS < currentTimeMs - GOOD_THRESHOLD) {
+          if (
+            modelEvent.time * 1000 + LEAD_IN_DEFAULT_MS <
+            currentTimeMs - GOOD_THRESHOLD
+          ) {
             currentIndexRef.current = i + 1;
           }
           continue;

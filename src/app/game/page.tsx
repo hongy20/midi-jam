@@ -122,7 +122,14 @@ export default function GamePage() {
       setGameSession(null);
       navigate("/results");
     };
-  }, [score, combo, events.length, navigate, setGameSession, setSessionResults]);
+  }, [
+    score,
+    combo,
+    events.length,
+    navigate,
+    setGameSession,
+    setSessionResults,
+  ]);
 
   // Sync state to context for persistence during navigation
   useEffect(() => {
