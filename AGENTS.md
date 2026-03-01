@@ -1,6 +1,6 @@
 # Project Overview
 
-Midi Jam is a web application designed to help users learn the piano through an immersive, game-like experience. It connects to digital instruments via USB-A/Web MIDI and features a 3D "falldown" (piano roll) visualizer inspired by rhythm games like Guitar Hero.
+Midi Jam is a web application designed to help users learn the piano through an immersive, game-like experience. It connects to digital instruments via USB-A/Web MIDI and features a "falldown" (piano roll) visualizer inspired by rhythm games like Guitar Hero.
 
 ## Tech Stack
 - **Framework**: [Next.js](https://nextjs.org) (v16)
@@ -22,7 +22,7 @@ To maintain stable 60fps, we offload layout to the browser's native engine:
 ### 2. Immersive UX & Style
 - **Playful Tone**: User-facing text and documentation should be playful and encouraging.
 - **Smart Defaults**: Minimize user friction by automatically selecting MIDI devices upon input and streamlining song selection.
-- **3D Perspective**: Use an engaging 3D "track" for MIDI playback visualization.
+- **Dynamic Visuals**: Use an engaging "track" for MIDI playback visualization that responds to real-time input.
 
 # Standard Workflow (Superpowers)
 
