@@ -1,8 +1,0 @@
-{
-  "track_id": "audio_simplification_20260203",
-  "type": "feature",
-  "status": "completed",
-  "created_at": "2026-02-03T17:15:00Z",
-  "updated_at": "2026-02-03T22:40:00Z",
-  "description": "refactor: simplify audio logic (remove mute button) and support external MIDI output"
-}

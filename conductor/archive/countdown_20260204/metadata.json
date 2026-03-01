@@ -1,8 +1,0 @@
-{
-  "track_id": "countdown_20260204",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-02-04T12:00:00Z",
-  "updated_at": "2026-02-04T12:00:00Z",
-  "description": "feature: add 3 seconds count down before starting a music"
-}
