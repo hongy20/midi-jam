@@ -12,29 +12,32 @@ Midi Jam is a web application designed to help users learn musical instrumentsâ€
 
 # Core Principles
 
-### 1. High-Performance Rendering (Native-First)
-To maintain stable 60fps, we offload layout to the browser's native engine:
+### 1. Layout & State
+- **Full-Screen Layouts**: Each page is a full-size layout mapping `100dvh` and `100dvw` using CSS Grid for precise component placement.
+- **Global State**: Application state is stored in React Context and shared across pages to ensure seamless transitions and data consistency.
+
+### 2. High-Performance Rendering
+To maintain stable 60fps, we offload layout and animations to the browser's compositor:
 - **CSS Grid/Flexbox**: Use native layout instead of calculating coordinates in JS.
 - **Layer Separation**: Split components into **Static Layers** (rendered once) and **Dynamic Layers** (active events only) to minimize DOM diffing.
-- **Composite-Only Updates**: High-frequency visual updates must strictly use `transform` and `opacity`.
+- **Smooth Animations**: High-frequency visual updates and animations must strictly use `transform` and `opacity`. NEVER animate layout-triggering properties like `width`, `height`, `top`, or `bottom`.
 - **21-Unit Octave Grid**: Use a 21-unit grid for the piano keyboard (3 per white key, 2 per black key) for precise, sub-pixel-free alignment.
-
-### 2. Immersive UX & Style
-- **Playful Tone**: User-facing text and documentation should be playful and encouraging.
-- **Dynamic Visuals**: Use an engaging "track" for MIDI playback visualization that responds to real-time input across different instrument types.
 
 # Standard Workflow (Superpowers)
 
-We follow a strict development lifecycle driven by specialized agent skills:
+We follow a strict development lifecycle driven by specialized agent skills.
 
-1. **Isolation**: Before making any changes to the repository (including creating plan files), check if you are on the default branch (`main`). If so, create a new feature branch with a descriptive name.
+### Tooling Authority
+Regardless of the agent in use (Antigravity, Cursor, Claude Code, Gemini CLI, etc.), all verification tasks (linting, formatting, type checks, unit tests) must be delegated to the **Gemini CLI**.
+
+### Lifecycle
+1. **Isolation**: Before making any changes to the repository (including creating plan files), check if you are on the default branch (`main`). If so, **ask the user for approval** before creating a new feature branch with a descriptive name.
 2. **Planning**: Use `@writing-plans` to draft comprehensive, bite-sized tasks for any multi-step feature or refactor.
 3. **Execution**: Implement tasks using `@subagent-driven-development` (step-by-step with review) or `@executing-plans` (batch execution).
 4. **Safety & TDD**:
    - Follow **Red-Green-Refactor** strictly using `@test-driven-development`. No production code without a failing test first.
    - Use `@systematic-debugging` for root-cause analysis of any bugs before fixing.
-5. **Tooling Authority**: Regardless of the agent in use (Antigravity, Cursor, Claude Code, Gemini CLI, etc.), all verification tasks (linting, formatting, type checks, unit tests) must be delegated to the **Gemini CLI**.
-6. **Completion**: Use `@finishing-a-development-branch` to verify tests and handle merges or Pull Requests.
+5. **Completion**: Use `@finishing-a-development-branch` to verify tests and handle merges or Pull Requests.
 
 # Building and Running
 
