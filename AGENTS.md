@@ -46,7 +46,7 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
    - **Red-Green-Refactor**: No production code without a failing test first (`@test-driven-development`).
    - **Root Cause Analysis**: Use `@systematic-debugging` for all bug reports before attempting a fix.
 5. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion.
-6. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR.
+6. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR. When merging Pull Requests, **ALWAYS use Squash and Merge** to maintain a clean project history.
 
 ---
 
