@@ -45,7 +45,6 @@ export default function GamePage() {
   const [showOverlay, setShowOverlay] = useState(
     gameSession?.isPaused ?? false,
   );
-  const [progress, setProgress] = useState(0);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const totalDurationMs =
@@ -112,31 +111,30 @@ export default function GamePage() {
     onNoteOff: handleNoteOff,
   });
 
-  handleFinishRef.current = () => {
-    setSessionResults({
-      score,
-      accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
-      combo,
-    });
-    setGameSession(null);
-    navigate("/results");
-  };
+  // Update finish callback ref in an effect to avoid render-phase side effects
+  useEffect(() => {
+    handleFinishRef.current = () => {
+      setSessionResults({
+        score,
+        accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
+        combo,
+      });
+      setGameSession(null);
+      navigate("/results");
+    };
+  }, [
+    score,
+    combo,
+    events.length,
+    navigate,
+    setGameSession,
+    setSessionResults,
+  ]);
 
   // Sync state to context for persistence during navigation
   useEffect(() => {
     setGameSession({ isPaused });
   }, [isPaused, setGameSession]);
-
-  // Update progress UI
-  useEffect(() => {
-    if (isPaused) return;
-    const interval = setInterval(() => {
-      setProgress(getProgress());
-    }, 100);
-    return () => clearInterval(interval);
-  }, [isPaused, getProgress]);
-
-  // Auto-navigate on completion is now handled by handleFinish callback from hook
 
   // Handle Pause
   const handleTogglePause = useCallback(() => {
@@ -153,7 +151,6 @@ export default function GamePage() {
     resetScore();
     setIsPaused(false);
     setShowOverlay(false);
-    setProgress(0);
   };
 
   const handleQuit = () => {
@@ -190,7 +187,8 @@ export default function GamePage() {
               score={score}
               combo={combo}
               lastHitQuality={lastHitQuality}
-              progress={progress}
+              getProgress={getProgress}
+              isPaused={isPaused}
             />
           </div>
         </div>

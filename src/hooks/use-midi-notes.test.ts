@@ -33,6 +33,28 @@ describe("useMIDINotes", () => {
     });
   });
 
+  it("should not re-subscribe when the callback changes", () => {
+    const mockInput = {
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    } as unknown as WebMidi.MIDIInput;
+
+    const { rerender } = renderHook(
+      ({ onNote }) => useMIDINotes(mockInput, onNote),
+      {
+        initialProps: { onNote: vi.fn() },
+      },
+    );
+
+    expect(mockInput.addEventListener).toHaveBeenCalledTimes(1);
+
+    // Re-render with a new callback
+    rerender({ onNote: vi.fn() });
+
+    // Should still only have called addEventListener once
+    expect(mockInput.addEventListener).toHaveBeenCalledTimes(1);
+  });
+
   it("should not add listener if input is null", () => {
     const onNote = vi.fn();
     renderHook(() => useMIDINotes(null, onNote));

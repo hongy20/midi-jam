@@ -26,12 +26,14 @@ export function useLaneScoreEngine({
   const [lastHitQuality, setLastHitQuality] = useState<HitQuality>(null);
 
   const processedNotesRef = useRef<Set<number>>(new Set());
+  const currentIndexRef = useRef(0);
 
   const resetScore = useCallback(() => {
     setScore(0);
     setCombo(0);
     setLastHitQuality(null);
     processedNotesRef.current.clear();
+    currentIndexRef.current = 0;
   }, []);
 
   const handleLiveNote = useCallback(
@@ -44,21 +46,31 @@ export function useLaneScoreEngine({
 
       const currentTimeMs = getCurrentTimeMs();
 
-      // Find closest model noteOn event for this pitch
+      // Find closest model noteOn event for this pitch within a window
       let bestMatchIdx = -1;
       let minDelta = Infinity;
 
-      for (let i = 0; i < modelEvents.length; i++) {
+      // Only scan from currentIndexRef.current onwards
+      // Since modelEvents is sorted by time, we can stop if we go too far past currentTimeMs
+      for (let i = currentIndexRef.current; i < modelEvents.length; i++) {
         const modelEvent = modelEvents[i];
-        if (modelEvent.type !== "noteOn" || modelEvent.note !== event.note)
-          continue;
-        if (processedNotesRef.current.has(i)) continue;
+        if (modelEvent.type !== "noteOn") continue;
 
         const targetTimeMs = modelEvent.time * 1000 + LEAD_IN_DEFAULT_MS;
         const delta = Math.abs(currentTimeMs - targetTimeMs);
-        if (delta < minDelta) {
-          minDelta = delta;
-          bestMatchIdx = i;
+
+        // If this event is already too far in the future, we can stop searching
+        if (targetTimeMs > currentTimeMs + GOOD_THRESHOLD) break;
+
+        // If it's the correct note and not processed, check if it's the best match
+        if (
+          modelEvent.note === event.note &&
+          !processedNotesRef.current.has(i)
+        ) {
+          if (delta < minDelta) {
+            minDelta = delta;
+            bestMatchIdx = i;
+          }
         }
       }
 
@@ -74,11 +86,9 @@ export function useLaneScoreEngine({
         }
 
         setLastHitQuality(quality);
-        setScore((s) => s + points * (1 + Math.floor(combo / 10) * 0.1)); // Simple multiplier
+        setScore((s) => s + points * (1 + Math.floor(combo / 10) * 0.1));
         setCombo((c) => c + 1);
       } else {
-        // If no match or too far off, it's a miss or ignore
-        // For now, only count missed as reset combo if they pressed a wrong note
         setLastHitQuality("miss");
         setCombo(0);
       }
@@ -88,27 +98,43 @@ export function useLaneScoreEngine({
 
   useMIDINotes(midiInput, handleLiveNote);
 
-  // Miss detection for notes that passed through without being hit
+  // Miss detection and window advancement
   useEffect(() => {
     if (!isPlaying) return;
 
     const interval = setInterval(() => {
       const currentTimeMs = getCurrentTimeMs();
 
-      for (let i = 0; i < modelEvents.length; i++) {
+      for (let i = currentIndexRef.current; i < modelEvents.length; i++) {
         const modelEvent = modelEvents[i];
-        if (modelEvent.type !== "noteOn") continue;
-        if (processedNotesRef.current.has(i)) continue;
+        if (modelEvent.type !== "noteOn") {
+          // Advance window for noteOff events too if we've passed them
+          if (
+            modelEvent.time * 1000 + LEAD_IN_DEFAULT_MS <
+            currentTimeMs - GOOD_THRESHOLD
+          ) {
+            currentIndexRef.current = i + 1;
+          }
+          continue;
+        }
 
-        // If note is more than GOOD_THRESHOLD past the target line
         const targetTimeMs = modelEvent.time * 1000 + LEAD_IN_DEFAULT_MS;
+
+        // If this note is more than GOOD_THRESHOLD past the target line, it's a miss
         if (currentTimeMs > targetTimeMs + GOOD_THRESHOLD) {
-          processedNotesRef.current.add(i);
-          setLastHitQuality("miss");
-          setCombo(0);
+          if (!processedNotesRef.current.has(i)) {
+            processedNotesRef.current.add(i);
+            setLastHitQuality("miss");
+            setCombo(0);
+          }
+          // Advance the window past this missed note
+          currentIndexRef.current = i + 1;
+        } else {
+          // Since events are sorted, once we hit a note that isn't a miss yet, we can stop
+          break;
         }
       }
-    }, 100); // Check every 100ms
+    }, 100);
 
     return () => clearInterval(interval);
   }, [isPlaying, modelEvents, getCurrentTimeMs]);
