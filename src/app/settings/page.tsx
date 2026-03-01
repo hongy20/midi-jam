@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useTheme } from "@/context/theme-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
+import styles from "./page.module.css";
 
 const BackButton = () => {
   const { goBack, navigate } = useGameNavigation();
@@ -58,7 +59,7 @@ export default function SettingsPage() {
         </Suspense>
       </header>
 
-      <main className="relative z-10 w-full max-w-5xl mx-auto grid grid-cols-1 landscape:grid-cols-2 gap-3 sm:gap-6 animate-slide-up overflow-y-auto no-scrollbar py-4">
+      <main className={`relative z-10 w-full max-w-5xl mx-auto grid grid-cols-1 landscape:grid-cols-2 gap-3 sm:gap-6 ${styles.animateSlideUp} overflow-y-auto ${styles.noScrollbar} py-4`}>
         {/* Setting Item: Theme */}
         <div className="bg-foreground/5 backdrop-blur-md border border-foreground/10 p-6 sm:p-8 landscape:p-4 rounded-[1.5rem] sm:rounded-[2rem] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
           <div className="flex flex-col flex-1">

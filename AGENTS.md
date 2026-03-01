@@ -23,6 +23,9 @@ To maintain stable 60fps, we offload layout and animations to the browser's comp
 - **Smooth Animations**: High-frequency visual updates and animations must strictly use `transform` and `opacity`. NEVER animate layout-triggering properties like `width`, `height`, `top`, or `bottom`.
 - **21-Unit Octave Grid**: Use a 21-unit grid for the piano keyboard (3 per white key, 2 per black key) for precise, sub-pixel-free alignment.
 
+### 3. Styling & Architecture
+- **CSS Modules**: Keep `globals.css` clean and generic, containing only styles for `html`, `body`, and theme-related custom CSS properties. Page-specific styles must use `page.module.css`, and component-specific styles must use `[component-name].module.css`.
+
 # Standard Workflow (Superpowers)
 
 We follow a strict development lifecycle driven by specialized agent skills.

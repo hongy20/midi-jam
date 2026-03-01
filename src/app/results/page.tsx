@@ -2,6 +2,7 @@
 
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
+import styles from "./page.module.css";
 
 export default function ResultsPage() {
   const { navigate } = useGameNavigation();
@@ -47,13 +48,13 @@ export default function ResultsPage() {
   const titleLabel = getAccuracyLabel(stats.accuracy);
 
   return (
-    <div className="w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden animate-fade-in transition-colors duration-500">
+    <div className={`w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden ${styles.animateFadeIn} transition-colors duration-500`}>
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[20%] right-[10%] w-[60%] h-[60%] rounded-full blur-[120px] bg-accent-primary/5" />
       </div>
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] h-full animate-slide-up">
+      <div className={`relative z-10 w-full max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] h-full ${styles.animateSlideUp}`}>
         {/* Header */}
         <header className="py-4 landscape:py-2 flex items-center justify-between flex-shrink-0">
           <div className="flex flex-col">
@@ -64,9 +65,9 @@ export default function ResultsPage() {
         </header>
 
         {/* Content */}
-        <main className="overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8">
+        <main className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0`}>
           <div className="w-full h-full max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 landscape:mt-0 landscape:justify-start z-20">
-            <header className="text-center mb-8 landscape:mb-4 w-full animate-slide-up">
+            <header className={`text-center mb-8 landscape:mb-4 w-full ${styles.animateSlideUp}`}>
               <span className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-2 sm:mb-4 landscape:mb-1 block drop-shadow-md">
                 Song Complete
               </span>
@@ -75,7 +76,7 @@ export default function ResultsPage() {
               </h1>
             </header>
 
-            <main className="w-full grid grid-cols-2 lg:grid-cols-4 gap-4 px-4 sm:px-0 landscape:gap-3 animate-fade-in delay-200">
+            <main className={`w-full grid grid-cols-2 lg:grid-cols-4 gap-4 px-4 sm:px-0 landscape:gap-3 ${styles.animateFadeIn} delay-200`}>
               <div className="col-span-2 lg:col-span-4 bg-foreground/5 backdrop-blur-3xl border border-foreground/10 flex flex-col items-center justify-center py-6 sm:py-10 landscape:py-4 rounded-[2rem] sm:rounded-[3rem] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] relative overflow-hidden group hover:border-foreground/30 transition-colors">
                 {/* Glossy inner reflection */}
                 <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
@@ -95,7 +96,7 @@ export default function ResultsPage() {
                 <span className="text-foreground/50 font-bold uppercase tracking-widest text-[10px] mb-1 sm:mb-2 text-center">
                   Accuracy
                 </span>
-                <span className="text-3xl sm:text-5xl landscape:text-2xl font-black text-foreground text-center animate-accuracy-pop drop-shadow-md tabular-nums">
+                <span className={`text-3xl sm:text-5xl landscape:text-2xl font-black text-foreground text-center ${styles.animateAccuracyPop} drop-shadow-md tabular-nums`}>
                   {stats.accuracy}%
                 </span>
               </div>

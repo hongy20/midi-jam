@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
+import styles from "./page.module.css";
+
 
 export default function InstrumentsPage() {
   const { navigate } = useGameNavigation();
@@ -65,13 +67,13 @@ export default function InstrumentsPage() {
   };
 
   return (
-    <div className="w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden animate-fade-in transition-colors duration-500">
+    <div className={`w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden ${styles.animateFadeIn} transition-colors duration-500`}>
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[20%] right-[10%] w-[60%] h-[60%] rounded-full blur-[120px] bg-accent-primary/5" />
       </div>
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] h-full animate-slide-up">
+      <div className={`relative z-10 w-full max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] h-full ${styles.animateSlideUp}`}>
         {/* Header */}
         <header className="py-4 landscape:py-2 flex items-center justify-between flex-shrink-0">
           <h1 className="text-3xl sm:text-4xl landscape:text-2xl font-black text-foreground uppercase tracking-tighter">
@@ -89,9 +91,9 @@ export default function InstrumentsPage() {
         </header>
 
         {/* Content */}
-        <main className="overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0">
+        <main className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0`}>
           <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
-            <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium animate-fade-in">
+            <p className={`text-center text-foreground/60 text-lg sm:text-xl font-medium ${styles.animateFadeIn}`}>
               {isLoading
                 ? "Searching for MIDI devices..."
                 : inputs.length > 0
@@ -105,7 +107,7 @@ export default function InstrumentsPage() {
               </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-12 ${styles.noScrollbar}`}>
               {inputs.map((inst) => {
                 const isSelected = selected === inst.id;
                 const isActive = lastInputId === inst.id;

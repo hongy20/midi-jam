@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
+import styles from "./page.module.css";
 
 export default function WelcomePage() {
   const { navigate } = useGameNavigation();
@@ -29,7 +30,7 @@ export default function WelcomePage() {
       <div className="w-full h-full" />
 
       {/* Main Content Area */}
-      <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-4 landscape:py-2 animate-slide-up w-full max-w-4xl">
+      <main className={`relative z-10 flex flex-col items-center justify-center text-center px-6 py-4 landscape:py-2 ${styles.animateSlideUp} w-full max-w-4xl`}>
         <div className="mb-8 landscape:mb-4 w-full relative">
           <h1 className="text-6xl sm:text-7xl md:text-9xl landscape:text-5xl font-black mb-4 landscape:mb-2 tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent transform transition-transform hover:scale-105 select-none drop-shadow-2xl">
             MIDI JAM

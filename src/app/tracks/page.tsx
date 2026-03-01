@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { getSoundTracks } from "@/lib/action/sound-track";
+import styles from "./page.module.css";
 
 interface Track {
   id: string;
@@ -54,13 +55,13 @@ export default function TracksPage() {
   };
 
   return (
-    <div className="w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden animate-fade-in transition-colors duration-500">
+    <div className={`w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden ${styles.animateFadeIn} transition-colors duration-500`}>
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-[20%] right-[10%] w-[60%] h-[60%] rounded-full blur-[120px] bg-accent-primary/5" />
       </div>
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] h-full animate-slide-up">
+      <div className={`relative z-10 w-full max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] h-full ${styles.animateSlideUp}`}>
         {/* Header */}
         <header className="py-4 landscape:py-2 flex items-center justify-between flex-shrink-0">
           <h1 className="text-3xl sm:text-4xl landscape:text-2xl font-black text-foreground uppercase tracking-tighter">
@@ -78,13 +79,13 @@ export default function TracksPage() {
         </header>
 
         {/* Content */}
-        <main className="overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0">
+        <main className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0`}>
           {isLoading ? (
             <div className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium">
               Loading soundtracks...
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 gap-3 sm:gap-6 pb-12 w-full">
+            <div className={`grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 gap-3 sm:gap-6 pb-12 w-full ${styles.noScrollbar}`}>
               {tracks.map((track) => (
                 <button
                   key={track.id}
