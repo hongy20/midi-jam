@@ -27,7 +27,7 @@ export default function WelcomePage() {
   return (
     <div className="w-[100dvw] h-[100dvh] grid grid-rows-[1fr_auto_1fr] landscape:grid-rows-[0.5fr_auto_0.5fr] place-items-center overflow-hidden bg-background text-foreground transition-colors duration-500">
       {/* Top Spacer */}
-      <div className="w-full h-full" />
+      <header className="w-full h-full" />
 
       {/* Main Content Area */}
       <main className={`relative z-10 flex flex-col items-center justify-center text-center px-6 py-4 landscape:py-2 ${styles.animateSlideUp} w-full max-w-4xl`}>
