@@ -25,12 +25,12 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="w-[100dvw] h-[100dvh] bg-background text-foreground grid grid-rows-[auto_1fr_auto] p-4 sm:p-6 overflow-hidden transition-colors duration-500">
+    <div className="w-[100dvw] h-[100dvh] bg-background text-foreground grid grid-rows-[auto_1fr_auto] p-4 sm:p-6 overflow-hidden">
       {/* Top Spacer */}
       <header className="w-full h-full" />
 
       {/* Main Content Area */}
-      <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-4 landscape:py-2 w-full max-w-4xl">
+      <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-4 landscape:py-2 w-full max-w-4xl mx-auto">
         <div className="mb-8 landscape:mb-4 w-full relative">
           <h1 className="text-6xl sm:text-7xl md:text-9xl landscape:text-5xl font-black mb-4 landscape:mb-2 tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
             MIDI JAM
