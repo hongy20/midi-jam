@@ -3,7 +3,6 @@
 import { ChevronRight, RotateCcw } from "lucide-react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
-import styles from "./page.module.css";
 
 export default function ResultsPage() {
   const { navigate } = useGameNavigation();
@@ -59,7 +58,7 @@ export default function ResultsPage() {
 
       {/* Content */}
       <main
-        className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full h-full max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 landscape:mt-0 landscape:justify-start z-20`}
+        className={`overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full h-full max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 landscape:mt-0 landscape:justify-start z-20`}
       >
         <div className="text-center mb-8 landscape:mb-4 w-full">
           <span className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-2 sm:mb-4 landscape:mb-1 block drop-shadow-md">

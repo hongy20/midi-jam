@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { getSoundTracks } from "@/lib/action/sound-track";
-import styles from "./page.module.css";
 
 interface Track {
   id: string;
@@ -74,7 +73,7 @@ export default function TracksPage() {
 
       {/* Content */}
       <main
-        className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0 grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 gap-3 sm:gap-6 pb-12 w-full`}
+        className={`overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 gap-3 sm:gap-6 pb-12 w-full`}
       >
         {isLoading ? (
           <div className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium col-span-full">

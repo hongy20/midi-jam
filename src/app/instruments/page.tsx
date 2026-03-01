@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
-import styles from "./page.module.css";
 
 export default function InstrumentsPage() {
   const { navigate } = useGameNavigation();
@@ -85,7 +84,7 @@ export default function InstrumentsPage() {
 
       {/* Content */}
       <main
-        className={`overflow-y-auto overflow-x-hidden ${styles.noScrollbar} py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full max-w-5xl mx-auto flex flex-col gap-8`}
+        className={`overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full max-w-5xl mx-auto flex flex-col gap-8`}
       >
         <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
           {isLoading
@@ -102,7 +101,7 @@ export default function InstrumentsPage() {
         )}
 
         <div
-          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-12 ${styles.noScrollbar}`}
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-12 no-scrollbar`}
         >
           {inputs.map((inst) => {
             const isSelected = selected === inst.id;
