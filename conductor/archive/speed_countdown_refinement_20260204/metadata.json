@@ -1,8 +1,0 @@
-{
-  "track_id": "speed_countdown_refinement_20260204",
-  "type": "feature",
-  "status": "new",
-  "created_at": "2026-02-04T13:45:00Z",
-  "updated_at": "2026-02-04T13:45:00Z",
-  "description": "Update speed controls to [0.75, 1, 1.25] with Turtle/Rabbit icons, set default demo mode to off, and fix countdown to be a consistent 4 real-time seconds."
-}

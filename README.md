@@ -1,70 +1,56 @@
 # MIDI Jam 🎹
 
-MIDI Jam is an experimental project exploring **agentic coding** and demonstrating the power of AI-driven development. It is built using the **Gemini CLI** and the [Conductor](https://github.com/gemini-cli-extensions/conductor) extension for a disciplined, step-by-step implementation.
+Midi Jam is an experimental project exploring **agentic coding** and demonstrating the power of AI-driven development. It is primarily built using the **Gemini CLI**, along with **Antigravity** and **Cursor** (as quotas allow), utilizing a suite of specialized agent skills for a disciplined, high-performance implementation.
 
-The project integrates advanced agent skills for **React best practices** and **web design guidelines**, while leveraging [embedded Next.js 16 documentation](https://vercel.com/blog/agents-md-outperforms-skills-in-our-agent-evals) to ensure strict alignment with the latest APIs and high-performance patterns.
+## Core Features
 
-Beyond its technical foundations, MIDI Jam is a fun, game-like web application designed to help kids learn musical instruments. It connects to digital instruments via the Web MIDI API, providing an immersive experience reminiscent of _Guitar Hero_.
+- **MIDI Connectivity**: Seamless connection to digital instruments via USB-A/Web MIDI API.
+- **88-Key Piano Visualizer**: High-performance, responsive visualizer with real-time feedback.
+- **Falldown Visuals**: Immersive piano roll visualizer for MIDI file playback.
+- **Scoring System**: Real-time accuracy tracking, combo counters, and persistent high scores.
+- **Playful UX**: Designed for an engaging and fun learning experience.
+- **Future Roadmap**: Support for digital drumset visualization and other MIDI instruments.
 
-## ✨ Features
-
-- **3D Perspective "Track"**: A dynamic visualizer that brings music to life with "Guitar Hero" style mechanics.
-- **Contextual Keyboard Zooming**: Automatically adjusts the piano range (21 to 108) to the specific song being played.
-- **Real-time MIDI Connectivity**: Zero-latency connectivity with digital pianos and MIDI controllers via Web MIDI API.
-- **Interactive Score & Combo System**: Real-time feedback on hit quality (Perfect, Great, OK, Miss) with combo multipliers.
-- **Responsive Design**: Optimized for mobile, tablet, and desktop with performance-first rendering.
-- **Visual Themes**: Support for Neon, Dark, and Light modes to suit your play style.
-- **Demo Mode**: Allows auto-playing tracks for previewing without a MIDI instrument.
-- **Performance Summary**: Detailed results page with accuracy, rank (S to D), and total score.
-- **Agentic Implementation**: Developed using spec-driven development workflows with Conductor.
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (v20 or higher)
-- A MIDI device (optional, but recommended for the full experience)
-- **HTTPS is required** for the Web MIDI API. The development server includes self-signed certificates for local use.
+- **Node.js**: Implemented with Node 24 (other versions like 22.x+ may also work).
+- **MIDI Hardware**: A MIDI-compatible keyboard, drumset, or controller (connected via USB).
+- **Browser**: A modern browser with Web MIDI support (Chrome, Edge, etc.).
+
+### MIDI Resources
+
+You can find and download MIDI files to play along with at sites like [Online Sequencer](https://onlinesequencer.net/sequences).
 
 ### Installation
 
-1. Clone the repository:
+```bash
+npm install
+```
 
-   ```bash
-   git clone https://github.com/hongy20/midi-jam.git
-   cd midi-jam
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-### Running Locally
-
-Start the development server:
+### Running the App
 
 ```bash
 npm run dev
 ```
 
-Open [https://localhost:3000](https://localhost:3000) in your browser.
+Open [https://localhost:3000](https://localhost:3000) to start jamming!
 
-## 🛠 Tech Stack
+## Development
 
-- **Framework**: Next.js 16 (App Router)
-- **Language**: TypeScript
-- **UI/Styling**: React 19, Tailwind CSS 4
-- **Tooling**: Biome (Linting & Formatting), Vitest (Testing)
-- **Audio**: Tone.js
+This project follows a strict **Superpowers** workflow. Development is driven by specialized agent skills for planning, execution, and verification.
 
-## 🤖 Agentic Development
+For detailed development principles, rendering patterns, and workflow instructions, please refer to [AGENTS.md](./AGENTS.md).
 
-This project follows a strict **Conductor** workflow. Development is broken down into "Tracks" with clear specifications and implementation plans.
+### Available Scripts
 
-- **Linting**: `npm run lint`
-- **Auto-fix**: `npm run lint:fix`
-- **Type Checking**: `npm run type-check`
-- **Testing**: `npm test`
+- `npm run dev`: Start development server.
+- `npm run build`: Create production build.
+- `npm run lint:fix`: Lint and format code with Biome.
+- `npm run type-check`: Run TypeScript type checking.
+- `npm test`: Execute Vitest unit and component tests.
 
-https://onlinesequencer.net/sequences
+---
+
+Made with ❤️ by AI Agents.
