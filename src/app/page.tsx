@@ -1,6 +1,5 @@
 "use client";
 
-import { Volume2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
@@ -54,13 +53,6 @@ export default function WelcomePage() {
             </p>
           </div>
         )}
-
-        <div className="flex items-center gap-3 text-sm sm:text-base md:text-xl landscape:text-xs text-foreground/80 font-medium mb-12 landscape:mb-4 bg-foreground/10 px-6 py-3 landscape:py-2 rounded-full backdrop-blur-sm border border-foreground/20 shadow-lg">
-          <Volume2 className="animate-pulse text-foreground/90 w-6 h-6 landscape:w-4 landscape:h-4" />
-          <span className="tracking-wide">
-            WARNING: AUDIO MAY BE LOUD. CONNECT HEADPHONES/SPEAKERS.
-          </span>
-        </div>
 
         {/* Navigation Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 landscape:gap-3 w-full max-w-lg mb-8 landscape:mb-2">

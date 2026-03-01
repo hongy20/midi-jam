@@ -7,7 +7,7 @@ import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
 
 export default function InstrumentsPage() {
-  const { navigate, goBack } = useGameNavigation();
+  const { navigate } = useGameNavigation();
   const { selectMIDIInput, selectedMIDIInput } = useSelection();
   const { inputs, isLoading, error } = useMIDIDevices();
 
@@ -64,9 +64,6 @@ export default function InstrumentsPage() {
     }
   };
 
-  const step = 1;
-  const totalSteps = 2;
-
   return (
     <div className="w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden animate-fade-in transition-colors duration-500">
       {/* Background Elements */}
@@ -77,26 +74,9 @@ export default function InstrumentsPage() {
       <div className="relative z-10 w-full max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] h-full animate-slide-up">
         {/* Header */}
         <header className="py-4 landscape:py-2 flex items-center justify-between flex-shrink-0">
-          <div className="flex flex-col">
-            <div className="flex items-center gap-3 mb-2 landscape:mb-0.5">
-              <span className="font-bold uppercase tracking-widest text-[10px] sm:text-xs text-accent-primary">
-                Step {step} of {totalSteps}
-              </span>
-              <div className="flex gap-1">
-                {Array.from({ length: totalSteps }).map((_, i) => (
-                  <div
-                    key={`step-${i + 1}`}
-                    className={`h-1 w-6 rounded-full transition-all duration-500 ${
-                      i + 1 <= step ? "bg-accent-primary" : "bg-foreground/10"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-            <h1 className="text-3xl sm:text-4xl landscape:text-2xl font-black text-foreground uppercase tracking-tighter">
-              Select Your Instrument
-            </h1>
-          </div>
+          <h1 className="text-3xl sm:text-4xl landscape:text-2xl font-black text-foreground uppercase tracking-tighter">
+            Select Your Instrument
+          </h1>
 
           <button
             type="button"
@@ -109,8 +89,8 @@ export default function InstrumentsPage() {
         </header>
 
         {/* Content */}
-        <main className="overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8">
-          <div className="w-full max-w-5xl mx-auto flex flex-col gap-8 h-full">
+        <main className="overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0">
+          <div className="w-full max-w-5xl mx-auto flex flex-col gap-8">
             <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium animate-fade-in">
               {isLoading
                 ? "Searching for MIDI devices..."
@@ -125,7 +105,7 @@ export default function InstrumentsPage() {
               </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto no-scrollbar pb-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
               {inputs.map((inst) => {
                 const isSelected = selected === inst.id;
                 const isActive = lastInputId === inst.id;

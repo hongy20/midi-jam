@@ -53,9 +53,6 @@ export default function TracksPage() {
     }
   };
 
-  const step = 2;
-  const totalSteps = 2;
-
   return (
     <div className="w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden animate-fade-in transition-colors duration-500">
       {/* Background Elements */}
@@ -66,26 +63,9 @@ export default function TracksPage() {
       <div className="relative z-10 w-full max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] h-full animate-slide-up">
         {/* Header */}
         <header className="py-4 landscape:py-2 flex items-center justify-between flex-shrink-0">
-          <div className="flex flex-col">
-            <div className="flex items-center gap-3 mb-2 landscape:mb-0.5">
-              <span className="font-bold uppercase tracking-widest text-[10px] sm:text-xs text-accent-primary">
-                Step {step} of {totalSteps}
-              </span>
-              <div className="flex gap-1">
-                {Array.from({ length: totalSteps }).map((_, i) => (
-                  <div
-                    key={`step-${i + 1}`}
-                    className={`h-1 w-6 rounded-full transition-all duration-500 ${
-                      i + 1 <= step ? "bg-accent-primary" : "bg-foreground/10"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-            <h1 className="text-3xl sm:text-4xl landscape:text-2xl font-black text-foreground uppercase tracking-tighter">
-              Select Soundtrack
-            </h1>
-          </div>
+          <h1 className="text-3xl sm:text-4xl landscape:text-2xl font-black text-foreground uppercase tracking-tighter">
+            Select Soundtrack
+          </h1>
 
           <button
             type="button"
@@ -98,13 +78,13 @@ export default function TracksPage() {
         </header>
 
         {/* Content */}
-        <main className="overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8">
+        <main className="overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0">
           {isLoading ? (
             <div className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium">
               Loading soundtracks...
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 gap-3 sm:gap-6 overflow-y-auto no-scrollbar pb-12 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 gap-3 sm:gap-6 pb-12 w-full">
               {tracks.map((track) => (
                 <button
                   key={track.id}
