@@ -1,57 +1,63 @@
-# Project Overview
+# Project Context: Midi Jam
 
-Midi Jam is a web application designed to help users learn musical instruments—including piano and digital drumsets—through an immersive, game-like experience. It connects to digital instruments via USB-A/Web MIDI and features a "falldown" (piano roll) visualizer inspired by rhythm games like Guitar Hero.
+Midi Jam is a high-performance web application for learning musical instruments (Piano, Drums) via Web MIDI. It features a rhythm-game-inspired "falldown" visualizer designed for low-latency, immersive gameplay.
 
 ## Tech Stack
-- **Framework**: [Next.js](https://nextjs.org) (v16)
-- **UI Library**: [React](https://react.dev) (v19) with [React Compiler](https://nextjs.org/docs/app/api-reference/next-config-js/reactCompiler) enabled.
-- **Styling**: [Tailwind CSS](https://tailwindcss.com) (v4)
-- **Audio**: [Tone.js](https://tonejs.github.io) for synthesis and MIDI processing.
-- **Tooling**: [Biome](https://biomejs.dev) for linting and formatting.
-- **Testing**: [Vitest](https://vitest.dev) for unit and component testing.
+- **Framework**: Next.js 15+ (App Router)
+- **UI**: React 19 (React Compiler enabled)
+- **Styling**: Tailwind CSS v4
+- **Audio/MIDI**: Tone.js & Web MIDI API
+- **Tooling**: Biome (Lint/Format), Vitest (Testing)
+
+---
 
 # Core Principles
 
-### 1. Layout & State
-- **Full-Screen Layouts**: Each page is a full-size layout mapping `100dvh` and `100dvw` using CSS Grid for precise component placement.
-- **Global State**: Application state is stored in React Context and shared across pages to ensure seamless transitions and data consistency.
+### 1. Unified Layout & State
+- **Viewport Locking**: All pages must use a full-screen layout (`100dvh`, `100dvw`) managed by CSS Grid.
+- **State Persistence**: Use React Context for cross-page state to ensure seamless transitions between setup and gameplay.
 
-### 2. High-Performance Rendering
-To maintain stable 60fps, we offload layout and animations to the browser's compositor:
-- **CSS Grid/Flexbox**: Use native layout instead of calculating coordinates in JS.
-- **Layer Separation**: Split components into **Static Layers** (rendered once) and **Dynamic Layers** (active events only) to minimize DOM diffing.
-- **Smooth Animations**: High-frequency visual updates and animations must strictly use `transform` and `opacity`. NEVER animate layout-triggering properties like `width`, `height`, `top`, or `bottom`.
-- **21-Unit Octave Grid**: Use a 21-unit grid for the piano keyboard (3 per white key, 2 per black key) for precise, sub-pixel-free alignment.
+### 2. High-Performance Rendering (60fps Target)
+To maintain a stable framerate, offload all frequent updates to the browser's compositor:
+- **Native Layout**: Prioritize CSS Grid/Flexbox over manual JS coordinate calculations.
+- **Layering**: Separate **Static Layers** (backgrounds, lanes) from **Dynamic Layers** (active notes, feedback) to minimize DOM reconciliation.
+- **Compositor Animations**: Strictly use `transform` and `opacity`. NEVER animate layout-triggering properties (`width`, `height`, `top`, `bottom`).
+- **Precision Alignment**: Use the **21-Unit Octave Grid** (3 units per white key, 2 per black key) for sub-pixel-perfect piano keyboard alignment.
 
-### 3. Styling & Architecture
-- **CSS Modules**: Keep `globals.css` clean and generic, containing only styles for `html`, `body`, and theme-related custom CSS properties. Page-specific styles must use `page.module.css`, and component-specific styles must use `[component-name].module.css`.
-- **Assets & Icons**: Load icons directly from `lucide-react`. If an icon is not available, save it as a standalone `.svg` file and import it. **NEVER use inline SVG strings or emojis.**
-- **DOM Optimization**:
-  - Avoid the pattern of using a `div` (or div-like tag) with only one child `div` (or div-like tag). Merge them into a single element to keep the DOM tree shallow and clean.
-  - Avoid empty `div` elements (e.g., used only for spacing or decoration) unless there is a specific technical reason that cannot be achieved with parent styling or pseudo-elements.
+### 3. Architecture & Styling Standards
+- **CSS Isolation**: `globals.css` is reserved for theme variables and generic resets. Use **CSS Modules** (`[name].module.css`) for all page and component-specific styles.
+- **Iconography**: Use `lucide-react` exclusively. For custom icons, use standalone `.svg` files. No inline SVG strings or emojis.
+- **DOM Efficiency**:
+  - **Flatten Trees**: Avoid redundant wrapping `div`s. If an element has only one child, consolidate them.
+  - **Purposeful Elements**: Avoid empty `div`s for spacing or decoration; use parent grid/flex spacing or pseudo-elements (`::before`/`::after`) instead.
 
-# Standard Workflow (Superpowers)
+---
 
-We follow a strict development lifecycle driven by specialized agent skills.
+# Standard Operating Procedure (SOP)
 
 ### Tooling Authority
-Regardless of the agent in use (Antigravity, Cursor, Claude Code, Gemini CLI, etc.), all verification tasks (linting, formatting, type checks, unit tests) must be delegated to the **Gemini CLI**.
+The **Gemini CLI** is the source of truth for all verification. Always delegate linting, formatting, type-checking, and testing to it, regardless of the IDE or agent environment.
 
-### Lifecycle
-1. **Isolation**: Before making any changes to the repository (including creating plan files), check if you are on the default branch (`main`). If so, **ask the user for approval** before creating a new feature branch with a descriptive name.
-2. **Planning**: Use `@writing-plans` to draft comprehensive, bite-sized tasks for any multi-step feature or refactor.
-3. **Execution**: Implement tasks using `@subagent-driven-development` (step-by-step with review) or `@executing-plans` (batch execution).
+### Development Lifecycle
+1. **Isolation**: Never work directly on `main`. Always create a descriptive feature branch after obtaining user approval.
+2. **Planning**: Use `@writing-plans` to break down features into bite-sized, verifiable tasks.
+3. **Execution**: Use `@subagent-driven-development` or `@executing-plans` for systematic implementation.
 4. **Safety & TDD**:
-   - Follow **Red-Green-Refactor** strictly using `@test-driven-development`. No production code without a failing test first.
-   - Use `@systematic-debugging` for root-cause analysis of any bugs before fixing.
-5. **Completion**: Use `@finishing-a-development-branch` to verify tests and handle merges or Pull Requests.
+   - **Red-Green-Refactor**: No production code without a failing test first (`@test-driven-development`).
+   - **Root Cause Analysis**: Use `@systematic-debugging` for all bug reports before attempting a fix.
+5. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion.
+6. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR.
 
-# Building and Running
+---
 
-- **Dev Server**: `npm run dev` (https://localhost:3000)
-- **Build**: `npm run build`
-- **Lint & Format**: `npm run lint:fix`
-- **Type Check**: `npm run type-check`
-- **Test**: `npm test`
+# Commands
+
+| Task | Command |
+| :--- | :--- |
+| **Development** | `npm run dev` |
+| **Build** | `npm run build` |
+| **Fix Styles** | `npm run lint:fix` |
+| **Type Check** | `npm run type-check` |
+| **Unit Test** | `npm test` |
 
 <!-- NEXT-AGENTS-MD-START -->[Next.js Docs Index]|root: ./.next-docs|STOP. What you remember about Next.js is WRONG for this project. Always search docs and read before any task.<!-- NEXT-AGENTS-MD-END -->
