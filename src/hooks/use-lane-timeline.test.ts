@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useLaneTimeline } from "./use-lane-timeline";
 
 describe("useLaneTimeline hook", () => {
-  let roCallback: ResizeObserverCallback = () => {};
+  let roCallback: ResizeObserverCallback;
 
   beforeEach(() => {
     vi.useFakeTimers();
@@ -136,19 +136,66 @@ describe("useLaneTimeline hook", () => {
   });
 
   it("restores progress and state on resize", () => {
-    const mockAnimation = {
+    let internalRoCallback: ResizeObserverCallback = () => {};
+    global.ResizeObserver = class ResizeObserver {
+      constructor(callback: ResizeObserverCallback) {
+        internalRoCallback = callback;
+      }
+      observe(_target: Element) {
+        internalRoCallback([], this as unknown as ResizeObserver);
+      }
+      unobserve() {}
+      disconnect() {}
+    } as unknown as typeof ResizeObserver;
+
+    const mockAnimation1 = {
       play: vi.fn(),
       pause: vi.fn(),
       cancel: vi.fn(),
-      playbackRate: 1.5,
+      get playbackRate() {
+        return 1.5;
+      },
+      set playbackRate(_v) {},
       playState: "running",
-      currentTime: 250,
+      get currentTime() {
+        return 250;
+      },
+      set currentTime(_v) {},
       effect: {
         getComputedTiming: () => ({ progress: 0.25 }),
       },
       onfinish: null,
     };
-    const animateMock = vi.fn().mockReturnValue(mockAnimation);
+
+    const mockAnimation2 = {
+      play: vi.fn(),
+      pause: vi.fn(),
+      cancel: vi.fn(),
+      _playbackRate: 1,
+      get playbackRate() {
+        return this._playbackRate;
+      },
+      set playbackRate(v) {
+        this._playbackRate = v;
+      },
+      playState: "idle",
+      _currentTime: 0,
+      get currentTime() {
+        return this._currentTime;
+      },
+      set currentTime(v) {
+        this._currentTime = v;
+      },
+      effect: {
+        getComputedTiming: () => ({ progress: 0 }),
+      },
+      onfinish: null,
+    };
+
+    const animateMock = vi
+      .fn()
+      .mockReturnValueOnce(mockAnimation1)
+      .mockReturnValueOnce(mockAnimation2);
 
     const container = {
       scrollHeight: 1000,
@@ -172,7 +219,7 @@ describe("useLaneTimeline hook", () => {
     act(() => {
       // @ts-ignore
       container.clientHeight = 500; // New clientHeight, maxScrollPx becomes 500
-      roCallback([], {} as ResizeObserver);
+      internalRoCallback([], {} as ResizeObserver);
     });
 
     // Should re-create animation with new keyframes
@@ -182,9 +229,10 @@ describe("useLaneTimeline hook", () => {
       expect.any(Object),
     );
 
-    // Should restore state
-    expect(mockAnimation.currentTime).toBe(250);
-    expect(mockAnimation.playbackRate).toBe(1.5);
-    expect(mockAnimation.play).toHaveBeenCalledTimes(2); // Initial + after resize
+    // Should restore state on the NEW animation object
+    expect(mockAnimation2.currentTime).toBe(250);
+    expect(mockAnimation2.playbackRate).toBe(1.5);
+    expect(mockAnimation2.play).toHaveBeenCalled();
+    expect(mockAnimation1.cancel).toHaveBeenCalled();
   });
 });
