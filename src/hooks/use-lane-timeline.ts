@@ -28,12 +28,23 @@ export function useLaneTimeline({
       const maxScrollPx = container.scrollHeight - container.clientHeight;
       const targetElement = container.querySelector("#track-lane");
 
-      // If animation already exists, we might need to recreate it if maxScrollPx changes significantly,
-      // but for simplicity, we create it once and assume height is stable after load.
-      if (!animationRef.current && maxScrollPx > 0 && targetElement) {
+      let prevTime = 0;
+      if (animationRef.current) {
+        // Save progress before cancelling
+        prevTime =
+          typeof animationRef.current.currentTime === "number"
+            ? animationRef.current.currentTime
+            : 0;
+
+        // Always cleanup old animation on resize
+        animationRef.current.cancel();
+        animationRef.current = null;
+      }
+
+      if (maxScrollPx > 0 && targetElement) {
         const keyframes = [
           { transform: `translateY(-${maxScrollPx}px)` },
-          { transform: `translateY(0px)` },
+          { transform: "translateY(0px)" },
         ];
 
         const animation = targetElement.animate(keyframes, {
@@ -42,8 +53,10 @@ export function useLaneTimeline({
           easing: "linear",
         });
 
-        // Sync initial state
+        // Restore state using props and saved progress
         animation.playbackRate = speed;
+        animation.currentTime = prevTime;
+
         if (isPaused) {
           animation.pause();
         } else {

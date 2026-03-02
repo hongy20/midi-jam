@@ -3,17 +3,19 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useLaneTimeline } from "./use-lane-timeline";
 
 describe("useLaneTimeline hook", () => {
+  let roCallback: ResizeObserverCallback;
+
   beforeEach(() => {
     vi.useFakeTimers();
 
-    // Mock ResizeObserver to immediately call its callback
+    // Mock ResizeObserver to capture its callback
     global.ResizeObserver = class ResizeObserver {
-      callback: ResizeObserverCallback;
       constructor(callback: ResizeObserverCallback) {
-        this.callback = callback;
+        roCallback = callback;
       }
       observe(_target: Element) {
-        this.callback([], this as unknown as ResizeObserver);
+        // Initial call
+        roCallback([], this as unknown as ResizeObserver);
       }
       unobserve() {}
       disconnect() {}
@@ -54,7 +56,7 @@ describe("useLaneTimeline hook", () => {
     );
 
     expect(animateMock).toHaveBeenCalledWith(
-      [{ transform: `translateY(-600px)` }, { transform: `translateY(0px)` }],
+      [{ transform: "translateY(-600px)" }, { transform: "translateY(0px)" }],
       { duration: 1000, fill: "both", easing: "linear" },
     );
     expect(mockAnimation.play).toHaveBeenCalled();
@@ -131,5 +133,106 @@ describe("useLaneTimeline hook", () => {
 
     expect(mockAnimation.currentTime).toBe(0);
     expect(mockAnimation.play).toHaveBeenCalledTimes(2); // Initial + reset
+  });
+
+  it("restores progress and state on resize", () => {
+    let internalRoCallback: ResizeObserverCallback = () => {};
+    global.ResizeObserver = class ResizeObserver {
+      constructor(callback: ResizeObserverCallback) {
+        internalRoCallback = callback;
+      }
+      observe(_target: Element) {
+        internalRoCallback([], this as unknown as ResizeObserver);
+      }
+      unobserve() {}
+      disconnect() {}
+    } as unknown as typeof ResizeObserver;
+
+    const mockAnimation1 = {
+      play: vi.fn(),
+      pause: vi.fn(),
+      cancel: vi.fn(),
+      get playbackRate() {
+        return 1.5;
+      },
+      set playbackRate(_v) {},
+      playState: "running",
+      get currentTime() {
+        return 250;
+      },
+      set currentTime(_v) {},
+      effect: {
+        getComputedTiming: () => ({ progress: 0.25 }),
+      },
+      onfinish: null,
+    };
+
+    const mockAnimation2 = {
+      play: vi.fn(),
+      pause: vi.fn(),
+      cancel: vi.fn(),
+      _playbackRate: 1,
+      get playbackRate() {
+        return this._playbackRate;
+      },
+      set playbackRate(v) {
+        this._playbackRate = v;
+      },
+      playState: "idle",
+      _currentTime: 0,
+      get currentTime() {
+        return this._currentTime;
+      },
+      set currentTime(v) {
+        this._currentTime = v;
+      },
+      effect: {
+        getComputedTiming: () => ({ progress: 0 }),
+      },
+      onfinish: null,
+    };
+
+    const animateMock = vi
+      .fn()
+      .mockReturnValueOnce(mockAnimation1)
+      .mockReturnValueOnce(mockAnimation2);
+
+    const container = {
+      scrollHeight: 1000,
+      clientHeight: 400,
+      querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
+    } as unknown as HTMLDivElement;
+    const containerRef = { current: container };
+
+    renderHook(() =>
+      useLaneTimeline({
+        containerRef,
+        totalDurationMs: 1000,
+        speed: 1.5,
+        isPaused: false,
+      }),
+    );
+
+    expect(animateMock).toHaveBeenCalledTimes(1);
+
+    // Simulate resize
+    act(() => {
+      // @ts-ignore
+      container.clientHeight = 500; // New clientHeight, maxScrollPx becomes 500
+      internalRoCallback([], {} as ResizeObserver);
+    });
+
+    // Should re-create animation with new keyframes
+    expect(animateMock).toHaveBeenCalledTimes(2);
+    expect(animateMock).toHaveBeenLastCalledWith(
+      [{ transform: "translateY(-500px)" }, { transform: "translateY(0px)" }],
+      expect.any(Object),
+    );
+
+    // Should restore state on the NEW animation object
+    expect(mockAnimation2.currentTime).toBe(250);
+    expect(mockAnimation2.playbackRate).toBe(1.5);
+    expect(mockAnimation2.play).toHaveBeenCalled();
+    expect(mockAnimation1.cancel).toHaveBeenCalled();
   });
 });
