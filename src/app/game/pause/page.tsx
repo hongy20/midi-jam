@@ -72,34 +72,27 @@ export default function PausePage() {
             {selectedMIDIInput.name} • {selectedTrack.name}
           </span>
         </div>
-
-        <button
-          type="button"
-          onClick={handleResume}
-          className="group flex items-center gap-2 px-4 py-2 bg-foreground/5 border border-foreground/10 rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
-        >
-          <Play className="w-3 h-3 fill-current" />
-          Resume
-        </button>
       </header>
 
-      {/* Main Menu */}
-      <main className="flex items-center justify-center overflow-hidden">
-        <div className="text-center flex flex-col gap-4 sm:gap-6 w-full max-w-[320px] sm:max-w-sm animate-in zoom-in-95 duration-300">
+      {/* Main Menu - Responsive container */}
+      <main className="flex items-center justify-center overflow-y-auto no-scrollbar py-8">
+        <div className="text-center flex flex-col gap-3 sm:gap-6 w-full max-w-[320px] sm:max-w-md animate-in zoom-in-95 duration-300">
           <button type="button" onClick={handleResume} className={buttonClass}>
             <Play className="w-5 h-5 fill-current" />
             RESUME
           </button>
 
-          <button type="button" onClick={handleRestart} className={buttonClass}>
-            <RotateCcw className="w-5 h-5" />
-            RESTART
-          </button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <button type="button" onClick={handleRestart} className={buttonClass}>
+              <RotateCcw className="w-5 h-5" />
+              RESTART
+            </button>
 
-          <button type="button" onClick={handleSettings} className={buttonClass}>
-            <Settings className="w-5 h-5" />
-            SETTINGS
-          </button>
+            <button type="button" onClick={handleSettings} className={buttonClass}>
+              <Settings className="w-5 h-5" />
+              SETTINGS
+            </button>
+          </div>
 
           <button
             type="button"
