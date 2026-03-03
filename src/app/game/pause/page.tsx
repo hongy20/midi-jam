@@ -76,13 +76,13 @@ export default function PausePage() {
 
       {/* Main Menu - Responsive container */}
       <main className="flex items-center justify-center overflow-y-auto no-scrollbar py-8">
-        <div className="text-center flex flex-col gap-3 sm:gap-6 w-full max-w-[320px] sm:max-w-md animate-in zoom-in-95 duration-300">
-          <button type="button" onClick={handleResume} className={buttonClass}>
-            <Play className="w-5 h-5 fill-current" />
-            RESUME
-          </button>
+        <div className="text-center w-full max-w-[320px] sm:max-w-2xl animate-in zoom-in-95 duration-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
+            <button type="button" onClick={handleResume} className={buttonClass}>
+              <Play className="w-5 h-5 fill-current" />
+              RESUME
+            </button>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <button type="button" onClick={handleRestart} className={buttonClass}>
               <RotateCcw className="w-5 h-5" />
               RESTART
@@ -92,16 +92,16 @@ export default function PausePage() {
               <Settings className="w-5 h-5" />
               SETTINGS
             </button>
-          </div>
 
-          <button
-            type="button"
-            onClick={handleQuit}
-            className={`${buttonClass} text-red-500 border-red-500/20 hover:bg-red-500/10 hover:border-red-500/40 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]`}
-          >
-            <LogOut className="w-5 h-5" />
-            QUIT GAME
-          </button>
+            <button
+              type="button"
+              onClick={handleQuit}
+              className={`${buttonClass} text-red-500 border-red-500/20 hover:bg-red-500/10 hover:border-red-500/40 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]`}
+            >
+              <LogOut className="w-5 h-5" />
+              QUIT GAME
+            </button>
+          </div>
         </div>
       </main>
 
