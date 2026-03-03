@@ -13,6 +13,9 @@ interface UseLaneScoreEngineProps {
   modelEvents: MidiEvent[];
   getCurrentTimeMs: () => number;
   isPlaying: boolean;
+  initialScore?: number;
+  initialCombo?: number;
+  initialTimeMs?: number;
 }
 
 export function useLaneScoreEngine({
@@ -20,13 +23,35 @@ export function useLaneScoreEngine({
   modelEvents,
   getCurrentTimeMs,
   isPlaying,
+  initialScore = 0,
+  initialCombo = 0,
+  initialTimeMs = 0,
 }: UseLaneScoreEngineProps) {
-  const [score, setScore] = useState(0);
-  const [combo, setCombo] = useState(0);
+  const [score, setScore] = useState(initialScore);
+  const [combo, setCombo] = useState(initialCombo);
   const [lastHitQuality, setLastHitQuality] = useState<HitQuality>(null);
 
   const processedNotesRef = useRef<Set<number>>(new Set());
   const currentIndexRef = useRef(0);
+
+  // Restore state on mount if needed
+  useEffect(() => {
+    if (initialTimeMs > 0) {
+      let nextIndex = 0;
+      for (let i = 0; i < modelEvents.length; i++) {
+        const modelEvent = modelEvents[i];
+        const targetTimeMs = modelEvent.time * 1000 + LEAD_IN_DEFAULT_MS;
+
+        if (targetTimeMs < initialTimeMs - GOOD_THRESHOLD) {
+          processedNotesRef.current.add(i);
+          nextIndex = i + 1;
+        } else {
+          break;
+        }
+      }
+      currentIndexRef.current = nextIndex;
+    }
+  }, [initialTimeMs, modelEvents]);
 
   const resetScore = useCallback(() => {
     setScore(0);

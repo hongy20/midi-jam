@@ -106,4 +106,40 @@ describe("useLaneScoreEngine hook", () => {
     expect(result.current.combo).toBe(1);
     expect(result.current.lastHitQuality).toBe("perfect");
   });
+
+  it("restores state from initial props", () => {
+    const modelEventsRestore = [
+      { type: "noteOn", note: 60, time: 1, velocity: 0.7 }, // 3000ms
+      { type: "noteOn", note: 62, time: 5, velocity: 0.7 }, // 7000ms
+    ] as MidiEvent[];
+
+    let onNoteCallback: (event: MIDINoteEvent) => void = () => {};
+    vi.mocked(useMIDINotes).mockImplementation((_input, cb) => {
+      onNoteCallback = cb as (event: MIDINoteEvent) => void;
+    });
+
+    const { result } = renderHook(() =>
+      useLaneScoreEngine({
+        midiInput: {} as WebMidi.MIDIInput,
+        modelEvents: modelEventsRestore,
+        getCurrentTimeMs: () => 7000,
+        isPlaying: true,
+        initialScore: 500,
+        initialCombo: 5,
+        initialTimeMs: 5000, // We are resuming at 5s, past the 3s note
+      }),
+    );
+
+    expect(result.current.score).toBe(500);
+    expect(result.current.combo).toBe(5);
+
+    // Hit the 7s note
+    act(() => {
+      onNoteCallback({ type: "note-on", note: 62, velocity: 0.7 });
+    });
+
+    expect(result.current.score).toBeGreaterThan(500);
+    expect(result.current.combo).toBe(6);
+    expect(result.current.lastHitQuality).toBe("perfect");
+  });
 });
