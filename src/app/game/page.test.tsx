@@ -194,40 +194,18 @@ describe("Game Page", () => {
     expect(screen.getByText(/Loading Track/i)).toBeInTheDocument();
   });
 
-  it("toggles pause overlay when pause button is clicked", () => {
+  it("navigates to /game/pause when pause button is clicked", () => {
     render(<GamePage />);
 
-    // Should not show paused overlay initially
-    expect(screen.queryByText("Paused")).not.toBeInTheDocument();
-
-    // Click pause button (the one in the header, not the piano keys)
+    // Click pause button (the one in the header)
     const header = screen.getByRole("banner");
     const pauseButton = within(header).getByRole("button");
     fireEvent.click(pauseButton);
 
-    // Should show paused overlay
-    expect(screen.getByText("Paused")).toBeInTheDocument();
-
-    // Click RESUME button in overlay
-    const resumeButton = screen.getByText("RESUME");
-    fireEvent.click(resumeButton);
-
-    // Should hide paused overlay
-    expect(screen.queryByText("Paused")).not.toBeInTheDocument();
-  });
-
-  it("navigates to results page when QUIT GAME is clicked", () => {
-    render(<GamePage />);
-
-    // Open pause overlay
-    const header = screen.getByRole("banner");
-    const pauseButton = within(header).getByRole("button");
-    fireEvent.click(pauseButton);
-
-    // Click QUIT GAME button
-    const quitButton = screen.getByText(/QUIT GAME/i);
-    fireEvent.click(quitButton);
-
-    expect(mockNavigate).toHaveBeenCalledWith("/results");
+    // Should navigate to pause page
+    expect(mockNavigate).toHaveBeenCalledWith("/game/pause");
+    expect(mockSetGameSession).toHaveBeenCalledWith(
+      expect.objectContaining({ isPaused: true }),
+    );
   });
 });
