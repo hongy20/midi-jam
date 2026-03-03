@@ -11,8 +11,10 @@ interface Track {
 }
 
 interface GameSession {
-  timeLeft?: number;
   isPaused: boolean;
+  score: number;
+  combo: number;
+  currentTimeMs: number;
 }
 
 interface SessionResults {
