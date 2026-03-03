@@ -52,15 +52,12 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
    - **Red-Green-Refactor**: No production code without a failing test first (`@test-driven-development`).
    - **Root Cause Analysis**: Use `@systematic-debugging` for all bug reports before attempting a fix.
 5. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion. **DO NOT rely solely on implementation plans for verification; the global SOP takes precedence.**
-
-### Mandatory Completion Checklist
-Before using `finishing-a-development-branch`, you MUST run and pass:
-- [ ] `npm run lint` (Biome check)
-- [ ] `npm run type-check` (TypeScript tsc)
-- [ ] `npm test` (Vitest suite)
-- [ ] `npm run build` (Next.js production build)
-
-Failure to run these command-by-command is a violation of Technical Integrity.
+   - **Mandatory Completion Checklist**: Before using `finishing-a-development-branch`, you MUST run and pass:
+     - [ ] `npm run lint` (Biome check)
+     - [ ] `npm run type-check` (TypeScript tsc)
+     - [ ] `npm test` (Vitest suite)
+     - [ ] `npm run build` (Next.js production build)
+   - *Failure to run these command-by-command is a violation of Technical Integrity.*
 6. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR. When merging Pull Requests, **ALWAYS use Squash and Merge** to maintain a clean project history.
 
 ---
