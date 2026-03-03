@@ -41,10 +41,7 @@ export default function GamePage() {
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
 
-  const [isPaused, setIsPaused] = useState(gameSession?.isPaused ?? false);
-  const [showOverlay, setShowOverlay] = useState(
-    gameSession?.isPaused ?? false,
-  );
+  const [isPaused, setIsPaused] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const totalDurationMs =
@@ -61,19 +58,23 @@ export default function GamePage() {
     handleFinishRef.current();
   }, []);
 
-  const { getCurrentTimeMs, getProgress, resetTimeline } = useLaneTimeline({
+  const { getCurrentTimeMs, getProgress } = useLaneTimeline({
     containerRef: scrollRef,
     totalDurationMs,
     speed,
     isPaused,
+    initialTimeMs: gameSession?.currentTimeMs ?? 0,
     onFinish: onFinishProxy,
   });
 
-  const { score, combo, lastHitQuality, resetScore } = useLaneScoreEngine({
+  const { score, combo, lastHitQuality } = useLaneScoreEngine({
     midiInput: selectedMIDIInput,
     modelEvents: events,
     getCurrentTimeMs,
     isPlaying,
+    initialScore: gameSession?.score ?? 0,
+    initialCombo: gameSession?.combo ?? 0,
+    initialTimeMs: gameSession?.currentTimeMs ?? 0,
   });
 
   const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
@@ -131,37 +132,17 @@ export default function GamePage() {
     setSessionResults,
   ]);
 
-  // Sync state to context for persistence during navigation
-  useEffect(() => {
-    setGameSession({ isPaused });
-  }, [isPaused, setGameSession]);
-
   // Handle Pause
   const handleTogglePause = useCallback(() => {
-    setIsPaused((prev) => {
-      const nextPaused = !prev;
-      setShowOverlay(nextPaused);
-      return nextPaused;
-    });
-  }, []);
-
-  // Handle Restart
-  const handleRestart = () => {
-    resetTimeline();
-    resetScore();
-    setIsPaused(false);
-    setShowOverlay(false);
-  };
-
-  const handleQuit = () => {
-    setSessionResults({
+    setIsPaused(true);
+    setGameSession({
+      isPaused: true,
       score,
-      accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
       combo,
+      currentTimeMs: getCurrentTimeMs(),
     });
-    setGameSession(null);
-    navigate("/results");
-  };
+    navigate("/game/pause");
+  }, [score, combo, getCurrentTimeMs, navigate, setGameSession]);
 
   // Redirect to welcome if no track is selected
   useEffect(() => {
@@ -232,15 +213,6 @@ export default function GamePage() {
           playbackNotes={playbackNotes}
         />
       </footer>
-
-      {showOverlay && (
-        <PauseOverlay
-          onResume={handleTogglePause}
-          onRestart={handleRestart}
-          onSettings={() => navigate("/settings?from=/game")}
-          onQuit={handleQuit}
-        />
-      )}
     </div>
   );
 }
