@@ -5,6 +5,7 @@ interface UseLaneTimelineProps {
   totalDurationMs: number;
   speed: number;
   isPaused: boolean;
+  initialTimeMs?: number;
   onFinish?: () => void;
 }
 
@@ -13,6 +14,7 @@ export function useLaneTimeline({
   totalDurationMs,
   speed,
   isPaused,
+  initialTimeMs,
   onFinish,
 }: UseLaneTimelineProps) {
   const animationRef = useRef<Animation | null>(null);
@@ -28,10 +30,10 @@ export function useLaneTimeline({
       const maxScrollPx = container.scrollHeight - container.clientHeight;
       const targetElement = container.querySelector("#track-lane");
 
-      let prevTime = 0;
+      let currentProgress = initialTimeMs ?? 0;
       if (animationRef.current) {
         // Save progress before cancelling
-        prevTime =
+        currentProgress =
           typeof animationRef.current.currentTime === "number"
             ? animationRef.current.currentTime
             : 0;
@@ -55,7 +57,7 @@ export function useLaneTimeline({
 
         // Restore state using props and saved progress
         animation.playbackRate = speed;
-        animation.currentTime = prevTime;
+        animation.currentTime = currentProgress;
 
         if (isPaused) {
           animation.pause();

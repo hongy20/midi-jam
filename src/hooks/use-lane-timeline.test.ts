@@ -235,4 +235,41 @@ describe("useLaneTimeline hook", () => {
     expect(mockAnimation2.play).toHaveBeenCalled();
     expect(mockAnimation1.cancel).toHaveBeenCalled();
   });
+
+  it("applies initialTimeMs correctly", () => {
+    const mockAnimation = {
+      play: vi.fn(),
+      pause: vi.fn(),
+      cancel: vi.fn(),
+      _currentTime: 0,
+      get currentTime() {
+        return this._currentTime;
+      },
+      set currentTime(v) {
+        this._currentTime = v;
+      },
+      playbackRate: 1,
+      playState: "running",
+    };
+    const animateMock = vi.fn().mockReturnValue(mockAnimation);
+
+    const container = {
+      scrollHeight: 1000,
+      clientHeight: 400,
+      querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
+    } as unknown as HTMLDivElement;
+    const containerRef = { current: container };
+
+    renderHook(() =>
+      useLaneTimeline({
+        containerRef,
+        totalDurationMs: 1000,
+        speed: 1,
+        isPaused: false,
+        initialTimeMs: 500,
+      }),
+    );
+
+    expect(mockAnimation.currentTime).toBe(500);
+  });
 });
