@@ -1,9 +1,9 @@
 "use client";
 
+import { ArrowLeft, LogOut, Play, RotateCcw, Settings } from "lucide-react";
+import { useEffect } from "react";
 import { useSelection } from "@/context/selection-context";
 import { useGameNavigation } from "@/hooks/use-game-navigation";
-import { useEffect } from "react";
-import { LogOut, Play, RotateCcw, Settings, ArrowLeft } from "lucide-react";
 
 export default function PausePage() {
   const { navigate } = useGameNavigation();
@@ -78,17 +78,29 @@ export default function PausePage() {
       <main className="flex items-center justify-center overflow-y-auto no-scrollbar py-8">
         <div className="text-center w-full max-w-[320px] sm:max-w-2xl animate-in zoom-in-95 duration-300">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
-            <button type="button" onClick={handleResume} className={buttonClass}>
+            <button
+              type="button"
+              onClick={handleResume}
+              className={buttonClass}
+            >
               <Play className="w-5 h-5 fill-current" />
               RESUME
             </button>
 
-            <button type="button" onClick={handleRestart} className={buttonClass}>
+            <button
+              type="button"
+              onClick={handleRestart}
+              className={buttonClass}
+            >
               <RotateCcw className="w-5 h-5" />
               RESTART
             </button>
 
-            <button type="button" onClick={handleSettings} className={buttonClass}>
+            <button
+              type="button"
+              onClick={handleSettings}
+              className={buttonClass}
+            >
               <Settings className="w-5 h-5" />
               SETTINGS
             </button>

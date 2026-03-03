@@ -3,7 +3,6 @@
 import { Pause } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LaneStage } from "@/components/lane-stage/lane-stage";
-import { PauseOverlay } from "@/components/pause-overlay";
 import { ScoreHudLite } from "@/components/score-hud-lite";
 import { VirtualInstrument } from "@/components/virtual-instrument";
 import { useSelection } from "@/context/selection-context";

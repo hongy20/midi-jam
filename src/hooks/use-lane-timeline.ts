@@ -83,7 +83,7 @@ export function useLaneTimeline({
         animationRef.current = null;
       }
     };
-  }, [containerRef, totalDurationMs, onFinish, speed, isPaused]); // Only re-create if these critical props change
+  }, [containerRef, totalDurationMs, onFinish, speed, isPaused, initialTimeMs]); // Only re-create if these critical props change
 
   // Handle Play/Pause and Speed updates smoothly
   useEffect(() => {

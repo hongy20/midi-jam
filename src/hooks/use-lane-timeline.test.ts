@@ -217,7 +217,7 @@ describe("useLaneTimeline hook", () => {
 
     // Simulate resize
     act(() => {
-      // @ts-ignore
+      // @ts-expect-error
       container.clientHeight = 500; // New clientHeight, maxScrollPx becomes 500
       internalRoCallback([], {} as ResizeObserver);
     });
