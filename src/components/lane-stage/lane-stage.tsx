@@ -11,6 +11,7 @@ interface LaneStageProps {
   spans: NoteSpan[];
   originalDurationMs: number;
   scrollRef: React.RefObject<HTMLDivElement | null>;
+  inputDevice: WebMidi.MIDIInput;
   rangeStart?: number;
   rangeEnd?: number;
 }
@@ -19,6 +20,7 @@ export function LaneStage({
   spans,
   originalDurationMs,
   scrollRef,
+  inputDevice,
   rangeStart = PIANO_88_KEY_MIN,
   rangeEnd = PIANO_88_KEY_MAX,
 }: LaneStageProps) {
@@ -47,14 +49,18 @@ export function LaneStage({
         } as React.CSSProperties
       }
     >
-      <BackgroundLane notes={visibleNotes} />
+      <BackgroundLane notes={visibleNotes} inputDevice={inputDevice} />
 
       <div
         ref={scrollRef}
         id="lane-scroll"
         className="absolute inset-0 overflow-hidden"
       >
-        <TrackLane spans={spans} originalDurationMs={originalDurationMs} />
+        <TrackLane
+          spans={spans}
+          originalDurationMs={originalDurationMs}
+          inputDevice={inputDevice}
+        />
       </div>
     </div>
   );
