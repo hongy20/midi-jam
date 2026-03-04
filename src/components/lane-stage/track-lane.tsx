@@ -6,7 +6,7 @@ import styles from "./track-lane.module.css";
 interface TrackLaneProps {
   spans: NoteSpan[];
   originalDurationMs: number;
-  inputDevice?: WebMidi.MIDIInput;
+  inputDevice: WebMidi.MIDIInput;
 }
 
 /**
@@ -18,7 +18,6 @@ interface TrackLaneProps {
 export function TrackLane({
   spans,
   originalDurationMs,
-  inputDevice: _inputDevice,
 }: TrackLaneProps) {
   // The lane represents total track time + lead-in/padding + lead-out
   const totalTrackMs =

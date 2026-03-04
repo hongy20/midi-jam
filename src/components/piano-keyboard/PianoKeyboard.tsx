@@ -7,8 +7,8 @@ import {
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "@/lib/midi/constant";
-import styles from "./piano-keyboard.module.css";
 import gridStyles from "./piano-grid.module.css";
+import styles from "./piano-keyboard.module.css";
 
 interface PianoKeyboardProps {
   liveNotes: Set<number>;

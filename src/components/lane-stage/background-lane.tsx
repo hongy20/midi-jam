@@ -4,7 +4,7 @@ import styles from "./background-lane.module.css";
 
 interface BackgroundLaneProps {
   notes: number[];
-  inputDevice?: WebMidi.MIDIInput;
+  inputDevice: WebMidi.MIDIInput;
 }
 
 /**
@@ -12,7 +12,6 @@ interface BackgroundLaneProps {
  */
 export function BackgroundLane({
   notes,
-  inputDevice: _inputDevice,
 }: BackgroundLaneProps) {
   return (
     <div className={styles.container}>

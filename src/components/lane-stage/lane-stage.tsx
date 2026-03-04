@@ -11,7 +11,7 @@ interface LaneStageProps {
   spans: NoteSpan[];
   originalDurationMs: number;
   scrollRef: React.RefObject<HTMLDivElement | null>;
-  inputDevice?: WebMidi.MIDIInput;
+  inputDevice: WebMidi.MIDIInput;
   rangeStart?: number;
   rangeEnd?: number;
 }
