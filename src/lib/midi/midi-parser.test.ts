@@ -48,7 +48,7 @@ describe("midi-parser", () => {
     expect(spans[1].note).toBe(62);
   });
 
-  it("getNoteSpans introduces a gap between sequential notes of the same pitch", () => {
+  it("getMidiEvents introduces a gap between sequential notes of the same pitch", () => {
     const sequentialMidi = {
       tracks: [
         {
@@ -62,20 +62,24 @@ describe("midi-parser", () => {
     } as unknown as Midi;
 
     const events = getMidiEvents(sequentialMidi, "piano");
-    const spans = getNoteSpans(events);
+    // Events: 60-On(0), 60-Off(1), 60-On(1.05), 60-Off(2)
+    expect(events).toHaveLength(4);
 
-    expect(spans).toHaveLength(2);
-    expect(spans[0].startTime).toBe(0);
-    expect(spans[0].duration).toBe(1);
+    expect(events[0].type).toBe("noteOn");
+    expect(events[0].time).toBe(0);
+
+    expect(events[1].type).toBe("noteOff");
+    expect(events[1].time).toBe(1);
 
     // Second note should be shifted by 50ms (0.05s)
-    expect(spans[1].startTime).toBe(1.05);
-    // Duration should be reduced to maintain the same original end time (2.0)
-    // 2.0 - 1.05 = 0.95
-    expect(spans[1].duration).toBeCloseTo(0.95);
+    expect(events[2].type).toBe("noteOn");
+    expect(events[2].time).toBe(1.05);
+
+    expect(events[3].type).toBe("noteOff");
+    expect(events[3].time).toBe(2.0);
   });
 
-  it("getNoteSpans shifts entire chords if one note has a collision", () => {
+  it("getMidiEvents shifts entire chords if one note has a collision", () => {
     const chordMidi = {
       tracks: [
         {
@@ -91,19 +95,16 @@ describe("midi-parser", () => {
     } as unknown as Midi;
 
     const events = getMidiEvents(chordMidi, "piano");
-    const spans = getNoteSpans(events);
+    // Events: 60-On(0), 60-Off(1), [60-On(1.05), 64-On(1.05)], [60-Off(2), 64-Off(2)]
+    expect(events).toHaveLength(6);
 
-    expect(spans).toHaveLength(3);
-    const chord = spans.slice(1);
-
-    // Both notes in the chord should be shifted together
-    expect(chord[0].startTime).toBe(1.05);
-    expect(chord[1].startTime).toBe(1.05);
-
-    expect(chord[0].duration).toBeCloseTo(0.95);
-    expect(chord[1].duration).toBeCloseTo(0.95);
+    const chordOnEvents = events.filter(
+      (e) => e.type === "noteOn" && e.time > 0,
+    );
+    expect(chordOnEvents).toHaveLength(2);
+    expect(chordOnEvents[0].time).toBe(1.05);
+    expect(chordOnEvents[1].time).toBe(1.05);
   });
-
   it("getNoteRange returns correct min/max", () => {
     const events = getMidiEvents(mockMidi, "piano");
     const range = getNoteRange(events);

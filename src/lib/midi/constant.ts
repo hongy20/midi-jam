@@ -41,4 +41,4 @@ export const LEAD_IN_DEFAULT_MS = 2000;
 export const LEAD_OUT_DEFAULT_MS = 2000;
 
 /** Minimal gap between sequential notes of the same pitch to ensure triggering on MIDI devices (in seconds) */
-export const MIDI_NOTE_GAP_S = 0.05;
+export const MIN_NOTE_GAP_S = 0.05;

@@ -1,6 +1,6 @@
 import type { Midi } from "@tonejs/midi";
 import { isBlackKey } from "../device/piano";
-import { MIDI_MAX_NOTE, MIDI_MIN_NOTE, MIDI_NOTE_GAP_S } from "./constant";
+import { MIDI_MAX_NOTE, MIDI_MIN_NOTE, MIN_NOTE_GAP_S } from "./constant";
 
 // FIXME: Can we merge MidiEvent and MIDINoteEvent?
 export interface MidiEvent {
@@ -22,6 +22,7 @@ export interface NoteSpan {
 /**
  * Extracts all note on and note off events from a MIDI object,
  * sorted by time.
+ * Introduces a minimal gap between sequential notes of the same pitch to ensure MIDI triggering.
  */
 export function getMidiEvents(
   midi: Midi,
@@ -32,22 +33,70 @@ export function getMidiEvents(
   midi.tracks
     .filter((track) => track.instrument.family === instrument)
     .forEach((track) => {
-      track.notes
+      // 1. Group notes by startTime to maintain chord sync
+      const rawNotes = track.notes
         .filter((note) => note.duration > 0)
-        .forEach((note) => {
+        .sort((a, b) => a.time - b.time);
+
+      const slices: (typeof rawNotes)[] = [];
+      for (const note of rawNotes) {
+        const lastSlice = slices[slices.length - 1];
+        if (lastSlice && Math.abs(lastSlice[0].time - note.time) < 0.001) {
+          lastSlice.push(note);
+        } else {
+          slices.push([note]);
+        }
+      }
+
+      // 2. Process slices to introduce gaps for sequential collisions
+      const activePitchesAtTime = new Map<number, number>(); // pitch -> originalEndTime of latest processed note
+
+      for (const slice of slices) {
+        let needsShift = false;
+
+        // Check if any note in the current chord collisions with a previous note of the same pitch
+        for (const note of slice) {
+          const lastEndTime = activePitchesAtTime.get(note.midi);
+          if (
+            lastEndTime !== undefined &&
+            Math.abs(lastEndTime - note.time) < 0.001
+          ) {
+            needsShift = true;
+            break;
+          }
+        }
+
+        // Apply shift to the ENTIRE chord if any note needs it
+        for (const note of slice) {
+          let eventTime = note.time;
+          let duration = note.duration;
+
+          if (needsShift) {
+            const originalEnd = note.time + note.duration;
+            eventTime = note.time + MIN_NOTE_GAP_S;
+
+            // Ensure we don't reduce duration below a safe minimum (20ms)
+            const minDuration = 0.02;
+            duration = Math.max(minDuration, originalEnd - eventTime);
+          }
+
           events.push({
-            time: note.time,
+            time: eventTime,
             type: "noteOn",
             note: note.midi,
             velocity: note.velocity,
           });
           events.push({
-            time: note.time + note.duration,
+            time: eventTime + duration,
             type: "noteOff",
             note: note.midi,
             velocity: 0,
           });
-        });
+
+          // Update tracking using the original end time to detect chains
+          activePitchesAtTime.set(note.midi, note.time + note.duration);
+        }
+      }
     });
 
   return events.sort((a, b) => a.time - b.time);
@@ -55,13 +104,11 @@ export function getMidiEvents(
 
 /**
  * Pre-processes MIDI events into duration-based NoteSpans for efficient rendering.
- * Introduces a 50ms gap between sequential notes of the same pitch to ensure MIDI triggering.
  */
 export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
-  const rawSpans: NoteSpan[] = [];
+  const spans: NoteSpan[] = [];
   const activeNotes = new Map<number, { time: number; velocity: number }>();
 
-  // 1. Generate initial raw spans
   for (const event of events) {
     if (event.type === "noteOn") {
       activeNotes.set(event.note, {
@@ -71,7 +118,7 @@ export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
     } else if (event.type === "noteOff") {
       const start = activeNotes.get(event.note);
       if (start !== undefined) {
-        rawSpans.push({
+        spans.push({
           id: `${event.note}-${start.time}`,
           note: event.note,
           startTime: start.time,
@@ -84,64 +131,7 @@ export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
     }
   }
 
-  rawSpans.sort((a, b) => a.startTime - b.startTime);
-
-  // 2. Group into time slices (chords) to maintain musical synchronization
-  const slices: NoteSpan[][] = [];
-  for (const span of rawSpans) {
-    const lastSlice = slices[slices.length - 1];
-    if (
-      lastSlice &&
-      Math.abs(lastSlice[0].startTime - span.startTime) < 0.001
-    ) {
-      lastSlice.push(span);
-    } else {
-      slices.push([span]);
-    }
-  }
-
-  // 3. Process slices to introduce gaps for sequential collisions
-  const processedSpans: NoteSpan[] = [];
-  const activePitchesAtTime = new Map<number, number>(); // pitch -> endTime of latest note
-
-  for (let i = 0; i < slices.length; i++) {
-    const slice = slices[i];
-    let needsShift = false;
-
-    // Check if any note in the current chord collisions with a previous note of the same pitch
-    for (const note of slice) {
-      const lastEndTime = activePitchesAtTime.get(note.note);
-      if (
-        lastEndTime !== undefined &&
-        Math.abs(lastEndTime - note.startTime) < 0.001
-      ) {
-        needsShift = true;
-        break;
-      }
-    }
-
-    // Apply shift to the ENTIRE chord if any note needs it
-    for (const note of slice) {
-      if (needsShift) {
-        // Shift start time and reduce duration
-        const originalEnd = note.startTime + note.duration;
-        const newStart = note.startTime + MIDI_NOTE_GAP_S;
-
-        // Ensure we don't reduce duration below a safe minimum (20ms)
-        const minDuration = 0.02;
-        const newDuration = Math.max(minDuration, originalEnd - newStart);
-
-        note.startTime = newStart;
-        note.duration = newDuration;
-      }
-
-      processedSpans.push(note);
-      // Update the "latest end time" for this pitch
-      activePitchesAtTime.set(note.note, note.startTime + note.duration);
-    }
-  }
-
-  return processedSpans;
+  return spans.sort((a, b) => a.startTime - b.startTime);
 }
 
 /**
