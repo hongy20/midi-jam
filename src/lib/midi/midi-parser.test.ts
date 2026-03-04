@@ -48,6 +48,106 @@ describe("midi-parser", () => {
     expect(spans[1].note).toBe(62);
   });
 
+  it("getMidiEvents introduces a gap between sequential notes of the same pitch", () => {
+    const sequentialMidi = {
+      tracks: [
+        {
+          instrument: { family: "piano" },
+          notes: [
+            { midi: 60, time: 0, duration: 1, velocity: 0.8 },
+            { midi: 60, time: 1, duration: 1, velocity: 0.7 }, // Starts exactly when first ends
+          ],
+        },
+      ],
+    } as unknown as Midi;
+
+    const events = getMidiEvents(sequentialMidi, "piano");
+    // Events: 60-On(0), 60-Off(1), 60-On(1.03), 60-Off(2)
+    expect(events).toHaveLength(4);
+
+    expect(events[0].type).toBe("noteOn");
+    expect(events[0].time).toBe(0);
+
+    expect(events[1].type).toBe("noteOff");
+    expect(events[1].time).toBe(1);
+
+    // Second note should be shifted by 10ms (0.01s)
+    expect(events[2].type).toBe("noteOn");
+    expect(events[2].time).toBe(1.01);
+
+    expect(events[3].type).toBe("noteOff");
+    expect(events[3].time).toBe(2.0);
+  });
+
+  it("getMidiEvents shifts entire chords if one note has a collision", () => {
+    const chordMidi = {
+      tracks: [
+        {
+          instrument: { family: "piano" },
+          notes: [
+            { midi: 60, time: 0, duration: 1, velocity: 0.8 },
+            // Chord at time 1.0: C4 (60) and E4 (64)
+            { midi: 60, time: 1, duration: 1, velocity: 0.7 }, // Collision!
+            { midi: 64, time: 1, duration: 1, velocity: 0.7 }, // Synchronized with collision
+          ],
+        },
+      ],
+    } as unknown as Midi;
+
+    const events = getMidiEvents(chordMidi, "piano");
+    // Events: 60-On(0), 60-Off(1), [60-On(1.01), 64-On(1.01)], [60-Off(2), 64-Off(2)]
+    expect(events).toHaveLength(6);
+
+    const chordOnEvents = events.filter(
+      (e) => e.type === "noteOn" && e.time > 0,
+    );
+    expect(chordOnEvents).toHaveLength(2);
+    expect(chordOnEvents[0].time).toBe(1.01);
+    expect(chordOnEvents[1].time).toBe(1.01);
+  });
+
+  it("getMidiEvents detects sequential collisions across different tracks", () => {
+    const crossTrackMidi = {
+      tracks: [
+        {
+          instrument: { family: "piano" },
+          notes: [{ midi: 60, time: 0, duration: 1, velocity: 0.8 }],
+        },
+        {
+          instrument: { family: "piano" },
+          notes: [{ midi: 60, time: 1, duration: 1, velocity: 0.7 }], // Collision across tracks
+        },
+      ],
+    } as unknown as Midi;
+
+    const events = getMidiEvents(crossTrackMidi, "piano");
+    expect(events).toHaveLength(4);
+
+    // Second note (from second track) should be shifted
+    expect(events[2].note).toBe(60);
+    expect(events[2].type).toBe("noteOn");
+    expect(events[2].time).toBe(1.01);
+  });
+
+  it("getMidiEvents detects and shifts overlapping notes of the same pitch", () => {
+    const overlappingMidi = {
+      tracks: [
+        {
+          instrument: { family: "piano" },
+          notes: [
+            { midi: 60, time: 0, duration: 1, velocity: 0.8 },
+            { midi: 60, time: 0.5, duration: 1, velocity: 0.7 }, // Starts while first is still on
+          ],
+        },
+      ],
+    } as unknown as Midi;
+
+    const events = getMidiEvents(overlappingMidi, "piano");
+    // Should shift second note to start at 0.5 + gap
+    expect(
+      events.filter((e) => e.note === 60 && e.type === "noteOn")[1].time,
+    ).toBe(0.51);
+  });
   it("getNoteRange returns correct min/max", () => {
     const events = getMidiEvents(mockMidi, "piano");
     const range = getNoteRange(events);
