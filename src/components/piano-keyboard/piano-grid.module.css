@@ -1,0 +1,4 @@
+/* src/components/piano-keyboard/piano-grid.module.css */
+.noteBase {
+  grid-column: calc(var(--note-start) - var(--piano-start-unit) + 1) / span var(--note-span);
+}
