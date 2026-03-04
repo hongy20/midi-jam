@@ -12,16 +12,22 @@ export function isBlackKey(note: number): boolean {
 const NOTE_OFFSETS = [0, 2, 3, 5, 6, 9, 11, 12, 14, 15, 17, 18];
 
 /**
- * Returns the horizontal unit range (start and end) for a MIDI note
- * in a 21-unit-per-octave grid.
+ * Returns the horizontal unit range (start coordinate of startNote and end coordinate of endNote)
+ * for a MIDI note range in a 21-unit-per-octave grid.
  */
-export function getNoteUnits(note: number) {
-  const octave = Math.floor(note / 12);
-  const semitone = note % 12;
-  const start = octave * 21 + NOTE_OFFSETS[semitone];
-  const isBlack = isBlackKey(note);
+export function getNoteUnits(startNote: number, endNote: number) {
+  const startOctave = Math.floor(startNote / 12);
+  const startSemitone = startNote % 12;
+  const startUnit = startOctave * 21 + NOTE_OFFSETS[startSemitone];
+
+  const endOctave = Math.floor(endNote / 12);
+  const endSemitone = endNote % 12;
+  const endStart = endOctave * 21 + NOTE_OFFSETS[endSemitone];
+  const isEndBlack = isBlackKey(endNote);
+  const endUnit = endStart + (isEndBlack ? 2 : 3);
+
   return {
-    start,
-    end: start + (isBlack ? 2 : 3),
+    startUnit,
+    endUnit,
   };
 }
