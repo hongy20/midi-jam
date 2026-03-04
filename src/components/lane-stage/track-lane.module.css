@@ -2,7 +2,7 @@
   display: grid;
   width: 100%;
   position: relative;
-  grid-template-columns: repeat(var(--piano-visible-units, 156), 1fr);
+  grid-template-columns: repeat(calc(var(--end-unit) - var(--start-unit)), 1fr);
   height: calc(var(--lane-height) * (var(--total-duration-ms) / 2000 + 1));
 }
 
