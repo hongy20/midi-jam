@@ -1,14 +1,7 @@
 @import "tailwindcss";
 
-:root[data-theme="neon"],
 :root {
-  --background: #000000;
-  --foreground: #00ffcc;
-  --accent-primary: #00ffcc;
-  --lane-white: rgba(0, 255, 204, 0.18); /* Vibrant neon teal tint */
-  --lane-black: rgba(168, 85, 247, 0.15); /* Vibrant neon purple tint */
-
-  /* Global Layout Constants */
+  /* Global Layout Constants - Theme Independent */
   --header-py: 1rem;
   --footer-py: 1rem;
   --h1-size: 1.875rem;
@@ -16,6 +9,15 @@
   --btn-px: 2rem;
   --btn-text: 0.875rem;
   --layout-gap: 1rem;
+}
+
+:root[data-theme="neon"],
+:root {
+  --background: #000000;
+  --foreground: #00ffcc;
+  --accent-primary: #00ffcc;
+  --lane-white: rgba(0, 255, 204, 0.18); /* Vibrant neon teal tint */
+  --lane-black: rgba(168, 85, 247, 0.15); /* Vibrant neon purple tint */
 }
 
 :root[data-theme="dark"] {

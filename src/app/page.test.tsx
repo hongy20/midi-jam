@@ -1,48 +1,70 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useSelection } from "@/context/selection-context";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
+import type { AppContextType } from "@/context/app-context";
+import { useAppContext } from "@/context/app-context";
+import { useNavigation } from "@/hooks/use-navigation";
 import WelcomePage from "./page";
 
-// Mock the hook
-vi.mock("@/hooks/use-game-navigation", () => ({
-  useGameNavigation: vi.fn(),
+// Mock the hooks
+vi.mock("@/hooks/use-navigation", () => ({
+  useNavigation: vi.fn(),
 }));
 
-vi.mock("@/context/selection-context", () => ({
-  useSelection: vi.fn(),
+vi.mock("@/context/app-context", () => ({
+  useAppContext: vi.fn(),
 }));
 
 describe("Welcome Page", () => {
+  const mockNavigation = {
+    toInstruments: vi.fn(),
+    toSettings: vi.fn(),
+    toHome: vi.fn(),
+    toTracks: vi.fn(),
+    toGame: vi.fn(),
+    toPause: vi.fn(),
+    toResults: vi.fn(),
+    toReconnect: vi.fn(),
+    goBack: vi.fn(),
+    navigate: vi.fn(),
+  };
+
+  const mockContext: AppContextType = {
+    tracks: { selected: null, set: vi.fn() },
+    instruments: {
+      input: null,
+      output: null,
+      lastInputName: null,
+      selectInput: vi.fn(),
+      selectOutput: vi.fn(),
+    },
+    game: {
+      track: { isLoading: false, isReady: false, error: null },
+      session: null,
+      setSession: vi.fn(),
+    },
+    results: { last: null, set: vi.fn() },
+    settings: {
+      speed: 1.0,
+      demoMode: false,
+      setSpeed: vi.fn(),
+      setDemoMode: vi.fn(),
+    },
+    actions: { resetAll: vi.fn() },
+    isSupported: true,
+  };
+
   beforeEach(() => {
     // Mock Web MIDI support
     Object.defineProperty(navigator, "requestMIDIAccess", {
       value: vi.fn(),
       configurable: true,
     });
+    vi.clearAllMocks();
   });
 
   it("renders the title and start button", () => {
-    vi.mocked(useGameNavigation).mockReturnValue({
-      navigate: vi.fn(),
-      goBack: vi.fn(),
-    });
-    vi.mocked(useSelection).mockReturnValue({
-      selectedTrack: null,
-      gameSession: null,
-      sessionResults: null,
-      speed: 1.0,
-      demoMode: false,
-      selectedMIDIInput: null,
-      selectedMIDIOutput: null,
-      setTrack: vi.fn(),
-      setGameSession: vi.fn(),
-      setSessionResults: vi.fn(),
-      setSpeed: vi.fn(),
-      setDemoMode: vi.fn(),
-      selectMIDIInput: vi.fn(),
-      clearSelection: vi.fn(),
-    });
+    vi.mocked(useNavigation).mockReturnValue(mockNavigation);
+    vi.mocked(useAppContext).mockReturnValue(mockContext);
 
     render(<WelcomePage />);
     expect(screen.getByText(/Midi Jam/i)).toBeInTheDocument();
@@ -52,58 +74,20 @@ describe("Welcome Page", () => {
   });
 
   it("navigates to instruments on start click", () => {
-    const mockNavigate = vi.fn();
-    vi.mocked(useGameNavigation).mockReturnValue({
-      navigate: mockNavigate,
-      goBack: vi.fn(),
-    });
-    vi.mocked(useSelection).mockReturnValue({
-      selectedTrack: null,
-      gameSession: null,
-      sessionResults: null,
-      speed: 1.0,
-      demoMode: false,
-      selectedMIDIInput: null,
-      selectedMIDIOutput: null,
-      setTrack: vi.fn(),
-      setGameSession: vi.fn(),
-      setSessionResults: vi.fn(),
-      setSpeed: vi.fn(),
-      setDemoMode: vi.fn(),
-      selectMIDIInput: vi.fn(),
-      clearSelection: vi.fn(),
-    });
+    vi.mocked(useNavigation).mockReturnValue(mockNavigation);
+    vi.mocked(useAppContext).mockReturnValue(mockContext);
 
     render(<WelcomePage />);
     fireEvent.click(screen.getByRole("button", { name: /START JAM/i }));
-    expect(mockNavigate).toHaveBeenCalledWith("/instruments");
+    expect(mockNavigation.toInstruments).toHaveBeenCalled();
   });
 
   it("navigates to settings on settings click", () => {
-    const mockNavigate = vi.fn();
-    vi.mocked(useGameNavigation).mockReturnValue({
-      navigate: mockNavigate,
-      goBack: vi.fn(),
-    });
-    vi.mocked(useSelection).mockReturnValue({
-      selectedTrack: null,
-      gameSession: null,
-      sessionResults: null,
-      speed: 1.0,
-      demoMode: false,
-      selectedMIDIInput: null,
-      selectedMIDIOutput: null,
-      setTrack: vi.fn(),
-      setGameSession: vi.fn(),
-      setSessionResults: vi.fn(),
-      setSpeed: vi.fn(),
-      setDemoMode: vi.fn(),
-      selectMIDIInput: vi.fn(),
-      clearSelection: vi.fn(),
-    });
+    vi.mocked(useNavigation).mockReturnValue(mockNavigation);
+    vi.mocked(useAppContext).mockReturnValue(mockContext);
 
     render(<WelcomePage />);
     fireEvent.click(screen.getByRole("button", { name: /Settings/i }));
-    expect(mockNavigate).toHaveBeenCalledWith("/settings?from=/");
+    expect(mockNavigation.toSettings).toHaveBeenCalled();
   });
 });

@@ -1,26 +1,19 @@
 "use client";
 
 import { ArrowLeft, LogOut, Play, RotateCcw, Settings } from "lucide-react";
-import { useEffect } from "react";
-import { useSelection } from "@/context/selection-context";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
+import { useAppContext } from "@/context/app-context";
+import { useNavigation } from "@/hooks/use-navigation";
+import { ROUTES } from "@/lib/navigation/routes";
 
 export default function PausePage() {
-  const { navigate } = useGameNavigation();
-  const {
-    gameSession,
-    setGameSession,
-    setSessionResults,
-    selectedTrack,
-    selectedMIDIInput,
-  } = useSelection();
+  const { toGame, toResults, toSettings, toHome } = useNavigation();
+  const { tracks, instruments, game, results } = useAppContext();
+  const { selected: selectedTrack } = tracks;
+  const { input: selectedMIDIInput } = instruments;
+  const { session: gameSession, setSession: setGameSession } = game;
+  const { set: setSessionResults } = results;
 
-  // Redirect if no session exists
-  useEffect(() => {
-    if (!gameSession || !selectedTrack || !selectedMIDIInput) {
-      navigate("/");
-    }
-  }, [gameSession, selectedTrack, selectedMIDIInput, navigate]);
+  // Note: Redirects are handled by NavigationGuard
 
   if (!gameSession || !selectedTrack || !selectedMIDIInput) return null;
 
@@ -29,7 +22,7 @@ export default function PausePage() {
       ...gameSession,
       isPaused: false,
     });
-    navigate("/game");
+    toGame();
   };
 
   const handleRestart = () => {
@@ -40,7 +33,7 @@ export default function PausePage() {
       combo: 0,
       currentTimeMs: 0,
     });
-    navigate("/game");
+    toGame();
   };
 
   const handleQuit = () => {
@@ -50,11 +43,11 @@ export default function PausePage() {
       combo: gameSession.combo,
     });
     setGameSession(null);
-    navigate("/results");
+    toResults();
   };
 
   const handleSettings = () => {
-    navigate("/settings?from=/game/pause");
+    toSettings(ROUTES.PAUSE);
   };
 
   const buttonClass =
@@ -130,7 +123,7 @@ export default function PausePage() {
 
         <button
           type="button"
-          onClick={() => navigate("/")}
+          onClick={toHome}
           className="group flex items-center gap-2 px-6 py-3 bg-foreground/5 border border-foreground/10 rounded-full text-foreground/50 font-bold text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />

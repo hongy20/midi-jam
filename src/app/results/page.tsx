@@ -1,26 +1,29 @@
 "use client";
 
 import { ChevronRight, RotateCcw } from "lucide-react";
-import { useSelection } from "@/context/selection-context";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
+import { useAppContext } from "@/context/app-context";
+import { useNavigation } from "@/hooks/use-navigation";
 
 export default function ResultsPage() {
-  const { navigate } = useGameNavigation();
-  const { setGameSession, sessionResults, clearSelection } = useSelection();
+  const { toGame, toTracks, toHome } = useNavigation();
+  const { game, results, actions } = useAppContext();
+  const { setSession: setGameSession } = game;
+  const { last: sessionResults } = results;
+  const { resetAll: clearSelection } = actions;
 
   const handlePlayAgain = () => {
     setGameSession(null);
-    navigate("/game");
+    toGame();
   };
 
   const handleNextSong = () => {
     setGameSession(null);
-    navigate("/tracks");
+    toTracks();
   };
 
   const handleMainMenu = () => {
     clearSelection();
-    navigate("/");
+    toHome();
   };
 
   const stats = sessionResults || {

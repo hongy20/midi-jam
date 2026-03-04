@@ -1,25 +1,21 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useSelection } from "@/context/selection-context";
+import type { AppContextType } from "@/context/app-context";
+import { useAppContext } from "@/context/app-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
-import { useMidiTrack } from "@/hooks/use-midi-track";
+import { useNavigation } from "@/hooks/use-navigation";
 import GamePage from "./page";
 
 // Mock the hooks
-vi.mock("@/hooks/use-game-navigation", () => ({
-  useGameNavigation: vi.fn(),
+vi.mock("@/hooks/use-navigation", () => ({
+  useNavigation: vi.fn(),
 }));
 
-vi.mock("@/context/selection-context", () => ({
-  useSelection: vi.fn(),
-}));
-
-vi.mock("@/hooks/use-midi-track", () => ({
-  useMidiTrack: vi.fn(),
+vi.mock("@/context/app-context", () => ({
+  useAppContext: vi.fn(),
 }));
 
 vi.mock("@/hooks/use-midi-audio", () => ({
@@ -39,42 +35,69 @@ vi.mock("@/hooks/use-lane-timeline", () => ({
 }));
 
 describe("Game Page", () => {
-  const mockNavigate = vi.fn();
-  const mockSetGameSession = vi.fn();
+  const mockNavigation = {
+    toResults: vi.fn(),
+    toPause: vi.fn(),
+    toHome: vi.fn(),
+    toTracks: vi.fn(),
+    toInstruments: vi.fn(),
+    toGame: vi.fn(),
+    toReconnect: vi.fn(),
+    toSettings: vi.fn(),
+    goBack: vi.fn(),
+    navigate: vi.fn(),
+  };
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-    vi.mocked(useGameNavigation).mockReturnValue({
-      navigate: mockNavigate,
-      goBack: vi.fn(),
-    });
-    vi.mocked(useSelection).mockReturnValue({
-      selectedTrack: {
+  const mockSetGameSession = vi.fn();
+  const mockSetSessionResults = vi.fn();
+
+  const mockContext: AppContextType = {
+    tracks: {
+      selected: {
         id: "track-1.mid",
         name: "Test Track",
         url: "/midi/track-1.mid",
       },
-      gameSession: null,
-      sessionResults: null,
+      set: vi.fn(),
+    },
+    instruments: {
+      input: { id: "piano", name: "Piano" } as WebMidi.MIDIInput,
+      output: null,
+      lastInputName: "Piano",
+      selectInput: vi.fn(),
+      selectOutput: vi.fn(),
+    },
+    game: {
+      track: {
+        isLoading: false,
+        isReady: true,
+        originalDurationMs: 1000,
+        events: [],
+        spans: [],
+        error: null,
+      },
+      session: null,
+      setSession: mockSetGameSession,
+    },
+    results: {
+      last: null,
+      set: mockSetSessionResults,
+    },
+    settings: {
       speed: 1.0,
       demoMode: false,
-      selectedMIDIInput: { id: "piano", name: "Piano" } as WebMidi.MIDIInput,
-      selectedMIDIOutput: null,
-      setTrack: vi.fn(),
       setSpeed: vi.fn(),
       setDemoMode: vi.fn(),
-      selectMIDIInput: vi.fn(),
-      setGameSession: mockSetGameSession,
-      setSessionResults: vi.fn(),
-      clearSelection: vi.fn(),
-    });
-    vi.mocked(useMidiTrack).mockReturnValue({
-      events: [],
-      spans: [],
-      duration: 0,
-      isLoading: false,
-      error: null,
-    });
+    },
+    actions: { resetAll: vi.fn() },
+    isSupported: true,
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(useNavigation).mockReturnValue(mockNavigation);
+    vi.mocked(useAppContext).mockReturnValue(mockContext);
+
     vi.mocked(useMidiAudio).mockReturnValue({
       playNote: vi.fn(),
       stopNote: vi.fn(),
@@ -106,22 +129,19 @@ describe("Game Page", () => {
       };
     });
 
-    const mockSetSessionResults = vi.fn();
-    vi.mocked(useSelection).mockReturnValue({
-      selectedTrack: { id: "t1", name: "Track 1", url: "url" },
-      gameSession: null,
-      sessionResults: null,
-      speed: 1.0,
-      demoMode: false,
-      selectedMIDIInput: { id: "p1", name: "Piano" } as WebMidi.MIDIInput,
-      selectedMIDIOutput: null,
-      setTrack: vi.fn(),
-      setSpeed: vi.fn(),
-      setDemoMode: vi.fn(),
-      selectMIDIInput: vi.fn(),
-      setGameSession: mockSetGameSession,
-      setSessionResults: mockSetSessionResults,
-      clearSelection: vi.fn(),
+    vi.mocked(useAppContext).mockReturnValue({
+      ...mockContext,
+      game: {
+        ...mockContext.game,
+        track: {
+          isLoading: false,
+          isReady: true,
+          originalDurationMs: 100,
+          events: new Array(10).fill({}),
+          spans: [],
+          error: null,
+        },
+      },
     });
 
     vi.mocked(useLaneScoreEngine).mockReturnValue({
@@ -129,14 +149,6 @@ describe("Game Page", () => {
       combo: 42,
       lastHitQuality: "perfect",
       resetScore: vi.fn(),
-    });
-
-    vi.mocked(useMidiTrack).mockReturnValue({
-      events: new Array(10).fill({}), // 10 events
-      spans: [],
-      duration: 100,
-      isLoading: false,
-      error: null,
     });
 
     render(<GamePage />);
@@ -150,7 +162,7 @@ describe("Game Page", () => {
       accuracy: expect.any(Number),
       combo: 42,
     });
-    expect(mockNavigate).toHaveBeenCalledWith("/results");
+    expect(mockNavigation.toResults).toHaveBeenCalled();
   });
 
   it("renders the track and instrument names", () => {
@@ -159,35 +171,23 @@ describe("Game Page", () => {
     expect(screen.getByText(/Test Track/)).toBeInTheDocument();
   });
 
-  it("navigates to welcome page when track is missing", () => {
-    vi.mocked(useSelection).mockReturnValue({
-      selectedTrack: null,
-      gameSession: null,
-      sessionResults: null,
-      speed: 1.0,
-      demoMode: false,
-      selectedMIDIInput: { id: "piano", name: "Piano" } as WebMidi.MIDIInput,
-      selectedMIDIOutput: null,
-      setTrack: vi.fn(),
-      setSpeed: vi.fn(),
-      setDemoMode: vi.fn(),
-      selectMIDIInput: vi.fn(),
-      setGameSession: mockSetGameSession,
-      setSessionResults: vi.fn(),
-      clearSelection: vi.fn(),
+  it("returns null when track or instrument is missing", () => {
+    vi.mocked(useAppContext).mockReturnValue({
+      ...mockContext,
+      tracks: { selected: null, set: vi.fn() },
     });
 
-    render(<GamePage />);
-    expect(mockNavigate).toHaveBeenCalledWith("/");
+    const { container } = render(<GamePage />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("shows loading state when track is loading", () => {
-    vi.mocked(useMidiTrack).mockReturnValue({
-      events: [],
-      spans: [],
-      duration: 0,
-      isLoading: true,
-      error: null,
+    vi.mocked(useAppContext).mockReturnValue({
+      ...mockContext,
+      game: {
+        ...mockContext.game,
+        track: { isLoading: true, isReady: false, error: null },
+      },
     });
 
     render(<GamePage />);
@@ -203,7 +203,7 @@ describe("Game Page", () => {
     fireEvent.click(pauseButton);
 
     // Should navigate to pause page
-    expect(mockNavigate).toHaveBeenCalledWith("/game/pause");
+    expect(mockNavigation.toPause).toHaveBeenCalled();
     expect(mockSetGameSession).toHaveBeenCalledWith(
       expect.objectContaining({ isPaused: true }),
     );

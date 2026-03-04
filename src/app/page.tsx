@@ -1,27 +1,25 @@
 "use client";
 
 import { Play, Settings } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useSelection } from "@/context/selection-context";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
+import { useEffect } from "react";
+import { useAppContext } from "@/context/app-context";
+import { useNavigation } from "@/hooks/use-navigation";
 
 export default function WelcomePage() {
-  const { navigate } = useGameNavigation();
-  const { clearSelection } = useSelection();
-  const [isSupported, setIsSupported] = useState<boolean>(false);
+  const { toInstruments, toSettings } = useNavigation();
+  const { actions, isSupported } = useAppContext();
+  const { resetAll: clearSelection } = actions;
 
   useEffect(() => {
-    const hasWebMidi = "requestMIDIAccess" in navigator;
-    setIsSupported(hasWebMidi);
     clearSelection();
   }, [clearSelection]);
 
   const handleStart = () => {
-    navigate("/instruments");
+    toInstruments();
   };
 
   const handleSettings = () => {
-    navigate("/settings?from=/");
+    toSettings();
   };
 
   return (
