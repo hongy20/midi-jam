@@ -13,12 +13,24 @@ import { useLaneTimeline } from "@/hooks/use-lane-timeline";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useWakeLock } from "@/hooks/use-wake-lock";
-import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "@/lib/midi/constant";
+import { getNoteUnits } from "@/lib/device/piano";
+import {
+  LEAD_IN_DEFAULT_MS,
+  LEAD_OUT_DEFAULT_MS,
+  PIANO_88_KEY_MAX,
+  PIANO_88_KEY_MIN,
+} from "@/lib/midi/constant";
 import styles from "./page.module.css";
 
 export default function GamePage() {
   const { toResults, toPause } = useNavigation();
   const { tracks, instruments, game, settings, results } = useAppContext();
+
+  // Calculate global piano range units for consistent grid alignment
+  const { startUnit, endUnit } = getNoteUnits(
+    PIANO_88_KEY_MIN,
+    PIANO_88_KEY_MAX,
+  );
 
   // Extract variables from context for easier access
   const { selected: selectedTrack } = tracks;
@@ -152,7 +164,15 @@ export default function GamePage() {
   }
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={
+        {
+          "--start-unit": startUnit,
+          "--end-unit": endUnit,
+        } as React.CSSProperties
+      }
+    >
       {/* Row 1: Status Bar (Fixed height) */}
       <header className="h-[var(--header-height)] w-full p-4 sm:p-8 flex justify-between items-center layout-padding bg-background/50 backdrop-blur-md border-b border-foreground/5">
         <div className="flex items-center gap-4 flex-1">
