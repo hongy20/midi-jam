@@ -22,7 +22,6 @@ export function BackgroundLane({
     notes.push(n);
   }
 
-
   return (
     <div className={styles.container}>
       {notes.map((note) => (

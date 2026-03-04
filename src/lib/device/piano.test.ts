@@ -1,6 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { getVisibleMidiRange } from "./piano";
-import { PIANO_88_KEY_MIN, PIANO_88_KEY_MAX } from "../midi/constant";
 
 describe("getVisibleMidiRange", () => {
   it("should return range around C4 with natural group expansion", () => {
@@ -40,7 +39,7 @@ describe("getVisibleMidiRange", () => {
   });
 
   it("should return full range if song covers most of the piano", () => {
-    const range = getVisibleMidiRange([21, 108]); 
+    const range = getVisibleMidiRange([21, 108]);
     expect(range).toEqual({ startNote: 21, endNote: 108 });
   });
 });

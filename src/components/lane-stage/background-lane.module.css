@@ -5,7 +5,10 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  grid-template-columns: repeat(calc(var(--end-unit) - var(--start-unit)), minmax(0, 1fr));
+  grid-template-columns: repeat(
+      calc(var(--end-unit) - var(--start-unit)),
+      minmax(0, 1fr)
+    );
   grid-template-rows: 1fr;
   z-index: 0;
   overflow: hidden;

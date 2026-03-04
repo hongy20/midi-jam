@@ -124,11 +124,7 @@ export const PianoKeyboard = ({
 }: PianoKeyboardProps) => {
   return (
     <div className="flex flex-col w-full h-full select-none relative z-50">
-      <div
-        className={styles.container}
-        role="img"
-        aria-label="Piano keyboard"
-      >
+      <div className={styles.container} role="img" aria-label="Piano keyboard">
         <PianoKeys start={rangeStart} end={rangeEnd} />
         <KeyGlows
           liveNotes={liveNotes}
@@ -140,4 +136,3 @@ export const PianoKeyboard = ({
     </div>
   );
 };
-

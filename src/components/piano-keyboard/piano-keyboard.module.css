@@ -4,7 +4,10 @@
   height: 100%;
   position: relative;
   /* Columns = End Unit - Start Unit. Use minmax(0, 1fr) to prevent squishing by items that fall outside column 1. */
-  grid-template-columns: repeat(calc(var(--end-unit) - var(--start-unit)), minmax(0, 1fr));
+  grid-template-columns: repeat(
+      calc(var(--end-unit) - var(--start-unit)),
+      minmax(0, 1fr)
+    );
   /* Rows: Key Top (2/3), Key Bottom (1/3) */
   grid-template-rows: 2fr 1fr;
   user-select: none;
