@@ -15,7 +15,6 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
     const isGame = pathname === ROUTES.GAME;
     const isPause = pathname === ROUTES.PAUSE;
     const isReconnect = pathname === ROUTES.RECONNECT;
-    const isInstruments = pathname === ROUTES.INSTRUMENTS;
     const isResults = pathname === ROUTES.RESULTS;
 
     // 1. No track selected? Can't go to game or pause.
@@ -24,9 +23,8 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    // 2. Can't go to instruments without music? 
+    // 2. Can't go to instruments without music?
     // Actually, user wants Instruments -> Tracks flow, so we allow /instruments.
-
 
     // 2. MIDI disconnected? Redirect from game/pause to reconnect.
     if ((isGame || isPause) && !instruments.input) {
