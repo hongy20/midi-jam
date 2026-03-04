@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { AppContextType } from "@/context/selection-context";
-import { useAppContext } from "@/context/selection-context";
+import type { AppContextType } from "@/context/app-context";
+import { useAppContext } from "@/context/app-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
@@ -14,7 +14,7 @@ vi.mock("@/hooks/use-navigation", () => ({
   useNavigation: vi.fn(),
 }));
 
-vi.mock("@/context/selection-context", () => ({
+vi.mock("@/context/app-context", () => ({
   useAppContext: vi.fn(),
 }));
 
@@ -89,9 +89,8 @@ describe("Game Page", () => {
       setSpeed: vi.fn(),
       setDemoMode: vi.fn(),
     },
-    actions: {
-      resetAll: vi.fn(),
-    },
+    actions: { resetAll: vi.fn() },
+    isSupported: true,
   };
 
   beforeEach(() => {

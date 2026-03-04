@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { LaneStage } from "@/components/lane-stage/lane-stage";
 import { ScoreHudLite } from "@/components/score-hud-lite";
 import { VirtualInstrument } from "@/components/virtual-instrument";
-import { useAppContext } from "@/context/selection-context";
+import { useAppContext } from "@/context/app-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useDemoPlayback } from "@/hooks/use-demo-playback";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";

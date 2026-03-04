@@ -80,6 +80,7 @@ export interface AppContextType {
   actions: {
     resetAll: () => void;
   };
+  isSupported: boolean;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -99,6 +100,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     isReady: false,
     error: null,
   });
+  const [isSupported, setIsSupported] = useState<boolean>(true);
+
+  // Detect Web MIDI support on mount
+  useEffect(() => {
+    setIsSupported("requestMIDIAccess" in navigator);
+  }, []);
 
   // MIDI Devices
   const { inputs, outputs } = useMIDIDevices();
@@ -196,6 +203,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     actions: {
       resetAll,
     },
+    isSupported,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
@@ -208,7 +216,3 @@ export function useAppContext() {
   }
   return context;
 }
-
-// Keep aliases for now to avoid breaking changes in other files
-export const useSelection = useAppContext;
-export const SelectionProvider = AppProvider;

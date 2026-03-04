@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRight, RotateCcw } from "lucide-react";
-import { useAppContext } from "@/context/selection-context";
+import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
 export default function ResultsPage() {

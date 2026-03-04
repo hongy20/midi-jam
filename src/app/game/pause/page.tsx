@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, LogOut, Play, RotateCcw, Settings } from "lucide-react";
-import { useAppContext } from "@/context/selection-context";
+import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
 export default function PausePage() {

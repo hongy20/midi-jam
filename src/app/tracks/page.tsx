@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Dices, Play } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useAppContext } from "@/context/selection-context";
+import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { getSoundTracks } from "@/lib/action/sound-track";
 

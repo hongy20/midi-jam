@@ -1,6 +1,6 @@
 import { queryByAttribute, render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { SelectionProvider } from "@/context/selection-context";
+import { AppProvider } from "@/context/app-context";
 import { LaneStage } from "./lane-stage";
 
 vi.mock("@/hooks/use-midi-devices", () => ({
@@ -62,13 +62,13 @@ describe("LaneStage", () => {
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };
     const { container } = render(
-      <SelectionProvider>
+      <AppProvider>
         <LaneStage
           spans={mockSpans}
           originalDurationMs={originalDurationMs}
           scrollRef={scrollRef}
         />
-      </SelectionProvider>,
+      </AppProvider>,
     );
     const note60 = queryByAttribute("data-pitch", container, "60");
     const note61 = queryByAttribute("data-pitch", container, "61");

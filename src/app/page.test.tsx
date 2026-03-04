@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { AppContextType } from "@/context/selection-context";
-import { useAppContext } from "@/context/selection-context";
+import type { AppContextType } from "@/context/app-context";
+import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import WelcomePage from "./page";
 
@@ -10,7 +10,7 @@ vi.mock("@/hooks/use-navigation", () => ({
   useNavigation: vi.fn(),
 }));
 
-vi.mock("@/context/selection-context", () => ({
+vi.mock("@/context/app-context", () => ({
   useAppContext: vi.fn(),
 }));
 
@@ -50,6 +50,7 @@ describe("Welcome Page", () => {
       setDemoMode: vi.fn(),
     },
     actions: { resetAll: vi.fn() },
+    isSupported: true,
   };
 
   beforeEach(() => {
