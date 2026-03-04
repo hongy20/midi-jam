@@ -48,6 +48,62 @@ describe("midi-parser", () => {
     expect(spans[1].note).toBe(62);
   });
 
+  it("getNoteSpans introduces a gap between sequential notes of the same pitch", () => {
+    const sequentialMidi = {
+      tracks: [
+        {
+          instrument: { family: "piano" },
+          notes: [
+            { midi: 60, time: 0, duration: 1, velocity: 0.8 },
+            { midi: 60, time: 1, duration: 1, velocity: 0.7 }, // Starts exactly when first ends
+          ],
+        },
+      ],
+    } as unknown as Midi;
+
+    const events = getMidiEvents(sequentialMidi, "piano");
+    const spans = getNoteSpans(events);
+
+    expect(spans).toHaveLength(2);
+    expect(spans[0].startTime).toBe(0);
+    expect(spans[0].duration).toBe(1);
+
+    // Second note should be shifted by 50ms (0.05s)
+    expect(spans[1].startTime).toBe(1.05);
+    // Duration should be reduced to maintain the same original end time (2.0)
+    // 2.0 - 1.05 = 0.95
+    expect(spans[1].duration).toBeCloseTo(0.95);
+  });
+
+  it("getNoteSpans shifts entire chords if one note has a collision", () => {
+    const chordMidi = {
+      tracks: [
+        {
+          instrument: { family: "piano" },
+          notes: [
+            { midi: 60, time: 0, duration: 1, velocity: 0.8 },
+            // Chord at time 1.0: C4 (60) and E4 (64)
+            { midi: 60, time: 1, duration: 1, velocity: 0.7 }, // Collision!
+            { midi: 64, time: 1, duration: 1, velocity: 0.7 }, // Synchronized with collision
+          ],
+        },
+      ],
+    } as unknown as Midi;
+
+    const events = getMidiEvents(chordMidi, "piano");
+    const spans = getNoteSpans(events);
+
+    expect(spans).toHaveLength(3);
+    const chord = spans.slice(1);
+
+    // Both notes in the chord should be shifted together
+    expect(chord[0].startTime).toBe(1.05);
+    expect(chord[1].startTime).toBe(1.05);
+
+    expect(chord[0].duration).toBeCloseTo(0.95);
+    expect(chord[1].duration).toBeCloseTo(0.95);
+  });
+
   it("getNoteRange returns correct min/max", () => {
     const events = getMidiEvents(mockMidi, "piano");
     const range = getNoteRange(events);
