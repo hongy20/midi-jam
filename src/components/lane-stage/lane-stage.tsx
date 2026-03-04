@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { getPitchUnits } from "@/lib/device/piano";
+import { getNoteUnits } from "@/lib/device/piano";
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import { BackgroundLane } from "./background-lane";
@@ -26,17 +26,17 @@ export function LaneStage({
 }: LaneStageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const visiblePitches = useMemo(() => {
-    const pitches = [];
-    for (let p = rangeStart; p <= rangeEnd; p++) {
-      pitches.push(p);
+  const visibleNotes = useMemo(() => {
+    const notes = [];
+    for (let n = rangeStart; n <= rangeEnd; n++) {
+      notes.push(n);
     }
-    return pitches;
+    return notes;
   }, [rangeStart, rangeEnd]);
 
-  const units = getPitchUnits(rangeStart);
+  const units = getNoteUnits(rangeStart);
   const startUnit = units.start;
-  const endUnit = getPitchUnits(rangeEnd).end;
+  const endUnit = getNoteUnits(rangeEnd).end;
 
   return (
     <div
@@ -49,7 +49,7 @@ export function LaneStage({
         } as React.CSSProperties
       }
     >
-      <BackgroundLane pitches={visiblePitches} inputDevice={inputDevice} />
+      <BackgroundLane notes={visibleNotes} inputDevice={inputDevice} />
 
       <div
         ref={scrollRef}
