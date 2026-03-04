@@ -18,7 +18,7 @@ interface TrackLaneProps {
 export function TrackLane({
   spans,
   originalDurationMs,
-  inputDevice,
+  inputDevice: _inputDevice,
 }: TrackLaneProps) {
   // The lane represents total track time + lead-in/padding + lead-out
   const totalTrackMs =
