@@ -3,21 +3,21 @@ import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./background-lane.module.css";
 
 interface BackgroundLaneProps {
-  notes: number[];
+  pitches: number[];
   inputDevice: WebMidi.MIDIInput;
 }
 
 /**
  * Static lanes matching the piano keys.
  */
-export function BackgroundLane({ notes }: BackgroundLaneProps) {
+export function BackgroundLane({ pitches }: BackgroundLaneProps) {
   return (
     <div className={styles.container}>
-      {notes.map((note) => (
+      {pitches.map((pitch) => (
         <div
-          key={`lane-${note}`}
-          className={`${styles.lane} ${gridStyles[`note-${note}`]}`}
-          data-black={isBlackKey(note)}
+          key={`lane-${pitch}`}
+          className={`${styles.lane} ${gridStyles[`note-${pitch}`]}`}
+          data-black={isBlackKey(pitch)}
         />
       ))}
     </div>
