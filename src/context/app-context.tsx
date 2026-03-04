@@ -6,6 +6,7 @@ import {
   type ReactNode,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
@@ -101,6 +102,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     error: null,
   });
   const [isSupported, setIsSupported] = useState<boolean>(true);
+  const lastLoadedTrackId = useRef<string | null>(null);
 
   // Detect Web MIDI support on mount
   useEffect(() => {
@@ -126,6 +128,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setDemoMode(true);
     selectMIDIInput(null);
     setTrackStatus({ isLoading: false, isReady: false, error: null });
+    lastLoadedTrackId.current = null;
   };
 
   // MIDI Track Loading (only when on /game path and a track is selected)
@@ -134,12 +137,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!isGamePath || !selectedTrack) {
       if (!selectedTrack) {
         setTrackStatus({ isLoading: false, isReady: false, error: null });
+        lastLoadedTrackId.current = null;
       }
       return;
     }
 
-    // Skip loading if already ready for this track
-    if (trackStatus.isReady) return;
+    // Skip loading if already ready for this SPECIFIC track
+    if (trackStatus.isReady && lastLoadedTrackId.current === selectedTrack.id) {
+      return;
+    }
 
     let mounted = true;
     setTrackStatus({ isLoading: true, isReady: false, error: null });
@@ -150,6 +156,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         const events = getMidiEvents(midi);
         const spans = getNoteSpans(events);
 
+        lastLoadedTrackId.current = selectedTrack.id;
         setTrackStatus({
           isLoading: false,
           isReady: true,

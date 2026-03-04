@@ -33,6 +33,7 @@ export function useMidiAudio(
     polySynthRef.current = polySynth;
 
     return () => {
+      polySynthRef.current = null;
       polySynth.dispose();
     };
   }, []);
