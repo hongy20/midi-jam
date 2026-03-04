@@ -1,6 +1,6 @@
 import type { Midi } from "@tonejs/midi";
 import { isBlackKey } from "../device/piano";
-import { MIDI_MAX_NOTE, MIDI_MIN_NOTE, MIN_NOTE_GAP_S } from "./constant";
+import { MIDI_MAX_NOTE, MIDI_MIN_NOTE, MIN_NOTE_GAP_MS } from "./constant";
 
 // FIXME: Can we merge MidiEvent and MIDINoteEvent?
 export interface MidiEvent {
@@ -73,7 +73,7 @@ export function getMidiEvents(
 
           if (needsShift) {
             const originalEnd = note.time + note.duration;
-            eventTime = note.time + MIN_NOTE_GAP_S;
+            eventTime = note.time + MIN_NOTE_GAP_MS / 1000;
 
             // Ensure we don't reduce duration below a safe minimum (20ms)
             const minDuration = 0.02;

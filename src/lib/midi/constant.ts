@@ -40,5 +40,5 @@ export const LEAD_IN_DEFAULT_MS = 2000;
 /** Default lead-out time before the game auto-completes */
 export const LEAD_OUT_DEFAULT_MS = 2000;
 
-/** Minimal gap between sequential notes of the same pitch to ensure triggering on MIDI devices (in seconds) */
-export const MIN_NOTE_GAP_S = 0.05;
+/** Minimal gap between sequential notes of the same pitch to ensure triggering on MIDI devices (in milliseconds) */
+export const MIN_NOTE_GAP_MS = 50;
