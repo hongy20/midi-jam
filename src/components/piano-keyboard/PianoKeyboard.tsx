@@ -13,15 +13,13 @@ import styles from "./piano-keyboard.module.css";
 interface PianoKeyboardProps {
   liveNotes: Set<number>;
   playbackNotes: Set<number>;
-  rangeStart?: number;
-  rangeEnd?: number;
 }
 
 /**
- * Static piano keys that only re-render when the range changes.
- * Memoized to prevent re-renders when active notes change.
+ * Static piano keys that render once and stay mounted.
+ * Visibility is handled by CSS overflow on the container.
  */
-const PianoKeys = memo(({ notes }: { notes: number[] }) => {
+const PianoKeys = memo(() => {
   const NOTE_NAMES = [
     "C",
     "C#",
@@ -36,6 +34,11 @@ const PianoKeys = memo(({ notes }: { notes: number[] }) => {
     "A#",
     "B",
   ];
+
+  const notes = [];
+  for (let n = PIANO_88_KEY_MIN; n <= PIANO_88_KEY_MAX; n++) {
+    notes.push(n);
+  }
 
   return (
     <>
@@ -71,25 +74,17 @@ PianoKeys.displayName = "PianoKeys";
 const KeyGlows = ({
   liveNotes,
   playbackNotes,
-  rangeStart,
-  rangeEnd,
 }: {
   liveNotes: Set<number>;
   playbackNotes: Set<number>;
-  rangeStart: number;
-  rangeEnd: number;
 }) => {
-  const active = new Set([
-    ...Array.from(liveNotes),
-    ...Array.from(playbackNotes),
-  ]);
-  const activeNotesInRange = Array.from(active).filter(
-    (n) => n >= rangeStart && n <= rangeEnd,
+  const active = Array.from(
+    new Set([...Array.from(liveNotes), ...Array.from(playbackNotes)]),
   );
 
   return (
     <>
-      {activeNotesInRange.map((note) => {
+      {active.map((note) => {
         const isLive = liveNotes.has(note);
         const isPlayback = playbackNotes.has(note);
         const source =
@@ -113,36 +108,21 @@ const KeyGlows = ({
 
 /**
  * A responsive visual representation of a piano keyboard.
- * Separates static key layout from dynamic visual feedback for high performance.
+ * Visibility is controlled via CSS variables on the container.
  */
 export const PianoKeyboard = ({
   liveNotes,
   playbackNotes,
-  rangeStart = PIANO_88_KEY_MIN,
-  rangeEnd = PIANO_88_KEY_MAX,
 }: PianoKeyboardProps) => {
-  const visibleNotes = useMemo(() => {
-    const notes = [];
-    for (let n = rangeStart; n <= rangeEnd; n++) {
-      notes.push(n);
-    }
-    return notes;
-  }, [rangeStart, rangeEnd]);
-
   return (
     <div className="flex flex-col w-full h-full select-none relative z-50">
       <div
         className={styles.container}
         role="img"
-        aria-label={`Piano keyboard (${rangeStart} to ${rangeEnd})`}
+        aria-label="Piano keyboard"
       >
-        <PianoKeys notes={visibleNotes} />
-        <KeyGlows
-          liveNotes={liveNotes}
-          playbackNotes={playbackNotes}
-          rangeStart={rangeStart}
-          rangeEnd={rangeEnd}
-        />
+        <PianoKeys />
+        <KeyGlows liveNotes={liveNotes} playbackNotes={playbackNotes} />
       </div>
     </div>
   );

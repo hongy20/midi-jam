@@ -1,53 +1,38 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { PianoKeyboard } from "./PianoKeyboard";
 
-describe("PianoKeyboard Responsiveness and Zooming", () => {
-  it("renders correct number of white keys for a specific range", () => {
-    // Range C4 (60) to C5 (72)
-    // White keys: 60, 62, 64, 65, 67, 69, 71, 72 (8 keys)
+// Mock constant values if needed, though they are imported from constants
+import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
+
+describe("PianoKeyboard", () => {
+  it("always renders the full 88-key range", () => {
     render(
       <PianoKeyboard
-        rangeStart={60}
-        rangeEnd={72}
         liveNotes={new Set()}
         playbackNotes={new Set()}
       />,
     );
 
-    const _whiteKeys = screen.getAllByRole("button").filter(
-      (el) => !el.className.includes("bg-gray-900"), // Exclude black keys which use bg-gray-900 by default
-    );
-
-    // Total buttons found should be white keys + black keys
-    // In range 60-72:
-    // White: 60, 62, 64, 65, 67, 69, 71, 72 (8)
-    // Black: 61, 63, 66, 68, 70 (5)
-    // Total: 13
-    expect(screen.getAllByRole("button")).toHaveLength(13);
+    // Full 88 keys should always be present in the DOM
+    const totalKeys = PIANO_88_KEY_MAX - PIANO_88_KEY_MIN + 1;
+    expect(screen.getAllByRole("button")).toHaveLength(totalKeys);
   });
 
-  it("handles dynamic range correctly", () => {
-    const { rerender } = render(
+  it("renders active notes correctly as glows", () => {
+    const liveNotes = new Set([60]); // C4
+    const playbackNotes = new Set([64]); // E4
+    
+    const { container } = render(
       <PianoKeyboard
-        liveNotes={new Set()}
-        playbackNotes={new Set()}
-        rangeStart={60}
-        rangeEnd={64}
+        liveNotes={liveNotes}
+        playbackNotes={playbackNotes}
       />,
     );
-    // C4, D4, E4 (3 white keys) + C#4, D#4 (2 black keys) = 5 total
-    expect(screen.getAllByRole("button")).toHaveLength(5);
 
-    rerender(
-      <PianoKeyboard
-        liveNotes={new Set()}
-        playbackNotes={new Set()}
-        rangeStart={21}
-        rangeEnd={108}
-      />,
-    );
-    // Full 88 keys
-    expect(screen.getAllByRole("button")).toHaveLength(88);
+    // Check for glow elements
+    // Note: Since we use CSS modules, we should check for elements with 'glow' in their class or data attributes
+    const glows = container.querySelectorAll('[class*="glow"]');
+    expect(glows).toHaveLength(2);
   });
 });
