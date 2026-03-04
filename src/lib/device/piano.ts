@@ -57,38 +57,41 @@ function shiftWhiteKey(note: number, delta: number): number {
 }
 
 /**
- * Calculates the optimal MIDI range for a set of notes, with a symmetric white-key buffer.
- * Ensures C4 is always included and that left/right buffers have an equal number of white keys.
+ * Calculates the optimal MIDI range for a set of notes.
+ * Expands the range to the nearest "natural break" (C-E or F-B groups)
+ * where no black keys "sit" on the line between white keys.
  */
 export function getVisibleMidiRange(notes: number[], buffer = 3) {
   // Always include C4 (60) in the range calculation base
   const allNotes =
     notes && notes.length > 0 ? [...notes, MIDI_NOTE_C4] : [MIDI_NOTE_C4];
 
-  const minNote = Math.min(...allNotes);
-  const maxNote = Math.max(...allNotes);
+  let startNote = Math.min(...allNotes);
+  let endNote = Math.max(...allNotes);
 
-  // Count available white keys on the left
-  let leftAvailable = 0;
-  let curr = minNote;
-  while (curr > PIANO_88_KEY_MIN) {
-    curr--;
-    if (!isBlackKey(curr)) leftAvailable++;
+  // 1. Apply white-key buffer first
+  for (let i = 0; i < buffer; i++) {
+    startNote = shiftWhiteKey(startNote, -1);
+    endNote = shiftWhiteKey(endNote, 1);
   }
 
-  // Count available white keys on the right
-  let rightAvailable = 0;
-  curr = maxNote;
-  while (curr < PIANO_88_KEY_MAX) {
-    curr++;
-    if (!isBlackKey(curr)) rightAvailable++;
+  // 2. Expand left to the nearest 'C' or 'F' (start of a group)
+  while (startNote > PIANO_88_KEY_MIN) {
+    const semitone = startNote % 12;
+    if (semitone === 0 || semitone === 5) break; // C or F
+    startNote--;
   }
 
-  // Use the smaller of the two, capped at the requested buffer
-  const actualBuffer = Math.min(buffer, leftAvailable, rightAvailable);
+  // 3. Expand right to the nearest 'E' or 'B' (end of a group)
+  while (endNote < PIANO_88_KEY_MAX) {
+    const semitone = endNote % 12;
+    if (semitone === 4 || semitone === 11) break; // E or B
+    endNote++;
+  }
 
-  const startNote = shiftWhiteKey(minNote, -actualBuffer);
-  const endNote = shiftWhiteKey(maxNote, actualBuffer);
+  // Final safety clip
+  startNote = Math.max(startNote, PIANO_88_KEY_MIN);
+  endNote = Math.min(endNote, PIANO_88_KEY_MAX);
 
   return {
     startNote,
