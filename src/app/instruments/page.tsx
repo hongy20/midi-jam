@@ -2,13 +2,15 @@
 
 import { ArrowLeft, ChevronRight, Piano } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSelection } from "@/context/selection-context";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
+import { useAppContext } from "@/context/selection-context";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
+import { useNavigation } from "@/hooks/use-navigation";
 
 export default function InstrumentsPage() {
-  const { navigate } = useGameNavigation();
-  const { selectMIDIInput, selectedMIDIInput } = useSelection();
+  const { toTracks, toHome } = useNavigation();
+  const { instruments: contextInstruments } = useAppContext();
+  const { selectInput: selectMIDIInput, input: selectedMIDIInput } =
+    contextInstruments;
   const { inputs, isLoading, error } = useMIDIDevices();
 
   const [selected, setSelected] = useState<string | null>(
@@ -60,7 +62,7 @@ export default function InstrumentsPage() {
       if (instrument) {
         selectMIDIInput(instrument);
       }
-      navigate("/tracks");
+      toTracks();
     }
   };
 
@@ -74,7 +76,7 @@ export default function InstrumentsPage() {
 
         <button
           type="button"
-          onClick={() => navigate("/")}
+          onClick={toHome}
           className="group flex items-center gap-2 px-4 py-2 bg-foreground/5 border border-foreground/10 rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
         >
           <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />

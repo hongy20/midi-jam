@@ -41,7 +41,16 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
       toHome();
       return;
     }
-  }, [pathname, tracks.selected, instruments.input, results.last, toTracks, toHome, toPause, toReconnect]);
+  }, [
+    pathname,
+    tracks.selected,
+    instruments.input,
+    results.last,
+    toTracks,
+    toHome,
+    toPause,
+    toReconnect,
+  ]);
 
   return <>{children}</>;
 }

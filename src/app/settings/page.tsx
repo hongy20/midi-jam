@@ -3,12 +3,12 @@
 import { LogOut, Settings } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { useSelection } from "@/context/selection-context";
+import { useAppContext } from "@/context/selection-context";
 import { useTheme } from "@/context/theme-context";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
+import { useNavigation } from "@/hooks/use-navigation";
 
 const BackButton = () => {
-  const { goBack, navigate } = useGameNavigation();
+  const { goBack, toHome } = useNavigation();
   const searchParams = useSearchParams();
   const from = searchParams.get("from") || "/";
 
@@ -23,7 +23,7 @@ const BackButton = () => {
       </button>
       <button
         type="button"
-        onClick={() => navigate("/")}
+        onClick={toHome}
         className="group px-6 py-3 bg-foreground text-background rounded-full font-bold text-sm tracking-widest uppercase hover:scale-105 transition-all flex items-center gap-2"
       >
         EXIT{" "}
@@ -35,7 +35,8 @@ const BackButton = () => {
 
 export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
-  const { speed, setSpeed, demoMode, setDemoMode } = useSelection();
+  const { settings } = useAppContext();
+  const { speed, setSpeed, demoMode, setDemoMode } = settings;
 
   const themeOptions = ["neon", "dark", "light"] as const;
   const speedOptions = [

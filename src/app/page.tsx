@@ -2,12 +2,13 @@
 
 import { Play, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSelection } from "@/context/selection-context";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
+import { useAppContext } from "@/context/selection-context";
+import { useNavigation } from "@/hooks/use-navigation";
 
 export default function WelcomePage() {
-  const { navigate } = useGameNavigation();
-  const { clearSelection } = useSelection();
+  const { toInstruments, toSettings } = useNavigation();
+  const { actions } = useAppContext();
+  const { resetAll: clearSelection } = actions;
   const [isSupported, setIsSupported] = useState<boolean>(false);
 
   useEffect(() => {
@@ -17,11 +18,11 @@ export default function WelcomePage() {
   }, [clearSelection]);
 
   const handleStart = () => {
-    navigate("/instruments");
+    toInstruments();
   };
 
   const handleSettings = () => {
-    navigate("/settings?from=/");
+    toSettings();
   };
 
   return (

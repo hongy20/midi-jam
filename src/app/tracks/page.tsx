@@ -2,8 +2,8 @@
 
 import { ArrowLeft, Dices, Play } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSelection } from "@/context/selection-context";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
+import { useAppContext } from "@/context/selection-context";
+import { useNavigation } from "@/hooks/use-navigation";
 import { getSoundTracks } from "@/lib/action/sound-track";
 
 interface Track {
@@ -15,8 +15,10 @@ interface Track {
 }
 
 export default function TracksPage() {
-  const { navigate } = useGameNavigation();
-  const { setTrack, selectedTrack } = useSelection();
+  const { toGame, toInstruments } = useNavigation();
+  const { tracks: contextTracks } = useAppContext();
+  const { set: setTrack, selected: selectedTrack } = contextTracks;
+
   const [tracks, setTracks] = useState<Track[]>([]);
   const [selected, setSelected] = useState<string | null>(
     selectedTrack?.id || null,
@@ -38,12 +40,12 @@ export default function TracksPage() {
       if (track) {
         setTrack({ id: track.id, name: track.name, url: track.url });
       }
-      navigate("/game");
+      toGame();
     }
   };
 
   const handleBack = () => {
-    navigate("/instruments");
+    toInstruments();
   };
 
   const handleSurprise = () => {

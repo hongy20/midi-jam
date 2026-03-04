@@ -5,37 +5,39 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { LaneStage } from "@/components/lane-stage/lane-stage";
 import { ScoreHudLite } from "@/components/score-hud-lite";
 import { VirtualInstrument } from "@/components/virtual-instrument";
-import { useSelection } from "@/context/selection-context";
+import { useAppContext } from "@/context/selection-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useDemoPlayback } from "@/hooks/use-demo-playback";
-import { useGameNavigation } from "@/hooks/use-game-navigation";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
-import { useMidiTrack } from "@/hooks/use-midi-track";
+import { useNavigation } from "@/hooks/use-navigation";
 import { useWakeLock } from "@/hooks/use-wake-lock";
 import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "@/lib/midi/constant";
 import styles from "./page.module.css";
 
 export default function GamePage() {
-  const { navigate } = useGameNavigation();
-  const {
-    selectedTrack,
-    gameSession,
-    setGameSession,
-    setSessionResults,
-    speed,
-    demoMode,
-    selectedMIDIInput,
-    selectedMIDIOutput,
-  } = useSelection();
+  const { toResults, toPause } = useNavigation();
+  const { tracks, instruments, game, settings, results } = useAppContext();
 
+  // Extract variables from context for easier access
+  const { selected: selectedTrack } = tracks;
+  const { input: selectedMIDIInput, output: selectedMIDIOutput } = instruments;
   const {
-    events,
-    spans,
-    duration: originalDurationMs,
-    isLoading,
-  } = useMidiTrack();
+    track: trackLoadStatus,
+    session: gameSession,
+    setSession: setGameSession,
+  } = game;
+  const { speed, demoMode } = settings;
+  const { set: setSessionResults } = results;
+
+  // Track Data (only if ready)
+  const events = trackLoadStatus.isReady ? trackLoadStatus.events : [];
+  const spans = trackLoadStatus.isReady ? trackLoadStatus.spans : [];
+  const originalDurationMs = trackLoadStatus.isReady
+    ? trackLoadStatus.originalDurationMs
+    : 0;
+  const isLoading = trackLoadStatus.isLoading;
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
@@ -120,15 +122,15 @@ export default function GamePage() {
         combo,
       });
       setGameSession(null);
-      navigate("/results");
+      toResults();
     };
   }, [
     score,
     combo,
     events.length,
-    navigate,
     setGameSession,
     setSessionResults,
+    toResults,
   ]);
 
   // Handle Pause
@@ -140,15 +142,10 @@ export default function GamePage() {
       combo,
       currentTimeMs: getCurrentTimeMs(),
     });
-    navigate("/game/pause");
-  }, [score, combo, getCurrentTimeMs, navigate, setGameSession]);
+    toPause();
+  }, [score, combo, getCurrentTimeMs, toPause, setGameSession]);
 
-  // Redirect to welcome if no track is selected
-  useEffect(() => {
-    if (!selectedTrack || !selectedMIDIInput) {
-      navigate("/");
-    }
-  }, [selectedTrack, selectedMIDIInput, navigate]);
+  // Note: Redirects are handled by NavigationGuard
 
   if (!selectedTrack || !selectedMIDIInput) {
     return null;
@@ -193,6 +190,12 @@ export default function GamePage() {
             <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
             <span className="font-bold uppercase tracking-widest text-xs">
               Loading Track...
+            </span>
+          </div>
+        ) : trackLoadStatus.error ? (
+          <div className="flex flex-col items-center justify-center h-full gap-4">
+            <span className="text-red-500 font-bold uppercase tracking-widest text-xs">
+              Error Loading Track: {trackLoadStatus.error}
             </span>
           </div>
         ) : (

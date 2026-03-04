@@ -107,7 +107,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   // Update lastInputName whenever a device is selected
   const handleSelectInput = (input: WebMidi.MIDIInput | null) => {
-    if (input) setLastInputName(input.name);
+    if (input) setLastInputName(input.name ?? "Unknown Device");
     selectMIDIInput(input);
   };
 

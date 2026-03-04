@@ -30,7 +30,7 @@ export function useNavigation() {
     toReconnect: useCallback(() => navigate(ROUTES.RECONNECT), [navigate]),
     toSettings: useCallback(() => navigate(ROUTES.SETTINGS), [navigate]),
     goBack: useCallback(
-      (fallback = ROUTES.HOME) => navigate(fallback),
+      (fallback: string = ROUTES.HOME) => navigate(fallback),
       [navigate],
     ),
     navigate, // Keep generic navigate for special cases
