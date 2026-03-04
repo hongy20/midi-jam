@@ -5,7 +5,6 @@ export const ROUTES = {
   GAME: "/game",
   PAUSE: "/game/pause",
   RESULTS: "/results",
-  RECONNECT: "/reconnect",
   SETTINGS: "/settings",
 } as const;
 

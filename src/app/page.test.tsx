@@ -23,7 +23,6 @@ describe("Welcome Page", () => {
     toGame: vi.fn(),
     toPause: vi.fn(),
     toResults: vi.fn(),
-    toReconnect: vi.fn(),
     goBack: vi.fn(),
     navigate: vi.fn(),
   };
