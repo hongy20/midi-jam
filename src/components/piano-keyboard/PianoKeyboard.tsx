@@ -137,8 +137,8 @@ export const PianoKeyboard = ({
         className={styles.container}
         style={
           {
-            "--piano-start-unit": startUnit,
-            "--piano-end-unit": endUnit,
+            "--start-unit": startUnit,
+            "--end-unit": endUnit,
           } as React.CSSProperties
         }
         role="img"

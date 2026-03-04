@@ -1,13 +1,12 @@
-# Direct MIDI Piano Range Implementation Plan (Simplified Pitch Range)
+# Direct MIDI Piano Range Implementation Plan (Note Range Refactor)
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Refactor the piano model to use `pitch` (MIDI number) naming and replace the `--piano-visible-units` variable with `--piano-end-unit`. The CSS will calculate the width automatically.
+**Goal:** Refactor `getNoteUnits` to accept a range (start and end notes) and return the corresponding unit coordinates. Update components to use this more direct signature.
 
 **Architecture:** 
-- **JS:** Rename `note` variables/helpers to `pitch`. Use `getPitchUnits(pitch)` to get both start and end coordinates.
-- **CSS:** Update the container to calculate `grid-template-columns` from the start and end units.
-- **Rules:** Keep the 88 hardcoded CSS rules in `piano-grid.module.css`.
+- **JS:** `getNoteUnits(startNote, endNote)` returns `{ startUnit, endUnit }`.
+- **Components:** Call `getNoteUnits` once per range instead of twice.
 
 **Tech Stack:** Next.js (App Router), React 19, CSS Modules.
 
@@ -18,27 +17,27 @@
 **Files:**
 - Modify: `src/lib/device/piano.ts`
 
-**Step 1: Rename and update helpers to use "Pitch" and return range units**
+**Step 1: Refactor `getNoteUnits` to accept range**
 
 ```typescript
-export function isBlackKey(pitch: number): boolean {
-  const n = pitch % 12;
-  return [1, 3, 6, 8, 10].includes(n);
-}
-
-const PITCH_OFFSETS = [0, 2, 3, 5, 6, 9, 11, 12, 14, 15, 17, 18];
-
 /**
- * Returns the horizontal unit range (start and end) for a MIDI pitch.
+ * Returns the horizontal unit range (start coordinate of startNote and end coordinate of endNote)
+ * for a MIDI note range in a 21-unit-per-octave grid.
  */
-export function getPitchUnits(pitch: number) {
-  const octave = Math.floor(pitch / 12);
-  const semitone = pitch % 12;
-  const start = octave * 21 + PITCH_OFFSETS[semitone];
-  const isBlack = [1, 3, 6, 8, 10].includes(semitone);
+export function getNoteUnits(startNote: number, endNote: number) {
+  const startOctave = Math.floor(startNote / 12);
+  const startSemitone = startNote % 12;
+  const startUnit = startOctave * 21 + NOTE_OFFSETS[startSemitone];
+
+  const endOctave = Math.floor(endNote / 12);
+  const endSemitone = endNote % 12;
+  const endStart = endOctave * 21 + NOTE_OFFSETS[endSemitone];
+  const isEndBlack = isBlackKey(endNote);
+  const endUnit = endStart + (isEndBlack ? 2 : 3);
+
   return {
-    start,
-    end: start + (isBlack ? 2 : 3),
+    startUnit,
+    endUnit,
   };
 }
 ```
@@ -47,99 +46,38 @@ export function getPitchUnits(pitch: number) {
 
 ```bash
 git add src/lib/device/piano.ts
-git commit -m "refactor: rename to pitch and add getPitchUnits helper"
+git commit -m "refactor: update getNoteUnits to accept start and end notes"
 ```
 
 ---
 
-### Task 2: Update Container CSS
-
-**Files:**
-- Modify: `src/components/piano-keyboard/piano-keyboard.module.css`
-
-**Step 1: Calculate columns from start and end units**
-
-```css
-.container {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  /* Columns = End Unit - Start Unit */
-  grid-template-columns: repeat(calc(var(--piano-end-unit) - var(--piano-start-unit)), 1fr);
-  grid-template-rows: 2fr 1fr;
-  user-select: none;
-}
-```
-
-**Step 2: Commit**
-
-```bash
-git add src/components/piano-keyboard/piano-keyboard.module.css
-git commit -m "style: calculate piano columns from start and end units"
-```
-
----
-
-### Task 3: Update Piano Keyboard Component
+### Task 2: Update Components
 
 **Files:**
 - Modify: `src/components/piano-keyboard/PianoKeyboard.tsx`
+- Modify: `src/components/lane-stage/lane-stage.tsx`
 
-**Step 1: Update range logic to use `getPitchUnits`**
+**Step 1: Use new `getNoteUnits` signature**
 
 ```typescript
-import { getPitchUnits } from "@/lib/device/piano";
-
-// Calculate range markers
-const startUnit = getPitchUnits(rangeStart).start;
-const endUnit = getPitchUnits(rangeEnd).end;
-
-// In container div:
-<div 
-  className={styles.container}
-  style={{ 
-    "--piano-start-unit": startUnit, 
-    "--piano-end-unit": endUnit 
-  } as React.CSSProperties}
->
+const { startUnit, endUnit } = getNoteUnits(rangeStart, rangeEnd);
 ```
 
-**Step 2: Rename internal variables from `note` to `pitch`**
-
-**Step 3: Run tests**
+**Step 2: Run tests**
 
 Run: `npm test src/components/piano-keyboard/PianoKeyboard.test.tsx`
 Expected: PASS
 
-**Step 4: Commit**
+**Step 3: Commit**
 
 ```bash
-git add src/components/piano-keyboard/PianoKeyboard.tsx
-git commit -m "feat: use pitch naming and end-unit marker in PianoKeyboard"
+git add src/components/piano-keyboard/PianoKeyboard.tsx src/components/lane-stage/lane-stage.tsx
+git commit -m "feat: use simplified getNoteUnits range signature in components"
 ```
 
 ---
 
-### Task 4: Update Lane Stage Components
-
-**Files:**
-- Modify: `src/components/lane-stage/lane-stage.tsx`
-- Modify: `src/components/lane-stage/track-lane.tsx`
-- Modify: `src/components/lane-stage/background-lane.tsx`
-
-**Step 1: Apply the `pitch` naming and `startUnit`/`endUnit` pattern to LaneStage and its children.**
-
-**Step 2: Commit**
-
-```bash
-git add src/components/lane-stage/
-git commit -m "feat: use pitch naming and end-unit marker in LaneStage"
-```
-
----
-
-### Task 5: Final Validation
+### Task 3: Final Validation
 
 **Step 1: Run full test suite, lint, and type-check**
 

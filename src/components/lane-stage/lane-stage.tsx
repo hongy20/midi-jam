@@ -42,8 +42,8 @@ export function LaneStage({
       className="relative w-full h-full overflow-hidden bg-background/5"
       style={
         {
-          "--piano-start-unit": startUnit,
-          "--piano-end-unit": endUnit,
+          "--start-unit": startUnit,
+          "--end-unit": endUnit,
         } as React.CSSProperties
       }
     >

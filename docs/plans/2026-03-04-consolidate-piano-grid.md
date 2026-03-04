@@ -22,7 +22,7 @@
 **Step 1: Write the shared CSS logic**
 ```css
 .noteBase {
-  grid-column: calc(var(--note-start) - var(--piano-start-unit) + 1) / span var(--note-span);
+  grid-column: calc(var(--note-start) - var(--start-unit) + 1) / span var(--note-span);
 }
 ```
 
