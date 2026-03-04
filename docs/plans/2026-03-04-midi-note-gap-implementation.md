@@ -8,21 +8,21 @@ To maintain musical synchronization, if one note in a chord (notes starting at t
 ## Proposed Changes
 
 ### 1. Configuration (`src/lib/midi/constant.ts`)
-- Add `MIDI_NOTE_GAP_S = 0.05` (50ms) to the MIDI constants.
+- Add `MIN_NOTE_GAP_MS = 50` (50ms) to the MIDI constants.
 
 ### 2. MIDI Parsing Logic (`src/lib/midi/midi-parser.ts`)
-- Update `getNoteSpans` to post-process the generated spans.
-- Group spans by their `startTime` (creating "chords" or "time-slices").
-- For each slice (starting from the second one):
-  - Check if any note in the current slice has the same pitch as a note from the *immediately preceding* slice that ended at the current slice's `startTime`.
-  - If a collision is detected for **any** note in the slice, apply a 50ms (or `MIDI_NOTE_GAP_S`) adjustment to **all** notes in that slice:
-    - Increase `startTime` by `MIDI_NOTE_GAP_S`.
-    - Decrease `duration` by `MIDI_NOTE_GAP_S` (ensuring it doesn't drop below a minimum threshold, e.g., 20ms).
-- Ensure the adjusted spans are returned in the correct order.
+- Apply changes to `getMidiEvents` to detect collisions and apply chord-synced offsets early in the processing pipeline.
+- Group notes within each track by their `time` (creating "chords" or "time-slices").
+- For each slice:
+  - Check if any note in the current slice has the same pitch as a note that ended at the current slice's `time`.
+  - If a collision is detected for **any** note in the slice, apply a 50ms (or `MIN_NOTE_GAP_MS`) adjustment to **all** notes in that slice:
+    - Shift `noteOn` event time forward by `MIN_NOTE_GAP_MS`.
+    - Decrease the note's duration by the same amount (ensuring it doesn't drop below a minimum threshold of 20ms) so the original `noteOff` timing is preserved where possible, or shifted if necessary to maintain the gap for the *next* note.
+- This ensures that both the visualizer (`NoteSpan`s) and audio playback (`MidiEvent`s) are perfectly synchronized with the gap.
 
 ### 3. Unit Testing (`src/lib/midi/midi-parser.test.ts`)
-- Add a test case for sequential notes of the same pitch to verify the gap is introduced.
-- Add a test case for a chord where only one note collisions with a previous note, verifying the entire chord is shifted together.
+- Add a test case for sequential notes of the same pitch in `getMidiEvents` to verify the gap is introduced.
+- Add a test case for a chord in `getMidiEvents` where only one note collisions with a previous note, verifying the entire chord is shifted together.
 
 ---
 
