@@ -3,6 +3,7 @@
 import { ArrowLeft, LogOut, Play, RotateCcw, Settings } from "lucide-react";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
+import { ROUTES } from "@/lib/navigation/routes";
 
 export default function PausePage() {
   const { toGame, toResults, toSettings, toHome } = useNavigation();
@@ -46,7 +47,7 @@ export default function PausePage() {
   };
 
   const handleSettings = () => {
-    toSettings();
+    toSettings(ROUTES.PAUSE);
   };
 
   const buttonClass =

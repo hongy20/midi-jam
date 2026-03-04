@@ -28,7 +28,11 @@ export function useNavigation() {
     toPause: useCallback(() => navigate(ROUTES.PAUSE), [navigate]),
     toResults: useCallback(() => navigate(ROUTES.RESULTS), [navigate]),
     toReconnect: useCallback(() => navigate(ROUTES.RECONNECT), [navigate]),
-    toSettings: useCallback(() => navigate(ROUTES.SETTINGS), [navigate]),
+    toSettings: useCallback(
+      (from?: string) =>
+        navigate(from ? `${ROUTES.SETTINGS}?from=${from}` : ROUTES.SETTINGS),
+      [navigate],
+    ),
     goBack: useCallback(
       (fallback: string = ROUTES.HOME) => navigate(fallback),
       [navigate],
