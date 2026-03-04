@@ -203,6 +203,7 @@ export default function GamePage() {
             spans={spans}
             originalDurationMs={originalDurationMs}
             scrollRef={scrollRef}
+            inputDevice={selectedMIDIInput}
           />
         )}
       </main>
