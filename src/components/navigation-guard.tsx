@@ -18,11 +18,15 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
     const isInstruments = pathname === ROUTES.INSTRUMENTS;
     const isResults = pathname === ROUTES.RESULTS;
 
-    // 1. No track selected? Can't go to game, pause, or instruments.
-    if ((isGame || isPause || isInstruments) && !tracks.selected) {
+    // 1. No track selected? Can't go to game or pause.
+    if ((isGame || isPause) && !tracks.selected) {
       toTracks();
       return;
     }
+
+    // 2. Can't go to instruments without music? 
+    // Actually, user wants Instruments -> Tracks flow, so we allow /instruments.
+
 
     // 2. MIDI disconnected? Redirect from game/pause to reconnect.
     if ((isGame || isPause) && !instruments.input) {
