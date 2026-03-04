@@ -129,9 +129,7 @@ export const PianoKeyboard = ({
     return notes;
   }, [rangeStart, rangeEnd]);
 
-  const units = getNoteUnits(rangeStart);
-  const startUnit = units.start;
-  const endUnit = getNoteUnits(rangeEnd).end;
+  const { startUnit, endUnit } = getNoteUnits(rangeStart, rangeEnd);
 
   return (
     <div className="flex flex-col w-full h-full select-none relative z-50">

@@ -34,9 +34,7 @@ export function LaneStage({
     return notes;
   }, [rangeStart, rangeEnd]);
 
-  const units = getNoteUnits(rangeStart);
-  const startUnit = units.start;
-  const endUnit = getNoteUnits(rangeEnd).end;
+  const { startUnit, endUnit } = getNoteUnits(rangeStart, rangeEnd);
 
   return (
     <div
