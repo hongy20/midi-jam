@@ -1,9 +1,9 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { AppContextType } from "@/context/selection-context";
 import { useAppContext } from "@/context/selection-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import WelcomePage from "./page";
-import type { AppContextType } from "@/context/selection-context";
 
 // Mock the hooks
 vi.mock("@/hooks/use-navigation", () => ({
@@ -37,9 +37,18 @@ describe("Welcome Page", () => {
       selectInput: vi.fn(),
       selectOutput: vi.fn(),
     },
-    game: { track: { isLoading: false, isReady: false, error: null }, session: null, setSession: vi.fn() },
+    game: {
+      track: { isLoading: false, isReady: false, error: null },
+      session: null,
+      setSession: vi.fn(),
+    },
     results: { last: null, set: vi.fn() },
-    settings: { speed: 1.0, demoMode: false, setSpeed: vi.fn(), setDemoMode: vi.fn() },
+    settings: {
+      speed: 1.0,
+      demoMode: false,
+      setSpeed: vi.fn(),
+      setDemoMode: vi.fn(),
+    },
     actions: { resetAll: vi.fn() },
   };
 

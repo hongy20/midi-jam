@@ -1,13 +1,13 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import type { AppContextType } from "@/context/selection-context";
 import { useAppContext } from "@/context/selection-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
-import { useNavigation } from "@/hooks/use-navigation";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
+import { useNavigation } from "@/hooks/use-navigation";
 import GamePage from "./page";
-import type { AppContextType } from "@/context/selection-context";
 
 // Mock the hooks
 vi.mock("@/hooks/use-navigation", () => ({
@@ -53,7 +53,11 @@ describe("Game Page", () => {
 
   const mockContext: AppContextType = {
     tracks: {
-      selected: { id: "track-1.mid", name: "Test Track", url: "/midi/track-1.mid" },
+      selected: {
+        id: "track-1.mid",
+        name: "Test Track",
+        url: "/midi/track-1.mid",
+      },
       set: vi.fn(),
     },
     instruments: {
@@ -64,7 +68,14 @@ describe("Game Page", () => {
       selectOutput: vi.fn(),
     },
     game: {
-      track: { isLoading: false, isReady: true, originalDurationMs: 1000, events: [], spans: [], error: null },
+      track: {
+        isLoading: false,
+        isReady: true,
+        originalDurationMs: 1000,
+        events: [],
+        spans: [],
+        error: null,
+      },
       session: null,
       setSession: mockSetGameSession,
     },
@@ -87,7 +98,7 @@ describe("Game Page", () => {
     vi.clearAllMocks();
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
     vi.mocked(useAppContext).mockReturnValue(mockContext);
-    
+
     vi.mocked(useMidiAudio).mockReturnValue({
       playNote: vi.fn(),
       stopNote: vi.fn(),
