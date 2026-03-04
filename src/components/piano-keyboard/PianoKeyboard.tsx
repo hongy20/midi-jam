@@ -8,6 +8,7 @@ import {
   PIANO_88_KEY_MIN,
 } from "@/lib/midi/constant";
 import styles from "./piano-keyboard.module.css";
+import gridStyles from "./piano-grid.module.css";
 
 interface PianoKeyboardProps {
   liveNotes: Set<number>;
@@ -40,7 +41,7 @@ const PianoKeys = memo(({ notes }: { notes: number[] }) => {
     <>
       {notes.map((note) => {
         const isBlack = isBlackKey(note);
-        const noteClass = styles[`note-${note}`];
+        const noteClass = gridStyles[`note-${note}`];
         const noteName = `${NOTE_NAMES[note % 12]}${Math.floor(note / 12) - 1}`;
 
         return (
@@ -94,7 +95,7 @@ const KeyGlows = ({
         const source =
           isLive && isPlayback ? "both" : isLive ? "live" : "playback";
         const isBlack = isBlackKey(note);
-        const noteClass = styles[`note-${note}`];
+        const noteClass = gridStyles[`note-${note}`];
 
         return (
           <div
