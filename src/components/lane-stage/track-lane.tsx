@@ -1,11 +1,12 @@
 import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
-import gridStyles from "./background-lane.module.css";
+import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./track-lane.module.css";
 
 interface TrackLaneProps {
   spans: NoteSpan[];
   originalDurationMs: number;
+  inputDevice?: WebMidi.MIDIInput;
 }
 
 /**
@@ -14,7 +15,11 @@ interface TrackLaneProps {
  * plus a lead-in/padding.
  * Total height is handled in CSS using variables.
  */
-export function TrackLane({ spans, originalDurationMs }: TrackLaneProps) {
+export function TrackLane({
+  spans,
+  originalDurationMs,
+  inputDevice,
+}: TrackLaneProps) {
   // The lane represents total track time + lead-in/padding + lead-out
   const totalTrackMs =
     originalDurationMs + LEAD_IN_DEFAULT_MS + LEAD_OUT_DEFAULT_MS;
@@ -30,7 +35,7 @@ export function TrackLane({ spans, originalDurationMs }: TrackLaneProps) {
         const endTimeMs =
           (span.startTime + span.duration) * 1000 + LEAD_IN_DEFAULT_MS;
 
-        // Proportional positioning: t=0 is at 100% (bottom), t=originalDurationMs is atリードout.
+        // Proportional positioning: t=0 is at 100% (bottom), t=originalDurationMs is at lead out.
         // top% = (totalTrackMs - endTimeMs) / totalTrackMs * 100
         const topPercent = ((totalTrackMs - endTimeMs) / totalTrackMs) * 100;
         const heightPercent = ((endTimeMs - startTimeMs) / totalTrackMs) * 100;
