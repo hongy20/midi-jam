@@ -1,29 +1,53 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-// Mock constant values if needed, though they are imported from constants
-import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import { PianoKeyboard } from "./PianoKeyboard";
 
-describe("PianoKeyboard", () => {
-  it("always renders the full 88-key range", () => {
-    render(<PianoKeyboard liveNotes={new Set()} playbackNotes={new Set()} />);
+// Mock constant values if needed, though they are imported from constants
+import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 
-    // Full 88 keys should always be present in the DOM
+describe("PianoKeyboard", () => {
+  it("renders the full 88-key range by default", () => {
+    render(
+      <PianoKeyboard
+        liveNotes={new Set()}
+        playbackNotes={new Set()}
+      />,
+    );
+
+    // Full 88 keys should be present by default
     const totalKeys = PIANO_88_KEY_MAX - PIANO_88_KEY_MIN + 1;
     expect(screen.getAllByRole("button")).toHaveLength(totalKeys);
   });
 
-  it("renders active notes correctly as glows", () => {
-    const liveNotes = new Set([60]); // C4
-    const playbackNotes = new Set([64]); // E4
-
-    const { container } = render(
-      <PianoKeyboard liveNotes={liveNotes} playbackNotes={playbackNotes} />,
+  it("renders a specific range when provided", () => {
+    render(
+      <PianoKeyboard
+        liveNotes={new Set()}
+        playbackNotes={new Set()}
+        rangeStart={60}
+        rangeEnd={72}
+      />,
     );
 
-    // Check for glow elements
-    // Note: Since we use CSS modules, we should check for elements with 'glow' in their class or data attributes
+    // C4 to C5 is 13 keys
+    expect(screen.getAllByRole("button")).toHaveLength(13);
+  });
+
+  it("renders active notes correctly as glows within range", () => {
+    const liveNotes = new Set([60]); // C4 (in range)
+    const playbackNotes = new Set([21]); // A0 (out of range)
+    
+    const { container } = render(
+      <PianoKeyboard
+        liveNotes={liveNotes}
+        playbackNotes={playbackNotes}
+        rangeStart={60}
+        rangeEnd={72}
+      />,
+    );
+
+    // Only 1 glow should be rendered (the one in range)
     const glows = container.querySelectorAll('[class*="glow"]');
-    expect(glows).toHaveLength(2);
+    expect(glows).toHaveLength(1);
   });
 });

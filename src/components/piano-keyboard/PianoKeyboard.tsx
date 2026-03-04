@@ -13,13 +13,15 @@ import styles from "./piano-keyboard.module.css";
 interface PianoKeyboardProps {
   liveNotes: Set<number>;
   playbackNotes: Set<number>;
+  rangeStart?: number;
+  rangeEnd?: number;
 }
 
 /**
  * Static piano keys that render once and stay mounted.
  * Visibility is handled by CSS overflow on the container.
  */
-const PianoKeys = memo(() => {
+const PianoKeys = memo(({ start, end }: { start: number; end: number }) => {
   const NOTE_NAMES = [
     "C",
     "C#",
@@ -36,7 +38,7 @@ const PianoKeys = memo(() => {
   ];
 
   const notes = [];
-  for (let n = PIANO_88_KEY_MIN; n <= PIANO_88_KEY_MAX; n++) {
+  for (let n = start; n <= end; n++) {
     notes.push(n);
   }
 
@@ -74,13 +76,17 @@ PianoKeys.displayName = "PianoKeys";
 const KeyGlows = ({
   liveNotes,
   playbackNotes,
+  start,
+  end,
 }: {
   liveNotes: Set<number>;
   playbackNotes: Set<number>;
+  start: number;
+  end: number;
 }) => {
   const active = Array.from(
     new Set([...Array.from(liveNotes), ...Array.from(playbackNotes)]),
-  );
+  ).filter((n) => n >= start && n <= end);
 
   return (
     <>
@@ -113,13 +119,25 @@ const KeyGlows = ({
 export const PianoKeyboard = ({
   liveNotes,
   playbackNotes,
+  rangeStart = PIANO_88_KEY_MIN,
+  rangeEnd = PIANO_88_KEY_MAX,
 }: PianoKeyboardProps) => {
   return (
     <div className="flex flex-col w-full h-full select-none relative z-50">
-      <div className={styles.container} role="img" aria-label="Piano keyboard">
-        <PianoKeys />
-        <KeyGlows liveNotes={liveNotes} playbackNotes={playbackNotes} />
+      <div
+        className={styles.container}
+        role="img"
+        aria-label="Piano keyboard"
+      >
+        <PianoKeys start={rangeStart} end={rangeEnd} />
+        <KeyGlows
+          liveNotes={liveNotes}
+          playbackNotes={playbackNotes}
+          start={rangeStart}
+          end={rangeEnd}
+        />
       </div>
     </div>
   );
 };
+

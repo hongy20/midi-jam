@@ -5,17 +5,23 @@ import styles from "./background-lane.module.css";
 
 interface BackgroundLaneProps {
   inputDevice: WebMidi.MIDIInput;
+  rangeStart?: number;
+  rangeEnd?: number;
 }
 
 /**
  * Static lanes matching the piano keys.
  * Always renders the full 88-key range.
  */
-export function BackgroundLane({}: BackgroundLaneProps) {
+export function BackgroundLane({
+  rangeStart = PIANO_88_KEY_MIN,
+  rangeEnd = PIANO_88_KEY_MAX,
+}: BackgroundLaneProps) {
   const notes = [];
-  for (let n = PIANO_88_KEY_MIN; n <= PIANO_88_KEY_MAX; n++) {
+  for (let n = rangeStart; n <= rangeEnd; n++) {
     notes.push(n);
   }
+
 
   return (
     <div className={styles.container}>
