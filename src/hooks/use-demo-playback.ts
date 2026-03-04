@@ -72,6 +72,13 @@ export function useDemoPlayback({
 
     return () => {
       observer.disconnect();
+      // Cleanup: release any currently active notes
+      for (const [pitch, count] of activeCounts.entries()) {
+        if (count > 0) {
+          onNoteOff(pitch);
+        }
+      }
+      activeCounts.clear();
     };
   }, [containerRef, demoMode, isLoading, spans, onNoteOn, onNoteOff]);
 }
