@@ -1,9 +1,23 @@
 "use client";
 
-import { createContext, type ReactNode, useContext, useState } from "react";
+import { usePathname } from "next/navigation";
+import {
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
 import { useMIDISelection } from "@/hooks/use-midi-selection";
-import type { MidiEvent, NoteSpan } from "@/lib/midi/midi-parser";
+import { loadMidiFile } from "@/lib/midi/midi-loader";
+import {
+  getMidiEvents,
+  getNoteSpans,
+  type MidiEvent,
+  type NoteSpan,
+} from "@/lib/midi/midi-parser";
+import { ROUTES } from "@/lib/navigation/routes";
 
 export interface Track {
   id: string;
@@ -71,6 +85,7 @@ export interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
+  const pathname = usePathname();
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
   const [gameSession, setGameSession] = useState<GameSession | null>(null);
   const [sessionResults, setSessionResults] = useState<SessionResults | null>(
@@ -105,6 +120,51 @@ export function AppProvider({ children }: { children: ReactNode }) {
     selectMIDIInput(null);
     setTrackStatus({ isLoading: false, isReady: false, error: null });
   };
+
+  // MIDI Track Loading (only when on /game path and a track is selected)
+  useEffect(() => {
+    const isGamePath = pathname === ROUTES.GAME || pathname === ROUTES.PAUSE;
+    if (!isGamePath || !selectedTrack) {
+      if (!selectedTrack) {
+        setTrackStatus({ isLoading: false, isReady: false, error: null });
+      }
+      return;
+    }
+
+    // Skip loading if already ready for this track
+    if (trackStatus.isReady) return;
+
+    let mounted = true;
+    setTrackStatus({ isLoading: true, isReady: false, error: null });
+
+    loadMidiFile(selectedTrack.url)
+      .then((midi) => {
+        if (!mounted) return;
+        const events = getMidiEvents(midi);
+        const spans = getNoteSpans(events);
+
+        setTrackStatus({
+          isLoading: false,
+          isReady: true,
+          originalDurationMs: midi.duration * 1000,
+          events,
+          spans,
+          error: null,
+        });
+      })
+      .catch((err) => {
+        if (!mounted) return;
+        setTrackStatus({
+          isLoading: false,
+          isReady: false,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [pathname, selectedTrack, trackStatus.isReady]);
 
   const value: AppContextType = {
     tracks: {
@@ -149,6 +209,6 @@ export function useAppContext() {
   return context;
 }
 
-// Keep useSelection as an alias for now to avoid breaking changes in other files
+// Keep aliases for now to avoid breaking changes in other files
 export const useSelection = useAppContext;
 export const SelectionProvider = AppProvider;
