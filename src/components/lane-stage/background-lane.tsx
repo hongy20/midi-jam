@@ -10,9 +10,7 @@ interface BackgroundLaneProps {
 /**
  * Static lanes matching the piano keys.
  */
-export function BackgroundLane({
-  notes,
-}: BackgroundLaneProps) {
+export function BackgroundLane({ notes }: BackgroundLaneProps) {
   return (
     <div className={styles.container}>
       {notes.map((note) => (

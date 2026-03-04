@@ -67,6 +67,7 @@ describe("LaneStage", () => {
           spans={mockSpans}
           originalDurationMs={originalDurationMs}
           scrollRef={scrollRef}
+          inputDevice={{} as WebMidi.MIDIInput}
         />
       </AppProvider>,
     );

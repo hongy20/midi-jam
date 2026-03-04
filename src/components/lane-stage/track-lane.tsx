@@ -15,10 +15,7 @@ interface TrackLaneProps {
  * plus a lead-in/padding.
  * Total height is handled in CSS using variables.
  */
-export function TrackLane({
-  spans,
-  originalDurationMs,
-}: TrackLaneProps) {
+export function TrackLane({ spans, originalDurationMs }: TrackLaneProps) {
   // The lane represents total track time + lead-in/padding + lead-out
   const totalTrackMs =
     originalDurationMs + LEAD_IN_DEFAULT_MS + LEAD_OUT_DEFAULT_MS;
