@@ -13,24 +13,19 @@ import { useLaneTimeline } from "@/hooks/use-lane-timeline";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useWakeLock } from "@/hooks/use-wake-lock";
-import { getNoteUnits } from "@/lib/device/piano";
+import { getNoteUnits, getVisibleMidiRange } from "@/lib/device/piano";
 import {
   LEAD_IN_DEFAULT_MS,
   LEAD_OUT_DEFAULT_MS,
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "@/lib/midi/constant";
+import { useMemo } from "react";
 import styles from "./page.module.css";
 
 export default function GamePage() {
   const { toResults, toPause } = useNavigation();
   const { tracks, instruments, game, settings, results } = useAppContext();
-
-  // Calculate global piano range units for consistent grid alignment
-  const { startUnit, endUnit } = getNoteUnits(
-    PIANO_88_KEY_MIN,
-    PIANO_88_KEY_MAX,
-  );
 
   // Extract variables from context for easier access
   const { selected: selectedTrack } = tracks;
@@ -50,6 +45,20 @@ export default function GamePage() {
     ? trackLoadStatus.originalDurationMs
     : 0;
   const isLoading = trackLoadStatus.isLoading;
+
+  // Calculate dynamic piano range for consistent grid alignment
+  const visibleMidiRange = useMemo(() => {
+    if (!spans || spans.length === 0) {
+      return { startNote: PIANO_88_KEY_MIN, endNote: PIANO_88_KEY_MAX };
+    }
+    const notes = spans.map((s) => s.note);
+    return getVisibleMidiRange(notes);
+  }, [spans]);
+
+  const { startUnit, endUnit } = getNoteUnits(
+    visibleMidiRange.startNote,
+    visibleMidiRange.endNote,
+  );
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
