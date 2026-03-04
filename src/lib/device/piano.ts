@@ -57,21 +57,41 @@ function shiftWhiteKey(note: number, delta: number): number {
 }
 
 /**
- * Calculates the optimal MIDI range for a set of notes, with a white-key buffer.
- * Clamps to standard 88-key piano range by default.
+ * Calculates the optimal MIDI range for a set of notes, with a symmetric white-key buffer.
+ * Ensures C4 is always included and that left/right buffers have an equal number of white keys.
  */
 export function getVisibleMidiRange(notes: number[], buffer = 3) {
   // Always include C4 (60) in the range calculation base
-  const allNotes = notes && notes.length > 0 ? [...notes, MIDI_NOTE_C4] : [MIDI_NOTE_C4];
-  
+  const allNotes =
+    notes && notes.length > 0 ? [...notes, MIDI_NOTE_C4] : [MIDI_NOTE_C4];
+
   const minNote = Math.min(...allNotes);
   const maxNote = Math.max(...allNotes);
 
-  const startNote = shiftWhiteKey(minNote, -buffer);
-  const endNote = shiftWhiteKey(maxNote, buffer);
+  // Count available white keys on the left
+  let leftAvailable = 0;
+  let curr = minNote;
+  while (curr > PIANO_88_KEY_MIN) {
+    curr--;
+    if (!isBlackKey(curr)) leftAvailable++;
+  }
+
+  // Count available white keys on the right
+  let rightAvailable = 0;
+  curr = maxNote;
+  while (curr < PIANO_88_KEY_MAX) {
+    curr++;
+    if (!isBlackKey(curr)) rightAvailable++;
+  }
+
+  // Use the smaller of the two, capped at the requested buffer
+  const actualBuffer = Math.min(buffer, leftAvailable, rightAvailable);
+
+  const startNote = shiftWhiteKey(minNote, -actualBuffer);
+  const endNote = shiftWhiteKey(maxNote, actualBuffer);
 
   return {
-    startNote: Math.max(PIANO_88_KEY_MIN, startNote),
-    endNote: Math.min(PIANO_88_KEY_MAX, endNote),
+    startNote,
+    endNote,
   };
 }
