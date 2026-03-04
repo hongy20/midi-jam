@@ -71,9 +71,9 @@ describe("midi-parser", () => {
     expect(events[1].type).toBe("noteOff");
     expect(events[1].time).toBe(1);
 
-    // Second note should be shifted by 50ms (0.05s)
+    // Second note should be shifted by 30ms (0.03s)
     expect(events[2].type).toBe("noteOn");
-    expect(events[2].time).toBe(1.05);
+    expect(events[2].time).toBe(1.03);
 
     expect(events[3].type).toBe("noteOff");
     expect(events[3].time).toBe(2.0);
@@ -95,15 +95,15 @@ describe("midi-parser", () => {
     } as unknown as Midi;
 
     const events = getMidiEvents(chordMidi, "piano");
-    // Events: 60-On(0), 60-Off(1), [60-On(1.05), 64-On(1.05)], [60-Off(2), 64-Off(2)]
+    // Events: 60-On(0), 60-Off(1), [60-On(1.03), 64-On(1.03)], [60-Off(2), 64-Off(2)]
     expect(events).toHaveLength(6);
 
     const chordOnEvents = events.filter(
       (e) => e.type === "noteOn" && e.time > 0,
     );
     expect(chordOnEvents).toHaveLength(2);
-    expect(chordOnEvents[0].time).toBe(1.05);
-    expect(chordOnEvents[1].time).toBe(1.05);
+    expect(chordOnEvents[0].time).toBe(1.03);
+    expect(chordOnEvents[1].time).toBe(1.03);
   });
 
   it("getMidiEvents detects sequential collisions across different tracks", () => {
@@ -126,7 +126,7 @@ describe("midi-parser", () => {
     // Second note (from second track) should be shifted
     expect(events[2].note).toBe(60);
     expect(events[2].type).toBe("noteOn");
-    expect(events[2].time).toBe(1.05);
+    expect(events[2].time).toBe(1.03);
   });
 
   it("getMidiEvents detects and shifts overlapping notes of the same pitch", () => {
@@ -143,11 +143,10 @@ describe("midi-parser", () => {
     } as unknown as Midi;
 
     const events = getMidiEvents(overlappingMidi, "piano");
-    // Should shift second note to start at 0.5 + gap?
-    // Wait, the logic shifts it by MIN_NOTE_GAP_MS regardless of overlap depth.
+    // Should shift second note to start at 0.5 + gap
     expect(
       events.filter((e) => e.note === 60 && e.type === "noteOn")[1].time,
-    ).toBe(0.55);
+    ).toBe(0.53);
   });
   it("getNoteRange returns correct min/max", () => {
     const events = getMidiEvents(mockMidi, "piano");
