@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo } from "react";
+import { memo } from "react";
 import { isBlackKey } from "@/lib/device/piano";
 import {
   MIDI_NOTE_C4,
@@ -116,11 +116,7 @@ export const PianoKeyboard = ({
 }: PianoKeyboardProps) => {
   return (
     <div className="flex flex-col w-full h-full select-none relative z-50">
-      <div
-        className={styles.container}
-        role="img"
-        aria-label="Piano keyboard"
-      >
+      <div className={styles.container} role="img" aria-label="Piano keyboard">
         <PianoKeys />
         <KeyGlows liveNotes={liveNotes} playbackNotes={playbackNotes} />
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Pause } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LaneStage } from "@/components/lane-stage/lane-stage";
 import { ScoreHudLite } from "@/components/score-hud-lite";
 import { VirtualInstrument } from "@/components/virtual-instrument";
@@ -20,7 +20,6 @@ import {
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "@/lib/midi/constant";
-import { useMemo } from "react";
 import styles from "./page.module.css";
 
 export default function GamePage() {
