@@ -105,6 +105,50 @@ describe("midi-parser", () => {
     expect(chordOnEvents[0].time).toBe(1.05);
     expect(chordOnEvents[1].time).toBe(1.05);
   });
+
+  it("getMidiEvents detects sequential collisions across different tracks", () => {
+    const crossTrackMidi = {
+      tracks: [
+        {
+          instrument: { family: "piano" },
+          notes: [{ midi: 60, time: 0, duration: 1, velocity: 0.8 }],
+        },
+        {
+          instrument: { family: "piano" },
+          notes: [{ midi: 60, time: 1, duration: 1, velocity: 0.7 }], // Collision across tracks
+        },
+      ],
+    } as unknown as Midi;
+
+    const events = getMidiEvents(crossTrackMidi, "piano");
+    expect(events).toHaveLength(4);
+
+    // Second note (from second track) should be shifted
+    expect(events[2].note).toBe(60);
+    expect(events[2].type).toBe("noteOn");
+    expect(events[2].time).toBe(1.05);
+  });
+
+  it("getMidiEvents detects and shifts overlapping notes of the same pitch", () => {
+    const overlappingMidi = {
+      tracks: [
+        {
+          instrument: { family: "piano" },
+          notes: [
+            { midi: 60, time: 0, duration: 1, velocity: 0.8 },
+            { midi: 60, time: 0.5, duration: 1, velocity: 0.7 }, // Starts while first is still on
+          ],
+        },
+      ],
+    } as unknown as Midi;
+
+    const events = getMidiEvents(overlappingMidi, "piano");
+    // Should shift second note to start at 0.5 + gap?
+    // Wait, the logic shifts it by MIN_NOTE_GAP_MS regardless of overlap depth.
+    expect(
+      events.filter((e) => e.note === 60 && e.type === "noteOn")[1].time,
+    ).toBe(0.55);
+  });
   it("getNoteRange returns correct min/max", () => {
     const events = getMidiEvents(mockMidi, "piano");
     const range = getNoteRange(events);

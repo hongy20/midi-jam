@@ -30,74 +30,74 @@ export function getMidiEvents(
 ): MidiEvent[] {
   const events: MidiEvent[] = [];
 
-  midi.tracks
+  // 1. Merge all notes from all relevant tracks first to catch cross-track collisions
+  const allNotes = midi.tracks
     .filter((track) => track.instrument.family === instrument)
-    .forEach((track) => {
-      // 1. Group notes by startTime to maintain chord sync
-      const rawNotes = track.notes
-        .filter((note) => note.duration > 0)
-        .sort((a, b) => a.time - b.time);
+    .flatMap((track) => track.notes)
+    .filter((note) => note.duration > 0)
+    .sort((a, b) => a.time - b.time);
 
-      const slices: (typeof rawNotes)[] = [];
-      for (const note of rawNotes) {
-        const lastSlice = slices[slices.length - 1];
-        if (lastSlice && Math.abs(lastSlice[0].time - note.time) < 0.001) {
-          lastSlice.push(note);
-        } else {
-          slices.push([note]);
-        }
+  if (allNotes.length === 0) return [];
+
+  // 2. Group notes into time slices (chords) across all tracks
+  const slices: (typeof allNotes)[] = [];
+  for (const note of allNotes) {
+    const lastSlice = slices[slices.length - 1];
+    if (lastSlice && Math.abs(lastSlice[0].time - note.time) < 0.001) {
+      lastSlice.push(note);
+    } else {
+      slices.push([note]);
+    }
+  }
+
+  // 3. Process slices using a shared tracking map for collisions
+  const activePitchesAtTime = new Map<number, number>(); // pitch -> final (shifted) endTime
+  const gapS = MIN_NOTE_GAP_MS / 1000;
+
+  for (const slice of slices) {
+    let needsShift = false;
+
+    // Check if any note in the current chord collisions with a previous note of the same pitch.
+    // A collision is defined as starting before or exactly when a previous note ends.
+    for (const note of slice) {
+      const lastEndTime = activePitchesAtTime.get(note.midi);
+      if (lastEndTime !== undefined && note.time < lastEndTime + 0.001) {
+        needsShift = true;
+        break;
+      }
+    }
+
+    // Apply shift to the ENTIRE chord if any note needs it
+    for (const note of slice) {
+      let eventTime = note.time;
+      let duration = note.duration;
+
+      if (needsShift) {
+        const originalEnd = note.time + note.duration;
+        eventTime = note.time + gapS;
+
+        // Ensure we don't reduce duration below a safe minimum (20ms)
+        const minDuration = 0.02;
+        duration = Math.max(minDuration, originalEnd - eventTime);
       }
 
-      // 2. Process slices to introduce gaps for sequential collisions
-      const activePitchesAtTime = new Map<number, number>(); // pitch -> originalEndTime of latest processed note
+      events.push({
+        time: eventTime,
+        type: "noteOn",
+        note: note.midi,
+        velocity: note.velocity,
+      });
+      events.push({
+        time: eventTime + duration,
+        type: "noteOff",
+        note: note.midi,
+        velocity: 0,
+      });
 
-      for (const slice of slices) {
-        let needsShift = false;
-
-        // Check if any note in the current chord collisions with a previous note of the same pitch
-        for (const note of slice) {
-          const lastEndTime = activePitchesAtTime.get(note.midi);
-          if (
-            lastEndTime !== undefined &&
-            Math.abs(lastEndTime - note.time) < 0.001
-          ) {
-            needsShift = true;
-            break;
-          }
-        }
-
-        // Apply shift to the ENTIRE chord if any note needs it
-        for (const note of slice) {
-          let eventTime = note.time;
-          let duration = note.duration;
-
-          if (needsShift) {
-            const originalEnd = note.time + note.duration;
-            eventTime = note.time + MIN_NOTE_GAP_MS / 1000;
-
-            // Ensure we don't reduce duration below a safe minimum (20ms)
-            const minDuration = 0.02;
-            duration = Math.max(minDuration, originalEnd - eventTime);
-          }
-
-          events.push({
-            time: eventTime,
-            type: "noteOn",
-            note: note.midi,
-            velocity: note.velocity,
-          });
-          events.push({
-            time: eventTime + duration,
-            type: "noteOff",
-            note: note.midi,
-            velocity: 0,
-          });
-
-          // Update tracking using the original end time to detect chains
-          activePitchesAtTime.set(note.midi, note.time + note.duration);
-        }
-      }
-    });
+      // Update tracking with the final end time of this note to maintain chain gaps
+      activePitchesAtTime.set(note.midi, eventTime + duration);
+    }
+  }
 
   return events.sort((a, b) => a.time - b.time);
 }
