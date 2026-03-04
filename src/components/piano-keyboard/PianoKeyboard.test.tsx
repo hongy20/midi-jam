@@ -1,53 +1,47 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+// Mock constant values if needed, though they are imported from constants
+import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import { PianoKeyboard } from "./PianoKeyboard";
 
-describe("PianoKeyboard Responsiveness and Zooming", () => {
-  it("renders correct number of white keys for a specific range", () => {
-    // Range C4 (60) to C5 (72)
-    // White keys: 60, 62, 64, 65, 67, 69, 71, 72 (8 keys)
+describe("PianoKeyboard", () => {
+  it("renders the full 88-key range by default", () => {
+    render(<PianoKeyboard liveNotes={new Set()} playbackNotes={new Set()} />);
+
+    // Full 88 keys should be present by default
+    const totalKeys = PIANO_88_KEY_MAX - PIANO_88_KEY_MIN + 1;
+    expect(screen.getAllByRole("button")).toHaveLength(totalKeys);
+  });
+
+  it("renders a specific range when provided", () => {
     render(
       <PianoKeyboard
-        rangeStart={60}
-        rangeEnd={72}
         liveNotes={new Set()}
         playbackNotes={new Set()}
+        rangeStart={60}
+        rangeEnd={72}
       />,
     );
 
-    const _whiteKeys = screen.getAllByRole("button").filter(
-      (el) => !el.className.includes("bg-gray-900"), // Exclude black keys which use bg-gray-900 by default
-    );
-
-    // Total buttons found should be white keys + black keys
-    // In range 60-72:
-    // White: 60, 62, 64, 65, 67, 69, 71, 72 (8)
-    // Black: 61, 63, 66, 68, 70 (5)
-    // Total: 13
+    // C4 to C5 is 13 keys
     expect(screen.getAllByRole("button")).toHaveLength(13);
   });
 
-  it("handles dynamic range correctly", () => {
-    const { rerender } = render(
-      <PianoKeyboard
-        liveNotes={new Set()}
-        playbackNotes={new Set()}
-        rangeStart={60}
-        rangeEnd={64}
-      />,
-    );
-    // C4, D4, E4 (3 white keys) + C#4, D#4 (2 black keys) = 5 total
-    expect(screen.getAllByRole("button")).toHaveLength(5);
+  it("renders active notes correctly as glows within range", () => {
+    const liveNotes = new Set([60]); // C4 (in range)
+    const playbackNotes = new Set([21]); // A0 (out of range)
 
-    rerender(
+    const { container } = render(
       <PianoKeyboard
-        liveNotes={new Set()}
-        playbackNotes={new Set()}
-        rangeStart={21}
-        rangeEnd={108}
+        liveNotes={liveNotes}
+        playbackNotes={playbackNotes}
+        rangeStart={60}
+        rangeEnd={72}
       />,
     );
-    // Full 88 keys
-    expect(screen.getAllByRole("button")).toHaveLength(88);
+
+    // Only 1 glow should be rendered (the one in range)
+    const glows = container.querySelectorAll('[class*="glow"]');
+    expect(glows).toHaveLength(1);
   });
 });

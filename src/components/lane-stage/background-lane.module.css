@@ -5,7 +5,10 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  grid-template-columns: repeat(var(--piano-visible-units, 156), 1fr);
+  grid-template-columns: repeat(
+      calc(var(--end-unit) - var(--start-unit)),
+      minmax(0, 1fr)
+    );
   grid-template-rows: 1fr;
   z-index: 0;
   overflow: hidden;
@@ -16,6 +19,7 @@
   grid-row: 1;
   height: 100%;
   box-sizing: border-box;
+  min-width: 0;
 }
 
 .lane[data-black="true"] {
