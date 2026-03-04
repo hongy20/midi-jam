@@ -57,17 +57,16 @@ function shiftWhiteKey(note: number, delta: number): number {
  * Clamps to standard 88-key piano range by default.
  */
 export function getVisibleMidiRange(notes: number[], buffer = 2) {
-  if (!notes || notes.length === 0) {
-    return { startNote: PIANO_88_KEY_MIN, endNote: PIANO_88_KEY_MAX };
-  }
-  const minNote = Math.min(...notes);
-  const maxNote = Math.max(...notes);
+  return { startNote: PIANO_88_KEY_MIN, endNote: PIANO_88_KEY_MAX };
 
-  const startNote = shiftWhiteKey(minNote, -buffer);
-  const endNote = shiftWhiteKey(maxNote, buffer);
+  // const minNote = Math.min(...notes);
+  // const maxNote = Math.max(...notes);
 
-  return {
-    startNote: Math.max(PIANO_88_KEY_MIN, startNote),
-    endNote: Math.min(PIANO_88_KEY_MAX, endNote),
-  };
+  // const startNote = shiftWhiteKey(minNote, -buffer);
+  // const endNote = shiftWhiteKey(maxNote, buffer);
+
+  // return {
+  //   startNote: Math.max(PIANO_88_KEY_MIN, startNote),
+  //   endNote: Math.min(PIANO_88_KEY_MAX, endNote),
+  // };
 }
