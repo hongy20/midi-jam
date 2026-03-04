@@ -2,12 +2,12 @@
 
 import { ArrowLeft, ChevronRight, Piano } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useAppContext } from "@/context/app-context";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
 import { useNavigation } from "@/hooks/use-navigation";
 
-export default function InstrumentsPage() {
+function InstrumentsContent() {
   const { toTracks, toHome, toPause } = useNavigation();
   const searchParams = useSearchParams();
   const fromGame = searchParams.get("from") === "game";
@@ -188,5 +188,22 @@ export default function InstrumentsPage() {
         </button>
       </footer>
     </div>
+  );
+}
+
+export default function InstrumentsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex flex-col items-center justify-center h-[100dvh] gap-4">
+          <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+          <span className="font-bold uppercase tracking-widest text-xs">
+            Loading Instrument Setup...
+          </span>
+        </div>
+      }
+    >
+      <InstrumentsContent />
+    </Suspense>
   );
 }

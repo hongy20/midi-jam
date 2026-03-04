@@ -47,7 +47,6 @@ describe("Game Page", () => {
     navigate: vi.fn(),
   };
 
-
   const mockSetGameSession = vi.fn();
   const mockSetSessionResults = vi.fn();
 

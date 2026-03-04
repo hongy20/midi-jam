@@ -7,7 +7,7 @@ import { useNavigation } from "@/hooks/use-navigation";
 import { ROUTES } from "@/lib/navigation/routes";
 
 export function NavigationGuard({ children }: { children: React.ReactNode }) {
-  const { toTracks, toHome, toPause, toInstruments } = useNavigation();
+  const { toTracks, toHome, toInstruments } = useNavigation();
   const pathname = usePathname();
   const { tracks, instruments, results } = useAppContext();
 
@@ -40,7 +40,6 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
     results.last,
     toTracks,
     toHome,
-    toPause,
     toInstruments,
   ]);
 
