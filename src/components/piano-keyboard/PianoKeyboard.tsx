@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import { getNoteUnitOffset, isBlackKey } from "@/lib/device/piano";
+import { getPitchUnits, isBlackKey } from "@/lib/device/piano";
 import {
   MIDI_NOTE_C4,
   PIANO_88_KEY_MAX,
@@ -21,8 +21,8 @@ interface PianoKeyboardProps {
  * Static piano keys that only re-render when the range changes.
  * Memoized to prevent re-renders when active notes change.
  */
-const PianoKeys = memo(({ notes }: { notes: number[] }) => {
-  const NOTE_NAMES = [
+const PianoKeys = memo(({ pitches }: { pitches: number[] }) => {
+  const PITCH_NAMES = [
     "C",
     "C#",
     "D",
@@ -39,21 +39,21 @@ const PianoKeys = memo(({ notes }: { notes: number[] }) => {
 
   return (
     <>
-      {notes.map((note) => {
-        const isBlack = isBlackKey(note);
-        const noteClass = gridStyles[`note-${note}`];
-        const noteName = `${NOTE_NAMES[note % 12]}${Math.floor(note / 12) - 1}`;
+      {pitches.map((pitch) => {
+        const isBlack = isBlackKey(pitch);
+        const pitchClass = gridStyles[`note-${pitch}`];
+        const pitchName = `${PITCH_NAMES[pitch % 12]}${Math.floor(pitch / 12) - 1}`;
 
         return (
           <button
-            key={`key-${note}`}
+            key={`key-${pitch}`}
             type="button"
-            className={`${styles.key} ${noteClass}`}
+            className={`${styles.key} ${pitchClass}`}
             data-black={isBlack}
-            aria-label={`${noteName} ${isBlack ? "Black" : "White"} Key`}
+            aria-label={`${pitchName} ${isBlack ? "Black" : "White"} Key`}
             tabIndex={-1}
           >
-            {!isBlack && note === MIDI_NOTE_C4 && (
+            {!isBlack && pitch === MIDI_NOTE_C4 && (
               <span className={styles.label}>C4</span>
             )}
           </button>
@@ -83,24 +83,24 @@ const KeyGlows = ({
     ...Array.from(liveNotes),
     ...Array.from(playbackNotes),
   ]);
-  const activeNotesInRange = Array.from(active).filter(
+  const activePitchesInRange = Array.from(active).filter(
     (n) => n >= rangeStart && n <= rangeEnd,
   );
 
   return (
     <>
-      {activeNotesInRange.map((note) => {
-        const isLive = liveNotes.has(note);
-        const isPlayback = playbackNotes.has(note);
+      {activePitchesInRange.map((pitch) => {
+        const isLive = liveNotes.has(pitch);
+        const isPlayback = playbackNotes.has(pitch);
         const source =
           isLive && isPlayback ? "both" : isLive ? "live" : "playback";
-        const isBlack = isBlackKey(note);
-        const noteClass = gridStyles[`note-${note}`];
+        const isBlack = isBlackKey(pitch);
+        const pitchClass = gridStyles[`note-${pitch}`];
 
         return (
           <div
-            key={`glow-${note}`}
-            className={`${styles.glow} ${noteClass}`}
+            key={`glow-${pitch}`}
+            className={`${styles.glow} ${pitchClass}`}
             data-active="true"
             data-black={isBlack}
             data-source={source}
@@ -121,17 +121,17 @@ export const PianoKeyboard = ({
   rangeStart = PIANO_88_KEY_MIN,
   rangeEnd = PIANO_88_KEY_MAX,
 }: PianoKeyboardProps) => {
-  const visibleNotes = useMemo(() => {
-    const notes = [];
-    for (let n = rangeStart; n <= rangeEnd; n++) {
-      notes.push(n);
+  const visiblePitches = useMemo(() => {
+    const pitches = [];
+    for (let p = rangeStart; p <= rangeEnd; p++) {
+      pitches.push(p);
     }
-    return notes;
+    return pitches;
   }, [rangeStart, rangeEnd]);
 
-  const startUnit = getNoteUnitOffset(rangeStart);
-  const endUnit = getNoteUnitOffset(rangeEnd) + (isBlackKey(rangeEnd) ? 2 : 3);
-  const visibleUnits = endUnit - startUnit;
+  const units = getPitchUnits(rangeStart);
+  const startUnit = units.start;
+  const endUnit = getPitchUnits(rangeEnd).end;
 
   return (
     <div className="flex flex-col w-full h-full select-none relative z-50">
@@ -140,13 +140,13 @@ export const PianoKeyboard = ({
         style={
           {
             "--piano-start-unit": startUnit,
-            "--piano-visible-units": visibleUnits,
+            "--piano-end-unit": endUnit,
           } as React.CSSProperties
         }
         role="img"
         aria-label={`Piano keyboard (${rangeStart} to ${rangeEnd})`}
       >
-        <PianoKeys notes={visibleNotes} />
+        <PianoKeys pitches={visiblePitches} />
         <KeyGlows
           liveNotes={liveNotes}
           playbackNotes={playbackNotes}
