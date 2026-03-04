@@ -3,7 +3,11 @@
   width: 100%;
   height: 100%;
   position: relative;
-  grid-template-columns: repeat(var(--piano-visible-units, 156), 1fr);
+  /* Columns = End Unit - Start Unit */
+  grid-template-columns: repeat(
+    calc(var(--piano-end-unit) - var(--piano-start-unit)),
+    1fr
+  );
   /* Rows: Key Top (2/3), Key Bottom (1/3) */
   grid-template-rows: 2fr 1fr;
   user-select: none;
