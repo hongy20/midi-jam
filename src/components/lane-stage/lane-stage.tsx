@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { getNoteUnits } from "@/lib/device/piano";
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import { BackgroundLane } from "./background-lane";
@@ -34,18 +33,10 @@ export function LaneStage({
     return notes;
   }, [rangeStart, rangeEnd]);
 
-  const { startUnit, endUnit } = getNoteUnits(rangeStart, rangeEnd);
-
   return (
     <div
       ref={containerRef}
       className="relative w-full h-full overflow-hidden bg-background/5"
-      style={
-        {
-          "--start-unit": startUnit,
-          "--end-unit": endUnit,
-        } as React.CSSProperties
-      }
     >
       <BackgroundLane notes={visibleNotes} inputDevice={inputDevice} />
 
