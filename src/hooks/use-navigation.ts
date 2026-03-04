@@ -23,11 +23,16 @@ export function useNavigation() {
   return {
     toHome: useCallback(() => navigate(ROUTES.HOME), [navigate]),
     toTracks: useCallback(() => navigate(ROUTES.TRACKS), [navigate]),
-    toInstruments: useCallback(() => navigate(ROUTES.INSTRUMENTS), [navigate]),
+    toInstruments: useCallback(
+      (from?: string) =>
+        navigate(
+          from ? `${ROUTES.INSTRUMENTS}?from=${from}` : ROUTES.INSTRUMENTS,
+        ),
+      [navigate],
+    ),
     toGame: useCallback(() => navigate(ROUTES.GAME), [navigate]),
     toPause: useCallback(() => navigate(ROUTES.PAUSE), [navigate]),
     toResults: useCallback(() => navigate(ROUTES.RESULTS), [navigate]),
-    toReconnect: useCallback(() => navigate(ROUTES.RECONNECT), [navigate]),
     toSettings: useCallback(
       (from?: string) =>
         navigate(from ? `${ROUTES.SETTINGS}?from=${from}` : ROUTES.SETTINGS),

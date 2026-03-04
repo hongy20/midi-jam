@@ -98,6 +98,26 @@ export default function GamePage() {
     initialTimeMs: gameSession?.currentTimeMs ?? 0,
   });
 
+  // Auto-pause and save session if device is disconnected mid-game
+  useEffect(() => {
+    if (isPlaying && !selectedMIDIInput) {
+      setGameSession({
+        isPaused: true,
+        score,
+        combo,
+        currentTimeMs: getCurrentTimeMs(),
+      });
+      // NavigationGuard will handle the redirect to instruments
+    }
+  }, [
+    isPlaying,
+    selectedMIDIInput,
+    score,
+    combo,
+    getCurrentTimeMs,
+    setGameSession,
+  ]);
+
   const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
 
   const handleNoteOn = useCallback(

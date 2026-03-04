@@ -36,13 +36,12 @@ vi.mock("@/hooks/use-lane-timeline", () => ({
 
 describe("Game Page", () => {
   const mockNavigation = {
-    toResults: vi.fn(),
-    toPause: vi.fn(),
     toHome: vi.fn(),
     toTracks: vi.fn(),
     toInstruments: vi.fn(),
     toGame: vi.fn(),
-    toReconnect: vi.fn(),
+    toPause: vi.fn(),
+    toResults: vi.fn(),
     toSettings: vi.fn(),
     goBack: vi.fn(),
     navigate: vi.fn(),

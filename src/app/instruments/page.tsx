@@ -1,13 +1,17 @@
 "use client";
 
 import { ArrowLeft, ChevronRight, Piano } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import { useAppContext } from "@/context/app-context";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
 import { useNavigation } from "@/hooks/use-navigation";
 
-export default function InstrumentsPage() {
-  const { toTracks, toHome } = useNavigation();
+function InstrumentsContent() {
+  const { toTracks, toHome, toPause } = useNavigation();
+  const searchParams = useSearchParams();
+  const fromGame = searchParams.get("from") === "game";
+
   const { instruments: contextInstruments } = useAppContext();
   const { selectInput: selectMIDIInput, input: selectedMIDIInput } =
     contextInstruments;
@@ -62,7 +66,11 @@ export default function InstrumentsPage() {
       if (instrument) {
         selectMIDIInput(instrument);
       }
-      toTracks();
+      if (fromGame) {
+        toPause();
+      } else {
+        toTracks();
+      }
     }
   };
 
@@ -71,7 +79,7 @@ export default function InstrumentsPage() {
       {/* Header */}
       <header className="flex items-center justify-between py-[var(--header-py)] flex-shrink-0">
         <h1 className="text-[var(--h1-size)] font-black text-foreground uppercase tracking-tighter">
-          Select Your Instrument
+          {fromGame ? "Reconnect Instrument" : "Select Your Instrument"}
         </h1>
 
         <button
@@ -80,7 +88,7 @@ export default function InstrumentsPage() {
           className="group flex items-center gap-2 px-4 py-2 bg-foreground/5 border border-foreground/10 rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
         >
           <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-          Main Menu
+          {fromGame ? "Back to Menu" : "Main Menu"}
         </button>
       </header>
 
@@ -92,7 +100,9 @@ export default function InstrumentsPage() {
           {isLoading
             ? "Searching for MIDI devices..."
             : inputs.length > 0
-              ? "Play a note on your MIDI keyboard to select it, or tap a card below."
+              ? fromGame
+                ? "The game is paused. Please reconnect your instrument to continue."
+                : "Play a note on your MIDI keyboard to select it, or tap a card below."
               : "No MIDI devices found. Please connect a keyboard and refresh."}
         </p>
 
@@ -173,10 +183,27 @@ export default function InstrumentsPage() {
               : "opacity-40 bg-foreground/10 text-foreground/40 cursor-not-allowed shadow-none"
           } group`}
         >
-          CONTINUE{" "}
+          {fromGame ? "RESUME GAME" : "CONTINUE"}{" "}
           <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
         </button>
       </footer>
     </div>
+  );
+}
+
+export default function InstrumentsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex flex-col items-center justify-center h-[100dvh] gap-4">
+          <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+          <span className="font-bold uppercase tracking-widest text-xs">
+            Loading Instrument Setup...
+          </span>
+        </div>
+      }
+    >
+      <InstrumentsContent />
+    </Suspense>
   );
 }
