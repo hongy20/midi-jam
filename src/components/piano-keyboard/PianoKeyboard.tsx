@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useMemo } from "react";
-import { getNoteUnits, isBlackKey } from "@/lib/device/piano";
+import { isBlackKey } from "@/lib/device/piano";
 import {
   MIDI_NOTE_C4,
   PIANO_88_KEY_MAX,
@@ -129,18 +129,10 @@ export const PianoKeyboard = ({
     return notes;
   }, [rangeStart, rangeEnd]);
 
-  const { startUnit, endUnit } = getNoteUnits(rangeStart, rangeEnd);
-
   return (
     <div className="flex flex-col w-full h-full select-none relative z-50">
       <div
         className={styles.container}
-        style={
-          {
-            "--start-unit": startUnit,
-            "--end-unit": endUnit,
-          } as React.CSSProperties
-        }
         role="img"
         aria-label={`Piano keyboard (${rangeStart} to ${rangeEnd})`}
       >
