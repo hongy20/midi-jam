@@ -3,11 +3,15 @@ import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./background-lane.module.css";
 
+interface BackgroundLaneProps {
+  inputDevice: WebMidi.MIDIInput;
+}
+
 /**
  * Static lanes matching the piano keys.
  * Always renders the full 88-key range.
  */
-export function BackgroundLane() {
+export function BackgroundLane({ inputDevice }: BackgroundLaneProps) {
   const notes = [];
   for (let n = PIANO_88_KEY_MIN; n <= PIANO_88_KEY_MAX; n++) {
     notes.push(n);

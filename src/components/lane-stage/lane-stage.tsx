@@ -25,7 +25,7 @@ export function LaneStage({
       ref={containerRef}
       className="relative w-full h-full overflow-hidden bg-background/5"
     >
-      <BackgroundLane />
+      <BackgroundLane inputDevice={inputDevice} />
 
       <div
         ref={scrollRef}
