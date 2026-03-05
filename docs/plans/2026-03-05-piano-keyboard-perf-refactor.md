@@ -19,12 +19,14 @@ This plan refactors the keyboard to use a **Stable DOM Tree** with **Imperative 
 
 - Consolidate the two top-level `div`s into a single `.container` element.
 - Initialize `const keyRefs = useRef<Map<number, HTMLButtonElement>>(new Map())`.
-- Pass the `keyRefs` to `PianoKeys`.
+- **Consolidate Component**: Move the logic from `PianoKeys` directly into the `PianoKeyboard` render function.
 
 ```tsx
 // Proposed PianoKeyboard structure
 export const PianoKeyboard = ({ liveNotes, playbackNotes }: PianoKeyboardProps) => {
   const keyRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
+
+  // ... setup notes array and constants ...
 
   return (
     <div 
@@ -32,7 +34,13 @@ export const PianoKeyboard = ({ liveNotes, playbackNotes }: PianoKeyboardProps) 
       role="img" 
       aria-label="Piano keyboard"
     >
-      <PianoKeys keyRefs={keyRefs} />
+      {notes.map((note) => (
+        <button
+          key={`key-${note}`}
+          ref={(el) => { if (el) keyRefs.current.set(note, el); }}
+          // ... rest of button props ...
+        />
+      ))}
     </div>
   );
 };
@@ -40,13 +48,13 @@ export const PianoKeyboard = ({ liveNotes, playbackNotes }: PianoKeyboardProps) 
 
 ---
 
-## Task 2: Register Keys in `PianoKeys`
+## Task 2: Register Keys & Logic Consolidation
 
 **File:** `src/components/piano-keyboard/PianoKeyboard.tsx`
 
-- Update `PianoKeys` to accept the `keyRefs` prop.
-- Use a Ref callback on each `<button>` to register the MIDI note:
+- Use a Ref callback on each `<button>` inside the main map loop to register the MIDI note:
   `ref={(el) => { if (el) keyRefs.current.set(note, el); }}`.
+- Ensure the `NOTE_NAMES` and `PIANO_88_KEY_*` constants are accessible within the component or imported.
 
 ---
 
