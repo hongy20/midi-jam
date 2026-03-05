@@ -2,25 +2,18 @@
 .noteBase {
   --relative-start: calc(var(--note-start) - var(--start-unit) + 1);
   grid-column: var(--relative-start) / span var(--note-span);
-}
-
-/* Hide keys that are completely to the left or right of the visible range */
-.noteBase {
   display: flex;
+  /*
+    Hide notes outside the visible range using two clamp() checks combined with min():
+    - Left  of range: --relative-start <= 0           → first  clamp returns 0 (invisible)
+    - Right of range: --note-start >= --end-unit       → second clamp returns 0 (invisible)
+    Either condition alone is enough to make the note fully transparent.
+  */
+  opacity: min(
+    clamp(0, var(--relative-start), 1),
+    clamp(0, calc(var(--end-unit) - var(--note-start)), 1)
+  );
 }
-
-/* If note-start + note-span <= start-unit, it's off-screen to the left */
-/* If note-start >= end-unit, it's off-screen to the right */
-/* CSS doesn't have if/else for variables easily, but we can use container-type or just rely on overflow if we use a better grid-column strategy. */
-
-/* Alternative: Use a very large grid and just shift the view. 
-   But the most robust way is to use a visibility toggle based on the range.
-   Since we are in React, we could pass the range, but the goal was to avoid it.
-   
-   Let's use the 'automatic' grid placement fix:
-   By using grid-column-start and span, we are already doing it.
-   The problem is '1fr' columns. If there are items in column 1 that don't belong there, they expand it.
-*/
 
 .note-21 {
   composes: noteBase;

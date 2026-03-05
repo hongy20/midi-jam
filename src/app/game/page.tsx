@@ -252,8 +252,6 @@ export default function GamePage() {
             originalDurationMs={originalDurationMs}
             scrollRef={scrollRef}
             inputDevice={selectedMIDIInput}
-            rangeStart={visibleMidiRange.startNote}
-            rangeEnd={visibleMidiRange.endNote}
           />
         )}
       </main>
@@ -264,8 +262,6 @@ export default function GamePage() {
           inputDevice={selectedMIDIInput}
           liveNotes={liveActiveNotes}
           playbackNotes={playbackNotes}
-          rangeStart={visibleMidiRange.startNote}
-          rangeEnd={visibleMidiRange.endNote}
         />
       </footer>
     </div>
