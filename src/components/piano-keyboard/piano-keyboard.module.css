@@ -53,33 +53,33 @@
 }
 
 /* Playback Notes (Blue/Purple - Default) */
-.playback {
+.key[data-playback="true"] {
   animation: pulse 2s infinite;
 }
 
-.playback[data-black="false"] {
+.key[data-playback="true"][data-black="false"] {
   background-color: rgba(59, 130, 246, 0.4);
   box-shadow: inset 0 0 20px #3b82f6;
 }
 
-.playback[data-black="true"] {
+.key[data-playback="true"][data-black="true"] {
   background-color: rgba(147, 51, 234, 0.4);
   box-shadow: inset 0 0 20px #9333ea;
 }
 
 /* Live Notes (Cyan/Teal - User Input) */
-.live {
+.key[data-live="true"] {
   animation: pulse 2s infinite;
 }
 
-.live[data-black="false"] {
+.key[data-live="true"][data-black="false"] {
   background-color: rgba(6, 182, 212, 0.5);
   box-shadow:
     inset 0 0 20px #06b6d4,
     0 0 15px rgba(6, 182, 212, 0.3);
 }
 
-.live[data-black="true"] {
+.key[data-live="true"][data-black="true"] {
   background-color: rgba(20, 184, 166, 0.5);
   box-shadow:
     inset 0 0 20px #14b8a6,
@@ -87,7 +87,7 @@
 }
 
 /* "Both" state intensified glow (Indigo) */
-.live.playback {
+.key[data-live="true"][data-playback="true"] {
   background-color: rgba(99, 102, 241, 0.6);
   box-shadow:
     inset 0 0 25px #6366f1,

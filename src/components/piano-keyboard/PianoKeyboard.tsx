@@ -64,6 +64,8 @@ const PianoKeys = memo(
               type="button"
               className={`${styles.key} ${noteClass}`}
               data-black={isBlack}
+              data-live="false"
+              data-playback="false"
               aria-label={`${noteName} ${isBlack ? "Black" : "White"} Key`}
               tabIndex={-1}
             >
@@ -90,24 +92,18 @@ export const PianoKeyboard = ({
 }: PianoKeyboardProps) => {
   const keyRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
 
-  // Imperative sync: Update classes on key elements without re-rendering
+  // Imperative sync: Update data attributes on key elements without re-rendering
   useEffect(() => {
     for (const [note, el] of keyRefs.current) {
       const isLive = liveNotes.has(note);
       const isPlayback = playbackNotes.has(note);
 
-      // Toggle live class
-      if (isLive) {
-        el.classList.add(styles.live);
-      } else {
-        el.classList.remove(styles.live);
+      // Update dataset for CSS attribute selectors
+      if (el.dataset.live !== isLive.toString()) {
+        el.dataset.live = isLive.toString();
       }
-
-      // Toggle playback class
-      if (isPlayback) {
-        el.classList.add(styles.playback);
-      } else {
-        el.classList.remove(styles.playback);
+      if (el.dataset.playback !== isPlayback.toString()) {
+        el.dataset.playback = isPlayback.toString();
       }
     }
   }, [liveNotes, playbackNotes]);
