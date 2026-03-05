@@ -38,7 +38,7 @@
   border-bottom-right-radius: 4px;
   grid-row: 1;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
-  /* Black keys sit on top of white keys */
+  /* Black keys sit on top of white keys, and their glows must too */
   z-index: 1;
 }
 
@@ -61,7 +61,6 @@
   border-radius: inherit;
   opacity: 0;
   pointer-events: none;
-  z-index: 2;
   transition: opacity 75ms;
 }
 
