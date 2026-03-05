@@ -7,6 +7,11 @@
       minmax(0, 1fr)
     );
   height: calc(var(--lane-height) * (var(--total-duration-ms) / 2000 + 1));
+  z-index: var(--z-lane);
+
+  /* Local Note Stacking Scale */
+  --z-note-white: 0;
+  --z-note-black: 10;
 }
 
 .note {
@@ -21,10 +26,10 @@
 
 .white {
   background-color: color-mix(in srgb, currentColor 20%, transparent);
-  z-index: 0;
+  z-index: var(--z-note-white);
 }
 
 .black {
   background-color: color-mix(in srgb, currentColor 40%, transparent);
-  z-index: 10;
+  z-index: var(--z-note-black);
 }

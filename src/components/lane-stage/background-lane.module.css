@@ -10,7 +10,7 @@
       minmax(0, 1fr)
     );
   grid-template-rows: 1fr;
-  z-index: 0;
+  z-index: var(--z-lane);
   overflow: hidden;
   opacity: 1;
 }
