@@ -10,8 +10,6 @@ interface LaneStageProps {
   originalDurationMs: number;
   scrollRef: React.RefObject<HTMLDivElement | null>;
   inputDevice: WebMidi.MIDIInput;
-  rangeStart?: number;
-  rangeEnd?: number;
 }
 
 export function LaneStage({
@@ -19,8 +17,6 @@ export function LaneStage({
   originalDurationMs,
   scrollRef,
   inputDevice,
-  rangeStart,
-  rangeEnd,
 }: LaneStageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -29,11 +25,7 @@ export function LaneStage({
       ref={containerRef}
       className="relative w-full h-full overflow-hidden bg-background/5"
     >
-      <BackgroundLane
-        inputDevice={inputDevice}
-        rangeStart={rangeStart}
-        rangeEnd={rangeEnd}
-      />
+      <BackgroundLane />
 
       <div
         ref={scrollRef}
