@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { isBlackKey } from "@/lib/device/piano";
 import {
   MIDI_NOTE_C4,
@@ -31,6 +31,58 @@ const NOTE_NAMES = [
 ];
 
 /**
+ * Static piano keys that register themselves to the parent's Ref Map.
+ */
+const PianoKeys = memo(
+  ({
+    keyRefs,
+  }: {
+    keyRefs: React.RefObject<Map<number, HTMLButtonElement> | null>;
+  }) => {
+    const notes = Array.from(
+      { length: PIANO_88_KEY_MAX - PIANO_88_KEY_MIN + 1 },
+      (_, i) => PIANO_88_KEY_MIN + i,
+    );
+
+    return (
+      <>
+        {notes.map((note) => {
+          const isBlack = isBlackKey(note);
+          const noteClass = gridStyles[`note-${note}`];
+          const noteName = `${NOTE_NAMES[note % 12]}${Math.floor(note / 12) - 1}`;
+
+          return (
+            <button
+              key={`key-${note}`}
+              ref={(el) => {
+                if (el) {
+                  keyRefs.current?.set(note, el);
+                } else {
+                  keyRefs.current?.delete(note);
+                }
+              }}
+              type="button"
+              className={`${styles.key} ${noteClass}`}
+              data-black={isBlack}
+              data-live="false"
+              data-playback="false"
+              aria-label={`${noteName} ${isBlack ? "Black" : "White"} Key`}
+              tabIndex={-1}
+            >
+              {!isBlack && note === MIDI_NOTE_C4 && (
+                <span className={styles.label}>C4</span>
+              )}
+            </button>
+          );
+        })}
+      </>
+    );
+  },
+);
+
+PianoKeys.displayName = "PianoKeys";
+
+/**
  * A high-performance responsive visual representation of a piano keyboard.
  * Uses a stable DOM tree and imperative Ref updates for 60fps glow effects.
  */
@@ -39,14 +91,6 @@ export const PianoKeyboard = ({
   playbackNotes,
 }: PianoKeyboardProps) => {
   const keyRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
-
-  // Generate the 88 notes once
-  const notes = useRef<number[]>(
-    Array.from(
-      { length: PIANO_88_KEY_MAX - PIANO_88_KEY_MIN + 1 },
-      (_, i) => PIANO_88_KEY_MIN + i,
-    ),
-  ).current;
 
   // Imperative sync: Update data attributes on key elements without re-rendering
   useEffect(() => {
@@ -66,35 +110,7 @@ export const PianoKeyboard = ({
 
   return (
     <div className={styles.container} role="img" aria-label="Piano keyboard">
-      {notes.map((note) => {
-        const isBlack = isBlackKey(note);
-        const noteClass = gridStyles[`note-${note}`];
-        const noteName = `${NOTE_NAMES[note % 12]}${Math.floor(note / 12) - 1}`;
-
-        return (
-          <button
-            key={`key-${note}`}
-            ref={(el) => {
-              if (el) {
-                keyRefs.current.set(note, el);
-              } else {
-                keyRefs.current.delete(note);
-              }
-            }}
-            type="button"
-            className={`${styles.key} ${noteClass}`}
-            data-black={isBlack}
-            data-live="false"
-            data-playback="false"
-            aria-label={`${noteName} ${isBlack ? "Black" : "White"} Key`}
-            tabIndex={-1}
-          >
-            {!isBlack && note === MIDI_NOTE_C4 && (
-              <span className={styles.label}>C4</span>
-            )}
-          </button>
-        );
-      })}
+      <PianoKeys keyRefs={keyRefs} />
     </div>
   );
 };
