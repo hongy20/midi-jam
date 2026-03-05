@@ -93,12 +93,12 @@ export const PianoKeyboard = ({ liveNotes, playbackNotes }: PianoKeyboardProps) 
 
 ## Task 5: Document Performance Learnings
 
-**File:** `src/components/piano-keyboard/PERFORMANCE.md`
+**File:** `AGENTS.md`
 
-Create a small documentation file explaining the "Stable DOM" principle:
+Update the **"High-Performance Rendering (60fps Target)"** section to include the **"Stable DOM"** principle:
 - **Rule**: Never mount/unmount elements for high-frequency (60fps) visual feedback.
-- **Solution**: Use stable elements and toggle attributes or classes via Refs.
-- **Benefit**: Zero layout shifts, minimal style recalculation, and bypassed React reconciliation.
+- **Solution**: Use stable elements and toggle attributes or classes via imperative Refs to bypass React reconciliation.
+- **Benefit**: Zero layout shifts, minimal style recalculation, and guaranteed 60fps performance for MIDI events.
 
 ---
 
