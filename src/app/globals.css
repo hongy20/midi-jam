@@ -9,12 +9,6 @@
   --btn-px: 2rem;
   --btn-text: 0.875rem;
   --layout-gap: 1rem;
-
-  /* Z-Index Layers */
-  --z-lane: 0;
-  --z-piano: 50;
-  --z-overlay: 100;
-  --z-nav: 200;
 }
 
 :root[data-theme="neon"],
