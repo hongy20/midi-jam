@@ -21,6 +21,7 @@ Midi Jam is a high-performance web application for learning musical instruments 
 To maintain a stable framerate, offload all frequent updates to the browser's compositor:
 - **Native Layout**: Prioritize CSS Grid/Flexbox over manual JS coordinate calculations.
 - **Layering**: Separate **Static Layers** (backgrounds, lanes) from **Dynamic Layers** (active notes, feedback) to minimize DOM reconciliation.
+- **Stable DOM Tree**: Never mount/unmount elements for high-frequency (60fps) visual feedback (e.g., piano glows). Use stable elements and toggle attributes or classes via imperative Refs to bypass React reconciliation.
 - **Compositor Animations**: Strictly use `transform` and `opacity`. NEVER animate layout-triggering properties (`width`, `height`, `top`, `bottom`).
 - **Precision Alignment**: Use the **21-Unit Octave Grid** (3 units per white key, 2 per black key) for sub-pixel-perfect piano keyboard alignment.
 

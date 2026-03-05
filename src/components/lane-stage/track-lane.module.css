@@ -21,10 +21,8 @@
 
 .white {
   background-color: color-mix(in srgb, currentColor 20%, transparent);
-  z-index: 0;
 }
 
 .black {
   background-color: color-mix(in srgb, currentColor 40%, transparent);
-  z-index: 10;
 }
