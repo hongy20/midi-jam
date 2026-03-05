@@ -97,5 +97,3 @@ export const PianoKeyboard = memo(
     );
   },
 );
-
-PianoKeyboard.displayName = "PianoKeyboard";
