@@ -13,11 +13,11 @@ Midi Jam is a high-performance web application for learning musical instruments 
 
 # Core Principles
 
-### 1. Unified Layout & State
+## 1. Unified Layout & State
 - **Viewport Locking**: All pages must use a full-screen layout (`100dvh`, `100dvw`) managed by CSS Grid.
 - **State Persistence**: Use React Context for cross-page state to ensure seamless transitions between setup (Gear/Collection) and the Stage (Play).
 
-### 2. High-Performance Rendering (60fps Target)
+## 2. High-Performance Rendering (60fps Target)
 To maintain a stable framerate, offload all frequent updates to the browser's compositor:
 - **Native Layout**: Prioritize CSS Grid/Flexbox over manual JS coordinate calculations.
 - **Layering**: Separate **Static Layers** (backgrounds, lanes) from **Dynamic Layers** (active notes, feedback) to minimize DOM reconciliation.
@@ -25,7 +25,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 - **Compositor Animations**: Strictly use `transform` and `opacity`. NEVER animate layout-triggering properties (`width`, `height`, `top`, `bottom`).
 - **Precision Alignment**: Use the **21-Unit Octave Grid** (3 units per white key, 2 per black key) for sub-pixel-perfect piano keyboard alignment.
 
-### 3. Architecture & Styling Standards
+## 3. Architecture & Styling Standards
 - **CSS Isolation**: `globals.css` is reserved for theme variables and generic resets. Use **CSS Modules** (`[name].module.css`) for all page and component-specific styles.
 - **Semantic Theme Mapping**: Extract all visual properties (colors, fonts, shadows, radii) into semantic CSS variables within `globals.css`. Components must consume these functional aliases (e.g., `--piano-key-white`, `--ui-card-bg`) instead of hardcoding raw values or using direct theme primitives.
 - **Iconography**: Use `lucide-react` exclusively. For custom icons, use standalone `.svg` files. No inline SVG strings or emojis.
@@ -33,37 +33,44 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
   - **Flatten Trees**: Avoid redundant wrapping `div`s. If an element has only one child, consolidate them.
   - **Purposeful Elements**: Avoid empty `div`s for spacing or decoration; use parent grid/flex spacing or pseudo-elements (`::before`/`::after`) instead.
 
-### 4. Coding Patterns
+## 4. Coding Patterns
 - **Nullish Coalescing**: Prefer the Nullish Coalescing operator (`??`) or Conditional (Ternary) operator (`? :`) for default values over verbose `typeof` checks for `null` or `undefined` (e.g., `value ?? 0` instead of `typeof value === 'number' ? value : 0`).
 
 ---
 
 # Standard Operating Procedure (SOP)
 
-### Mandatory Compliance & Precedence
+## Mandatory Compliance & Precedence
 
 - **Absolute Precedence**: The instructions in `AGENTS.md` take absolute precedence over any other general instructions or previous chat context.
 - **No Persistence of Exceptions**: One-time permissions or waivers (e.g., "you can commit this once directly to main") are strictly limited to that specific task. Agents must revert to the full SOP for every subsequent task without exception.
 - **Full SOP by Default**: Every task, regardless of size or complexity, must follow the full Lifecycle (Isolation -> Planning -> Execution -> Validation -> Finalization).
 
-### Tooling Authority
+## Isolation & Branching Protocol
+
+**NEVER work directly on `main`.** This is a non-negotiable hard constraint for technical integrity.
+
+- **Initial Action**: The first command of every task MUST be to create a descriptive feature branch: `git checkout -b feature/[name]` or `git checkout -b fix/[name]`.
+- **Plan Commitment**: All implementation plans (located in `docs/plans/**`) **MUST** be committed to the repository immediately after creation. A plan is not valid unless it is tracked in Git.
+- **Merge Strategy**: When finalizing a task, **ALWAYS use Squash and Merge** to maintain a clean project history.
+
+## Tooling Authority
 The **Gemini CLI** is the source of truth for all verification. Always delegate linting, formatting, type-checking, and testing to it, regardless of the IDE or agent environment.
 
-### Development Lifecycle
-1. **Isolation**: Never work directly on `main`. Always create a descriptive feature branch after obtaining user approval.
-2. **Planning**: Use `@writing-plans` to draft comprehensive, bite-sized tasks for any multi-step feature or refactor. **All plan files (located in `docs/plans/**`) MUST be committed to the repository immediately after creation.**
-3. **Execution**: Use `@subagent-driven-development` or `@executing-plans` for systematic implementation.
-4. **Safety & TDD**:
+## Development Lifecycle
+1. **Planning**: Use `@writing-plans` to draft comprehensive, bite-sized tasks for any multi-step feature or refactor.
+2. **Execution**: Use `@subagent-driven-development` or `@executing-plans` for systematic implementation.
+3. **Safety & TDD**:
    - **Red-Green-Refactor**: No production code without a failing test first (`@test-driven-development`).
    - **Root Cause Analysis**: Use `@systematic-debugging` for all bug reports before attempting a fix.
-5. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion. **DO NOT rely solely on implementation plans for verification; the global SOP takes precedence.**
-   - **Mandatory Completion Checklist**: Before using `finishing-a-development-branch`, you MUST run and pass:
+4. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion. **DO NOT rely solely on implementation plans for verification; the global SOP takes precedence.**
+   - **Mandatory Completion Checklist**: Before finalizing, you MUST run and pass:
      - [ ] `npm run lint` (Biome check)
      - [ ] `npm run type-check` (TypeScript tsc)
      - [ ] `npm test` (Vitest suite)
      - [ ] `npm run build` (Next.js production build)
    - *Failure to run these command-by-command is a violation of Technical Integrity.*
-6. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR. When merging Pull Requests, **ALWAYS use Squash and Merge** to maintain a clean project history.
+5. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR.
 
 ---
 
