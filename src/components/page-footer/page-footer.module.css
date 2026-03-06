@@ -25,7 +25,6 @@
 .centered {
   justify-content: center;
   text-align: center;
-  padding-bottom: 2rem; /* Restore Welcome page extra padding */
 }
 
 .actions {

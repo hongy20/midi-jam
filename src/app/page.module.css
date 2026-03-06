@@ -6,10 +6,8 @@
   gap: 1.5rem;
   width: 100%;
   max-width: 20rem; /* Consistency across all buttons */
-  align-items: stretch;
-  margin-top: 2rem;
 }
 
 .buttonGroup > * {
-  width: 100% !important; /* Force override fit-content in Button component */
+  width: 100%;
 }

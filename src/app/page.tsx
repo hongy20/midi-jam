@@ -33,7 +33,7 @@ export default function WelcomePage() {
       }
     >
       <main className="w-full h-full flex flex-col gap-4 items-center justify-center text-center">
-        <h1 className="text-6xl sm:text-7xl md:text-9xl w-full mb-16 font-black tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
+        <h1 className="text-6xl sm:text-7xl md:text-9xl w-full mb-4 font-black tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
           MIDI JAM
         </h1>
 
@@ -55,7 +55,7 @@ export default function WelcomePage() {
             disabled={!isSupported}
             icon={Play}
             iconPosition="right"
-            size="lg"
+            size="md"
           >
             START JAM
           </Button>
@@ -63,7 +63,7 @@ export default function WelcomePage() {
             variant="secondary"
             onClick={handleOptions}
             icon={Settings}
-            size="lg"
+            size="sm"
           >
             Options
           </Button>
