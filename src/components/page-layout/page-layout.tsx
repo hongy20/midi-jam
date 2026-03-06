@@ -3,7 +3,7 @@ import styles from "./page-layout.module.css";
 
 interface PageLayoutProps {
   header?: ReactNode;
-  footer?: ReactNode;
+  footer: ReactNode;
   children: ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -20,7 +20,7 @@ export function PageLayout({
     <div className={`${styles.container} ${className}`} style={style}>
       <header className={styles.header}>{header}</header>
       <main className={styles.main}>{children}</main>
-      {footer && <footer className={styles.footer}>{footer}</footer>}
+      <footer className={styles.footer}>{footer}</footer>
     </div>
   );
 }
