@@ -10,6 +10,44 @@
 
 ---
 
+## Design Specifications
+
+### 1. Architecture: Skeleton vs. Frames
+We separate the "Viewport Skeleton" from "Page Content."
+
+#### 1.1 `PageLayout` (The Skeleton)
+- **Role:** Enforces the `100dvw/h` viewport lock and the `3-row grid` structure.
+- **Centering Logic:** The `main` slot will use Flexbox (`items-center justify-center`) to ensure content is always centered by default.
+- **Grid Structure:** `grid-template-rows: auto 1fr auto`.
+
+#### 1.2 `PageHeader` & `PageFooter` (The Frames)
+- **Role:** Standardize spacing and alignment for page titles and action buttons.
+- **Design:** Simple Flex containers that handle `justify-between` and `gap` logic consistently.
+
+### 2. Component APIs & Styling
+
+#### 2.1 `PageLayout`
+- **Location:** `src/components/page-layout/`
+- **Props:**
+  ```tsx
+  interface PageLayoutProps {
+    header?: React.ReactNode;
+    footer?: React.ReactNode;
+    children: React.ReactNode; // Flexible middle section (centered)
+    className?: string; // Container overrides (e.g. background theme)
+    style?: React.CSSProperties; // Dynamic style overrides
+  }
+  ```
+- **Styling:** `page-layout.module.css` (using CSS Modules).
+
+#### 2.2 `PageHeader` & `PageFooter`
+- **`PageHeader`:** Standardizes `flex justify-between` layout for titles and back buttons.
+- **`PageFooter`:** Standardizes `flex items-center justify-end` layout for action buttons.
+
+---
+
+## Implementation Tasks
+
 ### Task 1: Create `PageLayout` Component
 
 **Files:**
@@ -82,11 +120,12 @@ interface PageLayoutProps {
   footer?: ReactNode;
   children: ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
-export function PageLayout({ header, footer, children, className = "" }: PageLayoutProps) {
+export function PageLayout({ header, footer, children, className = "", style }: PageLayoutProps) {
   return (
-    <div className={`${styles.container} ${className}`}>
+    <div className={`${styles.container} ${className}`} style={style}>
       {header && <header className={styles.header}>{header}</header>}
       <main className={styles.main}>{children}</main>
       {footer && <footer className={styles.footer}>{footer}</footer>}
