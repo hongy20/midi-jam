@@ -80,37 +80,31 @@ export default function PausePage() {
           </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full max-w-lg">
-          <div className="flex justify-center">
-            <Button
-              variant="secondary"
-              onClick={handleRestart}
-              size="lg"
-              icon={RotateCcw}
-            >
-              RESTART
-            </Button>
-          </div>
-          <div className="flex justify-center">
-            <Button
-              variant="secondary"
-              onClick={handleOptions}
-              size="lg"
-              icon={Settings}
-            >
-              OPTIONS
-            </Button>
-          </div>
-          <div className="sm:col-span-2 flex justify-center">
-            <Button
-              variant="secondary"
-              onClick={handleExit}
-              size="lg"
-              icon={XCircle}
-            >
-              END JAM
-            </Button>
-          </div>
+        <div className="flex flex-col landscape:flex-row items-center justify-center gap-4 sm:gap-6 w-full max-w-lg landscape:max-w-4xl">
+          <Button
+            variant="secondary"
+            onClick={handleRestart}
+            size="lg"
+            icon={RotateCcw}
+          >
+            RESTART
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleOptions}
+            size="lg"
+            icon={Settings}
+          >
+            OPTIONS
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleExit}
+            size="lg"
+            icon={XCircle}
+          >
+            END JAM
+          </Button>
         </div>
       </main>
     </PageLayout>
