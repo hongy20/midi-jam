@@ -76,26 +76,22 @@ export default function CollectionPage() {
       }
       footer={
         <PageFooter>
-          <div className="w-full sm:flex-1 flex">
-            <Button
-              variant="secondary"
-              onClick={handleSurprise}
-              icon={Dices}
-              size="md"
-            >
-              SURPRISE
-            </Button>
-          </div>
-          <div className="w-full sm:flex-[2] flex">
-            <Button
-              onClick={handlePlay}
-              disabled={!selected}
-              icon={Play}
-              size="md"
-            >
-              PLAY
-            </Button>
-          </div>
+          <Button
+            variant="secondary"
+            onClick={handleSurprise}
+            icon={Dices}
+            size="md"
+          >
+            SURPRISE
+          </Button>
+          <Button
+            onClick={handlePlay}
+            disabled={!selected}
+            icon={Play}
+            size="md"
+          >
+            PLAY
+          </Button>
         </PageFooter>
       }
     >
