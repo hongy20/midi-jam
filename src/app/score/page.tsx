@@ -65,7 +65,7 @@ export default function ScorePage() {
       >
         <div className="text-center mb-8 landscape:mb-4 w-full">
           <span className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-2 sm:mb-4 landscape:mb-1 block drop-shadow-md">
-            Stage Clear
+            SONG FINISHED
           </span>
           <h1 className="text-5xl sm:text-7xl md:text-8xl landscape:text-4xl font-black text-foreground italic uppercase tracking-tighter drop-shadow-xl bg-gradient-to-tr from-foreground to-foreground/50 bg-clip-text text-transparent">
             {titleLabel}

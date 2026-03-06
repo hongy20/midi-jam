@@ -230,13 +230,13 @@ export default function PlayPage() {
           <div className="flex flex-col items-center justify-center h-full gap-4">
             <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
             <span className="font-bold uppercase tracking-widest text-xs">
-              Loading Stage...
+              loading...
             </span>
           </div>
         ) : trackLoadStatus.error ? (
           <div className="flex flex-col items-center justify-center h-full gap-4">
             <span className="text-red-500 font-bold uppercase tracking-widest text-xs">
-              Error Loading Stage: {trackLoadStatus.error}
+              DATA CORRUPTED: {trackLoadStatus.error}
             </span>
           </div>
         ) : (
