@@ -19,7 +19,7 @@ Organize `globals.css` into layers:
 3. **Semantic Mappings:** Component-level functional aliases.
 
 #### Expanded Variable Categories:
-- **Piano Keyboard:** `--pk-key-white`, `--pk-key-black`, `--pk-glow-live-bg`, `--pk-glow-playback-bg`, `--pk-key-radius`.
+- **Piano Keyboard:** `--piano-key-white`, `--piano-key-black`, `--piano-glow-live-bg`, `--piano-glow-playback-bg`, `--piano-key-radius`.
 - **Lanes & Notes:** `--lane-bg-white`, `--lane-bg-black`, `--note-radius`, `--note-bg-intensity`.
 - **UI Elements (General):**
     - **Cards:** `--ui-card-bg`, `--ui-card-border`, `--ui-card-shadow`, `--ui-card-radius`.
@@ -42,7 +42,7 @@ Organize `globals.css` into layers:
 
 **Step 1: Define Extended Semantic Variables in each theme**
 - Update `:root` (Neon), `[data-theme="dark"]`, and `[data-theme="light"]` to include:
-    - **Piano/Lanes:** `--pk-key-white`, `--pk-key-black`, `--pk-glow-live-bg`, etc.
+    - **Piano/Lanes:** `--piano-key-white`, `--piano-key-black`, `--piano-glow-live-bg`, etc.
     - **UI Cards/Buttons:** `--ui-card-bg`, `--ui-card-border`, `--ui-card-radius`, `--ui-btn-primary-bg`, etc.
     - **Feedback:** `--ui-hit-perfect`, `--ui-hit-good`, etc.
 
