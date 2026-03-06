@@ -188,7 +188,7 @@ export default function PlayPage() {
 
   return (
     <PageLayout
-      className={`${styles.container} !transition-[color,background-color] !duration-500`}
+      className={styles.container}
       style={
         {
           "--start-unit": startUnit,
