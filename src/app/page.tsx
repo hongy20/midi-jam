@@ -19,14 +19,6 @@ export default function WelcomePage() {
     resetAll();
   }, [resetAll]);
 
-  const handleStart = () => {
-    toGear();
-  };
-
-  const handleOptions = () => {
-    toOptions();
-  };
-
   return (
     <PageLayout
       className={styles.page}
@@ -49,7 +41,7 @@ export default function WelcomePage() {
         ) : isSupported ? (
           <div className={styles.actions}>
             <Button
-              onClick={handleStart}
+              onClick={() => toGear()}
               icon={Play}
               iconPosition="right"
               size="md"
@@ -58,7 +50,7 @@ export default function WelcomePage() {
             </Button>
             <Button
               variant="secondary"
-              onClick={handleOptions}
+              onClick={() => toOptions()}
               icon={Settings}
               size="sm"
             >

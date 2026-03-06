@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import {
   createContext,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useRef,
