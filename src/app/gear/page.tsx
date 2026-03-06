@@ -107,7 +107,7 @@ function GearContent() {
       }
     >
       <main
-        className={`w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 max-w-5xl mx-auto flex flex-col gap-8`}
+        className={`w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar py-4 px-8 -mx-8 min-h-0 max-w-5xl mx-auto flex flex-col gap-8`}
       >
         <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
           {isLoading
@@ -137,7 +137,7 @@ function GearContent() {
                 key={inst.id}
                 type="button"
                 onClick={() => setSelected(inst.id)}
-                className={`group relative p-5 sm:p-8 landscape:p-4 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-3 sm:gap-4 overflow-hidden ${
+                className={`group relative p-5 sm:p-8 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-3 sm:gap-4 overflow-hidden ${
                   isSelected
                     ? "bg-foreground border-foreground scale-[1.02] shadow-[var(--ui-btn-primary-shadow)]"
                     : "bg-[var(--ui-card-bg)] border-[var(--ui-card-border)] hover:border-foreground/30 hover:bg-foreground/10"
@@ -151,18 +151,18 @@ function GearContent() {
                 />
 
                 <div
-                  className={`w-12 h-12 sm:w-16 sm:h-16 landscape:w-10 landscape:h-10 rounded-2xl flex items-center justify-center transition-colors relative z-10 ${
+                  className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center transition-colors relative z-10 ${
                     isSelected
                       ? "bg-background text-foreground"
                       : "bg-background/50 text-foreground/60"
                   }`}
                 >
-                  <Piano className="w-6 h-6 sm:w-7 sm:h-7 landscape:w-5 landscape:h-5" />
+                  <Piano className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
 
                 <div className="flex flex-col relative z-10 min-w-0">
                   <span
-                    className={`text-lg sm:text-xl landscape:text-base font-bold truncate ${isSelected ? "text-background" : "text-foreground"}`}
+                    className={`text-lg sm:text-xl font-bold truncate ${isSelected ? "text-background" : "text-foreground"}`}
                     title={inst.name || "Unknown Device"}
                   >
                     {inst.name || "Unknown Device"}

@@ -58,12 +58,12 @@ export default function OptionsPage() {
       footer={<PageFooter>Midi Jam v0.1.0 • Experimental Build</PageFooter>}
     >
       <main
-        className={`w-full h-full grid grid-cols-1 landscape:grid-cols-2 gap-3 sm:gap-6 overflow-y-auto no-scrollbar py-4`}
+        className={`w-full h-full grid grid-cols-1 gap-3 sm:gap-6 overflow-y-auto no-scrollbar py-4`}
       >
         {/* Setting Item: Theme */}
-        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 landscape:p-4 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
+        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 hover:bg-foreground/10 transition-colors">
           <div className="flex flex-col flex-1">
-            <span className="text-xl sm:text-2xl landscape:text-lg font-bold uppercase tracking-tight">
+            <span className="text-xl sm:text-2xl font-bold uppercase tracking-tight">
               Visual Theme
             </span>
             <span className="text-foreground/50 text-xs sm:text-sm font-medium">
@@ -76,7 +76,7 @@ export default function OptionsPage() {
                 key={opt}
                 type="button"
                 onClick={() => setTheme(opt)}
-                className={`px-4 sm:px-6 py-2 landscape:px-3 landscape:py-1 rounded-full font-black text-xs sm:text-sm landscape:text-[10px] uppercase tracking-widest transition-all ${
+                className={`px-4 sm:px-6 py-2 rounded-full font-black text-xs sm:text-sm uppercase tracking-widest transition-all ${
                   theme === opt
                     ? "bg-foreground text-background shadow-md scale-[1.05]"
                     : "text-foreground/60 hover:text-foreground"
@@ -89,9 +89,9 @@ export default function OptionsPage() {
         </div>
 
         {/* Setting Item: Speed */}
-        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 landscape:p-4 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
+        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 hover:bg-foreground/10 transition-colors">
           <div className="flex flex-col flex-1">
-            <span className="text-xl sm:text-2xl landscape:text-lg font-bold uppercase tracking-tight">
+            <span className="text-xl sm:text-2xl font-bold uppercase tracking-tight">
               Playback Speed
             </span>
             <span className="text-foreground/50 text-xs sm:text-sm font-medium">
@@ -104,7 +104,7 @@ export default function OptionsPage() {
                 key={opt.label}
                 type="button"
                 onClick={() => setSpeed(opt.value)}
-                className={`px-4 sm:px-6 py-2 landscape:px-3 landscape:py-1 rounded-full font-black text-xs sm:text-sm landscape:text-[10px] uppercase tracking-widest transition-all ${
+                className={`px-4 sm:px-6 py-2 rounded-full font-black text-xs sm:text-sm uppercase tracking-widest transition-all ${
                   speed === opt.value
                     ? "bg-foreground text-background shadow-md scale-[1.05]"
                     : "text-foreground/60 hover:text-foreground"
@@ -117,9 +117,9 @@ export default function OptionsPage() {
         </div>
 
         {/* Setting Item: Demo Mode */}
-        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 landscape:p-4 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
+        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 hover:bg-foreground/10 transition-colors">
           <div className="flex flex-col flex-1">
-            <span className="text-xl sm:text-2xl landscape:text-lg font-bold uppercase tracking-tight">
+            <span className="text-xl sm:text-2xl font-bold uppercase tracking-tight">
               Demo Mode
             </span>
             <span className="text-foreground/50 text-xs sm:text-sm font-medium">
@@ -129,16 +129,16 @@ export default function OptionsPage() {
           <button
             type="button"
             onClick={() => setDemoMode(!demoMode)}
-            className={`w-20 sm:w-24 landscape:w-16 h-10 sm:h-12 landscape:h-8 rounded-full relative transition-colors duration-300 self-end sm:self-auto ${
+            className={`w-20 sm:w-24 h-10 sm:h-12 rounded-full relative transition-colors duration-300 self-end sm:self-auto ${
               demoMode
                 ? "bg-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)]"
                 : "bg-foreground/20"
             }`}
           >
             <div
-              className={`absolute top-1 bottom-1 w-8 sm:w-10 landscape:w-6 rounded-full transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] shadow-sm ${
+              className={`absolute top-1 bottom-1 w-8 sm:w-10 rounded-full transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] shadow-sm ${
                 demoMode
-                  ? "bg-background left-[calc(100%-0.25rem-2rem)] sm:left-[calc(100%-0.25rem-2.5rem)] landscape:left-[calc(100%-0.25rem-1.5rem)] scale-110"
+                  ? "bg-background left-[calc(100%-0.25rem-2rem)] sm:left-[calc(100%-0.25rem-2.5rem)] scale-110"
                   : "bg-foreground/50 left-1 scale-90"
               }`}
             />
