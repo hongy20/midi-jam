@@ -46,7 +46,7 @@ export default function WelcomePage() {
               iconPosition="right"
               size="md"
             >
-              START JAM
+              START
             </Button>
             <Button
               variant="secondary"
