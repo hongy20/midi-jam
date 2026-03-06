@@ -60,12 +60,7 @@ export default function ScorePage() {
       footer={
         <PageFooter>
           <div className="flex-1 flex order-3 sm:order-1">
-            <Button
-              variant="secondary"
-              onClick={handleMainMenu}
-              size="md"
-              fullWidth
-            >
+            <Button variant="secondary" onClick={handleMainMenu} size="md">
               MAIN MENU
             </Button>
           </div>
@@ -76,7 +71,6 @@ export default function ScorePage() {
               onClick={handleNextSong}
               size="md"
               icon={ChevronRight}
-              fullWidth
             >
               NEXT SONG
             </Button>
@@ -88,7 +82,6 @@ export default function ScorePage() {
               onClick={handleRetry}
               size="md"
               icon={RotateCcw}
-              fullWidth
             >
               RETRY
             </Button>

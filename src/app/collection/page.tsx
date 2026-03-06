@@ -82,7 +82,6 @@ export default function CollectionPage() {
               onClick={handleSurprise}
               icon={Dices}
               size="md"
-              fullWidth
             >
               SURPRISE
             </Button>
@@ -93,7 +92,6 @@ export default function CollectionPage() {
               disabled={!selected}
               icon={Play}
               size="md"
-              fullWidth
             >
               PLAY
             </Button>
