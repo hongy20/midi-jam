@@ -1,8 +1,7 @@
 /* src/components/piano-keyboard/piano-grid.module.css */
 .noteBase {
   --relative-start: calc(var(--note-start) - var(--start-unit) + 1);
-  --note-span: calc(3 - var(--is-black));
-  grid-column: var(--relative-start) / span var(--note-span);
+  grid-column: var(--relative-start) / span calc(3 - var(--is-black));
   display: flex;
   /*
     Hide notes outside the visible range using two clamp() checks combined with min():

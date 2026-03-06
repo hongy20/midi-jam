@@ -46,7 +46,6 @@ describe("LaneStage", () => {
       startTime: 0,
       duration: 1,
       velocity: 0.8,
-      isBlack: false,
     },
     {
       id: "2",
@@ -54,7 +53,6 @@ describe("LaneStage", () => {
       startTime: 1,
       duration: 1,
       velocity: 0.8,
-      isBlack: true,
     },
   ];
   const originalDurationMs = 2000;
