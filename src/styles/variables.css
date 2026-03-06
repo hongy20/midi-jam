@@ -34,3 +34,10 @@
     --footer-height: 91px;
   }
 }
+
+@media (min-height: 601px) {
+  :root {
+    --header-height: 4rem;
+    --footer-height: 4rem;
+  }
+}
