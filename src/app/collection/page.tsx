@@ -2,6 +2,7 @@
 
 import { ArrowLeft, Dices, Play } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer";
 import { PageHeader } from "@/components/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
@@ -62,37 +63,35 @@ export default function CollectionPage() {
     <PageLayout
       header={
         <PageHeader title="Song Collection">
-          <button
-            type="button"
+          <Button
+            variant="secondary"
+            icon={ArrowLeft}
+            iconPosition="left"
             onClick={handleBack}
-            className="group flex items-center gap-2 px-4 py-2 bg-[var(--ui-btn-secondary-bg)] border border-[var(--ui-btn-secondary-border)] rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
+            className="!px-4 !py-2 !text-[10px] sm:!text-xs"
           >
-            <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
             Your Gear
-          </button>
+          </Button>
         </PageHeader>
       }
       footer={
         <PageFooter>
-          <button
-            type="button"
+          <Button
+            variant="secondary"
             onClick={handleSurprise}
-            className="w-full sm:flex-1 px-[var(--app-btn-px)] py-[var(--btn-py)] bg-[var(--ui-btn-secondary-bg)] text-[var(--ui-btn-secondary-text)] border border-[var(--ui-btn-secondary-border)] font-black rounded-full hover:bg-foreground/20 hover:scale-[1.02] active:scale-95 transition-all text-[var(--btn-text)] flex items-center justify-center gap-2"
+            icon={Dices}
+            className="w-full sm:flex-1"
           >
-            SURPRISE <Dices className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
-          <button
-            type="button"
+            SURPRISE
+          </Button>
+          <Button
             onClick={handlePlay}
             disabled={!selected}
-            className={`w-full sm:flex-[2] px-[var(--app-btn-px)] py-[var(--btn-py)] rounded-full font-black text-[var(--btn-text)] transition-all flex items-center justify-center gap-2 ${
-              selected
-                ? "bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] hover:scale-102 active:scale-95 shadow-[var(--ui-btn-primary-shadow)] cursor-pointer"
-                : "opacity-40 bg-foreground/10 text-foreground/40 cursor-not-allowed"
-            }`}
+            icon={Play}
+            className="w-full sm:flex-[2]"
           >
-            PLAY <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current" />
-          </button>
+            PLAY
+          </Button>
         </PageFooter>
       }
     >
