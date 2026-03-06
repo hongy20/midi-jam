@@ -9,12 +9,16 @@ import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
 export default function PausePage() {
-  const { toPlay, toOptions, toHome } = useNavigation();
-  const { game, instruments, tracks, actions } = useAppContext();
-  const { setSession: setGameSession } = game;
+  const { toPlay, toOptions, toScore } = useNavigation();
+  const { game, instruments, tracks, results } = useAppContext();
+  const {
+    session: gameSession,
+    setSession: setGameSession,
+    track: trackStatus,
+  } = game;
   const { input: selectedMIDIInput } = instruments;
   const { selected: selectedTrack } = tracks;
-  const { resetAll: clearSelection } = actions;
+  const { set: setSessionResults } = results;
 
   const handleResume = () => {
     toPlay();
@@ -30,8 +34,17 @@ export default function PausePage() {
   };
 
   const handleExit = () => {
-    clearSelection();
-    toHome();
+    if (gameSession && trackStatus.isReady) {
+      const { score, combo } = gameSession;
+      const totalEvents = trackStatus.events.length;
+      setSessionResults({
+        score,
+        accuracy: Math.floor((score / (totalEvents * 100)) * 100) || 0,
+        combo,
+      });
+    }
+    setGameSession(null);
+    toScore();
   };
 
   if (!selectedTrack || !selectedMIDIInput) {
@@ -60,7 +73,7 @@ export default function PausePage() {
             size="md"
             icon={LogOut}
           >
-            EXIT JAM
+            FINISH JAM
           </Button>
           <Button
             variant="primary"
@@ -87,22 +100,26 @@ export default function PausePage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full max-w-lg">
-          <Button
-            variant="primary"
-            onClick={handleResume}
-            size="lg"
-            icon={Play}
-          >
-            RESUME
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleRestart}
-            size="lg"
-            icon={RotateCcw}
-          >
-            RESTART
-          </Button>
+          <div className="flex justify-center">
+            <Button
+              variant="primary"
+              onClick={handleResume}
+              size="lg"
+              icon={Play}
+            >
+              RESUME
+            </Button>
+          </div>
+          <div className="flex justify-center">
+            <Button
+              variant="secondary"
+              onClick={handleRestart}
+              size="lg"
+              icon={RotateCcw}
+            >
+              RESTART
+            </Button>
+          </div>
           <div className="sm:col-span-2 flex justify-center">
             <Button
               variant="secondary"
@@ -110,7 +127,7 @@ export default function PausePage() {
               size="lg"
               icon={LogOut}
             >
-              QUIT JAM
+              END JAM
             </Button>
           </div>
         </div>
