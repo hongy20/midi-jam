@@ -33,6 +33,9 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
   - **Flatten Trees**: Avoid redundant wrapping `div`s. If an element has only one child, consolidate them.
   - **Purposeful Elements**: Avoid empty `div`s for spacing or decoration; use parent grid/flex spacing or pseudo-elements (`::before`/`::after`) instead.
 
+### 4. Coding Patterns
+- **Nullish Coalescing**: Prefer the Nullish Coalescing operator (`??`) or Conditional (Ternary) operator (`? :`) for default values over verbose `typeof` checks for `null` or `undefined` (e.g., `value ?? 0` instead of `typeof value === 'number' ? value : 0`).
+
 ---
 
 # Standard Operating Procedure (SOP)
