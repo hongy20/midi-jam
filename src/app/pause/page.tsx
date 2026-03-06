@@ -1,6 +1,6 @@
 "use client";
 
-import { Play, RotateCcw, Settings } from "lucide-react";
+import { LogOut, Play, RotateCcw, Settings } from "lucide-react";
 import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
@@ -9,11 +9,12 @@ import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
 export default function PausePage() {
-  const { toPlay, toOptions } = useNavigation();
-  const { game, instruments, tracks } = useAppContext();
+  const { toPlay, toOptions, toHome } = useNavigation();
+  const { game, instruments, tracks, actions } = useAppContext();
   const { setSession: setGameSession } = game;
   const { input: selectedMIDIInput } = instruments;
   const { selected: selectedTrack } = tracks;
+  const { resetAll: clearSelection } = actions;
 
   const handleResume = () => {
     toPlay();
@@ -26,6 +27,11 @@ export default function PausePage() {
 
   const handleOptions = () => {
     toOptions("pause");
+  };
+
+  const handleExit = () => {
+    clearSelection();
+    toHome();
   };
 
   if (!selectedTrack || !selectedMIDIInput) {
@@ -48,6 +54,14 @@ export default function PausePage() {
       }
       footer={
         <PageFooter>
+          <Button
+            variant="secondary"
+            onClick={handleExit}
+            size="md"
+            icon={LogOut}
+          >
+            EXIT JAM
+          </Button>
           <Button
             variant="primary"
             onClick={handleResume}
@@ -73,24 +87,30 @@ export default function PausePage() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full max-w-lg">
-          <div className="flex justify-center">
-            <Button
-              variant="primary"
-              onClick={handleResume}
-              size="lg"
-              icon={Play}
-            >
-              RESUME
-            </Button>
-          </div>
-          <div className="flex justify-center">
+          <Button
+            variant="primary"
+            onClick={handleResume}
+            size="lg"
+            icon={Play}
+          >
+            RESUME
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleRestart}
+            size="lg"
+            icon={RotateCcw}
+          >
+            RESTART
+          </Button>
+          <div className="sm:col-span-2 flex justify-center">
             <Button
               variant="secondary"
-              onClick={handleRestart}
+              onClick={handleExit}
               size="lg"
-              icon={RotateCcw}
+              icon={LogOut}
             >
-              RESTART
+              QUIT JAM
             </Button>
           </div>
         </div>
