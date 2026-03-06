@@ -1,7 +1,7 @@
 :root {
   /* Global Layout Constants - Theme Independent */
-  --header-height: auto;
-  --footer-height: auto;
+  --header-height: 2.5rem;
+  --footer-height: 2.5rem;
   --header-py: 1rem;
   --footer-py: 1rem;
   --h1-size: 1.875rem;
