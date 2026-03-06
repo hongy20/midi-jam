@@ -19,7 +19,7 @@ A new function `getVisibleMidiRange(notes: number[])` will:
 
 Using white keys for the buffer ensures that the viewport always ends on a "full" key boundary and provides consistent visual spacing.
 
-### 2. Page-Level Orchestration (`src/app/game/page.tsx`)
+### 2. Page-Level Orchestration (`src/app/play/page.tsx`)
 The `GamePage` will:
 - Call `getVisibleMidiRange` once the track is loaded.
 - Use `getNoteUnits(startNote, endNote)` to get `--start-unit` and `--end-unit`.

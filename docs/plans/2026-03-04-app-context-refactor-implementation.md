@@ -20,13 +20,13 @@
 ```typescript
 export const ROUTES = {
   HOME: '/',
-  TRACKS: '/tracks',
-  INSTRUMENTS: '/instruments',
-  GAME: '/game',
-  PAUSE: '/game/pause',
-  RESULTS: '/results',
+  TRACKS: '/collection',
+  INSTRUMENTS: '/gear',
+  GAME: '/play',
+  PAUSE: '/pause',
+  RESULTS: '/score',
   RECONNECT: '/reconnect',
-  SETTINGS: '/settings',
+  SETTINGS: '/options',
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];
@@ -82,7 +82,7 @@ git commit -m "refactor: define new AppContext types and structure"
 
 **Step 1: Move MIDI parsing logic into `AppContext`**
 
-Add a `useEffect` inside `AppProvider` that watches `tracks.selected` and the current path. If on `/game`, trigger `loadMidiFile` and update `game.track`.
+Add a `useEffect` inside `AppProvider` that watches `tracks.selected` and the current path. If on `/play`, trigger `loadMidiFile` and update `game.track`.
 
 **Step 2: Update `instruments` group with `lastInputName`**
 
@@ -156,10 +156,10 @@ git commit -m "feat: implement state-driven NavigationGuard"
 ### Task 6: Update Pages & Components to new Context
 
 **Files:**
-- Modify: `src/app/game/page.tsx`
-- Modify: `src/app/tracks/page.tsx`
-- Modify: `src/app/instruments/page.tsx`
-- Modify: `src/app/results/page.tsx`
+- Modify: `src/app/play/page.tsx`
+- Modify: `src/app/collection/page.tsx`
+- Modify: `src/app/gear/page.tsx`
+- Modify: `src/app/score/page.tsx`
 - Modify: `src/components/device-selector.tsx`
 - ... (Other components using useSelection)
 

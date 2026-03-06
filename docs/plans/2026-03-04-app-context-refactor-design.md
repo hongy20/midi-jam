@@ -64,17 +64,17 @@ A centralized `NavigationGuard` component will monitor the `pathname` and `AppCo
 
 | Path | Condition | Target Path | Reason |
 | :--- | :--- | :--- | :--- |
-| `/game` | `!tracks.selected` | `/tracks` | No music chosen |
-| `/game` | `!instruments.input` | `/reconnect` | Device disconnected |
-| `/game/pause` | `!tracks.selected` | `/tracks` | Lost track context |
-| `/game/pause` | `!instruments.input` | `/reconnect` | Device disconnected while paused |
-| `/reconnect` | `instruments.input !== null` | `/game/pause` | Device restored; return to pause |
-| `/instruments` | `!tracks.selected` | `/tracks` | Must pick music before instrument |
-| `/results` | `!results.last` | `/` | No results to display |
-| `/settings` | *(None)* | *(None)* | Always accessible |
+| `/play` | `!tracks.selected` | `/collection` | No music chosen |
+| `/play` | `!instruments.input` | `/reconnect` | Device disconnected |
+| `/pause` | `!tracks.selected` | `/collection` | Lost track context |
+| `/pause` | `!instruments.input` | `/reconnect` | Device disconnected while paused |
+| `/reconnect` | `instruments.input !== null` | `/pause` | Device restored; return to pause |
+| `/gear` | `!tracks.selected` | `/collection` | Must pick music before instrument |
+| `/score` | `!results.last` | `/` | No results to display |
+| `/options` | *(None)* | *(None)* | Always accessible |
 
 ### 3.3 Data Flow: MIDI Parsing
-1. **Trigger**: When the user navigates to `/game` and `tracks.selected` exists.
+1. **Trigger**: When the user navigates to `/play` and `tracks.selected` exists.
 2. **Execution**: `AppContext` uses a `useEffect` to parse the selected track.
 3. **State Update**: `game.track` transitions from `{ isLoading: true }` to the final result.
 4. **UI**: `GamePage` renders a loader if `game.track.isLoading` is true.
@@ -89,6 +89,6 @@ A centralized `NavigationGuard` component will monitor the `pathname` and `AppCo
 ## 5. Success Criteria
 - [ ] No `useEffect` redirects inside individual pages (except the Guard).
 - [ ] Mid-game device disconnect triggers the `/reconnect` page.
-- [ ] Reconnecting the device returns the user to the `/game/pause` screen.
+- [ ] Reconnecting the device returns the user to the `/pause` screen.
 - [ ] `GamePage` handles the `game.track.isLoading` state explicitly.
 - [ ] All tests pass and type-checking is clean.

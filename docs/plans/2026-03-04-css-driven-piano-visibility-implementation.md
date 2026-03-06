@@ -92,7 +92,7 @@ git commit -m "feat: add getVisibleMidiRange utility"
 ### Task 2: Update GamePage to use Dynamic Range
 
 **Files:**
-- Modify: `src/app/game/page.tsx`
+- Modify: `src/app/play/page.tsx`
 
 **Step 1: Update range calculation**
 Import `getVisibleMidiRange` and use it with `spans` (if ready).
@@ -113,7 +113,7 @@ Run: `npm run build` (or just check dev mode)
 
 **Step 3: Commit**
 ```bash
-git add src/app/game/page.tsx
+git add src/app/play/page.tsx
 git commit -m "feat: calculate dynamic piano range in GamePage"
 ```
 

@@ -2,7 +2,7 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Move the calculation of `--start-unit` and `--end-unit` CSS variables from `PianoKeyboard.tsx` and `LaneStage.tsx` to `src/app/game/page.tsx` to reduce redundancy.
+**Goal:** Move the calculation of `--start-unit` and `--end-unit` CSS variables from `PianoKeyboard.tsx` and `LaneStage.tsx` to `src/app/play/page.tsx` to reduce redundancy.
 
 **Architecture:** 
 - **Game Page:** Calculate `startUnit` and `endUnit` once and set them on the top-level container.
@@ -15,7 +15,7 @@
 ### Task 1: Update Game Page
 
 **Files:**
-- Modify: `src/app/game/page.tsx`
+- Modify: `src/app/play/page.tsx`
 
 **Step 1: Import constants and utility**
 
@@ -43,7 +43,7 @@ const { startUnit, endUnit } = getNoteUnits(PIANO_88_KEY_MIN, PIANO_88_KEY_MAX);
 **Step 3: Commit**
 
 ```bash
-git add src/app/game/page.tsx
+git add src/app/play/page.tsx
 git commit -m "refactor: hoist piano range units to game page container"
 ```
 

@@ -76,15 +76,15 @@ git commit -m "refactor: consolidate CSS in PianoKeyboard"
 **Files:**
 - Delete: `src/components/falldown-visualizer/BackgroundGrid.tsx`
 - Delete: `src/components/falldown-visualizer/background-grid.module.css`
-- Modify: `src/app/game/page.tsx` (Remove `BackgroundGrid` import and usage)
+- Modify: `src/app/play/page.tsx` (Remove `BackgroundGrid` import and usage)
 
-**Step 1: Remove references** in `src/app/game/page.tsx`.
+**Step 1: Remove references** in `src/app/play/page.tsx`.
 **Step 2: Delete the directory** `src/components/falldown-visualizer/`.
 
 **Step 3: Commit**
 ```bash
 git rm -r src/components/falldown-visualizer/
-git add src/app/game/page.tsx
+git add src/app/play/page.tsx
 git commit -m "chore: remove obsolete falldown-visualizer components"
 ```
 
@@ -120,7 +120,7 @@ git commit -m "refactor: add inputDevice prop to LaneStage and consolidate child
 ### Task 6: Propagate inputDevice from Game Page
 
 **Files:**
-- Modify: `src/app/game/page.tsx`
+- Modify: `src/app/play/page.tsx`
 
 **Step 1: Pass inputDevice**
 - Ensure the `selectedInput` from MIDI context is passed to `LaneStage`.

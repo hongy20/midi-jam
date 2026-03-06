@@ -88,7 +88,7 @@ const active = Array.from(new Set([...liveNotes, ...playbackNotes]));
 
 ## Task 5: Clean up call sites in `page.tsx`
 
-**File:** `src/app/game/page.tsx`
+**File:** `src/app/play/page.tsx`
 
 - Remove `rangeStart={visibleMidiRange.startNote}` and `rangeEnd={visibleMidiRange.endNote}` from both `<LaneStage>` and `<VirtualInstrument>`
 - Keep `visibleMidiRange`, `startUnit`, `endUnit`, and the CSS variable assignment — these still drive the CSS grid

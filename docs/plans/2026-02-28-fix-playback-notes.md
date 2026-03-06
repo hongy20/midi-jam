@@ -40,12 +40,12 @@ git commit -m "refactor(lane-stage): remove internal playback hooks"
 ### Task 2: Implement playback state in GamePage
 
 **Files:**
-- Modify: `src/app/game/page.tsx`
+- Modify: `src/app/play/page.tsx`
 
 **Step 1: Import hooks and add playback state**
 
 ```tsx
-// src/app/game/page.tsx
+// src/app/play/page.tsx
 
 import { useDemoPlayback } from "@/hooks/use-demo-playback";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
@@ -88,7 +88,7 @@ useDemoPlayback({
 **Step 2: Pass real playbackNotes to VirtualInstrument**
 
 ```tsx
-// src/app/game/page.tsx
+// src/app/play/page.tsx
 
 <VirtualInstrument
   inputDevice={selectedMIDIInput}
@@ -99,7 +99,7 @@ useDemoPlayback({
 
 **Step 3: Commit**
 ```bash
-git add src/app/game/page.tsx
+git add src/app/play/page.tsx
 git commit -m "feat(game): lift playback state to display demo notes on keyboard"
 ```
 

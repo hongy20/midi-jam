@@ -2,12 +2,12 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Transition the gameplay pause functionality from an overlay within the game page to a dedicated route (`/game/pause`), ensuring all gameplay state (progress, score, combo) is persisted via `SelectionContext`.
+**Goal:** Transition the gameplay pause functionality from an overlay within the game page to a dedicated route (`/pause`), ensuring all gameplay state (progress, score, combo) is persisted via `SelectionContext`.
 
 **Architecture:** 
 - Centralize gameplay state in `SelectionContext` within a `GameSession` object.
 - Update `useLaneTimeline` and `useLaneScoreEngine` hooks to initialize from provided state.
-- Create `/game/pause` page that modifies context state and handles navigation back to game or results.
+- Create `/pause` page that modifies context state and handles navigation back to game or results.
 
 **Tech Stack:** React, Next.js (App Router), Lucide React.
 
@@ -107,7 +107,7 @@ git commit -m "feat: support state restoration in useLaneScoreEngine"
 ### Task 4: Update GamePage to Sync State and Handle Pause Navigation
 
 **Files:**
-- Modify: `src/app/game/page.tsx`
+- Modify: `src/app/play/page.tsx`
 
 **Step 1: Initialize local state from gameSession**
 
@@ -121,7 +121,7 @@ const handleTogglePause = () => {
     combo,
     currentTimeMs: getCurrentTimeMs(),
   });
-  navigate("/game/pause");
+  navigate("/pause");
 };
 ```
 
@@ -130,8 +130,8 @@ const handleTogglePause = () => {
 **Step 4: Commit**
 
 ```bash
-git add src/app/game/page.tsx
-git commit -m "refactor: sync gameplay state and navigate to /game/pause"
+git add src/app/play/page.tsx
+git commit -m "refactor: sync gameplay state and navigate to /pause"
 ```
 
 ---
@@ -139,20 +139,20 @@ git commit -m "refactor: sync gameplay state and navigate to /game/pause"
 ### Task 5: Create Dedicated Pause Page
 
 **Files:**
-- Create: `src/app/game/pause/page.tsx`
-- Create: `src/app/game/pause/page.module.css`
+- Create: `src/app/pause/page.tsx`
+- Create: `src/app/pause/page.module.css`
 
 **Step 1: Implement the Pause Page**
 
 It should render the `PauseOverlay` logic or its contents.
-- `onResume`: Set `isPaused: false` and navigate back to `/game`.
-- `onRestart`: Reset context and navigate back to `/game`.
-- `onQuit`: Navigate to `/results` with context results.
+- `onResume`: Set `isPaused: false` and navigate back to `/play`.
+- `onRestart`: Reset context and navigate back to `/play`.
+- `onQuit`: Navigate to `/score` with context results.
 
 **Step 2: Commit**
 
 ```bash
-git add src/app/game/pause/page.tsx src/app/game/pause/page.module.css
+git add src/app/pause/page.tsx src/app/pause/page.module.css
 git commit -m "feat: add dedicated pause page"
 ```
 

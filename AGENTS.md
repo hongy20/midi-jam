@@ -15,7 +15,7 @@ Midi Jam is a high-performance web application for learning musical instruments 
 
 ### 1. Unified Layout & State
 - **Viewport Locking**: All pages must use a full-screen layout (`100dvh`, `100dvw`) managed by CSS Grid.
-- **State Persistence**: Use React Context for cross-page state to ensure seamless transitions between setup and gameplay.
+- **State Persistence**: Use React Context for cross-page state to ensure seamless transitions between setup (Gear/Collection) and the Stage (Play).
 
 ### 2. High-Performance Rendering (60fps Target)
 To maintain a stable framerate, offload all frequent updates to the browser's compositor:
