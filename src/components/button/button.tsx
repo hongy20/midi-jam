@@ -2,8 +2,10 @@ import type { LucideIcon } from "lucide-react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import styles from "./button.module.css";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> {
   variant?: "primary" | "secondary";
+  size?: "sm" | "md" | "lg";
   icon?: LucideIcon;
   iconPosition?: "left" | "right";
   children: ReactNode;
@@ -11,10 +13,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function Button({
   variant = "primary",
+  size = "md",
   icon: Icon,
   iconPosition = "right",
   children,
-  className = "",
   ...props
 }: ButtonProps) {
   // Use displayName or name to detect arrow types for special animations
@@ -32,7 +34,7 @@ export function Button({
 
   return (
     <button
-      className={`${styles.button} ${styles[variant]} ${className} group`}
+      className={`${styles.button} ${styles[variant]} ${styles[size]} group`}
       {...props}
     >
       {Icon && iconPosition === "left" && <Icon className={iconClasses} />}

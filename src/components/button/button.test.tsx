@@ -1,7 +1,7 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { Play } from "lucide-react";
-import { describe, expect, it, vi } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Button } from "./button";
+import { describe, it, expect, vi } from "vitest";
+import { Play } from "lucide-react";
 
 describe("Button", () => {
   it("renders with children and handles clicks", () => {
@@ -18,5 +18,12 @@ describe("Button", () => {
     // Lucide icon check
     const icon = document.querySelector("svg");
     expect(icon).toBeInTheDocument();
+  });
+
+  it("renders with different sizes", () => {
+    const { rerender } = render(<Button size="sm">Small</Button>);
+    expect(screen.getByText("Small")).toBeDefined();
+    rerender(<Button size="lg">Large</Button>);
+    expect(screen.getByText("Large")).toBeDefined();
   });
 });
