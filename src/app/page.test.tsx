@@ -49,7 +49,7 @@ describe("Welcome Page", () => {
       setDemoMode: vi.fn(),
     },
     actions: { resetAll: vi.fn() },
-    isSupported: true,
+    home: { isLoading: false, isSupported: true },
   };
 
   beforeEach(() => {
@@ -58,7 +58,7 @@ describe("Welcome Page", () => {
       value: vi.fn(),
       configurable: true,
     });
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it("renders the title and start button", () => {
@@ -70,6 +70,34 @@ describe("Welcome Page", () => {
     expect(
       screen.getByRole("button", { name: /START JAM/i }),
     ).toBeInTheDocument();
+  });
+
+  it("shows spinner when loading", () => {
+    vi.mocked(useNavigation).mockReturnValue(mockNavigation);
+    vi.mocked(useAppContext).mockReturnValue({
+      ...mockContext,
+      home: { isLoading: true, isSupported: true },
+    });
+
+    render(<WelcomePage />);
+    expect(screen.getByText(/Initializing Engine/i)).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /START JAM/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows error when not supported", () => {
+    vi.mocked(useNavigation).mockReturnValue(mockNavigation);
+    vi.mocked(useAppContext).mockReturnValue({
+      ...mockContext,
+      home: { isLoading: false, isSupported: false },
+    });
+
+    render(<WelcomePage />);
+    expect(screen.getByText(/UNSUPPORTED BROWSER/i)).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /START JAM/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("navigates to gear on start click", () => {

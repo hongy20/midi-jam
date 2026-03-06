@@ -1,13 +1,14 @@
 /* No animations for welcome page */
+:global(:root) {
+  --header-height: 0;
+}
 
-.buttonGroup {
+.actions {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   width: 100%;
   max-width: 20rem; /* Consistency across all buttons */
-}
-
-.buttonGroup > * {
-  width: 100%;
+  align-items: stretch;
+  margin-top: 2rem;
 }

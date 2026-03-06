@@ -89,11 +89,11 @@ describe("Play Page", () => {
       setDemoMode: vi.fn(),
     },
     actions: { resetAll: vi.fn() },
-    isSupported: true,
+    home: { isLoading: false, isSupported: true },
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
     vi.mocked(useAppContext).mockReturnValue(mockContext);
 

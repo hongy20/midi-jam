@@ -81,7 +81,10 @@ export interface AppContextType {
   actions: {
     resetAll: () => void;
   };
-  isSupported: boolean;
+  home: {
+    isLoading: boolean;
+    isSupported: boolean;
+  };
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -101,12 +104,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
     isReady: false,
     error: null,
   });
-  const [isSupported, setIsSupported] = useState<boolean>(true);
+  const [isHomeLoading, setIsHomeLoading] = useState<boolean>(true);
+  const [isSupported, setIsSupported] = useState<boolean>(false);
   const lastLoadedTrackId = useRef<string | null>(null);
 
-  // Detect Web MIDI support on mount
+  // Detect Web MIDI support and finish initial loading on mount
   useEffect(() => {
     setIsSupported("requestMIDIAccess" in navigator);
+
+    // Provide a small window to show the loader for smoother experience
+    const timer = setTimeout(() => {
+      setIsHomeLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // MIDI Devices
@@ -210,7 +221,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     actions: {
       resetAll,
     },
-    isSupported,
+    home: {
+      isLoading: isHomeLoading,
+      isSupported,
+    },
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
