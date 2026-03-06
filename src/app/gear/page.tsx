@@ -19,34 +19,13 @@ export default function GearPage() {
   } = useAppContext();
   const { inputs, isLoading, error } = useMIDIDevices();
 
-  const [selected, setSelected] = useState<string | null>(
-    selectedMIDIInput?.id || null,
-  );
-  const [lastInputId, setLastInputId] = useState<string | null>(null);
-
   useEffect(() => {
-    if (lastInputId && lastInputId !== selected) {
-      setSelected(lastInputId);
-    }
-  }, [lastInputId, selected]);
-
-  useEffect(() => {
-    // If a device is disconnected and was selected, unselect it.
-    if (selected && !inputs.some((input) => input.id === selected)) {
-      setSelected(null);
-      if (lastInputId === selected) {
-        setLastInputId(null);
-      }
-    }
-  }, [inputs, selected, lastInputId]);
-
-  useEffect(() => {
-    // Attach listener to all inputs to detect activity
+    // Attach listener to all inputs to detect activity and auto-select
     const handlers = new Map<string, (e: Event) => void>();
 
     inputs.forEach((input) => {
       const handler = () => {
-        setLastInputId(input.id);
+        selectMIDIInput(input);
       };
       input.addEventListener("midimessage", handler);
       handlers.set(input.id, handler);
@@ -60,16 +39,10 @@ export default function GearPage() {
         }
       });
     };
-  }, [inputs]);
+  }, [inputs, selectMIDIInput]);
 
   const handleContinue = () => {
-    if (selected) {
-      const instrument = inputs.find((i) => i.id === selected);
-      if (instrument) {
-        selectMIDIInput(instrument);
-      }
-      toCollection();
-    }
+    toCollection();
   };
 
   return (
@@ -91,7 +64,7 @@ export default function GearPage() {
         <PageFooter>
           <Button
             onClick={handleContinue}
-            disabled={!selected}
+            disabled={!selectedMIDIInput}
             icon={ChevronRight}
             size="sm"
           >
@@ -125,9 +98,9 @@ export default function GearPage() {
                 <GearCard
                   key={inst.id}
                   instrument={inst}
-                  isSelected={selected === inst.id}
-                  isActive={lastInputId === inst.id}
-                  onClick={() => setSelected(inst.id)}
+                  isSelected={selectedMIDIInput?.id === inst.id}
+                  isActive={false}
+                  onClick={() => selectMIDIInput(inst)}
                   className="shrink-0 w-[calc(100%-3rem)] min-h-[601px]:w-[320px] snap-center"
                 />
               ))}
