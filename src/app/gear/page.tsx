@@ -120,7 +120,7 @@ export default function GearPage() {
             <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
               "Play a note on your gear to select it, or tap a card below."
             </p>
-            <div className="flex items-center gap-6 overflow-x-auto snap-x snap-mandatory -mx-8 px-8">
+            <div className="h-full flex items-center gap-6 overflow-x-auto snap-x snap-mandatory -mx-8 px-8">
               {inputs.map((inst) => (
                 <GearCard
                   key={inst.id}
@@ -128,7 +128,7 @@ export default function GearPage() {
                   isSelected={selected === inst.id}
                   isActive={lastInputId === inst.id}
                   onClick={() => setSelected(inst.id)}
-                  className="shrink-0 w-[calc(100%-3rem)] snap-center"
+                  className="shrink-0 w-[calc(100%-3rem)] min-h-[601px]:w-[320px] snap-center"
                 />
               ))}
             </div>
