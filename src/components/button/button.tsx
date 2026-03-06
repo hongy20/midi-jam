@@ -19,8 +19,10 @@ export function Button({
 }: ButtonProps) {
   // Use displayName or name to detect arrow types for special animations
   const iconName = Icon?.displayName || Icon?.name || "";
-  const isArrowRight = iconName.includes("ChevronRight") || iconName.includes("ArrowRight");
-  const isArrowLeft = iconName.includes("ArrowLeft") || iconName.includes("ChevronLeft");
+  const isArrowRight =
+    iconName.includes("ChevronRight") || iconName.includes("ArrowRight");
+  const isArrowLeft =
+    iconName.includes("ArrowLeft") || iconName.includes("ChevronLeft");
 
   const iconClasses = `
     ${styles.icon} 
