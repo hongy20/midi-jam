@@ -9,7 +9,7 @@ import {
  * @param note The MIDI note number (0-127).
  * @returns True if the note is a black key (sharp/flat), false otherwise.
  */
-export function isBlackKey(note: number): boolean {
+function isBlackKey(note: number): boolean {
   const n = note % 12;
   return [1, 3, 6, 8, 10].includes(n);
 }
