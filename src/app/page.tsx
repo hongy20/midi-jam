@@ -31,7 +31,7 @@ export default function WelcomePage() {
         <PageFooter>The ultimate immersive musical experience</PageFooter>
       }
     >
-      <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-4 landscape:py-2 w-full max-w-4xl mx-auto">
+      <main className="w-full h-full flex flex-col items-center justify-center relative z-10 text-center px-6 py-4 landscape:py-2 max-w-4xl mx-auto overflow-hidden">
         <div className="mb-8 landscape:mb-4 w-full relative">
           <h1 className="text-6xl sm:text-7xl md:text-9xl landscape:text-5xl font-black mb-4 landscape:mb-2 tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
             MIDI JAM

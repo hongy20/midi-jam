@@ -19,7 +19,7 @@ export function PageLayout({
   return (
     <div className={`${styles.container} ${className}`} style={style}>
       {header}
-      <main className={styles.main}>{children}</main>
+      {children}
       {footer}
     </div>
   );

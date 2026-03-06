@@ -107,7 +107,7 @@ function GearContent() {
       }
     >
       <main
-        className={`overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full max-w-5xl mx-auto flex flex-col gap-8`}
+        className={`w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 max-w-5xl mx-auto flex flex-col gap-8`}
       >
         <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
           {isLoading
