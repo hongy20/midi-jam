@@ -43,7 +43,7 @@ export default function GearPage() {
 
   return (
     <PageLayout
-      header={<PageHeader title="Select Gear"></PageHeader>}
+      header={<PageHeader title="Choose Your Gear"></PageHeader>}
       footer={
         <PageFooter>
           <Button
