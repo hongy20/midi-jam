@@ -37,17 +37,9 @@ export function Button({
       className={`${styles.button} ${styles[variant]} ${styles[size]} group`}
       {...props}
     >
-      {Icon && iconPosition === "left" && (
-        <span className={styles.iconWrapper}>
-          <Icon className={iconClasses} />
-        </span>
-      )}
+      {Icon && iconPosition === "left" && <Icon className={iconClasses} />}
       {children}
-      {Icon && iconPosition === "right" && (
-        <span className={styles.iconWrapper}>
-          <Icon className={iconClasses} />
-        </span>
-      )}
+      {Icon && iconPosition === "right" && <Icon className={iconClasses} />}
     </button>
   );
 }
