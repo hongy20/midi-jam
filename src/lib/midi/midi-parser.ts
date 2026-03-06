@@ -1,5 +1,4 @@
 import type { Midi } from "@tonejs/midi";
-import { isBlackKey } from "../device/piano";
 import { MIDI_MAX_NOTE, MIDI_MIN_NOTE, MIN_NOTE_GAP_MS } from "./constant";
 
 // FIXME: Can we merge MidiEvent and MIDINoteEvent?
@@ -16,7 +15,6 @@ export interface NoteSpan {
   startTime: number;
   duration: number;
   velocity: number;
-  isBlack: boolean;
 }
 
 /**
@@ -124,7 +122,6 @@ export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
           startTime: start.time,
           duration: event.time - start.time,
           velocity: start.velocity,
-          isBlack: isBlackKey(event.note),
         });
         activeNotes.delete(event.note);
       }
