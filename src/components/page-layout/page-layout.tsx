@@ -1,21 +1,21 @@
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 import styles from "./page-layout.module.css";
 
-interface PageLayoutProps {
+interface PageLayoutProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, "className"> {
   header?: ReactNode;
   footer: ReactNode;
   children: ReactNode;
-  style?: React.CSSProperties;
 }
 
 export function PageLayout({
   header = <header />,
   footer,
   children,
-  style,
+  ...props
 }: PageLayoutProps) {
   return (
-    <div className={styles.container} style={style}>
+    <div className={styles.container} {...props}>
       {header}
       {children}
       {footer}
