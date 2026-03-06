@@ -59,24 +59,28 @@ export default function WelcomePage() {
 
         {/* Navigation Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 landscape:gap-3 w-full max-w-lg mb-8 landscape:mb-2">
-          <Button
-            onClick={handleStart}
-            disabled={!isSupported}
-            icon={Play}
-            iconPosition="right"
-            className="col-span-1 sm:col-span-2 !py-5 sm:!py-6 landscape:!py-3 !rounded-2xl sm:!rounded-3xl !text-xl sm:!text-2xl landscape:!text-lg"
-          >
-            START JAM
-          </Button>
+          <div className="col-span-1 sm:col-span-2 flex justify-center">
+            <Button
+              onClick={handleStart}
+              disabled={!isSupported}
+              icon={Play}
+              iconPosition="right"
+              size="lg"
+            >
+              START JAM
+            </Button>
+          </div>
 
-          <Button
-            variant="secondary"
-            onClick={handleOptions}
-            icon={Settings}
-            className="col-span-1 sm:col-span-2 !px-6 !py-4 landscape:!py-2 !rounded-xl !border-2 !font-bold !tracking-widest !text-sm landscape:!text-xs"
-          >
-            Options
-          </Button>
+          <div className="col-span-1 sm:col-span-2 flex justify-center">
+            <Button
+              variant="secondary"
+              onClick={handleOptions}
+              icon={Settings}
+              size="lg"
+            >
+              Options
+            </Button>
+          </div>
         </div>
       </main>
     </PageLayout>
