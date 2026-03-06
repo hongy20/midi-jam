@@ -27,7 +27,8 @@
 }
 
 .actions {
-  align-items: end;
+  flex-direction: row;
+  justify-content: end;
 }
 
 .brandingText {

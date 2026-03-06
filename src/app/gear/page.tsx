@@ -43,8 +43,9 @@ export default function GearPage() {
 
   return (
     <PageLayout
-      header={
-        <PageHeader title="Select Gear">
+      header={<PageHeader title="Select Gear"></PageHeader>}
+      footer={
+        <PageFooter>
           <Button
             variant="secondary"
             icon={ArrowLeft}
@@ -54,10 +55,6 @@ export default function GearPage() {
           >
             Main Menu
           </Button>
-        </PageHeader>
-      }
-      footer={
-        <PageFooter>
           <Button
             onClick={() => toCollection()}
             disabled={!selectedMIDIInput}
