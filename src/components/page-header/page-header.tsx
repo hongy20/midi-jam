@@ -14,7 +14,7 @@ export function PageHeader({ title, icon: Icon, children }: PageHeaderProps) {
       {Icon && <Icon className={styles.icon} />}
       <h1 className={styles.title}>{title}</h1>
       <div className={styles.spacer} />
-      {children && <div className={styles.actions}>{children}</div>}
+      {children}
     </header>
   );
 }

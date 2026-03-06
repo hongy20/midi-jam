@@ -43,9 +43,3 @@
 .spacer {
   flex: 1;
 }
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
