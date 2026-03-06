@@ -120,8 +120,8 @@ export default function GearPage() {
             <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
               "Play a note on your gear to select it, or tap a card below."
             </p>
-            <div className="flex items-center gap-6 overflow-x-auto snap-x snap-mandatory pb-8 -mx-8 px-8">
-              {inputs.map((inst) => (
+            <div className="flex items-center gap-6 overflow-x-auto snap-x snap-mandatory -mx-8 px-8">
+              {[...inputs, ...inputs, ...inputs].map((inst) => (
                 <div
                   key={inst.id}
                   className="shrink-0 w-[calc(100%-3rem)] snap-center"
