@@ -1,11 +1,11 @@
 export const ROUTES = {
   HOME: "/",
-  TRACKS: "/tracks",
-  INSTRUMENTS: "/instruments",
-  GAME: "/game",
-  PAUSE: "/game/pause",
-  RESULTS: "/results",
-  SETTINGS: "/settings",
+  COLLECTION: "/collection",
+  GEAR: "/gear",
+  PLAY: "/play",
+  PAUSE: "/pause",
+  SCORE: "/score",
+  OPTIONS: "/options",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];
