@@ -26,12 +26,6 @@
   padding-bottom: 2rem; /* Restore Welcome page extra padding */
 }
 
-@media (orientation: landscape) {
-  .centered {
-    padding-bottom: 0.5rem;
-  }
-}
-
 .actions {
   justify-content: flex-end;
 }
