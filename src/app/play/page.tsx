@@ -196,7 +196,7 @@ export default function PlayPage() {
         } as React.CSSProperties
       }
       header={
-        <header className="h-[var(--header-height)] w-full p-4 sm:p-8 flex justify-between items-center layout-padding bg-background/50 backdrop-blur-md border-b border-foreground/5">
+        <header className="w-full p-4 sm:p-8 flex justify-between items-center layout-padding bg-background/50 backdrop-blur-md border-b border-foreground/5">
           <div className="flex items-center gap-4 flex-1">
             <div className="flex flex-col">
               <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-0.5">

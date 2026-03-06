@@ -2,7 +2,7 @@
   width: 100dvw;
   height: 100dvh;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: var(--header-height) 1fr var(--footer-height);
   background-color: var(--background);
   color: var(--foreground);
   overflow: hidden;

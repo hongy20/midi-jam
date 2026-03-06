@@ -1,5 +1,7 @@
 :root {
   /* Global Layout Constants - Theme Independent */
+  --header-height: auto;
+  --footer-height: auto;
   --header-py: 1rem;
   --footer-py: 1rem;
   --h1-size: 1.875rem;
@@ -36,5 +38,18 @@
     --btn-px: 1rem;
     --btn-text: 0.75rem;
     --layout-gap: 0.5rem;
+  }
+}
+
+@media (max-height: 600px) {
+  :root {
+    --footer-height: 91px;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --header-height: 3rem;
+    --footer-height: 70px;
   }
 }
