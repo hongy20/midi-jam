@@ -22,6 +22,7 @@ import {
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "@/lib/midi/constant";
+import styles from "./page.module.css";
 
 export default function PlayPage() {
   const { toScore, toPause } = useNavigation();
@@ -187,7 +188,7 @@ export default function PlayPage() {
 
   return (
     <PageLayout
-      className="!transition-[color,background-color] !duration-500"
+      className={`${styles.container} !transition-[color,background-color] !duration-500`}
       style={
         {
           "--start-unit": startUnit,
@@ -222,13 +223,13 @@ export default function PlayPage() {
         </header>
       }
       footer={
-        <div className="h-[var(--footer-height)] w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
+        <footer className="h-[var(--footer-height)] w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
           <VirtualInstrument
             inputDevice={selectedMIDIInput}
             liveNotes={liveActiveNotes}
             playbackNotes={playbackNotes}
           />
-        </div>
+        </footer>
       }
     >
       {isLoading ? (
