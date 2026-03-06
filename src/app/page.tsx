@@ -31,8 +31,8 @@ export default function WelcomePage() {
         <PageFooter>The ultimate immersive musical experience</PageFooter>
       }
     >
-      <main className="w-full h-full flex flex-col gap-4 items-center justify-center text-center">
-        <h1 className="text-7xl md:text-9xl w-full mb-4 font-black tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
+      <main className="w-full h-full flex flex-col gap-4 items-center justify-evenly text-center">
+        <h1 className="text-7xl md:text-9xl w-full font-black tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
           MIDI JAM
         </h1>
 
