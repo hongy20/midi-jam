@@ -81,8 +81,13 @@
   );
   box-shadow:
     inset 0 0 20px
-      color-mix(in srgb, #06b6d4, #14b8a6 calc(var(--is-black) * 100%)),
-    0 0 15px color-mix(in srgb, rgba(6, 182, 212, 0.3), rgba(20, 184, 166, 0.3) calc(var(--is-black) * 100%));
+    color-mix(in srgb, #06b6d4, #14b8a6 calc(var(--is-black) * 100%)),
+    0 0 15px
+    color-mix(
+      in srgb,
+      rgba(6, 182, 212, 0.3),
+      rgba(20, 184, 166, 0.3) calc(var(--is-black) * 100%)
+    );
 }
 
 /* "Both" state intensified glow (Indigo) */
