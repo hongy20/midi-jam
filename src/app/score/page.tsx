@@ -1,6 +1,10 @@
 "use client";
 
 import { ChevronRight, RotateCcw } from "lucide-react";
+import { Button } from "@/components/button/button";
+import { PageFooter } from "@/components/page-footer/page-footer";
+import { PageHeader } from "@/components/page-header/page-header";
+import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
@@ -51,17 +55,34 @@ export default function ScorePage() {
   const titleLabel = getAccuracyLabel(stats.accuracy);
 
   return (
-    <div className="w-[100dvw] h-[100dvh] overflow-hidden max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4">
-      {/* Header */}
-      <header className="flex items-center justify-between py-[var(--header-py)] flex-shrink-0">
-        <h1 className="text-[var(--h1-size)] font-black text-foreground uppercase tracking-tighter">
-          Final Score
-        </h1>
-      </header>
-
-      {/* Content */}
+    <PageLayout
+      header={<PageHeader title="Final Score" />}
+      footer={
+        <PageFooter>
+          <Button variant="secondary" onClick={handleMainMenu} size="md">
+            MAIN MENU
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleNextSong}
+            size="md"
+            icon={ChevronRight}
+          >
+            NEXT SONG
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleRetry}
+            size="md"
+            icon={RotateCcw}
+          >
+            RETRY
+          </Button>
+        </PageFooter>
+      }
+    >
       <main
-        className={`overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full h-full max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 landscape:mt-0 landscape:justify-start z-20`}
+        className={`w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 landscape:mt-0 landscape:justify-start z-20`}
       >
         <div className="text-center mb-8 landscape:mb-4 w-full">
           <span className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-2 sm:mb-4 landscape:mb-1 block drop-shadow-md">
@@ -107,33 +128,6 @@ export default function ScorePage() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="flex flex-col sm:flex-row items-center justify-end gap-[var(--layout-gap)] py-[var(--footer-py)] w-full px-4 sm:px-0 z-20 landscape:gap-2 flex-shrink-0">
-        <button
-          type="button"
-          onClick={handleMainMenu}
-          className="flex-1 py-3 sm:py-4 landscape:py-2 bg-[var(--ui-btn-secondary-bg)] text-[var(--ui-btn-secondary-text)] border border-[var(--ui-btn-secondary-border)] rounded-full font-bold text-sm sm:text-xl landscape:text-xs uppercase tracking-widest hover:bg-foreground/10 transition-colors order-3 sm:order-1"
-        >
-          MAIN MENU
-        </button>
-
-        <button
-          type="button"
-          onClick={handleNextSong}
-          className="flex-1 py-3 sm:py-4 landscape:py-2 bg-[var(--ui-btn-secondary-bg)] text-[var(--ui-btn-secondary-text)] border border-[var(--ui-btn-secondary-border)] rounded-full font-black text-sm sm:text-xl landscape:text-xs uppercase tracking-widest hover:bg-foreground/20 hover:scale-[1.02] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.1)] order-2 flex items-center justify-center gap-2"
-        >
-          NEXT SONG <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-        </button>
-
-        <button
-          type="button"
-          onClick={handleRetry}
-          className="flex-[1.5] py-3 sm:py-5 landscape:py-2 bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] rounded-full font-black text-lg sm:text-xl landscape:text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[var(--ui-btn-primary-shadow)] order-1 sm:order-3 flex items-center justify-center gap-2"
-        >
-          RETRY <RotateCcw className="w-5 h-5 sm:w-6 sm:h-6" />
-        </button>
-      </footer>
-    </div>
+    </PageLayout>
   );
 }

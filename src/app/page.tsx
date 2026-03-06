@@ -2,6 +2,9 @@
 
 import { Play, Settings } from "lucide-react";
 import { useEffect } from "react";
+import { Button } from "@/components/button/button";
+import { PageFooter } from "@/components/page-footer/page-footer";
+import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
@@ -23,12 +26,12 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="w-[100dvw] h-[100dvh] bg-background text-foreground grid grid-rows-[auto_1fr_auto] p-4 sm:p-6 overflow-hidden">
-      {/* Top Spacer */}
-      <header className="w-full h-full" />
-
-      {/* Main Content Area */}
-      <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-4 landscape:py-2 w-full max-w-4xl mx-auto">
+    <PageLayout
+      footer={
+        <PageFooter>The ultimate immersive musical experience</PageFooter>
+      }
+    >
+      <main className="w-full h-full flex flex-col items-center justify-center relative z-10 text-center px-6 py-4 landscape:py-2 max-w-4xl mx-auto overflow-hidden">
         <div className="mb-8 landscape:mb-4 w-full relative">
           <h1 className="text-6xl sm:text-7xl md:text-9xl landscape:text-5xl font-black mb-4 landscape:mb-2 tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
             MIDI JAM
@@ -50,36 +53,30 @@ export default function WelcomePage() {
 
         {/* Navigation Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 landscape:gap-3 w-full max-w-lg mb-8 landscape:mb-2">
-          <button
-            type="button"
-            onClick={handleStart}
-            disabled={!isSupported}
-            className={`col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 landscape:py-3 bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] text-xl sm:text-2xl landscape:text-lg font-black rounded-2xl sm:rounded-3xl shadow-[var(--ui-btn-primary-shadow)] overflow-hidden flex items-center justify-center gap-3 ${
-              !isSupported
-                ? "opacity-20 cursor-not-allowed grayscale"
-                : "cursor-pointer"
-            }`}
-          >
-            <span className="relative z-10">START JAM</span>
-            <Play className="relative z-10 w-6 h-6 sm:w-8 sm:h-8 fill-current" />
-          </button>
+          <div className="col-span-1 sm:col-span-2 flex justify-center">
+            <Button
+              onClick={handleStart}
+              disabled={!isSupported}
+              icon={Play}
+              iconPosition="right"
+              size="lg"
+            >
+              START JAM
+            </Button>
+          </div>
 
-          <button
-            type="button"
-            onClick={handleOptions}
-            className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 px-6 py-4 landscape:py-2 rounded-xl border-2 border-[var(--ui-btn-secondary-border)] bg-[var(--ui-btn-secondary-bg)] text-[var(--ui-btn-secondary-text)] font-bold tracking-widest uppercase text-sm landscape:text-xs"
-          >
-            Options <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
-          </button>
+          <div className="col-span-1 sm:col-span-2 flex justify-center">
+            <Button
+              variant="secondary"
+              onClick={handleOptions}
+              icon={Settings}
+              size="lg"
+            >
+              Options
+            </Button>
+          </div>
         </div>
       </main>
-
-      {/* Bottom Spacer / Footer */}
-      <footer className="w-full flex items-center justify-center pb-8 landscape:pb-2 z-10">
-        <p className="text-foreground/40 text-[10px] sm:text-xs uppercase tracking-[0.3em] font-bold text-center">
-          The ultimate immersive musical experience
-        </p>
-      </footer>
-    </div>
+    </PageLayout>
   );
 }

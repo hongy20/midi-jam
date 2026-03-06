@@ -3,6 +3,10 @@
 import { ArrowLeft, ChevronRight, Piano } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { Button } from "@/components/button/button";
+import { PageFooter } from "@/components/page-footer/page-footer";
+import { PageHeader } from "@/components/page-header/page-header";
+import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
 import { useNavigation } from "@/hooks/use-navigation";
@@ -75,26 +79,35 @@ function GearContent() {
   };
 
   return (
-    <div className="w-[100dvw] h-[100dvh] overflow-hidden max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4">
-      {/* Header */}
-      <header className="flex items-center justify-between py-[var(--header-py)] flex-shrink-0">
-        <h1 className="text-[var(--h1-size)] font-black text-foreground uppercase tracking-tighter">
-          {fromGame ? "Reconnect Gear" : "Your Gear"}
-        </h1>
-
-        <button
-          type="button"
-          onClick={toHome}
-          className="group flex items-center gap-2 px-4 py-2 bg-[var(--ui-btn-secondary-bg)] border border-[var(--ui-btn-secondary-border)] rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
-        >
-          <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-          {fromGame ? "Back to Menu" : "Main Menu"}
-        </button>
-      </header>
-
-      {/* Content */}
+    <PageLayout
+      header={
+        <PageHeader title={fromGame ? "Reconnect Gear" : "Your Gear"}>
+          <Button
+            variant="secondary"
+            icon={ArrowLeft}
+            iconPosition="left"
+            onClick={toHome}
+            size="sm"
+          >
+            {fromGame ? "Back to Menu" : "Main Menu"}
+          </Button>
+        </PageHeader>
+      }
+      footer={
+        <PageFooter>
+          <Button
+            onClick={handleContinue}
+            disabled={!selected}
+            icon={ChevronRight}
+            size="md"
+          >
+            {fromGame ? "RESUME GAME" : "CONTINUE"}
+          </Button>
+        </PageFooter>
+      }
+    >
       <main
-        className={`overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 w-full max-w-5xl mx-auto flex flex-col gap-8`}
+        className={`w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 max-w-5xl mx-auto flex flex-col gap-8`}
       >
         <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
           {isLoading
@@ -170,24 +183,7 @@ function GearContent() {
           })}
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="flex items-center justify-end py-[var(--footer-py)] flex-shrink-0">
-        <button
-          type="button"
-          onClick={handleContinue}
-          disabled={!selected}
-          className={`px-[var(--btn-px)] py-[var(--btn-py)] rounded-full font-black text-[var(--btn-text)] uppercase tracking-wider transition-all duration-300 flex items-center gap-2 ${
-            selected
-              ? "bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] hover:scale-105 active:scale-95 shadow-[var(--ui-btn-primary-shadow)] cursor-pointer"
-              : "opacity-40 bg-foreground/10 text-foreground/40 cursor-not-allowed shadow-none"
-          } group`}
-        >
-          {fromGame ? "RESUME GAME" : "CONTINUE"}{" "}
-          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
-        </button>
-      </footer>
-    </div>
+    </PageLayout>
   );
 }
 

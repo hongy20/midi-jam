@@ -2,6 +2,10 @@
 
 import { ArrowLeft, Dices, Play } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/button/button";
+import { PageFooter } from "@/components/page-footer/page-footer";
+import { PageHeader } from "@/components/page-header/page-header";
+import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { getSoundTracks } from "@/lib/action/sound-track";
@@ -56,26 +60,43 @@ export default function CollectionPage() {
   };
 
   return (
-    <div className="w-[100dvw] h-[100dvh] overflow-hidden max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4">
-      {/* Header */}
-      <header className="flex items-center justify-between py-[var(--header-py)] flex-shrink-0">
-        <h1 className="text-[var(--h1-size)] font-black text-foreground uppercase tracking-tighter">
-          Song Collection
-        </h1>
-
-        <button
-          type="button"
-          onClick={handleBack}
-          className="group flex items-center gap-2 px-4 py-2 bg-[var(--ui-btn-secondary-bg)] border border-[var(--ui-btn-secondary-border)] rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
-        >
-          <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-          Your Gear
-        </button>
-      </header>
-
-      {/* Content */}
+    <PageLayout
+      header={
+        <PageHeader title="Song Collection">
+          <Button
+            variant="secondary"
+            icon={ArrowLeft}
+            iconPosition="left"
+            onClick={handleBack}
+            size="sm"
+          >
+            Your Gear
+          </Button>
+        </PageHeader>
+      }
+      footer={
+        <PageFooter>
+          <Button
+            variant="secondary"
+            onClick={handleSurprise}
+            icon={Dices}
+            size="md"
+          >
+            SURPRISE
+          </Button>
+          <Button
+            onClick={handlePlay}
+            disabled={!selected}
+            icon={Play}
+            size="md"
+          >
+            PLAY
+          </Button>
+        </PageFooter>
+      }
+    >
       <main
-        className={`overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 gap-3 sm:gap-6 pb-12 w-full`}
+        className={`w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 gap-3 sm:gap-6 pb-12`}
       >
         {isLoading ? (
           <div className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium col-span-full">
@@ -138,29 +159,6 @@ export default function CollectionPage() {
           ))
         )}
       </main>
-
-      {/* Footer */}
-      <footer className="flex flex-col sm:flex-row items-center justify-end gap-[var(--layout-gap)] py-[var(--footer-py)] w-full flex-shrink-0">
-        <button
-          type="button"
-          onClick={handleSurprise}
-          className="w-full sm:flex-1 px-[var(--app-btn-px)] py-[var(--btn-py)] bg-[var(--ui-btn-secondary-bg)] text-[var(--ui-btn-secondary-text)] border border-[var(--ui-btn-secondary-border)] font-black rounded-full hover:bg-foreground/20 hover:scale-[1.02] active:scale-95 transition-all text-[var(--btn-text)] flex items-center justify-center gap-2"
-        >
-          SURPRISE <Dices className="w-5 h-5 sm:w-6 sm:h-6" />
-        </button>
-        <button
-          type="button"
-          onClick={handlePlay}
-          disabled={!selected}
-          className={`w-full sm:flex-[2] px-[var(--app-btn-px)] py-[var(--btn-py)] rounded-full font-black text-[var(--btn-text)] transition-all flex items-center justify-center gap-2 ${
-            selected
-              ? "bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] hover:scale-[1.02] active:scale-95 shadow-[var(--ui-btn-primary-shadow)] cursor-pointer"
-              : "opacity-40 bg-foreground/10 text-foreground/40 cursor-not-allowed"
-          }`}
-        >
-          PLAY <Play className="w-5 h-5 sm:w-6 sm:h-6 fill-current" />
-        </button>
-      </footer>
-    </div>
+    </PageLayout>
   );
 }

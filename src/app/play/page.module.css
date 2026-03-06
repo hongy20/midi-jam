@@ -1,28 +1,16 @@
-.container {
+:global(:root) {
   --header-height: 5rem;
   --footer-height: 151px;
-  --lane-height: calc(100dvh - var(--header-height) - var(--footer-height));
-
-  width: 100dvw;
-  height: 100dvh;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  background-color: var(--background);
-  color: var(--foreground);
-  overflow: hidden;
-  transition:
-    color 500ms,
-    background-color 500ms;
 }
 
 @media (max-height: 600px) {
-  .container {
+  :global(:root) {
     --footer-height: 91px;
   }
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
-  .container {
+  :global(:root) {
     --header-height: 3rem;
     --footer-height: 70px;
   }

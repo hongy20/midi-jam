@@ -1,135 +1,112 @@
 "use client";
 
-import { ArrowLeft, LogOut, Play, RotateCcw, Settings } from "lucide-react";
+import { Play, RotateCcw, Settings, XCircle } from "lucide-react";
+import { Button } from "@/components/button/button";
+import { PageFooter } from "@/components/page-footer/page-footer";
+import { PageHeader } from "@/components/page-header/page-header";
+import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
-import { ROUTES } from "@/lib/navigation/routes";
 
 export default function PausePage() {
-  const { toPlay, toScore, toOptions, toHome } = useNavigation();
-  const { tracks, instruments, game, results } = useAppContext();
-  const { selected: selectedTrack } = tracks;
+  const { toPlay, toOptions, toScore } = useNavigation();
+  const { game, instruments, tracks, results } = useAppContext();
+  const {
+    session: gameSession,
+    setSession: setGameSession,
+    track: trackStatus,
+  } = game;
   const { input: selectedMIDIInput } = instruments;
-  const { session: gameSession, setSession: setGameSession } = game;
+  const { selected: selectedTrack } = tracks;
   const { set: setSessionResults } = results;
 
-  // Note: Redirects are handled by NavigationGuard
-
-  if (!gameSession || !selectedTrack || !selectedMIDIInput) return null;
-
   const handleResume = () => {
-    setGameSession({
-      ...gameSession,
-      isPaused: false,
-    });
     toPlay();
   };
 
   const handleRestart = () => {
-    setGameSession({
-      ...gameSession,
-      isPaused: false,
-      score: 0,
-      combo: 0,
-      currentTimeMs: 0,
-    });
+    setGameSession(null);
     toPlay();
   };
 
-  const handleQuit = () => {
-    setSessionResults({
-      score: gameSession.score,
-      accuracy: 0,
-      combo: gameSession.combo,
-    });
+  const handleOptions = () => {
+    toOptions("pause");
+  };
+
+  const handleExit = () => {
+    if (gameSession && trackStatus.isReady) {
+      const { score, combo } = gameSession;
+      const totalEvents = trackStatus.events.length;
+      setSessionResults({
+        score,
+        accuracy: Math.floor((score / (totalEvents * 100)) * 100) || 0,
+        combo,
+      });
+    }
     setGameSession(null);
     toScore();
   };
 
-  const handleOptions = () => {
-    toOptions(ROUTES.PAUSE);
-  };
-
-  const buttonClass =
-    "flex items-center justify-center gap-3 w-full py-3.5 sm:py-4 bg-foreground/10 text-foreground border border-foreground/20 rounded-full font-bold text-lg sm:text-xl transition-all hover:bg-foreground/20 hover:scale-[1.02] active:scale-[0.98]";
+  if (!selectedTrack || !selectedMIDIInput) {
+    return null;
+  }
 
   return (
-    <div className="w-[100dvw] h-[100dvh] overflow-hidden grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 bg-background/80 backdrop-blur-2xl animate-in fade-in duration-300">
-      {/* Header */}
-      <header className="flex items-center justify-between py-[var(--header-py)] flex-shrink-0">
-        <div className="flex flex-col">
-          <h1 className="text-[var(--h1-size)] font-black text-foreground uppercase tracking-tighter">
-            Paused
-          </h1>
-          <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px]">
-            {selectedMIDIInput.name} • {selectedTrack.name}
+    <PageLayout
+      header={<PageHeader title="Game Paused" />}
+      footer={
+        <PageFooter>
+          <Button
+            variant="primary"
+            onClick={handleResume}
+            size="md"
+            icon={Play}
+          >
+            RESUME
+          </Button>
+        </PageFooter>
+      }
+    >
+      <main className="w-full h-full flex flex-col items-center justify-center relative z-10 px-6 py-4 landscape:py-2">
+        <div className="text-center w-full max-w-lg mb-8 landscape:mb-4">
+          <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">
+            Currently Playing
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-black text-foreground uppercase tracking-tight truncate">
+            {selectedTrack.name}
+          </h2>
+          <span className="text-accent-primary font-bold text-sm sm:text-lg mt-1 block">
+            {selectedMIDIInput.name}
           </span>
         </div>
-      </header>
 
-      {/* Main Menu - Responsive container */}
-      <main className="flex items-center justify-center overflow-y-auto no-scrollbar py-8">
-        <div className="text-center w-full max-w-[320px] sm:max-w-2xl animate-in zoom-in-95 duration-300">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
-            <button
-              type="button"
-              onClick={handleResume}
-              className={buttonClass}
-            >
-              <Play className="w-5 h-5 fill-current" />
-              RESUME
-            </button>
-
-            <button
-              type="button"
-              onClick={handleRestart}
-              className={buttonClass}
-            >
-              <RotateCcw className="w-5 h-5" />
-              RESTART
-            </button>
-
-            <button
-              type="button"
-              onClick={handleOptions}
-              className={buttonClass}
-            >
-              <Settings className="w-5 h-5" />
-              OPTIONS
-            </button>
-
-            <button
-              type="button"
-              onClick={handleQuit}
-              className={`${buttonClass} text-red-500 border-red-500/20 hover:bg-red-500/10 hover:border-red-500/40 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]`}
-            >
-              <LogOut className="w-5 h-5" />
-              QUIT GAME
-            </button>
-          </div>
+        <div className="flex flex-col landscape:flex-row items-center justify-center gap-4 sm:gap-6 w-full max-w-lg landscape:max-w-4xl">
+          <Button
+            variant="secondary"
+            onClick={handleRestart}
+            size="lg"
+            icon={RotateCcw}
+          >
+            RESTART
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleOptions}
+            size="lg"
+            icon={Settings}
+          >
+            OPTIONS
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleExit}
+            size="lg"
+            icon={XCircle}
+          >
+            END JAM
+          </Button>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="flex items-center justify-between py-[var(--footer-py)] flex-shrink-0">
-        <div className="flex flex-col">
-          <span className="text-[10px] text-foreground/40 font-bold uppercase tracking-widest">
-            Current Score
-          </span>
-          <span className="text-xl font-black tabular-nums leading-none">
-            {gameSession.score.toLocaleString()}
-          </span>
-        </div>
-
-        <button
-          type="button"
-          onClick={toHome}
-          className="group flex items-center gap-2 px-6 py-3 bg-foreground/5 border border-foreground/10 rounded-full text-foreground/50 font-bold text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
-        >
-          <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          QUIT TO MENU
-        </button>
-      </footer>
-    </div>
+    </PageLayout>
   );
 }

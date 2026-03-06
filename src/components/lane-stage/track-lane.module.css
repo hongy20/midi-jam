@@ -6,7 +6,10 @@
       calc(var(--end-unit) - var(--start-unit)),
       minmax(0, 1fr)
     );
-  height: calc(var(--lane-height) * (var(--total-duration-ms) / 2000 + 1));
+  height: calc(
+    calc(100dvh - var(--header-height) - var(--footer-height)) *
+    (var(--total-duration-ms) / 2000 + 1)
+  );
 }
 
 .note {

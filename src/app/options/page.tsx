@@ -3,6 +3,10 @@
 import { LogOut, Settings } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { Button } from "@/components/button/button";
+import { PageFooter } from "@/components/page-footer/page-footer";
+import { PageHeader } from "@/components/page-header/page-header";
+import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useTheme } from "@/context/theme-context";
 import { useNavigation } from "@/hooks/use-navigation";
@@ -13,23 +17,20 @@ const BackButton = () => {
   const from = searchParams.get("from") || "/";
 
   return (
-    <div className="flex items-center gap-4">
-      <button
-        type="button"
-        onClick={() => goBack(from)}
-        className="px-6 py-3 bg-[var(--ui-btn-secondary-bg)] border border-[var(--ui-btn-secondary-border)] text-[var(--ui-btn-secondary-text)] rounded-full font-bold text-sm tracking-widest uppercase hover:bg-foreground/20 transition-colors"
-      >
+    <>
+      <Button variant="secondary" onClick={() => goBack(from)} size="sm">
         BACK
-      </button>
-      <button
-        type="button"
+      </Button>
+      <Button
+        variant="primary"
         onClick={toHome}
-        className="group px-6 py-3 bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] rounded-full font-bold text-sm tracking-widest uppercase hover:scale-105 transition-all shadow-[var(--ui-btn-primary-shadow)] flex items-center gap-2"
+        size="sm"
+        icon={LogOut}
+        iconPosition="right"
       >
-        EXIT{" "}
-        <LogOut className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-      </button>
-    </div>
+        EXIT
+      </Button>
+    </>
   );
 };
 
@@ -46,19 +47,18 @@ export default function OptionsPage() {
   ] as const;
 
   return (
-    <div className="w-[100dvw] h-[100dvh] overflow-hidden max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4">
-      <header className="w-full flex flex-row items-center justify-between py-[var(--header-py)] gap-4 flex-shrink-0">
-        <h1 className="text-[var(--h1-size)] font-black italic uppercase tracking-tighter drop-shadow-md flex items-center gap-3 text-foreground">
-          Options{" "}
-          <Settings className="w-8 h-8 sm:w-10 sm:h-10 animate-[spin_10s_linear_infinite]" />
-        </h1>
-        <Suspense>
-          <BackButton />
-        </Suspense>
-      </header>
-
+    <PageLayout
+      header={
+        <PageHeader title="Options" icon={Settings}>
+          <Suspense>
+            <BackButton />
+          </Suspense>
+        </PageHeader>
+      }
+      footer={<PageFooter>Midi Jam v0.1.0 • Experimental Build</PageFooter>}
+    >
       <main
-        className={`w-full grid grid-cols-1 landscape:grid-cols-2 gap-3 sm:gap-6 overflow-y-auto no-scrollbar py-4`}
+        className={`w-full h-full grid grid-cols-1 landscape:grid-cols-2 gap-3 sm:gap-6 overflow-y-auto no-scrollbar py-4`}
       >
         {/* Setting Item: Theme */}
         <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 landscape:p-4 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
@@ -145,10 +145,6 @@ export default function OptionsPage() {
           </button>
         </div>
       </main>
-
-      <footer className="py-[var(--footer-py)] text-foreground/40 text-[8px] sm:text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.5em] font-black w-full text-center flex-shrink-0">
-        Midi Jam v0.1.0 • Experimental Build
-      </footer>
-    </div>
+    </PageLayout>
   );
 }
