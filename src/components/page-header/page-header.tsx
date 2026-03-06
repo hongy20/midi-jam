@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import styles from "./page-header.module.css";
 
 interface PageHeaderProps {
-  title?: string;
+  title: string;
   icon?: LucideIcon;
   children?: ReactNode;
   className?: string;
