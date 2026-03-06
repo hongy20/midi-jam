@@ -33,10 +33,7 @@ export function useLaneTimeline({
       let currentProgress = initialTimeMs ?? 0;
       if (animationRef.current) {
         // Save progress before cancelling
-        currentProgress =
-          typeof animationRef.current.currentTime === "number"
-            ? animationRef.current.currentTime
-            : 0;
+        currentProgress = (animationRef.current.currentTime as number) ?? 0;
 
         // Always cleanup old animation on resize
         animationRef.current.cancel();
@@ -107,9 +104,7 @@ export function useLaneTimeline({
   }, [isPaused, speed]);
 
   const getCurrentTimeMs = useCallback(() => {
-    const animation = animationRef.current;
-    if (!animation || typeof animation.currentTime !== "number") return 0;
-    return animation.currentTime;
+    return (animationRef.current?.currentTime as number) ?? 0;
   }, []);
 
   const getProgress = useCallback((): number => {
