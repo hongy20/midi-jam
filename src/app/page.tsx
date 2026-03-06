@@ -2,6 +2,9 @@
 
 import { Play, Settings } from "lucide-react";
 import { useEffect } from "react";
+import { PageFooter } from "@/components/page-footer";
+import { PageHeader } from "@/components/page-header";
+import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
@@ -23,11 +26,16 @@ export default function WelcomePage() {
   };
 
   return (
-    <div className="w-[100dvw] h-[100dvh] bg-background text-foreground grid grid-rows-[auto_1fr_auto] p-4 sm:p-6 overflow-hidden">
-      {/* Top Spacer */}
-      <header className="w-full h-full" />
-
-      {/* Main Content Area */}
+    <PageLayout
+      header={<PageHeader />}
+      footer={
+        <PageFooter className="pb-8 landscape:pb-2">
+          <p className="text-foreground/40 text-[10px] sm:text-xs uppercase tracking-[0.3em] font-bold text-center w-full">
+            The ultimate immersive musical experience
+          </p>
+        </PageFooter>
+      }
+    >
       <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-4 landscape:py-2 w-full max-w-4xl mx-auto">
         <div className="mb-8 landscape:mb-4 w-full relative">
           <h1 className="text-6xl sm:text-7xl md:text-9xl landscape:text-5xl font-black mb-4 landscape:mb-2 tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
@@ -73,13 +81,6 @@ export default function WelcomePage() {
           </button>
         </div>
       </main>
-
-      {/* Bottom Spacer / Footer */}
-      <footer className="w-full flex items-center justify-center pb-8 landscape:pb-2 z-10">
-        <p className="text-foreground/40 text-[10px] sm:text-xs uppercase tracking-[0.3em] font-bold text-center">
-          The ultimate immersive musical experience
-        </p>
-      </footer>
-    </div>
+    </PageLayout>
   );
 }
