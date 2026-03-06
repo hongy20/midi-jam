@@ -133,7 +133,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   // MIDI Track Loading (only when on /game path and a track is selected)
   useEffect(() => {
-    const isGamePath = pathname === ROUTES.GAME || pathname === ROUTES.PAUSE;
+    const isGamePath = pathname === ROUTES.PLAY || pathname === ROUTES.PAUSE;
     if (!isGamePath || !selectedTrack) {
       if (!selectedTrack) {
         setTrackStatus({ isLoading: false, isReady: false, error: null });

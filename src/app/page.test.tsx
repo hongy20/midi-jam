@@ -16,13 +16,13 @@ vi.mock("@/context/app-context", () => ({
 
 describe("Welcome Page", () => {
   const mockNavigation = {
-    toInstruments: vi.fn(),
-    toSettings: vi.fn(),
     toHome: vi.fn(),
-    toTracks: vi.fn(),
-    toGame: vi.fn(),
+    toCollection: vi.fn(),
+    toGear: vi.fn(),
+    toPlay: vi.fn(),
     toPause: vi.fn(),
-    toResults: vi.fn(),
+    toScore: vi.fn(),
+    toOptions: vi.fn(),
     goBack: vi.fn(),
     navigate: vi.fn(),
   };
@@ -72,21 +72,21 @@ describe("Welcome Page", () => {
     ).toBeInTheDocument();
   });
 
-  it("navigates to instruments on start click", () => {
+  it("navigates to gear on start click", () => {
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
     vi.mocked(useAppContext).mockReturnValue(mockContext);
 
     render(<WelcomePage />);
     fireEvent.click(screen.getByRole("button", { name: /START JAM/i }));
-    expect(mockNavigation.toInstruments).toHaveBeenCalled();
+    expect(mockNavigation.toGear).toHaveBeenCalled();
   });
 
-  it("navigates to settings on settings click", () => {
+  it("navigates to options on options click", () => {
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
     vi.mocked(useAppContext).mockReturnValue(mockContext);
 
     render(<WelcomePage />);
-    fireEvent.click(screen.getByRole("button", { name: /Settings/i }));
-    expect(mockNavigation.toSettings).toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: /Options/i }));
+    expect(mockNavigation.toOptions).toHaveBeenCalled();
   });
 });

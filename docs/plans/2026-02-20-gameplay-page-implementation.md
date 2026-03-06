@@ -2,9 +2,9 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Refactor the existing `/game` page to implement a new scroll-driven gameplay experience. This includes rendering a MIDI-based note lane, driving lane motion via Web Animations + JS `ScrollTimeline`, supporting demo playback via IntersectionObserver, and scoring live MIDI input against the parsed MIDI model. We will preserve the existing navigation logic (pause, restart, quit) and optimize for Android Chrome performance.
+**Goal:** Refactor the existing `/play` page to implement a new scroll-driven gameplay experience. This includes rendering a MIDI-based note lane, driving lane motion via Web Animations + JS `ScrollTimeline`, supporting demo playback via IntersectionObserver, and scoring live MIDI input against the parsed MIDI model. We will preserve the existing navigation logic (pause, restart, quit) and optimize for Android Chrome performance.
 
-**Architecture:** The `GamePage` (at `src/app/game/page.tsx`) consumes selection and settings (MIDI devices, track, instrument, demoMode) from global context, owns lane playback and scoring state, and composes three main pieces: `LaneStage` (visual lane + target line), `VirtualInstrument` (instrument-specific UI, default keyboard), and `ScoreHudLite` (aggregated scoring + progress). Lane motion is controlled by a Web Animations motion object on the lane scroll container, while a JS `ScrollTimeline` bound to that container provides canonical song time and progress for scoring and UI.
+**Architecture:** The `GamePage` (at `src/app/play/page.tsx`) consumes selection and settings (MIDI devices, track, instrument, demoMode) from global context, owns lane playback and scoring state, and composes three main pieces: `LaneStage` (visual lane + target line), `VirtualInstrument` (instrument-specific UI, default keyboard), and `ScoreHudLite` (aggregated scoring + progress). Lane motion is controlled by a Web Animations motion object on the lane scroll container, while a JS `ScrollTimeline` bound to that container provides canonical song time and progress for scoring and UI.
 
 **Tech Stack:** Next.js App Router (TypeScript, React 19), Tailwind CSS 4, Web MIDI API, Web Animations API, CSS ScrollTimeline (JS API), Vitest, Testing Library, Biome.
 
@@ -13,13 +13,13 @@
 ### Task 1: Review existing gameplay page and hooks
 
 **Files:**
-- Read: `src/app/game/page.tsx`
+- Read: `src/app/play/page.tsx`
 - Read: `src/hooks/use-active-notes.ts` (or similar)
 - Read: `src/hooks/use-midi-player.ts`, `src/hooks/use-score-engine.ts`, and related MIDI hooks
 
 **Step 1: Review current game page composition**
 
-- Open `src/app/game/page.tsx` and identify:
+- Open `src/app/play/page.tsx` and identify:
   - Which hooks manage MIDI devices, audio, and scoring.
   - How placeholders are currently wired.
   - Current state management for timer and navigation in `GamePage`.
@@ -38,8 +38,8 @@
 ### Task 2: Refactor `GamePage` structure
 
 **Files:**
-- Modify: `src/app/game/page.tsx`
-- Test: `src/app/game/page.test.tsx` (create if missing or update)
+- Modify: `src/app/play/page.tsx`
+- Test: `src/app/play/page.test.tsx` (create if missing or update)
 
 **Step 1: Clean up placeholder UI**
 
@@ -59,7 +59,7 @@
 ### Task 3: Wire `GamePage` to global context and new logic
 
 **Files:**
-- Modify: `src/app/game/page.tsx`
+- Modify: `src/app/play/page.tsx`
 - Read/Use: existing settings/selection hooks
 
 **Step 1: Expand context consumption**
@@ -84,8 +84,8 @@
 ### Task 4: Implement lane geometry utilities (time → Y mapping)
 
 **Files:**
-- Create: `src/lib/gameplay/lane-geometry.ts`
-- Test: `src/lib/gameplay/lane-geometry.test.ts`
+- Create: `src/lib/play/lane-geometry.ts`
+- Test: `src/lib/play/lane-geometry.test.ts`
 
 **Step 1: Add utility functions**
 
@@ -102,7 +102,7 @@
 
 **Step 3: Run tests**
 
-- Run: `npm test -- src/lib/gameplay/lane-geometry.test.ts`
+- Run: `npm test -- src/lib/play/lane-geometry.test.ts`
 
 ---
 
@@ -311,7 +311,7 @@
 ### Task 11: Wire everything together and run full test suite
 
 **Files:**
-- Modify: `src/app/gameplay/page.tsx`
+- Modify: `src/app/play/page.tsx`
 - Modify: any components/hooks as needed for integration
 
 **Step 1: Connect hooks and components in `GamePlayPage`**

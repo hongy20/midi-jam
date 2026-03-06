@@ -33,7 +33,7 @@ const BackButton = () => {
   );
 };
 
-export default function SettingsPage() {
+export default function OptionsPage() {
   const { theme, setTheme } = useTheme();
   const { settings } = useAppContext();
   const { speed, setSpeed, demoMode, setDemoMode } = settings;
@@ -49,7 +49,7 @@ export default function SettingsPage() {
     <div className="w-[100dvw] h-[100dvh] overflow-hidden max-w-5xl mx-auto grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4">
       <header className="w-full flex flex-row items-center justify-between py-[var(--header-py)] gap-4 flex-shrink-0">
         <h1 className="text-[var(--h1-size)] font-black italic uppercase tracking-tighter drop-shadow-md flex items-center gap-3 text-foreground">
-          Settings{" "}
+          Options{" "}
           <Settings className="w-8 h-8 sm:w-10 sm:h-10 animate-[spin_10s_linear_infinite]" />
         </h1>
         <Suspense>
@@ -95,7 +95,7 @@ export default function SettingsPage() {
               Playback Speed
             </span>
             <span className="text-foreground/50 text-xs sm:text-sm font-medium">
-              Adjust note fall tempo in game
+              Adjust note fall tempo
             </span>
           </div>
           <div className="flex items-center gap-2 sm:gap-4 flex-wrap bg-background/50 p-2 rounded-full border border-foreground/10 self-stretch sm:self-auto justify-center">
@@ -123,7 +123,7 @@ export default function SettingsPage() {
               Demo Mode
             </span>
             <span className="text-foreground/50 text-xs sm:text-sm font-medium">
-              Auto-play previews without instrument
+              Auto-play previews without gear
             </span>
           </div>
           <button

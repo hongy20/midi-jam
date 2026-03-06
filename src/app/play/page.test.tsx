@@ -7,7 +7,7 @@ import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useNavigation } from "@/hooks/use-navigation";
-import GamePage from "./page";
+import PlayPage from "./page";
 
 // Mock the hooks
 vi.mock("@/hooks/use-navigation", () => ({
@@ -34,15 +34,15 @@ vi.mock("@/hooks/use-lane-timeline", () => ({
   useLaneTimeline: vi.fn(),
 }));
 
-describe("Game Page", () => {
+describe("Play Page", () => {
   const mockNavigation = {
     toHome: vi.fn(),
-    toTracks: vi.fn(),
-    toInstruments: vi.fn(),
-    toGame: vi.fn(),
+    toCollection: vi.fn(),
+    toGear: vi.fn(),
+    toPlay: vi.fn(),
     toPause: vi.fn(),
-    toResults: vi.fn(),
-    toSettings: vi.fn(),
+    toScore: vi.fn(),
+    toOptions: vi.fn(),
     goBack: vi.fn(),
     navigate: vi.fn(),
   };
@@ -117,7 +117,7 @@ describe("Game Page", () => {
     });
   });
 
-  it("navigates to results page when the timeline finishes", () => {
+  it("navigates to score page when the timeline finishes", () => {
     let capturedOnFinish: (() => void) | undefined;
     vi.mocked(useLaneTimeline).mockImplementation(({ onFinish }) => {
       capturedOnFinish = onFinish;
@@ -150,7 +150,7 @@ describe("Game Page", () => {
       resetScore: vi.fn(),
     });
 
-    render(<GamePage />);
+    render(<PlayPage />);
 
     // Simulate timeline finish
     expect(capturedOnFinish).toBeDefined();
@@ -161,22 +161,22 @@ describe("Game Page", () => {
       accuracy: expect.any(Number),
       combo: 42,
     });
-    expect(mockNavigation.toResults).toHaveBeenCalled();
+    expect(mockNavigation.toScore).toHaveBeenCalled();
   });
 
-  it("renders the track and instrument names", () => {
-    render(<GamePage />);
+  it("renders the track and gear names", () => {
+    render(<PlayPage />);
     expect(screen.getByText(/Piano/)).toBeInTheDocument();
     expect(screen.getByText(/Test Track/)).toBeInTheDocument();
   });
 
-  it("returns null when track or instrument is missing", () => {
+  it("returns null when track or gear is missing", () => {
     vi.mocked(useAppContext).mockReturnValue({
       ...mockContext,
       tracks: { selected: null, set: vi.fn() },
     });
 
-    const { container } = render(<GamePage />);
+    const { container } = render(<PlayPage />);
     expect(container.firstChild).toBeNull();
   });
 
@@ -189,12 +189,12 @@ describe("Game Page", () => {
       },
     });
 
-    render(<GamePage />);
-    expect(screen.getByText(/Loading Track/i)).toBeInTheDocument();
+    render(<PlayPage />);
+    expect(screen.getByText(/LOADING.../i)).toBeInTheDocument();
   });
 
-  it("navigates to /game/pause when pause button is clicked", () => {
-    render(<GamePage />);
+  it("navigates to pause when pause button is clicked", () => {
+    render(<PlayPage />);
 
     // Click pause button (the one in the header)
     const header = screen.getByRole("banner");

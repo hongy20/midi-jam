@@ -75,10 +75,10 @@ git commit -m "refactor: use semantic variables in gameplay CSS modules"
 
 **Files:**
 - Modify: `src/app/page.tsx`
-- Modify: `src/app/tracks/page.tsx`
-- Modify: `src/app/instruments/page.tsx`
-- Modify: `src/app/settings/page.tsx`
-- Modify: `src/app/results/page.tsx`
+- Modify: `src/app/collection/page.tsx`
+- Modify: `src/app/gear/page.tsx`
+- Modify: `src/app/options/page.tsx`
+- Modify: `src/app/score/page.tsx`
 - Modify: `src/components/score-hud-lite.tsx`
 
 **Step 1: Update `page.tsx` (Welcome)**

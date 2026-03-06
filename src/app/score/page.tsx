@@ -4,21 +4,21 @@ import { ChevronRight, RotateCcw } from "lucide-react";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
-export default function ResultsPage() {
-  const { toGame, toTracks, toHome } = useNavigation();
+export default function ScorePage() {
+  const { toPlay, toCollection, toHome } = useNavigation();
   const { game, results, actions } = useAppContext();
   const { setSession: setGameSession } = game;
   const { last: sessionResults } = results;
   const { resetAll: clearSelection } = actions;
 
-  const handlePlayAgain = () => {
+  const handleRetry = () => {
     setGameSession(null);
-    toGame();
+    toPlay();
   };
 
   const handleNextSong = () => {
     setGameSession(null);
-    toTracks();
+    toCollection();
   };
 
   const handleMainMenu = () => {
@@ -55,7 +55,7 @@ export default function ResultsPage() {
       {/* Header */}
       <header className="flex items-center justify-between py-[var(--header-py)] flex-shrink-0">
         <h1 className="text-[var(--h1-size)] font-black text-foreground uppercase tracking-tighter">
-          Performance Summary
+          Final Score
         </h1>
       </header>
 
@@ -65,7 +65,7 @@ export default function ResultsPage() {
       >
         <div className="text-center mb-8 landscape:mb-4 w-full">
           <span className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-2 sm:mb-4 landscape:mb-1 block drop-shadow-md">
-            Song Complete
+            SONG FINISHED
           </span>
           <h1 className="text-5xl sm:text-7xl md:text-8xl landscape:text-4xl font-black text-foreground italic uppercase tracking-tighter drop-shadow-xl bg-gradient-to-tr from-foreground to-foreground/50 bg-clip-text text-transparent">
             {titleLabel}
@@ -128,10 +128,10 @@ export default function ResultsPage() {
 
         <button
           type="button"
-          onClick={handlePlayAgain}
+          onClick={handleRetry}
           className="flex-[1.5] py-3 sm:py-5 landscape:py-2 bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] rounded-full font-black text-lg sm:text-xl landscape:text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[var(--ui-btn-primary-shadow)] order-1 sm:order-3 flex items-center justify-center gap-2"
         >
-          PLAY AGAIN <RotateCcw className="w-5 h-5 sm:w-6 sm:h-6" />
+          RETRY <RotateCcw className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
       </footer>
     </div>

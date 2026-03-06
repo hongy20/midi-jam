@@ -18,7 +18,7 @@ The gameplay page is **not** responsible for MIDI device or track selection; tho
 
 ### Settings / Global Context
 
-Owned outside the gameplay page (e.g. in a session/settings provider):
+Owned outside the gameplay page (e.g. in a session/options provider):
 
 - **Selected MIDI input/output**
 - **Selected track / MIDI file**
@@ -29,7 +29,7 @@ These are exposed via hooks/context (e.g. `useSessionSettings`, `useTrackSelecti
 
 ### `GamePage` (existing route refactor)
 
-Located at `src/app/game/page.tsx`. We will refactor this page to:
+Located at `src/app/play/page.tsx`. We will refactor this page to:
 
 - Retain existing **navigation logic** (pause overlay, restart, quit, auto-navigation to results).
 - Consume from context:

@@ -38,7 +38,7 @@ git commit -m "style: set global 100dvh/100dvw baseline"
 ### Task 2: Refactor InstrumentsPage to Standalone Grid
 
 **Files:**
-- Modify: `src/app/instruments/page.tsx`
+- Modify: `src/app/gear/page.tsx`
 
 **Step 1: Replace NavigationLayout with standalone grid**
 
@@ -70,14 +70,14 @@ return (
 **Step 2: Commit**
 
 ```bash
-git add src/app/instruments/page.tsx
+git add src/app/gear/page.tsx
 git commit -m "refactor: InstrumentsPage to standalone full-size grid"
 ```
 
 ### Task 3: Refactor TracksPage to Standalone Grid
 
 **Files:**
-- Modify: `src/app/tracks/page.tsx`
+- Modify: `src/app/collection/page.tsx`
 
 **Step 1: Replace NavigationLayout with standalone grid**
 
@@ -86,14 +86,14 @@ Replicate the header (with back button), stepper, and background.
 **Step 2: Commit**
 
 ```bash
-git add src/app/tracks/page.tsx
+git add src/app/collection/page.tsx
 git commit -m "refactor: TracksPage to standalone full-size grid"
 ```
 
 ### Task 4: Refactor ResultsPage to Standalone Grid
 
 **Files:**
-- Modify: `src/app/results/page.tsx`
+- Modify: `src/app/score/page.tsx`
 
 **Step 1: Replace NavigationLayout with standalone grid**
 
@@ -102,7 +102,7 @@ Replicate the header and background glow.
 **Step 2: Commit**
 
 ```bash
-git add src/app/results/page.tsx
+git add src/app/score/page.tsx
 git commit -m "refactor: ResultsPage to standalone full-size grid"
 ```
 
@@ -123,29 +123,29 @@ git commit -m "refactor: refine WelcomePage 100dvw/100dvh grid"
 ### Task 6: Refine SettingsPage Grid
 
 **Files:**
-- Modify: `src/app/settings/page.tsx`
+- Modify: `src/app/options/page.tsx`
 
 **Step 1: Ensure it uses exact 100dvw/100dvh and standard grid pattern**
 
 **Step 2: Commit**
 
 ```bash
-git add src/app/settings/page.tsx
+git add src/app/options/page.tsx
 git commit -m "refactor: refine SettingsPage 100dvw/100dvh grid"
 ```
 
 ### Task 7: Refine GamePage Grid
 
 **Files:**
-- Modify: `src/app/game/page.module.css`
-- Modify: `src/app/game/page.tsx`
+- Modify: `src/app/play/page.module.css`
+- Modify: `src/app/play/page.tsx`
 
 **Step 1: Update page.module.css to use 100dvh/100dvw baseline**
 
 **Step 2: Commit**
 
 ```bash
-git add src/app/game/page.module.css src/app/game/page.tsx
+git add src/app/play/page.module.css src/app/play/page.tsx
 git commit -m "refactor: refine GamePage grid layout"
 ```
 

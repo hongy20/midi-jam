@@ -13,12 +13,12 @@
 ### Task 1: Game Page Scaling
 
 **Files:**
-- Modify: `src/app/game/page.module.css`
+- Modify: `src/app/play/page.module.css`
 
 **Step 1: Reduce header/footer heights in landscape**
 
 ```css
-/* src/app/game/page.module.css */
+/* src/app/play/page.module.css */
 @media (max-height: 500px) and (orientation: landscape) {
   .container {
     --header-height: 3rem;
@@ -29,7 +29,7 @@
 
 **Step 2: Commit**
 ```bash
-git add src/app/game/page.module.css
+git add src/app/play/page.module.css
 git commit -m "style(game): aggressively scale header and footer in landscape"
 ```
 
@@ -38,14 +38,14 @@ git commit -m "style(game): aggressively scale header and footer in landscape"
 ### Task 2: Settings Page Landscape Reflow
 
 **Files:**
-- Modify: `src/app/settings/page.tsx`
+- Modify: `src/app/options/page.tsx`
 
 **Step 1: Shrink header and gaps in landscape**
 
 Update the header and main container to use less vertical space in landscape.
 
 ```tsx
-// src/app/settings/page.tsx
+// src/app/options/page.tsx
 
 // Header: reduce margin
 // <header className="relative z-10 w-full max-w-3xl flex flex-col sm:flex-row items-center justify-between mb-8 sm:mb-12 gap-4">
@@ -63,7 +63,7 @@ Update the header and main container to use less vertical space in landscape.
 Reduce padding and font sizes specifically for landscape.
 
 ```tsx
-// src/app/settings/page.tsx
+// src/app/options/page.tsx
 // Find setting card divs and update classes to be more compact in landscape:
 // p-6 sm:p-8 -> landscape:p-3 landscape:gap-3
 // text-xl sm:text-2xl -> landscape:text-lg
@@ -71,7 +71,7 @@ Reduce padding and font sizes specifically for landscape.
 
 **Step 3: Commit**
 ```bash
-git add src/app/settings/page.tsx
+git add src/app/options/page.tsx
 git commit -m "style(settings): reflow layout to grid in landscape to avoid scrolling"
 ```
 
@@ -110,12 +110,12 @@ git commit -m "style(ui): optimize NavigationLayout for fixed viewport height"
 ### Task 4: Tracks Page Grid Scaling
 
 **Files:**
-- Modify: `src/app/tracks/page.tsx`
+- Modify: `src/app/collection/page.tsx`
 
 **Step 1: Increase grid columns in landscape to reduce height**
 
 ```tsx
-// src/app/tracks/page.tsx
+// src/app/collection/page.tsx
 
 // Change:
 // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 overflow-y-auto no-scrollbar pb-12 w-full">
@@ -126,14 +126,14 @@ git commit -m "style(ui): optimize NavigationLayout for fixed viewport height"
 **Step 2: Scale down track buttons**
 
 ```tsx
-// src/app/tracks/page.tsx
+// src/app/collection/page.tsx
 // Reduce padding/gap in landscape:
 // p-5 sm:p-6 -> landscape:p-3
 ```
 
 **Step 3: Commit**
 ```bash
-git add src/app/tracks/page.tsx
+git add src/app/collection/page.tsx
 git commit -m "style(tracks): scale grid and buttons for landscape"
 ```
 
@@ -142,19 +142,19 @@ git commit -m "style(tracks): scale grid and buttons for landscape"
 ### Task 5: Results Page Layout Reflow
 
 **Files:**
-- Modify: `src/app/results/page.tsx`
+- Modify: `src/app/score/page.tsx`
 
 **Step 1: Make Results cards more compact in landscape**
 
 ```tsx
-// src/app/results/page.tsx
+// src/app/score/page.tsx
 // Use grid-cols-4 more aggressively in landscape.
 // Reduce font sizes (5xl/7xl -> 3xl/4xl in landscape).
 ```
 
 **Step 2: Commit**
 ```bash
-git add src/app/results/page.tsx
+git add src/app/score/page.tsx
 git commit -m "style(results): compact layout for landscape performance summary"
 ```
 

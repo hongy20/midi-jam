@@ -16,13 +16,13 @@
 ### Task 1: Fix GamePage Anti-patterns
 
 **Files:**
-- Modify: `src/app/game/page.tsx`
+- Modify: `src/app/play/page.tsx`
 
 **Step 1: Write the failing test**
 *Note: Existing tests might pass, but we want to ensure stability. I'll add a test case that verifies the finish callback works correctly without triggering extra renders.*
 
 **Step 2: Run test to verify it fails**
-Run: `npm test src/app/game/page.test.tsx`
+Run: `npm test src/app/play/page.test.tsx`
 
 **Step 3: Implement the fix**
 - Move `handleFinishRef.current` update into a `useCallback` or `useEffect`.
@@ -30,7 +30,7 @@ Run: `npm test src/app/game/page.test.tsx`
 - Remove redundant `useState` if possible (e.g., `progress` can be derived or handled more efficiently).
 
 **Step 4: Run test to verify it passes**
-Run: `npm test src/app/game/page.test.tsx`
+Run: `npm test src/app/play/page.test.tsx`
 
 **Step 5: Manually verify and seek approval**
 - Verify game still plays, pause works, and navigation to results works.
@@ -38,7 +38,7 @@ Run: `npm test src/app/game/page.test.tsx`
 
 **Step 6: Commit**
 ```bash
-git add src/app/game/page.tsx
+git add src/app/play/page.tsx
 git commit -m "refactor(game): fix ref-in-render anti-pattern and simplify state"
 ```
 

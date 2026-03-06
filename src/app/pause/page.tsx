@@ -6,7 +6,7 @@ import { useNavigation } from "@/hooks/use-navigation";
 import { ROUTES } from "@/lib/navigation/routes";
 
 export default function PausePage() {
-  const { toGame, toResults, toSettings, toHome } = useNavigation();
+  const { toPlay, toScore, toOptions, toHome } = useNavigation();
   const { tracks, instruments, game, results } = useAppContext();
   const { selected: selectedTrack } = tracks;
   const { input: selectedMIDIInput } = instruments;
@@ -22,7 +22,7 @@ export default function PausePage() {
       ...gameSession,
       isPaused: false,
     });
-    toGame();
+    toPlay();
   };
 
   const handleRestart = () => {
@@ -33,7 +33,7 @@ export default function PausePage() {
       combo: 0,
       currentTimeMs: 0,
     });
-    toGame();
+    toPlay();
   };
 
   const handleQuit = () => {
@@ -43,11 +43,11 @@ export default function PausePage() {
       combo: gameSession.combo,
     });
     setGameSession(null);
-    toResults();
+    toScore();
   };
 
-  const handleSettings = () => {
-    toSettings(ROUTES.PAUSE);
+  const handleOptions = () => {
+    toOptions(ROUTES.PAUSE);
   };
 
   const buttonClass =
@@ -91,11 +91,11 @@ export default function PausePage() {
 
             <button
               type="button"
-              onClick={handleSettings}
+              onClick={handleOptions}
               className={buttonClass}
             >
               <Settings className="w-5 h-5" />
-              SETTINGS
+              OPTIONS
             </button>
 
             <button
@@ -127,7 +127,7 @@ export default function PausePage() {
           className="group flex items-center gap-2 px-6 py-3 bg-foreground/5 border border-foreground/10 rounded-full text-foreground/50 font-bold text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
         >
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-          Quit to Menu
+          QUIT TO MENU
         </button>
       </footer>
     </div>

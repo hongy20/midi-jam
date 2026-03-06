@@ -14,8 +14,8 @@ interface Track {
   url: string;
 }
 
-export default function TracksPage() {
-  const { toGame, toInstruments } = useNavigation();
+export default function CollectionPage() {
+  const { toPlay, toGear } = useNavigation();
   const { tracks: contextTracks } = useAppContext();
   const { set: setTrack, selected: selectedTrack } = contextTracks;
 
@@ -40,12 +40,12 @@ export default function TracksPage() {
       if (track) {
         setTrack({ id: track.id, name: track.name, url: track.url });
       }
-      toGame();
+      toPlay();
     }
   };
 
   const handleBack = () => {
-    toInstruments();
+    toGear();
   };
 
   const handleSurprise = () => {
@@ -60,7 +60,7 @@ export default function TracksPage() {
       {/* Header */}
       <header className="flex items-center justify-between py-[var(--header-py)] flex-shrink-0">
         <h1 className="text-[var(--h1-size)] font-black text-foreground uppercase tracking-tighter">
-          Select Soundtrack
+          Song Collection
         </h1>
 
         <button
@@ -69,7 +69,7 @@ export default function TracksPage() {
           className="group flex items-center gap-2 px-4 py-2 bg-[var(--ui-btn-secondary-bg)] border border-[var(--ui-btn-secondary-border)] rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
         >
           <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
-          Instrument Setup
+          Your Gear
         </button>
       </header>
 
@@ -79,7 +79,7 @@ export default function TracksPage() {
       >
         {isLoading ? (
           <div className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium col-span-full">
-            Loading soundtracks...
+            Loading songs...
           </div>
         ) : (
           tracks.map((track) => (

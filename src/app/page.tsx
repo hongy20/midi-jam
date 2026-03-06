@@ -6,7 +6,7 @@ import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
 export default function WelcomePage() {
-  const { toInstruments, toSettings } = useNavigation();
+  const { toGear, toOptions } = useNavigation();
   const { actions, isSupported } = useAppContext();
   const { resetAll: clearSelection } = actions;
 
@@ -15,11 +15,11 @@ export default function WelcomePage() {
   }, [clearSelection]);
 
   const handleStart = () => {
-    toInstruments();
+    toGear();
   };
 
-  const handleSettings = () => {
-    toSettings();
+  const handleOptions = () => {
+    toOptions();
   };
 
   return (
@@ -66,10 +66,10 @@ export default function WelcomePage() {
 
           <button
             type="button"
-            onClick={handleSettings}
+            onClick={handleOptions}
             className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 px-6 py-4 landscape:py-2 rounded-xl border-2 border-[var(--ui-btn-secondary-border)] bg-[var(--ui-btn-secondary-bg)] text-[var(--ui-btn-secondary-text)] font-bold tracking-widest uppercase text-sm landscape:text-xs"
           >
-            Settings <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
+            Options <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
       </main>
