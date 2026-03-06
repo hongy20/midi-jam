@@ -1,5 +1,5 @@
 /* No animations for welcome page */
-:global(:root) {
+.page {
   --header-height: 0;
 }
 

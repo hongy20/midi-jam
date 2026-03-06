@@ -30,6 +30,7 @@ export default function WelcomePage() {
 
   return (
     <PageLayout
+      className={styles.page}
       footer={
         <PageFooter>The ultimate immersive musical experience</PageFooter>
       }
