@@ -121,18 +121,15 @@ export default function GearPage() {
               "Play a note on your gear to select it, or tap a card below."
             </p>
             <div className="flex items-center gap-6 overflow-x-auto snap-x snap-mandatory -mx-8 px-8">
-              {[...inputs, ...inputs, ...inputs].map((inst) => (
-                <div
+              {inputs.map((inst) => (
+                <GearCard
                   key={inst.id}
+                  instrument={inst}
+                  isSelected={selected === inst.id}
+                  isActive={lastInputId === inst.id}
+                  onClick={() => setSelected(inst.id)}
                   className="shrink-0 w-[calc(100%-3rem)] snap-center"
-                >
-                  <GearCard
-                    instrument={inst}
-                    isSelected={selected === inst.id}
-                    isActive={lastInputId === inst.id}
-                    onClick={() => setSelected(inst.id)}
-                  />
-                </div>
+                />
               ))}
             </div>
           </>

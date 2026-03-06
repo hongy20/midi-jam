@@ -6,6 +6,7 @@ interface GearCardProps {
   isSelected: boolean;
   isActive: boolean;
   onClick: () => void;
+  className?: string;
 }
 
 export function GearCard({
@@ -13,12 +14,13 @@ export function GearCard({
   isSelected,
   isActive,
   onClick,
+  className = "",
 }: GearCardProps) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`${styles.card} ${isSelected ? styles.selected : styles.unselected}`}
+      className={`${styles.card} ${isSelected ? styles.selected : styles.unselected} ${className}`}
     >
       {/* Active Pulse Background */}
       <div
