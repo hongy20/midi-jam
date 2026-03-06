@@ -68,7 +68,7 @@ export default function CollectionPage() {
             icon={ArrowLeft}
             iconPosition="left"
             onClick={handleBack}
-            className="!px-4 !py-2 !text-[10px] sm:!text-xs"
+            size="sm"
           >
             Your Gear
           </Button>
@@ -76,22 +76,28 @@ export default function CollectionPage() {
       }
       footer={
         <PageFooter>
-          <Button
-            variant="secondary"
-            onClick={handleSurprise}
-            icon={Dices}
-            className="w-full sm:flex-1"
-          >
-            SURPRISE
-          </Button>
-          <Button
-            onClick={handlePlay}
-            disabled={!selected}
-            icon={Play}
-            className="w-full sm:flex-[2]"
-          >
-            PLAY
-          </Button>
+          <div className="w-full sm:flex-1 flex">
+            <Button
+              variant="secondary"
+              onClick={handleSurprise}
+              icon={Dices}
+              size="md"
+              fullWidth
+            >
+              SURPRISE
+            </Button>
+          </div>
+          <div className="w-full sm:flex-[2] flex">
+            <Button
+              onClick={handlePlay}
+              disabled={!selected}
+              icon={Play}
+              size="md"
+              fullWidth
+            >
+              PLAY
+            </Button>
+          </div>
         </PageFooter>
       }
     >
