@@ -55,13 +55,7 @@ export default function OptionsPage() {
           </Suspense>
         </PageHeader>
       }
-      footer={
-        <PageFooter className="justify-center">
-          <p className="text-foreground/40 text-[8px] sm:text-[10px] uppercase tracking-[0.4em] sm:tracking-[0.5em] font-black w-full text-center">
-            Midi Jam v0.1.0 • Experimental Build
-          </p>
-        </PageFooter>
-      }
+      footer={<PageFooter>Midi Jam v0.1.0 • Experimental Build</PageFooter>}
     >
       <main
         className={`w-full grid grid-cols-1 landscape:grid-cols-2 gap-3 sm:gap-6 overflow-y-auto no-scrollbar py-4`}

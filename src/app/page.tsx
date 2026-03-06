@@ -28,11 +28,7 @@ export default function WelcomePage() {
   return (
     <PageLayout
       footer={
-        <PageFooter className="pb-8 landscape:pb-2">
-          <p className="text-foreground/40 text-[10px] sm:text-xs uppercase tracking-[0.3em] font-bold text-center w-full">
-            The ultimate immersive musical experience
-          </p>
-        </PageFooter>
+        <PageFooter>The ultimate immersive musical experience</PageFooter>
       }
     >
       <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 py-4 landscape:py-2 w-full max-w-4xl mx-auto">
