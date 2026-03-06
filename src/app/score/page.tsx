@@ -59,33 +59,25 @@ export default function ScorePage() {
       header={<PageHeader title="Final Score" />}
       footer={
         <PageFooter>
-          <div className="flex-1 flex order-3 sm:order-1">
-            <Button variant="secondary" onClick={handleMainMenu} size="md">
-              MAIN MENU
-            </Button>
-          </div>
-
-          <div className="flex-1 flex order-2">
-            <Button
-              variant="secondary"
-              onClick={handleNextSong}
-              size="md"
-              icon={ChevronRight}
-            >
-              NEXT SONG
-            </Button>
-          </div>
-
-          <div className="flex-[1.5] flex order-1 sm:order-3">
-            <Button
-              variant="primary"
-              onClick={handleRetry}
-              size="md"
-              icon={RotateCcw}
-            >
-              RETRY
-            </Button>
-          </div>
+          <Button variant="secondary" onClick={handleMainMenu} size="md">
+            MAIN MENU
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleNextSong}
+            size="md"
+            icon={ChevronRight}
+          >
+            NEXT SONG
+          </Button>
+          <Button
+            variant="primary"
+            onClick={handleRetry}
+            size="md"
+            icon={RotateCcw}
+          >
+            RETRY
+          </Button>
         </PageFooter>
       }
     >
