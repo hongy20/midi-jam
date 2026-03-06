@@ -2,6 +2,7 @@
 
 import { Play, Settings } from "lucide-react";
 import { useEffect } from "react";
+import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer";
 import { PageHeader } from "@/components/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
@@ -58,27 +59,24 @@ export default function WelcomePage() {
 
         {/* Navigation Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 landscape:gap-3 w-full max-w-lg mb-8 landscape:mb-2">
-          <button
-            type="button"
+          <Button
             onClick={handleStart}
             disabled={!isSupported}
-            className={`col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 landscape:py-3 bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] text-xl sm:text-2xl landscape:text-lg font-black rounded-2xl sm:rounded-3xl shadow-[var(--ui-btn-primary-shadow)] overflow-hidden flex items-center justify-center gap-3 ${
-              !isSupported
-                ? "opacity-20 cursor-not-allowed grayscale"
-                : "cursor-pointer"
-            }`}
+            icon={Play}
+            iconPosition="right"
+            className="col-span-1 sm:col-span-2 !py-5 sm:!py-6 landscape:!py-3 !rounded-2xl sm:!rounded-3xl !text-xl sm:!text-2xl landscape:!text-lg"
           >
-            <span className="relative z-10">START JAM</span>
-            <Play className="relative z-10 w-6 h-6 sm:w-8 sm:h-8 fill-current" />
-          </button>
+            START JAM
+          </Button>
 
-          <button
-            type="button"
+          <Button
+            variant="secondary"
             onClick={handleOptions}
-            className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 px-6 py-4 landscape:py-2 rounded-xl border-2 border-[var(--ui-btn-secondary-border)] bg-[var(--ui-btn-secondary-bg)] text-[var(--ui-btn-secondary-text)] font-bold tracking-widest uppercase text-sm landscape:text-xs"
+            icon={Settings}
+            className="col-span-1 sm:col-span-2 !px-6 !py-4 landscape:!py-2 !rounded-xl !border-2 !font-bold !tracking-widest !text-sm landscape:!text-xs"
           >
-            Options <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
-          </button>
+            Options
+          </Button>
         </div>
       </main>
     </PageLayout>
