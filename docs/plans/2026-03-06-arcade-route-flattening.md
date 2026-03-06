@@ -1,4 +1,4 @@
-# Arcade-Style Route Flattening Implementation Plan
+# Arcade-Style Route Flattening Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
@@ -9,6 +9,24 @@
 **Tech Stack:** Next.js 15+ (App Router), TypeScript, Tailwind CSS.
 
 ---
+
+## Design Summary
+
+### 1. Route & Page Mapping
+
+| Old Route | New Route | New Name | Folder Path |
+| :--- | :--- | :--- | :--- |
+| `/` | `/` | Main Menu | `src/app/page.tsx` |
+| `/tracks` | `/collection` | Song Collection | `src/app/collection/` |
+| `/instruments` | `/gear` | Your Gear | `src/app/gear/` |
+| `/game` | `/play` | The Stage | `src/app/play/` |
+| `/game/pause` | `/pause` | Pause Menu | `src/app/pause/` |
+| `/results` | `/score` | Final Score | `src/app/score/` |
+| `/settings` | `/options` | Game Options | `src/app/options/` |
+
+---
+
+## Implementation Tasks
 
 ### Task 1: Update Route Definitions
 
