@@ -87,7 +87,7 @@ function GearContent() {
             icon={ArrowLeft}
             iconPosition="left"
             onClick={toHome}
-            className="!px-4 !py-2 !text-[10px] sm:!text-xs"
+            size="sm"
           >
             {fromGame ? "Back to Menu" : "Main Menu"}
           </Button>
@@ -99,6 +99,7 @@ function GearContent() {
             onClick={handleContinue}
             disabled={!selected}
             icon={ChevronRight}
+            size="md"
           >
             {fromGame ? "RESUME GAME" : "CONTINUE"}
           </Button>
