@@ -1,9 +1,10 @@
 "use client";
 
-import { ArrowLeft, ChevronRight, Piano } from "lucide-react";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { Button } from "@/components/button/button";
+import { GearCard } from "@/components/gear-card/gear-card";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
@@ -128,59 +129,15 @@ function GearContent() {
         <div
           className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-12`}
         >
-          {inputs.map((inst) => {
-            const isSelected = selected === inst.id;
-            const isActive = lastInputId === inst.id;
-
-            return (
-              <button
-                key={inst.id}
-                type="button"
-                onClick={() => setSelected(inst.id)}
-                className={`group relative p-5 sm:p-8 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-3 sm:gap-4 overflow-hidden ${
-                  isSelected
-                    ? "bg-foreground border-foreground scale-[1.02] shadow-[var(--ui-btn-primary-shadow)]"
-                    : "bg-[var(--ui-card-bg)] border-[var(--ui-card-border)] hover:border-foreground/30 hover:bg-foreground/10"
-                }`}
-              >
-                {/* Active Pulse Background */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-tr from-accent-primary/20 to-transparent transition-opacity duration-300 ${
-                    isActive ? "opacity-100" : "opacity-0"
-                  }`}
-                />
-
-                <div
-                  className={`w-12 h-12 sm:w-16 sm:h-16 rounded-2xl flex items-center justify-center transition-colors relative z-10 ${
-                    isSelected
-                      ? "bg-background text-foreground"
-                      : "bg-background/50 text-foreground/60"
-                  }`}
-                >
-                  <Piano className="w-6 h-6 sm:w-7 sm:h-7" />
-                </div>
-
-                <div className="flex flex-col relative z-10 min-w-0">
-                  <span
-                    className={`text-lg sm:text-xl font-bold truncate ${isSelected ? "text-background" : "text-foreground"}`}
-                    title={inst.name || "Unknown Device"}
-                  >
-                    {inst.name || "Unknown Device"}
-                  </span>
-                  <span
-                    className={`text-xs sm:text-sm font-medium mt-0.5 sm:mt-1 ${isSelected ? "text-background/70" : "text-foreground/50"}`}
-                  >
-                    {inst.manufacturer || "Generic MIDI Input"}
-                  </span>
-                </div>
-
-                {/* Pulse ring when active */}
-                {isActive && (
-                  <div className="absolute inset-0 border-2 border-transparent rounded-3xl shadow-[inset_0_0_20px_rgba(255,255,255,0.5)] z-20 pointer-events-none" />
-                )}
-              </button>
-            );
-          })}
+          {inputs.map((inst) => (
+            <GearCard
+              key={inst.id}
+              instrument={inst}
+              isSelected={selected === inst.id}
+              isActive={lastInputId === inst.id}
+              onClick={() => setSelected(inst.id)}
+            />
+          ))}
         </div>
       </main>
     </PageLayout>
