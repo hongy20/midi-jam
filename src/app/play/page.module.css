@@ -1,16 +1,16 @@
-.container {
+:global(:root) {
   --header-height: 5rem;
   --footer-height: 151px;
 }
 
 @media (max-height: 600px) {
-  .container {
+  :global(:root) {
     --footer-height: 91px;
   }
 }
 
 @media (max-height: 500px) and (orientation: landscape) {
-  .container {
+  :global(:root) {
     --header-height: 3rem;
     --footer-height: 70px;
   }

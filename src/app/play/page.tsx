@@ -22,7 +22,7 @@ import {
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "@/lib/midi/constant";
-import styles from "./page.module.css";
+import "./page.module.css";
 
 export default function PlayPage() {
   const { toScore, toPause } = useNavigation();
@@ -188,7 +188,6 @@ export default function PlayPage() {
 
   return (
     <PageLayout
-      className={styles.container}
       style={
         {
           "--start-unit": startUnit,
