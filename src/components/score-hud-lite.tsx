@@ -59,13 +59,15 @@ export function ScoreHudLite({
       <div className="min-w-[80px] flex items-center justify-center">
         {lastHitQuality && (
           <span
-            className={`text-lg font-black uppercase italic tracking-tighter animate-bounce ${
-              lastHitQuality === "perfect"
-                ? "text-yellow-400"
-                : lastHitQuality === "good"
-                  ? "text-green-400"
-                  : "text-red-500"
-            }`}
+            className="text-lg font-black uppercase italic tracking-tighter animate-bounce"
+            style={{
+              color:
+                lastHitQuality === "perfect"
+                  ? "var(--ui-hit-perfect)"
+                  : lastHitQuality === "good"
+                    ? "var(--ui-hit-good)"
+                    : "var(--ui-hit-miss)",
+            }}
           >
             {lastHitQuality}!
           </span>

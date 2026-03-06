@@ -66,7 +66,7 @@ export default function TracksPage() {
         <button
           type="button"
           onClick={handleBack}
-          className="group flex items-center gap-2 px-4 py-2 bg-foreground/5 border border-foreground/10 rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
+          className="group flex items-center gap-2 px-4 py-2 bg-[var(--ui-btn-secondary-bg)] border border-[var(--ui-btn-secondary-border)] rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
         >
           <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
           Instrument Setup
@@ -89,8 +89,8 @@ export default function TracksPage() {
               onClick={() => setSelected(track.id)}
               className={`w-full p-5 sm:p-6 landscape:p-3 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col items-start gap-4 landscape:gap-2 ${
                 selected === track.id
-                  ? "bg-foreground border-foreground scale-[1.02] shadow-[0_0_40px_rgba(255,255,255,0.15)]"
-                  : "bg-foreground/5 border-foreground/10 hover:border-foreground/30 hover:bg-foreground/10 text-foreground/80"
+                  ? "bg-foreground border-foreground scale-[1.02] shadow-[var(--ui-btn-primary-shadow)]"
+                  : "bg-[var(--ui-card-bg)] border-[var(--ui-card-border)] hover:border-foreground/30 hover:bg-foreground/10 text-foreground/80"
               }`}
             >
               <div className="flex items-center gap-4 landscape:gap-3 w-full">
@@ -144,7 +144,7 @@ export default function TracksPage() {
         <button
           type="button"
           onClick={handleSurprise}
-          className="w-full sm:flex-1 px-[var(--app-btn-px)] py-[var(--btn-py)] bg-foreground/10 text-foreground border border-foreground/20 font-black rounded-full hover:bg-foreground/20 hover:scale-[1.02] active:scale-95 transition-all text-[var(--btn-text)] flex items-center justify-center gap-2"
+          className="w-full sm:flex-1 px-[var(--app-btn-px)] py-[var(--btn-py)] bg-[var(--ui-btn-secondary-bg)] text-[var(--ui-btn-secondary-text)] border border-[var(--ui-btn-secondary-border)] font-black rounded-full hover:bg-foreground/20 hover:scale-[1.02] active:scale-95 transition-all text-[var(--btn-text)] flex items-center justify-center gap-2"
         >
           SURPRISE <Dices className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
@@ -154,7 +154,7 @@ export default function TracksPage() {
           disabled={!selected}
           className={`w-full sm:flex-[2] px-[var(--app-btn-px)] py-[var(--btn-py)] rounded-full font-black text-[var(--btn-text)] transition-all flex items-center justify-center gap-2 ${
             selected
-              ? "bg-foreground text-background hover:scale-[1.02] active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.2)] cursor-pointer"
+              ? "bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] hover:scale-[1.02] active:scale-95 shadow-[var(--ui-btn-primary-shadow)] cursor-pointer"
               : "opacity-40 bg-foreground/10 text-foreground/40 cursor-not-allowed"
           }`}
         >

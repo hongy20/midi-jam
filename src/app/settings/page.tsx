@@ -17,14 +17,14 @@ const BackButton = () => {
       <button
         type="button"
         onClick={() => goBack(from)}
-        className="px-6 py-3 bg-foreground/10 text-foreground rounded-full font-bold text-sm tracking-widest uppercase hover:bg-foreground/20 transition-colors"
+        className="px-6 py-3 bg-[var(--ui-btn-secondary-bg)] border border-[var(--ui-btn-secondary-border)] text-[var(--ui-btn-secondary-text)] rounded-full font-bold text-sm tracking-widest uppercase hover:bg-foreground/20 transition-colors"
       >
         BACK
       </button>
       <button
         type="button"
         onClick={toHome}
-        className="group px-6 py-3 bg-foreground text-background rounded-full font-bold text-sm tracking-widest uppercase hover:scale-105 transition-all flex items-center gap-2"
+        className="group px-6 py-3 bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] rounded-full font-bold text-sm tracking-widest uppercase hover:scale-105 transition-all shadow-[var(--ui-btn-primary-shadow)] flex items-center gap-2"
       >
         EXIT{" "}
         <LogOut className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -61,7 +61,7 @@ export default function SettingsPage() {
         className={`w-full grid grid-cols-1 landscape:grid-cols-2 gap-3 sm:gap-6 overflow-y-auto no-scrollbar py-4`}
       >
         {/* Setting Item: Theme */}
-        <div className="bg-foreground/5 backdrop-blur-md border border-foreground/10 p-6 sm:p-8 landscape:p-4 rounded-[1.5rem] sm:rounded-[2rem] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
+        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 landscape:p-4 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
           <div className="flex flex-col flex-1">
             <span className="text-xl sm:text-2xl landscape:text-lg font-bold uppercase tracking-tight">
               Visual Theme
@@ -89,7 +89,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Setting Item: Speed */}
-        <div className="bg-foreground/5 backdrop-blur-md border border-foreground/10 p-6 sm:p-8 landscape:p-4 rounded-[1.5rem] sm:rounded-[2rem] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
+        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 landscape:p-4 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
           <div className="flex flex-col flex-1">
             <span className="text-xl sm:text-2xl landscape:text-lg font-bold uppercase tracking-tight">
               Playback Speed
@@ -117,7 +117,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Setting Item: Demo Mode */}
-        <div className="bg-foreground/5 backdrop-blur-md border border-foreground/10 p-6 sm:p-8 landscape:p-4 rounded-[1.5rem] sm:rounded-[2rem] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
+        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 landscape:p-4 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row landscape:flex-col items-start sm:items-center landscape:items-start justify-between gap-6 landscape:gap-3 hover:bg-foreground/10 transition-colors">
           <div className="flex flex-col flex-1">
             <span className="text-xl sm:text-2xl landscape:text-lg font-bold uppercase tracking-tight">
               Demo Mode

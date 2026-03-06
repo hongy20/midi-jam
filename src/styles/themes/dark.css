@@ -1,0 +1,34 @@
+:root[data-theme="dark"] {
+  /* Primitives */
+  --background: #121212;
+  --foreground: #ededed;
+  --accent-primary: #ededed;
+
+  /* Piano Keyboard */
+  --piano-key-white: #e5e7eb;
+  --piano-key-black: #030712;
+  --piano-key-border: 1px solid rgba(0, 0, 0, 0.2);
+  --piano-glow-playback-bg: rgba(59, 130, 246, 0.3);
+  --piano-glow-playback-shadow: #2563eb;
+  --piano-glow-live-bg: rgba(16, 185, 129, 0.3);
+  --piano-glow-live-shadow: #059669;
+  --piano-glow-both-bg: rgba(79, 70, 229, 0.4);
+  --piano-glow-both-shadow: #4f46e5;
+
+  /* Lanes & Notes */
+  --lane-white: rgba(255, 255, 255, 0.03);
+  --lane-black: rgba(0, 0, 0, 0.3);
+  --note-border-opacity: 0.1;
+  --note-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+
+  /* UI Elements */
+  --ui-card-bg: rgba(255, 255, 255, 0.03);
+  --ui-card-border: rgba(255, 255, 255, 0.08);
+  --ui-card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  --ui-btn-primary-bg: #ededed;
+  --ui-btn-primary-text: #121212;
+  --ui-btn-primary-shadow: 0 4px 14px 0 rgba(255, 255, 255, 0.1);
+  --ui-btn-secondary-bg: rgba(255, 255, 255, 0.05);
+  --ui-btn-secondary-border: rgba(255, 255, 255, 0.1);
+  --ui-btn-secondary-text: #ededed;
+}
