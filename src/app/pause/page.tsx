@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Play, RotateCcw, Settings } from "lucide-react";
+import { Play, RotateCcw, Settings, XCircle } from "lucide-react";
 import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
@@ -53,35 +53,16 @@ export default function PausePage() {
 
   return (
     <PageLayout
-      header={
-        <PageHeader title="Game Paused">
-          <Button
-            variant="secondary"
-            onClick={handleOptions}
-            size="sm"
-            icon={Settings}
-          >
-            OPTIONS
-          </Button>
-        </PageHeader>
-      }
+      header={<PageHeader title="Game Paused" />}
       footer={
         <PageFooter>
-          <Button
-            variant="secondary"
-            onClick={handleExit}
-            size="md"
-            icon={LogOut}
-          >
-            FINISH JAM
-          </Button>
           <Button
             variant="primary"
             onClick={handleResume}
             size="md"
             icon={Play}
           >
-            RESUME JAM
+            RESUME
           </Button>
         </PageFooter>
       }
@@ -102,16 +83,6 @@ export default function PausePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full max-w-lg">
           <div className="flex justify-center">
             <Button
-              variant="primary"
-              onClick={handleResume}
-              size="lg"
-              icon={Play}
-            >
-              RESUME
-            </Button>
-          </div>
-          <div className="flex justify-center">
-            <Button
               variant="secondary"
               onClick={handleRestart}
               size="lg"
@@ -120,12 +91,22 @@ export default function PausePage() {
               RESTART
             </Button>
           </div>
+          <div className="flex justify-center">
+            <Button
+              variant="secondary"
+              onClick={handleOptions}
+              size="lg"
+              icon={Settings}
+            >
+              OPTIONS
+            </Button>
+          </div>
           <div className="sm:col-span-2 flex justify-center">
             <Button
               variant="secondary"
               onClick={handleExit}
               size="lg"
-              icon={LogOut}
+              icon={XCircle}
             >
               END JAM
             </Button>
