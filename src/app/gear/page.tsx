@@ -101,7 +101,7 @@ export default function GearPage() {
       }
     >
       <main
-        className={`w-full h-full overflow-y-auto overflow-x-hidden py-4 px-8 -mx-8 min-h-0 max-w-5xl mx-auto flex flex-col gap-8`}
+        className={`w-full h-full max-h-full max-w-full overflow-y-auto overflow-x-hidden py-4 px-8 min-h-0 max-w-5xl mx-auto flex flex-col gap-8`}
       >
         {isLoading ? (
           <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
@@ -120,17 +120,19 @@ export default function GearPage() {
             <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
               "Play a note on your gear to select it, or tap a card below."
             </p>
-            <div
-              className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-12`}
-            >
+            <div className="flex items-center gap-6 overflow-x-auto snap-x snap-mandatory pb-8 -mx-8 px-8">
               {inputs.map((inst) => (
-                <GearCard
+                <div
                   key={inst.id}
-                  instrument={inst}
-                  isSelected={selected === inst.id}
-                  isActive={lastInputId === inst.id}
-                  onClick={() => setSelected(inst.id)}
-                />
+                  className="shrink-0 w-[280px] sm:w-[320px] snap-center"
+                >
+                  <GearCard
+                    instrument={inst}
+                    isSelected={selected === inst.id}
+                    isActive={lastInputId === inst.id}
+                    onClick={() => setSelected(inst.id)}
+                  />
+                </div>
               ))}
             </div>
           </>
