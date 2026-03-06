@@ -2,6 +2,7 @@
 
 import { Pause } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "@/components/button/button";
 import { LaneStage } from "@/components/lane-stage/lane-stage";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { ScoreHudLite } from "@/components/score-hud-lite";
@@ -211,15 +212,12 @@ export default function PlayPage() {
           </div>
 
           <div className="flex items-center gap-4 sm:gap-8">
-            <button
-              type="button"
+            <Button
+              variant="secondary"
               onClick={handleTogglePause}
-              className="w-12 h-12 bg-foreground/10 hover:bg-foreground/20 rounded-full flex items-center justify-center transition-colors group backdrop-blur-md border border-foreground/10 shadow-lg"
-            >
-              <div className="transition-transform duration-300 group-hover:scale-110">
-                <Pause className="w-6 h-6 fill-current" />
-              </div>
-            </button>
+              size="sm"
+              icon={Pause}
+            />
           </div>
         </div>
       }
