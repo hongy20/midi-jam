@@ -1,4 +1,3 @@
-import { isBlackKey } from "@/lib/device/piano";
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./background-lane.module.css";
@@ -19,7 +18,6 @@ export function BackgroundLane() {
         <div
           key={`lane-${note}`}
           className={`${styles.lane} ${gridStyles[`note-${note}`]}`}
-          data-black={isBlackKey(note)}
         />
       ))}
     </div>

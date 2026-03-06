@@ -1,7 +1,7 @@
 /* src/components/piano-keyboard/piano-grid.module.css */
 .noteBase {
   --relative-start: calc(var(--note-start) - var(--start-unit) + 1);
-  grid-column: var(--relative-start) / span var(--note-span);
+  grid-column: var(--relative-start) / span calc(3 - var(--is-black));
   display: flex;
   /*
     Hide notes outside the visible range using two clamp() checks combined with min():
@@ -18,440 +18,440 @@
 .note-21 {
   composes: noteBase;
   --note-start: 36;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-22 {
   composes: noteBase;
   --note-start: 38;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-23 {
   composes: noteBase;
   --note-start: 39;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-24 {
   composes: noteBase;
   --note-start: 42;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-25 {
   composes: noteBase;
   --note-start: 44;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-26 {
   composes: noteBase;
   --note-start: 45;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-27 {
   composes: noteBase;
   --note-start: 47;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-28 {
   composes: noteBase;
   --note-start: 48;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-29 {
   composes: noteBase;
   --note-start: 51;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-30 {
   composes: noteBase;
   --note-start: 53;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-31 {
   composes: noteBase;
   --note-start: 54;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-32 {
   composes: noteBase;
   --note-start: 56;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-33 {
   composes: noteBase;
   --note-start: 57;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-34 {
   composes: noteBase;
   --note-start: 59;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-35 {
   composes: noteBase;
   --note-start: 60;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-36 {
   composes: noteBase;
   --note-start: 63;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-37 {
   composes: noteBase;
   --note-start: 65;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-38 {
   composes: noteBase;
   --note-start: 66;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-39 {
   composes: noteBase;
   --note-start: 68;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-40 {
   composes: noteBase;
   --note-start: 69;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-41 {
   composes: noteBase;
   --note-start: 72;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-42 {
   composes: noteBase;
   --note-start: 74;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-43 {
   composes: noteBase;
   --note-start: 75;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-44 {
   composes: noteBase;
   --note-start: 77;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-45 {
   composes: noteBase;
   --note-start: 78;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-46 {
   composes: noteBase;
   --note-start: 80;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-47 {
   composes: noteBase;
   --note-start: 81;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-48 {
   composes: noteBase;
   --note-start: 84;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-49 {
   composes: noteBase;
   --note-start: 86;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-50 {
   composes: noteBase;
   --note-start: 87;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-51 {
   composes: noteBase;
   --note-start: 89;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-52 {
   composes: noteBase;
   --note-start: 90;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-53 {
   composes: noteBase;
   --note-start: 93;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-54 {
   composes: noteBase;
   --note-start: 95;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-55 {
   composes: noteBase;
   --note-start: 96;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-56 {
   composes: noteBase;
   --note-start: 98;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-57 {
   composes: noteBase;
   --note-start: 99;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-58 {
   composes: noteBase;
   --note-start: 101;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-59 {
   composes: noteBase;
   --note-start: 102;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-60 {
   composes: noteBase;
   --note-start: 105;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-61 {
   composes: noteBase;
   --note-start: 107;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-62 {
   composes: noteBase;
   --note-start: 108;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-63 {
   composes: noteBase;
   --note-start: 110;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-64 {
   composes: noteBase;
   --note-start: 111;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-65 {
   composes: noteBase;
   --note-start: 114;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-66 {
   composes: noteBase;
   --note-start: 116;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-67 {
   composes: noteBase;
   --note-start: 117;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-68 {
   composes: noteBase;
   --note-start: 119;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-69 {
   composes: noteBase;
   --note-start: 120;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-70 {
   composes: noteBase;
   --note-start: 122;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-71 {
   composes: noteBase;
   --note-start: 123;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-72 {
   composes: noteBase;
   --note-start: 126;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-73 {
   composes: noteBase;
   --note-start: 128;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-74 {
   composes: noteBase;
   --note-start: 129;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-75 {
   composes: noteBase;
   --note-start: 131;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-76 {
   composes: noteBase;
   --note-start: 132;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-77 {
   composes: noteBase;
   --note-start: 135;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-78 {
   composes: noteBase;
   --note-start: 137;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-79 {
   composes: noteBase;
   --note-start: 138;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-80 {
   composes: noteBase;
   --note-start: 140;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-81 {
   composes: noteBase;
   --note-start: 141;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-82 {
   composes: noteBase;
   --note-start: 143;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-83 {
   composes: noteBase;
   --note-start: 144;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-84 {
   composes: noteBase;
   --note-start: 147;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-85 {
   composes: noteBase;
   --note-start: 149;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-86 {
   composes: noteBase;
   --note-start: 150;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-87 {
   composes: noteBase;
   --note-start: 152;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-88 {
   composes: noteBase;
   --note-start: 153;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-89 {
   composes: noteBase;
   --note-start: 156;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-90 {
   composes: noteBase;
   --note-start: 158;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-91 {
   composes: noteBase;
   --note-start: 159;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-92 {
   composes: noteBase;
   --note-start: 161;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-93 {
   composes: noteBase;
   --note-start: 162;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-94 {
   composes: noteBase;
   --note-start: 164;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-95 {
   composes: noteBase;
   --note-start: 165;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-96 {
   composes: noteBase;
   --note-start: 168;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-97 {
   composes: noteBase;
   --note-start: 170;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-98 {
   composes: noteBase;
   --note-start: 171;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-99 {
   composes: noteBase;
   --note-start: 173;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-100 {
   composes: noteBase;
   --note-start: 174;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-101 {
   composes: noteBase;
   --note-start: 177;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-102 {
   composes: noteBase;
   --note-start: 179;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-103 {
   composes: noteBase;
   --note-start: 180;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-104 {
   composes: noteBase;
   --note-start: 182;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-105 {
   composes: noteBase;
   --note-start: 183;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-106 {
   composes: noteBase;
   --note-start: 185;
-  --note-span: 2;
+  --is-black: 1;
 }
 .note-107 {
   composes: noteBase;
   --note-start: 186;
-  --note-span: 3;
+  --is-black: 0;
 }
 .note-108 {
   composes: noteBase;
   --note-start: 189;
-  --note-span: 3;
+  --is-black: 0;
 }

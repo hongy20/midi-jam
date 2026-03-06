@@ -1,7 +1,6 @@
 "use client";
 
 import { memo, useEffect, useRef } from "react";
-import { isBlackKey } from "@/lib/device/piano";
 import {
   MIDI_NOTE_C4,
   PIANO_88_KEY_MAX,
@@ -47,7 +46,6 @@ const PianoKeys = memo(
     return (
       <>
         {notes.map((note) => {
-          const isBlack = isBlackKey(note);
           const noteClass = gridStyles[`note-${note}`];
           const noteName = `${NOTE_NAMES[note % 12]}${Math.floor(note / 12) - 1}`;
 
@@ -63,13 +61,12 @@ const PianoKeys = memo(
               }}
               type="button"
               className={`${styles.key} ${noteClass}`}
-              data-black={isBlack}
               data-live="false"
               data-playback="false"
-              aria-label={`${noteName} ${isBlack ? "Black" : "White"} Key`}
+              aria-label={noteName}
               tabIndex={-1}
             >
-              {!isBlack && note === MIDI_NOTE_C4 && (
+              {note === MIDI_NOTE_C4 && (
                 <span className={styles.label}>C4</span>
               )}
             </button>
