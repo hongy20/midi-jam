@@ -3,6 +3,7 @@
 import { ArrowLeft, ChevronRight, Piano } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer";
 import { PageHeader } from "@/components/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
@@ -81,31 +82,26 @@ function GearContent() {
     <PageLayout
       header={
         <PageHeader title={fromGame ? "Reconnect Gear" : "Your Gear"}>
-          <button
-            type="button"
+          <Button
+            variant="secondary"
+            icon={ArrowLeft}
+            iconPosition="left"
             onClick={toHome}
-            className="group flex items-center gap-2 px-4 py-2 bg-[var(--ui-btn-secondary-bg)] border border-[var(--ui-btn-secondary-border)] rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
+            className="!px-4 !py-2 !text-[10px] sm:!text-xs"
           >
-            <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
             {fromGame ? "Back to Menu" : "Main Menu"}
-          </button>
+          </Button>
         </PageHeader>
       }
       footer={
         <PageFooter>
-          <button
-            type="button"
+          <Button
             onClick={handleContinue}
             disabled={!selected}
-            className={`px-[var(--btn-px)] py-[var(--btn-py)] rounded-full font-black text-[var(--btn-text)] uppercase tracking-wider transition-all duration-300 flex items-center gap-2 ${
-              selected
-                ? "bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] hover:scale-105 active:scale-95 shadow-[var(--ui-btn-primary-shadow)] cursor-pointer"
-                : "opacity-40 bg-foreground/10 text-foreground/40 cursor-not-allowed shadow-none"
-            } group`}
+            icon={ChevronRight}
           >
-            {fromGame ? "RESUME GAME" : "CONTINUE"}{" "}
-            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
-          </button>
+            {fromGame ? "RESUME GAME" : "CONTINUE"}
+          </Button>
         </PageFooter>
       }
     >
