@@ -51,7 +51,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 **NEVER work directly on `main`.** This is a non-negotiable hard constraint for technical integrity.
 
 - **Initial Action**: The first command of every task MUST be to create a descriptive feature branch: `git checkout -b feature/[name]` or `git checkout -b fix/[name]`.
-- **Plan Commitment**: All implementation plans (located in `docs/plans/**`) **MUST** be committed to the repository immediately after creation. A plan is not valid unless it is tracked in Git. **Consolidate Design and Implementation into a single markdown file per task; do not split them across multiple files.**
+- **Plan Commitment (ONE PLAN PER TASK)**: Every task MUST have exactly ONE markdown file in `docs/plans/`. **Consolidate Design and Implementation into this single file.** A plan is not valid unless it is tracked in Git. NEVER split design and implementation into separate files. Commit the plan immediately after creation.
 - **Merge Strategy**: When finalizing a task, **ALWAYS use Squash and Merge** to maintain a clean project history.
 
 ## Tooling Authority

@@ -29,27 +29,8 @@
   }
 }
 
-@media (orientation: landscape) {
-  :root {
-    --header-py: 0.5rem;
-    --footer-py: 0.5rem;
-    --h1-size: 1.5rem;
-    --btn-py: 0.5rem;
-    --btn-px: 1rem;
-    --btn-text: 0.75rem;
-    --layout-gap: 0.5rem;
-  }
-}
-
 @media (max-height: 600px) {
   :root {
     --footer-height: 91px;
-  }
-}
-
-@media (max-height: 500px) and (orientation: landscape) {
-  :root {
-    --header-height: 3rem;
-    --footer-height: 70px;
   }
 }

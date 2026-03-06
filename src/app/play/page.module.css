@@ -8,10 +8,3 @@
     --footer-height: 91px;
   }
 }
-
-@media (max-height: 500px) and (orientation: landscape) {
-  :global(:root) {
-    --header-height: 3rem;
-    --footer-height: 70px;
-  }
-}

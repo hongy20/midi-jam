@@ -67,8 +67,8 @@ export default function PausePage() {
         </PageFooter>
       }
     >
-      <main className="w-full h-full flex flex-col items-center justify-center relative z-10 px-6 py-4 landscape:py-2">
-        <div className="text-center w-full max-w-lg mb-8 landscape:mb-4">
+      <main className="w-full h-full flex flex-col items-center justify-center relative z-10 px-6 py-4">
+        <div className="text-center w-full max-w-lg mb-8">
           <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">
             Currently Playing
           </span>
@@ -80,7 +80,7 @@ export default function PausePage() {
           </span>
         </div>
 
-        <div className="flex flex-col landscape:flex-row items-center justify-center gap-4 sm:gap-6 w-full max-w-lg landscape:max-w-4xl">
+        <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 w-full max-w-lg">
           <Button
             variant="secondary"
             onClick={handleRestart}

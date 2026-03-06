@@ -96,7 +96,7 @@ export default function CollectionPage() {
       }
     >
       <main
-        className={`w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar py-4 landscape:py-2 px-8 -mx-8 min-h-0 grid grid-cols-1 sm:grid-cols-2 landscape:grid-cols-3 gap-3 sm:gap-6 pb-12`}
+        className={`w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar py-4 px-8 -mx-8 min-h-0 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 pb-12`}
       >
         {isLoading ? (
           <div className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium col-span-full">
@@ -108,15 +108,15 @@ export default function CollectionPage() {
               key={track.id}
               type="button"
               onClick={() => setSelected(track.id)}
-              className={`w-full p-5 sm:p-6 landscape:p-3 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col items-start gap-4 landscape:gap-2 ${
+              className={`w-full p-5 sm:p-6 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col items-start gap-4 ${
                 selected === track.id
                   ? "bg-foreground border-foreground scale-[1.02] shadow-[var(--ui-btn-primary-shadow)]"
                   : "bg-[var(--ui-card-bg)] border-[var(--ui-card-border)] hover:border-foreground/30 hover:bg-foreground/10 text-foreground/80"
               }`}
             >
-              <div className="flex items-center gap-4 landscape:gap-3 w-full">
+              <div className="flex items-center gap-4 w-full">
                 <div
-                  className={`shrink-0 w-12 h-12 landscape:w-10 landscape:h-10 rounded-full flex items-center justify-center ${
+                  className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${
                     selected === track.id
                       ? "bg-background text-foreground"
                       : "bg-foreground/10 text-foreground/50"
@@ -126,7 +126,7 @@ export default function CollectionPage() {
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span
-                    className={`text-lg sm:text-xl landscape:text-base font-bold truncate ${
+                    className={`text-lg sm:text-xl font-bold truncate ${
                       selected === track.id
                         ? "text-background"
                         : "text-foreground"
@@ -135,7 +135,7 @@ export default function CollectionPage() {
                     {track.name}
                   </span>
                   <span
-                    className={`text-sm landscape:text-xs font-medium truncate ${
+                    className={`text-sm font-medium truncate ${
                       selected === track.id
                         ? "text-background/70"
                         : "text-foreground/60"
@@ -147,7 +147,7 @@ export default function CollectionPage() {
               </div>
 
               <span
-                className={`text-[10px] sm:text-xs landscape:text-[9px] font-black uppercase tracking-widest px-3 py-1.5 landscape:py-1 rounded-full ${
+                className={`text-[10px] sm:text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full ${
                   selected === track.id
                     ? "bg-background/20 text-background"
                     : "bg-foreground/10 text-foreground/70"
