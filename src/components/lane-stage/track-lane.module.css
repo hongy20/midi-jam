@@ -12,9 +12,10 @@
 .note {
   position: absolute;
   width: 100%;
-  border-radius: 0.125rem;
-  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-radius: var(--note-radius);
+  border: 1px solid
+    color-mix(in srgb, currentColor calc(var(--note-border-opacity) * 100%), transparent);
+  box-shadow: var(--note-shadow);
   transition: opacity 300ms;
   min-width: 0;
 
