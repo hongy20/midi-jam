@@ -1,4 +1,4 @@
-# CSS-Driven Black Key Distinction Implementation Plan
+# CSS-Driven Black Key Distinction Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
@@ -14,6 +14,49 @@
 - Next.js (App Router), Tailwind CSS v4, CSS Modules.
 
 ---
+
+## Design Document
+
+### 1. Overview
+Refactor the piano keyboard and note rendering to use CSS variables as the single source of truth for black/white key distinction, removing reliance on `data-black` attributes and exported JS helper functions for rendering.
+
+### 2. Goals
+- Remove `data-black` and `data-white` from DOM elements.
+- Stop exporting `isBlackKey` from `src/lib/device/piano.ts` (make it private).
+- Use `piano-grid.module.css` as the source of truth for key properties.
+- Simplify accessibility and display labels in `PianoKeyboard.tsx`.
+
+### 3. Architecture
+
+#### Source of Truth: `piano-grid.module.css`
+- Each note class (`.note-21` through `.note-108`) will define a `--is-black` variable:
+    - `0` for white keys.
+    - `1` for black keys.
+- The `.noteBase` class will derive `--note-span` using `calc(3 - var(--is-black))`.
+- This ensures that any element with a `note-N` class automatically "knows" if it's black or white.
+
+#### Styling Logic
+- **Layout:**
+    - `grid-row: 1 / calc(3 - var(--is-black));` (White: 1/3, Black: 1/2).
+    - `z-index: var(--is-black);` (Black keys on top).
+- **Aesthetics:**
+    - Use `color-mix(in srgb, var(--white-color), var(--black-color) calc(var(--is-black) * 100%))` for background colors.
+    - Derive `border-radius` and `box-shadow` from `--is-black` using `calc`.
+- **Glow Effects:**
+    - Use `--glow-color` derived from `color-mix` based on `--is-black`.
+
+#### JS Data Flow
+- **`NoteSpan` Interface:** Remove `isBlack` property.
+- **`midi-parser.ts`:** Stop tagging notes with `isBlack`.
+- **Components:**
+    - `PianoKeyboard.tsx`: Remove `isBlackKey` import and `data-black`. Use simple `note === 60` for the "C4" label.
+    - `BackgroundLane.tsx`: Remove `data-black`.
+    - `TrackLane.tsx`: Remove `.black`/`.white` classes.
+- **`piano.ts`:** Keep `isBlackKey` as a private helper for `getNoteUnits` and `getVisibleMidiRange`, but do not export it.
+
+---
+
+## Implementation Tasks
 
 ### Task 1: Update `piano-grid.module.css` with `--is-black`
 
@@ -34,6 +77,8 @@ git add src/components/piano-keyboard/piano-grid.module.css
 git commit -m "feat: add --is-black and derive --note-span in piano-grid.module.css"
 ```
 
+---
+
 ### Task 2: Refactor `piano-keyboard.module.css`
 
 **Files:**
@@ -49,6 +94,8 @@ git commit -m "feat: add --is-black and derive --note-span in piano-grid.module.
 git add src/components/piano-keyboard/piano-keyboard.module.css
 git commit -m "refactor: use CSS variables for key styling in piano-keyboard.module.css"
 ```
+
+---
 
 ### Task 3: Refactor `background-lane.module.css` and `track-lane.module.css`
 
@@ -70,6 +117,8 @@ git add src/components/lane-stage/background-lane.module.css src/components/lane
 git commit -m "refactor: remove data-black usage in lane CSS modules"
 ```
 
+---
+
 ### Task 4: Clean up `NoteSpan` and `midi-parser.ts`
 
 **Files:**
@@ -83,6 +132,8 @@ git commit -m "refactor: remove data-black usage in lane CSS modules"
 git add src/lib/midi/midi-parser.ts
 git commit -m "refactor: remove isBlack from NoteSpan and midi-parser"
 ```
+
+---
 
 ### Task 5: Clean up React Components
 
@@ -109,6 +160,8 @@ git add src/components/piano-keyboard/PianoKeyboard.tsx src/components/lane-stag
 git commit -m "refactor: remove isBlackKey usage and data-black in components"
 ```
 
+---
+
 ### Task 6: Make `isBlackKey` private in `piano.ts`
 
 **Files:**
@@ -124,6 +177,8 @@ git commit -m "refactor: remove isBlackKey usage and data-black in components"
 git add src/lib/device/piano.ts
 git commit -m "refactor: make isBlackKey private in piano.ts"
 ```
+
+---
 
 ### Task 7: Final Validation
 
