@@ -37,18 +37,6 @@
   box-shadow: var(--ui-btn-primary-shadow);
 }
 
-.pulse {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top right, var(--accent-primary), transparent);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.pulseActive {
-  opacity: 0.2;
-}
-
 .iconWrapper {
   width: 2.5rem; /* w-10 */
   height: 2.5rem; /* h-10 */
@@ -140,14 +128,4 @@
 
 .manufacturerUnselected {
   color: rgba(var(--foreground-rgb), 0.5);
-}
-
-.ring {
-  position: absolute;
-  inset: 0;
-  border: 2px solid transparent;
-  border-radius: 1.5rem; /* rounded-3xl */
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5);
-  z-index: 20;
-  pointer-events: none;
 }

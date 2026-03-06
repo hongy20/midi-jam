@@ -4,7 +4,6 @@ import styles from "./gear-card.module.css";
 interface GearCardProps {
   instrument: WebMidi.MIDIInput;
   isSelected: boolean;
-  isActive: boolean;
   onClick: () => void;
   className?: string;
 }
@@ -12,7 +11,6 @@ interface GearCardProps {
 export function GearCard({
   instrument,
   isSelected,
-  isActive,
   onClick,
   className = "",
 }: GearCardProps) {
@@ -22,11 +20,6 @@ export function GearCard({
       onClick={onClick}
       className={`${styles.card} ${isSelected ? styles.selected : styles.unselected} ${className}`}
     >
-      {/* Active Pulse Background */}
-      <div
-        className={`${styles.pulse} ${isActive ? styles.pulseActive : ""}`}
-      />
-
       <div
         className={`${styles.iconWrapper} ${
           isSelected ? styles.iconSelected : styles.iconUnselected
@@ -52,9 +45,6 @@ export function GearCard({
           {instrument.manufacturer || "Generic MIDI Input"}
         </span>
       </div>
-
-      {/* Pulse ring when active */}
-      {isActive && <div className={styles.ring} />}
     </button>
   );
 }

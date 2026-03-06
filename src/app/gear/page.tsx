@@ -41,10 +41,6 @@ export default function GearPage() {
     };
   }, [inputs, selectMIDIInput]);
 
-  const handleContinue = () => {
-    toCollection();
-  };
-
   return (
     <PageLayout
       header={
@@ -63,7 +59,7 @@ export default function GearPage() {
       footer={
         <PageFooter>
           <Button
-            onClick={handleContinue}
+            onClick={() => toCollection()}
             disabled={!selectedMIDIInput}
             icon={ChevronRight}
             size="sm"
@@ -99,7 +95,6 @@ export default function GearPage() {
                   key={inst.id}
                   instrument={inst}
                   isSelected={selectedMIDIInput?.id === inst.id}
-                  isActive={false}
                   onClick={() => selectMIDIInput(inst)}
                   className="shrink-0 w-[calc(100%-3rem)] min-h-[601px]:w-[320px] snap-center"
                 />
