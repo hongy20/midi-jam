@@ -48,8 +48,7 @@ describe("Welcome Page", () => {
       setSpeed: vi.fn(),
       setDemoMode: vi.fn(),
     },
-    actions: { resetAll: vi.fn() },
-    home: { isHomeLoading: false, isSupported: true },
+    home: { isHomeLoading: false, isSupported: true, resetAll: vi.fn() },
   };
 
   beforeEach(() => {
@@ -76,7 +75,7 @@ describe("Welcome Page", () => {
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
     vi.mocked(useAppContext).mockReturnValue({
       ...mockContext,
-      home: { isHomeLoading: true, isSupported: true },
+      home: { isHomeLoading: true, isSupported: true, resetAll: vi.fn() },
     });
 
     render(<WelcomePage />);
@@ -90,7 +89,7 @@ describe("Welcome Page", () => {
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
     vi.mocked(useAppContext).mockReturnValue({
       ...mockContext,
-      home: { isHomeLoading: false, isSupported: false },
+      home: { isHomeLoading: false, isSupported: false, resetAll: vi.fn() },
     });
 
     render(<WelcomePage />);

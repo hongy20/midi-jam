@@ -12,8 +12,7 @@ import styles from "./page.module.css";
 export default function WelcomePage() {
   const { toGear, toOptions } = useNavigation();
   const {
-    actions: { resetAll },
-    home: { isHomeLoading, isSupported },
+    home: { isHomeLoading, isSupported, resetAll },
   } = useAppContext();
 
   useEffect(() => {

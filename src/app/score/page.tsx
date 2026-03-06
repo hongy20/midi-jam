@@ -10,10 +10,10 @@ import { useNavigation } from "@/hooks/use-navigation";
 
 export default function ScorePage() {
   const { toPlay, toCollection, toHome } = useNavigation();
-  const { stage, score, actions } = useAppContext();
+  const { stage, score, home } = useAppContext();
   const { setGameSession } = stage;
   const { sessionResults } = score;
-  const { resetAll: clearSelection } = actions;
+  const { resetAll: clearSelection } = home;
 
   const handleRetry = () => {
     setGameSession(null);

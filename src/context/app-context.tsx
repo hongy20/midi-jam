@@ -78,12 +78,10 @@ export interface AppContextType {
     setSpeed: (speed: number) => void;
     setDemoMode: (enabled: boolean) => void;
   };
-  actions: {
-    resetAll: () => void;
-  };
   home: {
     isHomeLoading: boolean;
     isSupported: boolean;
+    resetAll: () => void;
   };
 }
 
@@ -218,12 +216,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
       setSpeed,
       setDemoMode,
     },
-    actions: {
-      resetAll,
-    },
     home: {
       isHomeLoading,
       isSupported,
+      resetAll,
     },
   };
 

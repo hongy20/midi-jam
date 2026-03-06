@@ -88,8 +88,7 @@ describe("Play Page", () => {
       setSpeed: vi.fn(),
       setDemoMode: vi.fn(),
     },
-    actions: { resetAll: vi.fn() },
-    home: { isHomeLoading: false, isSupported: true },
+    home: { isHomeLoading: false, isSupported: true, resetAll: vi.fn() },
   };
 
   beforeEach(() => {
