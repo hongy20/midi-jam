@@ -7,8 +7,8 @@ import { useAppContext } from "@/context/app-context";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
 import { useNavigation } from "@/hooks/use-navigation";
 
-function InstrumentsContent() {
-  const { toTracks, toHome, toPause } = useNavigation();
+function GearContent() {
+  const { toCollection, toHome, toPause } = useNavigation();
   const searchParams = useSearchParams();
   const fromGame = searchParams.get("from") === "game";
 
@@ -69,7 +69,7 @@ function InstrumentsContent() {
       if (fromGame) {
         toPause();
       } else {
-        toTracks();
+        toCollection();
       }
     }
   };
@@ -79,7 +79,7 @@ function InstrumentsContent() {
       {/* Header */}
       <header className="flex items-center justify-between py-[var(--header-py)] flex-shrink-0">
         <h1 className="text-[var(--h1-size)] font-black text-foreground uppercase tracking-tighter">
-          {fromGame ? "Reconnect Instrument" : "Select Your Instrument"}
+          {fromGame ? "Reconnect Gear" : "Your Gear"}
         </h1>
 
         <button
@@ -98,12 +98,12 @@ function InstrumentsContent() {
       >
         <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
           {isLoading
-            ? "Searching for MIDI devices..."
+            ? "Searching for gear..."
             : inputs.length > 0
               ? fromGame
-                ? "The game is paused. Please reconnect your instrument to continue."
-                : "Play a note on your MIDI keyboard to select it, or tap a card below."
-              : "No MIDI devices found. Please connect a keyboard and refresh."}
+                ? "The game is paused. Please reconnect your gear to continue."
+                : "Play a note on your gear to select it, or tap a card below."
+              : "No gear found. Please connect a keyboard and refresh."}
         </p>
 
         {error && (
@@ -191,19 +191,19 @@ function InstrumentsContent() {
   );
 }
 
-export default function InstrumentsPage() {
+export default function GearPage() {
   return (
     <Suspense
       fallback={
         <div className="flex flex-col items-center justify-center h-[100dvh] gap-4">
           <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
           <span className="font-bold uppercase tracking-widest text-xs">
-            Loading Instrument Setup...
+            Loading Gear Setup...
           </span>
         </div>
       }
     >
-      <InstrumentsContent />
+      <GearContent />
     </Suspense>
   );
 }

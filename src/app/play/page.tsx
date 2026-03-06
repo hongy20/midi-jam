@@ -22,8 +22,8 @@ import {
 } from "@/lib/midi/constant";
 import styles from "./page.module.css";
 
-export default function GamePage() {
-  const { toResults, toPause } = useNavigation();
+export default function PlayPage() {
+  const { toScore, toPause } = useNavigation();
   const { tracks, instruments, game, settings, results } = useAppContext();
 
   // Extract variables from context for easier access
@@ -98,7 +98,7 @@ export default function GamePage() {
     initialTimeMs: gameSession?.currentTimeMs ?? 0,
   });
 
-  // Auto-pause and save session if device is disconnected mid-game
+  // Auto-pause and save session if device is disconnected mid-play
   useEffect(() => {
     if (isPlaying && !selectedMIDIInput) {
       setGameSession({
@@ -107,7 +107,7 @@ export default function GamePage() {
         combo,
         currentTimeMs: getCurrentTimeMs(),
       });
-      // NavigationGuard will handle the redirect to instruments
+      // NavigationGuard will handle the redirect to gear
     }
   }, [
     isPlaying,
@@ -162,7 +162,7 @@ export default function GamePage() {
         combo,
       });
       setGameSession(null);
-      toResults();
+      toScore();
     };
   }, [
     score,
@@ -170,7 +170,7 @@ export default function GamePage() {
     events.length,
     setGameSession,
     setSessionResults,
-    toResults,
+    toScore,
   ]);
 
   // Handle Pause
@@ -237,13 +237,13 @@ export default function GamePage() {
           <div className="flex flex-col items-center justify-center h-full gap-4">
             <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
             <span className="font-bold uppercase tracking-widest text-xs">
-              Loading Track...
+              Loading Stage...
             </span>
           </div>
         ) : trackLoadStatus.error ? (
           <div className="flex flex-col items-center justify-center h-full gap-4">
             <span className="text-red-500 font-bold uppercase tracking-widest text-xs">
-              Error Loading Track: {trackLoadStatus.error}
+              Error Loading Stage: {trackLoadStatus.error}
             </span>
           </div>
         ) : (

@@ -7,24 +7,24 @@ import { useNavigation } from "@/hooks/use-navigation";
 import { ROUTES } from "@/lib/navigation/routes";
 
 export function NavigationGuard({ children }: { children: React.ReactNode }) {
-  const { toTracks, toHome, toInstruments } = useNavigation();
+  const { toCollection, toHome, toGear } = useNavigation();
   const pathname = usePathname();
   const { tracks, instruments, results } = useAppContext();
 
   useEffect(() => {
-    const isGame = pathname === ROUTES.GAME;
+    const isGame = pathname === ROUTES.PLAY;
     const isPause = pathname === ROUTES.PAUSE;
-    const isResults = pathname === ROUTES.RESULTS;
+    const isResults = pathname === ROUTES.SCORE;
 
     // 1. No track selected? Can't go to game or pause.
     if ((isGame || isPause) && !tracks.selected) {
-      toTracks();
+      toCollection();
       return;
     }
 
     // 2. MIDI disconnected? Redirect from game/pause to instruments for reconnection.
     if ((isGame || isPause) && !instruments.input) {
-      toInstruments("game");
+      toGear("game");
       return;
     }
 
@@ -38,9 +38,9 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
     tracks.selected,
     instruments.input,
     results.last,
-    toTracks,
+    toCollection,
     toHome,
-    toInstruments,
+    toGear,
   ]);
 
   return <>{children}</>;
