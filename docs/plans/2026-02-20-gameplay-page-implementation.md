@@ -84,8 +84,8 @@
 ### Task 4: Implement lane geometry utilities (time → Y mapping)
 
 **Files:**
-- Create: `src/lib/playplay/lane-geometry.ts`
-- Test: `src/lib/playplay/lane-geometry.test.ts`
+- Create: `src/lib/play/lane-geometry.ts`
+- Test: `src/lib/play/lane-geometry.test.ts`
 
 **Step 1: Add utility functions**
 
@@ -102,7 +102,7 @@
 
 **Step 3: Run tests**
 
-- Run: `npm test -- src/lib/playplay/lane-geometry.test.ts`
+- Run: `npm test -- src/lib/play/lane-geometry.test.ts`
 
 ---
 
@@ -311,7 +311,7 @@
 ### Task 11: Wire everything together and run full test suite
 
 **Files:**
-- Modify: `src/app/playplay/page.tsx`
+- Modify: `src/app/play/page.tsx`
 - Modify: any components/hooks as needed for integration
 
 **Step 1: Connect hooks and components in `GamePlayPage`**
