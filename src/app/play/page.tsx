@@ -3,6 +3,7 @@
 import { Pause } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { LaneStage } from "@/components/lane-stage/lane-stage";
+import { PageLayout } from "@/components/page-layout/page-layout";
 import { ScoreHudLite } from "@/components/score-hud-lite";
 import { VirtualInstrument } from "@/components/virtual-instrument";
 import { useAppContext } from "@/context/app-context";
@@ -20,7 +21,6 @@ import {
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "@/lib/midi/constant";
-import styles from "./page.module.css";
 
 export default function PlayPage() {
   const { toScore, toPause } = useNavigation();
@@ -185,78 +185,75 @@ export default function PlayPage() {
   }
 
   return (
-    <div
-      className={styles.container}
+    <PageLayout
+      className="!transition-[color,background-color] !duration-500"
       style={
         {
           "--start-unit": startUnit,
           "--end-unit": endUnit,
         } as React.CSSProperties
       }
-    >
-      {/* Row 1: Status Bar (Fixed height) */}
-      <header className="h-[var(--header-height)] w-full p-4 sm:p-8 flex justify-between items-center layout-padding bg-background/50 backdrop-blur-md border-b border-foreground/5">
-        <div className="flex items-center gap-4 flex-1">
-          <div className="flex flex-col">
-            <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-0.5">
-              {selectedMIDIInput.name} • {selectedTrack.name}
-            </span>
-            <ScoreHudLite
-              score={score}
-              combo={combo}
-              lastHitQuality={lastHitQuality}
-              getProgress={getProgress}
-              isPaused={isPaused}
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4 sm:gap-8">
-          <button
-            type="button"
-            onClick={handleTogglePause}
-            className="w-12 h-12 bg-foreground/10 hover:bg-foreground/20 rounded-full flex items-center justify-center transition-colors group backdrop-blur-md border border-foreground/10 shadow-lg"
-          >
-            <div className="transition-transform duration-300 group-hover:scale-110">
-              <Pause className="w-6 h-6 fill-current" />
+      header={
+        <header className="h-[var(--header-height)] w-full p-4 sm:p-8 flex justify-between items-center layout-padding bg-background/50 backdrop-blur-md border-b border-foreground/5">
+          <div className="flex items-center gap-4 flex-1">
+            <div className="flex flex-col">
+              <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-0.5">
+                {selectedMIDIInput.name} • {selectedTrack.name}
+              </span>
+              <ScoreHudLite
+                score={score}
+                combo={combo}
+                lastHitQuality={lastHitQuality}
+                getProgress={getProgress}
+                isPaused={isPaused}
+              />
             </div>
-          </button>
-        </div>
-      </header>
+          </div>
 
-      {/* Row 2: Gameplay Lane (Flexible) */}
-      <main className="relative w-full h-full overflow-hidden">
-        {isLoading ? (
-          <div className="flex flex-col items-center justify-center h-full gap-4">
-            <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
-            <span className="font-bold uppercase tracking-widest text-xs">
-              LOADING...
-            </span>
+          <div className="flex items-center gap-4 sm:gap-8">
+            <button
+              type="button"
+              onClick={handleTogglePause}
+              className="w-12 h-12 bg-foreground/10 hover:bg-foreground/20 rounded-full flex items-center justify-center transition-colors group backdrop-blur-md border border-foreground/10 shadow-lg"
+            >
+              <div className="transition-transform duration-300 group-hover:scale-110">
+                <Pause className="w-6 h-6 fill-current" />
+              </div>
+            </button>
           </div>
-        ) : trackLoadStatus.error ? (
-          <div className="flex flex-col items-center justify-center h-full gap-4">
-            <span className="text-red-500 font-bold uppercase tracking-widest text-xs">
-              DATA CORRUPTED: {trackLoadStatus.error}
-            </span>
-          </div>
-        ) : (
-          <LaneStage
-            spans={spans}
-            originalDurationMs={originalDurationMs}
-            scrollRef={scrollRef}
+        </header>
+      }
+      footer={
+        <footer className="h-[var(--footer-height)] w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
+          <VirtualInstrument
             inputDevice={selectedMIDIInput}
+            liveNotes={liveActiveNotes}
+            playbackNotes={playbackNotes}
           />
-        )}
-      </main>
-
-      {/* Row 3: Instrument (Fixed height based on content) */}
-      <footer className="h-[var(--footer-height)] w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
-        <VirtualInstrument
+        </footer>
+      }
+    >
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center h-full gap-4">
+          <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+          <span className="font-bold uppercase tracking-widest text-xs">
+            LOADING...
+          </span>
+        </div>
+      ) : trackLoadStatus.error ? (
+        <div className="flex flex-col items-center justify-center h-full gap-4">
+          <span className="text-red-500 font-bold uppercase tracking-widest text-xs">
+            DATA CORRUPTED: {trackLoadStatus.error}
+          </span>
+        </div>
+      ) : (
+        <LaneStage
+          spans={spans}
+          originalDurationMs={originalDurationMs}
+          scrollRef={scrollRef}
           inputDevice={selectedMIDIInput}
-          liveNotes={liveActiveNotes}
-          playbackNotes={playbackNotes}
         />
-      </footer>
-    </div>
+      )}
+    </PageLayout>
   );
 }

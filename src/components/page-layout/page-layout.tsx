@@ -6,6 +6,7 @@ interface PageLayoutProps {
   footer?: ReactNode;
   children: ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export function PageLayout({
@@ -13,9 +14,10 @@ export function PageLayout({
   footer,
   children,
   className = "",
+  style,
 }: PageLayoutProps) {
   return (
-    <div className={`${styles.container} ${className}`}>
+    <div className={`${styles.container} ${className}`} style={style}>
       {header && <header className={styles.header}>{header}</header>}
       <main className={styles.main}>{children}</main>
       {footer && <footer className={styles.footer}>{footer}</footer>}
