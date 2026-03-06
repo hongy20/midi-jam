@@ -164,14 +164,7 @@ export default function PlayPage() {
       setGameSession(null);
       toScore();
     };
-  }, [
-    score,
-    combo,
-    events.length,
-    setGameSession,
-    setSessionResults,
-    toScore,
-  ]);
+  }, [score, combo, events.length, setGameSession, setSessionResults, toScore]);
 
   // Handle Pause
   const handleTogglePause = useCallback(() => {
