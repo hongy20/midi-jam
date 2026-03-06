@@ -129,7 +129,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     selectMIDIInput(input);
   };
 
-  const resetAll = () => {
+  const resetAll = useCallback(() => {
     setSelectedTrack(null);
     setGameSession(null);
     setSessionResults(null);
@@ -138,7 +138,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     selectMIDIInput(null);
     setTrackStatus({ isLoading: false, isReady: false, error: null });
     lastLoadedTrackId.current = null;
-  };
+  }, [selectMIDIInput]);
 
   // MIDI Track Loading (only when on /game path and a track is selected)
   useEffect(() => {
