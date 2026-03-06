@@ -17,7 +17,7 @@ const BackButton = () => {
   const from = searchParams.get("from") || "/";
 
   return (
-    <div className="flex items-center gap-4">
+    <>
       <Button variant="secondary" onClick={() => goBack(from)} size="sm">
         BACK
       </Button>
@@ -30,7 +30,7 @@ const BackButton = () => {
       >
         EXIT
       </Button>
-    </div>
+    </>
   );
 };
 
