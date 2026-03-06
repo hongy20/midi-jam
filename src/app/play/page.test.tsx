@@ -190,7 +190,7 @@ describe("Play Page", () => {
     });
 
     render(<PlayPage />);
-    expect(screen.getByText(/Loading Stage/i)).toBeInTheDocument();
+    expect(screen.getByText(/LOADING.../i)).toBeInTheDocument();
   });
 
   it("navigates to pause when pause button is clicked", () => {
