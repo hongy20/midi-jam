@@ -13,11 +13,11 @@ Midi Jam is a high-performance web application for learning musical instruments 
 
 # Core Principles
 
-### 1. Unified Layout & State
+## 1. Unified Layout & State
 - **Viewport Locking**: All pages must use a full-screen layout (`100dvh`, `100dvw`) managed by CSS Grid.
 - **State Persistence**: Use React Context for cross-page state to ensure seamless transitions between setup (Gear/Collection) and the Stage (Play).
 
-### 2. High-Performance Rendering (60fps Target)
+## 2. High-Performance Rendering (60fps Target)
 To maintain a stable framerate, offload all frequent updates to the browser's compositor:
 - **Native Layout**: Prioritize CSS Grid/Flexbox over manual JS coordinate calculations.
 - **Layering**: Separate **Static Layers** (backgrounds, lanes) from **Dynamic Layers** (active notes, feedback) to minimize DOM reconciliation.
@@ -25,7 +25,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 - **Compositor Animations**: Strictly use `transform` and `opacity`. NEVER animate layout-triggering properties (`width`, `height`, `top`, `bottom`).
 - **Precision Alignment**: Use the **21-Unit Octave Grid** (3 units per white key, 2 per black key) for sub-pixel-perfect piano keyboard alignment.
 
-### 3. Architecture & Styling Standards
+## 3. Architecture & Styling Standards
 - **CSS Isolation**: `globals.css` is reserved for theme variables and generic resets. Use **CSS Modules** (`[name].module.css`) for all page and component-specific styles.
 - **Semantic Theme Mapping**: Extract all visual properties (colors, fonts, shadows, radii) into semantic CSS variables within `globals.css`. Components must consume these functional aliases (e.g., `--piano-key-white`, `--ui-card-bg`) instead of hardcoding raw values or using direct theme primitives.
 - **Iconography**: Use `lucide-react` exclusively. For custom icons, use standalone `.svg` files. No inline SVG strings or emojis.
@@ -33,7 +33,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
   - **Flatten Trees**: Avoid redundant wrapping `div`s. If an element has only one child, consolidate them.
   - **Purposeful Elements**: Avoid empty `div`s for spacing or decoration; use parent grid/flex spacing or pseudo-elements (`::before`/`::after`) instead.
 
-### 4. Coding Patterns
+## 4. Coding Patterns
 - **Nullish Coalescing**: Prefer the Nullish Coalescing operator (`??`) or Conditional (Ternary) operator (`? :`) for default values over verbose `typeof` checks for `null` or `undefined` (e.g., `value ?? 0` instead of `typeof value === 'number' ? value : 0`).
 
 ---
