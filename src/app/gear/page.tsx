@@ -16,7 +16,9 @@ function GearContent() {
   const searchParams = useSearchParams();
   const fromGame = searchParams.get("from") === "game";
 
-  const { gear: { selectMIDIInput, selectedMIDIInput } } = useAppContext();
+  const {
+    gear: { selectMIDIInput, selectedMIDIInput },
+  } = useAppContext();
   const { inputs, isLoading, error } = useMIDIDevices();
 
   const [selected, setSelected] = useState<string | null>(
