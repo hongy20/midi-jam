@@ -7,7 +7,7 @@
   /* Piano Keyboard */
   --piano-key-white: #e5e7eb;
   --piano-key-black: #030712;
-  --piano-key-border: 1px solid rgba(255, 255, 255, 0.1);
+  --piano-key-border: 1px solid rgba(0, 0, 0, 0.2);
   --piano-glow-playback-bg: rgba(59, 130, 246, 0.3);
   --piano-glow-playback-shadow: #2563eb;
   --piano-glow-live-bg: rgba(16, 185, 129, 0.3);
