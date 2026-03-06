@@ -105,7 +105,7 @@ function GearContent() {
       }
     >
       <main
-        className={`w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar py-4 px-8 -mx-8 min-h-0 max-w-5xl mx-auto flex flex-col gap-8`}
+        className={`w-full h-full overflow-y-auto overflow-x-hidden py-4 px-8 -mx-8 min-h-0 max-w-5xl mx-auto flex flex-col gap-8`}
       >
         <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
           {isLoading
@@ -124,7 +124,7 @@ function GearContent() {
         )}
 
         <div
-          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-12 no-scrollbar`}
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 pb-12`}
         >
           {inputs.map((inst) => {
             const isSelected = selected === inst.id;

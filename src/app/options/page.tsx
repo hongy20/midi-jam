@@ -58,7 +58,7 @@ export default function OptionsPage() {
       footer={<PageFooter>Midi Jam v0.1.0 • Experimental Build</PageFooter>}
     >
       <main
-        className={`w-full h-full grid grid-cols-1 gap-3 sm:gap-6 overflow-y-auto no-scrollbar py-4`}
+        className={`w-full h-full grid grid-cols-1 gap-3 sm:gap-6 overflow-y-auto py-4`}
       >
         {/* Setting Item: Theme */}
         <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 hover:bg-foreground/10 transition-colors">

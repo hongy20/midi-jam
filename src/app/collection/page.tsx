@@ -96,7 +96,7 @@ export default function CollectionPage() {
       }
     >
       <main
-        className={`w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar py-4 px-8 -mx-8 min-h-0 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 pb-12`}
+        className={`w-full h-full overflow-y-auto overflow-x-hidden py-4 px-8 -mx-8 min-h-0 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 pb-12`}
       >
         {isLoading ? (
           <div className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium col-span-full">

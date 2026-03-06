@@ -82,7 +82,7 @@ export default function ScorePage() {
       }
     >
       <main
-        className={`w-full h-full overflow-y-auto overflow-x-hidden no-scrollbar py-4 px-8 -mx-8 min-h-0 max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 z-20`}
+        className={`w-full h-full overflow-y-auto overflow-x-hidden py-4 px-8 -mx-8 min-h-0 max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 z-20`}
       >
         <div className="text-center mb-8 w-full">
           <span className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-2 sm:mb-4 block drop-shadow-md">
