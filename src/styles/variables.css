@@ -29,12 +29,7 @@
   }
 }
 
-@media (max-height: 600px) {
-  :root {
-    --footer-height: 91px;
-  }
-}
-
+/* Mobile Portrait, Tablets, and Desktop screens */
 @media (min-height: 601px) {
   :root {
     --header-height: 4rem;
