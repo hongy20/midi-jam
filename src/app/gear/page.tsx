@@ -1,8 +1,7 @@
 "use client";
 
 import { ArrowLeft, ChevronRight } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/button/button";
 import { GearCard } from "@/components/gear-card/gear-card";
 import { PageFooter } from "@/components/page-footer/page-footer";
@@ -12,10 +11,8 @@ import { useAppContext } from "@/context/app-context";
 import { useMIDIDevices } from "@/hooks/use-midi-devices";
 import { useNavigation } from "@/hooks/use-navigation";
 
-function GearContent() {
-  const { toCollection, toHome, toPause } = useNavigation();
-  const searchParams = useSearchParams();
-  const fromGame = searchParams.get("from") === "game";
+export default function GearPage() {
+  const { toCollection, toHome } = useNavigation();
 
   const {
     gear: { selectMIDIInput, selectedMIDIInput },
@@ -71,18 +68,14 @@ function GearContent() {
       if (instrument) {
         selectMIDIInput(instrument);
       }
-      if (fromGame) {
-        toPause();
-      } else {
-        toCollection();
-      }
+      toCollection();
     }
   };
 
   return (
     <PageLayout
       header={
-        <PageHeader title={fromGame ? "Reconnect Gear" : "Your Gear"}>
+        <PageHeader title="Your Gear">
           <Button
             variant="secondary"
             icon={ArrowLeft}
@@ -90,7 +83,7 @@ function GearContent() {
             onClick={toHome}
             size="sm"
           >
-            {fromGame ? "Back to Menu" : "Main Menu"}
+            Main Menu
           </Button>
         </PageHeader>
       }
@@ -102,7 +95,7 @@ function GearContent() {
             icon={ChevronRight}
             size="sm"
           >
-            {fromGame ? "RESUME GAME" : "CONTINUE"}
+            CONTINUE
           </Button>
         </PageFooter>
       }
@@ -114,9 +107,7 @@ function GearContent() {
           {isLoading
             ? "Searching for gear..."
             : inputs.length > 0
-              ? fromGame
-                ? "The game is paused. Please reconnect your gear to continue."
-                : "Play a note on your gear to select it, or tap a card below."
+              ? "Play a note on your gear to select it, or tap a card below."
               : "No gear found. Please connect a keyboard and refresh."}
         </p>
 
@@ -141,22 +132,5 @@ function GearContent() {
         </div>
       </main>
     </PageLayout>
-  );
-}
-
-export default function GearPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex flex-col items-center justify-center h-[100dvh] gap-4">
-          <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
-          <span className="font-bold uppercase tracking-widest text-xs">
-            Loading Gear Setup...
-          </span>
-        </div>
-      }
-    >
-      <GearContent />
-    </Suspense>
   );
 }
