@@ -3,7 +3,7 @@
 import { Play, Settings } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "@/components/button/button";
-import { PageFooter } from "@/components/page-footer";
+import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
@@ -27,7 +27,6 @@ export default function WelcomePage() {
 
   return (
     <PageLayout
-      header={<div />}
       footer={
         <PageFooter className="pb-8 landscape:pb-2">
           <p className="text-foreground/40 text-[10px] sm:text-xs uppercase tracking-[0.3em] font-bold text-center w-full">

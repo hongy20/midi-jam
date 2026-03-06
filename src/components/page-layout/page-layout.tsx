@@ -10,7 +10,7 @@ interface PageLayoutProps {
 }
 
 export function PageLayout({
-  header,
+  header = <header />,
   footer,
   children,
   className = "",
@@ -18,9 +18,9 @@ export function PageLayout({
 }: PageLayoutProps) {
   return (
     <div className={`${styles.container} ${className}`} style={style}>
-      <header className={styles.header}>{header}</header>
+      {header}
       <main className={styles.main}>{children}</main>
-      <footer className={styles.footer}>{footer}</footer>
+      {footer}
     </div>
   );
 }

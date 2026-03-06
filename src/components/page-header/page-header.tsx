@@ -16,11 +16,11 @@ export function PageHeader({
   className = "",
 }: PageHeaderProps) {
   return (
-    <div className={`${styles.header} ${className}`}>
+    <header className={`${styles.header} ${className}`}>
       {Icon && <Icon className={styles.icon} />}
       {title && <h1 className={styles.title}>{title}</h1>}
       <div className={styles.spacer} />
       {children && <div className={styles.actions}>{children}</div>}
-    </div>
+    </header>
   );
 }

@@ -1,0 +1,22 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--layout-gap);
+  padding: var(--footer-py) 1.5rem;
+  width: 100%;
+  max-width: 64rem; /* max-w-5xl */
+  margin-left: auto;
+  margin-right: auto;
+  flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .footer {
+    flex-direction: row;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    gap: 1rem;
+  }
+}
