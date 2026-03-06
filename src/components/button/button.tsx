@@ -6,14 +6,16 @@ interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> {
   variant?: "primary" | "secondary";
   size?: "sm" | "md" | "lg";
+  fullWidth?: boolean;
   icon?: LucideIcon;
   iconPosition?: "left" | "right";
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export function Button({
   variant = "primary",
   size = "md",
+  fullWidth = false,
   icon: Icon,
   iconPosition = "right",
   children,
@@ -34,7 +36,9 @@ export function Button({
 
   return (
     <button
-      className={`${styles.button} ${styles[variant]} ${styles[size]} group`}
+      className={`${styles.button} ${styles[variant]} ${styles[size]} ${
+        fullWidth ? styles.fullWidth : ""
+      } group`}
       {...props}
     >
       {Icon && iconPosition === "left" && <Icon className={iconClasses} />}

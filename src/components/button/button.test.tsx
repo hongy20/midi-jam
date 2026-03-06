@@ -1,7 +1,7 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { Button } from "./button";
-import { describe, it, expect, vi } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { Play } from "lucide-react";
+import { describe, expect, it, vi } from "vitest";
+import { Button } from "./button";
 
 describe("Button", () => {
   it("renders with children and handles clicks", () => {
