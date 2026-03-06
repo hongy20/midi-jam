@@ -85,7 +85,7 @@ function InstrumentsContent() {
         <button
           type="button"
           onClick={toHome}
-          className="group flex items-center gap-2 px-4 py-2 bg-foreground/5 border border-foreground/10 rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
+          className="group flex items-center gap-2 px-4 py-2 bg-[var(--ui-btn-secondary-bg)] border border-[var(--ui-btn-secondary-border)] rounded-full text-foreground/50 font-bold text-[10px] sm:text-xs uppercase hover:text-foreground hover:border-foreground/30 transition-all active:scale-95"
         >
           <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
           {fromGame ? "Back to Menu" : "Main Menu"}
@@ -126,8 +126,8 @@ function InstrumentsContent() {
                 onClick={() => setSelected(inst.id)}
                 className={`group relative p-5 sm:p-8 landscape:p-4 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col gap-3 sm:gap-4 overflow-hidden ${
                   isSelected
-                    ? "bg-foreground border-foreground scale-[1.02] shadow-[0_0_40px_rgba(255,255,255,0.2)]"
-                    : "bg-foreground/5 border-foreground/10 hover:border-foreground/30 hover:bg-foreground/10"
+                    ? "bg-foreground border-foreground scale-[1.02] shadow-[var(--ui-btn-primary-shadow)]"
+                    : "bg-[var(--ui-card-bg)] border-[var(--ui-card-border)] hover:border-foreground/30 hover:bg-foreground/10"
                 }`}
               >
                 {/* Active Pulse Background */}
@@ -179,7 +179,7 @@ function InstrumentsContent() {
           disabled={!selected}
           className={`px-[var(--btn-px)] py-[var(--btn-py)] rounded-full font-black text-[var(--btn-text)] uppercase tracking-wider transition-all duration-300 flex items-center gap-2 ${
             selected
-              ? "bg-foreground text-background hover:scale-105 active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.4)] cursor-pointer"
+              ? "bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] hover:scale-105 active:scale-95 shadow-[var(--ui-btn-primary-shadow)] cursor-pointer"
               : "opacity-40 bg-foreground/10 text-foreground/40 cursor-not-allowed shadow-none"
           } group`}
         >

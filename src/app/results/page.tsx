@@ -73,7 +73,7 @@ export default function ResultsPage() {
         </div>
 
         <section className="w-full grid grid-cols-2 landscape:grid-cols-4 lg:grid-cols-4 gap-4 px-4 sm:px-0 landscape:gap-3">
-          <div className="col-span-2 landscape:col-span-2 lg:col-span-4 bg-foreground/5 backdrop-blur-3xl border border-foreground/10 flex flex-col items-center justify-center py-6 sm:py-10 landscape:py-3 rounded-[2rem] sm:rounded-[3rem] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] relative overflow-hidden group hover:border-foreground/30 transition-colors">
+          <div className="col-span-2 landscape:col-span-2 lg:col-span-4 bg-[var(--ui-card-bg)] backdrop-blur-3xl border border-[var(--ui-card-border)] flex flex-col items-center justify-center py-6 sm:py-10 landscape:py-3 rounded-[2rem] sm:rounded-[3rem] shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] relative overflow-hidden group hover:border-foreground/30 transition-colors">
             {/* Glossy inner reflection */}
             <div className="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
 
@@ -88,7 +88,7 @@ export default function ResultsPage() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-accent-primary/10 blur-[80px] rounded-full -z-10 group-hover:bg-accent-primary/20 transition-colors duration-500" />
           </div>
 
-          <div className="bg-foreground/5 backdrop-blur-3xl border border-foreground/10 p-5 sm:p-8 landscape:p-3 rounded-[1.5rem] sm:rounded-[2.5rem] flex flex-col col-span-1 landscape:col-span-1 lg:col-span-2 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:bg-foreground/10 transition-colors">
+          <div className="bg-[var(--ui-card-bg)] backdrop-blur-3xl border border-[var(--ui-card-border)] p-5 sm:p-8 landscape:p-3 rounded-[1.5rem] sm:rounded-[2.5rem] flex flex-col col-span-1 landscape:col-span-1 lg:col-span-2 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:bg-foreground/10 transition-colors">
             <span className="text-foreground/50 font-bold uppercase tracking-widest text-[10px] mb-1 sm:mb-2 text-center">
               Accuracy
             </span>
@@ -97,7 +97,7 @@ export default function ResultsPage() {
             </span>
           </div>
 
-          <div className="bg-foreground/5 backdrop-blur-3xl border border-foreground/10 p-5 sm:p-8 landscape:p-3 rounded-[1.5rem] sm:rounded-[2.5rem] flex flex-col col-span-1 landscape:col-span-1 lg:col-span-2 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:bg-foreground/10 transition-colors">
+          <div className="bg-[var(--ui-card-bg)] backdrop-blur-3xl border border-[var(--ui-card-border)] p-5 sm:p-8 landscape:p-3 rounded-[1.5rem] sm:rounded-[2.5rem] flex flex-col col-span-1 landscape:col-span-1 lg:col-span-2 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:bg-foreground/10 transition-colors">
             <span className="text-foreground/50 font-bold uppercase tracking-widest text-[10px] mb-1 sm:mb-2 text-center">
               Max Combo
             </span>
@@ -113,7 +113,7 @@ export default function ResultsPage() {
         <button
           type="button"
           onClick={handleMainMenu}
-          className="flex-1 py-3 sm:py-4 landscape:py-2 bg-foreground/5 text-foreground border border-foreground/10 rounded-full font-bold text-sm sm:text-xl landscape:text-xs uppercase tracking-widest hover:bg-foreground/10 transition-colors order-3 sm:order-1"
+          className="flex-1 py-3 sm:py-4 landscape:py-2 bg-[var(--ui-btn-secondary-bg)] text-[var(--ui-btn-secondary-text)] border border-[var(--ui-btn-secondary-border)] rounded-full font-bold text-sm sm:text-xl landscape:text-xs uppercase tracking-widest hover:bg-foreground/10 transition-colors order-3 sm:order-1"
         >
           MAIN MENU
         </button>
@@ -121,7 +121,7 @@ export default function ResultsPage() {
         <button
           type="button"
           onClick={handleNextSong}
-          className="flex-1 py-3 sm:py-4 landscape:py-2 bg-foreground/10 text-foreground border border-foreground/20 rounded-full font-black text-sm sm:text-xl landscape:text-xs uppercase tracking-widest hover:bg-foreground/20 hover:scale-[1.02] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.1)] order-2 flex items-center justify-center gap-2"
+          className="flex-1 py-3 sm:py-4 landscape:py-2 bg-[var(--ui-btn-secondary-bg)] text-[var(--ui-btn-secondary-text)] border border-[var(--ui-btn-secondary-border)] rounded-full font-black text-sm sm:text-xl landscape:text-xs uppercase tracking-widest hover:bg-foreground/20 hover:scale-[1.02] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.1)] order-2 flex items-center justify-center gap-2"
         >
           NEXT SONG <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
@@ -129,7 +129,7 @@ export default function ResultsPage() {
         <button
           type="button"
           onClick={handlePlayAgain}
-          className="flex-[1.5] py-3 sm:py-5 landscape:py-2 bg-foreground text-background rounded-full font-black text-lg sm:text-xl landscape:text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(255,255,255,0.3)] order-1 sm:order-3 flex items-center justify-center gap-2"
+          className="flex-[1.5] py-3 sm:py-5 landscape:py-2 bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] rounded-full font-black text-lg sm:text-xl landscape:text-sm hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[var(--ui-btn-primary-shadow)] order-1 sm:order-3 flex items-center justify-center gap-2"
         >
           PLAY AGAIN <RotateCcw className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>

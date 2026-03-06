@@ -27,6 +27,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 
 ### 3. Architecture & Styling Standards
 - **CSS Isolation**: `globals.css` is reserved for theme variables and generic resets. Use **CSS Modules** (`[name].module.css`) for all page and component-specific styles.
+- **Semantic Theme Mapping**: Extract all visual properties (colors, fonts, shadows, radii) into semantic CSS variables within `globals.css`. Components must consume these functional aliases (e.g., `--piano-key-white`, `--ui-card-bg`) instead of hardcoding raw values or using direct theme primitives.
 - **Iconography**: Use `lucide-react` exclusively. For custom icons, use standalone `.svg` files. No inline SVG strings or emojis.
 - **DOM Efficiency**:
   - **Flatten Trees**: Avoid redundant wrapping `div`s. If an element has only one child, consolidate them.

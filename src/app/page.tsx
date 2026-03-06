@@ -54,7 +54,7 @@ export default function WelcomePage() {
             type="button"
             onClick={handleStart}
             disabled={!isSupported}
-            className={`col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 landscape:py-3 bg-foreground text-background text-xl sm:text-2xl landscape:text-lg font-black rounded-2xl sm:rounded-3xl shadow-[0_0_40px_rgba(255,255,255,0.2)] overflow-hidden flex items-center justify-center gap-3 ${
+            className={`col-span-1 sm:col-span-2 group relative px-8 py-5 sm:py-6 landscape:py-3 bg-[var(--ui-btn-primary-bg)] text-[var(--ui-btn-primary-text)] text-xl sm:text-2xl landscape:text-lg font-black rounded-2xl sm:rounded-3xl shadow-[var(--ui-btn-primary-shadow)] overflow-hidden flex items-center justify-center gap-3 ${
               !isSupported
                 ? "opacity-20 cursor-not-allowed grayscale"
                 : "cursor-pointer"
@@ -67,7 +67,7 @@ export default function WelcomePage() {
           <button
             type="button"
             onClick={handleSettings}
-            className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 px-6 py-4 landscape:py-2 rounded-xl border-2 border-foreground/20 text-foreground font-bold tracking-widest uppercase text-sm landscape:text-xs"
+            className="col-span-1 sm:col-span-2 flex items-center justify-center gap-2 px-6 py-4 landscape:py-2 rounded-xl border-2 border-[var(--ui-btn-secondary-border)] bg-[var(--ui-btn-secondary-bg)] text-[var(--ui-btn-secondary-text)] font-bold tracking-widest uppercase text-sm landscape:text-xs"
           >
             Settings <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
