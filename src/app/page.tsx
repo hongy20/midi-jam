@@ -31,16 +31,16 @@ export default function WelcomePage() {
         <PageFooter>The ultimate immersive musical experience</PageFooter>
       }
     >
-      <main className="w-full h-full flex flex-col items-center justify-center relative z-10 text-center px-6 py-4 landscape:py-2 max-w-4xl mx-auto overflow-hidden">
-        <div className="mb-8 landscape:mb-4 w-full relative">
-          <h1 className="text-6xl sm:text-7xl md:text-9xl landscape:text-5xl font-black mb-4 landscape:mb-2 tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
+      <main className="w-full h-full flex flex-col items-center justify-center relative z-10 text-center px-6 py-4 max-w-4xl mx-auto overflow-hidden">
+        <div className="mb-8 w-full relative">
+          <h1 className="text-6xl sm:text-7xl md:text-9xl font-black mb-4 tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
             MIDI JAM
           </h1>
           <div className="absolute -inset-4 bg-foreground/20 blur-3xl -z-10 rounded-full px-4" />
         </div>
 
         {!isSupported && (
-          <div className="flex flex-col items-center gap-2 text-red-500 font-bold mb-8 landscape:mb-4">
+          <div className="flex flex-col items-center gap-2 text-red-500 font-bold mb-8">
             <span className="bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20">
               UNSUPPORTED BROWSER
             </span>
@@ -52,7 +52,7 @@ export default function WelcomePage() {
         )}
 
         {/* Navigation Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 landscape:gap-3 w-full max-w-lg mb-8 landscape:mb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full max-w-lg mb-8">
           <div className="col-span-1 sm:col-span-2 flex justify-center">
             <Button
               onClick={handleStart}
