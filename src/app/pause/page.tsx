@@ -104,7 +104,7 @@ export default function PausePage() {
               className={`${buttonClass} text-red-500 border-red-500/20 hover:bg-red-500/10 hover:border-red-500/40 hover:shadow-[0_0_20px_rgba(239,68,68,0.2)]`}
             >
               <LogOut className="w-5 h-5" />
-              QUIT STAGE
+              QUIT GAME
             </button>
           </div>
         </div>
