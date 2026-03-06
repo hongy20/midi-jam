@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, ChevronRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/button/button";
 import { GearCard } from "@/components/gear-card/gear-card";
 import { PageFooter } from "@/components/page-footer/page-footer";
@@ -74,7 +74,7 @@ export default function GearPage() {
       >
         {isLoading ? (
           <p className="text-center text-foreground/60 text-base font-medium">
-            "Searching for gear..."
+            Searching for gear...
           </p>
         ) : error ? (
           <div className="p-4 bg-red-500/20 text-red-200 border border-red-500/50 rounded-xl text-center">
@@ -82,12 +82,12 @@ export default function GearPage() {
           </div>
         ) : inputs.length === 0 ? (
           <p className="text-center text-foreground/60 text-base font-medium">
-            "No gear found. Please connect a keyboard and refresh."
+            No gear found. Please connect a keyboard and refresh.
           </p>
         ) : (
           <>
             <p className="text-center text-foreground/60 text-base font-medium">
-              "Play a note on your gear to select it, or tap a card below."
+              Play a note on your gear to select it, or tap a card below.
             </p>
             <div className="flex items-center gap-6 overflow-x-auto snap-x snap-mandatory px-8">
               {inputs.map((inst) => (
