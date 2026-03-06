@@ -28,28 +28,28 @@ describe("Welcome Page", () => {
   };
 
   const mockContext: AppContextType = {
-    tracks: { selected: null, set: vi.fn() },
-    instruments: {
-      input: null,
-      output: null,
+    collection: { selectedTrack: null, setSelectedTrack: vi.fn() },
+    gear: {
+      selectedMIDIInput: null,
+      selectedMIDIOutput: null,
       lastInputName: null,
-      selectInput: vi.fn(),
-      selectOutput: vi.fn(),
+      selectMIDIInput: vi.fn(),
+      selectMIDIOutput: vi.fn(),
     },
-    game: {
-      track: { isLoading: false, isReady: false, error: null },
-      session: null,
-      setSession: vi.fn(),
+    stage: {
+      trackStatus: { isLoading: false, isReady: false, error: null },
+      gameSession: null,
+      setGameSession: vi.fn(),
     },
-    results: { last: null, set: vi.fn() },
-    settings: {
+    score: { sessionResults: null, setSessionResults: vi.fn() },
+    options: {
       speed: 1.0,
       demoMode: false,
       setSpeed: vi.fn(),
       setDemoMode: vi.fn(),
     },
     actions: { resetAll: vi.fn() },
-    home: { isLoading: false, isSupported: true },
+    home: { isHomeLoading: false, isSupported: true },
   };
 
   beforeEach(() => {
@@ -76,7 +76,7 @@ describe("Welcome Page", () => {
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
     vi.mocked(useAppContext).mockReturnValue({
       ...mockContext,
-      home: { isLoading: true, isSupported: true },
+      home: { isHomeLoading: true, isSupported: true },
     });
 
     render(<WelcomePage />);
@@ -90,7 +90,7 @@ describe("Welcome Page", () => {
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
     vi.mocked(useAppContext).mockReturnValue({
       ...mockContext,
-      home: { isLoading: false, isSupported: false },
+      home: { isHomeLoading: false, isSupported: false },
     });
 
     render(<WelcomePage />);

@@ -10,15 +10,11 @@ import { useNavigation } from "@/hooks/use-navigation";
 
 export default function PausePage() {
   const { toPlay, toOptions, toScore } = useNavigation();
-  const { game, instruments, tracks, results } = useAppContext();
-  const {
-    session: gameSession,
-    setSession: setGameSession,
-    track: trackStatus,
-  } = game;
-  const { input: selectedMIDIInput } = instruments;
-  const { selected: selectedTrack } = tracks;
-  const { set: setSessionResults } = results;
+  const { stage, gear, collection, score } = useAppContext();
+  const { gameSession, setGameSession, trackStatus } = stage;
+  const { selectedMIDIInput } = gear;
+  const { selectedTrack } = collection;
+  const { setSessionResults } = score;
 
   const handleResume = () => {
     toPlay();
@@ -35,11 +31,11 @@ export default function PausePage() {
 
   const handleExit = () => {
     if (gameSession && trackStatus.isReady) {
-      const { score, combo } = gameSession;
+      const { score: currentScore, combo } = gameSession;
       const totalEvents = trackStatus.events.length;
       setSessionResults({
-        score,
-        accuracy: Math.floor((score / (totalEvents * 100)) * 100) || 0,
+        score: currentScore,
+        accuracy: Math.floor((currentScore / (totalEvents * 100)) * 100) || 0,
         combo,
       });
     }

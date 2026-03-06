@@ -16,9 +16,8 @@ function GearContent() {
   const searchParams = useSearchParams();
   const fromGame = searchParams.get("from") === "game";
 
-  const { instruments: contextInstruments } = useAppContext();
-  const { selectInput: selectMIDIInput, input: selectedMIDIInput } =
-    contextInstruments;
+  const { gear: contextGear } = useAppContext();
+  const { selectMIDIInput, selectedMIDIInput } = contextGear;
   const { inputs, isLoading, error } = useMIDIDevices();
 
   const [selected, setSelected] = useState<string | null>(
@@ -99,7 +98,7 @@ function GearContent() {
             onClick={handleContinue}
             disabled={!selected}
             icon={ChevronRight}
-            size="md"
+            size="sm"
           >
             {fromGame ? "RESUME GAME" : "CONTINUE"}
           </Button>

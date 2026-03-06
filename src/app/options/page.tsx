@@ -36,8 +36,8 @@ const BackButton = () => {
 
 export default function OptionsPage() {
   const { theme, setTheme } = useTheme();
-  const { settings } = useAppContext();
-  const { speed, setSpeed, demoMode, setDemoMode } = settings;
+  const { options } = useAppContext();
+  const { speed, setSpeed, demoMode, setDemoMode } = options;
 
   const themeOptions = ["neon", "dark", "light"] as const;
   const speedOptions = [

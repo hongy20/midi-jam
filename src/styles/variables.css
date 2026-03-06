@@ -1,7 +1,7 @@
 :root {
   /* Global Layout Constants - Theme Independent */
-  --header-height: 2.5rem;
-  --footer-height: 2.5rem;
+  --header-height: 3rem;
+  --footer-height: 3rem;
   --h1-size: 1.875rem;
   --btn-py: 0.75rem;
   --btn-px: 2rem;
@@ -17,7 +17,6 @@
 
 @media (min-width: 640px) {
   :root {
-    --h1-size: 2.25rem;
     --btn-py: 1.25rem;
     --btn-px: 3rem;
     --btn-text: 1.25rem;
@@ -30,5 +29,6 @@
   :root {
     --header-height: 4rem;
     --footer-height: 4rem;
+    --h1-size: 2.25rem;
   }
 }

@@ -20,8 +20,8 @@ interface Track {
 
 export default function CollectionPage() {
   const { toPlay, toGear } = useNavigation();
-  const { tracks: contextTracks } = useAppContext();
-  const { set: setTrack, selected: selectedTrack } = contextTracks;
+  const { collection: contextCollection } = useAppContext();
+  const { setSelectedTrack, selectedTrack } = contextCollection;
 
   const [tracks, setTracks] = useState<Track[]>([]);
   const [selected, setSelected] = useState<string | null>(
@@ -42,7 +42,7 @@ export default function CollectionPage() {
     if (selected) {
       const track = tracks.find((t) => t.id === selected);
       if (track) {
-        setTrack({ id: track.id, name: track.name, url: track.url });
+        setSelectedTrack({ id: track.id, name: track.name, url: track.url });
       }
       toPlay();
     }

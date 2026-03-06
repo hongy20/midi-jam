@@ -52,27 +52,27 @@ export type TrackLoadStatus =
     };
 
 export interface AppContextType {
-  tracks: {
-    selected: Track | null;
-    set: (track: Track | null) => void;
+  collection: {
+    selectedTrack: Track | null;
+    setSelectedTrack: (track: Track | null) => void;
   };
-  instruments: {
-    input: WebMidi.MIDIInput | null;
-    output: WebMidi.MIDIOutput | null;
+  gear: {
+    selectedMIDIInput: WebMidi.MIDIInput | null;
+    selectedMIDIOutput: WebMidi.MIDIOutput | null;
     lastInputName: string | null;
-    selectInput: (input: WebMidi.MIDIInput | null) => void;
-    selectOutput: (output: WebMidi.MIDIOutput | null) => void;
+    selectMIDIInput: (input: WebMidi.MIDIInput | null) => void;
+    selectMIDIOutput: (output: WebMidi.MIDIOutput | null) => void;
   };
-  game: {
-    track: TrackLoadStatus;
-    session: GameSession | null;
-    setSession: (s: GameSession | null) => void;
+  stage: {
+    trackStatus: TrackLoadStatus;
+    gameSession: GameSession | null;
+    setGameSession: (s: GameSession | null) => void;
   };
-  results: {
-    last: SessionResults | null;
-    set: (r: SessionResults | null) => void;
+  score: {
+    sessionResults: SessionResults | null;
+    setSessionResults: (r: SessionResults | null) => void;
   };
-  settings: {
+  options: {
     speed: number;
     demoMode: boolean;
     setSpeed: (speed: number) => void;
@@ -82,7 +82,7 @@ export interface AppContextType {
     resetAll: () => void;
   };
   home: {
-    isLoading: boolean;
+    isHomeLoading: boolean;
     isSupported: boolean;
   };
 }
@@ -192,27 +192,27 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [pathname, selectedTrack, trackStatus.isReady]);
 
   const value: AppContextType = {
-    tracks: {
-      selected: selectedTrack,
-      set: setSelectedTrack,
+    collection: {
+      selectedTrack,
+      setSelectedTrack,
     },
-    instruments: {
-      input: selectedMIDIInput,
-      output: selectedMIDIOutput,
+    gear: {
+      selectedMIDIInput,
+      selectedMIDIOutput,
       lastInputName,
-      selectInput: handleSelectInput,
-      selectOutput: () => {}, // TODO: Implement if needed
+      selectMIDIInput: handleSelectInput,
+      selectMIDIOutput: () => {}, // TODO: Implement if needed
     },
-    game: {
-      track: trackStatus,
-      session: gameSession,
-      setSession: setGameSession,
+    stage: {
+      trackStatus,
+      gameSession,
+      setGameSession,
     },
-    results: {
-      last: sessionResults,
-      set: setSessionResults,
+    score: {
+      sessionResults,
+      setSessionResults,
     },
-    settings: {
+    options: {
       speed,
       demoMode,
       setSpeed,
@@ -222,7 +222,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       resetAll,
     },
     home: {
-      isLoading: isHomeLoading,
+      isHomeLoading,
       isSupported,
     },
   };
