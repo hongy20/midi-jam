@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { VirtualInstrument } from "./virtual-instrument";
 
 // Mock PianoKeyboard
-vi.mock("./piano-keyboard", () => ({
+vi.mock("./piano-keyboard/PianoKeyboard", () => ({
   PianoKeyboard: vi.fn(() => <div data-testid="piano-keyboard" />),
 }));
 

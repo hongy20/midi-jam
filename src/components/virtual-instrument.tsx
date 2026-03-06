@@ -1,6 +1,6 @@
 "use client";
 
-import { PianoKeyboard } from "./piano-keyboard";
+import { PianoKeyboard } from "./piano-keyboard/PianoKeyboard";
 
 interface VirtualInstrumentProps {
   inputDevice: WebMidi.MIDIInput;
