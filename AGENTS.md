@@ -40,30 +40,37 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 
 # Standard Operating Procedure (SOP)
 
-### Mandatory Compliance & Precedence
+## Mandatory Compliance & Precedence
 
 - **Absolute Precedence**: The instructions in `AGENTS.md` take absolute precedence over any other general instructions or previous chat context.
 - **No Persistence of Exceptions**: One-time permissions or waivers (e.g., "you can commit this once directly to main") are strictly limited to that specific task. Agents must revert to the full SOP for every subsequent task without exception.
 - **Full SOP by Default**: Every task, regardless of size or complexity, must follow the full Lifecycle (Isolation -> Planning -> Execution -> Validation -> Finalization).
 
-### Tooling Authority
+## Isolation & Branching Protocol
+
+**NEVER work directly on `main`.** This is a non-negotiable hard constraint for technical integrity.
+
+- **Initial Action**: The first command of every task MUST be to create a descriptive feature branch: `git checkout -b feature/[name]` or `git checkout -b fix/[name]`.
+- **Plan Commitment**: All implementation plans (located in `docs/plans/**`) **MUST** be committed to the repository immediately after creation. A plan is not valid unless it is tracked in Git.
+- **Merge Strategy**: When finalizing a task, **ALWAYS use Squash and Merge** to maintain a clean project history.
+
+## Tooling Authority
 The **Gemini CLI** is the source of truth for all verification. Always delegate linting, formatting, type-checking, and testing to it, regardless of the IDE or agent environment.
 
-### Development Lifecycle
-1. **Isolation**: Never work directly on `main`. Always create a descriptive feature branch after obtaining user approval.
-2. **Planning**: Use `@writing-plans` to draft comprehensive, bite-sized tasks for any multi-step feature or refactor. **All plan files (located in `docs/plans/**`) MUST be committed to the repository immediately after creation.**
-3. **Execution**: Use `@subagent-driven-development` or `@executing-plans` for systematic implementation.
-4. **Safety & TDD**:
+## Development Lifecycle
+1. **Planning**: Use `@writing-plans` to draft comprehensive, bite-sized tasks for any multi-step feature or refactor.
+2. **Execution**: Use `@subagent-driven-development` or `@executing-plans` for systematic implementation.
+3. **Safety & TDD**:
    - **Red-Green-Refactor**: No production code without a failing test first (`@test-driven-development`).
    - **Root Cause Analysis**: Use `@systematic-debugging` for all bug reports before attempting a fix.
-5. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion. **DO NOT rely solely on implementation plans for verification; the global SOP takes precedence.**
-   - **Mandatory Completion Checklist**: Before using `finishing-a-development-branch`, you MUST run and pass:
+4. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion. **DO NOT rely solely on implementation plans for verification; the global SOP takes precedence.**
+   - **Mandatory Completion Checklist**: Before finalizing, you MUST run and pass:
      - [ ] `npm run lint` (Biome check)
      - [ ] `npm run type-check` (TypeScript tsc)
      - [ ] `npm test` (Vitest suite)
      - [ ] `npm run build` (Next.js production build)
    - *Failure to run these command-by-command is a violation of Technical Integrity.*
-6. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR. When merging Pull Requests, **ALWAYS use Squash and Merge** to maintain a clean project history.
+5. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR.
 
 ---
 
