@@ -124,7 +124,7 @@ export default function GearPage() {
               {inputs.map((inst) => (
                 <div
                   key={inst.id}
-                  className="shrink-0 w-[280px] sm:w-[320px] snap-center"
+                  className="shrink-0 w-[calc(100%-3rem)] snap-center"
                 >
                   <GearCard
                     instrument={inst}
