@@ -18,7 +18,7 @@ export function PageLayout({
 }: PageLayoutProps) {
   return (
     <div className={`${styles.container} ${className}`} style={style}>
-      {header && <header className={styles.header}>{header}</header>}
+      <header className={styles.header}>{header}</header>
       <main className={styles.main}>{children}</main>
       {footer && <footer className={styles.footer}>{footer}</footer>}
     </div>
