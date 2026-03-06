@@ -3,7 +3,7 @@
 import { ChevronRight, RotateCcw } from "lucide-react";
 import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer";
-import { PageHeader } from "@/components/page-header";
+import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";

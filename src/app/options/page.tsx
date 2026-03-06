@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer";
-import { PageHeader } from "@/components/page-header";
+import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useTheme } from "@/context/theme-context";
@@ -49,14 +49,7 @@ export default function OptionsPage() {
   return (
     <PageLayout
       header={
-        <PageHeader
-          title={
-            <h1 className="text-[var(--h1-size)] font-black italic uppercase tracking-tighter drop-shadow-md flex items-center gap-3 text-foreground">
-              Options{" "}
-              <Settings className="w-8 h-8 sm:w-10 sm:h-10 animate-[spin_10s_linear_infinite]" />
-            </h1>
-          }
-        >
+        <PageHeader title="Options" icon={Settings}>
           <Suspense>
             <BackButton />
           </Suspense>
