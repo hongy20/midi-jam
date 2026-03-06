@@ -43,9 +43,7 @@ export function TrackLane({ spans, originalDurationMs }: TrackLaneProps) {
             key={span.id}
             data-pitch={span.note}
             data-note-id={span.id}
-            className={`${styles.note} ${pitchClass} ${
-              span.isBlack ? styles.black : styles.white
-            }`}
+            className={`${styles.note} ${pitchClass}`}
             style={{
               top: `${topPercent}%`,
               height: `${heightPercent}%`,
