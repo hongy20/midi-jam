@@ -44,7 +44,7 @@ export default function GearPage() {
   return (
     <PageLayout
       header={
-        <PageHeader title="Gear">
+        <PageHeader title="Select Gear">
           <Button
             variant="secondary"
             icon={ArrowLeft}
