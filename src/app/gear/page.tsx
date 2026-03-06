@@ -89,7 +89,7 @@ export default function GearPage() {
             <p className="text-center text-foreground/60 text-base font-medium">
               Play a note on your gear to select it, or tap a card below.
             </p>
-            <div className="flex items-center gap-6 overflow-x-auto snap-x snap-mandatory px-8">
+            <div className="h-full flex items-center gap-6 overflow-x-auto snap-x snap-mandatory px-8">
               {inputs.map((inst) => (
                 <GearCard
                   key={inst.id}
