@@ -104,7 +104,7 @@ export default function GearPage() {
         className={`w-full h-full max-h-full max-w-full overflow-y-auto overflow-x-hidden py-4 px-8 min-h-0 max-w-5xl mx-auto flex flex-col gap-8`}
       >
         {isLoading ? (
-          <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
+          <p className="text-center text-foreground/60 text-base font-medium">
             "Searching for gear..."
           </p>
         ) : error ? (
@@ -112,15 +112,15 @@ export default function GearPage() {
             {error}
           </div>
         ) : inputs.length === 0 ? (
-          <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
+          <p className="text-center text-foreground/60 text-base font-medium">
             "No gear found. Please connect a keyboard and refresh."
           </p>
         ) : (
           <>
-            <p className="text-center text-foreground/60 text-lg sm:text-xl font-medium">
+            <p className="text-center text-foreground/60 text-base font-medium">
               "Play a note on your gear to select it, or tap a card below."
             </p>
-            <div className="h-full flex items-center gap-6 overflow-x-auto snap-x snap-mandatory -mx-8 px-8">
+            <div className="flex items-center gap-6 overflow-x-auto snap-x snap-mandatory px-8">
               {inputs.map((inst) => (
                 <GearCard
                   key={inst.id}
