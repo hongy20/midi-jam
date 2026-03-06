@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 import { PageLayout } from "./page-layout";
-import { describe, it, expect } from "vitest";
 
 describe("PageLayout", () => {
   it("renders header, footer, and children in the correct slots", () => {
@@ -10,7 +10,7 @@ describe("PageLayout", () => {
         footer={<div data-testid="footer">Footer</div>}
       >
         <div data-testid="content">Content</div>
-      </PageLayout>
+      </PageLayout>,
     );
     expect(screen.getByTestId("header")).toBeDefined();
     expect(screen.getByTestId("footer")).toBeDefined();
