@@ -11,6 +11,7 @@ import { SettingItem } from "@/components/setting-item/setting-item";
 import { useAppContext } from "@/context/app-context";
 import { useTheme } from "@/context/theme-context";
 import { useNavigation } from "@/hooks/use-navigation";
+import { THEMES } from "@/lib/theme/constant";
 
 function BackButton() {
   const { goBack } = useNavigation();
@@ -31,7 +32,6 @@ export default function OptionsPage() {
     options: { speed, setSpeed, demoMode, setDemoMode },
   } = useAppContext();
 
-  const themeOptions = ["neon", "dark", "light"] as const;
   const speedOptions = [
     { label: "Slow", value: 0.5 },
     { label: "Normal", value: 1.0 },
@@ -40,8 +40,9 @@ export default function OptionsPage() {
 
   return (
     <PageLayout
-      header={
-        <PageHeader title="System Settings" icon={Settings}>
+      header={<PageHeader title="System Settings" icon={Settings} />}
+      footer={
+        <PageFooter>
           <Suspense fallback={<div className="w-20" />}>
             <BackButton />
           </Suspense>
@@ -54,16 +55,15 @@ export default function OptionsPage() {
           >
             Exit
           </Button>
-        </PageHeader>
+        </PageFooter>
       }
-      footer={<PageFooter>Midi Jam v0.1.0 • Experimental Build</PageFooter>}
     >
       <main className="w-full h-full flex flex-col gap-6 py-4 px-8 max-w-5xl mx-auto overflow-y-auto">
         <SettingItem
           title="Visual Theme"
           description="Toggle global application style"
         >
-          {themeOptions.map((opt) => (
+          {THEMES.map((opt) => (
             <button
               key={opt}
               type="button"
