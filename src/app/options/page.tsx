@@ -49,20 +49,10 @@ export default function OptionsPage() {
         </PageFooter>
       }
     >
-      <main className="w-full h-full max-h-full max-w-full overflow-y-auto overflow-x-hidden py-4 px-8 min-h-0 max-w-5xl mx-auto flex flex-col gap-8">
-        <p className="text-center text-foreground/60 text-base font-medium">
-          Personalize your experience by swiping through settings.
-        </p>
-
-        <div className="flex-1 flex items-center gap-6 overflow-x-auto snap-x snap-mandatory px-8">
-          {optionTypes.map((type) => (
-            <OptionCard
-              key={type}
-              type={type}
-              className="shrink-0 w-[calc(100%-3rem)] sm:w-[360px] h-full snap-center"
-            />
-          ))}
-        </div>
+      <main className="w-full h-full max-w-5xl mx-auto flex flex-col gap-4 py-8 px-8 overflow-y-auto">
+        {optionTypes.map((type) => (
+          <OptionCard key={type} type={type} />
+        ))}
       </main>
     </PageLayout>
   );
