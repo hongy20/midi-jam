@@ -11,33 +11,41 @@ import { useAppContext } from "@/context/app-context";
 import { useTheme } from "@/context/theme-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
-const BackButton = () => {
+function SettingItem({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 hover:bg-foreground/10 transition-colors">
+      <div className="flex flex-col flex-1">
+        <span className="text-xl sm:text-2xl font-bold uppercase tracking-tight">
+          {title}
+        </span>
+        <span className="text-foreground/50 text-xs sm:text-sm font-medium">
+          {description}
+        </span>
+      </div>
+      <div className="flex items-center gap-2 sm:gap-4 flex-wrap bg-background/50 p-2 rounded-full border border-foreground/10 self-stretch sm:self-auto justify-center">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function OptionsContent() {
   const { goBack, toHome } = useNavigation();
   const searchParams = useSearchParams();
-  const from = searchParams.get("from") || "/";
+  const from = searchParams.get("from") ?? "/";
 
-  return (
-    <>
-      <Button variant="secondary" onClick={() => goBack(from)} size="sm">
-        BACK
-      </Button>
-      <Button
-        variant="primary"
-        onClick={toHome}
-        size="sm"
-        icon={LogOut}
-        iconPosition="right"
-      >
-        EXIT
-      </Button>
-    </>
-  );
-};
-
-export default function OptionsPage() {
   const { theme, setTheme } = useTheme();
-  const { options } = useAppContext();
-  const { speed, setSpeed, demoMode, setDemoMode } = options;
+  const {
+    options: { speed, setSpeed, demoMode, setDemoMode },
+  } = useAppContext();
 
   const themeOptions = ["neon", "dark", "light"] as const;
   const speedOptions = [
@@ -49,83 +57,68 @@ export default function OptionsPage() {
   return (
     <PageLayout
       header={
-        <PageHeader title="Options" icon={Settings}>
-          <Suspense>
-            <BackButton />
-          </Suspense>
+        <PageHeader title="System Settings" icon={Settings}>
+          <Button variant="secondary" onClick={() => goBack(from)} size="sm">
+            Back
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => toHome()}
+            size="sm"
+            icon={LogOut}
+            iconPosition="right"
+          >
+            Exit
+          </Button>
         </PageHeader>
       }
       footer={<PageFooter>Midi Jam v0.1.0 • Experimental Build</PageFooter>}
     >
-      <main
-        className={`w-full h-full grid grid-cols-1 gap-3 sm:gap-6 overflow-y-auto py-4`}
-      >
-        {/* Setting Item: Theme */}
-        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 hover:bg-foreground/10 transition-colors">
-          <div className="flex flex-col flex-1">
-            <span className="text-xl sm:text-2xl font-bold uppercase tracking-tight">
-              Visual Theme
-            </span>
-            <span className="text-foreground/50 text-xs sm:text-sm font-medium">
-              Toggle global application style
-            </span>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-4 flex-wrap bg-background/50 p-2 rounded-full border border-foreground/10 self-stretch sm:self-auto justify-center">
-            {themeOptions.map((opt) => (
-              <button
-                key={opt}
-                type="button"
-                onClick={() => setTheme(opt)}
-                className={`px-4 sm:px-6 py-2 rounded-full font-black text-xs sm:text-sm uppercase tracking-widest transition-all ${
-                  theme === opt
-                    ? "bg-foreground text-background shadow-md scale-[1.05]"
-                    : "text-foreground/60 hover:text-foreground"
-                }`}
-              >
-                {opt}
-              </button>
-            ))}
-          </div>
-        </div>
+      <main className="w-full h-full flex flex-col gap-6 py-4 px-8 max-w-5xl mx-auto overflow-y-auto">
+        <SettingItem
+          title="Visual Theme"
+          description="Toggle global application style"
+        >
+          {themeOptions.map((opt) => (
+            <button
+              key={opt}
+              type="button"
+              onClick={() => setTheme(opt)}
+              className={`px-4 sm:px-6 py-2 rounded-full font-black text-xs sm:text-sm uppercase tracking-widest transition-all ${
+                theme === opt
+                  ? "bg-foreground text-background shadow-md scale-[1.05]"
+                  : "text-foreground/60 hover:text-foreground"
+              }`}
+            >
+              {opt}
+            </button>
+          ))}
+        </SettingItem>
 
-        {/* Setting Item: Speed */}
-        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 hover:bg-foreground/10 transition-colors">
-          <div className="flex flex-col flex-1">
-            <span className="text-xl sm:text-2xl font-bold uppercase tracking-tight">
-              Playback Speed
-            </span>
-            <span className="text-foreground/50 text-xs sm:text-sm font-medium">
-              Adjust note fall tempo
-            </span>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-4 flex-wrap bg-background/50 p-2 rounded-full border border-foreground/10 self-stretch sm:self-auto justify-center">
-            {speedOptions.map((opt) => (
-              <button
-                key={opt.label}
-                type="button"
-                onClick={() => setSpeed(opt.value)}
-                className={`px-4 sm:px-6 py-2 rounded-full font-black text-xs sm:text-sm uppercase tracking-widest transition-all ${
-                  speed === opt.value
-                    ? "bg-foreground text-background shadow-md scale-[1.05]"
-                    : "text-foreground/60 hover:text-foreground"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        <SettingItem
+          title="Playback Speed"
+          description="Adjust note fall tempo"
+        >
+          {speedOptions.map((opt) => (
+            <button
+              key={opt.label}
+              type="button"
+              onClick={() => setSpeed(opt.value)}
+              className={`px-4 sm:px-6 py-2 rounded-full font-black text-xs sm:text-sm uppercase tracking-widest transition-all ${
+                speed === opt.value
+                  ? "bg-foreground text-background shadow-md scale-[1.05]"
+                  : "text-foreground/60 hover:text-foreground"
+              }`}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </SettingItem>
 
-        {/* Setting Item: Demo Mode */}
-        <div className="bg-[var(--ui-card-bg)] backdrop-blur-md border border-[var(--ui-card-border)] p-6 sm:p-8 rounded-[var(--ui-card-radius)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 hover:bg-foreground/10 transition-colors">
-          <div className="flex flex-col flex-1">
-            <span className="text-xl sm:text-2xl font-bold uppercase tracking-tight">
-              Demo Mode
-            </span>
-            <span className="text-foreground/50 text-xs sm:text-sm font-medium">
-              Auto-play previews without gear
-            </span>
-          </div>
+        <SettingItem
+          title="Demo Mode"
+          description="Auto-play previews without gear"
+        >
           <button
             type="button"
             onClick={() => setDemoMode(!demoMode)}
@@ -143,8 +136,16 @@ export default function OptionsPage() {
               }`}
             />
           </button>
-        </div>
+        </SettingItem>
       </main>
     </PageLayout>
+  );
+}
+
+export default function OptionsPage() {
+  return (
+    <Suspense>
+      <OptionsContent />
+    </Suspense>
   );
 }
