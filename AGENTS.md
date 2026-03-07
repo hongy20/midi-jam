@@ -62,7 +62,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 - **Grouped Status UI**: Use nested ternary operators to group loading, error, and success states into a single logical block within the JSX. This keeps the state-dependent UI cohesive.
 - **Minimal DOM Nesting**: Minimize container layers. Avoid wrapping elements in redundant `div`s for spacing, alignment, or positioning; instead, apply these rules to the parent container (e.g., using Flexbox/Grid properties on `<main>`). Use fragments `<></>` when a React wrapper is technically required but styling is not.
 
-## 5. Coding Patterns
+## 6. Coding Patterns
 - **Nullish Coalescing**: Prefer `??` or ternary for default values over verbose checks.
 - **Iconography**: Use `lucide-react` exclusively. No inline SVG strings or emojis.
 
