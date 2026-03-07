@@ -12,11 +12,20 @@ import { useAppContext } from "@/context/app-context";
 import { useTheme } from "@/context/theme-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
-function OptionsContent() {
-  const { goBack, toHome } = useNavigation();
+function BackButton() {
+  const { goBack } = useNavigation();
   const searchParams = useSearchParams();
   const from = searchParams.get("from") ?? "/";
 
+  return (
+    <Button variant="secondary" onClick={() => goBack(from)} size="sm">
+      Back
+    </Button>
+  );
+}
+
+export default function OptionsPage() {
+  const { toHome } = useNavigation();
   const { theme, setTheme } = useTheme();
   const {
     options: { speed, setSpeed, demoMode, setDemoMode },
@@ -33,9 +42,9 @@ function OptionsContent() {
     <PageLayout
       header={
         <PageHeader title="System Settings" icon={Settings}>
-          <Button variant="secondary" onClick={() => goBack(from)} size="sm">
-            Back
-          </Button>
+          <Suspense fallback={<div className="w-20" />}>
+            <BackButton />
+          </Suspense>
           <Button
             variant="primary"
             onClick={() => toHome()}
@@ -114,13 +123,5 @@ function OptionsContent() {
         </SettingItem>
       </main>
     </PageLayout>
-  );
-}
-
-export default function OptionsPage() {
-  return (
-    <Suspense>
-      <OptionsContent />
-    </Suspense>
   );
 }
