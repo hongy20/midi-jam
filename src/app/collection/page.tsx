@@ -62,13 +62,13 @@ export default function CollectionPage() {
             onClick={() => toGear()}
             size="sm"
           >
-            Your Gear
+            Select Gear
           </Button>
           <Button
             onClick={() => toPlay()}
             disabled={!selectedTrack}
             icon={Play}
-            size="md"
+            size="sm"
           >
             PLAY
           </Button>
