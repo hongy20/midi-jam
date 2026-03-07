@@ -1,0 +1,141 @@
+.card {
+  width: 100%;
+  padding: 1.25rem;
+  border-radius: 1.5rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+@media (min-width: 640px) {
+  .card {
+    padding: 1.5rem;
+  }
+}
+
+.unselected {
+  background-color: var(--ui-card-bg);
+  border-color: var(--ui-card-border);
+  color: var(--foreground);
+  opacity: 0.8;
+}
+
+.unselected:hover {
+  border-color: rgba(var(--foreground-rgb), 0.3);
+  background-color: rgba(var(--foreground-rgb), 0.1);
+}
+
+.selected {
+  background-color: var(--foreground);
+  border-color: var(--foreground);
+  transform: scale(1.02);
+  box-shadow: var(--ui-btn-primary-shadow);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+}
+
+.iconWrapper {
+  flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.iconUnselected {
+  background-color: rgba(var(--foreground-rgb), 0.1);
+  color: rgba(var(--foreground-rgb), 0.5);
+}
+
+.iconSelected {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+.icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 640px) {
+  .name {
+    font-size: 1.25rem;
+  }
+}
+
+.artist {
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.textPrimary {
+  color: var(--foreground);
+}
+
+.textSecondary {
+  color: rgba(var(--foreground-rgb), 0.6);
+}
+
+.textInverted {
+  color: var(--background);
+}
+
+.textInvertedSecondary {
+  color: rgba(var(--background-rgb), 0.7);
+}
+
+.difficulty {
+  font-size: 0.625rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+}
+
+@media (min-width: 640px) {
+  .difficulty {
+    font-size: 0.75rem;
+  }
+}
+
+.difficultyUnselected {
+  background-color: rgba(var(--foreground-rgb), 0.1);
+  color: rgba(var(--foreground-rgb), 0.7);
+}
+
+.difficultySelected {
+  background-color: rgba(var(--background-rgb), 0.2);
+  color: var(--background);
+}

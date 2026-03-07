@@ -6,24 +6,21 @@ import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
+import {
+  type CollectionTrack,
+  TrackCard,
+} from "@/components/track-card/track-card";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { getSoundTracks } from "@/lib/action/sound-track";
 
-interface Track {
-  id: string;
-  name: string;
-  artist: string;
-  difficulty: string;
-  url: string;
-}
-
 export default function CollectionPage() {
   const { toPlay, toGear } = useNavigation();
-  const { collection: contextCollection } = useAppContext();
-  const { setSelectedTrack, selectedTrack } = contextCollection;
+  const {
+    collection: { setSelectedTrack, selectedTrack },
+  } = useAppContext();
 
-  const [tracks, setTracks] = useState<Track[]>([]);
+  const [tracks, setTracks] = useState<CollectionTrack[]>([]);
   const [selected, setSelected] = useState<string | null>(
     selectedTrack?.id || null,
   );
@@ -38,27 +35,6 @@ export default function CollectionPage() {
     fetchTracks();
   }, []);
 
-  const handlePlay = () => {
-    if (selected) {
-      const track = tracks.find((t) => t.id === selected);
-      if (track) {
-        setSelectedTrack({ id: track.id, name: track.name, url: track.url });
-      }
-      toPlay();
-    }
-  };
-
-  const handleBack = () => {
-    toGear();
-  };
-
-  const handleSurprise = () => {
-    if (tracks.length > 0) {
-      const randomTrack = tracks[Math.floor(Math.random() * tracks.length)];
-      setSelected(randomTrack.id);
-    }
-  };
-
   return (
     <PageLayout
       header={
@@ -67,7 +43,7 @@ export default function CollectionPage() {
             variant="secondary"
             icon={ArrowLeft}
             iconPosition="left"
-            onClick={handleBack}
+            onClick={() => toGear()}
             size="sm"
           >
             Your Gear
@@ -78,14 +54,32 @@ export default function CollectionPage() {
         <PageFooter>
           <Button
             variant="secondary"
-            onClick={handleSurprise}
+            onClick={() => {
+              if (tracks.length > 0) {
+                const randomTrack =
+                  tracks[Math.floor(Math.random() * tracks.length)];
+                setSelected(randomTrack.id);
+              }
+            }}
             icon={Dices}
             size="md"
           >
             SURPRISE
           </Button>
           <Button
-            onClick={handlePlay}
+            onClick={() => {
+              if (selected) {
+                const track = tracks.find((t) => t.id === selected);
+                if (track) {
+                  setSelectedTrack({
+                    id: track.id,
+                    name: track.name,
+                    url: track.url,
+                  });
+                }
+                toPlay();
+              }
+            }}
             disabled={!selected}
             icon={Play}
             size="md"
@@ -95,68 +89,26 @@ export default function CollectionPage() {
         </PageFooter>
       }
     >
-      <main
-        className={`w-full h-full overflow-y-auto overflow-x-hidden py-4 px-8 -mx-8 min-h-0 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 pb-12`}
-      >
+      <main className="w-full h-full overflow-y-auto py-4 px-8 min-h-0">
         {isLoading ? (
-          <div className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium col-span-full">
+          <div className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium">
             Loading songs...
           </div>
+        ) : tracks.length === 0 ? (
+          <div className="flex items-center justify-center p-12 text-foreground/50 font-medium">
+            No tracks found.
+          </div>
         ) : (
-          tracks.map((track) => (
-            <button
-              key={track.id}
-              type="button"
-              onClick={() => setSelected(track.id)}
-              className={`w-full p-5 sm:p-6 rounded-3xl border-2 transition-all duration-300 text-left flex flex-col items-start gap-4 ${
-                selected === track.id
-                  ? "bg-foreground border-foreground scale-[1.02] shadow-[var(--ui-btn-primary-shadow)]"
-                  : "bg-[var(--ui-card-bg)] border-[var(--ui-card-border)] hover:border-foreground/30 hover:bg-foreground/10 text-foreground/80"
-              }`}
-            >
-              <div className="flex items-center gap-4 w-full">
-                <div
-                  className={`shrink-0 w-12 h-12 rounded-full flex items-center justify-center ${
-                    selected === track.id
-                      ? "bg-background text-foreground"
-                      : "bg-foreground/10 text-foreground/50"
-                  }`}
-                >
-                  <Play className="w-5 h-5 fill-current" />
-                </div>
-                <div className="flex flex-col min-w-0">
-                  <span
-                    className={`text-lg sm:text-xl font-bold truncate ${
-                      selected === track.id
-                        ? "text-background"
-                        : "text-foreground"
-                    }`}
-                  >
-                    {track.name}
-                  </span>
-                  <span
-                    className={`text-sm font-medium truncate ${
-                      selected === track.id
-                        ? "text-background/70"
-                        : "text-foreground/60"
-                    }`}
-                  >
-                    {track.artist}
-                  </span>
-                </div>
-              </div>
-
-              <span
-                className={`text-[10px] sm:text-xs font-black uppercase tracking-widest px-3 py-1.5 rounded-full ${
-                  selected === track.id
-                    ? "bg-background/20 text-background"
-                    : "bg-foreground/10 text-foreground/70"
-                }`}
-              >
-                {track.difficulty}
-              </span>
-            </button>
-          ))
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pb-12">
+            {tracks.map((track) => (
+              <TrackCard
+                key={track.id}
+                track={track}
+                isSelected={selected === track.id}
+                onClick={() => setSelected(track.id)}
+              />
+            ))}
+          </div>
         )}
       </main>
     </PageLayout>
