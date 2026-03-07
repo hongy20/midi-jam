@@ -64,12 +64,12 @@ export default function ScorePage() {
         </PageFooter>
       }
     >
-      <main className="w-full h-full overflow-y-auto overflow-x-hidden py-4 px-8 min-h-0 max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 z-20">
-        <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-foreground italic uppercase tracking-tighter drop-shadow-xl bg-gradient-to-tr from-foreground to-foreground/50 bg-clip-text text-transparent text-center mb-8 w-full">
+      <main className="w-full h-full overflow-y-auto overflow-x-hidden py-4 px-6 sm:px-8 min-h-0 max-w-4xl mx-auto flex flex-col items-center justify-center gap-6 sm:gap-10 z-20">
+        <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-foreground italic uppercase tracking-tighter drop-shadow-xl bg-gradient-to-tr from-foreground to-foreground/50 bg-clip-text text-transparent text-center w-full leading-[0.9]">
           {titleLabel}
         </h1>
 
-        <section className="w-full grid grid-cols-2 lg:grid-cols-4 gap-4 px-4 sm:px-0">
+        <section className="w-full grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
           <StatCard
             label="Total Score"
             value={stats.score.toLocaleString()}
