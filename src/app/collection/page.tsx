@@ -76,13 +76,13 @@ export default function CollectionPage() {
       }
     >
       <main className="w-full h-full overflow-y-auto py-4 px-8 min-h-0">
-        {isLoading ? (
-          <p className="flex items-center justify-center p-12 text-foreground/50 animate-pulse font-medium">
-            Loading songs...
+        {!isLoading ? (
+          <p className="text-center text-foreground/60 text-base font-medium animate-pulse">
+            Searching for tracks...
           </p>
         ) : tracks.length === 0 ? (
-          <p className="flex items-center justify-center p-12 text-foreground/50 font-medium">
-            No tracks found.
+          <p className="text-center text-foreground/60 text-base font-medium">
+            No tracks found. Please refresh or try again later.
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pb-12">
