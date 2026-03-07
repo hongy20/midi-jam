@@ -61,7 +61,7 @@ export default function PausePage() {
             }}
             size="md"
             icon={RotateCcw}
-            className="w-full"
+            className="w-full sm:py-8"
           >
             RESTART
           </Button>
@@ -70,7 +70,7 @@ export default function PausePage() {
             onClick={() => toOptions("pause")}
             size="md"
             icon={Settings}
-            className="w-full"
+            className="w-full sm:py-8"
           >
             OPTIONS
           </Button>
@@ -92,7 +92,7 @@ export default function PausePage() {
             }}
             size="md"
             icon={XCircle}
-            className="w-full text-red-500/80 hover:text-red-500"
+            className="w-full sm:py-8 text-red-500/80 hover:text-red-500"
           >
             END JAM
           </Button>
