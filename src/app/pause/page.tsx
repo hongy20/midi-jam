@@ -10,38 +10,12 @@ import { useNavigation } from "@/hooks/use-navigation";
 
 export default function PausePage() {
   const { toPlay, toOptions, toScore } = useNavigation();
-  const { stage, gear, collection, score } = useAppContext();
-  const { gameSession, setGameSession, trackStatus } = stage;
-  const { selectedMIDIInput } = gear;
-  const { selectedTrack } = collection;
-  const { setSessionResults } = score;
-
-  const handleResume = () => {
-    toPlay();
-  };
-
-  const handleRestart = () => {
-    setGameSession(null);
-    toPlay();
-  };
-
-  const handleOptions = () => {
-    toOptions("pause");
-  };
-
-  const handleExit = () => {
-    if (gameSession && trackStatus.isReady) {
-      const { score: currentScore, combo } = gameSession;
-      const totalEvents = trackStatus.events.length;
-      setSessionResults({
-        score: currentScore,
-        accuracy: Math.floor((currentScore / (totalEvents * 100)) * 100) || 0,
-        combo,
-      });
-    }
-    setGameSession(null);
-    toScore();
-  };
+  const {
+    stage: { gameSession, setGameSession, trackStatus },
+    gear: { selectedMIDIInput },
+    collection: { selectedTrack },
+    score: { setSessionResults },
+  } = useAppContext();
 
   if (!selectedTrack || !selectedMIDIInput) {
     return null;
@@ -54,7 +28,7 @@ export default function PausePage() {
         <PageFooter>
           <Button
             variant="primary"
-            onClick={handleResume}
+            onClick={() => toPlay()}
             size="md"
             icon={Play}
           >
@@ -63,41 +37,60 @@ export default function PausePage() {
         </PageFooter>
       }
     >
-      <main className="w-full h-full flex flex-col items-center justify-center relative z-10 px-6 py-4">
-        <div className="text-center w-full max-w-lg mb-8">
-          <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-4 block">
+      <main className="w-full h-full flex flex-col items-center justify-center relative z-10 px-6 py-4 gap-8 sm:gap-12">
+        <div className="text-center w-full max-w-lg">
+          <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-2 sm:mb-4 block">
             Currently Playing
           </span>
-          <h2 className="text-2xl sm:text-4xl font-black text-foreground uppercase tracking-tight truncate">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-foreground uppercase tracking-tight truncate leading-tight">
             {selectedTrack.name}
           </h2>
-          <span className="text-accent-primary font-bold text-sm sm:text-lg mt-1 block">
+          <span className="text-accent-primary font-bold text-sm sm:text-lg mt-2 block tracking-wide">
             {selectedMIDIInput.name}
           </span>
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-4 sm:gap-6 w-full max-w-lg">
+        <div className="flex flex-col items-center justify-center gap-4 w-full max-w-xs">
           <Button
             variant="secondary"
-            onClick={handleRestart}
+            onClick={() => {
+              setGameSession(null);
+              toPlay();
+            }}
             size="lg"
             icon={RotateCcw}
+            className="w-full"
           >
             RESTART
           </Button>
           <Button
             variant="secondary"
-            onClick={handleOptions}
+            onClick={() => toOptions("pause")}
             size="lg"
             icon={Settings}
+            className="w-full"
           >
             OPTIONS
           </Button>
           <Button
             variant="secondary"
-            onClick={handleExit}
+            onClick={() => {
+              if (gameSession && trackStatus.isReady) {
+                const { score: currentScore, combo } = gameSession;
+                const totalEvents = trackStatus.events.length;
+                setSessionResults({
+                  score: currentScore,
+                  accuracy:
+                    Math.floor((currentScore / (totalEvents * 100)) * 100) || 0,
+                  combo,
+                });
+              }
+              setGameSession(null);
+              toScore();
+            }}
             size="lg"
             icon={XCircle}
+            className="w-full"
           >
             END JAM
           </Button>
