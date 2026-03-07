@@ -4,7 +4,7 @@
 }
 
 @media (max-height: 600px) {
-  :global(:root) {
+  .page {
     --footer-height: 91px;
   }
 }
