@@ -54,12 +54,12 @@ export default function OptionsPage() {
           Personalize your experience by swiping through settings.
         </p>
 
-        <div className="h-full flex items-center gap-6 overflow-x-auto snap-x snap-mandatory px-8">
+        <div className="flex-1 flex items-center gap-6 overflow-x-auto snap-x snap-mandatory px-8">
           {optionTypes.map((type) => (
             <OptionCard
               key={type}
               type={type}
-              className="shrink-0 w-[calc(100%-3rem)] min-h-[400px]:w-[360px] snap-center"
+              className="shrink-0 w-[calc(100%-3rem)] sm:w-[360px] h-full snap-center"
             />
           ))}
         </div>
