@@ -1,0 +1,121 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.statGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 0.625rem; /* text-[10px] */
+  color: var(--foreground);
+  opacity: 0.4;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.value {
+  font-size: 1.25rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.feedback {
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hitText {
+  font-size: 1.125rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-style: italic;
+  letter-spacing: -0.05em;
+  animation: bounce 0.5s ease infinite alternate;
+}
+
+.perfect {
+  color: var(--ui-hit-perfect, #00ff00);
+}
+
+.good {
+  color: var(--ui-hit-good, #ffff00);
+}
+
+.miss {
+  color: var(--ui-hit-miss, #ff0000);
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-4px);
+  }
+}
+
+.progressSection {
+  flex: 1;
+  max-width: 200px;
+  display: none;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .progressSection {
+    display: flex;
+  }
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.progressLabel {
+  font-size: 0.625rem;
+  color: var(--foreground);
+  opacity: 0.4;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.progressValue {
+  font-size: 0.625rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.progressBarBg {
+  height: 0.375rem;
+  width: 100%;
+  background-color: rgba(var(--foreground-rgb), 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  width: 100%;
+  background-color: var(--foreground);
+  transform-origin: left;
+  transition: transform 0.1s linear;
+}
