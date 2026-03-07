@@ -75,7 +75,7 @@ export default function CollectionPage() {
         </PageFooter>
       }
     >
-      <main className="w-full h-full overflow-y-auto py-4 px-8 min-h-0">
+      <main className="w-full h-full overflow-y-auto overflow-x-hidden py-4 px-8 min-h-0 flex flex-col">
         {isLoading ? (
           <p className="text-center text-foreground/60 text-base font-medium animate-pulse">
             Searching for tracks...
@@ -89,7 +89,7 @@ export default function CollectionPage() {
             <p className="text-center text-foreground/60 text-base font-medium mb-8">
               Select a song below to continue.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pb-12">
+            <div className="flex-1 flex items-center gap-6 overflow-x-auto snap-x snap-mandatory px-8">
               {tracks.map((track) => (
                 <TrackCard
                   key={track.id}
@@ -102,6 +102,7 @@ export default function CollectionPage() {
                       url: track.url,
                     })
                   }
+                  className="shrink-0 w-[calc(100%-3rem)] sm:w-[360px] h-full snap-center"
                 />
               ))}
             </div>
