@@ -32,7 +32,6 @@ describe("Welcome Page", () => {
     gear: {
       selectedMIDIInput: null,
       selectedMIDIOutput: null,
-      lastInputName: null,
       selectMIDIInput: vi.fn(),
       selectMIDIOutput: vi.fn(),
     },

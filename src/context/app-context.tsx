@@ -60,7 +60,6 @@ export interface AppContextType {
   gear: {
     selectedMIDIInput: WebMidi.MIDIInput | null;
     selectedMIDIOutput: WebMidi.MIDIOutput | null;
-    lastInputName: string | null;
     selectMIDIInput: (input: WebMidi.MIDIInput | null) => void;
     selectMIDIOutput: (output: WebMidi.MIDIOutput | null) => void;
   };
@@ -97,7 +96,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
   const [speed, setSpeed] = useState<number>(1.0);
   const [demoMode, setDemoMode] = useState<boolean>(true);
-  const [lastInputName, setLastInputName] = useState<string | null>(null);
   const [trackStatus, setTrackStatus] = useState<TrackLoadStatus>({
     isLoading: false,
     isReady: false,
@@ -123,12 +121,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const { inputs, outputs } = useMIDIDevices();
   const { selectedMIDIInput, selectedMIDIOutput, selectMIDIInput } =
     useMIDISelection(inputs, outputs);
-
-  // Update lastInputName whenever a device is selected
-  const handleSelectInput = (input: WebMidi.MIDIInput | null) => {
-    if (input) setLastInputName(input.name ?? "Unknown Device");
-    selectMIDIInput(input);
-  };
 
   const resetAll = useCallback(() => {
     setSelectedTrack(null);
@@ -198,8 +190,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     gear: {
       selectedMIDIInput,
       selectedMIDIOutput,
-      lastInputName,
-      selectMIDIInput: handleSelectInput,
+      selectMIDIInput,
       selectMIDIOutput: () => {}, // TODO: Implement if needed
     },
     stage: {

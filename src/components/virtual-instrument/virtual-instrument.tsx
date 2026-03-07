@@ -13,7 +13,7 @@ export function VirtualInstrument({
   playbackNotes,
 }: VirtualInstrumentProps) {
   return (
-    <div className="w-full h-full flex items-end">
+    <div className="w-full h-full flex items-end" data-testid="piano-keyboard">
       <PianoKeyboard liveNotes={liveNotes} playbackNotes={playbackNotes} />
     </div>
   );

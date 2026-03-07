@@ -1,4 +1,4 @@
-import { render, screen, act } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { ScoreWidget } from "./score-widget";
 
@@ -27,7 +27,7 @@ describe("ScoreWidget", () => {
 
     expect(screen.getByText(/45/)).toBeInTheDocument();
     expect(screen.getByText(/%/)).toBeInTheDocument();
-    
+
     vi.useRealTimers();
   });
 
