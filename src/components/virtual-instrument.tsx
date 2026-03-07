@@ -1,9 +1,8 @@
 "use client";
 
-import type { HTMLAttributes } from "react";
 import { PianoKeyboard } from "./piano-keyboard/PianoKeyboard";
 
-interface VirtualInstrumentProps extends HTMLAttributes<HTMLDivElement> {
+interface VirtualInstrumentProps {
   inputDevice: WebMidi.MIDIInput;
   liveNotes: Set<number>;
   playbackNotes: Set<number>;
@@ -12,11 +11,9 @@ interface VirtualInstrumentProps extends HTMLAttributes<HTMLDivElement> {
 export function VirtualInstrument({
   liveNotes,
   playbackNotes,
-  className = "",
-  ...props
 }: VirtualInstrumentProps) {
   return (
-    <div className={`w-full h-full flex items-end ${className}`} {...props}>
+    <div className="w-full h-full flex items-end">
       <PianoKeyboard liveNotes={liveNotes} playbackNotes={playbackNotes} />
     </div>
   );

@@ -58,7 +58,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
   - **❌ Bad**: `onClick={handleBack}`
 
 ### Component Structure
-- **HTML Attribute Extension**: When a component's root element is a standard HTML tag (e.g., `div`, `button`, `main`), its props interface should extend the corresponding React HTML attributes (e.g., `HTMLAttributes<HTMLDivElement>`). This ensures the component naturally supports standard props like `className`, `id`, and `style`.
+- **HTML Attribute Extension**: Do not blindly extend HTML attributes for every component. Only extend the corresponding React HTML attributes (e.g., `HTMLAttributes<HTMLDivElement>`) when the component is intended to support standard props like `className`, `children`, or `style`. This ensures the component naturally supports these standards without manually defining them, while avoiding polluting the API of purely internal or logic-heavy components.
 - **List Abstraction**: When using `.map()` to render items with multiple tags or complex internal layers, always abstract the item into its own React component (e.g., `GearCard`). This component must be defined in its own module/file to keep the parent component's JSX flat and readable.
 - **Grouped Status UI**: Use nested ternary operators to group loading, error, and success states into a single logical block within the JSX. This keeps the state-dependent UI cohesive.
 - **Minimal DOM Nesting**: Minimize container layers. Avoid wrapping elements in redundant `div`s for spacing, alignment, or positioning; instead, apply these rules to the parent container (e.g., using Flexbox/Grid properties on `<main>`). Use fragments `<></>` when a React wrapper is technically required but styling is not.
