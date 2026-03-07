@@ -66,9 +66,6 @@ export default function ScorePage() {
     >
       <main className="w-full h-full overflow-y-auto overflow-x-hidden py-4 px-8 min-h-0 max-w-4xl mx-auto flex flex-col items-center justify-center -mt-10 sm:-mt-16 z-20">
         <div className="text-center mb-8 w-full">
-          <span className="text-accent-primary font-black uppercase tracking-[0.4em] text-[10px] sm:text-xs mb-2 sm:mb-4 block drop-shadow-md">
-            SONG FINISHED
-          </span>
           <h1 className="text-5xl sm:text-7xl md:text-8xl font-black text-foreground italic uppercase tracking-tighter drop-shadow-xl bg-gradient-to-tr from-foreground to-foreground/50 bg-clip-text text-transparent">
             {titleLabel}
           </h1>
