@@ -76,31 +76,36 @@ export default function CollectionPage() {
       }
     >
       <main className="w-full h-full overflow-y-auto py-4 px-8 min-h-0">
-        {!isLoading ? (
+        {isLoading ? (
           <p className="text-center text-foreground/60 text-base font-medium animate-pulse">
             Searching for tracks...
           </p>
         ) : tracks.length === 0 ? (
           <p className="text-center text-foreground/60 text-base font-medium">
-            No tracks found. Please refresh or try again later.
+            No songs found. Please refresh or try again later.
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pb-12">
-            {tracks.map((track) => (
-              <TrackCard
-                key={track.id}
-                track={track}
-                isSelected={selectedTrack?.id === track.id}
-                onClick={() =>
-                  setSelectedTrack({
-                    id: track.id,
-                    name: track.name,
-                    url: track.url,
-                  })
-                }
-              />
-            ))}
-          </div>
+          <>
+            <p className="text-center text-foreground/60 text-base font-medium mb-8">
+              Select a song below to continue.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pb-12">
+              {tracks.map((track) => (
+                <TrackCard
+                  key={track.id}
+                  track={track}
+                  isSelected={selectedTrack?.id === track.id}
+                  onClick={() =>
+                    setSelectedTrack({
+                      id: track.id,
+                      name: track.name,
+                      url: track.url,
+                    })
+                  }
+                />
+              ))}
+            </div>
+          </>
         )}
       </main>
     </PageLayout>
