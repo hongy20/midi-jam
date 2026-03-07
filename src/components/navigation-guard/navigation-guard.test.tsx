@@ -69,7 +69,7 @@ describe("NavigationGuard", () => {
     render(<NavigationGuard>Test</NavigationGuard>);
 
     expect(mockSetGameSession).toHaveBeenCalledWith(null);
-    expect(mockToGear).toHaveBeenCalledWith("game");
+    expect(mockToGear).toHaveBeenCalled();
   });
 
   it("redirects from Level 2 to Collection if track is missing", () => {
