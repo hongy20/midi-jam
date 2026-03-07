@@ -5,15 +5,15 @@ import { useEffect } from "react";
 import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageLayout } from "@/components/page-layout/page-layout";
-import { useAppContext } from "@/context/app-context";
+import { useHome } from "@/context/home-context";
 import { useNavigation } from "@/hooks/use-navigation";
+import { useAppReset } from "@/hooks/use-track-sync";
 import styles from "./page.module.css";
 
 export default function WelcomePage() {
   const { toGear, toOptions } = useNavigation();
-  const {
-    home: { isHomeLoading, isSupported, resetAll },
-  } = useAppContext();
+  const { isLoading, isSupported } = useHome();
+  const { resetAll } = useAppReset();
 
   useEffect(() => {
     resetAll();
@@ -31,7 +31,7 @@ export default function WelcomePage() {
           MIDI JAM
         </h1>
 
-        {isHomeLoading ? (
+        {isLoading ? (
           <div className="flex flex-col items-center gap-4 mt-8">
             <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
             <span className="font-bold uppercase tracking-widest text-[10px] opacity-50">

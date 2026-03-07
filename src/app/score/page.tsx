@@ -6,15 +6,14 @@ import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { StatCard } from "@/components/stat-card/stat-card";
-import { useAppContext } from "@/context/app-context";
+import { useScore } from "@/context/score-context";
+import { useStage } from "@/context/stage-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
 export default function ScorePage() {
   const { toPlay, toCollection, toHome } = useNavigation();
-  const {
-    stage: { setGameSession },
-    score: { sessionResults },
-  } = useAppContext();
+  const { setGameSession } = useStage();
+  const { sessionResults } = useScore();
 
   const stats = sessionResults ?? {
     score: 0,

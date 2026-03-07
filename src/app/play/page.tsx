@@ -7,7 +7,12 @@ import { LaneStage } from "@/components/lane-stage/lane-stage";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { ScoreWidget } from "@/components/score-widget/score-widget";
 import { VirtualInstrument } from "@/components/virtual-instrument/virtual-instrument";
-import { useAppContext } from "@/context/app-context";
+import { useCollection } from "@/context/collection-context";
+import { useGear } from "@/context/gear-context";
+import { useOptions } from "@/context/options-context";
+import { useScore } from "@/context/score-context";
+import { useStage } from "@/context/stage-context";
+import { useTrack } from "@/context/track-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useDemoPlayback } from "@/hooks/use-demo-playback";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
@@ -26,28 +31,20 @@ import styles from "./page.module.css";
 
 export default function PlayPage() {
   const { toScore, toPause } = useNavigation();
-  const {
-    collection,
-    gear,
-    stage,
-    options,
-    score: contextScore,
-  } = useAppContext();
-
-  // Extract variables from context for easier access
-  const { selectedTrack } = collection;
-  const { selectedMIDIInput, selectedMIDIOutput } = gear;
-  const { trackStatus: trackLoadStatus, gameSession, setGameSession } = stage;
-  const { speed, demoMode } = options;
-  const { setSessionResults } = contextScore;
+  const { selectedTrack } = useCollection();
+  const { selectedMIDIInput, selectedMIDIOutput } = useGear();
+  const { trackStatus } = useTrack();
+  const { gameSession, setGameSession } = useStage();
+  const { speed, demoMode } = useOptions();
+  const { setSessionResults } = useScore();
 
   // Track Data (only if ready)
-  const events = trackLoadStatus.isReady ? trackLoadStatus.events : [];
-  const spans = trackLoadStatus.isReady ? trackLoadStatus.spans : [];
-  const originalDurationMs = trackLoadStatus.isReady
-    ? trackLoadStatus.originalDurationMs
+  const events = trackStatus.isReady ? trackStatus.events : [];
+  const spans = trackStatus.isReady ? trackStatus.spans : [];
+  const originalDurationMs = trackStatus.isReady
+    ? trackStatus.originalDurationMs
     : 0;
-  const isLoading = trackLoadStatus.isLoading;
+  const isLoading = trackStatus.isLoading;
 
   // Calculate dynamic piano range for consistent grid alignment
   const visibleMidiRange = useMemo(() => {
@@ -241,10 +238,10 @@ export default function PlayPage() {
             LOADING...
           </span>
         </div>
-      ) : trackLoadStatus.error ? (
+      ) : trackStatus.error ? (
         <div className="flex flex-col items-center justify-center h-full gap-4">
           <span className="text-red-500 font-bold uppercase tracking-widest text-xs">
-            DATA CORRUPTED: {trackLoadStatus.error}
+            DATA CORRUPTED: {trackStatus.error}
           </span>
         </div>
       ) : (

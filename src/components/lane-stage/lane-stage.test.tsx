@@ -1,24 +1,6 @@
 import { queryByAttribute, render } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
-import { AppProvider } from "@/context/app-context";
+import { describe, expect, it } from "vitest";
 import { LaneStage } from "./lane-stage";
-
-vi.mock("@/hooks/use-midi-devices", () => ({
-  useMIDIDevices: () => ({
-    inputs: [],
-    outputs: [],
-    isLoading: false,
-    error: null,
-  }),
-}));
-
-vi.mock("@/hooks/use-midi-selection", () => ({
-  useMIDISelection: () => ({
-    selectedMIDIInput: { name: "Mock Input" } as unknown as WebMidi.MIDIInput,
-    selectedMIDIOutput: null,
-    selectMIDIInput: vi.fn(),
-  }),
-}));
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -60,14 +42,12 @@ describe("LaneStage", () => {
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };
     const { container } = render(
-      <AppProvider>
-        <LaneStage
-          spans={mockSpans}
-          originalDurationMs={originalDurationMs}
-          scrollRef={scrollRef}
-          inputDevice={{} as WebMidi.MIDIInput}
-        />
-      </AppProvider>,
+      <LaneStage
+        spans={mockSpans}
+        originalDurationMs={originalDurationMs}
+        scrollRef={scrollRef}
+        inputDevice={{} as WebMidi.MIDIInput}
+      />,
     );
     const note60 = queryByAttribute("data-pitch", container, "60");
     const note61 = queryByAttribute("data-pitch", container, "61");

@@ -2,19 +2,20 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { useAppContext } from "@/context/app-context";
+import { useCollection } from "@/context/collection-context";
+import { useGear } from "@/context/gear-context";
+import { useScore } from "@/context/score-context";
+import { useStage } from "@/context/stage-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { ROUTES } from "@/lib/navigation/routes";
 
 export function NavigationGuard({ children }: { children: React.ReactNode }) {
   const { toCollection, toHome, toGear } = useNavigation();
   const pathname = usePathname();
-  const {
-    collection: { selectedTrack },
-    gear: { selectedMIDIInput },
-    score: { sessionResults },
-    stage: { setGameSession },
-  } = useAppContext();
+  const { selectedTrack } = useCollection();
+  const { selectedMIDIInput } = useGear();
+  const { sessionResults } = useScore();
+  const { setGameSession } = useStage();
 
   useEffect(() => {
     switch (pathname) {

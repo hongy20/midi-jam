@@ -5,18 +5,21 @@ import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
-import { useAppContext } from "@/context/app-context";
+import { useCollection } from "@/context/collection-context";
+import { useGear } from "@/context/gear-context";
+import { useScore } from "@/context/score-context";
+import { useStage } from "@/context/stage-context";
+import { useTrack } from "@/context/track-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import styles from "./page.module.css";
 
 export default function PausePage() {
   const { toPlay, toOptions, toScore } = useNavigation();
-  const {
-    stage: { gameSession, setGameSession, trackStatus },
-    gear: { selectedMIDIInput },
-    collection: { selectedTrack },
-    score: { setSessionResults },
-  } = useAppContext();
+  const { gameSession, setGameSession } = useStage();
+  const { trackStatus } = useTrack();
+  const { selectedMIDIInput } = useGear();
+  const { selectedTrack } = useCollection();
+  const { setSessionResults } = useScore();
 
   if (!selectedTrack || !selectedMIDIInput) {
     return null;

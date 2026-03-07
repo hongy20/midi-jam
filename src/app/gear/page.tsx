@@ -7,17 +7,14 @@ import { GearCard } from "@/components/gear-card/gear-card";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
-import { useAppContext } from "@/context/app-context";
-import { useMIDIDevices } from "@/hooks/use-midi-devices";
+import { useGear } from "@/context/gear-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
 export default function GearPage() {
   const { toCollection, toHome } = useNavigation();
 
-  const {
-    gear: { selectMIDIInput, selectedMIDIInput },
-  } = useAppContext();
-  const { inputs, isLoading, error } = useMIDIDevices();
+  const { selectMIDIInput, selectedMIDIInput, inputs, isLoading, error } =
+    useGear();
 
   useEffect(() => {
     // Attach listener to all inputs to detect activity and auto-select
