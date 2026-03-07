@@ -62,7 +62,6 @@ describe("Play Page", () => {
     gear: {
       selectedMIDIInput: { id: "piano", name: "Piano" } as WebMidi.MIDIInput,
       selectedMIDIOutput: null,
-      lastInputName: "Piano",
       selectMIDIInput: vi.fn(),
       selectMIDIOutput: vi.fn(),
     },

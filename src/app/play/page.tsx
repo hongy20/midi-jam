@@ -5,8 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/button/button";
 import { LaneStage } from "@/components/lane-stage/lane-stage";
 import { PageLayout } from "@/components/page-layout/page-layout";
-import { ScoreHudLite } from "@/components/score-hud-lite";
-import { VirtualInstrument } from "@/components/virtual-instrument";
+import { ScoreWidget } from "@/components/score-widget/score-widget";
+import { VirtualInstrument } from "@/components/virtual-instrument/virtual-instrument";
 import { useAppContext } from "@/context/app-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useDemoPlayback } from "@/hooks/use-demo-playback";
@@ -204,7 +204,7 @@ export default function PlayPage() {
               <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-0.5">
                 {selectedMIDIInput.name} • {selectedTrack.name}
               </span>
-              <ScoreHudLite
+              <ScoreWidget
                 score={score}
                 combo={combo}
                 lastHitQuality={lastHitQuality}

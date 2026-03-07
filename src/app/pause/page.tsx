@@ -7,6 +7,7 @@ import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
+import styles from "./page.module.css";
 
 export default function PausePage() {
   const { toPlay, toOptions, toScore } = useNavigation();
@@ -51,8 +52,8 @@ export default function PausePage() {
           </span>
         </div>
 
-        {/* Primary Actions Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6 w-full max-w-2xl px-4 sm:px-0">
+        {/* Primary Actions */}
+        <div className={styles.actions}>
           <Button
             variant="secondary"
             onClick={() => {
@@ -61,7 +62,7 @@ export default function PausePage() {
             }}
             size="md"
             icon={RotateCcw}
-            className="w-full sm:py-8"
+            className="w-full"
           >
             RESTART
           </Button>
@@ -70,7 +71,7 @@ export default function PausePage() {
             onClick={() => toOptions("pause")}
             size="md"
             icon={Settings}
-            className="w-full sm:py-8"
+            className="w-full"
           >
             OPTIONS
           </Button>
@@ -92,7 +93,7 @@ export default function PausePage() {
             }}
             size="md"
             icon={XCircle}
-            className="w-full sm:py-8 text-red-500/80 hover:text-red-500"
+            className="w-full text-red-500/80 hover:text-red-500"
           >
             END JAM
           </Button>
