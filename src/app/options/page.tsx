@@ -40,7 +40,7 @@ export default function OptionsPage() {
 
   return (
     <PageLayout
-      header={<PageHeader title="System Settings" icon={Settings} />}
+      header={<PageHeader title="Settings" icon={Settings} />}
       footer={
         <PageFooter>
           <Suspense fallback={<div className="w-20" />}>
