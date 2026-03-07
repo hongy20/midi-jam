@@ -49,9 +49,9 @@ export default function OptionsPage() {
         </PageFooter>
       }
     >
-      <main className="w-full h-full max-w-5xl mx-auto flex flex-col gap-4 py-8 px-8 overflow-y-auto">
+      <main className="w-full h-full max-w-5xl mx-auto flex flex-col gap-4 py-4 sm:py-8 px-8 overflow-hidden">
         {optionTypes.map((type) => (
-          <OptionCard key={type} type={type} />
+          <OptionCard key={type} type={type} className="flex-1" />
         ))}
       </main>
     </PageLayout>
