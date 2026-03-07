@@ -66,9 +66,7 @@ describe("Welcome Page", () => {
 
     render(<WelcomePage />);
     expect(screen.getByText(/Midi Jam/i)).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /START JAM/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /START/i })).toBeInTheDocument();
   });
 
   it("shows spinner when loading", () => {
@@ -104,7 +102,7 @@ describe("Welcome Page", () => {
     vi.mocked(useAppContext).mockReturnValue(mockContext);
 
     render(<WelcomePage />);
-    fireEvent.click(screen.getByRole("button", { name: /START JAM/i }));
+    fireEvent.click(screen.getByRole("button", { name: /START/i }));
     expect(mockNavigation.toGear).toHaveBeenCalled();
   });
 
