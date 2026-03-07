@@ -17,24 +17,24 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
   } = useAppContext();
 
   useEffect(() => {
-    switch (pathname as string) {
+    const isGame = pathname === ROUTES.PLAY || pathname === ROUTES.PAUSE;
+
+    switch (pathname) {
       case ROUTES.PLAY:
+      // biome-ignore lint/suspicious/noFallthroughSwitchClause: Hierarchical waterfall
       case ROUTES.PAUSE:
-        if (!selectedMIDIInput) {
-          setGameSession(null);
-          toGear("game");
-          return;
-        }
         if (!selectedTrack) {
           setGameSession(null);
           toCollection();
           return;
         }
-        break;
-
+      // Intentional fallthrough: Play/Pause also requires Level 1 (MIDI)
       case ROUTES.COLLECTION:
         if (!selectedMIDIInput) {
-          toGear();
+          if (isGame) {
+            setGameSession(null);
+          }
+          toGear(isGame ? "game" : undefined);
           return;
         }
         break;
@@ -42,7 +42,6 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
       case ROUTES.SCORE:
         if (!sessionResults) {
           toHome();
-          return;
         }
         break;
 
