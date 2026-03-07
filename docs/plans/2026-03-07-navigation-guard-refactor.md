@@ -24,7 +24,7 @@ We define three levels of page requirements:
 - **Action**: No automatic redirection. The `/gear` page remains "dumb"—it only moves forward when the user explicitly interacts with it.
 
 ## 3. Implementation Details
-- **Location**: `src/components/navigation-guard.tsx`.
+- **Location**: `src/components/navigation-guard/navigation-guard.tsx`.
 - **Hooks**: Uses `useAppContext`, `usePathname`, and `useNavigation`.
 - **Redirection**: All redirects use `router.replace()` via the `useNavigation` hook to maintain "History Neutrality".
 - **Cleanup**: The guard is responsible for clearing the `gameSession` when moving *out* of Level 2 due to a violation.
@@ -50,7 +50,7 @@ We define three levels of page requirements:
 ### Task 1: Refactor `NavigationGuard` Logic
 
 **Files:**
-- Modify: `src/components/navigation-guard.tsx`
+- Modify: `src/components/navigation-guard/navigation-guard.tsx`
 
 **Step 1: Update the `NavigationGuard` component**
 
@@ -68,23 +68,22 @@ import { ROUTES } from "@/lib/navigation/routes";
 export function NavigationGuard({ children }: { children: React.ReactNode }) {
   const { toCollection, toHome, toGear } = useNavigation();
   const pathname = usePathname();
-  const { collection, gear, score, stage: { setGameSession } } = useAppContext();
+  const {
+    collection: { selectedTrack },
+    gear: { selectedMIDIInput },
+    score: { sessionResults },
+    stage: { setGameSession },
+  } = useAppContext();
 
   useEffect(() => {
-    const isPlay = pathname === ROUTES.PLAY;
-    const isPause = pathname === ROUTES.PAUSE;
-    const isLevel2 = isPlay || isPause;
-    const isLevel1 = pathname === ROUTES.COLLECTION;
-    const isResults = pathname === ROUTES.SCORE;
-
     // Level 2 Requirements (Play/Pause): MIDI + Track
-    if (isLevel2) {
-      if (!gear.selectedMIDIInput) {
+    if ([ROUTES.PLAY, ROUTES.PAUSE].includes(pathname as any)) {
+      if (!selectedMIDIInput) {
         setGameSession(null);
         toGear("game");
         return;
       }
-      if (!collection.selectedTrack) {
+      if (!selectedTrack) {
         setGameSession(null);
         toCollection();
         return;
@@ -92,8 +91,8 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
     }
 
     // Level 1 Requirements (Collection): MIDI
-    if (isLevel1) {
-      if (!gear.selectedMIDIInput) {
+    if ([ROUTES.COLLECTION].includes(pathname as any)) {
+      if (!selectedMIDIInput) {
         toGear();
         return;
       }
@@ -101,15 +100,17 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
 
     // Level 0 (Score/Home/Gear/Options): No strict requirements
     // Special case: Redirect Score to Home if results are missing
-    if (isResults && !score.sessionResults) {
-      toHome();
-      return;
+    if ([ROUTES.SCORE].includes(pathname as any)) {
+      if (!sessionResults) {
+        toHome();
+        return;
+      }
     }
   }, [
     pathname,
-    collection.selectedTrack,
-    gear.selectedMIDIInput,
-    score.sessionResults,
+    selectedTrack,
+    selectedMIDIInput,
+    sessionResults,
     setGameSession,
     toCollection,
     toHome,
@@ -128,7 +129,7 @@ Expected: PASS
 **Step 3: Commit**
 
 ```bash
-git add src/components/navigation-guard.tsx
+git add src/components/navigation-guard/navigation-guard.tsx
 git commit -m "refactor: implement hierarchical navigation guard"
 ```
 
@@ -137,12 +138,12 @@ git commit -m "refactor: implement hierarchical navigation guard"
 ### Task 2: Verify Redirection Flow
 
 **Files:**
-- Modify: `src/components/navigation-guard.test.tsx` (create if missing)
+- Modify: `src/components/navigation-guard/navigation-guard.test.tsx` (create if missing)
 - Existing tests: `src/app/page.test.tsx`, `src/app/play/page.test.tsx`
 
 **Step 1: Write a unit test for the guard**
 
-Create or update `src/components/navigation-guard.test.tsx`.
+Create or update `src/components/navigation-guard/navigation-guard.test.tsx`.
 
 ```tsx
 import { render } from "@testing-library/react";
@@ -220,13 +221,13 @@ describe("NavigationGuard", () => {
 
 **Step 2: Run tests**
 
-Run: `npm test src/components/navigation-guard.test.tsx`
+Run: `npm test src/components/navigation-guard/navigation-guard.test.tsx`
 Expected: PASS
 
 **Step 3: Commit**
 
 ```bash
-git add src/components/navigation-guard.test.tsx
+git add src/components/navigation-guard/navigation-guard.test.tsx
 git commit -m "test: add navigation guard redirection tests"
 ```
 
