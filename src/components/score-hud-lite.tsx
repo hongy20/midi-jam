@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type HTMLAttributes, useEffect, useState } from "react";
 import type { HitQuality } from "@/hooks/use-lane-score-engine";
 
-interface ScoreHudLiteProps {
+interface ScoreHudLiteProps extends HTMLAttributes<HTMLDivElement> {
   score: number;
   combo: number;
   lastHitQuality: HitQuality;
@@ -17,6 +17,8 @@ export function ScoreHudLite({
   lastHitQuality,
   getProgress,
   isPaused,
+  className = "",
+  ...props
 }: ScoreHudLiteProps) {
   const [progress, setProgress] = useState(0);
 
@@ -33,7 +35,7 @@ export function ScoreHudLite({
   const percentage = Math.floor(progress * 100);
 
   return (
-    <div className="flex items-center gap-8 w-full">
+    <div className={`flex items-center gap-8 w-full ${className}`} {...props}>
       {/* Score & Combo */}
       <div className="flex items-center gap-6">
         <div className="flex flex-col">

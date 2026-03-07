@@ -1,11 +1,10 @@
 import { Piano } from "lucide-react";
+import type { ButtonHTMLAttributes } from "react";
 import styles from "./gear-card.module.css";
 
-interface GearCardProps {
+interface GearCardProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   instrument: WebMidi.MIDIInput;
   isSelected: boolean;
-  onClick: () => void;
-  className?: string;
 }
 
 export function GearCard({
@@ -13,12 +12,14 @@ export function GearCard({
   isSelected,
   onClick,
   className = "",
+  ...props
 }: GearCardProps) {
   return (
     <button
       type="button"
       onClick={onClick}
       className={`${styles.card} ${isSelected ? styles.selected : styles.unselected} ${className}`}
+      {...props}
     >
       <div
         className={`${styles.iconWrapper} ${

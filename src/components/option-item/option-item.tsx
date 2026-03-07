@@ -1,5 +1,6 @@
 "use client";
 
+import type { HTMLAttributes } from "react";
 import { useAppContext } from "@/context/app-context";
 import { useTheme } from "@/context/theme-context";
 import { THEMES, type Theme } from "@/lib/theme/constant";
@@ -7,9 +8,8 @@ import styles from "./option-item.module.css";
 
 export type OptionType = "theme" | "speed" | "demo";
 
-interface OptionItemProps {
+interface OptionItemProps extends HTMLAttributes<HTMLDivElement> {
   type: OptionType;
-  className?: string;
 }
 
 type ThemeConfig = {
@@ -40,7 +40,11 @@ type DemoConfig = {
 
 type Config = ThemeConfig | SpeedConfig | DemoConfig;
 
-export function OptionItem({ type, className = "" }: OptionItemProps) {
+export function OptionItem({
+  type,
+  className = "",
+  ...props
+}: OptionItemProps) {
   const { theme, setTheme } = useTheme();
   const {
     options: { speed, setSpeed, demoMode, setDemoMode },
@@ -79,7 +83,7 @@ export function OptionItem({ type, className = "" }: OptionItemProps) {
   const config = configs[type];
 
   return (
-    <div className={`${styles.card} ${className}`}>
+    <div className={`${styles.card} ${className}`} {...props}>
       <div className={styles.info}>
         <span className={styles.title}>{config.title}</span>
         <span className={styles.description}>{config.description}</span>
