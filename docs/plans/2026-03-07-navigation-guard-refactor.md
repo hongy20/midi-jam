@@ -76,35 +76,37 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
   } = useAppContext();
 
   useEffect(() => {
-    // Level 2 Requirements (Play/Pause): MIDI + Track
-    if ([ROUTES.PLAY, ROUTES.PAUSE].includes(pathname as any)) {
-      if (!selectedMIDIInput) {
-        setGameSession(null);
-        toGear("game");
-        return;
-      }
-      if (!selectedTrack) {
-        setGameSession(null);
-        toCollection();
-        return;
-      }
-    }
+    switch (pathname as string) {
+      case ROUTES.PLAY:
+      case ROUTES.PAUSE:
+        if (!selectedMIDIInput) {
+          setGameSession(null);
+          toGear("game");
+          return;
+        }
+        if (!selectedTrack) {
+          setGameSession(null);
+          toCollection();
+          return;
+        }
+        break;
 
-    // Level 1 Requirements (Collection): MIDI
-    if ([ROUTES.COLLECTION].includes(pathname as any)) {
-      if (!selectedMIDIInput) {
-        toGear();
-        return;
-      }
-    }
+      case ROUTES.COLLECTION:
+        if (!selectedMIDIInput) {
+          toGear();
+          return;
+        }
+        break;
 
-    // Level 0 (Score/Home/Gear/Options): No strict requirements
-    // Special case: Redirect Score to Home if results are missing
-    if ([ROUTES.SCORE].includes(pathname as any)) {
-      if (!sessionResults) {
-        toHome();
-        return;
-      }
+      case ROUTES.SCORE:
+        if (!sessionResults) {
+          toHome();
+          return;
+        }
+        break;
+
+      default:
+        break;
     }
   }, [
     pathname,
