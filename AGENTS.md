@@ -40,7 +40,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 - **Sections**:
   - `PageHeader`: Reserved for **Context** (Active Titles, Contextual Icons) and secondary navigation actions.
   - `PageFooter`: Reserved for primary **Actions** (Navigation, Primary Buttons, Branding).
-  - `<main>`: Reserved for **Content**. Must use consistent padding/max-width (`max-w-5xl mx-auto px-8`).
+  - `<main>`: Reserved for **Content**. Must be direct child of `PageLayout`.
 
 ### Navigation Patterns
 - **Button Semantics**:
