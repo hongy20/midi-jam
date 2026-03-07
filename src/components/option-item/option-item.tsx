@@ -1,7 +1,5 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "@/context/app-context";
 import { useTheme } from "@/context/theme-context";
 import { THEMES, type Theme } from "@/lib/theme/constant";
@@ -43,26 +41,10 @@ type DemoConfig = {
 type Config = ThemeConfig | SpeedConfig | DemoConfig;
 
 export function OptionItem({ type, className = "" }: OptionItemProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
   const { theme, setTheme } = useTheme();
   const {
     options: { speed, setSpeed, demoMode, setDemoMode },
   } = useAppContext();
-
-  // Close dropdown on click outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   const configs: Record<OptionType, Config> = {
     theme: {
@@ -71,10 +53,7 @@ export function OptionItem({ type, className = "" }: OptionItemProps) {
       description: "Toggle global application style",
       options: THEMES,
       current: theme,
-      onSelect: (val: Theme) => {
-        setTheme(val);
-        setIsOpen(false);
-      },
+      onSelect: (val: Theme) => setTheme(val),
     },
     speed: {
       type: "speed",
@@ -86,10 +65,7 @@ export function OptionItem({ type, className = "" }: OptionItemProps) {
         { label: "Fast", value: 2.0 },
       ],
       current: speed,
-      onSelect: (val: number) => {
-        setSpeed(val);
-        setIsOpen(false);
-      },
+      onSelect: (val: number) => setSpeed(val),
     },
     demo: {
       type: "demo",
@@ -109,7 +85,7 @@ export function OptionItem({ type, className = "" }: OptionItemProps) {
         <span className={styles.description}>{config.description}</span>
       </div>
 
-      <div className={styles.controls} ref={dropdownRef}>
+      <div className={styles.controls}>
         {config.type === "demo" ? (
           <button
             type="button"
@@ -125,54 +101,32 @@ export function OptionItem({ type, className = "" }: OptionItemProps) {
             />
           </button>
         ) : (
-          <div className={styles.dropdownWrapper}>
-            <button
-              type="button"
-              onClick={() => setIsOpen(!isOpen)}
-              className={`${styles.dropdownTrigger} ${isOpen ? styles.triggerActive : ""}`}
-            >
-              <span className={styles.currentLabel}>
-                {config.type === "theme"
-                  ? config.current
-                  : config.options.find((o) => o.value === config.current)
-                      ?.label}
-              </span>
-              <ChevronDown
-                className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ""}`}
-              />
-            </button>
-
-            {isOpen && (
-              <div className={styles.dropdownMenu}>
-                {config.type === "theme"
-                  ? config.options.map((opt) => (
-                      <button
-                        key={opt}
-                        type="button"
-                        onClick={() => config.onSelect(opt)}
-                        className={`${styles.dropdownItem} ${
-                          config.current === opt ? styles.itemSelected : ""
-                        }`}
-                      >
-                        {opt}
-                      </button>
-                    ))
-                  : config.options.map((opt) => (
-                      <button
-                        key={opt.label}
-                        type="button"
-                        onClick={() => config.onSelect(opt.value)}
-                        className={`${styles.dropdownItem} ${
-                          config.current === opt.value
-                            ? styles.itemSelected
-                            : ""
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-              </div>
-            )}
+          <div className={styles.buttonGroup}>
+            {config.type === "theme"
+              ? config.options.map((opt) => (
+                  <button
+                    key={opt}
+                    type="button"
+                    onClick={() => config.onSelect(opt)}
+                    className={`${styles.optionButton} ${
+                      config.current === opt ? styles.itemSelected : ""
+                    }`}
+                  >
+                    {opt}
+                  </button>
+                ))
+              : config.options.map((opt) => (
+                  <button
+                    key={opt.label}
+                    type="button"
+                    onClick={() => config.onSelect(opt.value)}
+                    className={`${styles.optionButton} ${
+                      config.current === opt.value ? styles.itemSelected : ""
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
           </div>
         )}
       </div>

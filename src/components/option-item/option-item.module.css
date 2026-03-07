@@ -1,20 +1,23 @@
 .card {
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1.5rem;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 1.5rem;
   background: var(--ui-card-bg);
   backdrop-filter: blur(12px);
   border: 1px solid var(--ui-card-border);
   border-radius: var(--ui-card-radius);
   transition: all 0.2s ease;
-  gap: 1.5rem;
+  gap: 1rem;
   min-height: 0;
 }
 
-@media (min-height: 601px) {
+@media (min-width: 640px) {
   .card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     padding: 1.5rem 2rem;
     gap: 2rem;
   }
@@ -33,136 +36,100 @@
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: -0.01em;
   color: var(--foreground);
 }
 
+@media (min-width: 640px) {
+  .title {
+    font-size: 1.25rem;
+  }
+}
+
 .description {
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--foreground);
   opacity: 0.5;
 }
 
+@media (min-width: 640px) {
+  .description {
+    font-size: 0.875rem;
+  }
+}
+
 .controls {
-  position: relative;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 }
 
-/* Dropdown */
-.dropdownWrapper {
-  position: relative;
-  min-width: 140px;
+@media (min-width: 640px) {
+  .controls {
+    justify-content: flex-end;
+  }
 }
 
-.dropdownTrigger {
-  width: 100%;
+.buttonGroup {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.75rem 1.25rem;
-  background: rgba(var(--foreground-rgb), 0.1);
-  border: 1px solid rgba(var(--foreground-rgb), 0.1);
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.dropdownTrigger:hover {
-  background: rgba(var(--foreground-rgb), 0.15);
-  border-color: rgba(var(--foreground-rgb), 0.2);
-}
-
-.triggerActive {
-  background: var(--foreground);
-  color: var(--background);
-}
-
-.currentLabel {
-  font-weight: 900;
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-}
-
-.chevron {
-  width: 1.25rem;
-  height: 1.25rem;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  opacity: 0.6;
-}
-
-.chevronOpen {
-  transform: rotate(180deg);
-}
-
-.dropdownMenu {
-  position: absolute;
-  top: calc(100% + 0.5rem);
-  right: 0;
-  width: 100%;
-  background: var(--background);
-  border: 1px solid var(--ui-card-border);
-  border-radius: 1rem;
-  padding: 0.5rem;
-  z-index: 100;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-  display: flex;
-  flex-direction: column;
   gap: 0.25rem;
-  animation: dropdownFade 0.2s ease-out;
+  background-color: rgba(var(--foreground-rgb), 0.05);
+  padding: 0.25rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(var(--foreground-rgb), 0.1);
+  width: auto;
 }
 
-@keyframes dropdownFade {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.dropdownItem {
-  width: 100%;
-  text-align: left;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  font-weight: 800;
-  font-size: 0.75rem;
+.optionButton {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-weight: 900;
+  font-size: 0.625rem;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--foreground);
-  opacity: 0.6;
+  letter-spacing: 0.1em;
   transition: all 0.2s ease;
+  white-space: nowrap;
+  color: var(--foreground);
+  opacity: 0.5;
 }
 
-.dropdownItem:hover {
+@media (min-width: 640px) {
+  .optionButton {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.75rem;
+  }
+}
+
+.optionButton:hover {
   opacity: 1;
-  background: rgba(var(--foreground-rgb), 0.1);
 }
 
 .itemSelected {
   opacity: 1;
-  background: rgba(var(--foreground-rgb), 0.1);
-  color: var(--accent-primary);
+  background-color: var(--foreground);
+  color: var(--background);
 }
 
 /* Toggle Switch */
 .toggle {
-  width: 4rem;
-  height: 2rem;
+  width: 3.5rem;
+  height: 1.75rem;
   border-radius: 9999px;
   position: relative;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: pointer;
   border: none;
+}
+
+@media (min-width: 640px) {
+  .toggle {
+    width: 4rem;
+    height: 2rem;
+  }
 }
 
 .toggleInactive {
@@ -178,9 +145,15 @@
   position: absolute;
   top: 0.2rem;
   bottom: 0.2rem;
-  width: 1.6rem;
+  width: 1.35rem;
   border-radius: 9999px;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@media (min-width: 640px) {
+  .toggleKnob {
+    width: 1.6rem;
+  }
 }
 
 .knobInactive {
@@ -190,5 +163,11 @@
 
 .knobActive {
   background-color: var(--background);
-  left: calc(100% - 1.8rem);
+  left: calc(100% - 1.55rem);
+}
+
+@media (min-width: 640px) {
+  .knobActive {
+    left: calc(100% - 1.8rem);
+  }
 }
