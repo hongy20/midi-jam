@@ -21,9 +21,6 @@ export default function CollectionPage() {
   } = useAppContext();
 
   const [tracks, setTracks] = useState<CollectionTrack[]>([]);
-  const [selected, setSelected] = useState<string | null>(
-    selectedTrack?.id || null,
-  );
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -56,9 +53,12 @@ export default function CollectionPage() {
             variant="secondary"
             onClick={() => {
               if (tracks.length > 0) {
-                const randomTrack =
-                  tracks[Math.floor(Math.random() * tracks.length)];
-                setSelected(randomTrack.id);
+                const track = tracks[Math.floor(Math.random() * tracks.length)];
+                setSelectedTrack({
+                  id: track.id,
+                  name: track.name,
+                  url: track.url,
+                });
               }
             }}
             icon={Dices}
@@ -67,20 +67,8 @@ export default function CollectionPage() {
             SURPRISE
           </Button>
           <Button
-            onClick={() => {
-              if (selected) {
-                const track = tracks.find((t) => t.id === selected);
-                if (track) {
-                  setSelectedTrack({
-                    id: track.id,
-                    name: track.name,
-                    url: track.url,
-                  });
-                }
-                toPlay();
-              }
-            }}
-            disabled={!selected}
+            onClick={() => toPlay()}
+            disabled={!selectedTrack}
             icon={Play}
             size="md"
           >
@@ -104,8 +92,14 @@ export default function CollectionPage() {
               <TrackCard
                 key={track.id}
                 track={track}
-                isSelected={selected === track.id}
-                onClick={() => setSelected(track.id)}
+                isSelected={selectedTrack?.id === track.id}
+                onClick={() =>
+                  setSelectedTrack({
+                    id: track.id,
+                    name: track.name,
+                    url: track.url,
+                  })
+                }
               />
             ))}
           </div>
