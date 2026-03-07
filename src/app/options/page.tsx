@@ -5,9 +5,9 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Button } from "@/components/button/button";
 import {
-  OptionCard,
+  OptionItem,
   type OptionType,
-} from "@/components/option-card/option-card";
+} from "@/components/option-item/option-item";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
@@ -51,7 +51,7 @@ export default function OptionsPage() {
     >
       <main className="w-full h-full max-w-5xl mx-auto flex flex-col gap-4 py-4 sm:py-8 px-8 overflow-hidden">
         {optionTypes.map((type) => (
-          <OptionCard key={type} type={type} className="flex-1" />
+          <OptionItem key={type} type={type} className="flex-1" />
         ))}
       </main>
     </PageLayout>

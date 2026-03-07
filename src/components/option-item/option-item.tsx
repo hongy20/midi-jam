@@ -5,11 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "@/context/app-context";
 import { useTheme } from "@/context/theme-context";
 import { THEMES, type Theme } from "@/lib/theme/constant";
-import styles from "./option-card.module.css";
+import styles from "./option-item.module.css";
 
 export type OptionType = "theme" | "speed" | "demo";
 
-interface OptionCardProps {
+interface OptionItemProps {
   type: OptionType;
   className?: string;
 }
@@ -42,7 +42,7 @@ type DemoConfig = {
 
 type Config = ThemeConfig | SpeedConfig | DemoConfig;
 
-export function OptionCard({ type, className = "" }: OptionCardProps) {
+export function OptionItem({ type, className = "" }: OptionItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { theme, setTheme } = useTheme();
