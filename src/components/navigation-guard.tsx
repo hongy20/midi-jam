@@ -9,35 +9,50 @@ import { ROUTES } from "@/lib/navigation/routes";
 export function NavigationGuard({ children }: { children: React.ReactNode }) {
   const { toCollection, toHome, toGear } = useNavigation();
   const pathname = usePathname();
-  const { collection, gear, score } = useAppContext();
+  const {
+    collection: { selectedTrack },
+    gear: { selectedMIDIInput },
+    score: { sessionResults },
+    stage: { setGameSession },
+  } = useAppContext();
 
   useEffect(() => {
-    const isGame = pathname === ROUTES.PLAY;
-    const isPause = pathname === ROUTES.PAUSE;
-    const isResults = pathname === ROUTES.SCORE;
-
-    // 1. No track selected? Can't go to game or pause.
-    if ((isGame || isPause) && !collection.selectedTrack) {
-      toCollection();
-      return;
+    // Level 2 Requirements (Play/Pause): MIDI + Track
+    if (([ROUTES.PLAY, ROUTES.PAUSE] as string[]).includes(pathname)) {
+      if (!selectedMIDIInput) {
+        setGameSession(null);
+        toGear("game");
+        return;
+      }
+      if (!selectedTrack) {
+        setGameSession(null);
+        toCollection();
+        return;
+      }
     }
 
-    // 2. MIDI disconnected? Redirect from game/pause to instruments for reconnection.
-    if ((isGame || isPause) && !gear.selectedMIDIInput) {
-      toGear("game");
-      return;
+    // Level 1 Requirements (Collection): MIDI
+    if (([ROUTES.COLLECTION] as string[]).includes(pathname)) {
+      if (!selectedMIDIInput) {
+        toGear();
+        return;
+      }
     }
 
-    // 3. No results? Go home.
-    if (isResults && !score.sessionResults) {
-      toHome();
-      return;
+    // Level 0 (Score/Home/Gear/Options): No strict requirements
+    // Special case: Redirect Score to Home if results are missing
+    if (([ROUTES.SCORE] as string[]).includes(pathname)) {
+      if (!sessionResults) {
+        toHome();
+        return;
+      }
     }
   }, [
     pathname,
-    collection.selectedTrack,
-    gear.selectedMIDIInput,
-    score.sessionResults,
+    selectedTrack,
+    selectedMIDIInput,
+    sessionResults,
+    setGameSession,
     toCollection,
     toHome,
     toGear,
