@@ -38,19 +38,6 @@ export default function CollectionPage() {
         <PageHeader title="Song Collection">
           <Button
             variant="secondary"
-            icon={ArrowLeft}
-            iconPosition="left"
-            onClick={() => toGear()}
-            size="sm"
-          >
-            Your Gear
-          </Button>
-        </PageHeader>
-      }
-      footer={
-        <PageFooter>
-          <Button
-            variant="secondary"
             onClick={() => {
               if (tracks.length > 0) {
                 const track = tracks[Math.floor(Math.random() * tracks.length)];
@@ -62,9 +49,20 @@ export default function CollectionPage() {
               }
             }}
             icon={Dices}
-            size="md"
+            size="sm"
+          />
+        </PageHeader>
+      }
+      footer={
+        <PageFooter>
+          <Button
+            variant="secondary"
+            icon={ArrowLeft}
+            iconPosition="left"
+            onClick={() => toGear()}
+            size="sm"
           >
-            SURPRISE
+            Your Gear
           </Button>
           <Button
             onClick={() => toPlay()}
