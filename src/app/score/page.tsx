@@ -65,30 +65,30 @@ export default function ScorePage() {
       }
     >
       <main className="w-full h-full overflow-hidden py-2 sm:py-4 px-6 sm:px-8 max-w-5xl mx-auto flex flex-col items-center justify-center gap-4 sm:gap-8 z-20">
-        <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-foreground italic uppercase tracking-tighter drop-shadow-xl bg-gradient-to-tr from-foreground to-foreground/50 bg-clip-text text-transparent text-center w-full leading-[0.9] whitespace-nowrap">
+        <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-foreground italic uppercase tracking-tighter drop-shadow-xl bg-gradient-to-tr from-foreground to-foreground/50 bg-clip-text text-transparent text-center w-full leading-[0.9] md:whitespace-nowrap">
           {titleLabel}
         </h1>
 
-        <section className="w-full flex flex-row gap-3 sm:gap-6 justify-center items-stretch">
+        <section className="w-full grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 justify-center items-stretch">
           <StatCard
             label="Total Score"
             value={stats.score.toLocaleString()}
             variant="large"
-            className="flex-[2]"
+            className="col-span-2"
           />
 
           <StatCard
             label="Accuracy"
             value={`${stats.accuracy}%`}
             variant="small"
-            className="flex-1"
+            className="col-span-1"
           />
 
           <StatCard
             label="Max Combo"
             value={stats.combo}
             variant="small"
-            className="flex-1"
+            className="col-span-1"
           />
         </section>
       </main>
