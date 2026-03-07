@@ -40,7 +40,11 @@ describe("TrackProvider & useTrack", () => {
       });
     });
 
-    expect(result.current.trackStatus.isReady).toBe(true);
-    expect(result.current.trackStatus.originalDurationMs).toBe(120000);
+    const status = result.current.trackStatus;
+    if (status.isReady) {
+      expect(status.originalDurationMs).toBe(120000);
+    } else {
+      throw new Error("Track status should be ready");
+    }
   });
 });

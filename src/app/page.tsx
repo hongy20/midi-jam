@@ -5,15 +5,15 @@ import { useEffect } from "react";
 import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageLayout } from "@/components/page-layout/page-layout";
-import { useAppContext } from "@/context/app-context";
+import { useHome } from "@/context/home-context";
 import { useNavigation } from "@/hooks/use-navigation";
+import { useAppReset } from "@/hooks/use-track-sync";
 import styles from "./page.module.css";
 
 export default function WelcomePage() {
   const { toGear, toOptions } = useNavigation();
-  const {
-    home: { isHomeLoading, isSupported, resetAll },
-  } = useAppContext();
+  const { isHomeLoading, isSupported } = useHome();
+  const { resetAll } = useAppReset();
 
   useEffect(() => {
     resetAll();

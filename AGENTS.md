@@ -50,9 +50,10 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 ## 5. React & State Patterns
 
 ### Context & Hook Consumption
-- **Deep Destructuring**: Always destructure required properties directly in a single statement. Avoid intermediate constants for sub-objects.
-  - **✅ Good**: `const { gear: { selectedMIDIInput } } = useAppContext();`
-  - **❌ Bad**: `const { gear } = useAppContext(); const { selectedMIDIInput } = gear;`
+- **Granular Hooks**: Prefer specialized hooks (`useGear`, `useTrack`, `useOptions`) over a monolithic context to prevent unnecessary re-renders.
+- **Deep Destructuring**: Always destructure required properties directly in a single statement.
+  - **✅ Good**: `const { selectedMIDIInput } = useGear();`
+  - **❌ Bad**: `const gear = useGear(); const selectedMIDIInput = gear.selectedMIDIInput;`
 - **Inline Handlers**: Avoid creating single-use, simple wrapper functions (e.g., `const handleBack = () => toHome()`). Invoke the logic inline within the event prop.
   - **✅ Good**: `onClick={() => toHome()}`
   - **❌ Bad**: `onClick={handleBack}`

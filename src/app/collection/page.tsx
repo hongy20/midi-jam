@@ -10,15 +10,13 @@ import {
   type CollectionTrack,
   TrackCard,
 } from "@/components/track-card/track-card";
-import { useAppContext } from "@/context/app-context";
+import { useCollection } from "@/context/collection-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { getSoundTracks } from "@/lib/action/sound-track";
 
 export default function CollectionPage() {
   const { toPlay, toGear } = useNavigation();
-  const {
-    collection: { setSelectedTrack, selectedTrack },
-  } = useAppContext();
+  const { setSelectedTrack, selectedTrack } = useCollection();
 
   const [tracks, setTracks] = useState<CollectionTrack[]>([]);
   const [isLoading, setIsLoading] = useState(true);

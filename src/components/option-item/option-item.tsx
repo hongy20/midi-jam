@@ -1,7 +1,7 @@
 "use client";
 
 import type { HTMLAttributes } from "react";
-import { useAppContext } from "@/context/app-context";
+import { useOptions } from "@/context/options-context";
 import { useTheme } from "@/context/theme-context";
 import { THEMES, type Theme } from "@/lib/theme/constant";
 import styles from "./option-item.module.css";
@@ -46,9 +46,7 @@ export function OptionItem({
   ...props
 }: OptionItemProps) {
   const { theme, setTheme } = useTheme();
-  const {
-    options: { speed, setSpeed, demoMode, setDemoMode },
-  } = useAppContext();
+  const { speed, setSpeed, demoMode, setDemoMode } = useOptions();
 
   const configs: Record<OptionType, Config> = {
     theme: {
