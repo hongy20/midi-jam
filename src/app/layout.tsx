@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { NavigationGuard } from "@/components/navigation-guard/navigation-guard";
-import { AppProvider } from "@/context/app-context";
+import { CombinedProvider } from "@/context/combined-provider";
 import { ThemeProvider } from "@/context/theme-context";
 
 const geistSans = Geist({
@@ -31,9 +31,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
-          <AppProvider>
+          <CombinedProvider>
             <NavigationGuard>{children}</NavigationGuard>
-          </AppProvider>
+          </CombinedProvider>
         </ThemeProvider>
       </body>
     </html>
