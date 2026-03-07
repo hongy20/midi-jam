@@ -14,7 +14,6 @@
     box-shadow 0.3s ease;
   cursor: pointer;
   border: 2px solid transparent;
-  width: fit-content;
   overflow: hidden;
   position: relative;
 }

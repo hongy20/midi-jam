@@ -1,7 +1,9 @@
 :root[data-theme="light"] {
   /* Primitives */
   --background: #ffffff;
+  --background-rgb: 255, 255, 255;
   --foreground: #171717;
+  --foreground-rgb: 23, 23, 23;
   --accent-primary: #2563eb;
 
   /* Piano Keyboard */

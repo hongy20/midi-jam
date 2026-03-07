@@ -1,10 +1,10 @@
-:global(:root) {
+.page {
   --header-height: 5rem;
   --footer-height: 151px;
 }
 
 @media (max-height: 600px) {
-  :global(:root) {
+  .page {
     --footer-height: 91px;
   }
 }

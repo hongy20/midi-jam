@@ -2,9 +2,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: var(--layout-gap);
-  padding: var(--footer-py) 1.5rem;
+  padding: 0 1.5rem;
   width: 100%;
+  height: 100%;
   max-width: 64rem; /* max-w-5xl */
   margin-left: auto;
   margin-right: auto;
@@ -13,7 +15,6 @@
 
 @media (min-width: 640px) {
   .footer {
-    flex-direction: row;
     padding-left: 2rem;
     padding-right: 2rem;
     gap: 1rem;
@@ -23,11 +24,11 @@
 .centered {
   justify-content: center;
   text-align: center;
-  padding-bottom: 2rem; /* Restore Welcome page extra padding */
 }
 
 .actions {
-  justify-content: flex-end;
+  flex-direction: row;
+  justify-content: end;
 }
 
 .brandingText {

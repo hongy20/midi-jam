@@ -28,28 +28,27 @@ describe("Welcome Page", () => {
   };
 
   const mockContext: AppContextType = {
-    tracks: { selected: null, set: vi.fn() },
-    instruments: {
-      input: null,
-      output: null,
+    collection: { selectedTrack: null, setSelectedTrack: vi.fn() },
+    gear: {
+      selectedMIDIInput: null,
+      selectedMIDIOutput: null,
       lastInputName: null,
-      selectInput: vi.fn(),
-      selectOutput: vi.fn(),
+      selectMIDIInput: vi.fn(),
+      selectMIDIOutput: vi.fn(),
     },
-    game: {
-      track: { isLoading: false, isReady: false, error: null },
-      session: null,
-      setSession: vi.fn(),
+    stage: {
+      trackStatus: { isLoading: false, isReady: false, error: null },
+      gameSession: null,
+      setGameSession: vi.fn(),
     },
-    results: { last: null, set: vi.fn() },
-    settings: {
+    score: { sessionResults: null, setSessionResults: vi.fn() },
+    options: {
       speed: 1.0,
       demoMode: false,
       setSpeed: vi.fn(),
       setDemoMode: vi.fn(),
     },
-    actions: { resetAll: vi.fn() },
-    isSupported: true,
+    home: { isHomeLoading: false, isSupported: true, resetAll: vi.fn() },
   };
 
   beforeEach(() => {
@@ -58,7 +57,7 @@ describe("Welcome Page", () => {
       value: vi.fn(),
       configurable: true,
     });
-    vi.clearAllMocks();
+    vi.resetAllMocks();
   });
 
   it("renders the title and start button", () => {
@@ -67,9 +66,35 @@ describe("Welcome Page", () => {
 
     render(<WelcomePage />);
     expect(screen.getByText(/Midi Jam/i)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /START/i })).toBeInTheDocument();
+  });
+
+  it("shows spinner when loading", () => {
+    vi.mocked(useNavigation).mockReturnValue(mockNavigation);
+    vi.mocked(useAppContext).mockReturnValue({
+      ...mockContext,
+      home: { isHomeLoading: true, isSupported: true, resetAll: vi.fn() },
+    });
+
+    render(<WelcomePage />);
+    expect(screen.getByText(/Initializing Engine/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /START JAM/i }),
-    ).toBeInTheDocument();
+      screen.queryByRole("button", { name: /START JAM/i }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("shows error when not supported", () => {
+    vi.mocked(useNavigation).mockReturnValue(mockNavigation);
+    vi.mocked(useAppContext).mockReturnValue({
+      ...mockContext,
+      home: { isHomeLoading: false, isSupported: false, resetAll: vi.fn() },
+    });
+
+    render(<WelcomePage />);
+    expect(screen.getByText(/UNSUPPORTED BROWSER/i)).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /START JAM/i }),
+    ).not.toBeInTheDocument();
   });
 
   it("navigates to gear on start click", () => {
@@ -77,7 +102,7 @@ describe("Welcome Page", () => {
     vi.mocked(useAppContext).mockReturnValue(mockContext);
 
     render(<WelcomePage />);
-    fireEvent.click(screen.getByRole("button", { name: /START JAM/i }));
+    fireEvent.click(screen.getByRole("button", { name: /START/i }));
     expect(mockNavigation.toGear).toHaveBeenCalled();
   });
 

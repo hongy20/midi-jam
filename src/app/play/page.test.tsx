@@ -51,23 +51,23 @@ describe("Play Page", () => {
   const mockSetSessionResults = vi.fn();
 
   const mockContext: AppContextType = {
-    tracks: {
-      selected: {
+    collection: {
+      selectedTrack: {
         id: "track-1.mid",
         name: "Test Track",
         url: "/midi/track-1.mid",
       },
-      set: vi.fn(),
+      setSelectedTrack: vi.fn(),
     },
-    instruments: {
-      input: { id: "piano", name: "Piano" } as WebMidi.MIDIInput,
-      output: null,
+    gear: {
+      selectedMIDIInput: { id: "piano", name: "Piano" } as WebMidi.MIDIInput,
+      selectedMIDIOutput: null,
       lastInputName: "Piano",
-      selectInput: vi.fn(),
-      selectOutput: vi.fn(),
+      selectMIDIInput: vi.fn(),
+      selectMIDIOutput: vi.fn(),
     },
-    game: {
-      track: {
+    stage: {
+      trackStatus: {
         isLoading: false,
         isReady: true,
         originalDurationMs: 1000,
@@ -75,25 +75,24 @@ describe("Play Page", () => {
         spans: [],
         error: null,
       },
-      session: null,
-      setSession: mockSetGameSession,
+      gameSession: null,
+      setGameSession: mockSetGameSession,
     },
-    results: {
-      last: null,
-      set: mockSetSessionResults,
+    score: {
+      sessionResults: null,
+      setSessionResults: mockSetSessionResults,
     },
-    settings: {
+    options: {
       speed: 1.0,
       demoMode: false,
       setSpeed: vi.fn(),
       setDemoMode: vi.fn(),
     },
-    actions: { resetAll: vi.fn() },
-    isSupported: true,
+    home: { isHomeLoading: false, isSupported: true, resetAll: vi.fn() },
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
     vi.mocked(useAppContext).mockReturnValue(mockContext);
 
@@ -130,9 +129,9 @@ describe("Play Page", () => {
 
     vi.mocked(useAppContext).mockReturnValue({
       ...mockContext,
-      game: {
-        ...mockContext.game,
-        track: {
+      stage: {
+        ...mockContext.stage,
+        trackStatus: {
           isLoading: false,
           isReady: true,
           originalDurationMs: 100,
@@ -173,7 +172,7 @@ describe("Play Page", () => {
   it("returns null when track or gear is missing", () => {
     vi.mocked(useAppContext).mockReturnValue({
       ...mockContext,
-      tracks: { selected: null, set: vi.fn() },
+      collection: { selectedTrack: null, setSelectedTrack: vi.fn() },
     });
 
     const { container } = render(<PlayPage />);
@@ -183,9 +182,9 @@ describe("Play Page", () => {
   it("shows loading state when track is loading", () => {
     vi.mocked(useAppContext).mockReturnValue({
       ...mockContext,
-      game: {
-        ...mockContext.game,
-        track: { isLoading: true, isReady: false, error: null },
+      stage: {
+        ...mockContext.stage,
+        trackStatus: { isLoading: true, isReady: false, error: null },
       },
     });
 

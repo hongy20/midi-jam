@@ -22,22 +22,24 @@ import {
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "@/lib/midi/constant";
-import "./page.module.css";
+import styles from "./page.module.css";
 
 export default function PlayPage() {
   const { toScore, toPause } = useNavigation();
-  const { tracks, instruments, game, settings, results } = useAppContext();
+  const {
+    collection,
+    gear,
+    stage,
+    options,
+    score: contextScore,
+  } = useAppContext();
 
   // Extract variables from context for easier access
-  const { selected: selectedTrack } = tracks;
-  const { input: selectedMIDIInput, output: selectedMIDIOutput } = instruments;
-  const {
-    track: trackLoadStatus,
-    session: gameSession,
-    setSession: setGameSession,
-  } = game;
-  const { speed, demoMode } = settings;
-  const { set: setSessionResults } = results;
+  const { selectedTrack } = collection;
+  const { selectedMIDIInput, selectedMIDIOutput } = gear;
+  const { trackStatus: trackLoadStatus, gameSession, setGameSession } = stage;
+  const { speed, demoMode } = options;
+  const { setSessionResults } = contextScore;
 
   // Track Data (only if ready)
   const events = trackLoadStatus.isReady ? trackLoadStatus.events : [];
@@ -188,6 +190,7 @@ export default function PlayPage() {
 
   return (
     <PageLayout
+      className={styles.page}
       style={
         {
           "--start-unit": startUnit,

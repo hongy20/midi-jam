@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import {
   createContext,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -52,36 +53,37 @@ export type TrackLoadStatus =
     };
 
 export interface AppContextType {
-  tracks: {
-    selected: Track | null;
-    set: (track: Track | null) => void;
+  collection: {
+    selectedTrack: Track | null;
+    setSelectedTrack: (track: Track | null) => void;
   };
-  instruments: {
-    input: WebMidi.MIDIInput | null;
-    output: WebMidi.MIDIOutput | null;
+  gear: {
+    selectedMIDIInput: WebMidi.MIDIInput | null;
+    selectedMIDIOutput: WebMidi.MIDIOutput | null;
     lastInputName: string | null;
-    selectInput: (input: WebMidi.MIDIInput | null) => void;
-    selectOutput: (output: WebMidi.MIDIOutput | null) => void;
+    selectMIDIInput: (input: WebMidi.MIDIInput | null) => void;
+    selectMIDIOutput: (output: WebMidi.MIDIOutput | null) => void;
   };
-  game: {
-    track: TrackLoadStatus;
-    session: GameSession | null;
-    setSession: (s: GameSession | null) => void;
+  stage: {
+    trackStatus: TrackLoadStatus;
+    gameSession: GameSession | null;
+    setGameSession: (s: GameSession | null) => void;
   };
-  results: {
-    last: SessionResults | null;
-    set: (r: SessionResults | null) => void;
+  score: {
+    sessionResults: SessionResults | null;
+    setSessionResults: (r: SessionResults | null) => void;
   };
-  settings: {
+  options: {
     speed: number;
     demoMode: boolean;
     setSpeed: (speed: number) => void;
     setDemoMode: (enabled: boolean) => void;
   };
-  actions: {
+  home: {
+    isHomeLoading: boolean;
+    isSupported: boolean;
     resetAll: () => void;
   };
-  isSupported: boolean;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -101,12 +103,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
     isReady: false,
     error: null,
   });
-  const [isSupported, setIsSupported] = useState<boolean>(true);
+  const [isHomeLoading, setIsHomeLoading] = useState<boolean>(true);
+  const [isSupported, setIsSupported] = useState<boolean>(false);
   const lastLoadedTrackId = useRef<string | null>(null);
 
-  // Detect Web MIDI support on mount
+  // Detect Web MIDI support and finish initial loading on mount
   useEffect(() => {
     setIsSupported("requestMIDIAccess" in navigator);
+
+    // Provide a small window to show the loader for smoother experience
+    const timer = setTimeout(() => {
+      setIsHomeLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // MIDI Devices
@@ -120,7 +130,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     selectMIDIInput(input);
   };
 
-  const resetAll = () => {
+  const resetAll = useCallback(() => {
     setSelectedTrack(null);
     setGameSession(null);
     setSessionResults(null);
@@ -129,7 +139,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     selectMIDIInput(null);
     setTrackStatus({ isLoading: false, isReady: false, error: null });
     lastLoadedTrackId.current = null;
-  };
+  }, [selectMIDIInput]);
 
   // MIDI Track Loading (only when on /game path and a track is selected)
   useEffect(() => {
@@ -181,36 +191,37 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [pathname, selectedTrack, trackStatus.isReady]);
 
   const value: AppContextType = {
-    tracks: {
-      selected: selectedTrack,
-      set: setSelectedTrack,
+    collection: {
+      selectedTrack,
+      setSelectedTrack,
     },
-    instruments: {
-      input: selectedMIDIInput,
-      output: selectedMIDIOutput,
+    gear: {
+      selectedMIDIInput,
+      selectedMIDIOutput,
       lastInputName,
-      selectInput: handleSelectInput,
-      selectOutput: () => {}, // TODO: Implement if needed
+      selectMIDIInput: handleSelectInput,
+      selectMIDIOutput: () => {}, // TODO: Implement if needed
     },
-    game: {
-      track: trackStatus,
-      session: gameSession,
-      setSession: setGameSession,
+    stage: {
+      trackStatus,
+      gameSession,
+      setGameSession,
     },
-    results: {
-      last: sessionResults,
-      set: setSessionResults,
+    score: {
+      sessionResults,
+      setSessionResults,
     },
-    settings: {
+    options: {
       speed,
       demoMode,
       setSpeed,
       setDemoMode,
     },
-    actions: {
+    home: {
+      isHomeLoading,
+      isSupported,
       resetAll,
     },
-    isSupported,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

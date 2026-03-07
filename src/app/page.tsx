@@ -7,75 +7,67 @@ import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { useAppContext } from "@/context/app-context";
 import { useNavigation } from "@/hooks/use-navigation";
+import styles from "./page.module.css";
 
 export default function WelcomePage() {
   const { toGear, toOptions } = useNavigation();
-  const { actions, isSupported } = useAppContext();
-  const { resetAll: clearSelection } = actions;
+  const {
+    home: { isHomeLoading, isSupported, resetAll },
+  } = useAppContext();
 
   useEffect(() => {
-    clearSelection();
-  }, [clearSelection]);
-
-  const handleStart = () => {
-    toGear();
-  };
-
-  const handleOptions = () => {
-    toOptions();
-  };
+    resetAll();
+  }, [resetAll]);
 
   return (
     <PageLayout
+      className={styles.page}
       footer={
         <PageFooter>The ultimate immersive musical experience</PageFooter>
       }
     >
-      <main className="w-full h-full flex flex-col items-center justify-center relative z-10 text-center px-6 py-4 max-w-4xl mx-auto overflow-hidden">
-        <div className="mb-8 w-full relative">
-          <h1 className="text-6xl sm:text-7xl md:text-9xl font-black mb-4 tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
-            MIDI JAM
-          </h1>
-          <div className="absolute -inset-4 bg-foreground/20 blur-3xl -z-10 rounded-full px-4" />
-        </div>
+      <main className="w-full h-full flex flex-col gap-4 items-center justify-evenly text-center">
+        <h1 className="text-7xl md:text-9xl w-full font-black tracking-tighter uppercase italic bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent select-none drop-shadow-2xl">
+          MIDI JAM
+        </h1>
 
-        {!isSupported && (
-          <div className="flex flex-col items-center gap-2 text-red-500 font-bold mb-8">
-            <span className="bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20">
-              UNSUPPORTED BROWSER
+        {isHomeLoading ? (
+          <div className="flex flex-col items-center gap-4 mt-8">
+            <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
+            <span className="font-bold uppercase tracking-widest text-[10px] opacity-50">
+              Initializing Engine
             </span>
-            <p className="text-xs text-red-500/60 max-w-xs">
-              This app requires Web MIDI API. Please use Android Chrome or a
-              modern Chromium browser.
-            </p>
           </div>
-        )}
-
-        {/* Navigation Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 w-full max-w-lg mb-8">
-          <div className="col-span-1 sm:col-span-2 flex justify-center">
+        ) : isSupported ? (
+          <div className={styles.actions}>
             <Button
-              onClick={handleStart}
-              disabled={!isSupported}
+              onClick={() => toGear()}
               icon={Play}
               iconPosition="right"
-              size="lg"
+              size="md"
             >
-              START JAM
+              START
             </Button>
-          </div>
-
-          <div className="col-span-1 sm:col-span-2 flex justify-center">
             <Button
               variant="secondary"
-              onClick={handleOptions}
+              onClick={() => toOptions()}
               icon={Settings}
-              size="lg"
+              size="sm"
             >
               Options
             </Button>
           </div>
-        </div>
+        ) : (
+          <>
+            <span className="bg-red-500/10 px-4 py-2 rounded-full border border-red-500/20 text-xs">
+              UNSUPPORTED BROWSER
+            </span>
+            <p className="text-red-500/60 max-w-xs leading-relaxed">
+              This app requires Web MIDI API. Please use Android Chrome or a
+              modern Chromium browser.
+            </p>
+          </>
+        )}
       </main>
     </PageLayout>
   );
