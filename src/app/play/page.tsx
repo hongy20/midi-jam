@@ -33,18 +33,18 @@ export default function PlayPage() {
   const { toScore, toPause } = useNavigation();
   const { selectedTrack } = useCollection();
   const { selectedMIDIInput, selectedMIDIOutput } = useGear();
-  const { trackStatus: trackLoadStatus } = useTrack();
+  const { trackStatus } = useTrack();
   const { gameSession, setGameSession } = useStage();
   const { speed, demoMode } = useOptions();
   const { setSessionResults } = useScore();
 
   // Track Data (only if ready)
-  const events = trackLoadStatus.isReady ? trackLoadStatus.events : [];
-  const spans = trackLoadStatus.isReady ? trackLoadStatus.spans : [];
-  const originalDurationMs = trackLoadStatus.isReady
-    ? trackLoadStatus.originalDurationMs
+  const events = trackStatus.isReady ? trackStatus.events : [];
+  const spans = trackStatus.isReady ? trackStatus.spans : [];
+  const originalDurationMs = trackStatus.isReady
+    ? trackStatus.originalDurationMs
     : 0;
-  const isLoading = trackLoadStatus.isLoading;
+  const isLoading = trackStatus.isLoading;
 
   // Calculate dynamic piano range for consistent grid alignment
   const visibleMidiRange = useMemo(() => {
@@ -238,10 +238,10 @@ export default function PlayPage() {
             LOADING...
           </span>
         </div>
-      ) : trackLoadStatus.error ? (
+      ) : trackStatus.error ? (
         <div className="flex flex-col items-center justify-center h-full gap-4">
           <span className="text-red-500 font-bold uppercase tracking-widest text-xs">
-            DATA CORRUPTED: {trackLoadStatus.error}
+            DATA CORRUPTED: {trackStatus.error}
           </span>
         </div>
       ) : (

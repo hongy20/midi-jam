@@ -3,7 +3,7 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
 import type { MidiEvent, NoteSpan } from "@/lib/midi/midi-parser";
 
-export type TrackLoadStatus =
+export type TrackStatus =
   | { isLoading: true; isReady: false; error: null }
   | { isLoading: false; isReady: false; error: string | null }
   | {
@@ -16,15 +16,15 @@ export type TrackLoadStatus =
     };
 
 export interface TrackContextType {
-  trackStatus: TrackLoadStatus;
-  setTrackStatus: (status: TrackLoadStatus) => void;
+  trackStatus: TrackStatus;
+  setTrackStatus: (status: TrackStatus) => void;
   resetTrack: () => void;
 }
 
 const TrackContext = createContext<TrackContextType | undefined>(undefined);
 
 export function TrackProvider({ children }: { children: ReactNode }) {
-  const [trackStatus, setTrackStatus] = useState<TrackLoadStatus>({
+  const [trackStatus, setTrackStatus] = useState<TrackStatus>({
     isLoading: false,
     isReady: false,
     error: null,
