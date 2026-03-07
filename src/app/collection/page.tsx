@@ -35,7 +35,7 @@ export default function CollectionPage() {
   return (
     <PageLayout
       header={
-        <PageHeader title="Song Collection">
+        <PageHeader title="Songs">
           <Button
             variant="secondary"
             onClick={() => {
