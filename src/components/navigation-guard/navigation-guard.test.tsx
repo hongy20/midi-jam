@@ -1,12 +1,18 @@
 import { render } from "@testing-library/react";
 import { usePathname } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useAppContext } from "@/context/app-context";
+import { useCollection } from "@/context/collection-context";
+import { useGear } from "@/context/gear-context";
+import { useScore } from "@/context/score-context";
+import { useStage } from "@/context/stage-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { ROUTES } from "@/lib/navigation/routes";
 import { NavigationGuard } from "./navigation-guard";
 
-vi.mock("@/context/app-context");
+vi.mock("@/context/collection-context");
+vi.mock("@/context/gear-context");
+vi.mock("@/context/score-context");
+vi.mock("@/context/stage-context");
 vi.mock("@/hooks/use-navigation");
 vi.mock("next/navigation");
 
@@ -29,41 +35,41 @@ describe("NavigationGuard", () => {
       goBack: vi.fn(),
       navigate: vi.fn(),
     });
+
+    // Default mock values
+    vi.mocked(useCollection).mockReturnValue({
+      selectedTrack: null,
+      setSelectedTrack: vi.fn(),
+      resetCollection: vi.fn(),
+    });
+    vi.mocked(useGear).mockReturnValue({
+      selectedMIDIInput: null,
+      selectedMIDIOutput: null,
+      selectMIDIInput: vi.fn(),
+      selectMIDIOutput: vi.fn(),
+      inputs: [],
+      outputs: [],
+      isLoading: false,
+      error: null,
+    });
+    vi.mocked(useScore).mockReturnValue({
+      sessionResults: null,
+      setSessionResults: vi.fn(),
+      resetScore: vi.fn(),
+    });
+    vi.mocked(useStage).mockReturnValue({
+      gameSession: null,
+      setGameSession: mockSetGameSession,
+      resetStage: vi.fn(),
+    });
   });
 
   it("redirects from Level 2 to Gear if MIDI is missing", () => {
     vi.mocked(usePathname).mockReturnValue(ROUTES.PLAY);
-    vi.mocked(useAppContext).mockReturnValue({
-      collection: {
-        selectedTrack: { id: "1", name: "Track", url: "url" },
-        setSelectedTrack: vi.fn(),
-      },
-      gear: {
-        selectedMIDIInput: null,
-        selectedMIDIOutput: null,
-        selectMIDIInput: vi.fn(),
-        selectMIDIOutput: vi.fn(),
-      },
-      stage: {
-        trackStatus: {
-          isLoading: false,
-          isReady: true,
-          error: null,
-          originalDurationMs: 1000,
-          events: [],
-          spans: [],
-        },
-        gameSession: null,
-        setGameSession: mockSetGameSession,
-      },
-      score: { sessionResults: null, setSessionResults: vi.fn() },
-      options: {
-        speed: 1,
-        demoMode: false,
-        setSpeed: vi.fn(),
-        setDemoMode: vi.fn(),
-      },
-      home: { isHomeLoading: false, isSupported: true, resetAll: vi.fn() },
+    vi.mocked(useCollection).mockReturnValue({
+      selectedTrack: { id: "1", name: "Track", url: "url" },
+      setSelectedTrack: vi.fn(),
+      resetCollection: vi.fn(),
     });
 
     render(<NavigationGuard>Test</NavigationGuard>);
@@ -74,28 +80,15 @@ describe("NavigationGuard", () => {
 
   it("redirects from Level 2 to Collection if track is missing", () => {
     vi.mocked(usePathname).mockReturnValue(ROUTES.PLAY);
-    vi.mocked(useAppContext).mockReturnValue({
-      collection: { selectedTrack: null, setSelectedTrack: vi.fn() },
-      gear: {
-        // biome-ignore lint/suspicious/noExplicitAny: mocking MIDI input
-        selectedMIDIInput: { id: "midi-1" } as any,
-        selectedMIDIOutput: null,
-        selectMIDIInput: vi.fn(),
-        selectMIDIOutput: vi.fn(),
-      },
-      stage: {
-        trackStatus: { isLoading: false, isReady: false, error: null },
-        gameSession: null,
-        setGameSession: mockSetGameSession,
-      },
-      score: { sessionResults: null, setSessionResults: vi.fn() },
-      options: {
-        speed: 1,
-        demoMode: false,
-        setSpeed: vi.fn(),
-        setDemoMode: vi.fn(),
-      },
-      home: { isHomeLoading: false, isSupported: true, resetAll: vi.fn() },
+    vi.mocked(useGear).mockReturnValue({
+      selectedMIDIInput: { id: "midi-1" } as any,
+      selectedMIDIOutput: null,
+      selectMIDIInput: vi.fn(),
+      selectMIDIOutput: vi.fn(),
+      inputs: [],
+      outputs: [],
+      isLoading: false,
+      error: null,
     });
 
     render(<NavigationGuard>Test</NavigationGuard>);
@@ -106,28 +99,6 @@ describe("NavigationGuard", () => {
 
   it("redirects from Level 1 to Gear if MIDI is missing", () => {
     vi.mocked(usePathname).mockReturnValue(ROUTES.COLLECTION);
-    vi.mocked(useAppContext).mockReturnValue({
-      collection: { selectedTrack: null, setSelectedTrack: vi.fn() },
-      gear: {
-        selectedMIDIInput: null,
-        selectedMIDIOutput: null,
-        selectMIDIInput: vi.fn(),
-        selectMIDIOutput: vi.fn(),
-      },
-      stage: {
-        trackStatus: { isLoading: false, isReady: false, error: null },
-        gameSession: null,
-        setGameSession: mockSetGameSession,
-      },
-      score: { sessionResults: null, setSessionResults: vi.fn() },
-      options: {
-        speed: 1,
-        demoMode: false,
-        setSpeed: vi.fn(),
-        setDemoMode: vi.fn(),
-      },
-      home: { isHomeLoading: false, isSupported: true, resetAll: vi.fn() },
-    });
 
     render(<NavigationGuard>Test</NavigationGuard>);
 
@@ -136,28 +107,6 @@ describe("NavigationGuard", () => {
 
   it("does not redirect from Level 0 (Gear) even if MIDI is missing", () => {
     vi.mocked(usePathname).mockReturnValue(ROUTES.GEAR);
-    vi.mocked(useAppContext).mockReturnValue({
-      collection: { selectedTrack: null, setSelectedTrack: vi.fn() },
-      gear: {
-        selectedMIDIInput: null,
-        selectedMIDIOutput: null,
-        selectMIDIInput: vi.fn(),
-        selectMIDIOutput: vi.fn(),
-      },
-      stage: {
-        trackStatus: { isLoading: false, isReady: false, error: null },
-        gameSession: null,
-        setGameSession: mockSetGameSession,
-      },
-      score: { sessionResults: null, setSessionResults: vi.fn() },
-      options: {
-        speed: 1,
-        demoMode: false,
-        setSpeed: vi.fn(),
-        setDemoMode: vi.fn(),
-      },
-      home: { isHomeLoading: false, isSupported: true, resetAll: vi.fn() },
-    });
 
     render(<NavigationGuard>Test</NavigationGuard>);
 
@@ -167,28 +116,6 @@ describe("NavigationGuard", () => {
 
   it("redirects from Score to Home if results are missing", () => {
     vi.mocked(usePathname).mockReturnValue(ROUTES.SCORE);
-    vi.mocked(useAppContext).mockReturnValue({
-      collection: { selectedTrack: null, setSelectedTrack: vi.fn() },
-      gear: {
-        selectedMIDIInput: null,
-        selectedMIDIOutput: null,
-        selectMIDIInput: vi.fn(),
-        selectMIDIOutput: vi.fn(),
-      },
-      stage: {
-        trackStatus: { isLoading: false, isReady: false, error: null },
-        gameSession: null,
-        setGameSession: mockSetGameSession,
-      },
-      score: { sessionResults: null, setSessionResults: vi.fn() },
-      options: {
-        speed: 1,
-        demoMode: false,
-        setSpeed: vi.fn(),
-        setDemoMode: vi.fn(),
-      },
-      home: { isHomeLoading: false, isSupported: true, resetAll: vi.fn() },
-    });
 
     render(<NavigationGuard>Test</NavigationGuard>);
 

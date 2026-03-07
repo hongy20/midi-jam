@@ -14,7 +14,7 @@ describe("HomeProvider & useHome", () => {
     consoleSpy.mockRestore();
   });
 
-  it("should initialize isHomeLoading as true and isSupported based on navigator", async () => {
+  it("should initialize isLoading as true and isSupported based on navigator", async () => {
     vi.useFakeTimers();
     // Mock navigator.requestMIDIAccess
     const originalNavigator = global.navigator;
@@ -29,7 +29,7 @@ describe("HomeProvider & useHome", () => {
 
     const { result } = renderHook(() => useHome(), { wrapper });
 
-    expect(result.current.isHomeLoading).toBe(true);
+    expect(result.current.isLoading).toBe(true);
     expect(result.current.isSupported).toBe(true);
 
     // Fast-forward 1000ms
@@ -37,7 +37,7 @@ describe("HomeProvider & useHome", () => {
       vi.advanceTimersByTime(1000);
     });
 
-    expect(result.current.isHomeLoading).toBe(false);
+    expect(result.current.isLoading).toBe(false);
 
     Object.defineProperty(global, "navigator", {
       value: originalNavigator,
@@ -80,14 +80,14 @@ describe("HomeProvider & useHome", () => {
     act(() => {
       vi.advanceTimersByTime(1000);
     });
-    expect(result.current.isHomeLoading).toBe(false);
+    expect(result.current.isLoading).toBe(false);
 
     // Resetting doesn't actually change loading state once finished,
     // but we verify the function exists and is callable.
     act(() => {
       result.current.resetHome();
     });
-    expect(result.current.isHomeLoading).toBe(false);
+    expect(result.current.isLoading).toBe(false);
     vi.useRealTimers();
   });
 });

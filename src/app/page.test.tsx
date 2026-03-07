@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { AppContextType } from "@/context/app-context";
-import { useAppContext } from "@/context/app-context";
+import { useHome } from "@/context/home-context";
 import { useNavigation } from "@/hooks/use-navigation";
+import { useAppReset } from "@/hooks/use-track-sync";
 import WelcomePage from "./page";
 
 // Mock the hooks
@@ -10,8 +10,12 @@ vi.mock("@/hooks/use-navigation", () => ({
   useNavigation: vi.fn(),
 }));
 
-vi.mock("@/context/app-context", () => ({
-  useAppContext: vi.fn(),
+vi.mock("@/context/home-context", () => ({
+  useHome: vi.fn(),
+}));
+
+vi.mock("@/hooks/use-track-sync", () => ({
+  useAppReset: vi.fn(),
 }));
 
 describe("Welcome Page", () => {
@@ -27,41 +31,22 @@ describe("Welcome Page", () => {
     navigate: vi.fn(),
   };
 
-  const mockContext: AppContextType = {
-    collection: { selectedTrack: null, setSelectedTrack: vi.fn() },
-    gear: {
-      selectedMIDIInput: null,
-      selectedMIDIOutput: null,
-      selectMIDIInput: vi.fn(),
-      selectMIDIOutput: vi.fn(),
-    },
-    stage: {
-      trackStatus: { isLoading: false, isReady: false, error: null },
-      gameSession: null,
-      setGameSession: vi.fn(),
-    },
-    score: { sessionResults: null, setSessionResults: vi.fn() },
-    options: {
-      speed: 1.0,
-      demoMode: false,
-      setSpeed: vi.fn(),
-      setDemoMode: vi.fn(),
-    },
-    home: { isHomeLoading: false, isSupported: true, resetAll: vi.fn() },
+  const mockAppReset = {
+    resetAll: vi.fn(),
   };
 
   beforeEach(() => {
-    // Mock Web MIDI support
-    Object.defineProperty(navigator, "requestMIDIAccess", {
-      value: vi.fn(),
-      configurable: true,
-    });
     vi.resetAllMocks();
+    vi.mocked(useAppReset).mockReturnValue(mockAppReset);
   });
 
   it("renders the title and start button", () => {
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
-    vi.mocked(useAppContext).mockReturnValue(mockContext);
+    vi.mocked(useHome).mockReturnValue({
+      isLoading: false,
+      isSupported: true,
+      resetHome: vi.fn(),
+    });
 
     render(<WelcomePage />);
     expect(screen.getByText(/Midi Jam/i)).toBeInTheDocument();
@@ -70,35 +55,41 @@ describe("Welcome Page", () => {
 
   it("shows spinner when loading", () => {
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
-    vi.mocked(useAppContext).mockReturnValue({
-      ...mockContext,
-      home: { isHomeLoading: true, isSupported: true, resetAll: vi.fn() },
+    vi.mocked(useHome).mockReturnValue({
+      isLoading: true,
+      isSupported: true,
+      resetHome: vi.fn(),
     });
 
     render(<WelcomePage />);
     expect(screen.getByText(/Initializing Engine/i)).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: /START JAM/i }),
+      screen.queryByRole("button", { name: /START/i }),
     ).not.toBeInTheDocument();
   });
 
   it("shows error when not supported", () => {
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
-    vi.mocked(useAppContext).mockReturnValue({
-      ...mockContext,
-      home: { isHomeLoading: false, isSupported: false, resetAll: vi.fn() },
+    vi.mocked(useHome).mockReturnValue({
+      isLoading: false,
+      isSupported: false,
+      resetHome: vi.fn(),
     });
 
     render(<WelcomePage />);
     expect(screen.getByText(/UNSUPPORTED BROWSER/i)).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: /START JAM/i }),
+      screen.queryByRole("button", { name: /START/i }),
     ).not.toBeInTheDocument();
   });
 
   it("navigates to gear on start click", () => {
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
-    vi.mocked(useAppContext).mockReturnValue(mockContext);
+    vi.mocked(useHome).mockReturnValue({
+      isLoading: false,
+      isSupported: true,
+      resetHome: vi.fn(),
+    });
 
     render(<WelcomePage />);
     fireEvent.click(screen.getByRole("button", { name: /START/i }));
@@ -107,7 +98,11 @@ describe("Welcome Page", () => {
 
   it("navigates to options on options click", () => {
     vi.mocked(useNavigation).mockReturnValue(mockNavigation);
-    vi.mocked(useAppContext).mockReturnValue(mockContext);
+    vi.mocked(useHome).mockReturnValue({
+      isLoading: false,
+      isSupported: true,
+      resetHome: vi.fn(),
+    });
 
     render(<WelcomePage />);
     fireEvent.click(screen.getByRole("button", { name: /Options/i }));

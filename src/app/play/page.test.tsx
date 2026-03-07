@@ -1,7 +1,11 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { AppContextType } from "@/context/app-context";
-import { useAppContext } from "@/context/app-context";
+import { useCollection } from "@/context/collection-context";
+import { useGear } from "@/context/gear-context";
+import { useOptions } from "@/context/options-context";
+import { useScore } from "@/context/score-context";
+import { useStage } from "@/context/stage-context";
+import { useTrack } from "@/context/track-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
@@ -14,9 +18,12 @@ vi.mock("@/hooks/use-navigation", () => ({
   useNavigation: vi.fn(),
 }));
 
-vi.mock("@/context/app-context", () => ({
-  useAppContext: vi.fn(),
-}));
+vi.mock("@/context/collection-context");
+vi.mock("@/context/gear-context");
+vi.mock("@/context/options-context");
+vi.mock("@/context/score-context");
+vi.mock("@/context/stage-context");
+vi.mock("@/context/track-context");
 
 vi.mock("@/hooks/use-midi-audio", () => ({
   useMidiAudio: vi.fn(),
@@ -32,6 +39,14 @@ vi.mock("@/hooks/use-lane-score-engine", () => ({
 
 vi.mock("@/hooks/use-lane-timeline", () => ({
   useLaneTimeline: vi.fn(),
+}));
+
+vi.mock("@/hooks/use-demo-playback", () => ({
+  useDemoPlayback: vi.fn(),
+}));
+
+vi.mock("@/hooks/use-wake-lock", () => ({
+  useWakeLock: vi.fn(),
 }));
 
 describe("Play Page", () => {
@@ -50,22 +65,32 @@ describe("Play Page", () => {
   const mockSetGameSession = vi.fn();
   const mockSetSessionResults = vi.fn();
 
-  const mockContext: AppContextType = {
-    collection: {
+  beforeEach(() => {
+    vi.resetAllMocks();
+    vi.mocked(useNavigation).mockReturnValue(mockNavigation);
+
+    vi.mocked(useCollection).mockReturnValue({
       selectedTrack: {
         id: "track-1.mid",
         name: "Test Track",
         url: "/midi/track-1.mid",
       },
       setSelectedTrack: vi.fn(),
-    },
-    gear: {
+      resetCollection: vi.fn(),
+    });
+
+    vi.mocked(useGear).mockReturnValue({
       selectedMIDIInput: { id: "piano", name: "Piano" } as WebMidi.MIDIInput,
       selectedMIDIOutput: null,
       selectMIDIInput: vi.fn(),
       selectMIDIOutput: vi.fn(),
-    },
-    stage: {
+      inputs: [],
+      outputs: [],
+      isLoading: false,
+      error: null,
+    });
+
+    vi.mocked(useTrack).mockReturnValue({
       trackStatus: {
         isLoading: false,
         isReady: true,
@@ -74,26 +99,29 @@ describe("Play Page", () => {
         spans: [],
         error: null,
       },
+      setTrackStatus: vi.fn(),
+      resetTrack: vi.fn(),
+    });
+
+    vi.mocked(useStage).mockReturnValue({
       gameSession: null,
       setGameSession: mockSetGameSession,
-    },
-    score: {
+      resetStage: vi.fn(),
+    });
+
+    vi.mocked(useScore).mockReturnValue({
       sessionResults: null,
       setSessionResults: mockSetSessionResults,
-    },
-    options: {
+      resetScore: vi.fn(),
+    });
+
+    vi.mocked(useOptions).mockReturnValue({
       speed: 1.0,
       demoMode: false,
       setSpeed: vi.fn(),
       setDemoMode: vi.fn(),
-    },
-    home: { isHomeLoading: false, isSupported: true, resetAll: vi.fn() },
-  };
-
-  beforeEach(() => {
-    vi.resetAllMocks();
-    vi.mocked(useNavigation).mockReturnValue(mockNavigation);
-    vi.mocked(useAppContext).mockReturnValue(mockContext);
+      resetOptions: vi.fn(),
+    });
 
     vi.mocked(useMidiAudio).mockReturnValue({
       playNote: vi.fn(),
@@ -126,19 +154,17 @@ describe("Play Page", () => {
       };
     });
 
-    vi.mocked(useAppContext).mockReturnValue({
-      ...mockContext,
-      stage: {
-        ...mockContext.stage,
-        trackStatus: {
-          isLoading: false,
-          isReady: true,
-          originalDurationMs: 100,
-          events: new Array(10).fill({}),
-          spans: [],
-          error: null,
-        },
+    vi.mocked(useTrack).mockReturnValue({
+      trackStatus: {
+        isLoading: false,
+        isReady: true,
+        originalDurationMs: 100,
+        events: new Array(10).fill({}),
+        spans: [],
+        error: null,
       },
+      setTrackStatus: vi.fn(),
+      resetTrack: vi.fn(),
     });
 
     vi.mocked(useLaneScoreEngine).mockReturnValue({
@@ -169,9 +195,10 @@ describe("Play Page", () => {
   });
 
   it("returns null when track or gear is missing", () => {
-    vi.mocked(useAppContext).mockReturnValue({
-      ...mockContext,
-      collection: { selectedTrack: null, setSelectedTrack: vi.fn() },
+    vi.mocked(useCollection).mockReturnValue({
+      selectedTrack: null,
+      setSelectedTrack: vi.fn(),
+      resetCollection: vi.fn(),
     });
 
     const { container } = render(<PlayPage />);
@@ -179,12 +206,10 @@ describe("Play Page", () => {
   });
 
   it("shows loading state when track is loading", () => {
-    vi.mocked(useAppContext).mockReturnValue({
-      ...mockContext,
-      stage: {
-        ...mockContext.stage,
-        trackStatus: { isLoading: true, isReady: false, error: null },
-      },
+    vi.mocked(useTrack).mockReturnValue({
+      trackStatus: { isLoading: true, isReady: false, error: null },
+      setTrackStatus: vi.fn(),
+      resetTrack: vi.fn(),
     });
 
     render(<PlayPage />);

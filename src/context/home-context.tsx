@@ -10,7 +10,7 @@ import {
 } from "react";
 
 export interface HomeContextType {
-  isHomeLoading: boolean;
+  isLoading: boolean;
   isSupported: boolean;
   resetHome: () => void;
 }
@@ -18,7 +18,7 @@ export interface HomeContextType {
 const HomeContext = createContext<HomeContextType | undefined>(undefined);
 
 export function HomeProvider({ children }: { children: ReactNode }) {
-  const [isHomeLoading, setIsHomeLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSupported, setIsSupported] = useState<boolean>(false);
 
   // Detect Web MIDI support and finish initial loading on mount
@@ -29,7 +29,7 @@ export function HomeProvider({ children }: { children: ReactNode }) {
 
     // Provide a small window to show the loader for smoother experience
     const timer = setTimeout(() => {
-      setIsHomeLoading(false);
+      setIsLoading(false);
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -41,7 +41,7 @@ export function HomeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value: HomeContextType = {
-    isHomeLoading,
+    isLoading,
     isSupported,
     resetHome,
   };

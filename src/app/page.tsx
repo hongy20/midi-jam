@@ -12,7 +12,7 @@ import styles from "./page.module.css";
 
 export default function WelcomePage() {
   const { toGear, toOptions } = useNavigation();
-  const { isHomeLoading, isSupported } = useHome();
+  const { isLoading, isSupported } = useHome();
   const { resetAll } = useAppReset();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function WelcomePage() {
           MIDI JAM
         </h1>
 
-        {isHomeLoading ? (
+        {isLoading ? (
           <div className="flex flex-col items-center gap-4 mt-8">
             <div className="w-12 h-12 border-4 border-foreground/20 border-t-foreground rounded-full animate-spin" />
             <span className="font-bold uppercase tracking-widest text-[10px] opacity-50">
