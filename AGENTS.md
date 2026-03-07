@@ -33,8 +33,38 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
   - **Flatten Trees**: Avoid redundant wrapping `div`s. If an element has only one child, consolidate them.
   - **Purposeful Elements**: Avoid empty `div`s for spacing or decoration; use parent grid/flex spacing or pseudo-elements (`::before`/`::after`) instead.
 
-## 4. Coding Patterns
-- **Nullish Coalescing**: Prefer the Nullish Coalescing operator (`??`) or Conditional (Ternary) operator (`? :`) for default values over verbose `typeof` checks for `null` or `undefined` (e.g., `value ?? 0` instead of `typeof value === 'number' ? value : 0`).
+## 4. UI & Navigation Architecture
+
+### Layout Hierarchy
+- **Root**: Every page must use `PageLayout` as its root component.
+- **Sections**:
+  - `PageHeader`: Reserved for **Context** (Active Titles, Contextual Icons) and secondary navigation actions.
+  - `PageFooter`: Reserved for primary **Actions** (Navigation, Primary Buttons, Branding).
+  - `<main>`: Reserved for **Content**. Must use consistent padding/max-width (`max-w-5xl mx-auto px-8`).
+
+### Navigation Patterns
+- **Button Semantics**:
+  - **Primary Actions**: Use `UPPERCASE` labels (e.g., `CONTINUE`, `START`).
+  - **Secondary/Navigational**: Use `Title Case` (e.g., `Main Menu`, `Options`).
+
+## 5. React & State Patterns
+
+### Context & Hook Consumption
+- **Deep Destructuring**: Always destructure required properties directly in a single statement. Avoid intermediate constants for sub-objects.
+  - **✅ Good**: `const { gear: { selectedMIDIInput } } = useAppContext();`
+  - **❌ Bad**: `const { gear } = useAppContext(); const { selectedMIDIInput } = gear;`
+- **Inline Handlers**: Avoid creating single-use, simple wrapper functions (e.g., `const handleBack = () => toHome()`). Invoke the logic inline within the event prop.
+  - **✅ Good**: `onClick={() => toHome()}`
+  - **❌ Bad**: `onClick={handleBack}`
+
+### Component Structure
+- **List Abstraction**: When using `.map()` to render items with multiple tags or complex internal layers, always abstract the item into its own React component (e.g., `GearCard`). This keeps the parent component's JSX flat and readable.
+- **Grouped Status UI**: Use nested ternary operators to group loading, error, and success states into a single logical block within the JSX. This keeps the state-dependent UI cohesive.
+- **Minimal DOM Nesting**: Minimize container layers. Avoid wrapping elements in redundant `div`s for spacing, alignment, or positioning; instead, apply these rules to the parent container (e.g., using Flexbox/Grid properties on `<main>`). Use fragments `<></>` when a React wrapper is technically required but styling is not.
+
+## 5. Coding Patterns
+- **Nullish Coalescing**: Prefer `??` or ternary for default values over verbose checks.
+- **Iconography**: Use `lucide-react` exclusively. No inline SVG strings or emojis.
 
 ---
 
