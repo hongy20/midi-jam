@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 export interface OptionsContextType {
   speed: number;
@@ -16,10 +23,10 @@ export function OptionsProvider({ children }: { children: ReactNode }) {
   const [speed, setSpeed] = useState<number>(1.0);
   const [demoMode, setDemoMode] = useState<boolean>(true);
 
-  const resetOptions = () => {
+  const resetOptions = useCallback(() => {
     setSpeed(1.0);
     setDemoMode(true);
-  };
+  }, []);
 
   const value: OptionsContextType = useMemo(
     () => ({
@@ -29,7 +36,7 @@ export function OptionsProvider({ children }: { children: ReactNode }) {
       setDemoMode,
       resetOptions,
     }),
-    [speed, demoMode],
+    [speed, demoMode, resetOptions],
   );
 
   return (

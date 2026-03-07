@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 export interface GameSession {
   isPaused: boolean;
@@ -20,9 +27,9 @@ const StageContext = createContext<StageContextType | undefined>(undefined);
 export function StageProvider({ children }: { children: ReactNode }) {
   const [gameSession, setGameSession] = useState<GameSession | null>(null);
 
-  const resetStage = () => {
+  const resetStage = useCallback(() => {
     setGameSession(null);
-  };
+  }, []);
 
   const value: StageContextType = useMemo(
     () => ({
@@ -30,7 +37,7 @@ export function StageProvider({ children }: { children: ReactNode }) {
       setGameSession,
       resetStage,
     }),
-    [gameSession],
+    [gameSession, resetStage],
   );
 
   return (

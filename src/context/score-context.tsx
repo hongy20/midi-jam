@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 
 export interface SessionResults {
   score: number;
@@ -21,9 +28,9 @@ export function ScoreProvider({ children }: { children: ReactNode }) {
     null,
   );
 
-  const resetScore = () => {
+  const resetScore = useCallback(() => {
     setSessionResults(null);
-  };
+  }, []);
 
   const value: ScoreContextType = useMemo(
     () => ({
@@ -31,7 +38,7 @@ export function ScoreProvider({ children }: { children: ReactNode }) {
       setSessionResults,
       resetScore,
     }),
-    [sessionResults],
+    [sessionResults, resetScore],
   );
 
   return (

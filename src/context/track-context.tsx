@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
 import type { MidiEvent, NoteSpan } from "@/lib/midi/midi-parser";
 
 export type TrackStatus =
@@ -30,9 +37,9 @@ export function TrackProvider({ children }: { children: ReactNode }) {
     error: null,
   });
 
-  const resetTrack = () => {
+  const resetTrack = useCallback(() => {
     setTrackStatus({ isLoading: false, isReady: false, error: null });
-  };
+  }, []);
 
   const value: TrackContextType = useMemo(
     () => ({
@@ -40,7 +47,7 @@ export function TrackProvider({ children }: { children: ReactNode }) {
       setTrackStatus,
       resetTrack,
     }),
-    [trackStatus],
+    [trackStatus, resetTrack],
   );
 
   return (

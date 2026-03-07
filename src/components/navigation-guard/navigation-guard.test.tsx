@@ -81,7 +81,7 @@ describe("NavigationGuard", () => {
   it("redirects from Level 2 to Collection if track is missing", () => {
     vi.mocked(usePathname).mockReturnValue(ROUTES.PLAY);
     vi.mocked(useGear).mockReturnValue({
-      selectedMIDIInput: { id: "midi-1" } as any,
+      selectedMIDIInput: { id: "midi-1" } as unknown as WebMidi.MIDIInput,
       selectedMIDIOutput: null,
       selectMIDIInput: vi.fn(),
       selectMIDIOutput: vi.fn(),
