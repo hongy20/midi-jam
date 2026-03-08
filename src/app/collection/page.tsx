@@ -138,8 +138,6 @@ export default function CollectionPage() {
     [tracks, selectedTrack, setSelectedTrack],
   );
 
-  const currentTrackIndex = tracks.findIndex((t) => t.id === selectedTrack?.id);
-
   return (
     <PageLayout
       header={
@@ -227,7 +225,9 @@ export default function CollectionPage() {
                 variant="secondary"
                 icon={ChevronLeft}
                 onClick={() => handleNavigate("prev")}
-                disabled={currentTrackIndex <= 0}
+                disabled={
+                  tracks.findIndex((t) => t.id === selectedTrack?.id) <= 0
+                }
                 className="absolute right-2.5 top-1/2 -translate-y-1/2"
                 aria-label="Previous song"
                 size="sm"
@@ -236,7 +236,10 @@ export default function CollectionPage() {
                 variant="secondary"
                 icon={ChevronRight}
                 onClick={() => handleNavigate("next")}
-                disabled={currentTrackIndex >= tracks.length - 1}
+                disabled={
+                  tracks.findIndex((t) => t.id === selectedTrack?.id) >=
+                  tracks.length - 1
+                }
                 className="absolute left-2.5 top-1/2 -translate-y-1/2"
                 aria-label="Next song"
                 size="sm"
