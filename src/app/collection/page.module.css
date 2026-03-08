@@ -24,20 +24,7 @@
   display: none;
 }
 
-.navArrows {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  transform: translateY(-50%);
-  display: flex;
-  justify-content: space-between;
-  padding: 0 4rem;
-  pointer-events: none;
-  z-index: 20;
-}
-
-.navArrows .navButton {
+.navButton {
   pointer-events: auto;
   background-color: var(--ui-card-bg);
   border: 2px solid var(--ui-card-border);
@@ -52,12 +39,12 @@
   justify-content: center;
 }
 
-.navArrows .navButton svg {
+.navButton svg {
   width: 1.75rem;
   height: 1.75rem;
 }
 
-.navArrows .navButton:hover {
+.navButton:hover {
   opacity: 1;
   transform: scale(1.1);
   background-color: var(--foreground);

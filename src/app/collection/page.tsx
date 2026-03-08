@@ -125,6 +125,8 @@ export default function CollectionPage() {
     [tracks, selectedTrack, setSelectedTrack],
   );
 
+  const currentTrackIndex = tracks.findIndex((t) => t.id === selectedTrack?.id);
+
   return (
     <PageLayout
       header={
@@ -192,7 +194,7 @@ export default function CollectionPage() {
               Select a song below to continue.
             </p>
 
-            <div className="group/gallery">
+            <div className="relative group/gallery">
               <div
                 ref={(node) => {
                   scrollContainerRef.current = node;
@@ -226,29 +228,22 @@ export default function CollectionPage() {
               </div>
 
               {/* Navigation Arrows */}
-              <div className={styles.navArrows}>
-                <Button
-                  variant="secondary"
-                  icon={ChevronLeft}
-                  onClick={() => handleNavigate("prev")}
-                  disabled={
-                    tracks.findIndex((t) => t.id === selectedTrack?.id) <= 0
-                  }
-                  className={styles.navButton}
-                  aria-label="Previous song"
-                />
-                <Button
-                  variant="secondary"
-                  icon={ChevronRight}
-                  onClick={() => handleNavigate("next")}
-                  disabled={
-                    tracks.findIndex((t) => t.id === selectedTrack?.id) >=
-                    tracks.length - 1
-                  }
-                  className={styles.navButton}
-                  aria-label="Next song"
-                />
-              </div>
+              <Button
+                variant="secondary"
+                icon={ChevronLeft}
+                onClick={() => handleNavigate("prev")}
+                disabled={currentTrackIndex <= 0}
+                className={`${styles.navButton} absolute top-1/2 -translate-y-1/2 left-4 sm:left-12 z-20 hidden sm:flex`}
+                aria-label="Previous song"
+              />
+              <Button
+                variant="secondary"
+                icon={ChevronRight}
+                onClick={() => handleNavigate("next")}
+                disabled={currentTrackIndex >= tracks.length - 1}
+                className={`${styles.navButton} absolute top-1/2 -translate-y-1/2 right-4 sm:right-12 z-20 hidden sm:flex`}
+                aria-label="Next song"
+              />
             </div>
           </>
         )}
