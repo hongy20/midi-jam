@@ -5,6 +5,8 @@ import {
   Children,
   type HTMLAttributes,
   type ReactNode,
+  cloneElement,
+  isValidElement,
   useCallback,
   useEffect,
   useRef,
@@ -107,6 +109,16 @@ export function Carousel({
 
   return (
     <div className={`${styles.carousel} ${className}`} {...props}>
+      <Button
+        variant="secondary"
+        icon={ChevronLeft}
+        onClick={handlePrev}
+        disabled={isFirst}
+        className={`${styles.prev} z-20 hidden sm:flex`}
+        aria-label="Previous item"
+        size="sm"
+      />
+
       <div
         ref={(node) => {
           scrollContainerRef.current = node;
@@ -115,42 +127,33 @@ export function Carousel({
         className={styles.gallery}
       >
         {childrenArray.map((child, index) => {
-          const key =
-            child && typeof child === "object" && "key" in child && child.key
-              ? child.key
-              : index;
+          if (!isValidElement(child)) return child;
 
-          return (
-            <div
-              key={key}
-              data-index={index}
-              ref={(el) => {
-                if (el && observerRef.current) observerRef.current.observe(el);
-              }}
-              className="shrink-0 h-[80%] flex items-center"
-            >
-              {child}
-            </div>
-          );
+          return cloneElement(child as React.ReactElement<any>, {
+            "data-index": index,
+            ref: (node: HTMLElement | null) => {
+              // Observe the element
+              if (node && observerRef.current) {
+                observerRef.current.observe(node);
+              }
+              // Handle the child's own ref if it's a function ref or RefObject
+              const { ref: childRef } = child as any;
+              if (typeof childRef === "function") {
+                childRef(node);
+              } else if (childRef && "current" in childRef) {
+                childRef.current = node;
+              }
+            },
+          });
         })}
       </div>
-
-      <Button
-        variant="secondary"
-        icon={ChevronLeft}
-        onClick={handlePrev}
-        disabled={isFirst}
-        className={`${styles.prev}`}
-        aria-label="Previous item"
-        size="sm"
-      />
 
       <Button
         variant="secondary"
         icon={ChevronRight}
         onClick={handleNext}
         disabled={isLast}
-        className={`${styles.next}`}
+        className={`${styles.next} z-20 hidden sm:flex`}
         aria-label="Next item"
         size="sm"
       />
