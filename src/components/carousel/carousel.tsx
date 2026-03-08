@@ -12,17 +12,16 @@ import {
 import { Button } from "@/components/button/button";
 import styles from "./carousel.module.css";
 
-interface CarouselProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> {
+interface CarouselProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
   selectedIndex: number;
-  onSelect: (index: number) => void;
+  onSelectedIndexChange: (index: number) => void;
 }
 
 export function Carousel({
   children,
   selectedIndex,
-  onSelect,
+  onSelectedIndexChange,
   className = "",
   ...props
 }: CarouselProps) {
@@ -73,7 +72,7 @@ export function Carousel({
                   10,
                 );
                 if (index !== -1 && index !== selectedIndex) {
-                  onSelect(index);
+                  onSelectedIndexChange(index);
                 }
               }
             }
@@ -88,18 +87,18 @@ export function Carousel({
         observerRef.current = observer;
       }
     },
-    [selectedIndex, onSelect],
+    [selectedIndex, onSelectedIndexChange],
   );
 
   const handlePrev = () => {
     if (selectedIndex > 0) {
-      onSelect(selectedIndex - 1);
+      onSelectedIndexChange(selectedIndex - 1);
     }
   };
 
   const handleNext = () => {
     if (selectedIndex < itemCount - 1) {
-      onSelect(selectedIndex + 1);
+      onSelectedIndexChange(selectedIndex + 1);
     }
   };
 
@@ -141,7 +140,7 @@ export function Carousel({
         icon={ChevronLeft}
         onClick={handlePrev}
         disabled={isFirst}
-        className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
+        className={`${styles.prev}`}
         aria-label="Previous item"
         size="sm"
       />
@@ -151,7 +150,7 @@ export function Carousel({
         icon={ChevronRight}
         onClick={handleNext}
         disabled={isLast}
-        className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
+        className={`${styles.next}`}
         aria-label="Next item"
         size="sm"
       />

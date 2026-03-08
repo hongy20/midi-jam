@@ -123,7 +123,7 @@ export default function CollectionPage() {
 
             <Carousel
               selectedIndex={selectedIndex}
-              onSelect={(index) => {
+              onSelectedIndexChange={(index) => {
                 const track = tracks[index];
                 if (track) {
                   setSelectedTrack({
