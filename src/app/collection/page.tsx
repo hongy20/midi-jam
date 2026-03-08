@@ -177,7 +177,7 @@ export default function CollectionPage() {
         </PageFooter>
       }
     >
-      <main className="w-full h-full py-4 px-8 min-h-0 flex flex-col justify-center relative">
+      <main className="w-full h-full py-4 px-8 min-h-0 flex flex-col justify-center">
         {isLoading ? (
           <p className="text-center text-foreground/60 text-base font-medium animate-pulse">
             Searching for tracks...
@@ -192,7 +192,7 @@ export default function CollectionPage() {
               Select a song below to continue.
             </p>
 
-            <div className="relative group/gallery">
+            <div className="group/gallery">
               <div
                 ref={(node) => {
                   scrollContainerRef.current = node;
