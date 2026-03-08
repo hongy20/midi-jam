@@ -19,18 +19,22 @@
   padding-inline: calc(50% - 140px); /* (50% - 280px/2) */
   -ms-overflow-style: none;
   scrollbar-width: none;
-  height: 400px;
+  height: 480px; /* Increased height to accommodate scaling */
   min-height: 0;
+  /* Add vertical padding to prevent scale clipping */
+  padding-block: 2rem;
 }
 
 .prev {
   grid-area: 1 / 1 / 2 / 2; /* First column */
   justify-self: center;
+  z-index: 20;
 }
 
 .next {
   grid-area: 1 / 3 / 2 / 4; /* Third column */
   justify-self: center;
+  z-index: 20;
 }
 
 @media (min-width: 640px) {
