@@ -31,8 +31,8 @@ export function Carousel({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const isProgrammaticScrollRef = useRef(false);
+  const lastEmittedIndexRef = useRef(selectedIndex);
   
-  // Refs to keep track of latest values in observer callback without recreation
   const selectedIndexRef = useRef(selectedIndex);
   const onSelectRef = useRef(onSelectedIndexChange);
 
@@ -44,7 +44,7 @@ export function Carousel({
   const childrenArray = Children.toArray(children);
   const itemCount = childrenArray.length;
 
-  // Initial scroll on mount - use instant scroll
+  // Initial scroll on mount
   useLayoutEffect(() => {
     if (itemCount === 0 || selectedIndex < 0 || selectedIndex >= itemCount)
       return;
@@ -58,23 +58,30 @@ export function Carousel({
         inline: "center",
       });
     }
-  }, []); // Only on mount
+  }, []);
 
-  // Handle programmatic selection changes (via buttons or props)
+  // Handle selection changes (via buttons, props, or dice)
   useEffect(() => {
-    // If it's NOT a programmatic scroll, don't force a scrollIntoView
-    // This prevents the "shaking" where manual scroll and scrollIntoView fight
-    if (!isProgrammaticScrollRef.current) return;
+    // If the change came from our own observer during a manual scroll, skip scrollIntoView
+    if (selectedIndex === lastEmittedIndexRef.current && !isProgrammaticScrollRef.current) {
+      return;
+    }
 
     const container = scrollContainerRef.current;
     if (container) {
       const element = container.querySelector(`[data-index="${selectedIndex}"]`);
-      element?.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "center",
-      });
+      if (element) {
+        // We are moving programmatically
+        isProgrammaticScrollRef.current = true;
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
     }
+    
+    lastEmittedIndexRef.current = selectedIndex;
   }, [selectedIndex]);
 
   const setupObserver = useCallback(() => {
@@ -98,8 +105,10 @@ export function Carousel({
                 isProgrammaticScrollRef.current = false;
               }
 
-              // Only trigger selection change if NOT in a programmatic scroll
+              // Trigger selection change if not in a programmatic scroll
+              // or if we just arrived at the target
               if (!isProgrammaticScrollRef.current && index !== selectedIndexRef.current) {
+                lastEmittedIndexRef.current = index;
                 onSelectRef.current(index);
               }
             }
