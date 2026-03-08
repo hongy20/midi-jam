@@ -31,6 +31,7 @@ export default function CollectionPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
+  // Fetch tracks on mount
   useEffect(() => {
     async function fetchTracks() {
       const data = await getSoundTracks();
@@ -40,30 +41,31 @@ export default function CollectionPage() {
     fetchTracks();
   }, []);
 
-  // Ensure initial selected track is scrolled into center on mount and during resize
+  // Handle scrolling to selected track (initial, resize, and selection changes)
   useEffect(() => {
-    if (!isLoading && tracks.length > 0 && selectedTrack) {
-      const scrollIntoCenter = () => {
-        const container = scrollContainerRef.current;
-        if (container) {
-          const element = container.querySelector(
-            `[data-track-id="${selectedTrack.id}"]`,
-          );
-          element?.scrollIntoView({
-            behavior: "instant",
-            block: "nearest",
-            inline: "center",
-          });
-        }
-      };
+    if (isLoading || tracks.length === 0 || !selectedTrack) return;
 
-      // Initial scroll
-      scrollIntoCenter();
+    const scrollIntoCenter = (behavior: ScrollBehavior = "smooth") => {
+      const container = scrollContainerRef.current;
+      if (container) {
+        const element = container.querySelector(
+          `[data-track-id="${selectedTrack.id}"]`,
+        );
+        element?.scrollIntoView({
+          behavior,
+          block: "nearest",
+          inline: "center",
+        });
+      }
+    };
 
-      // Handle resize
-      window.addEventListener("resize", scrollIntoCenter);
-      return () => window.removeEventListener("resize", scrollIntoCenter);
-    }
+    // Initial scroll and selection changes use smooth by default
+    // (Note: IntersectionObserver updates also trigger this, but scrollIntoView is no-op if already centered)
+    scrollIntoCenter("smooth");
+
+    const handleResize = () => scrollIntoCenter("instant");
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, [isLoading, tracks.length, selectedTrack]);
 
   const setupObserver = useCallback(
@@ -119,19 +121,6 @@ export default function CollectionPage() {
         name: track.name,
         url: track.url,
       });
-
-      // Programmatically scroll the selected track into center
-      const container = scrollContainerRef.current;
-      if (container) {
-        const element = container.querySelector(
-          `[data-track-id="${track.id}"]`,
-        );
-        element?.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-          inline: "center",
-        });
-      }
     },
     [tracks, selectedTrack, setSelectedTrack],
   );
@@ -144,7 +133,6 @@ export default function CollectionPage() {
             variant="secondary"
             onClick={() => {
               if (tracks.length > 0) {
-                // Filter out the currently selected track if there are other options
                 const availableTracks =
                   tracks.length > 1
                     ? tracks.filter((t) => t.id !== selectedTrack?.id)
@@ -160,19 +148,6 @@ export default function CollectionPage() {
                   name: track.name,
                   url: track.url,
                 });
-
-                // Programmatically scroll the selected track into center
-                const container = scrollContainerRef.current;
-                if (container) {
-                  const element = container.querySelector(
-                    `[data-track-id="${track.id}"]`,
-                  );
-                  element?.scrollIntoView({
-                    behavior: "smooth",
-                    block: "nearest",
-                    inline: "center",
-                  });
-                }
               }
             }}
             icon={Dices}
@@ -244,19 +219,6 @@ export default function CollectionPage() {
                           name: track.name,
                           url: track.url,
                         });
-
-                        // Programmatically scroll the selected track into center
-                        const container = scrollContainerRef.current;
-                        if (container) {
-                          const element = container.querySelector(
-                            `[data-track-id="${track.id}"]`,
-                          );
-                          element?.scrollIntoView({
-                            behavior: "smooth",
-                            block: "nearest",
-                            inline: "center",
-                          });
-                        }
                       }}
                     />
                   </div>
