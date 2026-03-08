@@ -140,13 +140,6 @@ export default function CollectionPage() {
                   key={track.id}
                   track={track}
                   isSelected={selectedTrack?.id === track.id}
-                  onClick={() =>
-                    setSelectedTrack({
-                      id: track.id,
-                      name: track.name,
-                      url: track.url,
-                    })
-                  }
                 />
               ))}
             </Carousel>
