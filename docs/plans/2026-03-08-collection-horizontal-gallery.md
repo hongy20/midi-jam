@@ -10,12 +10,12 @@
 
 ---
 
-### Task 1: Update `TrackCard` Styles for Gallery
+### Task 1: Update `TrackCard` Styles
 
 **Files:**
 - Modify: `src/components/track-card/track-card.module.css`
 
-**Step 1: Update card styles for horizontal layout**
+**Step 1: Update card styles for horizontal gallery**
 Update `.card` to have a stable width and add `.selected` class for scaling.
 
 ```css
@@ -63,13 +63,12 @@ git commit -m "feat(collection): update TrackCard styles for gallery"
 
 ---
 
-### Task 2: Implement Horizontal Gallery in `CollectionPage`
+### Task 2: Add Gallery Container Styles
 
 **Files:**
-- Modify: `src/app/collection/page.tsx`
 - Modify: `src/app/collection/page.module.css`
 
-**Step 1: Add gallery container styles**
+**Step 1: Define gallery layout in CSS module**
 
 ```css
 /* src/app/collection/page.module.css */
@@ -83,7 +82,7 @@ git commit -m "feat(collection): update TrackCard styles for gallery"
   padding-inline: calc(50% - 140px); /* (50% - cardWidth/2) */
   -ms-overflow-style: none;
   scrollbar-width: none;
-  height: 400px; /* Adjust based on card height */
+  height: 400px; 
   min-height: 0;
 }
 
@@ -98,15 +97,30 @@ git commit -m "feat(collection): update TrackCard styles for gallery"
 }
 ```
 
-**Step 2: Implement `IntersectionObserver` logic in `page.tsx`**
+**Step 2: Commit**
+
+```bash
+git add src/app/collection/page.module.css
+git commit -m "feat(collection): add gallery container styles"
+```
+
+---
+
+### Task 3: Implement IntersectionObserver Logic
+
+**Files:**
+- Modify: `src/app/collection/page.tsx`
+
+**Step 1: Implement `IntersectionObserver` in the component**
+Add refs and the observer setup to detect the centered track.
 
 ```tsx
-/* src/app/collection/page.tsx additions */
+/* src/app/collection/page.tsx */
 import { useRef, useCallback } from "react";
+import styles from "./page.module.css";
 
 // Inside CollectionPage component
 const scrollContainerRef = useRef<HTMLDivElement>(null);
-
 const observerRef = useRef<IntersectionObserver | null>(null);
 
 const setupObserver = useCallback((node: HTMLDivElement | null) => {
@@ -131,21 +145,21 @@ const setupObserver = useCallback((node: HTMLDivElement | null) => {
       },
       {
         root: node,
-        rootMargin: "0px -45% 0px -45%", // Narrow center hit box
+        rootMargin: "0px -45% 0px -45%",
         threshold: 0.5,
       }
     );
 
     observerRef.current = observer;
-    // We'll need to observe items after they render
   }
 }, [tracks, setSelectedTrack]);
 ```
 
-**Step 3: Update JSX to use the new gallery structure**
+**Step 2: Update JSX structure**
+Replace the current track list with the new gallery structure.
 
 ```tsx
-/* Update the div in CollectionPage JSX */
+/* Update JSX in CollectionPage */
 <div 
   ref={(node) => {
     scrollContainerRef.current = node;
@@ -166,7 +180,6 @@ const setupObserver = useCallback((node: HTMLDivElement | null) => {
         track={track}
         isSelected={selectedTrack?.id === track.id}
         onClick={() => {
-          // Manual click should also scroll into view
           setSelectedTrack({
             id: track.id,
             name: track.name,
@@ -179,26 +192,22 @@ const setupObserver = useCallback((node: HTMLDivElement | null) => {
 </div>
 ```
 
-**Step 4: Run dev server and verify**
-Run: `npm run dev`
-Expected: Gallery scrolls horizontally, snaps to center, and auto-selects.
-
-**Step 5: Commit**
+**Step 3: Commit**
 
 ```bash
-git add src/app/collection/page.tsx src/app/collection/page.module.css
-git commit -m "feat(collection): implement horizontal gallery with IntersectionObserver"
+git add src/app/collection/page.tsx
+git commit -m "feat(collection): implement IntersectionObserver for gallery auto-selection"
 ```
 
 ---
 
-### Task 3: Refine Loading and Empty States
+### Task 4: Refine Loading State
 
 **Files:**
 - Modify: `src/app/collection/page.tsx`
 
-**Step 1: Update loading state to match gallery layout**
-Use a placeholder or simply center the loading text.
+**Step 1: Adjust loading/empty state layout**
+Ensure loading text is centered and fits the new gallery aesthetic.
 
 **Step 2: Commit**
 
@@ -209,7 +218,7 @@ git commit -m "feat(collection): refine loading state for gallery"
 
 ---
 
-### Task 4: Final Validation
+### Task 5: Final Validation
 
 **Step 1: Run Lint, Type-Check, and Tests**
 Run: `npm run lint && npm run type-check && npm test`
