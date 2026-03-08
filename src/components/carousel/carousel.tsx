@@ -3,10 +3,10 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Children,
-  type HTMLAttributes,
-  type ReactNode,
   cloneElement,
+  type HTMLAttributes,
   isValidElement,
+  type ReactNode,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -32,7 +32,7 @@ export function Carousel({
   const observerRef = useRef<IntersectionObserver | null>(null);
   const isProgrammaticScrollRef = useRef(false);
   const lastEmittedIndexRef = useRef(selectedIndex);
-  
+
   const selectedIndexRef = useRef(selectedIndex);
   const onSelectRef = useRef(onSelectedIndexChange);
 
@@ -51,25 +51,32 @@ export function Carousel({
 
     const container = scrollContainerRef.current;
     if (container) {
-      const element = container.querySelector(`[data-index="${selectedIndex}"]`);
+      const element = container.querySelector(
+        `[data-index="${selectedIndex}"]`,
+      );
       element?.scrollIntoView({
         behavior: "instant",
         block: "nearest",
         inline: "center",
       });
     }
-  }, []);
+  }, [itemCount, selectedIndex]);
 
   // Handle selection changes (via buttons, props, or dice)
   useEffect(() => {
     // If the change came from our own observer during a manual scroll, skip scrollIntoView
-    if (selectedIndex === lastEmittedIndexRef.current && !isProgrammaticScrollRef.current) {
+    if (
+      selectedIndex === lastEmittedIndexRef.current &&
+      !isProgrammaticScrollRef.current
+    ) {
       return;
     }
 
     const container = scrollContainerRef.current;
     if (container) {
-      const element = container.querySelector(`[data-index="${selectedIndex}"]`);
+      const element = container.querySelector(
+        `[data-index="${selectedIndex}"]`,
+      );
       if (element) {
         // We are moving programmatically
         isProgrammaticScrollRef.current = true;
@@ -80,7 +87,7 @@ export function Carousel({
         });
       }
     }
-    
+
     lastEmittedIndexRef.current = selectedIndex;
   }, [selectedIndex]);
 
@@ -97,9 +104,9 @@ export function Carousel({
             if (entry.isIntersecting) {
               const indexAttr = entry.target.getAttribute("data-index");
               if (indexAttr === null) continue;
-              
+
               const index = Number.parseInt(indexAttr, 10);
-              
+
               // If we reach the target of a programmatic scroll, release the lock
               if (index === selectedIndexRef.current) {
                 isProgrammaticScrollRef.current = false;
@@ -107,7 +114,10 @@ export function Carousel({
 
               // Trigger selection change if not in a programmatic scroll
               // or if we just arrived at the target
-              if (!isProgrammaticScrollRef.current && index !== selectedIndexRef.current) {
+              if (
+                !isProgrammaticScrollRef.current &&
+                index !== selectedIndexRef.current
+              ) {
                 lastEmittedIndexRef.current = index;
                 onSelectRef.current(index);
               }
@@ -164,21 +174,28 @@ export function Carousel({
         size="sm"
       />
 
+      {/* biome-ignore lint/a11y/noStaticElementInteractions: This is a scroll container with custom interaction tracking to handle programmatic vs manual scrolling. */}
       <div
         ref={scrollContainerRef}
         className={styles.gallery}
-        onMouseDown={() => { isProgrammaticScrollRef.current = false; }}
-        onTouchStart={() => { isProgrammaticScrollRef.current = false; }}
+        onMouseDown={() => {
+          isProgrammaticScrollRef.current = false;
+        }}
+        onTouchStart={() => {
+          isProgrammaticScrollRef.current = false;
+        }}
       >
         {childrenArray.map((child, index) => {
           if (!isValidElement(child)) return child;
 
-          return cloneElement(child as React.ReactElement<any>, {
+          // biome-ignore lint/suspicious/noExplicitAny: cloneElement with ref is notoriously difficult to type with Children.toArray
+          return cloneElement(child as any, {
             "data-index": index,
             ref: (node: HTMLElement | null) => {
               if (node && observerRef.current) {
                 observerRef.current.observe(node);
               }
+              // biome-ignore lint/suspicious/noExplicitAny: ref access on ReactElement requires casting or React 19 specific handling
               const { ref: childRef } = child as any;
               if (typeof childRef === "function") {
                 childRef(node);
