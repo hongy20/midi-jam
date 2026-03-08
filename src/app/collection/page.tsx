@@ -168,13 +168,26 @@ export default function CollectionPage() {
                   <TrackCard
                     track={track}
                     isSelected={selectedTrack?.id === track.id}
-                    onClick={() =>
+                    onClick={() => {
                       setSelectedTrack({
                         id: track.id,
                         name: track.name,
                         url: track.url,
-                      })
-                    }
+                      });
+
+                      // Programmatically scroll the selected track into center
+                      const container = scrollContainerRef.current;
+                      if (container) {
+                        const element = container.querySelector(
+                          `[data-track-id="${track.id}"]`,
+                        );
+                        element?.scrollIntoView({
+                          behavior: "smooth",
+                          block: "nearest",
+                          inline: "center",
+                        });
+                      }
+                    }}
                   />
                 </div>
               ))}
