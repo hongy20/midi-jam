@@ -1,44 +1,63 @@
-# Performance Optimizations Implementation Plan
+# Performance & Synchronization Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Improve performance for long tracks by capping TrackLane height and refactoring useDemoPlayback to use a more efficient pointer-based rAF system.
+**Goal:** Resolve audio/visual synchronization drift, adjust falldown speed, and ensure user settings persist across navigation.
 
 **Architecture:**
-- **TrackLane Height**: Use CSS `min()` to clamp TrackLane height at 16,000px.
-- **useDemoPlayback Refactor**: Replace `IntersectionObserver` with a `requestAnimationFrame` (rAF) loop.
-- **Pointer System**: Use a `nextStartIndexRef` to scan the `spans` array (already sorted by `startTime`).
-- **Active Note Tracking**: Maintain `activeSpansRef` to track currently sounding notes.
-- **Synchronization**: Use `getCurrentTimeMs()` from `useLaneTimeline` to ensure perfect sync between visuals and audio.
+- **Synchronization**: Update `useLaneTimeline` to animate the entire `scrollHeight` of the track lane, ensuring the visual playhead perfectly matches the audio duration.
+- **Falldown Speed**: Adjust the `TrackLane` height calculation to provide a consistent speed of 1 viewport height per 3000ms.
+- **State Persistence**: Refactor `useAppReset` to exclude user options from the global reset.
+- **Cleanup**: Tighten the song completion window by reducing lead-out time.
 
 **Tech Stack:** React 19, CSS Modules, Web Animation API (Timeline).
 
 ---
 
-### Task 1: Cap TrackLane Height
+### Task 1: Fix Audio/Visual Synchronization Drift
+
+**Files:**
+- Modify: `src/hooks/use-lane-timeline.ts`
+
+**Step 1: Adjust animation keyframes**
+
+```typescript
+/* src/hooks/use-lane-timeline.ts */
+// From:
+// { transform: `translateY(-${maxScrollPx}px)` },
+// { transform: "translateY(0px)" },
+
+// To:
+const keyframes = [
+  { transform: `translateY(${-maxScrollPx}px)` },
+  { transform: `translateY(${container.clientHeight}px)` },
+];
+```
+
+**Step 2: Commit**
+
+```bash
+git add src/hooks/use-lane-timeline.ts
+git commit -m "fix: resolve audio/visual synchronization drift by using full scroll height in animation"
+```
+
+---
+
+### Task 2: Adjust Falldown Speed & Height Calculation
 
 **Files:**
 - Modify: `src/components/lane-stage/track-lane.module.css`
 
-**Step 1: Apply height clamp**
+**Step 1: Update height formula and remove redundant viewport**
 
 ```css
 /* src/components/lane-stage/track-lane.module.css */
 .container {
-  display: grid;
-  width: 100%;
-  position: relative;
-  grid-template-columns: repeat(
-      calc(var(--end-unit) - var(--start-unit)),
-      minmax(0, 1fr)
-    );
-  /* Clamp height to 16000px max */
-  height: min(
-    16000px,
-    calc(
-      calc(100dvh - var(--header-height) - var(--footer-height)) *
-      (var(--total-duration-ms) / 2000 + 1)
-    )
+  /* ... */
+  /* Adjust speed to 3000ms per viewport height */
+  height: calc(
+    calc(100dvh - var(--header-height) - var(--footer-height)) *
+    (var(--total-duration-ms) / 3000)
   );
 }
 ```
@@ -47,194 +66,56 @@
 
 ```bash
 git add src/components/lane-stage/track-lane.module.css
-git commit -m "perf: clamp TrackLane height to 16000px"
+git commit -m "style: adjust falldown speed to 3000ms per viewport"
 ```
 
 ---
 
-### Task 2: Refactor useDemoPlayback Interface
+### Task 3: Persist User Options
 
 **Files:**
-- Modify: `src/hooks/use-demo-playback.ts`
+- Modify: `src/hooks/use-track-sync.ts`
 
-**Step 1: Update hook props interface**
-
-Change `containerRef` to optional/removed and add `getCurrentTimeMs`.
+**Step 1: Remove resetOptions from useAppReset**
 
 ```typescript
-/* src/hooks/use-demo-playback.ts */
-interface UseDemoPlaybackProps {
-  demoMode: boolean;
-  isLoading: boolean;
-  spans: NoteSpan[];
-  getCurrentTimeMs: () => number; // New prop
-  onNoteOn: (note: number, velocity: number) => void;
-  onNoteOff: (note: number) => void;
+/* src/hooks/use-track-sync.ts */
+export function useAppReset() {
+  // Remove resetOptions from imports and callback
 }
 ```
 
 **Step 2: Commit**
 
 ```bash
-git add src/hooks/use-demo-playback.ts
-git commit -m "refactor: update useDemoPlayback signature to accept getCurrentTimeMs"
+git add src/hooks/use-track-sync.ts
+git commit -m "fix: persist user options by removing resetOptions from useAppReset"
 ```
 
 ---
 
-### Task 3: Update PlayPage Integration
+### Task 4: Tweak Song Completion Window
 
 **Files:**
-- Modify: `src/app/play/page.tsx`
+- Modify: `src/lib/midi/constant.ts`
 
-**Step 1: Update useDemoPlayback usage**
+**Step 1: Reduce lead-out time**
 
 ```typescript
-/* src/app/play/page.tsx */
-  useDemoPlayback({
-    demoMode,
-    isLoading,
-    spans,
-    getCurrentTimeMs, // Pass from useLaneTimeline
-    onNoteOn: handleNoteOn,
-    onNoteOff: handleNoteOff,
-  });
+/* src/lib/midi/constant.ts */
+export const LEAD_OUT_DEFAULT_MS = 800;
 ```
 
 **Step 2: Commit**
 
 ```bash
-git add src/app/play/page.tsx
-git commit -m "refactor: update PlayPage to pass getCurrentTimeMs to useDemoPlayback"
+git add src/lib/midi/constant.ts
+git commit -m "style: reduce lead-out time to 800ms for tighter song completion"
 ```
 
 ---
 
-### Task 4: Implement Pointer-Based Playback Logic
-
-**Files:**
-- Modify: `src/hooks/use-demo-playback.ts`
-
-**Step 1: Write the pointer-based logic**
-
-Implement the rAF loop with `nextStartIndex` and `activeSpans` tracking.
-
-```typescript
-/* src/hooks/use-demo-playback.ts */
-import { useEffect, useRef } from "react";
-import type { NoteSpan } from "@/lib/midi/midi-parser";
-import { LEAD_IN_DEFAULT_MS } from "@/lib/midi/constant";
-
-// ... props ...
-
-export function useDemoPlayback({
-  demoMode,
-  isLoading,
-  spans,
-  getCurrentTimeMs,
-  onNoteOn,
-  onNoteOff,
-}: UseDemoPlaybackProps) {
-  const nextStartIndexRef = useRef(0);
-  const activeSpansRef = useRef<Set<NoteSpan>>(new Set());
-  const lastTimeRef = useRef(-1);
-
-  useEffect(() => {
-    if (!demoMode || isLoading || spans.length === 0) return;
-
-    let rafId: number;
-
-    const tick = () => {
-      const rawTime = getCurrentTimeMs();
-      // Adjust for lead-in: timeline starts at 0, but notes have LEAD_IN_DEFAULT_MS offset
-      const currentTime = (rawTime - LEAD_IN_DEFAULT_MS) / 1000;
-
-      // Handle timeline reset or jump
-      if (rawTime < lastTimeRef.current || Math.abs(rawTime - lastTimeRef.current) > 500) {
-        nextStartIndexRef.current = 0;
-        for (const span of activeSpansRef.current) {
-          onNoteOff(span.note);
-        }
-        activeSpansRef.current.clear();
-      }
-      lastTimeRef.current = rawTime;
-
-      // 1. Process Offs
-      for (const span of activeSpansRef.current) {
-        if (span.startTime + span.duration <= currentTime) {
-          onNoteOff(span.note);
-          activeSpansRef.current.delete(span);
-        }
-      }
-
-      // 2. Process Ons
-      while (
-        nextStartIndexRef.current < spans.length &&
-        spans[nextStartIndexRef.current].startTime <= currentTime
-      ) {
-        const span = spans[nextStartIndexRef.current];
-        // Only start if it's not already finished (in case of jumps)
-        if (span.startTime + span.duration > currentTime) {
-          onNoteOn(span.note, span.velocity || 0.7);
-          activeSpansRef.current.add(span);
-        }
-        nextStartIndexRef.current++;
-      }
-
-      rafId = requestAnimationFrame(tick);
-    };
-
-    rafId = requestAnimationFrame(tick);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      for (const span of activeSpansRef.current) {
-        onNoteOff(span.note);
-      }
-      activeSpansRef.current.clear();
-      nextStartIndexRef.current = 0;
-      lastTimeRef.current = -1;
-    };
-  }, [demoMode, isLoading, spans, getCurrentTimeMs, onNoteOn, onNoteOff]);
-}
-```
-
-**Step 2: Commit**
-
-```bash
-git add src/hooks/use-demo-playback.ts
-git commit -m "perf: implement pointer-based rAF playback in useDemoPlayback"
-```
-
----
-
-### Task 5: Update useDemoPlayback Tests
-
-**Files:**
-- Modify: `src/hooks/use-demo-playback.test.ts`
-
-**Step 1: Update tests to mock `getCurrentTimeMs` and trigger rAF**
-
-```typescript
-/* src/hooks/use-demo-playback.test.ts */
-// Update mocks and test cases to use the new signature
-```
-
-**Step 2: Run tests**
-
-Run: `npm test src/hooks/use-demo-playback.test.ts`
-Expected: PASS
-
-**Step 3: Commit**
-
-```bash
-git add src/hooks/use-demo-playback.test.ts
-git commit -m "test: update useDemoPlayback tests for new rAF logic"
-```
-
----
-
-### Task 6: Final Validation
+### Task 5: Final Validation
 
 **Step 1: Run full suite**
 
