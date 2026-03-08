@@ -194,7 +194,7 @@ export default function CollectionPage() {
               Select a song below to continue.
             </p>
 
-            <div className={`${styles.carousel} group/gallery`}>
+            <div className="relative w-full">
               <div
                 ref={(node) => {
                   scrollContainerRef.current = node;
@@ -233,7 +233,7 @@ export default function CollectionPage() {
                 icon={ChevronLeft}
                 onClick={() => handleNavigate("prev")}
                 disabled={currentTrackIndex <= 0}
-                className="absolute top-1/2 -translate-y-1/2 left-4 sm:left-12 z-20 hidden sm:flex"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2"
                 aria-label="Previous song"
                 size="sm"
               />
@@ -242,7 +242,7 @@ export default function CollectionPage() {
                 icon={ChevronRight}
                 onClick={() => handleNavigate("next")}
                 disabled={currentTrackIndex >= tracks.length - 1}
-                className="absolute top-1/2 -translate-y-1/2 right-4 sm:right-12 z-20 hidden sm:flex"
+                className="absolute left-2.5 top-1/2 -translate-y-1/2"
                 aria-label="Next song"
                 size="sm"
               />

@@ -1,10 +1,5 @@
 /* Page specific styles */
 
-.carousel {
-  position: relative;
-  width: 100%;
-}
-
 .gallery {
   display: flex;
   align-items: center;
