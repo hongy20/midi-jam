@@ -5,7 +5,6 @@ import { useCallback, useEffect, useRef } from "react";
 import { useCollection } from "@/context/collection-context";
 import { useGear } from "@/context/gear-context";
 import { useHome } from "@/context/home-context";
-import { useOptions } from "@/context/options-context";
 import { useScore } from "@/context/score-context";
 import { useStage } from "@/context/stage-context";
 import { useTrack } from "@/context/track-context";
