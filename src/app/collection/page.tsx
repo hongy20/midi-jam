@@ -103,19 +103,32 @@ export default function CollectionPage() {
   );
 
   const handleNavigate = useCallback(
-    (direction: "prev" | "next") => {
+    (direction: "prev" | "next" | "random") => {
       if (tracks.length === 0) return;
 
-      const currentIndex = tracks.findIndex((t) => t.id === selectedTrack?.id);
-      let nextIndex: number;
+      let track: CollectionTrack;
 
-      if (direction === "prev") {
-        nextIndex = (currentIndex - 1 + tracks.length) % tracks.length;
+      if (direction === "random") {
+        const availableTracks =
+          tracks.length > 1
+            ? tracks.filter((t) => t.id !== selectedTrack?.id)
+            : tracks;
+        track =
+          availableTracks[Math.floor(Math.random() * availableTracks.length)];
       } else {
-        nextIndex = (currentIndex + 1) % tracks.length;
+        const currentIndex = tracks.findIndex(
+          (t) => t.id === selectedTrack?.id,
+        );
+        let nextIndex: number;
+
+        if (direction === "prev") {
+          nextIndex = (currentIndex - 1 + tracks.length) % tracks.length;
+        } else {
+          nextIndex = (currentIndex + 1) % tracks.length;
+        }
+        track = tracks[nextIndex];
       }
 
-      const track = tracks[nextIndex];
       setSelectedTrack({
         id: track.id,
         name: track.name,
@@ -133,25 +146,7 @@ export default function CollectionPage() {
         <PageHeader title="Songs">
           <Button
             variant="secondary"
-            onClick={() => {
-              if (tracks.length > 0) {
-                const availableTracks =
-                  tracks.length > 1
-                    ? tracks.filter((t) => t.id !== selectedTrack?.id)
-                    : tracks;
-
-                const track =
-                  availableTracks[
-                    Math.floor(Math.random() * availableTracks.length)
-                  ];
-
-                setSelectedTrack({
-                  id: track.id,
-                  name: track.name,
-                  url: track.url,
-                });
-              }
-            }}
+            onClick={() => handleNavigate("random")}
             icon={Dices}
             size="sm"
           />
