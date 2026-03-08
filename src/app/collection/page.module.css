@@ -37,21 +37,21 @@
   z-index: 20;
 }
 
-.navButton {
+.navArrows .navButton {
   pointer-events: auto;
-  background-color: var(--ui-card-bg) !important;
-  border: 2px solid var(--ui-card-border) !important;
+  background-color: var(--ui-card-bg);
+  border: 2px solid var(--ui-card-border);
   box-shadow: var(--ui-card-shadow);
   opacity: 0.6;
   transition: all 0.2s ease;
 }
 
-.navButton:hover {
+.navArrows .navButton:hover {
   opacity: 1;
   transform: scale(1.1);
-  background-color: var(--foreground) !important;
-  color: var(--background) !important;
-  border-color: var(--foreground) !important;
+  background-color: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
 }
 
 @media (max-width: 640px) {
