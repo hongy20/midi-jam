@@ -32,7 +32,7 @@
   transform: translateY(-50%);
   display: flex;
   justify-content: space-between;
-  padding: 0 1rem;
+  padding: 0 4rem;
   pointer-events: none;
   z-index: 20;
 }
