@@ -243,6 +243,9 @@ export default function CollectionPage() {
                   variant="secondary"
                   icon={ChevronLeft}
                   onClick={() => handleNavigate("prev")}
+                  disabled={
+                    tracks.findIndex((t) => t.id === selectedTrack?.id) <= 0
+                  }
                   className={styles.navButton}
                   aria-label="Previous song"
                 />
@@ -250,6 +253,10 @@ export default function CollectionPage() {
                   variant="secondary"
                   icon={ChevronRight}
                   onClick={() => handleNavigate("next")}
+                  disabled={
+                    tracks.findIndex((t) => t.id === selectedTrack?.id) >=
+                    tracks.length - 1
+                  }
                   className={styles.navButton}
                   aria-label="Next song"
                 />
