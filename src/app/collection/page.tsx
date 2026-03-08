@@ -7,8 +7,9 @@ import {
   Dices,
   Play,
 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/button/button";
+import { Carousel } from "@/components/carousel/carousel";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
@@ -19,7 +20,6 @@ import {
 import { useCollection } from "@/context/collection-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { getSoundTracks } from "@/lib/action/sound-track";
-import styles from "./page.module.css";
 
 export default function CollectionPage() {
   const { toPlay, toGear } = useNavigation();
@@ -27,9 +27,6 @@ export default function CollectionPage() {
 
   const [tracks, setTracks] = useState<CollectionTrack[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Fetch tracks on mount
   useEffect(() => {
@@ -40,67 +37,6 @@ export default function CollectionPage() {
     }
     fetchTracks();
   }, []);
-
-  // Handle scrolling to selected track (initial, resize, and selection changes)
-  useEffect(() => {
-    if (isLoading || tracks.length === 0 || !selectedTrack) return;
-
-    const scrollIntoCenter = (behavior: ScrollBehavior = "smooth") => {
-      const container = scrollContainerRef.current;
-      if (container) {
-        const element = container.querySelector(
-          `[data-track-id="${selectedTrack.id}"]`,
-        );
-        element?.scrollIntoView({
-          behavior,
-          block: "nearest",
-          inline: "center",
-        });
-      }
-    };
-
-    // Initial scroll and selection changes use smooth by default
-    // (Note: IntersectionObserver updates also trigger this, but scrollIntoView is no-op if already centered)
-    scrollIntoCenter("smooth");
-
-    const handleResize = () => scrollIntoCenter("instant");
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [isLoading, tracks.length, selectedTrack]);
-
-  const setupObserver = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (observerRef.current) observerRef.current.disconnect();
-
-      if (node) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (entry.isIntersecting) {
-                const trackId = entry.target.getAttribute("data-track-id");
-                const track = tracks.find((t) => t.id === trackId);
-                if (track) {
-                  setSelectedTrack({
-                    id: track.id,
-                    name: track.name,
-                    url: track.url,
-                  });
-                }
-              }
-            }
-          },
-          {
-            root: node,
-            rootMargin: "0px -45% 0px -45%",
-            threshold: 0.5,
-          },
-        );
-
-        observerRef.current = observer;
-      }
-    },
-    [tracks, setSelectedTrack],
-  );
 
   const handleNavigate = useCallback(
     (direction: "prev" | "next" | "random") => {
@@ -113,6 +49,7 @@ export default function CollectionPage() {
           tracks.length > 1
             ? tracks.filter((t) => t.id !== selectedTrack?.id)
             : tracks;
+
         track =
           availableTracks[Math.floor(Math.random() * availableTracks.length)];
       } else {
@@ -126,6 +63,7 @@ export default function CollectionPage() {
         } else {
           nextIndex = (currentIndex + 1) % tracks.length;
         }
+
         track = tracks[nextIndex];
       }
 
@@ -187,46 +125,39 @@ export default function CollectionPage() {
               Select a song below to continue.
             </p>
 
-            <div className="relative w-full">
-              <div
-                ref={(node) => {
-                  scrollContainerRef.current = node;
-                  setupObserver(node);
-                }}
-                className={styles.gallery}
-              >
-                {tracks.map((track) => (
-                  <div
-                    key={track.id}
-                    data-track-id={track.id}
-                    ref={(el) => {
-                      if (el && observerRef.current)
-                        observerRef.current.observe(el);
-                    }}
-                    className="shrink-0 h-[80%] flex items-center"
-                  >
-                    <TrackCard
-                      track={track}
-                      isSelected={selectedTrack?.id === track.id}
-                      onClick={() => {
-                        setSelectedTrack({
-                          id: track.id,
-                          name: track.name,
-                          url: track.url,
-                        });
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-
+            <Carousel
+              items={tracks}
+              selectedId={selectedTrack?.id ?? null}
+              getItemId={(track) => track.id}
+              onSelect={(track) =>
+                setSelectedTrack({
+                  id: track.id,
+                  name: track.name,
+                  url: track.url,
+                })
+              }
+              renderItem={(track, isSelected) => (
+                <TrackCard
+                  track={track}
+                  isSelected={isSelected}
+                  onClick={() =>
+                    setSelectedTrack({
+                      id: track.id,
+                      name: track.name,
+                      url: track.url,
+                    })
+                  }
+                />
+              )}
+              className="group/gallery"
+            >
               {/* Navigation Arrows */}
               <Button
                 variant="secondary"
                 icon={ChevronLeft}
                 onClick={() => handleNavigate("prev")}
                 disabled={tracks.at(0)?.id === selectedTrack?.id}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2"
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
                 aria-label="Previous song"
                 size="sm"
               />
@@ -235,11 +166,11 @@ export default function CollectionPage() {
                 icon={ChevronRight}
                 onClick={() => handleNavigate("next")}
                 disabled={tracks.at(-1)?.id === selectedTrack?.id}
-                className="absolute left-2.5 top-1/2 -translate-y-1/2"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
                 aria-label="Next song"
                 size="sm"
               />
-            </div>
+            </Carousel>
           </>
         )}
       </main>

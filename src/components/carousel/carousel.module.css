@@ -1,0 +1,28 @@
+.carousel {
+  position: relative;
+  width: 100%;
+}
+
+.gallery {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding-inline: calc(50% - 140px); /* (50% - 280px/2) */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  height: 400px;
+  min-height: 0;
+}
+
+@media (min-width: 640px) {
+  .gallery {
+    padding-inline: calc(50% - 180px); /* (50% - 360px/2) */
+  }
+}
+
+.gallery::-webkit-scrollbar {
+  display: none;
+}
