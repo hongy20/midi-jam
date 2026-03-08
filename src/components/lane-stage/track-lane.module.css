@@ -10,7 +10,7 @@
      layout performance degradation on extremely long tracks while maximizing 
      visual clarity for notes. */
   height: min(
-    16384px,
+    10000px,
     calc(
       calc(100dvh - var(--header-height) - var(--footer-height)) *
       (var(--total-duration-ms) / 2000)
@@ -37,4 +37,5 @@
     currentColor calc(20% + 20% * var(--is-black)),
     transparent
   );
+  content-visibility: auto;
 }
