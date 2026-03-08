@@ -41,9 +41,13 @@ export function useLaneTimeline({
       }
 
       if (maxScrollPx > 0 && targetElement) {
+        // The animation must move the entire height of the lane relative to the hit line.
+        // At t=0, the bottom of the lane (scrollHeight) is at the hit line (clientHeight).
+        // At t=totalDuration, the top of the lane (0) is at the hit line (clientHeight).
+        // Distance = (clientHeight - 0) - (clientHeight - scrollHeight) = scrollHeight.
         const keyframes = [
-          { transform: `translateY(-${maxScrollPx}px)` },
-          { transform: "translateY(0px)" },
+          { transform: `translateY(${-maxScrollPx}px)` },
+          { transform: `translateY(${container.clientHeight}px)` },
         ];
 
         const animation = targetElement.animate(keyframes, {
