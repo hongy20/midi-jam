@@ -7,7 +7,7 @@
       minmax(0, 1fr)
     );
   height: min(
-    16000px,
+    32767px,
     calc(
       calc(100dvh - var(--header-height) - var(--footer-height)) *
       (var(--total-duration-ms) / 2000 + 1)
