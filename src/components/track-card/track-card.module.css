@@ -1,9 +1,10 @@
 .card {
-  width: 100%;
+  width: 280px;
+  flex-shrink: 0;
   padding: 1.25rem;
   border-radius: 1.5rem;
   border: 2px solid transparent;
-  transition: all 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -12,12 +13,22 @@
   gap: 1rem;
   cursor: pointer;
   height: 100%;
+  scroll-snap-align: center;
 }
 
 @media (min-width: 640px) {
   .card {
+    width: 360px;
     padding: 1.5rem;
   }
+}
+
+.selected {
+  background-color: var(--foreground);
+  border-color: var(--foreground);
+  transform: scale(1.1);
+  box-shadow: var(--ui-btn-primary-shadow);
+  z-index: 10;
 }
 
 .unselected {
@@ -30,13 +41,6 @@
 .unselected:hover {
   border-color: rgba(var(--foreground-rgb), 0.3);
   background-color: rgba(var(--foreground-rgb), 0.1);
-}
-
-.selected {
-  background-color: var(--foreground);
-  border-color: var(--foreground);
-  transform: scale(1.02);
-  box-shadow: var(--ui-btn-primary-shadow);
 }
 
 .header {
