@@ -76,7 +76,17 @@ export default function CollectionPage() {
             variant="secondary"
             onClick={() => {
               if (tracks.length > 0) {
-                const track = tracks[Math.floor(Math.random() * tracks.length)];
+                // Filter out the currently selected track if there are other options
+                const availableTracks =
+                  tracks.length > 1
+                    ? tracks.filter((t) => t.id !== selectedTrack?.id)
+                    : tracks;
+
+                const track =
+                  availableTracks[
+                    Math.floor(Math.random() * availableTracks.length)
+                  ];
+
                 setSelectedTrack({
                   id: track.id,
                   name: track.name,
