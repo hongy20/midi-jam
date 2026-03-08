@@ -80,7 +80,6 @@ export function useAppReset() {
   const { resetCollection } = useCollection();
   const { selectMIDIInput } = useGear();
   const { resetHome } = useHome();
-  const { resetOptions } = useOptions();
   const { resetScore } = useScore();
   const { resetStage } = useStage();
   const { resetTrack } = useTrack();
@@ -88,7 +87,6 @@ export function useAppReset() {
   const resetAll = useCallback(() => {
     resetCollection();
     resetHome();
-    resetOptions();
     resetScore();
     resetStage();
     resetTrack();
@@ -96,7 +94,6 @@ export function useAppReset() {
   }, [
     resetCollection,
     resetHome,
-    resetOptions,
     resetScore,
     resetStage,
     resetTrack,
