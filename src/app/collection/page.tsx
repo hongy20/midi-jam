@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, Dices, Play } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
@@ -13,6 +13,7 @@ import {
 import { useCollection } from "@/context/collection-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { getSoundTracks } from "@/lib/action/sound-track";
+import styles from "./page.module.css";
 
 export default function CollectionPage() {
   const { toPlay, toGear } = useNavigation();
@@ -20,6 +21,9 @@ export default function CollectionPage() {
 
   const [tracks, setTracks] = useState<CollectionTrack[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     async function fetchTracks() {
@@ -29,6 +33,40 @@ export default function CollectionPage() {
     }
     fetchTracks();
   }, []);
+
+  const setupObserver = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (observerRef.current) observerRef.current.disconnect();
+
+      if (node) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                const trackId = entry.target.getAttribute("data-track-id");
+                const track = tracks.find((t) => t.id === trackId);
+                if (track) {
+                  setSelectedTrack({
+                    id: track.id,
+                    name: track.name,
+                    url: track.url,
+                  });
+                }
+              }
+            }
+          },
+          {
+            root: node,
+            rootMargin: "0px -45% 0px -45%",
+            threshold: 0.5,
+          },
+        );
+
+        observerRef.current = observer;
+      }
+    },
+    [tracks, setSelectedTrack],
+  );
 
   return (
     <PageLayout
@@ -87,21 +125,34 @@ export default function CollectionPage() {
             <p className="text-center text-foreground/60 text-base font-medium mb-8">
               Select a song below to continue.
             </p>
-            <div className="flex-1 flex items-center gap-6 overflow-x-auto snap-x snap-mandatory px-8">
+            <div
+              ref={(node) => {
+                scrollContainerRef.current = node;
+                setupObserver(node);
+              }}
+              className={styles.gallery}
+            >
               {tracks.map((track) => (
-                <TrackCard
+                <div
                   key={track.id}
-                  track={track}
-                  isSelected={selectedTrack?.id === track.id}
-                  onClick={() =>
-                    setSelectedTrack({
-                      id: track.id,
-                      name: track.name,
-                      url: track.url,
-                    })
-                  }
-                  className="shrink-0 w-[calc(100%-3rem)] sm:w-[360px] h-full snap-center"
-                />
+                  data-track-id={track.id}
+                  ref={(el) => {
+                    if (el && observerRef.current) observerRef.current.observe(el);
+                  }}
+                  className="shrink-0 h-[80%] flex items-center"
+                >
+                  <TrackCard
+                    track={track}
+                    isSelected={selectedTrack?.id === track.id}
+                    onClick={() =>
+                      setSelectedTrack({
+                        id: track.id,
+                        name: track.name,
+                        url: track.url,
+                      })
+                    }
+                  />
+                </div>
               ))}
             </div>
           </>
