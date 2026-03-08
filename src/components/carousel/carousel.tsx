@@ -40,11 +40,6 @@ export function Carousel({
     onSelectRef.current = onSelectedIndexChange;
   }, [selectedIndex, onSelectedIndexChange]);
 
-  // Mark as programmatic scroll when index changes via props/buttons
-  useEffect(() => {
-    isProgrammaticScrollRef.current = true;
-  }, [selectedIndex]);
-
   const childrenArray = Children.toArray(children);
   const itemCount = childrenArray.length;
 
@@ -96,7 +91,6 @@ export function Carousel({
               }
 
               // Only trigger selection change if NOT in a programmatic scroll
-              // or if we've already reached/passed the target
               if (!isProgrammaticScrollRef.current && index !== selectedIndexRef.current) {
                 onSelectRef.current(index);
               }
@@ -105,9 +99,9 @@ export function Carousel({
         },
         {
           root: node,
-          // 10% hit zone in the center (45% + 45% = 90% margin)
-          rootMargin: "0px -45% 0px -45%",
-          threshold: 0.5,
+          // Use a narrow strip in the center to detect intersection
+          rootMargin: "0px -49% 0px -49%",
+          threshold: 0,
         },
       );
 
@@ -159,6 +153,8 @@ export function Carousel({
       <div
         ref={scrollContainerRef}
         className={styles.gallery}
+        onMouseDown={() => { isProgrammaticScrollRef.current = false; }}
+        onTouchStart={() => { isProgrammaticScrollRef.current = false; }}
       >
         {childrenArray.map((child, index) => {
           if (!isValidElement(child)) return child;
@@ -166,11 +162,9 @@ export function Carousel({
           return cloneElement(child as React.ReactElement<any>, {
             "data-index": index,
             ref: (node: HTMLElement | null) => {
-              // Observe the element if it's new
               if (node && observerRef.current) {
                 observerRef.current.observe(node);
               }
-              // Handle the child's own ref
               const { ref: childRef } = child as any;
               if (typeof childRef === "function") {
                 childRef(node);
