@@ -6,6 +6,9 @@
       calc(var(--end-unit) - var(--start-unit)),
       minmax(0, 1fr)
     );
+  /* Total height corresponds to the song duration such that notes fall at a 
+     consistent speed of 1 viewport height (vh) per 2000ms. 
+     Speed (px/ms) = viewportHeight / 2000. */
   height: calc(
     calc(100dvh - var(--header-height) - var(--footer-height)) *
     (var(--total-duration-ms) / 2000)
