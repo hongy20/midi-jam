@@ -146,10 +146,10 @@ export default function PlayPage() {
   );
 
   useDemoPlayback({
+    containerRef: scrollRef,
     demoMode,
     isLoading,
     spans,
-    getCurrentTimeMs,
     onNoteOn: handleNoteOn,
     onNoteOff: handleNoteOff,
   });

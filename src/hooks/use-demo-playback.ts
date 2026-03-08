@@ -1,87 +1,84 @@
-import { useEffect, useRef } from "react";
-import { LEAD_IN_DEFAULT_MS } from "@/lib/midi/constant";
+import { useEffect } from "react";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 
 interface UseDemoPlaybackProps {
+  containerRef: React.RefObject<HTMLDivElement | null>;
   demoMode: boolean;
   isLoading: boolean;
   spans: NoteSpan[];
-  getCurrentTimeMs: () => number;
   onNoteOn: (note: number, velocity: number) => void;
   onNoteOff: (note: number) => void;
 }
 
 export function useDemoPlayback({
+  containerRef,
   demoMode,
   isLoading,
   spans,
-  getCurrentTimeMs,
   onNoteOn,
   onNoteOff,
 }: UseDemoPlaybackProps) {
-  const nextStartIndexRef = useRef(0);
-  const activeSpansRef = useRef<Set<NoteSpan>>(new Set());
-  const lastTimeRef = useRef(-1);
-
   useEffect(() => {
-    if (!demoMode || isLoading || spans.length === 0) return;
+    const container = containerRef.current;
+    if (!container || !demoMode || isLoading || spans.length === 0) return;
 
-    let rafId: number;
+    const activeCounts = new Map<number, number>();
 
-    const tick = () => {
-      const rawTime = getCurrentTimeMs();
-      // Adjust for lead-in: timeline starts at 0, but notes have LEAD_IN_DEFAULT_MS offset
-      const currentTime = (rawTime - LEAD_IN_DEFAULT_MS) / 1000;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Partition entries to process exits (Off) before entries (On)
+        const exits = entries.filter((e) => !e.isIntersecting);
+        const entriesIn = entries.filter((e) => e.isIntersecting);
 
-      // Handle timeline reset or jump
-      if (
-        rawTime < lastTimeRef.current ||
-        Math.abs(rawTime - lastTimeRef.current) > 500
-      ) {
-        nextStartIndexRef.current = 0;
-        for (const span of activeSpansRef.current) {
-          onNoteOff(span.note);
+        // Process exits (Off) first
+        for (const entry of exits) {
+          const pitch = Number(entry.target.getAttribute("data-pitch"));
+          if (Number.isNaN(pitch)) continue;
+
+          const currentCount = activeCounts.get(pitch) || 0;
+          if (currentCount > 0) {
+            const nextCount = currentCount - 1;
+            activeCounts.set(pitch, nextCount);
+            if (nextCount === 0) {
+              onNoteOff(pitch);
+            }
+          }
         }
-        activeSpansRef.current.clear();
-      }
-      lastTimeRef.current = rawTime;
 
-      // 1. Process Offs
-      for (const span of activeSpansRef.current) {
-        if (span.startTime + span.duration <= currentTime) {
-          onNoteOff(span.note);
-          activeSpansRef.current.delete(span);
+        // Process entries (On) second
+        for (const entry of entriesIn) {
+          const pitch = Number(entry.target.getAttribute("data-pitch"));
+          if (Number.isNaN(pitch)) continue;
+
+          const currentCount = activeCounts.get(pitch) || 0;
+          activeCounts.set(pitch, currentCount + 1);
+          if (currentCount === 0) {
+            onNoteOn(pitch, 0.7);
+          }
         }
-      }
+      },
+      {
+        root: container,
+        rootMargin: "-99% 0px 0px 0px",
+        threshold: [0, 1],
+      },
+    );
 
-      // 2. Process Ons
-      while (
-        nextStartIndexRef.current < spans.length &&
-        spans[nextStartIndexRef.current].startTime <= currentTime
-      ) {
-        const span = spans[nextStartIndexRef.current];
-        // Only start if it's not already finished (in case of jumps)
-        if (span.startTime + span.duration > currentTime) {
-          onNoteOn(span.note, span.velocity || 0.7);
-          activeSpansRef.current.add(span);
-        }
-        nextStartIndexRef.current++;
-      }
-
-      rafId = requestAnimationFrame(tick);
-    };
-
-    rafId = requestAnimationFrame(tick);
+    // Observe all note elements
+    const notes = container.querySelectorAll("[data-pitch]");
+    notes.forEach((note) => {
+      observer.observe(note);
+    });
 
     return () => {
-      cancelAnimationFrame(rafId);
+      observer.disconnect();
       // Cleanup: release any currently active notes
-      for (const span of activeSpansRef.current) {
-        onNoteOff(span.note);
+      for (const [pitch, count] of activeCounts.entries()) {
+        if (count > 0) {
+          onNoteOff(pitch);
+        }
       }
-      activeSpansRef.current.clear();
-      nextStartIndexRef.current = 0;
-      lastTimeRef.current = -1;
+      activeCounts.clear();
     };
-  }, [demoMode, isLoading, spans, getCurrentTimeMs, onNoteOn, onNoteOff]);
+  }, [containerRef, demoMode, isLoading, spans, onNoteOn, onNoteOff]);
 }
