@@ -70,6 +70,8 @@ export default function CollectionPage() {
     [tracks, selectedTrack, setSelectedTrack],
   );
 
+  const selectedIndex = tracks.findIndex((t) => t.id === selectedTrack?.id);
+
   return (
     <PageLayout
       header={
@@ -120,22 +122,26 @@ export default function CollectionPage() {
             </p>
 
             <Carousel
-              items={tracks}
-              selectedId={selectedTrack?.id ?? null}
-              getItemId={(track) => track.id}
-              onSelect={(track) =>
-                setSelectedTrack({
-                  id: track.id,
-                  name: track.name,
-                  url: track.url,
-                })
-              }
+              selectedIndex={selectedIndex}
+              onSelect={(index) => {
+                const track = tracks[index];
+                if (track) {
+                  setSelectedTrack({
+                    id: track.id,
+                    name: track.name,
+                    url: track.url,
+                  });
+                }
+              }}
               onNext={() => handleNavigate("next")}
               onPrev={() => handleNavigate("prev")}
-              renderItem={(track, isSelected) => (
+              className="group/gallery"
+            >
+              {tracks.map((track) => (
                 <TrackCard
+                  key={track.id}
                   track={track}
-                  isSelected={isSelected}
+                  isSelected={selectedTrack?.id === track.id}
                   onClick={() =>
                     setSelectedTrack({
                       id: track.id,
@@ -144,9 +150,8 @@ export default function CollectionPage() {
                     })
                   }
                 />
-              )}
-              className="group/gallery"
-            />
+              ))}
+            </Carousel>
           </>
         )}
       </main>

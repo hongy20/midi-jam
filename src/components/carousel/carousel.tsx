@@ -1,47 +1,52 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { type ReactNode, useCallback, useEffect, useRef } from "react";
+import {
+  Children,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import { Button } from "@/components/button/button";
 import styles from "./carousel.module.css";
 
-interface CarouselProps<T> {
-  items: T[];
-  renderItem: (item: T, isSelected: boolean) => ReactNode;
-  selectedId: string | null;
-  onSelect: (item: T) => void;
+interface CarouselProps {
+  children: ReactNode;
+  selectedIndex: number;
+  onSelect: (index: number) => void;
   onNext?: () => void;
   onPrev?: () => void;
-  getItemId: (item: T) => string;
   className?: string;
   galleryClassName?: string;
-  children?: ReactNode;
 }
 
-export function Carousel<T>({
-  items,
-  renderItem,
-  selectedId,
+export function Carousel({
+  children,
+  selectedIndex,
   onSelect,
   onNext,
   onPrev,
-  getItemId,
   className = "",
   galleryClassName = "",
-  children,
-}: CarouselProps<T>) {
+}: CarouselProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Handle scrolling to selected item (initial, resize, and selection changes)
+  const childrenArray = Children.toArray(children);
+  const itemCount = childrenArray.length;
+
+  // Handle scrolling to selected index (initial, resize, and selection changes)
   useEffect(() => {
-    if (items.length === 0 || !selectedId) return;
+    if (itemCount === 0 || selectedIndex < 0 || selectedIndex >= itemCount)
+      return;
 
     const scrollIntoCenter = (behavior: ScrollBehavior = "smooth") => {
       const container = scrollContainerRef.current;
       if (container) {
         const element = container.querySelector(
-          `[data-item-id="${selectedId}"]`,
+          `[data-index="${selectedIndex}"]`,
         );
         element?.scrollIntoView({
           behavior,
@@ -57,7 +62,7 @@ export function Carousel<T>({
     const handleResize = () => scrollIntoCenter("instant");
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [items.length, selectedId]);
+  }, [itemCount, selectedIndex]);
 
   const setupObserver = useCallback(
     (node: HTMLDivElement | null) => {
@@ -68,10 +73,12 @@ export function Carousel<T>({
           (entries) => {
             for (const entry of entries) {
               if (entry.isIntersecting) {
-                const itemId = entry.target.getAttribute("data-item-id");
-                const item = items.find((i) => getItemId(i) === itemId);
-                if (item && getItemId(item) !== selectedId) {
-                  onSelect(item);
+                const index = Number.parseInt(
+                  entry.target.getAttribute("data-index") || "-1",
+                  10,
+                );
+                if (index !== -1 && index !== selectedIndex) {
+                  onSelect(index);
                 }
               }
             }
@@ -86,13 +93,11 @@ export function Carousel<T>({
         observerRef.current = observer;
       }
     },
-    [items, selectedId, onSelect, getItemId],
+    [selectedIndex, onSelect],
   );
 
-  const firstItem = items.at(0);
-  const lastItem = items.at(-1);
-  const isFirst = firstItem ? getItemId(firstItem) === selectedId : true;
-  const isLast = lastItem ? getItemId(lastItem) === selectedId : true;
+  const isFirst = selectedIndex <= 0;
+  const isLast = selectedIndex >= itemCount - 1;
 
   return (
     <div className={`${styles.carousel} ${className}`}>
@@ -103,20 +108,23 @@ export function Carousel<T>({
         }}
         className={`${styles.gallery} ${galleryClassName}`}
       >
-        {items.map((item) => {
-          const id = getItemId(item);
-          const isSelected = selectedId === id;
+        {childrenArray.map((child, index) => {
+          const key =
+            child && typeof child === "object" && "key" in child && child.key
+              ? child.key
+              : index;
 
           return (
             <div
-              key={id}
-              data-item-id={id}
+              key={key}
+              data-index={index}
               ref={(el) => {
+                itemsRef.current[index] = el;
                 if (el && observerRef.current) observerRef.current.observe(el);
               }}
               className="shrink-0 h-[80%] flex items-center"
             >
-              {renderItem(item, isSelected)}
+              {child}
             </div>
           );
         })}
@@ -145,8 +153,6 @@ export function Carousel<T>({
           size="sm"
         />
       )}
-
-      {children}
     </div>
   );
 }
