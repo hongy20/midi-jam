@@ -9,6 +9,7 @@ import {
   isValidElement,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
 } from "react";
 import { Button } from "@/components/button/button";
@@ -43,31 +44,38 @@ export function Carousel({
   const childrenArray = Children.toArray(children);
   const itemCount = childrenArray.length;
 
-  // Handle scrolling to selected index (initial, resize, and selection changes)
-  useEffect(() => {
+  // Initial scroll on mount - use instant scroll
+  useLayoutEffect(() => {
     if (itemCount === 0 || selectedIndex < 0 || selectedIndex >= itemCount)
       return;
 
-    const scrollIntoCenter = (behavior: ScrollBehavior = "smooth") => {
-      const container = scrollContainerRef.current;
-      if (container) {
-        const element = container.querySelector(
-          `[data-index="${selectedIndex}"]`,
-        );
-        element?.scrollIntoView({
-          behavior,
-          block: "nearest",
-          inline: "center",
-        });
-      }
-    };
+    const container = scrollContainerRef.current;
+    if (container) {
+      const element = container.querySelector(`[data-index="${selectedIndex}"]`);
+      element?.scrollIntoView({
+        behavior: "instant",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, []); // Only on mount
 
-    scrollIntoCenter("smooth");
+  // Handle programmatic selection changes (via buttons or props)
+  useEffect(() => {
+    // If it's NOT a programmatic scroll, don't force a scrollIntoView
+    // This prevents the "shaking" where manual scroll and scrollIntoView fight
+    if (!isProgrammaticScrollRef.current) return;
 
-    const handleResize = () => scrollIntoCenter("instant");
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [itemCount, selectedIndex]);
+    const container = scrollContainerRef.current;
+    if (container) {
+      const element = container.querySelector(`[data-index="${selectedIndex}"]`);
+      element?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [selectedIndex]);
 
   const setupObserver = useCallback(() => {
     const node = scrollContainerRef.current;
@@ -99,7 +107,6 @@ export function Carousel({
         },
         {
           root: node,
-          // Use a narrow strip in the center to detect intersection
           rootMargin: "0px -49% 0px -49%",
           threshold: 0,
         },
@@ -107,7 +114,6 @@ export function Carousel({
 
       observerRef.current = observer;
 
-      // Observe all current children
       const items = node.querySelectorAll("[data-index]");
       for (const item of items) {
         observer.observe(item);
@@ -115,7 +121,6 @@ export function Carousel({
     }
   }, []);
 
-  // Initialize observer once
   useEffect(() => {
     setupObserver();
     return () => observerRef.current?.disconnect();
