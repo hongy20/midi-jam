@@ -133,8 +133,6 @@ export default function CollectionPage() {
                   });
                 }
               }}
-              onNext={() => handleNavigate("next")}
-              onPrev={() => handleNavigate("prev")}
               className="group/gallery"
             >
               {tracks.map((track) => (

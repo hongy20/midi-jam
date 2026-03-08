@@ -3,6 +3,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Children,
+  type HTMLAttributes,
   type ReactNode,
   useCallback,
   useEffect,
@@ -11,28 +12,22 @@ import {
 import { Button } from "@/components/button/button";
 import styles from "./carousel.module.css";
 
-interface CarouselProps {
+interface CarouselProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> {
   children: ReactNode;
   selectedIndex: number;
   onSelect: (index: number) => void;
-  onNext?: () => void;
-  onPrev?: () => void;
-  className?: string;
-  galleryClassName?: string;
 }
 
 export function Carousel({
   children,
   selectedIndex,
   onSelect,
-  onNext,
-  onPrev,
   className = "",
-  galleryClassName = "",
+  ...props
 }: CarouselProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const itemsRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const childrenArray = Children.toArray(children);
   const itemCount = childrenArray.length;
@@ -96,17 +91,29 @@ export function Carousel({
     [selectedIndex, onSelect],
   );
 
+  const handlePrev = () => {
+    if (selectedIndex > 0) {
+      onSelect(selectedIndex - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (selectedIndex < itemCount - 1) {
+      onSelect(selectedIndex + 1);
+    }
+  };
+
   const isFirst = selectedIndex <= 0;
   const isLast = selectedIndex >= itemCount - 1;
 
   return (
-    <div className={`${styles.carousel} ${className}`}>
+    <div className={`${styles.carousel} ${className}`} {...props}>
       <div
         ref={(node) => {
           scrollContainerRef.current = node;
           setupObserver(node);
         }}
-        className={`${styles.gallery} ${galleryClassName}`}
+        className={styles.gallery}
       >
         {childrenArray.map((child, index) => {
           const key =
@@ -119,7 +126,6 @@ export function Carousel({
               key={key}
               data-index={index}
               ref={(el) => {
-                itemsRef.current[index] = el;
                 if (el && observerRef.current) observerRef.current.observe(el);
               }}
               className="shrink-0 h-[80%] flex items-center"
@@ -130,29 +136,25 @@ export function Carousel({
         })}
       </div>
 
-      {onPrev && (
-        <Button
-          variant="secondary"
-          icon={ChevronLeft}
-          onClick={onPrev}
-          disabled={isFirst}
-          className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
-          aria-label="Previous item"
-          size="sm"
-        />
-      )}
+      <Button
+        variant="secondary"
+        icon={ChevronLeft}
+        onClick={handlePrev}
+        disabled={isFirst}
+        className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
+        aria-label="Previous item"
+        size="sm"
+      />
 
-      {onNext && (
-        <Button
-          variant="secondary"
-          icon={ChevronRight}
-          onClick={onNext}
-          disabled={isLast}
-          className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
-          aria-label="Next item"
-          size="sm"
-        />
-      )}
+      <Button
+        variant="secondary"
+        icon={ChevronRight}
+        onClick={handleNext}
+        disabled={isLast}
+        className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
+        aria-label="Next item"
+        size="sm"
+      />
     </div>
   );
 }
