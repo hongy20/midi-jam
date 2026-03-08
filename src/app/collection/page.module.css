@@ -23,37 +23,3 @@
 .gallery::-webkit-scrollbar {
   display: none;
 }
-
-.navButton {
-  pointer-events: auto;
-  background-color: var(--ui-card-bg);
-  border: 2px solid var(--ui-card-border);
-  box-shadow: var(--ui-card-shadow);
-  opacity: 0.6;
-  transition: all 0.2s ease;
-  width: 3.5rem;
-  height: 3.5rem;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.navButton svg {
-  width: 1.75rem;
-  height: 1.75rem;
-}
-
-.navButton:hover {
-  opacity: 1;
-  transform: scale(1.1);
-  background-color: var(--foreground);
-  color: var(--background);
-  border-color: var(--foreground);
-}
-
-@media (max-width: 640px) {
-  .navArrows {
-    display: none;
-  }
-}

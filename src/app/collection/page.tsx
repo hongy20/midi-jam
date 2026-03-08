@@ -233,16 +233,18 @@ export default function CollectionPage() {
                 icon={ChevronLeft}
                 onClick={() => handleNavigate("prev")}
                 disabled={currentTrackIndex <= 0}
-                className={`${styles.navButton} absolute top-1/2 -translate-y-1/2 left-4 sm:left-12 z-20 hidden sm:flex`}
+                className={`absolute top-1/2 -translate-y-1/2 left-4 sm:left-12 z-20 hidden sm:flex`}
                 aria-label="Previous song"
+                size="sm"
               />
               <Button
                 variant="secondary"
                 icon={ChevronRight}
                 onClick={() => handleNavigate("next")}
                 disabled={currentTrackIndex >= tracks.length - 1}
-                className={`${styles.navButton} absolute top-1/2 -translate-y-1/2 right-4 sm:right-12 z-20 hidden sm:flex`}
+                className={`absolute top-1/2 -translate-y-1/2 right-4 sm:right-12 z-20 hidden sm:flex`}
                 aria-label="Next song"
+                size="sm"
               />
             </div>
           </>
