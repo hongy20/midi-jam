@@ -29,6 +29,12 @@ export function Carousel({
 }: CarouselProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const selectedIndexRef = useRef(selectedIndex);
+
+  // Keep ref in sync to avoid observer recreation
+  useEffect(() => {
+    selectedIndexRef.current = selectedIndex;
+  }, [selectedIndex]);
 
   const childrenArray = Children.toArray(children);
   const itemCount = childrenArray.length;
@@ -62,7 +68,9 @@ export function Carousel({
 
   const setupObserver = useCallback(
     (node: HTMLDivElement | null) => {
-      if (observerRef.current) observerRef.current.disconnect();
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
 
       if (node) {
         const observer = new IntersectionObserver(
@@ -73,7 +81,7 @@ export function Carousel({
                   entry.target.getAttribute("data-index") || "-1",
                   10,
                 );
-                if (index !== -1 && index !== selectedIndex) {
+                if (index !== -1 && index !== selectedIndexRef.current) {
                   onSelectedIndexChange(index);
                 }
               }
@@ -87,9 +95,15 @@ export function Carousel({
         );
 
         observerRef.current = observer;
+
+        // Re-observe all children immediately
+        const items = node.querySelectorAll("[data-index]");
+        for (const item of items) {
+          observer.observe(item);
+        }
       }
     },
-    [selectedIndex, onSelectedIndexChange],
+    [onSelectedIndexChange], // No longer depends on selectedIndex
   );
 
   const handlePrev = () => {
@@ -132,7 +146,7 @@ export function Carousel({
           return cloneElement(child as React.ReactElement<any>, {
             "data-index": index,
             ref: (node: HTMLElement | null) => {
-              // Observe the element
+              // Observe the element if it's new
               if (node && observerRef.current) {
                 observerRef.current.observe(node);
               }
