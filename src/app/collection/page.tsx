@@ -40,6 +40,32 @@ export default function CollectionPage() {
     fetchTracks();
   }, []);
 
+  // Ensure initial selected track is scrolled into center on mount and during resize
+  useEffect(() => {
+    if (!isLoading && tracks.length > 0 && selectedTrack) {
+      const scrollIntoCenter = () => {
+        const container = scrollContainerRef.current;
+        if (container) {
+          const element = container.querySelector(
+            `[data-track-id="${selectedTrack.id}"]`,
+          );
+          element?.scrollIntoView({
+            behavior: "instant",
+            block: "nearest",
+            inline: "center",
+          });
+        }
+      };
+
+      // Initial scroll
+      scrollIntoCenter();
+
+      // Handle resize
+      window.addEventListener("resize", scrollIntoCenter);
+      return () => window.removeEventListener("resize", scrollIntoCenter);
+    }
+  }, [isLoading, tracks.length, selectedTrack]);
+
   const setupObserver = useCallback(
     (node: HTMLDivElement | null) => {
       if (observerRef.current) observerRef.current.disconnect();
