@@ -5,7 +5,7 @@
   align-items: center;
   gap: 2rem;
   overflow-x: auto;
-  snap-type: x mandatory;
+  scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   padding-inline: calc(50% - 140px); /* (50% - cardWidth/2) */
   -ms-overflow-style: none;

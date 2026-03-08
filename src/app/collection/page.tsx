@@ -137,7 +137,8 @@ export default function CollectionPage() {
                   key={track.id}
                   data-track-id={track.id}
                   ref={(el) => {
-                    if (el && observerRef.current) observerRef.current.observe(el);
+                    if (el && observerRef.current)
+                      observerRef.current.observe(el);
                   }}
                   className="shrink-0 h-[80%] flex items-center"
                 >
