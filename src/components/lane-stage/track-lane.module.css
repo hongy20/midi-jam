@@ -6,6 +6,9 @@
       calc(var(--end-unit) - var(--start-unit)),
       minmax(0, 1fr)
     );
+  /* Clamp height to 32767px (16-bit signed integer limit) to prevent browser 
+     layout performance degradation on extremely long tracks while maximizing 
+     visual clarity for notes. */
   height: min(
     32767px,
     calc(
