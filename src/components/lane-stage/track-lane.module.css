@@ -22,19 +22,9 @@
   position: absolute;
   width: 100%;
   border-radius: var(--note-radius);
-  border: 1px solid
-    color-mix(
-      in srgb,
-      currentColor calc(var(--note-border-opacity) * 100%),
-      transparent
-    );
-  box-shadow: var(--note-shadow);
-  transition: opacity 300ms;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   min-width: 0;
-
-  background-color: color-mix(
-    in srgb,
-    currentColor calc(20% + 20% * var(--is-black)),
-    transparent
-  );
+  /* Use simple opacity instead of color-mix to avoid high-precision blending passes */
+  background-color: currentColor;
+  opacity: 0.6;
 }
