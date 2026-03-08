@@ -1,6 +1,8 @@
 "use client";
 
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { type ReactNode, useCallback, useEffect, useRef } from "react";
+import { Button } from "@/components/button/button";
 import styles from "./carousel.module.css";
 
 interface CarouselProps<T> {
@@ -8,6 +10,8 @@ interface CarouselProps<T> {
   renderItem: (item: T, isSelected: boolean) => ReactNode;
   selectedId: string | null;
   onSelect: (item: T) => void;
+  onNext?: () => void;
+  onPrev?: () => void;
   getItemId: (item: T) => string;
   className?: string;
   galleryClassName?: string;
@@ -19,6 +23,8 @@ export function Carousel<T>({
   renderItem,
   selectedId,
   onSelect,
+  onNext,
+  onPrev,
   getItemId,
   className = "",
   galleryClassName = "",
@@ -83,6 +89,11 @@ export function Carousel<T>({
     [items, selectedId, onSelect, getItemId],
   );
 
+  const firstItem = items.at(0);
+  const lastItem = items.at(-1);
+  const isFirst = firstItem ? getItemId(firstItem) === selectedId : true;
+  const isLast = lastItem ? getItemId(lastItem) === selectedId : true;
+
   return (
     <div className={`${styles.carousel} ${className}`}>
       <div
@@ -110,6 +121,31 @@ export function Carousel<T>({
           );
         })}
       </div>
+
+      {onPrev && (
+        <Button
+          variant="secondary"
+          icon={ChevronLeft}
+          onClick={onPrev}
+          disabled={isFirst}
+          className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
+          aria-label="Previous item"
+          size="sm"
+        />
+      )}
+
+      {onNext && (
+        <Button
+          variant="secondary"
+          icon={ChevronRight}
+          onClick={onNext}
+          disabled={isLast}
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
+          aria-label="Next item"
+          size="sm"
+        />
+      )}
+
       {children}
     </div>
   );

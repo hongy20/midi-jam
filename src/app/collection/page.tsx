@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-  Dices,
-  Play,
-} from "lucide-react";
+import { ArrowLeft, Dices, Play } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/button/button";
 import { Carousel } from "@/components/carousel/carousel";
@@ -136,6 +130,8 @@ export default function CollectionPage() {
                   url: track.url,
                 })
               }
+              onNext={() => handleNavigate("next")}
+              onPrev={() => handleNavigate("prev")}
               renderItem={(track, isSelected) => (
                 <TrackCard
                   track={track}
@@ -150,27 +146,7 @@ export default function CollectionPage() {
                 />
               )}
               className="group/gallery"
-            >
-              {/* Navigation Arrows */}
-              <Button
-                variant="secondary"
-                icon={ChevronLeft}
-                onClick={() => handleNavigate("prev")}
-                disabled={tracks.at(0)?.id === selectedTrack?.id}
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
-                aria-label="Previous song"
-                size="sm"
-              />
-              <Button
-                variant="secondary"
-                icon={ChevronRight}
-                onClick={() => handleNavigate("next")}
-                disabled={tracks.at(-1)?.id === selectedTrack?.id}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex"
-                aria-label="Next song"
-                size="sm"
-              />
-            </Carousel>
+            />
           </>
         )}
       </main>
