@@ -225,9 +225,7 @@ export default function CollectionPage() {
                 variant="secondary"
                 icon={ChevronLeft}
                 onClick={() => handleNavigate("prev")}
-                disabled={
-                  tracks.findIndex((t) => t.id === selectedTrack?.id) <= 0
-                }
+                disabled={tracks.at(0)?.id === selectedTrack?.id}
                 className="absolute right-2.5 top-1/2 -translate-y-1/2"
                 aria-label="Previous song"
                 size="sm"
@@ -236,10 +234,7 @@ export default function CollectionPage() {
                 variant="secondary"
                 icon={ChevronRight}
                 onClick={() => handleNavigate("next")}
-                disabled={
-                  tracks.findIndex((t) => t.id === selectedTrack?.id) >=
-                  tracks.length - 1
-                }
+                disabled={tracks.at(-1)?.id === selectedTrack?.id}
                 className="absolute left-2.5 top-1/2 -translate-y-1/2"
                 aria-label="Next song"
                 size="sm"
