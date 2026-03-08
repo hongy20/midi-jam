@@ -111,7 +111,7 @@ export default function CollectionPage() {
         </PageFooter>
       }
     >
-      <main className="w-full h-full overflow-y-auto overflow-x-hidden py-4 px-8 min-h-0 flex flex-col">
+      <main className="w-full h-full overflow-y-auto overflow-x-hidden py-4 px-8 min-h-0 flex flex-col justify-center">
         {isLoading ? (
           <p className="text-center text-foreground/60 text-base font-medium animate-pulse">
             Searching for tracks...
