@@ -1,6 +1,12 @@
 "use client";
 
-import { ArrowLeft, Dices, Play } from "lucide-react";
+import {
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Dices,
+  Play,
+} from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/button/button";
 import { PageFooter } from "@/components/page-footer/page-footer";
@@ -66,6 +72,42 @@ export default function CollectionPage() {
       }
     },
     [tracks, setSelectedTrack],
+  );
+
+  const handleNavigate = useCallback(
+    (direction: "prev" | "next") => {
+      if (tracks.length === 0) return;
+
+      const currentIndex = tracks.findIndex((t) => t.id === selectedTrack?.id);
+      let nextIndex: number;
+
+      if (direction === "prev") {
+        nextIndex = (currentIndex - 1 + tracks.length) % tracks.length;
+      } else {
+        nextIndex = (currentIndex + 1) % tracks.length;
+      }
+
+      const track = tracks[nextIndex];
+      setSelectedTrack({
+        id: track.id,
+        name: track.name,
+        url: track.url,
+      });
+
+      // Programmatically scroll the selected track into center
+      const container = scrollContainerRef.current;
+      if (container) {
+        const element = container.querySelector(
+          `[data-track-id="${track.id}"]`,
+        );
+        element?.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+          inline: "center",
+        });
+      }
+    },
+    [tracks, selectedTrack, setSelectedTrack],
   );
 
   return (
@@ -134,7 +176,7 @@ export default function CollectionPage() {
         </PageFooter>
       }
     >
-      <main className="w-full h-full overflow-y-auto overflow-x-hidden py-4 px-8 min-h-0 flex flex-col justify-center">
+      <main className="w-full h-full py-4 px-8 min-h-0 flex flex-col justify-center relative">
         {isLoading ? (
           <p className="text-center text-foreground/60 text-base font-medium animate-pulse">
             Searching for tracks...
@@ -148,49 +190,70 @@ export default function CollectionPage() {
             <p className="text-center text-foreground/60 text-base font-medium mb-8">
               Select a song below to continue.
             </p>
-            <div
-              ref={(node) => {
-                scrollContainerRef.current = node;
-                setupObserver(node);
-              }}
-              className={styles.gallery}
-            >
-              {tracks.map((track) => (
-                <div
-                  key={track.id}
-                  data-track-id={track.id}
-                  ref={(el) => {
-                    if (el && observerRef.current)
-                      observerRef.current.observe(el);
-                  }}
-                  className="shrink-0 h-[80%] flex items-center"
-                >
-                  <TrackCard
-                    track={track}
-                    isSelected={selectedTrack?.id === track.id}
-                    onClick={() => {
-                      setSelectedTrack({
-                        id: track.id,
-                        name: track.name,
-                        url: track.url,
-                      });
 
-                      // Programmatically scroll the selected track into center
-                      const container = scrollContainerRef.current;
-                      if (container) {
-                        const element = container.querySelector(
-                          `[data-track-id="${track.id}"]`,
-                        );
-                        element?.scrollIntoView({
-                          behavior: "smooth",
-                          block: "nearest",
-                          inline: "center",
-                        });
-                      }
+            <div className="relative group/gallery">
+              <div
+                ref={(node) => {
+                  scrollContainerRef.current = node;
+                  setupObserver(node);
+                }}
+                className={styles.gallery}
+              >
+                {tracks.map((track) => (
+                  <div
+                    key={track.id}
+                    data-track-id={track.id}
+                    ref={(el) => {
+                      if (el && observerRef.current)
+                        observerRef.current.observe(el);
                     }}
-                  />
-                </div>
-              ))}
+                    className="shrink-0 h-[80%] flex items-center"
+                  >
+                    <TrackCard
+                      track={track}
+                      isSelected={selectedTrack?.id === track.id}
+                      onClick={() => {
+                        setSelectedTrack({
+                          id: track.id,
+                          name: track.name,
+                          url: track.url,
+                        });
+
+                        // Programmatically scroll the selected track into center
+                        const container = scrollContainerRef.current;
+                        if (container) {
+                          const element = container.querySelector(
+                            `[data-track-id="${track.id}"]`,
+                          );
+                          element?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "nearest",
+                            inline: "center",
+                          });
+                        }
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Navigation Arrows */}
+              <div className={styles.navArrows}>
+                <Button
+                  variant="secondary"
+                  icon={ChevronLeft}
+                  onClick={() => handleNavigate("prev")}
+                  className={styles.navButton}
+                  aria-label="Previous song"
+                />
+                <Button
+                  variant="secondary"
+                  icon={ChevronRight}
+                  onClick={() => handleNavigate("next")}
+                  className={styles.navButton}
+                  aria-label="Next song"
+                />
+              </div>
             </div>
           </>
         )}

@@ -23,3 +23,39 @@
 .gallery::-webkit-scrollbar {
   display: none;
 }
+
+.navArrows {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.navButton {
+  pointer-events: auto;
+  background-color: var(--ui-card-bg) !important;
+  border: 2px solid var(--ui-card-border) !important;
+  box-shadow: var(--ui-card-shadow);
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+.navButton:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  background-color: var(--foreground) !important;
+  color: var(--background) !important;
+  border-color: var(--foreground) !important;
+}
+
+@media (max-width: 640px) {
+  .navArrows {
+    display: none;
+  }
+}
