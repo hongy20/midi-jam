@@ -6,9 +6,12 @@
       calc(var(--end-unit) - var(--start-unit)),
       minmax(0, 1fr)
     );
+  /* Total height corresponds to the song duration such that notes fall at a 
+     consistent speed of 1 container height per 3000ms. 
+     Speed (px/ms) = containerHeight / 3000. */
   height: calc(
     calc(100dvh - var(--header-height) - var(--footer-height)) *
-    (var(--total-duration-ms) / 2000 + 1)
+    (var(--total-duration-ms) / 3000)
   );
 }
 

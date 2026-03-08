@@ -56,7 +56,7 @@ describe("useLaneTimeline hook", () => {
     );
 
     expect(animateMock).toHaveBeenCalledWith(
-      [{ transform: "translateY(-600px)" }, { transform: "translateY(0px)" }],
+      [{ transform: "translateY(-600px)" }, { transform: "translateY(400px)" }],
       { duration: 1000, fill: "both", easing: "linear" },
     );
     expect(mockAnimation.play).toHaveBeenCalled();
@@ -225,7 +225,7 @@ describe("useLaneTimeline hook", () => {
     // Should re-create animation with new keyframes
     expect(animateMock).toHaveBeenCalledTimes(2);
     expect(animateMock).toHaveBeenLastCalledWith(
-      [{ transform: "translateY(-500px)" }, { transform: "translateY(0px)" }],
+      [{ transform: "translateY(-500px)" }, { transform: "translateY(500px)" }],
       expect.any(Object),
     );
 
