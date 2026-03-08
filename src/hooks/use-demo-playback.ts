@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import type { NoteSpan } from "@/lib/midi/midi-parser";
 import { LEAD_IN_DEFAULT_MS } from "@/lib/midi/constant";
+import type { NoteSpan } from "@/lib/midi/midi-parser";
 
 interface UseDemoPlaybackProps {
   demoMode: boolean;

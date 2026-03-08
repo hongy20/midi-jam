@@ -6,9 +6,12 @@
       calc(var(--end-unit) - var(--start-unit)),
       minmax(0, 1fr)
     );
-  height: min(16000px, calc(
-    calc(100dvh - var(--header-height) - var(--footer-height)) *
-    (var(--total-duration-ms) / 2000 + 1)
+  height: min(
+    16000px,
+    calc(
+      calc(100dvh - var(--header-height) - var(--footer-height)) *
+      (var(--total-duration-ms) / 2000 + 1)
+    )
   );
 }
 

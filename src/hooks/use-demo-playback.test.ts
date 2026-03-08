@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NoteSpan } from "@/lib/midi/midi-parser";
 import { LEAD_IN_DEFAULT_MS } from "@/lib/midi/constant";
+import type { NoteSpan } from "@/lib/midi/midi-parser";
 import { useDemoPlayback } from "./use-demo-playback";
 
 describe("useDemoPlayback", () => {
@@ -111,7 +111,7 @@ describe("useDemoPlayback", () => {
       { id: "1", note: 60, startTime: 1, duration: 1, velocity: 0.7 },
       { id: "2", note: 64, startTime: 1, duration: 1, velocity: 0.7 },
     ];
-    let currentTime = 1000 + LEAD_IN_DEFAULT_MS;
+    const currentTime = 1000 + LEAD_IN_DEFAULT_MS;
     const getCurrentTimeMs = vi.fn(() => currentTime);
 
     renderHook(() =>
