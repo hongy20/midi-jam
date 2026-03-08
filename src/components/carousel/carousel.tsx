@@ -30,11 +30,13 @@ export function Carousel({
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const selectedIndexRef = useRef(selectedIndex);
+  const onSelectRef = useRef(onSelectedIndexChange);
 
-  // Keep ref in sync to avoid observer recreation
+  // Keep refs in sync to avoid observer recreation
   useEffect(() => {
     selectedIndexRef.current = selectedIndex;
-  }, [selectedIndex]);
+    onSelectRef.current = onSelectedIndexChange;
+  }, [selectedIndex, onSelectedIndexChange]);
 
   const childrenArray = Children.toArray(children);
   const itemCount = childrenArray.length;
@@ -66,45 +68,43 @@ export function Carousel({
     return () => window.removeEventListener("resize", handleResize);
   }, [itemCount, selectedIndex]);
 
-  const setupObserver = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
+  const setupObserver = useCallback((node: HTMLDivElement | null) => {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
 
-      if (node) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            for (const entry of entries) {
-              if (entry.isIntersecting) {
-                const index = Number.parseInt(
-                  entry.target.getAttribute("data-index") || "-1",
-                  10,
-                );
-                if (index !== -1 && index !== selectedIndexRef.current) {
-                  onSelectedIndexChange(index);
-                }
+    if (node) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              const indexAttr = entry.target.getAttribute("data-index");
+              if (indexAttr === null) continue;
+              
+              const index = Number.parseInt(indexAttr, 10);
+              if (index !== -1 && index !== selectedIndexRef.current) {
+                onSelectRef.current(index);
               }
             }
-          },
-          {
-            root: node,
-            rootMargin: "0px -45% 0px -45%",
-            threshold: 0.5,
-          },
-        );
+          }
+        },
+        {
+          root: node,
+          // Use a very narrow vertical strip in the center to detect intersection
+          rootMargin: "0px -49% 0px -49%",
+          threshold: 0,
+        },
+      );
 
-        observerRef.current = observer;
+      observerRef.current = observer;
 
-        // Re-observe all children immediately
-        const items = node.querySelectorAll("[data-index]");
-        for (const item of items) {
-          observer.observe(item);
-        }
+      // Observe all current children
+      const items = node.querySelectorAll("[data-index]");
+      for (const item of items) {
+        observer.observe(item);
       }
-    },
-    [onSelectedIndexChange], // No longer depends on selectedIndex
-  );
+    }
+  }, []); // No dependencies, completely stable
 
   const handlePrev = () => {
     if (selectedIndex > 0) {
