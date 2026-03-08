@@ -29,14 +29,21 @@ export function Carousel({
 }: CarouselProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
+  const isProgrammaticScrollRef = useRef(false);
+  
+  // Refs to keep track of latest values in observer callback without recreation
   const selectedIndexRef = useRef(selectedIndex);
   const onSelectRef = useRef(onSelectedIndexChange);
 
-  // Keep refs in sync to avoid observer recreation
   useEffect(() => {
     selectedIndexRef.current = selectedIndex;
     onSelectRef.current = onSelectedIndexChange;
   }, [selectedIndex, onSelectedIndexChange]);
+
+  // Mark as programmatic scroll when index changes via props/buttons
+  useEffect(() => {
+    isProgrammaticScrollRef.current = true;
+  }, [selectedIndex]);
 
   const childrenArray = Children.toArray(children);
   const itemCount = childrenArray.length;
@@ -60,7 +67,6 @@ export function Carousel({
       }
     };
 
-    // Initial scroll and selection changes use smooth by default
     scrollIntoCenter("smooth");
 
     const handleResize = () => scrollIntoCenter("instant");
@@ -68,7 +74,8 @@ export function Carousel({
     return () => window.removeEventListener("resize", handleResize);
   }, [itemCount, selectedIndex]);
 
-  const setupObserver = useCallback((node: HTMLDivElement | null) => {
+  const setupObserver = useCallback(() => {
+    const node = scrollContainerRef.current;
     if (observerRef.current) {
       observerRef.current.disconnect();
     }
@@ -82,7 +89,15 @@ export function Carousel({
               if (indexAttr === null) continue;
               
               const index = Number.parseInt(indexAttr, 10);
-              if (index !== -1 && index !== selectedIndexRef.current) {
+              
+              // If we reach the target of a programmatic scroll, release the lock
+              if (index === selectedIndexRef.current) {
+                isProgrammaticScrollRef.current = false;
+              }
+
+              // Only trigger selection change if NOT in a programmatic scroll
+              // or if we've already reached/passed the target
+              if (!isProgrammaticScrollRef.current && index !== selectedIndexRef.current) {
                 onSelectRef.current(index);
               }
             }
@@ -90,9 +105,9 @@ export function Carousel({
         },
         {
           root: node,
-          // Use a very narrow vertical strip in the center to detect intersection
-          rootMargin: "0px -49% 0px -49%",
-          threshold: 0,
+          // 10% hit zone in the center (45% + 45% = 90% margin)
+          rootMargin: "0px -45% 0px -45%",
+          threshold: 0.5,
         },
       );
 
@@ -104,16 +119,24 @@ export function Carousel({
         observer.observe(item);
       }
     }
-  }, []); // No dependencies, completely stable
+  }, []);
+
+  // Initialize observer once
+  useEffect(() => {
+    setupObserver();
+    return () => observerRef.current?.disconnect();
+  }, [setupObserver]);
 
   const handlePrev = () => {
     if (selectedIndex > 0) {
+      isProgrammaticScrollRef.current = true;
       onSelectedIndexChange(selectedIndex - 1);
     }
   };
 
   const handleNext = () => {
     if (selectedIndex < itemCount - 1) {
+      isProgrammaticScrollRef.current = true;
       onSelectedIndexChange(selectedIndex + 1);
     }
   };
@@ -134,10 +157,7 @@ export function Carousel({
       />
 
       <div
-        ref={(node) => {
-          scrollContainerRef.current = node;
-          setupObserver(node);
-        }}
+        ref={scrollContainerRef}
         className={styles.gallery}
       >
         {childrenArray.map((child, index) => {
@@ -150,7 +170,7 @@ export function Carousel({
               if (node && observerRef.current) {
                 observerRef.current.observe(node);
               }
-              // Handle the child's own ref if it's a function ref or RefObject
+              // Handle the child's own ref
               const { ref: childRef } = child as any;
               if (typeof childRef === "function") {
                 childRef(node);
