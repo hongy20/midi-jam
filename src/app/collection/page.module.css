@@ -44,6 +44,17 @@
   box-shadow: var(--ui-card-shadow);
   opacity: 0.6;
   transition: all 0.2s ease;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navArrows .navButton svg {
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .navArrows .navButton:hover {
