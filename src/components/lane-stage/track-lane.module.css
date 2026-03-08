@@ -6,11 +6,11 @@
       calc(var(--end-unit) - var(--start-unit)),
       minmax(0, 1fr)
     );
-  /* Clamp height to 32767px (16-bit signed integer limit) to prevent browser 
+  /* Clamp height to 16384px (a common GPU texture limit) to prevent browser 
      layout performance degradation on extremely long tracks while maximizing 
      visual clarity for notes. */
   height: min(
-    32767px,
+    16384px,
     calc(
       calc(100dvh - var(--header-height) - var(--footer-height)) *
       (var(--total-duration-ms) / 2000 + 1)
