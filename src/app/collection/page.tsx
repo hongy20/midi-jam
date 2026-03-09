@@ -32,45 +32,17 @@ export default function CollectionPage() {
     fetchTracks();
   }, []);
 
-  const handleNavigate = useCallback(
-    (direction: "prev" | "next" | "random") => {
-      if (tracks.length === 0) return;
-
-      let track: CollectionTrack;
-
-      if (direction === "random") {
-        const availableTracks =
-          tracks.length > 1
-            ? tracks.filter((t) => t.id !== selectedTrack?.id)
-            : tracks;
-
-        track =
-          availableTracks[Math.floor(Math.random() * availableTracks.length)];
-      } else {
-        const currentIndex = tracks.findIndex(
-          (t) => t.id === selectedTrack?.id,
-        );
-        let nextIndex: number;
-
-        if (direction === "prev") {
-          nextIndex = (currentIndex - 1 + tracks.length) % tracks.length;
-        } else {
-          nextIndex = (currentIndex + 1) % tracks.length;
-        }
-
-        track = tracks[nextIndex];
-      }
-
+  const handleTrackSelection = useCallback(
+    (track?: CollectionTrack) => {
+      if (!track) return;
       setSelectedTrack({
         id: track.id,
         name: track.name,
         url: track.url,
       });
     },
-    [tracks, selectedTrack, setSelectedTrack],
+    [setSelectedTrack],
   );
-
-  const selectedIndex = tracks.findIndex((t) => t.id === selectedTrack?.id);
 
   return (
     <PageLayout
@@ -78,7 +50,15 @@ export default function CollectionPage() {
         <PageHeader title="Songs">
           <Button
             variant="secondary"
-            onClick={() => handleNavigate("random")}
+            onClick={() => {
+              const otherTracks = tracks.filter(
+                (t) => t.id !== selectedTrack?.id,
+              );
+              handleTrackSelection(
+                otherTracks[Math.floor(Math.random() * otherTracks.length)],
+              );
+            }}
+            disabled={tracks.length <= 1}
             icon={Dices}
             size="sm"
           />
@@ -122,18 +102,10 @@ export default function CollectionPage() {
             </p>
 
             <Carousel
-              selectedIndex={selectedIndex}
-              onSelectedIndexChange={(index) => {
-                const track = tracks[index];
-                if (track) {
-                  setSelectedTrack({
-                    id: track.id,
-                    name: track.name,
-                    url: track.url,
-                  });
-                }
-              }}
-              className="group/gallery"
+              selectedIndex={tracks.findIndex(
+                (t) => t.id === selectedTrack?.id,
+              )}
+              onSelectedIndexChange={(idx) => handleTrackSelection(tracks[idx])}
             >
               {tracks.map((track) => (
                 <TrackCard
