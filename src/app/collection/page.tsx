@@ -44,20 +44,20 @@ export default function CollectionPage() {
     [setSelectedTrack],
   );
 
-  const handleRandomTrack = useCallback(() => {
-    const otherTracks = tracks.filter((t) => t.id !== selectedTrack?.id);
-    handleTrackSelection(
-      otherTracks[Math.floor(Math.random() * otherTracks.length)],
-    );
-  }, [tracks, selectedTrack, handleTrackSelection]);
-
   return (
     <PageLayout
       header={
         <PageHeader title="Songs">
           <Button
             variant="secondary"
-            onClick={handleRandomTrack}
+            onClick={() => {
+              const otherTracks = tracks.filter(
+                (t) => t.id !== selectedTrack?.id,
+              );
+              handleTrackSelection(
+                otherTracks[Math.floor(Math.random() * otherTracks.length)],
+              );
+            }}
             disabled={tracks.length <= 1}
             icon={Dices}
             size="sm"
