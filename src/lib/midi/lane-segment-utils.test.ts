@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { LEAD_IN_DEFAULT_MS } from "./constant";
 import {
   filterSpansForSegment,
   getCurrentSegmentIndex,
@@ -49,9 +48,15 @@ describe("lane-segment-utils", () => {
   describe("segmentAnimationCurrentTime", () => {
     it("calculates correct offset including fallTimeMs", () => {
       // (masterTime - segmentIndex * duration) + 3000
-      expect(segmentAnimationCurrentTime(15000, 1, segmentDuration)).toBe(5000 + 3000);
-      expect(segmentAnimationCurrentTime(25000, 2, segmentDuration)).toBe(5000 + 3000);
-      expect(segmentAnimationCurrentTime(5000, 0, segmentDuration)).toBe(5000 + 3000);
+      expect(segmentAnimationCurrentTime(15000, 1, segmentDuration)).toBe(
+        5000 + 3000,
+      );
+      expect(segmentAnimationCurrentTime(25000, 2, segmentDuration)).toBe(
+        5000 + 3000,
+      );
+      expect(segmentAnimationCurrentTime(5000, 0, segmentDuration)).toBe(
+        5000 + 3000,
+      );
     });
   });
 

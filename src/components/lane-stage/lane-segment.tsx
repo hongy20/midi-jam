@@ -81,7 +81,16 @@ export function LaneSegment({
       animation.cancel();
       animationRef.current = null;
     };
-  }, [segmentIndex, containerHeight, segmentHeightPx]);
+  }, [
+    segmentIndex,
+    containerHeight,
+    segmentHeightPx,
+    getMasterCurrentTimeMs,
+    isPaused,
+    speed,
+    segmentDurationMs,
+    fallTimeMs,
+  ]);
 
   // Handle speed and pause changes without re-creating the animation
   useEffect(() => {
@@ -111,6 +120,8 @@ export function LaneSegment({
       style={
         {
           "--segment-duration-ms": LANE_SEGMENT_DURATION_MS,
+          // Initial position way off-top to prevent "ghost" flashes
+          transform: `translateY(${-segmentHeightPx}px)`,
         } as React.CSSProperties
       }
     >

@@ -66,5 +66,9 @@ export function segmentAnimationCurrentTime(
   segmentIndex: number,
   laneSegmentDurationMs: number,
 ): number {
-  return masterCurrentTimeMs - segmentIndex * laneSegmentDurationMs + LANE_FALL_TIME_MS;
+  return (
+    masterCurrentTimeMs -
+    segmentIndex * laneSegmentDurationMs +
+    LANE_FALL_TIME_MS
+  );
 }
