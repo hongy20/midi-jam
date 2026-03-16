@@ -36,9 +36,13 @@ export function LaneSegment({
     // Segment duration in pixels: 1 screen height per 3000ms
     const segmentHeight = containerHeight * (LANE_SEGMENT_DURATION_MS / 3000);
 
+    // Keyframes for "falldown" (Top to Bottom):
+    // At t=0, the bottom of the segment (where relTime=0 notes are) is at the hit-line (containerHeight).
+    // So translateY = containerHeight - segmentHeight.
+    // At t=LANE_SEGMENT_DURATION_MS, the top of the segment is at the hit-line (containerHeight).
     const keyframes = [
+      { transform: `translateY(${containerHeight - segmentHeight}px)` },
       { transform: `translateY(${containerHeight}px)` },
-      { transform: `translateY(${-segmentHeight}px)` },
     ];
 
     const animation = element.animate(keyframes, {
