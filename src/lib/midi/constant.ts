@@ -42,3 +42,6 @@ export const LEAD_OUT_DEFAULT_MS = 800;
 
 /** Minimal gap between sequential notes of the same pitch to ensure triggering on MIDI devices (in milliseconds) */
 export const MIN_NOTE_GAP_MS = 10;
+
+/** Duration in ms of each windowed LaneSegment */
+export const LANE_SEGMENT_DURATION_MS = 10 * 1000;

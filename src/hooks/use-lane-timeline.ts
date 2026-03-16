@@ -19,72 +19,45 @@ export function useLaneTimeline({
 }: UseLaneTimelineProps) {
   const animationRef = useRef<Animation | null>(null);
 
-  // Initialize and manage the Web Animation
+  // Initialize and manage the Web Animation (internal clock only)
   useEffect(() => {
     const container = containerRef.current;
     if (!container || totalDurationMs <= 0) return;
 
-    // Use a ResizeObserver to get the correct max scroll distance.
-    // The note lane container should have its final height based on totalDurationMs.
-    const updateAnimation = () => {
-      const maxScrollPx = container.scrollHeight - container.clientHeight;
-      const targetElement = container.querySelector("#track-lane");
+    // We still create a "dummy" animation on the container itself (or an invisible div)
+    // to leverage the Web Animation API's built-in clock, playbackRate, and pause/resume logic.
+    // This animation doesn't need to move anything visible.
+    const keyframes = [{ opacity: 1 }, { opacity: 1 }];
 
-      let currentProgress = initialTimeMs ?? 0;
-      if (animationRef.current) {
-        // Save progress before cancelling
-        currentProgress = (animationRef.current.currentTime as number) ?? 0;
+    const animation = container.animate(keyframes, {
+      duration: totalDurationMs,
+      fill: "both",
+      easing: "linear",
+    });
 
-        // Always cleanup old animation on resize
-        animationRef.current.cancel();
-        animationRef.current = null;
-      }
+    // Restore state using props and saved progress
+    animation.playbackRate = speed;
+    animation.currentTime = initialTimeMs ?? 0;
 
-      if (maxScrollPx > 0 && targetElement) {
-        // The animation must move the entire height of the lane relative to the hit line.
-        // At t=0, the bottom of the lane (scrollHeight) is at the hit line (clientHeight).
-        // At t=totalDuration, the top of the lane (0) is at the hit line (clientHeight).
-        // Distance = (clientHeight - 0) - (clientHeight - scrollHeight) = scrollHeight.
-        const keyframes = [
-          { transform: `translateY(${-maxScrollPx}px)` },
-          { transform: `translateY(${container.clientHeight}px)` },
-        ];
+    if (isPaused) {
+      animation.pause();
+    } else {
+      animation.play();
+    }
 
-        const animation = targetElement.animate(keyframes, {
-          duration: totalDurationMs,
-          fill: "both",
-          easing: "linear",
-        });
-
-        // Restore state using props and saved progress
-        animation.playbackRate = speed;
-        animation.currentTime = currentProgress;
-
-        if (isPaused) {
-          animation.pause();
-        } else {
-          animation.play();
-        }
-
-        animation.onfinish = () => {
-          onFinish?.();
-        };
-
-        animationRef.current = animation;
-      }
+    animation.onfinish = () => {
+      onFinish?.();
     };
 
-    const ro = new ResizeObserver(updateAnimation);
-    ro.observe(container);
+    animationRef.current = animation;
 
     return () => {
-      ro.disconnect();
       if (animationRef.current) {
         animationRef.current.cancel();
         animationRef.current = null;
       }
     };
-  }, [containerRef, totalDurationMs, onFinish, speed, isPaused, initialTimeMs]); // Only re-create if these critical props change
+  }, [containerRef, totalDurationMs, onFinish, speed, isPaused, initialTimeMs]);
 
   // Handle Play/Pause and Speed updates smoothly
   useEffect(() => {
