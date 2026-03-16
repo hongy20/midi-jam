@@ -29,33 +29,39 @@ export function LaneSegment({
   const segmentRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<Animation | null>(null);
 
+  // Constants for fall speed: 1 screen height per 3000ms
+  const fallTimeMs = 3000;
+  const segmentDurationMs = LANE_SEGMENT_DURATION_MS;
+  const segmentHeightPx = containerHeight * (segmentDurationMs / fallTimeMs);
+
   useEffect(() => {
     const element = segmentRef.current;
     if (!element || containerHeight <= 0) return;
 
-    // Segment duration in pixels: 1 screen height per 3000ms
-    const segmentHeight = containerHeight * (LANE_SEGMENT_DURATION_MS / 3000);
-
-    // Keyframes for "falldown" (Top to Bottom):
-    // At t=0, the bottom of the segment (where relTime=0 notes are) is at the hit-line (containerHeight).
-    // So translateY = containerHeight - segmentHeight.
-    // At t=LANE_SEGMENT_DURATION_MS, the top of the segment is at the hit-line (containerHeight).
+    // The animation covers the entire travel:
+    // From entering the top of the container to completely leaving the bottom.
+    // EnterTop: Bottom of segment at Y=0 -> translateY = -segmentSize
+    // LeaveBottom: Top of segment at Y=containerHeight -> translateY = containerHeight
     const keyframes = [
-      { transform: `translateY(${containerHeight - segmentHeight}px)` },
+      { transform: `translateY(${-segmentHeightPx}px)` },
       { transform: `translateY(${containerHeight}px)` },
     ];
 
+    // Total duration for this full travel: 10s for the segment itself + 3s for it to finish falling.
+    const totalTravelTimeMs = segmentDurationMs + fallTimeMs;
+
     const animation = element.animate(keyframes, {
-      duration: LANE_SEGMENT_DURATION_MS,
+      duration: totalTravelTimeMs,
       fill: "both",
       easing: "linear",
     });
 
-    // Initialize state
+    // Map master time to animation time.
+    // At masterTime = segmentStart + 0ms, the segment should be entering (t_anim=0).
+    const currentTimeMs = getMasterCurrentTimeMs();
+    const segmentStartMs = segmentIndex * segmentDurationMs;
+    animation.currentTime = currentTimeMs - segmentStartMs;
     animation.playbackRate = speed;
-    const initialTime =
-      getMasterCurrentTimeMs() - segmentIndex * LANE_SEGMENT_DURATION_MS;
-    animation.currentTime = initialTime;
 
     if (isPaused) {
       animation.pause();
@@ -69,7 +75,7 @@ export function LaneSegment({
       animation.cancel();
       animationRef.current = null;
     };
-  }, [segmentIndex, containerHeight, getMasterCurrentTimeMs, isPaused, speed]);
+  }, [segmentIndex, containerHeight, segmentHeightPx]);
 
   // Handle speed and pause changes without re-creating the animation
   useEffect(() => {
