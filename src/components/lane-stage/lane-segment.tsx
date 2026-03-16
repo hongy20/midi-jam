@@ -2,9 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import {
+  LANE_FALL_TIME_MS,
   LANE_SEGMENT_DURATION_MS,
   LEAD_IN_DEFAULT_MS,
 } from "@/lib/midi/constant";
+import { segmentAnimationCurrentTime } from "@/lib/midi/lane-segment-utils";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./lane-segment.module.css";
@@ -30,7 +32,7 @@ export function LaneSegment({
   const animationRef = useRef<Animation | null>(null);
 
   // Constants for fall speed: 1 screen height per 3000ms
-  const fallTimeMs = 3000;
+  const fallTimeMs = LANE_FALL_TIME_MS;
   const segmentDurationMs = LANE_SEGMENT_DURATION_MS;
   const segmentHeightPx = containerHeight * (segmentDurationMs / fallTimeMs);
 
@@ -57,10 +59,14 @@ export function LaneSegment({
     });
 
     // Map master time to animation time.
-    // At masterTime = segmentStart + 0ms, the segment should be entering (t_anim=0).
+    // At masterTime = segmentStart, the bottom of segment should be at Y = containerHeight.
+    // This occurs at animation.currentTime = fallTimeMs.
     const currentTimeMs = getMasterCurrentTimeMs();
-    const segmentStartMs = segmentIndex * segmentDurationMs;
-    animation.currentTime = currentTimeMs - segmentStartMs;
+    animation.currentTime = segmentAnimationCurrentTime(
+      currentTimeMs,
+      segmentIndex,
+      segmentDurationMs,
+    );
     animation.playbackRate = speed;
 
     if (isPaused) {

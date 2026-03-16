@@ -1,4 +1,4 @@
-import { LEAD_IN_DEFAULT_MS } from "./constant";
+import { LANE_FALL_TIME_MS, LEAD_IN_DEFAULT_MS } from "./constant";
 import type { NoteSpan } from "./midi-parser";
 
 /**
@@ -59,11 +59,12 @@ export function filterSpansForSegment(
 /**
  * Calculates the currentTime to set on a specific segment's animation
  * to align it with the master timeline.
+ * The animation starts when the segment starts entering the screen (3s before hit).
  */
 export function segmentAnimationCurrentTime(
   masterCurrentTimeMs: number,
   segmentIndex: number,
   laneSegmentDurationMs: number,
 ): number {
-  return masterCurrentTimeMs - segmentIndex * laneSegmentDurationMs;
+  return masterCurrentTimeMs - segmentIndex * laneSegmentDurationMs + LANE_FALL_TIME_MS;
 }
