@@ -29,7 +29,6 @@ export function LaneStage({
   scrollRef,
   getCurrentTimeMs,
   isPaused,
-  speed,
 }: LaneStageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerHeight, setContainerHeight] = useState(0);
@@ -58,11 +57,13 @@ export function LaneStage({
 
   // MASTER SYNC LOOP: Drive all segments from one place
   useEffect(() => {
+    if (isPaused) return;
+
     let rafId: number;
 
     const update = () => {
       const timeMs = getCurrentTimeMs();
-      
+
       // 1. Update window indexing (drivers React state change only when segment changes)
       const newIndex = Math.floor(timeMs / LANE_SEGMENT_DURATION_MS);
       if (newIndex !== currentIndex) {
@@ -76,7 +77,7 @@ export function LaneStage({
             timeMs,
             idx,
             containerHeight,
-            LANE_SEGMENT_DURATION_MS
+            LANE_SEGMENT_DURATION_MS,
           );
           element.style.transform = `translateY(${ty}px)`;
         }
@@ -87,13 +88,13 @@ export function LaneStage({
 
     rafId = requestAnimationFrame(update);
     return () => cancelAnimationFrame(rafId);
-  }, [currentIndex, isPaused, getCurrentTimeMs, containerHeight]);
+  }, [currentIndex, getCurrentTimeMs, containerHeight, isPaused]);
 
   const visibleIndexes = useMemo(() => {
     return getVisibleSegmentIndexes(
       currentIndex * LANE_SEGMENT_DURATION_MS,
       totalDurationMs,
-      LANE_SEGMENT_DURATION_MS
+      LANE_SEGMENT_DURATION_MS,
     );
   }, [currentIndex, totalDurationMs]);
 
@@ -117,7 +118,11 @@ export function LaneStage({
             <LaneSegment
               key={idx}
               segmentIndex={idx}
-              spans={filterSpansForSegment(spans, idx, LANE_SEGMENT_DURATION_MS)}
+              spans={filterSpansForSegment(
+                spans,
+                idx,
+                LANE_SEGMENT_DURATION_MS,
+              )}
               containerHeight={containerHeight}
               innerRef={(el) => {
                 if (el) {

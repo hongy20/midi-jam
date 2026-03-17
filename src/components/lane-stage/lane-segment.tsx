@@ -1,6 +1,5 @@
 "use client";
 
-import { useImperativeHandle, useRef } from "react";
 import {
   LANE_FALL_TIME_MS,
   LANE_SEGMENT_DURATION_MS,
@@ -15,7 +14,7 @@ interface LaneSegmentProps {
   spans: NoteSpan[];
   containerHeight: number;
   // Expose the div via a ref for imperative positioning from LaneStage
-  innerRef: React.RefObject<HTMLDivElement | null>;
+  innerRef: (el: HTMLDivElement | null) => void;
 }
 
 export function LaneSegment({
