@@ -36,8 +36,8 @@ export default function PlayPage() {
   // Track Data (only if ready)
   const events = trackStatus.isReady ? trackStatus.events : [];
   const spans = trackStatus.isReady ? trackStatus.spans : [];
-  const originalDurationMs = trackStatus.isReady
-    ? trackStatus.originalDurationMs
+  const totalDurationMs = trackStatus.isReady
+    ? trackStatus.totalDurationMs
     : 0;
   const isLoading = trackStatus.isLoading;
 
@@ -61,10 +61,9 @@ export default function PlayPage() {
   const [isPaused, setIsPaused] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const totalDurationMs = originalDurationMs;
   const handleFinishRef = useRef<() => void>(() => {});
 
-  const isPlaying = !isPaused && originalDurationMs > 0;
+  const isPlaying = !isPaused && totalDurationMs > 0;
 
   useWakeLock(isPlaying);
 
@@ -239,7 +238,7 @@ export default function PlayPage() {
       ) : (
         <LaneStage
           spans={spans}
-          originalDurationMs={originalDurationMs}
+          totalDurationMs={totalDurationMs}
           scrollRef={scrollRef}
           getCurrentTimeMs={getCurrentTimeMs}
           isPaused={isPaused}

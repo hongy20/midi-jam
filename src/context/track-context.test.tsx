@@ -33,7 +33,7 @@ describe("TrackProvider & useTrack", () => {
       result.current.setTrackStatus({
         isLoading: false,
         isReady: true,
-        originalDurationMs: 120000,
+        totalDurationMs: 120000,
         events: [],
         spans: [],
         error: null,
@@ -42,7 +42,7 @@ describe("TrackProvider & useTrack", () => {
 
     const status = result.current.trackStatus;
     if (status.isReady) {
-      expect(status.originalDurationMs).toBe(120000);
+      expect(status.totalDurationMs).toBe(120000);
     } else {
       throw new Error("Track status should be ready");
     }

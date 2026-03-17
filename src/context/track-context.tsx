@@ -14,13 +14,13 @@ export type TrackStatus =
   | { isLoading: true; isReady: false; error: null }
   | { isLoading: false; isReady: false; error: string | null }
   | {
-      isLoading: false;
-      isReady: true;
-      originalDurationMs: number;
-      events: MidiEvent[];
-      spans: NoteSpan[];
-      error: null;
-    };
+    isLoading: false,
+    isReady: true,
+    totalDurationMs: number;
+    events: MidiEvent[];
+    spans: NoteSpan[];
+    error: null;
+  };
 
 export interface TrackContextType {
   trackStatus: TrackStatus;

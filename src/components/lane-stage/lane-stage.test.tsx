@@ -37,14 +37,14 @@ describe("LaneStage", () => {
       velocity: 0.8,
     },
   ];
-  const originalDurationMs = 2000;
+  const totalDurationMs = 2000;
 
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };
     const { container } = render(
       <LaneStage
         spans={mockSpans}
-        originalDurationMs={originalDurationMs}
+        totalDurationMs={totalDurationMs}
         scrollRef={scrollRef}
         getCurrentTimeMs={() => 0}
         isPaused={false}

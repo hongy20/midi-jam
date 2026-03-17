@@ -24,6 +24,9 @@ Remove manual addition of `LEAD_IN_DEFAULT_MS` and `LEAD_OUT_DEFAULT_MS` in the 
 - Add a new test case to `src/lib/midi/midi-loader.test.ts` to verify `patchMidi` logic.
 - Verify the total duration and note offsets in the `PlayPage` logic.
 
+## 4. Renaming: `originalDurationMs` -> `totalDurationMs`
+Since the duration now includes margins, `originalDurationMs` is no longer accurate. Rename it to `totalDurationMs` across the codebase for clarity.
+
 ## Tasks
 - [x] Create `patchMidi` in `src/lib/midi/midi-loader.ts`.
 - [x] Update `loadMidiFile` in `src/lib/midi/midi-loader.ts`.
@@ -32,4 +35,5 @@ Remove manual addition of `LEAD_IN_DEFAULT_MS` and `LEAD_OUT_DEFAULT_MS` in the 
 - [x] Clean up `src/components/lane-stage/lane-segment.tsx`.
 - [x] Clean up `src/hooks/use-lane-score-engine.ts`.
 - [x] Clean up `src/app/play/page.tsx`.
+- [x] Rename `originalDurationMs` to `totalDurationMs` in `src/context/track-context.tsx` and all usages.
 - [x] Verify everything.
