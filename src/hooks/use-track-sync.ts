@@ -51,7 +51,7 @@ export function useTrackSync() {
         setTrackStatus({
           isLoading: false,
           isReady: true,
-          originalDurationMs: midi.duration * 1000,
+          totalDurationMs: midi.duration * 1000,
           events,
           spans,
           error: null,

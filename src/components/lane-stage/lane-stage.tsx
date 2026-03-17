@@ -1,9 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  LANE_SEGMENT_DURATION_MS,
-  LEAD_IN_DEFAULT_MS,
-  LEAD_OUT_DEFAULT_MS,
-} from "@/lib/midi/constant";
+import { LANE_SEGMENT_DURATION_MS } from "@/lib/midi/constant";
 import {
   computeSegmentTranslateY,
   filterSpansForSegment,
@@ -15,7 +11,7 @@ import { LaneSegment } from "./lane-segment";
 
 interface LaneStageProps {
   spans: NoteSpan[];
-  originalDurationMs: number;
+  totalDurationMs: number;
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
   isPaused: boolean;
@@ -23,7 +19,7 @@ interface LaneStageProps {
 
 export function LaneStage({
   spans,
-  originalDurationMs,
+  totalDurationMs,
   scrollRef,
   getCurrentTimeMs,
   isPaused,
@@ -34,9 +30,6 @@ export function LaneStage({
 
   // Use individual refs for each visible segment to apply transforms imperatively
   const segmentRefs = useRef<Map<number, HTMLDivElement>>(new Map());
-
-  const totalDurationMs =
-    originalDurationMs + LEAD_IN_DEFAULT_MS + LEAD_OUT_DEFAULT_MS;
 
   // Track container height for positioning math
   useEffect(() => {

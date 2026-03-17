@@ -16,7 +16,7 @@ export type TrackStatus =
   | {
       isLoading: false;
       isReady: true;
-      originalDurationMs: number;
+      totalDurationMs: number;
       events: MidiEvent[];
       spans: NoteSpan[];
       error: null;

@@ -94,7 +94,7 @@ describe("Play Page", () => {
       trackStatus: {
         isLoading: false,
         isReady: true,
-        originalDurationMs: 1000,
+        totalDurationMs: 1000,
         events: [],
         spans: [],
         error: null,
@@ -158,7 +158,7 @@ describe("Play Page", () => {
       trackStatus: {
         isLoading: false,
         isReady: true,
-        originalDurationMs: 100,
+        totalDurationMs: 100,
         events: new Array(10).fill({}),
         spans: [],
         error: null,

@@ -11,7 +11,7 @@ vi.mock("./use-midi-notes", () => ({
 
 describe("useLaneScoreEngine hook", () => {
   const modelEvents = [
-    { type: "noteOn", note: 60, time: 1, velocity: 0.7 }, // 1000ms + 2000ms lead-in = 3000ms
+    { type: "noteOn", note: 60, time: 3, velocity: 0.7 }, // 1000ms + 2000ms lead-in = 3000ms
   ] as MidiEvent[];
 
   beforeEach(() => {
@@ -79,7 +79,7 @@ describe("useLaneScoreEngine hook", () => {
       (_, i) => ({
         type: "noteOn",
         note: 60,
-        time: i,
+        time: i + 2,
         velocity: 0.7,
       }),
     );
@@ -109,8 +109,8 @@ describe("useLaneScoreEngine hook", () => {
 
   it("restores state from initial props", () => {
     const modelEventsRestore = [
-      { type: "noteOn", note: 60, time: 1, velocity: 0.7 }, // 3000ms
-      { type: "noteOn", note: 62, time: 5, velocity: 0.7 }, // 7000ms
+      { type: "noteOn", note: 60, time: 3, velocity: 0.7 }, // 3000ms
+      { type: "noteOn", note: 62, time: 7, velocity: 0.7 }, // 7000ms
     ] as MidiEvent[];
 
     let onNoteCallback: (event: MIDINoteEvent) => void = () => {};
