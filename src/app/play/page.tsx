@@ -211,7 +211,7 @@ export default function PlayPage() {
         </header>
       }
       footer={
-        <footer className="h-[var(--footer-height)] w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
+        <footer className="h-(--footer-height) w-full bg-background/50 backdrop-blur-md border-t border-foreground/5">
           <VirtualInstrument
             inputDevice={selectedMIDIInput}
             liveNotes={liveActiveNotes}

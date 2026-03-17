@@ -117,5 +117,4 @@
   width: 100%;
   background-color: var(--foreground);
   transform-origin: left;
-  transition: transform 0.1s linear;
 }
