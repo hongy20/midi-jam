@@ -27,7 +27,10 @@ export function patchMidi(midi: Midi): Midi {
     }
 
     // controlChanges is a proxy object with CC numbers as keys.
-    const controlChanges = track.controlChanges as any;
+    const controlChanges = track.controlChanges as unknown as Record<
+      string,
+      { ticks: number }[]
+    >;
     for (const ccNumber in controlChanges) {
       const ccList = controlChanges[ccNumber];
       if (Array.isArray(ccList)) {

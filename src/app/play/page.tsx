@@ -36,9 +36,7 @@ export default function PlayPage() {
   // Track Data (only if ready)
   const events = trackStatus.isReady ? trackStatus.events : [];
   const spans = trackStatus.isReady ? trackStatus.spans : [];
-  const totalDurationMs = trackStatus.isReady
-    ? trackStatus.totalDurationMs
-    : 0;
+  const totalDurationMs = trackStatus.isReady ? trackStatus.totalDurationMs : 0;
   const isLoading = trackStatus.isLoading;
 
   // Calculate dynamic piano range for consistent grid alignment

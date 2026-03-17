@@ -44,7 +44,12 @@ describe("midi-loader patchMidi", () => {
     expect(mockMidi.tracks[0].notes[1].ticks).toBe(4800 + shiftTicks);
 
     // CC and PitchBend shift
-    const ccList = (mockMidi.tracks[0].controlChanges as any)["7"];
+    const ccList = (
+      mockMidi.tracks[0].controlChanges as unknown as Record<
+        string,
+        { ticks: number }[]
+      >
+    )["7"];
     expect(ccList[0].ticks).toBe(1000 + shiftTicks);
     expect(mockMidi.tracks[0].pitchBends[0].ticks).toBe(1500 + shiftTicks);
 
