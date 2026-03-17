@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { HitQuality } from "@/hooks/use-lane-score-engine";
 import styles from "./score-widget.module.css";
 
@@ -19,19 +19,32 @@ export function ScoreWidget({
   getProgress,
   isPaused,
 }: ScoreWidgetProps) {
-  const [progress, setProgress] = useState(0);
+  const progressBarFillRef = useRef<HTMLDivElement>(null);
+  const progressValueRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (isPaused) return;
 
-    const interval = setInterval(() => {
-      setProgress(getProgress());
-    }, 100);
+    let rafId: number;
 
-    return () => clearInterval(interval);
+    const update = () => {
+      const progress = getProgress();
+
+      if (progressBarFillRef.current) {
+        progressBarFillRef.current.style.transform = `scaleX(${progress})`;
+      }
+
+      if (progressValueRef.current) {
+        progressValueRef.current.textContent = `${Math.floor(progress * 100)}%`;
+      }
+
+      rafId = requestAnimationFrame(update);
+    };
+
+    rafId = requestAnimationFrame(update);
+
+    return () => cancelAnimationFrame(rafId);
   }, [isPaused, getProgress]);
-
-  const percentage = Math.floor(progress * 100);
 
   return (
     <div className={styles.container}>
@@ -61,12 +74,15 @@ export function ScoreWidget({
       <div className={styles.progressSection}>
         <div className={styles.progressHeader}>
           <span className={styles.progressLabel}>Progress</span>
-          <span className={styles.progressValue}>{percentage}%</span>
+          <span ref={progressValueRef} className={styles.progressValue}>
+            0%
+          </span>
         </div>
         <div className={styles.progressBarBg}>
           <div
+            ref={progressBarFillRef}
             className={styles.progressBarFill}
-            style={{ transform: `scaleX(${progress})` }}
+            style={{ transform: "scaleX(0)" }}
           />
         </div>
       </div>
