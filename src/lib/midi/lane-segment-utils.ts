@@ -84,12 +84,14 @@ export function computeSegmentTranslateY(
   laneSegmentDurationMs: number,
 ): number {
   const fallTimeMs = LANE_FALL_TIME_MS;
-  const segmentHeightPx = containerHeightPx * (laneSegmentDurationMs / fallTimeMs);
+  const segmentHeightPx =
+    containerHeightPx * (laneSegmentDurationMs / fallTimeMs);
 
-  // Animation covers travel: -segmentHeightPx to containerHeightPx 
+  // Animation covers travel: -segmentHeightPx to containerHeightPx
   // over (laneSegmentDurationMs + fallTimeMs).
   const totalTravelMs = laneSegmentDurationMs + fallTimeMs;
-  const animTimeMs = masterCurrentTimeMs - segmentIndex * laneSegmentDurationMs + fallTimeMs;
+  const animTimeMs =
+    masterCurrentTimeMs - segmentIndex * laneSegmentDurationMs + fallTimeMs;
 
   const progress = animTimeMs / totalTravelMs;
 
