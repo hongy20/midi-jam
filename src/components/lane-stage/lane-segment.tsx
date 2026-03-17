@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useImperativeHandle, useRef } from "react";
 import {
   LANE_FALL_TIME_MS,
   LANE_SEGMENT_DURATION_MS,
   LEAD_IN_DEFAULT_MS,
 } from "@/lib/midi/constant";
-import { segmentAnimationCurrentTime } from "@/lib/midi/lane-segment-utils";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./lane-segment.module.css";
@@ -14,108 +13,25 @@ import styles from "./lane-segment.module.css";
 interface LaneSegmentProps {
   segmentIndex: number;
   spans: NoteSpan[];
-  getMasterCurrentTimeMs: () => number;
-  isPaused: boolean;
-  speed: number;
   containerHeight: number;
+  // Expose the div via a ref for imperative positioning from LaneStage
+  innerRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export function LaneSegment({
   segmentIndex,
   spans,
-  getMasterCurrentTimeMs,
-  isPaused,
-  speed,
   containerHeight,
+  innerRef,
 }: LaneSegmentProps) {
-  const segmentRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<Animation | null>(null);
-
-  // Constants for fall speed: 1 screen height per 3000ms
-  const fallTimeMs = LANE_FALL_TIME_MS;
+  // Local height calc (same logic as before but used just for note layout)
   const segmentDurationMs = LANE_SEGMENT_DURATION_MS;
+  const fallTimeMs = LANE_FALL_TIME_MS;
   const segmentHeightPx = containerHeight * (segmentDurationMs / fallTimeMs);
-
-  useEffect(() => {
-    const element = segmentRef.current;
-    if (!element || containerHeight <= 0) return;
-
-    // The animation covers the entire travel:
-    // From entering the top of the container to completely leaving the bottom.
-    // EnterTop: Bottom of segment at Y=0 -> translateY = -segmentSize
-    // LeaveBottom: Top of segment at Y=containerHeight -> translateY = containerHeight
-    const keyframes = [
-      { transform: `translateY(${-segmentHeightPx}px)` },
-      { transform: `translateY(${containerHeight}px)` },
-    ];
-
-    // Total duration for this full travel: 10s for the segment itself + 3s for it to finish falling.
-    const totalTravelTimeMs = segmentDurationMs + fallTimeMs;
-
-    const animation = element.animate(keyframes, {
-      duration: totalTravelTimeMs,
-      fill: "both",
-      easing: "linear",
-    });
-
-    // Map master time to animation time.
-    // At masterTime = segmentStart, the bottom of segment should be at Y = containerHeight.
-    // This occurs at animation.currentTime = fallTimeMs.
-    const currentTimeMs = getMasterCurrentTimeMs();
-    animation.currentTime = segmentAnimationCurrentTime(
-      currentTimeMs,
-      segmentIndex,
-      segmentDurationMs,
-    );
-    animation.playbackRate = speed;
-
-    if (isPaused) {
-      animation.pause();
-    } else {
-      animation.play();
-    }
-
-    animationRef.current = animation;
-
-    return () => {
-      animation.cancel();
-      animationRef.current = null;
-    };
-  }, [
-    segmentIndex,
-    containerHeight,
-    segmentHeightPx,
-    getMasterCurrentTimeMs,
-    isPaused,
-    speed,
-    segmentDurationMs,
-    fallTimeMs,
-  ]);
-
-  // Handle speed and pause changes without re-creating the animation
-  useEffect(() => {
-    const animation = animationRef.current;
-    if (!animation) return;
-
-    animation.playbackRate = speed;
-
-    if (isPaused) {
-      if (animation.playState !== "paused") {
-        animation.pause();
-      }
-    } else {
-      if (
-        animation.playState !== "running" &&
-        animation.playState !== "finished"
-      ) {
-        animation.play();
-      }
-    }
-  }, [isPaused, speed]);
 
   return (
     <div
-      ref={segmentRef}
+      ref={innerRef}
       className={styles.container}
       style={
         {

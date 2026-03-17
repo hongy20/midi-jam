@@ -72,3 +72,27 @@ export function segmentAnimationCurrentTime(
     LANE_FALL_TIME_MS
   );
 }
+
+/**
+ * Calculates the exact translateY for a segment based on the master timeline.
+ * Used for imperative positioning to avoid animation drift/jitter.
+ */
+export function computeSegmentTranslateY(
+  masterCurrentTimeMs: number,
+  segmentIndex: number,
+  containerHeightPx: number,
+  laneSegmentDurationMs: number,
+): number {
+  const fallTimeMs = LANE_FALL_TIME_MS;
+  const segmentHeightPx = containerHeightPx * (laneSegmentDurationMs / fallTimeMs);
+
+  // Animation covers travel: -segmentHeightPx to containerHeightPx 
+  // over (laneSegmentDurationMs + fallTimeMs).
+  const totalTravelMs = laneSegmentDurationMs + fallTimeMs;
+  const animTimeMs = masterCurrentTimeMs - segmentIndex * laneSegmentDurationMs + fallTimeMs;
+
+  const progress = animTimeMs / totalTravelMs;
+
+  // Linear interpolation: start + progress * (end - start)
+  return -segmentHeightPx + progress * (containerHeightPx + segmentHeightPx);
+}
