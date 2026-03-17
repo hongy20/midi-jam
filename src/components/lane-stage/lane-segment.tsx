@@ -35,6 +35,7 @@ export function LaneSegment({
       style={
         {
           "--segment-duration-ms": LANE_SEGMENT_DURATION_MS,
+          "--fall-time-ms": LANE_FALL_TIME_MS,
           // Initial position way off-top to prevent "ghost" flashes
           transform: `translateY(${-segmentHeightPx}px)`,
         } as React.CSSProperties

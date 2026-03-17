@@ -8,10 +8,10 @@
       minmax(0, 1fr)
     );
   /* Segment height corresponds to LANE_SEGMENT_DURATION_MS.
-     Speed is 1 container height per 3000ms. */
+     Speed is 1 container height per --fall-time-ms. */
   height: calc(
     calc(100dvh - var(--header-height) - var(--footer-height)) *
-    (var(--segment-duration-ms) / 3000)
+    (var(--segment-duration-ms) / var(--fall-time-ms))
   );
   overflow: hidden;
   will-change: transform;
