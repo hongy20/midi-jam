@@ -65,21 +65,21 @@ describe("lane-segment-utils", () => {
       {
         id: "1",
         note: 60,
-        startTime: 0, // 0s + 2s lead-in = 2000ms
+        startTime: 2, // 0s + 2s lead-in = 2000ms
         duration: 1, // Ends at 3000ms
         velocity: 0.8,
       },
       {
         id: "2",
         note: 61,
-        startTime: 7, // 7s + 2s lead-in = 9000ms
+        startTime: 9, // 7s + 2s lead-in = 9000ms
         duration: 2, // Ends at 11000ms
         velocity: 0.8,
       },
       {
         id: "3",
         note: 62,
-        startTime: 15, // 15s + 2s lead-in = 17000ms
+        startTime: 17, // 15s + 2s lead-in = 17000ms
         duration: 1, // Ends at 18000ms
         velocity: 0.8,
       },

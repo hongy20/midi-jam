@@ -3,7 +3,6 @@
 import {
   LANE_FALL_TIME_MS,
   LANE_SEGMENT_DURATION_MS,
-  LEAD_IN_DEFAULT_MS,
 } from "@/lib/midi/constant";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
@@ -43,9 +42,8 @@ export function LaneSegment({
     >
       {spans.map((span) => {
         // Absolute time in master clock
-        const startTimeMs = span.startTime * 1000 + LEAD_IN_DEFAULT_MS;
-        const endTimeMs =
-          (span.startTime + span.duration) * 1000 + LEAD_IN_DEFAULT_MS;
+        const startTimeMs = span.startTime * 1000;
+        const endTimeMs = (span.startTime + span.duration) * 1000;
 
         // Relative to segment start
         const relStartMs =

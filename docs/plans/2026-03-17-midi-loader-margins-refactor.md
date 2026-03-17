@@ -25,11 +25,11 @@ Remove manual addition of `LEAD_IN_DEFAULT_MS` and `LEAD_OUT_DEFAULT_MS` in the 
 - Verify the total duration and note offsets in the `PlayPage` logic.
 
 ## Tasks
-- [ ] Create `patchMidi` in `src/lib/midi/midi-loader.ts`.
-- [ ] Update `loadMidiFile` in `src/lib/midi/midi-loader.ts`.
-- [ ] Clean up `src/lib/midi/lane-segment-utils.ts`.
-- [ ] Clean up `src/components/lane-stage/lane-stage.tsx`.
-- [ ] Clean up `src/components/lane-stage/lane-segment.tsx`.
-- [ ] Clean up `src/hooks/use-lane-score-engine.ts`.
-- [ ] Clean up `src/app/play/page.tsx`.
-- [ ] Verify everything.
+- [x] Create `patchMidi` in `src/lib/midi/midi-loader.ts`.
+- [x] Update `loadMidiFile` in `src/lib/midi/midi-loader.ts`.
+- [x] Clean up `src/lib/midi/lane-segment-utils.ts`.
+- [x] Clean up `src/components/lane-stage/lane-stage.tsx`.
+- [x] Clean up `src/components/lane-stage/lane-segment.tsx`.
+- [x] Clean up `src/hooks/use-lane-score-engine.ts`.
+- [x] Clean up `src/app/play/page.tsx`.
+- [x] Verify everything.

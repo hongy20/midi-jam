@@ -1,4 +1,4 @@
-import { LANE_FALL_TIME_MS, LEAD_IN_DEFAULT_MS } from "./constant";
+import { LANE_FALL_TIME_MS } from "./constant";
 import type { NoteSpan } from "./midi-parser";
 
 /**
@@ -46,10 +46,8 @@ export function filterSpansForSegment(
 
   return spans.filter((span) => {
     // Note times in spans are in seconds and relative to the song start (post lead-in).
-    // We must add LEAD_IN_DEFAULT_MS to get the absolute time in the master timeline.
-    const startTimeMs = span.startTime * 1000 + LEAD_IN_DEFAULT_MS;
-    const endTimeMs =
-      (span.startTime + span.duration) * 1000 + LEAD_IN_DEFAULT_MS;
+    const startTimeMs = span.startTime * 1000;
+    const endTimeMs = (span.startTime + span.duration) * 1000;
 
     // A span is visible in this segment if it overlaps with the window [windowStartMs, windowEndMs]
     return startTimeMs < windowEndMs && endTimeMs > windowStartMs;

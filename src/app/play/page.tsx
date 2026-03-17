@@ -21,12 +21,7 @@ import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useWakeLock } from "@/hooks/use-wake-lock";
 import { getNoteUnits, getVisibleMidiRange } from "@/lib/device/piano";
-import {
-  LEAD_IN_DEFAULT_MS,
-  LEAD_OUT_DEFAULT_MS,
-  PIANO_88_KEY_MAX,
-  PIANO_88_KEY_MIN,
-} from "@/lib/midi/constant";
+import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
 import styles from "./page.module.css";
 
 export default function PlayPage() {
@@ -66,10 +61,7 @@ export default function PlayPage() {
   const [isPaused, setIsPaused] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const totalDurationMs =
-    originalDurationMs > 0
-      ? originalDurationMs + LEAD_IN_DEFAULT_MS + LEAD_OUT_DEFAULT_MS
-      : 0;
+  const totalDurationMs = originalDurationMs;
   const handleFinishRef = useRef<() => void>(() => {});
 
   const isPlaying = !isPaused && originalDurationMs > 0;
