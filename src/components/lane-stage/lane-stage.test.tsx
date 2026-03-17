@@ -1,5 +1,5 @@
 import { queryByAttribute, render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { LaneStage } from "./lane-stage";
 
 // Mock ResizeObserver
@@ -46,7 +46,8 @@ describe("LaneStage", () => {
         spans={mockSpans}
         originalDurationMs={originalDurationMs}
         scrollRef={scrollRef}
-        inputDevice={{} as WebMidi.MIDIInput}
+        getCurrentTimeMs={() => 0}
+        isPaused={false}
       />,
     );
     const note60 = queryByAttribute("data-pitch", container, "60");

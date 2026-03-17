@@ -3,23 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useLaneTimeline } from "./use-lane-timeline";
 
 describe("useLaneTimeline hook", () => {
-  let roCallback: ResizeObserverCallback;
-
   beforeEach(() => {
     vi.useFakeTimers();
-
-    // Mock ResizeObserver to capture its callback
-    global.ResizeObserver = class ResizeObserver {
-      constructor(callback: ResizeObserverCallback) {
-        roCallback = callback;
-      }
-      observe(_target: Element) {
-        // Initial call
-        roCallback([], this as unknown as ResizeObserver);
-      }
-      unobserve() {}
-      disconnect() {}
-    } as unknown as typeof ResizeObserver;
   });
 
   afterEach(() => {
@@ -28,7 +13,7 @@ describe("useLaneTimeline hook", () => {
     vi.clearAllMocks();
   });
 
-  it("initializes and plays Web Animation", () => {
+  it("initializes and plays Web Animation clock", () => {
     const mockAnimation = {
       play: vi.fn(),
       pause: vi.fn(),
@@ -40,9 +25,7 @@ describe("useLaneTimeline hook", () => {
     const animateMock = vi.fn().mockReturnValue(mockAnimation);
 
     const container = {
-      scrollHeight: 1000,
-      clientHeight: 400,
-      querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
+      animate: animateMock,
     } as unknown as HTMLDivElement;
     const containerRef = { current: container };
 
@@ -55,10 +38,11 @@ describe("useLaneTimeline hook", () => {
       }),
     );
 
-    expect(animateMock).toHaveBeenCalledWith(
-      [{ transform: "translateY(-600px)" }, { transform: "translateY(400px)" }],
-      { duration: 1000, fill: "both", easing: "linear" },
-    );
+    expect(animateMock).toHaveBeenCalledWith([{ opacity: 1 }, { opacity: 1 }], {
+      duration: 1000,
+      fill: "both",
+      easing: "linear",
+    });
     expect(mockAnimation.play).toHaveBeenCalled();
   });
 
@@ -74,9 +58,7 @@ describe("useLaneTimeline hook", () => {
     const animateMock = vi.fn().mockReturnValue(mockAnimation);
 
     const container = {
-      scrollHeight: 1000,
-      clientHeight: 400,
-      querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
+      animate: animateMock,
     } as unknown as HTMLDivElement;
     const containerRef = { current: container };
 
@@ -107,14 +89,18 @@ describe("useLaneTimeline hook", () => {
       cancel: vi.fn(),
       playbackRate: 1,
       playState: "running",
-      currentTime: 500,
+      _currentTime: 500,
+      get currentTime() {
+        return this._currentTime;
+      },
+      set currentTime(v) {
+        this._currentTime = v;
+      },
     };
     const animateMock = vi.fn().mockReturnValue(mockAnimation);
 
     const container = {
-      scrollHeight: 1000,
-      clientHeight: 400,
-      querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
+      animate: animateMock,
     } as unknown as HTMLDivElement;
     const containerRef = { current: container };
 
@@ -135,107 +121,6 @@ describe("useLaneTimeline hook", () => {
     expect(mockAnimation.play).toHaveBeenCalledTimes(2); // Initial + reset
   });
 
-  it("restores progress and state on resize", () => {
-    let internalRoCallback: ResizeObserverCallback = () => {};
-    global.ResizeObserver = class ResizeObserver {
-      constructor(callback: ResizeObserverCallback) {
-        internalRoCallback = callback;
-      }
-      observe(_target: Element) {
-        internalRoCallback([], this as unknown as ResizeObserver);
-      }
-      unobserve() {}
-      disconnect() {}
-    } as unknown as typeof ResizeObserver;
-
-    const mockAnimation1 = {
-      play: vi.fn(),
-      pause: vi.fn(),
-      cancel: vi.fn(),
-      get playbackRate() {
-        return 1.5;
-      },
-      set playbackRate(_v) {},
-      playState: "running",
-      get currentTime() {
-        return 250;
-      },
-      set currentTime(_v) {},
-      effect: {
-        getComputedTiming: () => ({ progress: 0.25 }),
-      },
-      onfinish: null,
-    };
-
-    const mockAnimation2 = {
-      play: vi.fn(),
-      pause: vi.fn(),
-      cancel: vi.fn(),
-      _playbackRate: 1,
-      get playbackRate() {
-        return this._playbackRate;
-      },
-      set playbackRate(v) {
-        this._playbackRate = v;
-      },
-      playState: "idle",
-      _currentTime: 0,
-      get currentTime() {
-        return this._currentTime;
-      },
-      set currentTime(v) {
-        this._currentTime = v;
-      },
-      effect: {
-        getComputedTiming: () => ({ progress: 0 }),
-      },
-      onfinish: null,
-    };
-
-    const animateMock = vi
-      .fn()
-      .mockReturnValueOnce(mockAnimation1)
-      .mockReturnValueOnce(mockAnimation2);
-
-    const container = {
-      scrollHeight: 1000,
-      clientHeight: 400,
-      querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
-    } as unknown as HTMLDivElement;
-    const containerRef = { current: container };
-
-    renderHook(() =>
-      useLaneTimeline({
-        containerRef,
-        totalDurationMs: 1000,
-        speed: 1.5,
-        isPaused: false,
-      }),
-    );
-
-    expect(animateMock).toHaveBeenCalledTimes(1);
-
-    // Simulate resize
-    act(() => {
-      // @ts-expect-error
-      container.clientHeight = 500; // New clientHeight, maxScrollPx becomes 500
-      internalRoCallback([], {} as ResizeObserver);
-    });
-
-    // Should re-create animation with new keyframes
-    expect(animateMock).toHaveBeenCalledTimes(2);
-    expect(animateMock).toHaveBeenLastCalledWith(
-      [{ transform: "translateY(-500px)" }, { transform: "translateY(500px)" }],
-      expect.any(Object),
-    );
-
-    // Should restore state on the NEW animation object
-    expect(mockAnimation2.currentTime).toBe(250);
-    expect(mockAnimation2.playbackRate).toBe(1.5);
-    expect(mockAnimation2.play).toHaveBeenCalled();
-    expect(mockAnimation1.cancel).toHaveBeenCalled();
-  });
-
   it("applies initialTimeMs correctly", () => {
     const mockAnimation = {
       play: vi.fn(),
@@ -254,9 +139,7 @@ describe("useLaneTimeline hook", () => {
     const animateMock = vi.fn().mockReturnValue(mockAnimation);
 
     const container = {
-      scrollHeight: 1000,
-      clientHeight: 400,
-      querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
+      animate: animateMock,
     } as unknown as HTMLDivElement;
     const containerRef = { current: container };
 

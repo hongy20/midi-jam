@@ -23,6 +23,7 @@ export function useDemoPlayback({
     if (!container || !demoMode || isLoading || spans.length === 0) return;
 
     const activeCounts = new Map<number, number>();
+    const observedElements = new Set<Element>();
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -64,14 +65,51 @@ export function useDemoPlayback({
       },
     );
 
-    // Observe all note elements
-    const notes = container.querySelectorAll("[data-pitch]");
-    notes.forEach((note) => {
-      observer.observe(note);
+    const observeNotes = (root: ParentNode) => {
+      const notes = root.querySelectorAll("[data-pitch]");
+      notes.forEach((note) => {
+        if (!observedElements.has(note)) {
+          observer.observe(note);
+          observedElements.add(note);
+        }
+      });
+    };
+
+    // Initial observation
+    observeNotes(container);
+
+    // Dynamic observation via MutationObserver
+    const mutationObserver = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.type === "childList") {
+          mutation.addedNodes.forEach((node) => {
+            if (node instanceof HTMLElement) {
+              if (node.hasAttribute("data-pitch")) {
+                if (!observedElements.has(node)) {
+                  observer.observe(node);
+                  observedElements.add(node);
+                }
+              }
+              // Also check children in case a LaneSegment was added
+              observeNotes(node);
+            }
+          });
+          // Cleanup removed nodes from tracker if necessary (observer handles GC, but tracker helps)
+          mutation.removedNodes.forEach((node) => {
+            if (node instanceof Element) {
+              observedElements.delete(node);
+            }
+          });
+        }
+      }
     });
+
+    mutationObserver.observe(container, { childList: true, subtree: true });
 
     return () => {
       observer.disconnect();
+      mutationObserver.disconnect();
+      observedElements.clear();
       // Cleanup: release any currently active notes
       for (const [pitch, count] of activeCounts.entries()) {
         if (count > 0) {

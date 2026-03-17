@@ -42,3 +42,9 @@ export const LEAD_OUT_DEFAULT_MS = 800;
 
 /** Minimal gap between sequential notes of the same pitch to ensure triggering on MIDI devices (in milliseconds) */
 export const MIN_NOTE_GAP_MS = 10;
+
+/** Duration in ms of each windowed LaneSegment */
+export const LANE_SEGMENT_DURATION_MS = 10 * 1000;
+
+/** Time in ms for a note to fall one full container height at speed 1.0 */
+export const LANE_FALL_TIME_MS = 3000;

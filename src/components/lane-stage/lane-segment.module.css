@@ -1,18 +1,20 @@
 .container {
   display: grid;
   width: 100%;
-  position: relative;
+  position: absolute;
+  top: 0;
   grid-template-columns: repeat(
       calc(var(--end-unit) - var(--start-unit)),
       minmax(0, 1fr)
     );
-  /* Total height corresponds to the song duration such that notes fall at a 
-     consistent speed of 1 container height per 3000ms. 
-     Speed (px/ms) = containerHeight / 3000. */
+  /* Segment height corresponds to LANE_SEGMENT_DURATION_MS.
+     Speed is 1 container height per --fall-time-ms. */
   height: calc(
     calc(100dvh - var(--header-height) - var(--footer-height)) *
-    (var(--total-duration-ms) / 3000)
+    (var(--segment-duration-ms) / var(--fall-time-ms))
   );
+  overflow: hidden;
+  will-change: transform;
 }
 
 .note {
