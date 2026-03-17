@@ -40,25 +40,14 @@ describe("LaneStage", () => {
   const originalDurationMs = 2000;
 
   it("renders notes", () => {
-    // Mock animate for LaneSegment
-    Element.prototype.animate = vi.fn().mockReturnValue({
-      play: vi.fn(),
-      pause: vi.fn(),
-      cancel: vi.fn(),
-      playbackRate: 1,
-      currentTime: 0,
-    });
-
     const scrollRef = { current: document.createElement("div") };
     const { container } = render(
       <LaneStage
         spans={mockSpans}
         originalDurationMs={originalDurationMs}
         scrollRef={scrollRef}
-        inputDevice={{} as WebMidi.MIDIInput}
         getCurrentTimeMs={() => 0}
         isPaused={false}
-        speed={1}
       />,
     );
     const note60 = queryByAttribute("data-pitch", container, "60");

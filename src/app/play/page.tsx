@@ -249,10 +249,8 @@ export default function PlayPage() {
           spans={spans}
           originalDurationMs={originalDurationMs}
           scrollRef={scrollRef}
-          inputDevice={selectedMIDIInput}
           getCurrentTimeMs={getCurrentTimeMs}
           isPaused={isPaused}
-          speed={speed}
         />
       )}
     </PageLayout>

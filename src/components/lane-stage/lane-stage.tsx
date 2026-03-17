@@ -17,10 +17,8 @@ interface LaneStageProps {
   spans: NoteSpan[];
   originalDurationMs: number;
   scrollRef: React.RefObject<HTMLDivElement | null>;
-  inputDevice: WebMidi.MIDIInput;
   getCurrentTimeMs: () => number;
   isPaused: boolean;
-  speed: number;
 }
 
 export function LaneStage({
