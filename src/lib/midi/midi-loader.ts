@@ -6,7 +6,7 @@ import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "./constant";
  * Shifts all events by LEAD_IN_DEFAULT_MS and ensures the total duration
  * includes LEAD_OUT_DEFAULT_MS.
  */
-export function patchMidi(midi: Midi): Midi {
+function patchMidi(midi: Midi): Midi {
   const leadInS = LEAD_IN_DEFAULT_MS / 1000;
   const leadOutS = LEAD_OUT_DEFAULT_MS / 1000;
 
