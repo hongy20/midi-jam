@@ -20,7 +20,7 @@ Implement a **Note Ownership & Dynamic Lifespan** model:
   Helper to iterate over spans and determine the max `endTime` for each segment block. Returns an array of `{ startMs, endMs, maxEndMs }`.
 - **[MODIFY] `getVisibleSegmentIndexes`**:
   Refactor to take `segmentLifespans` and return an array of all active segment block indexes. A segment is active if:
-  `currentTimeMs >= startMs - LANE_FALL_TIME_MS` AND
+  `currentTimeMs >= startMs - LANE_SCROLL_DURATION_MS` AND
   `currentTimeMs <= maxEndMs + buffer` (ensure it cleanly passes the hit-line).
 
 ### 2. `src/components/lane-stage/lane-stage.tsx`

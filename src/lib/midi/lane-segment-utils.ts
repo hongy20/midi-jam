@@ -1,4 +1,4 @@
-import { LANE_FALL_TIME_MS } from "./constant";
+import { LANE_SCROLL_DURATION_MS } from "./constant";
 import type { NoteSpan } from "./midi-parser";
 
 /**
@@ -126,5 +126,5 @@ export function computeLaneSegmentAnimationDelay(
   mountTimeMs: number,
   groupStartMs: number,
 ): number {
-  return -(mountTimeMs - groupStartMs + LANE_FALL_TIME_MS);
+  return -(mountTimeMs - groupStartMs + LANE_SCROLL_DURATION_MS);
 }

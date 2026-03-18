@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { LANE_FALL_TIME_MS } from "./constant";
+import { LANE_SCROLL_DURATION_MS } from "./constant";
 import {
   buildSegmentGroups,
   computeLaneSegmentAnimationDelay,
@@ -111,10 +111,10 @@ describe("lane-segment-utils clustering", () => {
     it("calculates the correct negative delay for phase-locking", () => {
       const mountTimeMs = 5000;
       const groupStartMs = 2000;
-      // delay = -(mountTimeMs - groupStartMs + LANE_FALL_TIME_MS)
+      // delay = -(mountTimeMs - groupStartMs + LANE_SCROLL_DURATION_MS)
       // delay = -(5000 - 2000 + 3000) = -6000
       const delay = computeLaneSegmentAnimationDelay(mountTimeMs, groupStartMs);
-      expect(delay).toBe(-(5000 - 2000 + LANE_FALL_TIME_MS));
+      expect(delay).toBe(-(5000 - 2000 + LANE_SCROLL_DURATION_MS));
     });
 
     it("results in a negative delay even if mount happens before group start", () => {
@@ -122,7 +122,7 @@ describe("lane-segment-utils clustering", () => {
       const groupStartMs = 2000;
       // delay = -(1000 - 2000 + 3000) = -2000
       const delay = computeLaneSegmentAnimationDelay(mountTimeMs, groupStartMs);
-      expect(delay).toBe(-(1000 - 2000 + LANE_FALL_TIME_MS));
+      expect(delay).toBe(-(1000 - 2000 + LANE_SCROLL_DURATION_MS));
     });
   });
 });

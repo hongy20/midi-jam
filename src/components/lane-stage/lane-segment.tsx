@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import { LANE_FALL_TIME_MS } from "@/lib/midi/constant";
+import { LANE_SCROLL_DURATION_MS } from "@/lib/midi/constant";
 import {
   computeLaneSegmentAnimationDelay,
   type SegmentGroup,
@@ -41,7 +41,7 @@ export function LaneSegment({
       style={
         {
           "--segment-duration-ms": group.durationMs,
-          "--fall-time-ms": LANE_FALL_TIME_MS,
+          "--scroll-duration-ms": LANE_SCROLL_DURATION_MS,
           "--speed": speed,
         } as React.CSSProperties
       }

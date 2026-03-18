@@ -27,7 +27,7 @@ manage in the CSS animation.
 The correct delay to compute at mount time:
 
 ```
-delay = -(getCurrentTimeMs() - group.startMs + LANE_FALL_TIME_MS)
+delay = -(getCurrentTimeMs() - group.startMs + LANE_SCROLL_DURATION_MS)
 ```
 
 This is computed **once**, inside `useLayoutEffect`, which fires synchronously after DOM
@@ -43,9 +43,9 @@ LaneStage  (4 Hz setInterval — mount/unmount decisions only)
           └─ useLayoutEffect (runs once on insert):
                mountTimeMs = getCurrentTimeMs()
                writes to element:
-                 --ty-from       = -(height * durationMs / LANE_FALL_TIME_MS)  px
+                 --ty-from       = -(height * durationMs / LANE_SCROLL_DURATION_MS)  px
                  --ty-to         = containerHeight                               px
-                 --anim-duration = durationMs + LANE_FALL_TIME_MS               ms
+                 --anim-duration = durationMs + LANE_SCROLL_DURATION_MS               ms
                  --anim-delay    = -(mountTimeMs - group.startMs + FALL)        ms
 
 CSS (compositor-owned from this point):
@@ -68,7 +68,7 @@ CSS (compositor-owned from this point):
     mountTimeMs: number,
     groupStartMs: number,
   ): number {
-    return -(mountTimeMs - groupStartMs + LANE_FALL_TIME_MS);
+    return -(mountTimeMs - groupStartMs + LANE_SCROLL_DURATION_MS);
   }
   ```
   Keeping the math in a named, testable function preserves coverage parity.
@@ -88,7 +88,7 @@ CSS (compositor-owned from this point):
   3. Sets all four via `el.style.setProperty(...)`.
 - **Remove** the inline `style` prop's `transform` (the initial off-screen position is
   now handled by `animation-fill-mode: both` + the from-keyframe being off-screen).
-- Keep `--segment-duration-ms` and `--fall-time-ms` CSS vars if still consumed by the
+- Keep `--segment-duration-ms` and `--scroll-duration-ms` CSS vars if still consumed by the
   height calc in `lane-segment.module.css`; otherwise remove them too.
 
 ### Task 3 — Update `lane-segment.module.css`

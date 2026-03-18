@@ -15,7 +15,7 @@
      Proportionally calculated based on its music duration relative to the standard fall time. */
   --translate-y-from: calc(
     var(--container-height) *
-    (var(--segment-duration-ms) / var(--fall-time-ms)) *
+    (var(--segment-duration-ms) / var(--scroll-duration-ms)) *
     -1
   );
 
@@ -31,16 +31,16 @@
       minmax(0, 1fr)
     );
   /* Segment height corresponds to LANE_SEGMENT_DURATION_MS.
-     Speed is 1 container height per --fall-time-ms. */
+     Speed is 1 container height per --scroll-duration-ms. */
   height: calc(
     var(--container-height) *
-    (var(--segment-duration-ms) / var(--fall-time-ms))
+    (var(--segment-duration-ms) / var(--scroll-duration-ms))
   );
   will-change: transform;
 
   /* Total travel duration scaled by playback speed */
   --anim-duration: calc(
-    (var(--segment-duration-ms) + var(--fall-time-ms)) /
+    (var(--segment-duration-ms) + var(--scroll-duration-ms)) /
     var(--speed) *
     1ms
   );
