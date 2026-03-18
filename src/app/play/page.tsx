@@ -35,18 +35,18 @@ export default function PlayPage() {
 
   // Track Data (only if ready)
   const events = trackStatus.isReady ? trackStatus.events : [];
-  const spans = trackStatus.isReady ? trackStatus.spans : [];
+  const groups = trackStatus.isReady ? trackStatus.groups : [];
   const totalDurationMs = trackStatus.isReady ? trackStatus.totalDurationMs : 0;
   const isLoading = trackStatus.isLoading;
 
   // Calculate dynamic piano range for consistent grid alignment
   const visibleMidiRange = useMemo(() => {
-    if (!spans || spans.length === 0) {
+    if (!groups || groups.length === 0) {
       return { startNote: PIANO_88_KEY_MIN, endNote: PIANO_88_KEY_MAX };
     }
-    const notes = spans.map((s) => s.note);
+    const notes = groups.flatMap((g) => g.spans.map((s) => s.note));
     return getVisibleMidiRange(notes);
-  }, [spans]);
+  }, [groups]);
 
   const { startUnit, endUnit } = getNoteUnits(
     visibleMidiRange.startNote,
@@ -138,7 +138,7 @@ export default function PlayPage() {
     containerRef: scrollRef,
     demoMode,
     isLoading,
-    spans,
+    spans: useMemo(() => groups.flatMap((g) => g.spans), [groups]),
     onNoteOn: handleNoteOn,
     onNoteOff: handleNoteOff,
   });
@@ -235,8 +235,7 @@ export default function PlayPage() {
         </div>
       ) : (
         <LaneStage
-          spans={spans}
-          totalDurationMs={totalDurationMs}
+          groups={groups}
           scrollRef={scrollRef}
           getCurrentTimeMs={getCurrentTimeMs}
           isPaused={isPaused}

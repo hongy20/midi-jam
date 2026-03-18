@@ -1,5 +1,6 @@
 import { queryByAttribute, render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { buildSegmentGroups } from "@/lib/midi/lane-segment-utils";
 import { LaneStage } from "./lane-stage";
 
 // Mock ResizeObserver
@@ -21,7 +22,7 @@ global.ResizeObserver = class ResizeObserver {
 };
 
 describe("LaneStage", () => {
-  const mockSpans = [
+  const mockGroups = buildSegmentGroups([
     {
       id: "1",
       note: 60,
@@ -36,15 +37,13 @@ describe("LaneStage", () => {
       durationMs: 1000,
       velocity: 0.8,
     },
-  ];
-  const totalDurationMs = 2000;
+  ]);
 
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };
     const { container } = render(
       <LaneStage
-        spans={mockSpans}
-        totalDurationMs={totalDurationMs}
+        groups={mockGroups}
         scrollRef={scrollRef}
         getCurrentTimeMs={() => 0}
         isPaused={false}

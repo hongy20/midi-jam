@@ -1,26 +1,21 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { LANE_SEGMENT_DURATION_MS } from "@/lib/midi/constant";
 import {
-  buildSegmentGroups,
   computeSegmentTranslateY,
   getVisibleSegmentIndexes,
   type SegmentGroup,
 } from "@/lib/midi/lane-segment-utils";
-import type { NoteSpan } from "@/lib/midi/midi-parser";
 import { BackgroundLane } from "./background-lane";
 import { LaneSegment } from "./lane-segment";
 
 interface LaneStageProps {
-  spans: NoteSpan[];
-  totalDurationMs: number;
+  groups: SegmentGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
   isPaused: boolean;
 }
 
 export function LaneStage({
-  spans,
-  totalDurationMs,
+  groups,
   scrollRef,
   getCurrentTimeMs,
   isPaused,
@@ -30,11 +25,6 @@ export function LaneStage({
 
   // Use individual refs for each visible segment to apply transforms imperatively
   const segmentRefs = useRef<Map<number, HTMLDivElement>>(new Map());
-
-  // Pre-calculate the groups of notes based on relationships and duration thresholds
-  const segmentGroups = useMemo(() => {
-    return buildSegmentGroups(spans, LANE_SEGMENT_DURATION_MS);
-  }, [spans]);
 
   // Track container height for positioning math
   useEffect(() => {
@@ -63,7 +53,7 @@ export function LaneStage({
       // Drive transforms for all CURRENTLY MOUNTED segments in the Map
       if (containerHeight > 0) {
         for (const [idx, element] of segmentRefs.current.entries()) {
-          const group = segmentGroups[idx];
+          const group = groups[idx];
           if (!group) continue;
 
           const ty = computeSegmentTranslateY(
@@ -81,7 +71,7 @@ export function LaneStage({
 
     rafId = requestAnimationFrame(update);
     return () => cancelAnimationFrame(rafId);
-  }, [getCurrentTimeMs, containerHeight, isPaused, segmentGroups]);
+  }, [getCurrentTimeMs, containerHeight, isPaused, groups]);
 
   const [timeMs, setTimeMs] = useState(0);
 
@@ -93,8 +83,8 @@ export function LaneStage({
   }, [isPaused, getCurrentTimeMs]);
 
   const renderIndexes = useMemo(() => {
-    return getVisibleSegmentIndexes(timeMs, segmentGroups);
-  }, [timeMs, segmentGroups]);
+    return getVisibleSegmentIndexes(timeMs, groups);
+  }, [timeMs, groups]);
 
   return (
     <div
@@ -112,7 +102,7 @@ export function LaneStage({
           renderIndexes.map((idx) => (
             <LaneSegment
               key={idx}
-              group={segmentGroups[idx]}
+              group={groups[idx]}
               containerHeight={containerHeight}
               innerRef={(el) => {
                 if (el) {
