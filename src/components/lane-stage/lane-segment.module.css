@@ -8,6 +8,14 @@
 }
 
 .container {
+  --container-height: calc(100dvh - var(--header-height) - var(--footer-height));
+  --ty-from: calc(
+    var(--container-height) *
+    (var(--segment-duration-ms) / var(--fall-time-ms)) *
+    -1
+  );
+  --ty-to: var(--container-height);
+
   display: grid;
   width: 100%;
   position: absolute;
@@ -19,7 +27,7 @@
   /* Segment height corresponds to LANE_SEGMENT_DURATION_MS.
      Speed is 1 container height per --fall-time-ms. */
   height: calc(
-    calc(100dvh - var(--header-height) - var(--footer-height)) *
+    var(--container-height) *
     (var(--segment-duration-ms) / var(--fall-time-ms))
   );
   will-change: transform;

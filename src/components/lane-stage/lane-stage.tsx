@@ -21,24 +21,6 @@ export function LaneStage({
   isPaused,
   speed,
 }: LaneStageProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [containerHeight, setContainerHeight] = useState(0);
-
-  // Track container height for positioning math
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const ro = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setContainerHeight(entry.contentRect.height);
-      }
-    });
-
-    ro.observe(container);
-    return () => ro.disconnect();
-  }, []);
-
   const [timeMs, setTimeMs] = useState(0);
 
   // Poll current time to drive React-level mount/unmount decisions
@@ -53,10 +35,7 @@ export function LaneStage({
   }, [timeMs, groups]);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative w-full h-full overflow-hidden bg-background/5"
-    >
+    <div className="relative w-full h-full overflow-hidden bg-background/5">
       <BackgroundLane />
 
       <div
@@ -64,16 +43,14 @@ export function LaneStage({
         id="lane-scroll"
         className="absolute inset-0 overflow-hidden"
       >
-        {containerHeight > 0 &&
-          renderIndexes.map((idx) => (
-            <LaneSegment
-              key={idx}
-              group={groups[idx]}
-              containerHeight={containerHeight}
-              getCurrentTimeMs={getCurrentTimeMs}
-              speed={speed}
-            />
-          ))}
+        {renderIndexes.map((idx) => (
+          <LaneSegment
+            key={idx}
+            group={groups[idx]}
+            getCurrentTimeMs={getCurrentTimeMs}
+            speed={speed}
+          />
+        ))}
       </div>
     </div>
   );

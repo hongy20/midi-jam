@@ -9,47 +9,32 @@ import styles from "./lane-segment.module.css";
 
 interface LaneSegmentProps {
   group: SegmentGroup;
-  containerHeight: number;
   getCurrentTimeMs: () => number;
   speed: number;
 }
 
 export function LaneSegment({
   group,
-  containerHeight,
   getCurrentTimeMs,
   speed,
 }: LaneSegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const segmentHeightPx =
-    containerHeight * (group.durationMs / LANE_FALL_TIME_MS);
-  const tyFrom = -segmentHeightPx;
 
   // Phase-lock the CSS animation to the master clock at the exact moment this
   // element is inserted into the DOM. useLayoutEffect fires synchronously after
   // browser commit, giving the tightest possible time snapshot.
   useLayoutEffect(() => {
     const el = containerRef.current;
-    if (!el || containerHeight <= 0) return;
+    if (!el) return;
 
     const mountTimeMs = getCurrentTimeMs();
     const totalTravelMs = (group.durationMs + LANE_FALL_TIME_MS) / speed;
     const delay =
       computeLaneSegmentAnimationDelay(mountTimeMs, group.startMs) / speed;
 
-    el.style.setProperty("--ty-from", `${tyFrom}px`);
-    el.style.setProperty("--ty-to", `${containerHeight}px`);
     el.style.setProperty("--anim-duration", `${totalTravelMs}ms`);
     el.style.setProperty("--anim-delay", `${delay}ms`);
-  }, [
-    getCurrentTimeMs,
-    containerHeight,
-    group.durationMs,
-    group.startMs,
-    speed,
-    tyFrom,
-  ]);
+  }, [getCurrentTimeMs, group.durationMs, group.startMs, speed]);
 
   return (
     <div
@@ -59,7 +44,7 @@ export function LaneSegment({
         {
           "--segment-duration-ms": group.durationMs,
           "--fall-time-ms": LANE_FALL_TIME_MS,
-          transform: `translateY(${tyFrom}px)`,
+          transform: "translateY(var(--ty-from))",
         } as React.CSSProperties
       }
     >
