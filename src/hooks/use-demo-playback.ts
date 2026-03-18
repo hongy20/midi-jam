@@ -22,48 +22,53 @@ export function useDemoPlayback({
     const container = containerRef.current;
     if (!container || !demoMode || isLoading || groups.length === 0) return;
 
-    const activeCounts = new Map<number, number>();
-    const observedElements = new Set<Element>();
+    // Track which elements are currently active per pitch
+    const activeElements = new Map<number, Set<Element>>();
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Partition entries to process exits (Off) before entries (On)
         const exits = entries.filter((e) => !e.isIntersecting);
         const entriesIn = entries.filter((e) => e.isIntersecting);
 
-        // Process exits (Off) first
+        // Process exits first to allow re-triggering if same pitch starts in the same batch
         for (const entry of exits) {
           const pitch = Number(entry.target.getAttribute("data-pitch"));
           if (Number.isNaN(pitch)) continue;
 
-          const currentCount = activeCounts.get(pitch) || 0;
-          if (currentCount > 0) {
-            const nextCount = currentCount - 1;
-            activeCounts.set(pitch, nextCount);
-            if (nextCount === 0) {
+          const elements = activeElements.get(pitch);
+          if (elements) {
+            elements.delete(entry.target);
+            if (elements.size === 0) {
               onNoteOff(pitch);
             }
           }
         }
 
-        // Process entries (On) second
+        // Process entry arrivals
         for (const entry of entriesIn) {
           const pitch = Number(entry.target.getAttribute("data-pitch"));
           if (Number.isNaN(pitch)) continue;
 
-          const currentCount = activeCounts.get(pitch) || 0;
-          activeCounts.set(pitch, currentCount + 1);
-          if (currentCount === 0) {
+          let elements = activeElements.get(pitch);
+          if (!elements) {
+            elements = new Set();
+            activeElements.set(pitch, elements);
+          }
+
+          if (elements.size === 0) {
             onNoteOn(pitch, 0.7);
           }
+          elements.add(entry.target);
         }
       },
       {
         root: container,
         rootMargin: "-99% 0px 0px 0px",
-        threshold: [0, 1],
+        threshold: 0, // Only trigger on boundary entry/exit
       },
     );
+
+    const observedElements = new Set<Element>();
 
     const observeNotes = (root: ParentNode) => {
       const notes = root.querySelectorAll("[data-pitch]");
@@ -111,12 +116,12 @@ export function useDemoPlayback({
       mutationObserver.disconnect();
       observedElements.clear();
       // Cleanup: release any currently active notes
-      for (const [pitch, count] of activeCounts.entries()) {
-        if (count > 0) {
+      for (const [pitch, elements] of activeElements.entries()) {
+        if (elements.size > 0) {
           onNoteOff(pitch);
         }
       }
-      activeCounts.clear();
+      activeElements.clear();
     };
   }, [containerRef, demoMode, isLoading, groups, onNoteOn, onNoteOff]);
 }
