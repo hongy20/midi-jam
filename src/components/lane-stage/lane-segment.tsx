@@ -11,12 +11,14 @@ interface LaneSegmentProps {
   group: SegmentGroup;
   containerHeight: number;
   getCurrentTimeMs: () => number;
+  speed: number;
 }
 
 export function LaneSegment({
   group,
   containerHeight,
   getCurrentTimeMs,
+  speed,
 }: LaneSegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -30,14 +32,21 @@ export function LaneSegment({
     const mountTimeMs = getCurrentTimeMs();
     const segmentHeightPx =
       containerHeight * (group.durationMs / LANE_FALL_TIME_MS);
-    const totalTravelMs = group.durationMs + LANE_FALL_TIME_MS;
-    const delay = computeLaneSegmentAnimationDelay(mountTimeMs, group.startMs);
+    const totalTravelMs = (group.durationMs + LANE_FALL_TIME_MS) / speed;
+    const delay =
+      computeLaneSegmentAnimationDelay(mountTimeMs, group.startMs) / speed;
 
     el.style.setProperty("--ty-from", `${-segmentHeightPx}px`);
     el.style.setProperty("--ty-to", `${containerHeight}px`);
     el.style.setProperty("--anim-duration", `${totalTravelMs}ms`);
     el.style.setProperty("--anim-delay", `${delay}ms`);
-  }, [getCurrentTimeMs, containerHeight, group.durationMs, group.startMs]);
+  }, [
+    getCurrentTimeMs,
+    containerHeight,
+    group.durationMs,
+    group.startMs,
+    speed,
+  ]);
 
   return (
     <div

@@ -79,23 +79,29 @@ export function buildSegmentGroups(
 
 /**
  * Returns an array of segment indexes that should be visibly mounted in the DOM.
+ * We follow a sliding window strategy of [prev, current, next] to ensure a smooth
+ * mounting buffer, even if the clusters are large or sparse.
  */
 export function getVisibleSegmentIndexes(
   currentTimeMs: number,
   segmentGroups: SegmentGroup[],
 ): number[] {
-  const visible: number[] = [];
+  if (segmentGroups.length === 0) return [];
 
+  // Find the 'current' group (the one we are in or just passed)
+  let currentIndex = 0;
   for (let i = 0; i < segmentGroups.length; i++) {
-    const { startMs, durationMs } = segmentGroups[i];
-    const endMs = startMs + durationMs;
+    if (currentTimeMs >= segmentGroups[i].startMs) {
+      currentIndex = i;
+    } else {
+      break;
+    }
+  }
 
-    // Active if current playback time is anywhere between when the segment first enters the screen (startMs - fallTime)
-    // and when the longest note finishes leaving the screen (endMs + fallTime)
-    if (
-      currentTimeMs >= startMs - LANE_FALL_TIME_MS &&
-      currentTimeMs <= endMs + LANE_FALL_TIME_MS
-    ) {
+  const visible: number[] = [];
+  // Return [currentIndex - 1, currentIndex, currentIndex + 1], clamped to bounds
+  for (let i = currentIndex - 1; i <= currentIndex + 1; i++) {
+    if (i >= 0 && i < segmentGroups.length) {
       visible.push(i);
     }
   }

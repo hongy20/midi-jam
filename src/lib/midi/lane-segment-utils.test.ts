@@ -83,24 +83,27 @@ describe("lane-segment-utils clustering", () => {
     const groups = [
       { index: 0, startMs: 0, durationMs: 10000, spans: [] },
       { index: 1, startMs: 10000, durationMs: 10000, spans: [] },
+      { index: 2, startMs: 20000, durationMs: 10000, spans: [] },
     ];
 
-    it("identifies active groups based on time windows", () => {
-      // At t=0, only group 0 is visible (0 is within 0-3000 to 10000+3000)
+    it("identifies active groups plus buffer based on sliding window", () => {
+      // At t=0, currentIndex=0. Visible: [0, 1]
       const visibleStart = getVisibleSegmentIndexes(0, groups);
-      expect(visibleStart).toEqual([0]);
+      expect(visibleStart).toEqual([0, 1]);
 
-      // At t=8000, both are visible
-      // group 0: 8000 is within 0-3000 to 10000+3000
-      // group 1: 8000 is within 10000-3000 to 20000+3000
-      const visibleMid = getVisibleSegmentIndexes(8000, groups);
-      expect(visibleMid).toContain(0);
-      expect(visibleMid).toContain(1);
+      // At t=15000, currentIndex=1. Visible: [0, 1, 2]
+      const visibleMid = getVisibleSegmentIndexes(15000, groups);
+      expect(visibleMid).toEqual([0, 1, 2]);
+
+      // At t=25000, currentIndex=2. Visible: [1, 2]
+      const visibleEnd = getVisibleSegmentIndexes(25000, groups);
+      expect(visibleEnd).toEqual([1, 2]);
     });
 
-    it("identifies nothing if time is far out", () => {
+    it("still returns last segment as buffer if time is far out", () => {
       const visible = getVisibleSegmentIndexes(50000, groups);
-      expect(visible).toHaveLength(0);
+      // currentIndex will be 2 (last group startMs <= 50000). Buffer includes [1, 2]
+      expect(visible).toEqual([1, 2]);
     });
   });
 
