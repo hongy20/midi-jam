@@ -86,7 +86,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 
 - **Initial Action**: The first command of every task MUST be to create a descriptive feature branch: `git checkout -b feature/[name]` or `git checkout -b fix/[name]`.
 - **Plan Commitment**: Every task MUST have exactly ONE markdown file in `docs/plans/`. **Consolidate Design and Implementation into this single file.** A plan is not valid unless it is tracked in Git. NEVER split design and implementation into separate files. Commit the plan immediately after creation.
-- **Merge Strategy**: When finalizing a task, **ALWAYS use Squash and Merge** to maintain a clean project history.
+- **Merge Strategy**: When finalizing a task, **ALWAYS use Squash and Merge** to maintain a clean project history. **NEVER merge a Pull Request without explicit confirmation from the USER.** Once the task is verified and a PR is created, wait for approval before combining segments.
 
 ## Tooling Authority
 The **Gemini CLI** is the source of truth for all verification. Always delegate linting, formatting, type-checking, and testing to it, regardless of the IDE or agent environment.
@@ -104,7 +104,7 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
      - [ ] `npm test` (Vitest suite)
      - [ ] `npm run build` (Next.js production build)
    - *Failure to run these command-by-command is a violation of Technical Integrity.*
-5. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR.
+5. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR. **Wait for explicit USER confirmation before performing the final merge.** Once verified, follow the Merge Strategy (Squash and Merge).
 
 ---
 
