@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { LANE_SCROLL_DURATION_MS } from "./constant";
 import {
   buildSegmentGroups,
-  computeSegmentTranslateY,
+  computeLaneSegmentAnimationDelay,
   getVisibleSegmentIndexes,
-  segmentAnimationCurrentTime,
 } from "./lane-segment-utils";
 import type { NoteSpan } from "./midi-parser";
 
@@ -83,50 +83,46 @@ describe("lane-segment-utils clustering", () => {
     const groups = [
       { index: 0, startMs: 0, durationMs: 10000, spans: [] },
       { index: 1, startMs: 10000, durationMs: 10000, spans: [] },
+      { index: 2, startMs: 20000, durationMs: 10000, spans: [] },
     ];
 
-    it("identifies active groups based on time windows", () => {
-      // At t=0, only group 0 is visible (0 is within 0 to 10000+3000)
+    it("identifies active groups plus buffer based on sliding window", () => {
+      // At t=0, currentIndex=0. Visible: [0, 1]
       const visibleStart = getVisibleSegmentIndexes(0, groups);
-      expect(visibleStart).toEqual([0]);
+      expect(visibleStart).toEqual([0, 1]);
 
-      // At t=8000, both are visible
-      // group 0: 8000 is within 0-3000 to 10000+3000
-      // group 1: 8000 is within 10000-3000 to 20000+3000
-      const visibleMid = getVisibleSegmentIndexes(8000, groups);
-      expect(visibleMid).toContain(0);
-      expect(visibleMid).toContain(1);
+      // At t=15000, currentIndex=1. Visible: [0, 1, 2]
+      const visibleMid = getVisibleSegmentIndexes(15000, groups);
+      expect(visibleMid).toEqual([0, 1, 2]);
+
+      // At t=25000, currentIndex=2. Visible: [1, 2]
+      const visibleEnd = getVisibleSegmentIndexes(25000, groups);
+      expect(visibleEnd).toEqual([1, 2]);
     });
 
-    it("identifies nothing if time is far out", () => {
+    it("still returns last segment as buffer if time is far out", () => {
       const visible = getVisibleSegmentIndexes(50000, groups);
-      expect(visible).toHaveLength(0);
+      // currentIndex will be 2 (last group startMs <= 50000). Buffer includes [1, 2]
+      expect(visible).toEqual([1, 2]);
     });
   });
 
-  describe("computeSegmentTranslateY", () => {
-    it("handles varied group durations", () => {
-      const masterTime = 5000;
-      const groupStart = 0;
-      const groupDuration = 20000;
-      const containerHeight = 1000;
-
-      const ty = computeSegmentTranslateY(
-        masterTime,
-        groupStart,
-        groupDuration,
-        containerHeight,
-      );
-      expect(ty).toBeDefined();
-      expect(typeof ty).toBe("number");
+  describe("computeLaneSegmentAnimationDelay", () => {
+    it("calculates the correct negative delay for phase-locking", () => {
+      const mountTimeMs = 5000;
+      const groupStartMs = 2000;
+      // delay = -(mountTimeMs - groupStartMs + LANE_SCROLL_DURATION_MS)
+      // delay = -(5000 - 2000 + 3000) = -6000
+      const delay = computeLaneSegmentAnimationDelay(mountTimeMs, groupStartMs);
+      expect(delay).toBe(-(5000 - 2000 + LANE_SCROLL_DURATION_MS));
     });
-  });
 
-  describe("segmentAnimationCurrentTime", () => {
-    it("calculates offset", () => {
-      expect(segmentAnimationCurrentTime(15000, 1, threshold)).toBe(
-        15000 - 10000 + 3000,
-      );
+    it("results in a negative delay even if mount happens before group start", () => {
+      const mountTimeMs = 1000;
+      const groupStartMs = 2000;
+      // delay = -(1000 - 2000 + 3000) = -2000
+      const delay = computeLaneSegmentAnimationDelay(mountTimeMs, groupStartMs);
+      expect(delay).toBe(-(1000 - 2000 + LANE_SCROLL_DURATION_MS));
     });
   });
 });

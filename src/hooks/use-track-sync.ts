@@ -9,10 +9,7 @@ import { useScore } from "@/context/score-context";
 import { useStage } from "@/context/stage-context";
 import { useTrack } from "@/context/track-context";
 import { LANE_SEGMENT_DURATION_MS } from "@/lib/midi/constant";
-import {
-  buildSegmentGroups,
-  type SegmentGroup,
-} from "@/lib/midi/lane-segment-utils";
+import { buildSegmentGroups } from "@/lib/midi/lane-segment-utils";
 import { loadMidiFile } from "@/lib/midi/midi-loader";
 import { getMidiEvents, getNoteSpans } from "@/lib/midi/midi-parser";
 import { ROUTES } from "@/lib/navigation/routes";

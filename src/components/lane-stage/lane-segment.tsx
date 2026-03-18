@@ -1,33 +1,42 @@
-import { LANE_FALL_TIME_MS } from "@/lib/midi/constant";
-import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
+import { useLayoutEffect, useRef } from "react";
+import {
+  computeLaneSegmentAnimationDelay,
+  type SegmentGroup,
+} from "@/lib/midi/lane-segment-utils";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./lane-segment.module.css";
 
 interface LaneSegmentProps {
   group: SegmentGroup;
-  containerHeight: number;
-  // Expose the div via a ref for imperative positioning from LaneStage
-  innerRef: (el: HTMLDivElement | null) => void;
+  getCurrentTimeMs: () => number;
 }
 
-export function LaneSegment({
-  group,
-  containerHeight,
-  innerRef,
-}: LaneSegmentProps) {
-  const segmentHeightPx =
-    containerHeight * (group.durationMs / LANE_FALL_TIME_MS);
+export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Phase-lock the CSS animation to the master clock at the exact moment this
+  // element is inserted into the DOM. useLayoutEffect fires synchronously after
+  // browser commit, giving the tightest possible time snapshot.
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const mountTimeMs = getCurrentTimeMs();
+    const delayMs = computeLaneSegmentAnimationDelay(
+      mountTimeMs,
+      group.startMs,
+    );
+
+    el.style.setProperty("--anim-delay-raw", `${delayMs}`);
+  }, [getCurrentTimeMs, group.startMs]);
 
   return (
     <div
-      ref={innerRef}
+      ref={containerRef}
       className={styles.container}
       style={
         {
           "--segment-duration-ms": group.durationMs,
-          "--fall-time-ms": LANE_FALL_TIME_MS,
-          // Initial position way off-top to prevent "ghost" flashes
-          transform: `translateY(${-segmentHeightPx}px)`,
         } as React.CSSProperties
       }
     >

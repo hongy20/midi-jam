@@ -1,4 +1,4 @@
-import { LANE_FALL_TIME_MS } from "./constant";
+import { LANE_SCROLL_DURATION_MS } from "./constant";
 import type { NoteSpan } from "./midi-parser";
 
 /**
@@ -79,23 +79,29 @@ export function buildSegmentGroups(
 
 /**
  * Returns an array of segment indexes that should be visibly mounted in the DOM.
+ * We follow a sliding window strategy of [prev, current, next] to ensure a smooth
+ * mounting buffer, even if the clusters are large or sparse.
  */
 export function getVisibleSegmentIndexes(
   currentTimeMs: number,
   segmentGroups: SegmentGroup[],
 ): number[] {
-  const visible: number[] = [];
+  if (segmentGroups.length === 0) return [];
 
+  // Find the 'current' group (the one we are in or just passed)
+  let currentIndex = 0;
   for (let i = 0; i < segmentGroups.length; i++) {
-    const { startMs, durationMs } = segmentGroups[i];
-    const endMs = startMs + durationMs;
+    if (currentTimeMs >= segmentGroups[i].startMs) {
+      currentIndex = i;
+    } else {
+      break;
+    }
+  }
 
-    // Active if current playback time is anywhere between when the segment first enters the screen (startMs - fallTime)
-    // and when the longest note finishes leaving the screen (endMs + fallTime)
-    if (
-      currentTimeMs >= startMs - LANE_FALL_TIME_MS &&
-      currentTimeMs <= endMs + LANE_FALL_TIME_MS
-    ) {
+  const visible: number[] = [];
+  // Return [currentIndex - 1, currentIndex, currentIndex + 1], clamped to bounds
+  for (let i = currentIndex - 1; i <= currentIndex + 1; i++) {
+    if (i >= 0 && i < segmentGroups.length) {
       visible.push(i);
     }
   }
@@ -106,39 +112,19 @@ export function getVisibleSegmentIndexes(
 // filterSpansForSegment was removed. buildSegmentGroups now pre-filters the notes into groups.
 
 /**
- * Calculates the currentTime to set on a specific segment's animation
- * to align it with the master timeline.
- * The animation starts when the segment starts entering the screen (3s before hit).
+ * Computes the CSS `animation-delay` (always negative) that phase-locks a LaneSegment's
+ * fall animation to the master playback clock at the moment the element is inserted into
+ * the DOM.
+ *
+ * A negative delay tells the browser to start the animation as if it began |delay| ms ago,
+ * which is exactly equivalent to the linear-interpolation logic of the old sync-loop.
+ *
+ * @param mountTimeMs  - Snapshot of getCurrentTimeMs() taken inside useLayoutEffect.
+ * @param groupStartMs - The group's startMs (master clock time when the group begins).
  */
-export function segmentAnimationCurrentTime(
-  masterCurrentTimeMs: number,
-  segmentIndex: number,
-  laneSegmentDurationMs: number,
-): number {
-  return (
-    masterCurrentTimeMs -
-    segmentIndex * laneSegmentDurationMs +
-    LANE_FALL_TIME_MS
-  );
-}
-
-/**
- * Calculates the exact translateY for a segment based on its group boundaries.
- */
-export function computeSegmentTranslateY(
-  masterCurrentTimeMs: number,
+export function computeLaneSegmentAnimationDelay(
+  mountTimeMs: number,
   groupStartMs: number,
-  groupDurationMs: number,
-  containerHeightPx: number,
 ): number {
-  const fallTimeMs = LANE_FALL_TIME_MS;
-  const segmentHeightPx = containerHeightPx * (groupDurationMs / fallTimeMs);
-
-  // Animation covers travel: -segmentHeightPx to containerHeightPx
-  const totalTravelMs = groupDurationMs + fallTimeMs;
-  const animTimeMs = masterCurrentTimeMs - groupStartMs + fallTimeMs;
-
-  const progress = animTimeMs / totalTravelMs;
-
-  return -segmentHeightPx + progress * (containerHeightPx + segmentHeightPx);
+  return -(mountTimeMs - groupStartMs + LANE_SCROLL_DURATION_MS);
 }
