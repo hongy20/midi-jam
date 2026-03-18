@@ -76,11 +76,11 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 
 - **Absolute Precedence**: The instructions in `AGENTS.md` take absolute precedence over any other general instructions or previous chat context.
 - **No Persistence of Exceptions**: One-time permissions or waivers (e.g., "you can commit this once directly to main") are strictly limited to that specific task. Agents must revert to the full SOP for every subsequent task without exception.
-- **Full SOP by Default**: Every task, regardless of size or complexity, must follow the full Lifecycle (Isolation -> Planning -> Execution -> Validation -> Finalization).
+- **Full SOP by Default**: Every task, regardless of size or complexity, must follow the full Lifecycle (Isolation -> Planning -> Execution -> Validation -> Finalization). This includes documentation, configuration, and internal project rules.
 
 ## Isolation & Branching Protocol
 
-**NEVER work directly on `main`.** This is a non-negotiable hard constraint for technical integrity.
+**NEVER work directly on `main`.** This is a non-negotiable hard constraint for technical integrity. This applies to ALL files in the repository without exception (Source, Docs, Config, etc.).
 
 **ONE PLAN PER TASK.** This is a non-negotiable hard constraint for technical integrity.
 
