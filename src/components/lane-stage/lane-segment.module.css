@@ -31,7 +31,16 @@
     (var(--segment-duration-ms) / var(--fall-time-ms))
   );
   will-change: transform;
+
+  /* Total travel duration scaled by playback speed */
+  --anim-duration: calc(
+    (var(--segment-duration-ms) + var(--fall-time-ms)) /
+    var(--speed) *
+    1ms
+  );
+
   /* animation vars are written imperatively in useLayoutEffect */
+  transform: translateY(var(--ty-from));
   animation: fall var(--anim-duration) linear var(--anim-delay) both;
 }
 

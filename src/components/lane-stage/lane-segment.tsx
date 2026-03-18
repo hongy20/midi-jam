@@ -28,13 +28,11 @@ export function LaneSegment({
     if (!el) return;
 
     const mountTimeMs = getCurrentTimeMs();
-    const totalTravelMs = (group.durationMs + LANE_FALL_TIME_MS) / speed;
     const delay =
       computeLaneSegmentAnimationDelay(mountTimeMs, group.startMs) / speed;
 
-    el.style.setProperty("--anim-duration", `${totalTravelMs}ms`);
     el.style.setProperty("--anim-delay", `${delay}ms`);
-  }, [getCurrentTimeMs, group.durationMs, group.startMs, speed]);
+  }, [getCurrentTimeMs, group.startMs, speed]);
 
   return (
     <div
@@ -44,7 +42,7 @@ export function LaneSegment({
         {
           "--segment-duration-ms": group.durationMs,
           "--fall-time-ms": LANE_FALL_TIME_MS,
-          transform: "translateY(var(--ty-from))",
+          "--speed": speed,
         } as React.CSSProperties
       }
     >
