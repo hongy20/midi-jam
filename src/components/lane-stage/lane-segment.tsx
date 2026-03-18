@@ -41,7 +41,7 @@ export function LaneSegment({
       style={
         {
           "--segment-duration-ms": group.durationMs,
-          "--scroll-duration-ms": LANE_SCROLL_DURATION_MS,
+          "--lane-scroll-duration-ms": LANE_SCROLL_DURATION_MS,
           "--speed": speed,
         } as React.CSSProperties
       }

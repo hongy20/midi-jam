@@ -88,7 +88,7 @@ CSS (compositor-owned from this point):
   3. Sets all four via `el.style.setProperty(...)`.
 - **Remove** the inline `style` prop's `transform` (the initial off-screen position is
   now handled by `animation-fill-mode: both` + the from-keyframe being off-screen).
-- Keep `--segment-duration-ms` and `--scroll-duration-ms` CSS vars if still consumed by the
+- Keep `--segment-duration-ms` and `--lane-scroll-duration-ms` CSS vars if still consumed by the
   height calc in `lane-segment.module.css`; otherwise remove them too.
 
 ### Task 3 — Update `lane-segment.module.css`
