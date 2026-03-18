@@ -46,6 +46,8 @@
   );
 
   /* animation vars are written imperatively in useLayoutEffect */
+  --anim-delay: calc(var(--anim-delay-raw) / var(--speed) * 1ms);
+
   transform: translateY(var(--translate-y-from));
   animation: fall var(--anim-duration) linear var(--anim-delay) both;
 }

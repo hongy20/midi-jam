@@ -28,11 +28,13 @@ export function LaneSegment({
     if (!el) return;
 
     const mountTimeMs = getCurrentTimeMs();
-    const delay =
-      computeLaneSegmentAnimationDelay(mountTimeMs, group.startMs) / speed;
+    const delayMs = computeLaneSegmentAnimationDelay(
+      mountTimeMs,
+      group.startMs,
+    );
 
-    el.style.setProperty("--anim-delay", `${delay}ms`);
-  }, [getCurrentTimeMs, group.startMs, speed]);
+    el.style.setProperty("--anim-delay-raw", `${delayMs}`);
+  }, [getCurrentTimeMs, group.startMs]);
 
   return (
     <div
