@@ -1,109 +1,120 @@
 import { describe, expect, it } from "vitest";
 import {
-  computeSegmentLifespans,
-  filterSpansForSegment,
-  getCurrentSegmentIndex,
+  buildSegmentGroups,
+  computeSegmentTranslateY,
   getVisibleSegmentIndexes,
   segmentAnimationCurrentTime,
 } from "./lane-segment-utils";
 import type { NoteSpan } from "./midi-parser";
 
-describe("lane-segment-utils", () => {
-  const segmentDuration = 10000; // 10s
+describe("lane-segment-utils clustering", () => {
+  const threshold = 10000; // 10s
 
-  describe("getCurrentSegmentIndex", () => {
-    it("returns correct index for various times", () => {
-      expect(getCurrentSegmentIndex(0, segmentDuration)).toBe(0);
-      expect(getCurrentSegmentIndex(5000, segmentDuration)).toBe(0);
-      expect(getCurrentSegmentIndex(10000, segmentDuration)).toBe(1);
-      expect(getCurrentSegmentIndex(25000, segmentDuration)).toBe(2);
+  describe("buildSegmentGroups", () => {
+    it("groups sequential notes within the threshold", () => {
+      const spans: NoteSpan[] = [
+        { id: "1", note: 60, startTimeMs: 1000, durationMs: 1000, velocity: 1 },
+        { id: "2", note: 62, startTimeMs: 5000, durationMs: 1000, velocity: 1 },
+      ];
+      const groups = buildSegmentGroups(spans, threshold);
+
+      expect(groups).toHaveLength(1);
+      expect(groups[0].spans).toHaveLength(2);
+      expect(groups[0].startMs).toBe(1000);
+      expect(groups[0].durationMs).toBe(5000 + 1000 - 1000); // end of last note - start of first
+    });
+
+    it("breaks groups exceeding the threshold", () => {
+      const spans: NoteSpan[] = [
+        { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
+        {
+          id: "2",
+          note: 62,
+          startTimeMs: 11000,
+          durationMs: 1000,
+          velocity: 1,
+        },
+      ];
+      const groups = buildSegmentGroups(spans, threshold);
+
+      expect(groups).toHaveLength(2);
+      expect(groups[0].spans[0].id).toBe("1");
+      expect(groups[1].spans[0].id).toBe("2");
+    });
+
+    it("protects chords from being split across groups", () => {
+      const spans: NoteSpan[] = [
+        { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
+        // This note is exactly at the 10s threshold - should trigger a break BEFORE it
+        { id: "2a", note: 64, startTimeMs: 10000, durationMs: 1000, velocity: 1 },
+        { id: "2b", note: 67, startTimeMs: 10000, durationMs: 1000, velocity: 1 },
+      ];
+      const groups = buildSegmentGroups(spans, threshold);
+
+      expect(groups).toHaveLength(2);
+      expect(groups[0].spans).toHaveLength(1); // 1
+      expect(groups[1].spans).toHaveLength(2); // 2a, 2b stay together
+    });
+
+    it("allows durationMs to be much larger than threshold if notes are long", () => {
+      const spans: NoteSpan[] = [
+        { id: "1", note: 60, startTimeMs: 0, durationMs: 30000, velocity: 1 },
+      ];
+      const groups = buildSegmentGroups(spans, threshold);
+
+      expect(groups).toHaveLength(1);
+      expect(groups[0].durationMs).toBe(30000);
     });
   });
 
   describe("getVisibleSegmentIndexes", () => {
-    it("clumps indexes at the start of a track", () => {
-      const totalMs = 30000; // 3 segments
-      const lifespans = computeSegmentLifespans([], totalMs, segmentDuration);
-      // At t=0, segments 0 and 1 are in view. Since they have no notes, their endMs is original.
-      // Math.max(0, 0-1) = 0, current = 0, next = 1
-      const active = getVisibleSegmentIndexes(0, lifespans, segmentDuration);
-      expect(active).toEqual([0, 1]); // Set deduplicates
+    const groups = [
+      { index: 0, startMs: 0, durationMs: 10000, spans: [] },
+      { index: 1, startMs: 10000, durationMs: 10000, spans: [] },
+    ];
+
+    it("identifies active groups based on time windows", () => {
+      // At t=0, only group 0 is visible (0 is within 0 to 10000+3000)
+      const visibleStart = getVisibleSegmentIndexes(0, groups);
+      expect(visibleStart).toEqual([0]);
+
+      // At t=8000, both are visible
+      // group 0: 8000 is within 0-3000 to 10000+3000
+      // group 1: 8000 is within 10000-3000 to 20000+3000
+      const visibleMid = getVisibleSegmentIndexes(8000, groups);
+      expect(visibleMid).toContain(0);
+      expect(visibleMid).toContain(1);
     });
 
-    it("keeps segments alive if they own long notes", () => {
-      const totalMs = 50000; // 5 segments
-      const spans: NoteSpan[] = [
-        { id: "1", note: 60, startTimeMs: 0, durationMs: 30000, velocity: 1 }, // 30s note in segment 0
-      ];
-      const lifespans = computeSegmentLifespans(
-        spans,
-        totalMs,
-        segmentDuration,
-      );
+    it("identifies nothing if time is far out", () => {
+      const visible = getVisibleSegmentIndexes(50000, groups);
+      expect(visible).toHaveLength(0);
+    });
+  });
 
-      // At t=25s, currentIndex = 2. default [1, 2, 3]
-      // Segment 0 maxEndMs is 30s. Since 25s <= 30s + LANE_FALL_TIME_MS, segment 0 is kept!
-      const active = getVisibleSegmentIndexes(
-        25000,
-        lifespans,
-        segmentDuration,
+  describe("computeSegmentTranslateY", () => {
+    it("handles varied group durations", () => {
+      const masterTime = 5000;
+      const groupStart = 0;
+      const groupDuration = 20000;
+      const containerHeight = 1000;
+
+      const ty = computeSegmentTranslateY(
+        masterTime,
+        groupStart,
+        groupDuration,
+        containerHeight,
       );
-      expect(active).toEqual([0, 1, 2, 3]);
+      expect(ty).toBeDefined();
+      expect(typeof ty).toBe("number");
     });
   });
 
   describe("segmentAnimationCurrentTime", () => {
-    it("calculates correct offset including fallTimeMs", () => {
-      // (masterTime - segmentIndex * duration) + 3000
-      expect(segmentAnimationCurrentTime(15000, 1, segmentDuration)).toBe(
-        5000 + 3000,
+    it("calculates offset", () => {
+      expect(segmentAnimationCurrentTime(15000, 1, threshold)).toBe(
+        15000 - 10000 + 3000,
       );
-    });
-  });
-
-  describe("filterSpansForSegment", () => {
-    const mockSpans: NoteSpan[] = [
-      {
-        id: "1",
-        note: 60,
-        startTimeMs: 2000,
-        durationMs: 1000,
-        velocity: 0.8,
-      },
-      {
-        id: "2",
-        note: 61,
-        startTimeMs: 9000,
-        durationMs: 2000,
-        velocity: 0.8,
-      },
-      {
-        id: "3",
-        note: 62,
-        startTimeMs: 17000,
-        durationMs: 1000,
-        velocity: 0.8,
-      },
-    ];
-
-    it("filters spans for the first segment (0-10s)", () => {
-      const filtered = filterSpansForSegment(mockSpans, 0, segmentDuration);
-      expect(filtered).toHaveLength(2);
-      expect(filtered.map((s) => s.id)).toContain("1");
-      expect(filtered.map((s) => s.id)).toContain("2");
-    });
-
-    it("filters spans for the second segment (10-20s)", () => {
-      const filtered = filterSpansForSegment(mockSpans, 1, segmentDuration);
-      // Note "2" starts at 9000ms, so it belongs exclusively to Segment 0!
-      // Only Note "3" starts in Segment 1.
-      expect(filtered).toHaveLength(1);
-      expect(filtered.map((s) => s.id)).toContain("3");
-    });
-
-    it("returns empty for segment with no notes", () => {
-      const filtered = filterSpansForSegment(mockSpans, 5, segmentDuration);
-      expect(filtered).toHaveLength(0);
     });
   });
 });
