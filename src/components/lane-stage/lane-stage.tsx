@@ -11,7 +11,6 @@ interface LaneStageProps {
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
   isPaused: boolean;
-  speed: number;
 }
 
 export function LaneStage({
@@ -19,7 +18,6 @@ export function LaneStage({
   scrollRef,
   getCurrentTimeMs,
   isPaused,
-  speed,
 }: LaneStageProps) {
   const [timeMs, setTimeMs] = useState(0);
 
@@ -38,17 +36,12 @@ export function LaneStage({
     <div className="relative w-full h-full overflow-hidden bg-background/5">
       <BackgroundLane />
 
-      <div
-        ref={scrollRef}
-        id="lane-scroll"
-        className="absolute inset-0 overflow-hidden"
-      >
+      <div ref={scrollRef} className="absolute inset-0 overflow-hidden">
         {renderIndexes.map((idx) => (
           <LaneSegment
             key={idx}
             group={groups[idx]}
             getCurrentTimeMs={getCurrentTimeMs}
-            speed={speed}
           />
         ))}
       </div>

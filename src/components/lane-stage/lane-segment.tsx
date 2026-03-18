@@ -1,5 +1,4 @@
 import { useLayoutEffect, useRef } from "react";
-import { LANE_SCROLL_DURATION_MS } from "@/lib/midi/constant";
 import {
   computeLaneSegmentAnimationDelay,
   type SegmentGroup,
@@ -10,14 +9,9 @@ import styles from "./lane-segment.module.css";
 interface LaneSegmentProps {
   group: SegmentGroup;
   getCurrentTimeMs: () => number;
-  speed: number;
 }
 
-export function LaneSegment({
-  group,
-  getCurrentTimeMs,
-  speed,
-}: LaneSegmentProps) {
+export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Phase-lock the CSS animation to the master clock at the exact moment this
@@ -43,8 +37,6 @@ export function LaneSegment({
       style={
         {
           "--segment-duration-ms": group.durationMs,
-          "--lane-scroll-duration-ms": LANE_SCROLL_DURATION_MS,
-          "--speed": speed,
         } as React.CSSProperties
       }
     >

@@ -21,7 +21,11 @@ import { useMidiAudio } from "@/hooks/use-midi-audio";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useWakeLock } from "@/hooks/use-wake-lock";
 import { getNoteUnits, getVisibleMidiRange } from "@/lib/device/piano";
-import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
+import {
+  LANE_SCROLL_DURATION_MS,
+  PIANO_88_KEY_MAX,
+  PIANO_88_KEY_MIN,
+} from "@/lib/midi/constant";
 import styles from "./page.module.css";
 
 export default function PlayPage() {
@@ -181,6 +185,8 @@ export default function PlayPage() {
         {
           "--start-unit": startUnit,
           "--end-unit": endUnit,
+          "--lane-scroll-duration-ms": LANE_SCROLL_DURATION_MS,
+          "--speed": speed,
         } as React.CSSProperties
       }
       header={
@@ -239,7 +245,6 @@ export default function PlayPage() {
           scrollRef={scrollRef}
           getCurrentTimeMs={getCurrentTimeMs}
           isPaused={isPaused}
-          speed={speed}
         />
       )}
     </PageLayout>
