@@ -13,7 +13,6 @@
     calc(100dvh - var(--header-height) - var(--footer-height)) *
     (var(--segment-duration-ms) / var(--fall-time-ms))
   );
-  overflow: hidden;
   will-change: transform;
 }
 

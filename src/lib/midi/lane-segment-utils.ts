@@ -11,30 +11,86 @@ export function getCurrentSegmentIndex(
   return Math.floor(currentTimeMs / laneSegmentDurationMs);
 }
 
+export interface SegmentLifespan {
+  startMs: number;
+  endMs: number;
+  maxEndMs: number;
+}
+
 /**
- * Returns the [prev, current, next] segment indexes, clamped to the valid range.
+ * Calculates the visual lifecycle times for each segment.
+ * A segment needs to stay conceptually mounted until its longest owned note finishes.
+ */
+export function computeSegmentLifespans(
+  spans: NoteSpan[],
+  totalDurationMs: number,
+  laneSegmentDurationMs: number,
+): SegmentLifespan[] {
+  const segmentCount = Math.ceil(totalDurationMs / laneSegmentDurationMs);
+  const lifespans: SegmentLifespan[] = Array.from(
+    { length: segmentCount },
+    (_, i) => ({
+      startMs: i * laneSegmentDurationMs,
+      endMs: (i + 1) * laneSegmentDurationMs,
+      maxEndMs: (i + 1) * laneSegmentDurationMs,
+    }),
+  );
+
+  for (const span of spans) {
+    const startTimeMs = span.startTime * 1000;
+    const endTimeMs = (span.startTime + span.duration) * 1000;
+    const segmentIndex = Math.floor(startTimeMs / laneSegmentDurationMs);
+
+    if (segmentIndex >= 0 && segmentIndex < segmentCount) {
+      if (endTimeMs > lifespans[segmentIndex].maxEndMs) {
+        lifespans[segmentIndex].maxEndMs = endTimeMs;
+      }
+    }
+  }
+
+  return lifespans;
+}
+
+/**
+ * Returns an array of segment indexes that should be visibly mounted in the DOM.
  */
 export function getVisibleSegmentIndexes(
   currentTimeMs: number,
-  totalDurationMs: number,
+  segmentLifespans: SegmentLifespan[],
   laneSegmentDurationMs: number,
-): [number, number, number] {
-  const segmentCount = Math.ceil(totalDurationMs / laneSegmentDurationMs);
+): number[] {
+  const visible = new Set<number>();
   const currentIndex = getCurrentSegmentIndex(
     currentTimeMs,
     laneSegmentDurationMs,
   );
 
-  const prev = Math.max(0, currentIndex - 1);
-  const current = Math.min(Math.max(0, currentIndex), segmentCount - 1);
-  const next = Math.min(currentIndex + 1, segmentCount - 1);
+  const segmentCount = segmentLifespans.length;
+  if (segmentCount > 0) {
+    visible.add(Math.max(0, currentIndex - 1));
+    visible.add(Math.min(Math.max(0, currentIndex), segmentCount - 1));
+    visible.add(Math.min(currentIndex + 1, segmentCount - 1));
+  }
 
-  return [prev, current, next];
+  // Add any segments whose dynamically calculated longest note hasn't cleared the screen yet
+  for (let i = 0; i < segmentLifespans.length; i++) {
+    const { startMs, maxEndMs } = segmentLifespans[i];
+    // Active if current playback time is anywhere between when the segment first enters the screen (startMs - fallTime)
+    // and when the longest note finishes leaving the screen (maxEndMs + fallTime)
+    if (
+      currentTimeMs >= startMs - LANE_FALL_TIME_MS &&
+      currentTimeMs <= maxEndMs + LANE_FALL_TIME_MS
+    ) {
+      visible.add(i);
+    }
+  }
+
+  return Array.from(visible).sort((a, b) => a - b);
 }
 
 /**
  * Filters a list of spans to only those that fall within a given segment's time window.
- * Spans are included if their start time or end time falls within the window.
+ * Spans belong to a segment ONLY if their start time falls within the window.
  */
 export function filterSpansForSegment(
   spans: NoteSpan[],
@@ -47,10 +103,9 @@ export function filterSpansForSegment(
   return spans.filter((span) => {
     // Note times in spans are in seconds and relative to the song start (post lead-in).
     const startTimeMs = span.startTime * 1000;
-    const endTimeMs = (span.startTime + span.duration) * 1000;
 
-    // A span is visible in this segment if it overlaps with the window [windowStartMs, windowEndMs]
-    return startTimeMs < windowEndMs && endTimeMs > windowStartMs;
+    // A span is owned by this segment if it starts within this window block
+    return startTimeMs >= windowStartMs && startTimeMs < windowEndMs;
   });
 }
 

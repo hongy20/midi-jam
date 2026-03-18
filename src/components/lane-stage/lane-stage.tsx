@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { LANE_SEGMENT_DURATION_MS } from "@/lib/midi/constant";
 import {
+  computeSegmentLifespans,
   computeSegmentTranslateY,
   filterSpansForSegment,
   getVisibleSegmentIndexes,
@@ -30,6 +31,15 @@ export function LaneStage({
 
   // Use individual refs for each visible segment to apply transforms imperatively
   const segmentRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+
+  // Pre-calculate the maximum visual lifespans of all segments on mount/params change
+  const segmentLifespans = useMemo(() => {
+    return computeSegmentLifespans(
+      spans,
+      totalDurationMs,
+      LANE_SEGMENT_DURATION_MS,
+    );
+  }, [spans, totalDurationMs]);
 
   // Track container height for positioning math
   useEffect(() => {
@@ -84,10 +94,10 @@ export function LaneStage({
   const visibleIndexes = useMemo(() => {
     return getVisibleSegmentIndexes(
       currentIndex * LANE_SEGMENT_DURATION_MS,
-      totalDurationMs,
+      segmentLifespans,
       LANE_SEGMENT_DURATION_MS,
     );
-  }, [currentIndex, totalDurationMs]);
+  }, [currentIndex, segmentLifespans]);
 
   // Unique set of segments to keep in DOM
   const renderIndexes = Array.from(new Set(visibleIndexes));

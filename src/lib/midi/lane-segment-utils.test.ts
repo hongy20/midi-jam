@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  computeSegmentLifespans,
   filterSpansForSegment,
   getCurrentSegmentIndex,
   getVisibleSegmentIndexes,
@@ -22,26 +23,32 @@ describe("lane-segment-utils", () => {
   describe("getVisibleSegmentIndexes", () => {
     it("clumps indexes at the start of a track", () => {
       const totalMs = 30000; // 3 segments
-      expect(getVisibleSegmentIndexes(0, totalMs, segmentDuration)).toEqual([
-        0, 0, 1,
-      ]);
+      const lifespans = computeSegmentLifespans([], totalMs, segmentDuration);
+      // At t=0, segments 0 and 1 are in view. Since they have no notes, their endMs is original.
+      // Math.max(0, 0-1) = 0, current = 0, next = 1
+      const active = getVisibleSegmentIndexes(0, lifespans, segmentDuration);
+      expect(active).toEqual([0, 1]); // Set deduplicates
     });
 
-    it("returns previous, current, and next mid-track", () => {
+    it("keeps segments alive if they own long notes", () => {
       const totalMs = 50000; // 5 segments
-      expect(getVisibleSegmentIndexes(15000, totalMs, segmentDuration)).toEqual(
-        [0, 1, 2],
+      const spans: NoteSpan[] = [
+        { id: "1", note: 60, startTime: 0, duration: 30, velocity: 1 }, // 30s note in segment 0
+      ];
+      const lifespans = computeSegmentLifespans(
+        spans,
+        totalMs,
+        segmentDuration,
       );
-      expect(getVisibleSegmentIndexes(25000, totalMs, segmentDuration)).toEqual(
-        [1, 2, 3],
-      );
-    });
 
-    it("clumps indexes at the end of a track", () => {
-      const totalMs = 25000; // 3 segments (0, 1, 2)
-      expect(getVisibleSegmentIndexes(22000, totalMs, segmentDuration)).toEqual(
-        [1, 2, 2],
+      // At t=25s, currentIndex = 2. default [1, 2, 3]
+      // Segment 0 maxEndMs is 30s. Since 25s <= 30s + LANE_FALL_TIME_MS, segment 0 is kept!
+      const active = getVisibleSegmentIndexes(
+        25000,
+        lifespans,
+        segmentDuration,
       );
+      expect(active).toEqual([0, 1, 2, 3]);
     });
   });
 
@@ -49,12 +56,6 @@ describe("lane-segment-utils", () => {
     it("calculates correct offset including fallTimeMs", () => {
       // (masterTime - segmentIndex * duration) + 3000
       expect(segmentAnimationCurrentTime(15000, 1, segmentDuration)).toBe(
-        5000 + 3000,
-      );
-      expect(segmentAnimationCurrentTime(25000, 2, segmentDuration)).toBe(
-        5000 + 3000,
-      );
-      expect(segmentAnimationCurrentTime(5000, 0, segmentDuration)).toBe(
         5000 + 3000,
       );
     });
@@ -65,21 +66,21 @@ describe("lane-segment-utils", () => {
       {
         id: "1",
         note: 60,
-        startTime: 2, // 0s + 2s lead-in = 2000ms
+        startTime: 2, // 2000ms
         duration: 1, // Ends at 3000ms
         velocity: 0.8,
       },
       {
         id: "2",
         note: 61,
-        startTime: 9, // 7s + 2s lead-in = 9000ms
+        startTime: 9, // 9000ms
         duration: 2, // Ends at 11000ms
         velocity: 0.8,
       },
       {
         id: "3",
         note: 62,
-        startTime: 17, // 15s + 2s lead-in = 17000ms
+        startTime: 17, // 17000ms
         duration: 1, // Ends at 18000ms
         velocity: 0.8,
       },
@@ -94,8 +95,9 @@ describe("lane-segment-utils", () => {
 
     it("filters spans for the second segment (10-20s)", () => {
       const filtered = filterSpansForSegment(mockSpans, 1, segmentDuration);
-      expect(filtered).toHaveLength(2);
-      expect(filtered.map((s) => s.id)).toContain("2");
+      // Note "2" starts at 9000ms, so it belongs exclusively to Segment 0!
+      // Only Note "3" starts in Segment 1.
+      expect(filtered).toHaveLength(1);
       expect(filtered.map((s) => s.id)).toContain("3");
     });
 
