@@ -9,8 +9,8 @@ export function calculateNoteWeights(events: MidiEvent[]): Map<number, number> {
   const noteOnsByTime: Record<number, number[]> = {};
   events.forEach((e, i) => {
     if (e.type === "noteOn") {
-      if (!noteOnsByTime[e.time]) noteOnsByTime[e.time] = [];
-      noteOnsByTime[e.time].push(i);
+      if (!noteOnsByTime[e.timeMs]) noteOnsByTime[e.timeMs] = [];
+      noteOnsByTime[e.timeMs].push(i);
     }
   });
 

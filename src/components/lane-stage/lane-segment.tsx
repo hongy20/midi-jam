@@ -42,8 +42,8 @@ export function LaneSegment({
     >
       {spans.map((span) => {
         // Absolute time in master clock
-        const startTimeMs = span.startTime * 1000;
-        const endTimeMs = (span.startTime + span.duration) * 1000;
+        const startTimeMs = span.startTimeMs;
+        const endTimeMs = span.startTimeMs + span.durationMs;
 
         // Relative to segment start
         const relStartMs =

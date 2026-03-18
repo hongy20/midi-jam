@@ -25,15 +25,15 @@ describe("LaneStage", () => {
     {
       id: "1",
       note: 60,
-      startTime: 0,
-      duration: 1,
+      startTimeMs: 0,
+      durationMs: 1000,
       velocity: 0.8,
     },
     {
       id: "2",
       note: 61,
-      startTime: 1,
-      duration: 1,
+      startTimeMs: 1000,
+      durationMs: 1000,
       velocity: 0.8,
     },
   ];

@@ -33,7 +33,7 @@ describe("lane-segment-utils", () => {
     it("keeps segments alive if they own long notes", () => {
       const totalMs = 50000; // 5 segments
       const spans: NoteSpan[] = [
-        { id: "1", note: 60, startTime: 0, duration: 30, velocity: 1 }, // 30s note in segment 0
+        { id: "1", note: 60, startTimeMs: 0, durationMs: 30000, velocity: 1 }, // 30s note in segment 0
       ];
       const lifespans = computeSegmentLifespans(
         spans,
@@ -66,22 +66,22 @@ describe("lane-segment-utils", () => {
       {
         id: "1",
         note: 60,
-        startTime: 2, // 2000ms
-        duration: 1, // Ends at 3000ms
+        startTimeMs: 2000,
+        durationMs: 1000,
         velocity: 0.8,
       },
       {
         id: "2",
         note: 61,
-        startTime: 9, // 9000ms
-        duration: 2, // Ends at 11000ms
+        startTimeMs: 9000,
+        durationMs: 2000,
         velocity: 0.8,
       },
       {
         id: "3",
         note: 62,
-        startTime: 17, // 17000ms
-        duration: 1, // Ends at 18000ms
+        startTimeMs: 17000,
+        durationMs: 1000,
         velocity: 0.8,
       },
     ];
