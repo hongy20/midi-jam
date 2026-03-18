@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import type { NoteSpan } from "@/lib/midi/midi-parser";
+import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
 
 interface UseDemoPlaybackProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   demoMode: boolean;
   isLoading: boolean;
-  spans: NoteSpan[];
+  groups: SegmentGroup[];
   onNoteOn: (note: number, velocity: number) => void;
   onNoteOff: (note: number) => void;
 }
@@ -14,13 +14,13 @@ export function useDemoPlayback({
   containerRef,
   demoMode,
   isLoading,
-  spans,
+  groups,
   onNoteOn,
   onNoteOff,
 }: UseDemoPlaybackProps) {
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || !demoMode || isLoading || spans.length === 0) return;
+    if (!container || !demoMode || isLoading || groups.length === 0) return;
 
     const activeCounts = new Map<number, number>();
     const observedElements = new Set<Element>();
@@ -118,5 +118,5 @@ export function useDemoPlayback({
       }
       activeCounts.clear();
     };
-  }, [containerRef, demoMode, isLoading, spans, onNoteOn, onNoteOff]);
+  }, [containerRef, demoMode, isLoading, groups, onNoteOn, onNoteOff]);
 }

@@ -8,7 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { type SegmentGroup } from "@/lib/midi/lane-segment-utils";
+import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
 import type { MidiEvent } from "@/lib/midi/midi-parser";
 
 export type TrackStatus =

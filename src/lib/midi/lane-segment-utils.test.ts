@@ -46,8 +46,20 @@ describe("lane-segment-utils clustering", () => {
       const spans: NoteSpan[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
         // This note is exactly at the 10s threshold - should trigger a break BEFORE it
-        { id: "2a", note: 64, startTimeMs: 10000, durationMs: 1000, velocity: 1 },
-        { id: "2b", note: 67, startTimeMs: 10000, durationMs: 1000, velocity: 1 },
+        {
+          id: "2a",
+          note: 64,
+          startTimeMs: 10000,
+          durationMs: 1000,
+          velocity: 1,
+        },
+        {
+          id: "2b",
+          note: 67,
+          startTimeMs: 10000,
+          durationMs: 1000,
+          velocity: 1,
+        },
       ];
       const groups = buildSegmentGroups(spans, threshold);
 

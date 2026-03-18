@@ -41,7 +41,7 @@ export default function PlayPage() {
 
   // Calculate dynamic piano range for consistent grid alignment
   const visibleMidiRange = useMemo(() => {
-    if (!groups || groups.length === 0) {
+    if (groups.length === 0) {
       return { startNote: PIANO_88_KEY_MIN, endNote: PIANO_88_KEY_MAX };
     }
     const notes = groups.flatMap((g) => g.spans.map((s) => s.note));
@@ -138,7 +138,7 @@ export default function PlayPage() {
     containerRef: scrollRef,
     demoMode,
     isLoading,
-    spans: useMemo(() => groups.flatMap((g) => g.spans), [groups]),
+    groups,
     onNoteOn: handleNoteOn,
     onNoteOff: handleNoteOff,
   });
