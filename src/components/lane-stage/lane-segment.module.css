@@ -15,7 +15,8 @@
      Proportionally calculated based on its music duration relative to the standard fall time. */
   --translate-y-from: calc(
     var(--container-height) *
-      (var(--segment-duration-ms) / var(--fall-time-ms)) * -1
+    (var(--segment-duration-ms) / var(--fall-time-ms)) *
+    -1
   );
 
   /* Target position: The top of the segment reaches the bottom of the container. */

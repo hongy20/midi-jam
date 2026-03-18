@@ -5,7 +5,7 @@ import { loadMidiFile } from "./midi-loader";
 // Mock @tonejs/midi
 vi.mock("@tonejs/midi", () => {
   return {
-    Midi: vi.fn().mockImplementation(function (this: Record<string, any>) {
+    Midi: vi.fn().mockImplementation(function (this: Record<string, unknown>) {
       this.header = {
         ppq: 480,
         tempos: [{ ticks: 0, bpm: 120 }],
