@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { LANE_FALL_TIME_MS } from "./constant";
 import {
   buildSegmentGroups,
-  computeSegmentTranslateY,
+  computeLaneSegmentAnimationDelay,
   getVisibleSegmentIndexes,
-  segmentAnimationCurrentTime,
 } from "./lane-segment-utils";
 import type { NoteSpan } from "./midi-parser";
 
@@ -86,7 +86,7 @@ describe("lane-segment-utils clustering", () => {
     ];
 
     it("identifies active groups based on time windows", () => {
-      // At t=0, only group 0 is visible (0 is within 0 to 10000+3000)
+      // At t=0, only group 0 is visible (0 is within 0-3000 to 10000+3000)
       const visibleStart = getVisibleSegmentIndexes(0, groups);
       expect(visibleStart).toEqual([0]);
 
@@ -104,29 +104,22 @@ describe("lane-segment-utils clustering", () => {
     });
   });
 
-  describe("computeSegmentTranslateY", () => {
-    it("handles varied group durations", () => {
-      const masterTime = 5000;
-      const groupStart = 0;
-      const groupDuration = 20000;
-      const containerHeight = 1000;
-
-      const ty = computeSegmentTranslateY(
-        masterTime,
-        groupStart,
-        groupDuration,
-        containerHeight,
-      );
-      expect(ty).toBeDefined();
-      expect(typeof ty).toBe("number");
+  describe("computeLaneSegmentAnimationDelay", () => {
+    it("calculates the correct negative delay for phase-locking", () => {
+      const mountTimeMs = 5000;
+      const groupStartMs = 2000;
+      // delay = -(mountTimeMs - groupStartMs + LANE_FALL_TIME_MS)
+      // delay = -(5000 - 2000 + 3000) = -6000
+      const delay = computeLaneSegmentAnimationDelay(mountTimeMs, groupStartMs);
+      expect(delay).toBe(-(5000 - 2000 + LANE_FALL_TIME_MS));
     });
-  });
 
-  describe("segmentAnimationCurrentTime", () => {
-    it("calculates offset", () => {
-      expect(segmentAnimationCurrentTime(15000, 1, threshold)).toBe(
-        15000 - 10000 + 3000,
-      );
+    it("results in a negative delay even if mount happens before group start", () => {
+      const mountTimeMs = 1000;
+      const groupStartMs = 2000;
+      // delay = -(1000 - 2000 + 3000) = -2000
+      const delay = computeLaneSegmentAnimationDelay(mountTimeMs, groupStartMs);
+      expect(delay).toBe(-(1000 - 2000 + LANE_FALL_TIME_MS));
     });
   });
 });

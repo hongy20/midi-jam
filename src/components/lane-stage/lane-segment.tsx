@@ -1,33 +1,52 @@
+import { useLayoutEffect, useRef } from "react";
 import { LANE_FALL_TIME_MS } from "@/lib/midi/constant";
-import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
+import {
+  computeLaneSegmentAnimationDelay,
+  type SegmentGroup,
+} from "@/lib/midi/lane-segment-utils";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./lane-segment.module.css";
 
 interface LaneSegmentProps {
   group: SegmentGroup;
   containerHeight: number;
-  // Expose the div via a ref for imperative positioning from LaneStage
-  innerRef: (el: HTMLDivElement | null) => void;
+  getCurrentTimeMs: () => number;
 }
 
 export function LaneSegment({
   group,
   containerHeight,
-  innerRef,
+  getCurrentTimeMs,
 }: LaneSegmentProps) {
-  const segmentHeightPx =
-    containerHeight * (group.durationMs / LANE_FALL_TIME_MS);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Phase-lock the CSS animation to the master clock at the exact moment this
+  // element is inserted into the DOM. useLayoutEffect fires synchronously after
+  // browser commit, giving the tightest possible time snapshot.
+  useLayoutEffect(() => {
+    const el = containerRef.current;
+    if (!el || containerHeight <= 0) return;
+
+    const mountTimeMs = getCurrentTimeMs();
+    const segmentHeightPx =
+      containerHeight * (group.durationMs / LANE_FALL_TIME_MS);
+    const totalTravelMs = group.durationMs + LANE_FALL_TIME_MS;
+    const delay = computeLaneSegmentAnimationDelay(mountTimeMs, group.startMs);
+
+    el.style.setProperty("--ty-from", `${-segmentHeightPx}px`);
+    el.style.setProperty("--ty-to", `${containerHeight}px`);
+    el.style.setProperty("--anim-duration", `${totalTravelMs}ms`);
+    el.style.setProperty("--anim-delay", `${delay}ms`);
+  }, [getCurrentTimeMs, containerHeight, group.durationMs, group.startMs]);
 
   return (
     <div
-      ref={innerRef}
+      ref={containerRef}
       className={styles.container}
       style={
         {
           "--segment-duration-ms": group.durationMs,
           "--fall-time-ms": LANE_FALL_TIME_MS,
-          // Initial position way off-top to prevent "ghost" flashes
-          transform: `translateY(${-segmentHeightPx}px)`,
         } as React.CSSProperties
       }
     >

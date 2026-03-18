@@ -1,3 +1,12 @@
+@keyframes fall {
+  from {
+    transform: translateY(var(--ty-from));
+  }
+  to {
+    transform: translateY(var(--ty-to));
+  }
+}
+
 .container {
   display: grid;
   width: 100%;
@@ -14,6 +23,8 @@
     (var(--segment-duration-ms) / var(--fall-time-ms))
   );
   will-change: transform;
+  /* animation vars are written imperatively in useLayoutEffect */
+  animation: fall var(--anim-duration) linear var(--anim-delay) both;
 }
 
 .note {

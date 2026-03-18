@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  computeSegmentTranslateY,
   getVisibleSegmentIndexes,
   type SegmentGroup,
 } from "@/lib/midi/lane-segment-utils";
@@ -23,9 +22,6 @@ export function LaneStage({
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerHeight, setContainerHeight] = useState(0);
 
-  // Use individual refs for each visible segment to apply transforms imperatively
-  const segmentRefs = useRef<Map<number, HTMLDivElement>>(new Map());
-
   // Track container height for positioning math
   useEffect(() => {
     const container = containerRef.current;
@@ -40,38 +36,6 @@ export function LaneStage({
     ro.observe(container);
     return () => ro.disconnect();
   }, []);
-
-  // MASTER SYNC LOOP: Drive all segments from one place
-  useEffect(() => {
-    if (isPaused) return;
-
-    let rafId: number;
-
-    const update = () => {
-      const timeMs = getCurrentTimeMs();
-
-      // Drive transforms for all CURRENTLY MOUNTED segments in the Map
-      if (containerHeight > 0) {
-        for (const [idx, element] of segmentRefs.current.entries()) {
-          const group = groups[idx];
-          if (!group) continue;
-
-          const ty = computeSegmentTranslateY(
-            timeMs,
-            group.startMs,
-            group.durationMs,
-            containerHeight,
-          );
-          element.style.transform = `translateY(${ty}px)`;
-        }
-      }
-
-      rafId = requestAnimationFrame(update);
-    };
-
-    rafId = requestAnimationFrame(update);
-    return () => cancelAnimationFrame(rafId);
-  }, [getCurrentTimeMs, containerHeight, isPaused, groups]);
 
   const [timeMs, setTimeMs] = useState(0);
 
@@ -104,13 +68,7 @@ export function LaneStage({
               key={idx}
               group={groups[idx]}
               containerHeight={containerHeight}
-              innerRef={(el) => {
-                if (el) {
-                  segmentRefs.current.set(idx, el);
-                } else {
-                  segmentRefs.current.delete(idx);
-                }
-              }}
+              getCurrentTimeMs={getCurrentTimeMs}
             />
           ))}
       </div>

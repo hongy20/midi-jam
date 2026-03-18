@@ -106,39 +106,19 @@ export function getVisibleSegmentIndexes(
 // filterSpansForSegment was removed. buildSegmentGroups now pre-filters the notes into groups.
 
 /**
- * Calculates the currentTime to set on a specific segment's animation
- * to align it with the master timeline.
- * The animation starts when the segment starts entering the screen (3s before hit).
+ * Computes the CSS `animation-delay` (always negative) that phase-locks a LaneSegment's
+ * fall animation to the master playback clock at the moment the element is inserted into
+ * the DOM.
+ *
+ * A negative delay tells the browser to start the animation as if it began |delay| ms ago,
+ * which is exactly equivalent to the linear-interpolation logic of the old sync-loop.
+ *
+ * @param mountTimeMs  - Snapshot of getCurrentTimeMs() taken inside useLayoutEffect.
+ * @param groupStartMs - The group's startMs (master clock time when the group begins).
  */
-export function segmentAnimationCurrentTime(
-  masterCurrentTimeMs: number,
-  segmentIndex: number,
-  laneSegmentDurationMs: number,
-): number {
-  return (
-    masterCurrentTimeMs -
-    segmentIndex * laneSegmentDurationMs +
-    LANE_FALL_TIME_MS
-  );
-}
-
-/**
- * Calculates the exact translateY for a segment based on its group boundaries.
- */
-export function computeSegmentTranslateY(
-  masterCurrentTimeMs: number,
+export function computeLaneSegmentAnimationDelay(
+  mountTimeMs: number,
   groupStartMs: number,
-  groupDurationMs: number,
-  containerHeightPx: number,
 ): number {
-  const fallTimeMs = LANE_FALL_TIME_MS;
-  const segmentHeightPx = containerHeightPx * (groupDurationMs / fallTimeMs);
-
-  // Animation covers travel: -segmentHeightPx to containerHeightPx
-  const totalTravelMs = groupDurationMs + fallTimeMs;
-  const animTimeMs = masterCurrentTimeMs - groupStartMs + fallTimeMs;
-
-  const progress = animTimeMs / totalTravelMs;
-
-  return -segmentHeightPx + progress * (containerHeightPx + segmentHeightPx);
+  return -(mountTimeMs - groupStartMs + LANE_FALL_TIME_MS);
 }
