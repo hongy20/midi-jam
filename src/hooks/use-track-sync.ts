@@ -8,6 +8,11 @@ import { useHome } from "@/context/home-context";
 import { useScore } from "@/context/score-context";
 import { useStage } from "@/context/stage-context";
 import { useTrack } from "@/context/track-context";
+import { LANE_SEGMENT_DURATION_MS } from "@/lib/midi/constant";
+import {
+  buildSegmentGroups,
+  type SegmentGroup,
+} from "@/lib/midi/lane-segment-utils";
 import { loadMidiFile } from "@/lib/midi/midi-loader";
 import { getMidiEvents, getNoteSpans } from "@/lib/midi/midi-parser";
 import { ROUTES } from "@/lib/navigation/routes";
@@ -46,6 +51,7 @@ export function useTrackSync() {
         if (!mounted) return;
         const events = getMidiEvents(midi);
         const spans = getNoteSpans(events);
+        const groups = buildSegmentGroups(spans, LANE_SEGMENT_DURATION_MS);
 
         lastLoadedTrackId.current = selectedTrack.id;
         setTrackStatus({
@@ -53,7 +59,7 @@ export function useTrackSync() {
           isReady: true,
           totalDurationMs: midi.duration * 1000,
           events,
-          spans,
+          groups,
           error: null,
         });
       })

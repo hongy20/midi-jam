@@ -11,44 +11,70 @@ export function getCurrentSegmentIndex(
   return Math.floor(currentTimeMs / laneSegmentDurationMs);
 }
 
-export interface SegmentLifespan {
+export interface SegmentGroup {
+  index: number;
   startMs: number;
-  endMs: number;
-  maxEndMs: number;
+  durationMs: number;
+  spans: NoteSpan[];
 }
 
 /**
- * Calculates the visual lifecycle times for each segment.
- * A segment needs to stay conceptually mounted until its longest owned note finishes.
+ * Groups notes into discrete clusters for rendering.
+ * A new group is started when the current group's time span exceeds thresholdMs,
+ * provided we aren't splitting a chord (notes with identical startTimeMs).
  */
-export function computeSegmentLifespans(
+export function buildSegmentGroups(
   spans: NoteSpan[],
-  totalDurationMs: number,
-  laneSegmentDurationMs: number,
-): SegmentLifespan[] {
-  const segmentCount = Math.ceil(totalDurationMs / laneSegmentDurationMs);
-  const lifespans: SegmentLifespan[] = Array.from(
-    { length: segmentCount },
-    (_, i) => ({
-      startMs: i * laneSegmentDurationMs,
-      endMs: (i + 1) * laneSegmentDurationMs,
-      maxEndMs: (i + 1) * laneSegmentDurationMs,
-    }),
-  );
+  thresholdMs = 10000,
+): SegmentGroup[] {
+  const groups: SegmentGroup[] = [];
+  if (spans.length === 0) return groups;
+
+  let currentStartMs = spans[0].startTimeMs;
+  let currentMaxEndMs = spans[0].startTimeMs + spans[0].durationMs;
+  let currentGroupSpans: NoteSpan[] = [];
+  let lastStartTimeMs = -1;
 
   for (const span of spans) {
-    const startTimeMs = span.startTimeMs;
-    const endTimeMs = span.startTimeMs + span.durationMs;
-    const segmentIndex = Math.floor(startTimeMs / laneSegmentDurationMs);
+    const spanEndMs = span.startTimeMs + span.durationMs;
 
-    if (segmentIndex >= 0 && segmentIndex < segmentCount) {
-      if (endTimeMs > lifespans[segmentIndex].maxEndMs) {
-        lifespans[segmentIndex].maxEndMs = endTimeMs;
-      }
+    // Boundary check: Does it exceed the threshold? Are we NOT splitting a chord?
+    if (
+      currentGroupSpans.length > 0 &&
+      span.startTimeMs - currentStartMs >= thresholdMs &&
+      span.startTimeMs > lastStartTimeMs
+    ) {
+      groups.push({
+        index: groups.length,
+        startMs: currentStartMs,
+        durationMs: currentMaxEndMs - currentStartMs,
+        spans: currentGroupSpans,
+      });
+
+      // Reset for the next group
+      currentStartMs = span.startTimeMs;
+      currentMaxEndMs = spanEndMs;
+      currentGroupSpans = [];
+    }
+
+    currentGroupSpans.push(span);
+    lastStartTimeMs = span.startTimeMs;
+    if (spanEndMs > currentMaxEndMs) {
+      currentMaxEndMs = spanEndMs;
     }
   }
 
-  return lifespans;
+  // Flush the final group
+  if (currentGroupSpans.length > 0) {
+    groups.push({
+      index: groups.length,
+      startMs: currentStartMs,
+      durationMs: currentMaxEndMs - currentStartMs,
+      spans: currentGroupSpans,
+    });
+  }
+
+  return groups;
 }
 
 /**
@@ -56,55 +82,28 @@ export function computeSegmentLifespans(
  */
 export function getVisibleSegmentIndexes(
   currentTimeMs: number,
-  segmentLifespans: SegmentLifespan[],
-  laneSegmentDurationMs: number,
+  segmentGroups: SegmentGroup[],
 ): number[] {
-  const visible = new Set<number>();
-  const currentIndex = getCurrentSegmentIndex(
-    currentTimeMs,
-    laneSegmentDurationMs,
-  );
+  const visible: number[] = [];
 
-  const segmentCount = segmentLifespans.length;
-  if (segmentCount > 0) {
-    visible.add(Math.max(0, currentIndex - 1));
-    visible.add(Math.min(Math.max(0, currentIndex), segmentCount - 1));
-    visible.add(Math.min(currentIndex + 1, segmentCount - 1));
-  }
+  for (let i = 0; i < segmentGroups.length; i++) {
+    const { startMs, durationMs } = segmentGroups[i];
+    const endMs = startMs + durationMs;
 
-  // Add any segments whose dynamically calculated longest note hasn't cleared the screen yet
-  for (let i = 0; i < segmentLifespans.length; i++) {
-    const { startMs, maxEndMs } = segmentLifespans[i];
     // Active if current playback time is anywhere between when the segment first enters the screen (startMs - fallTime)
-    // and when the longest note finishes leaving the screen (maxEndMs + fallTime)
+    // and when the longest note finishes leaving the screen (endMs + fallTime)
     if (
       currentTimeMs >= startMs - LANE_FALL_TIME_MS &&
-      currentTimeMs <= maxEndMs + LANE_FALL_TIME_MS
+      currentTimeMs <= endMs + LANE_FALL_TIME_MS
     ) {
-      visible.add(i);
+      visible.push(i);
     }
   }
 
-  return Array.from(visible).sort((a, b) => a - b);
+  return visible;
 }
 
-/**
- * Filters a list of spans to only those that fall within a given segment's time window.
- * Spans belong to a segment ONLY if their start time falls within the window.
- */
-export function filterSpansForSegment(
-  spans: NoteSpan[],
-  segmentIndex: number,
-  laneSegmentDurationMs: number,
-): NoteSpan[] {
-  const windowStartMs = segmentIndex * laneSegmentDurationMs;
-  const windowEndMs = windowStartMs + laneSegmentDurationMs;
-
-  return spans.filter((span) => {
-    // A span is owned by this segment if it starts within this window block
-    return span.startTimeMs >= windowStartMs && span.startTimeMs < windowEndMs;
-  });
-}
+// filterSpansForSegment was removed. buildSegmentGroups now pre-filters the notes into groups.
 
 /**
  * Calculates the currentTime to set on a specific segment's animation
@@ -124,27 +123,22 @@ export function segmentAnimationCurrentTime(
 }
 
 /**
- * Calculates the exact translateY for a segment based on the master timeline.
- * Used for imperative positioning to avoid animation drift/jitter.
+ * Calculates the exact translateY for a segment based on its group boundaries.
  */
 export function computeSegmentTranslateY(
   masterCurrentTimeMs: number,
-  segmentIndex: number,
+  groupStartMs: number,
+  groupDurationMs: number,
   containerHeightPx: number,
-  laneSegmentDurationMs: number,
 ): number {
   const fallTimeMs = LANE_FALL_TIME_MS;
-  const segmentHeightPx =
-    containerHeightPx * (laneSegmentDurationMs / fallTimeMs);
+  const segmentHeightPx = containerHeightPx * (groupDurationMs / fallTimeMs);
 
   // Animation covers travel: -segmentHeightPx to containerHeightPx
-  // over (laneSegmentDurationMs + fallTimeMs).
-  const totalTravelMs = laneSegmentDurationMs + fallTimeMs;
-  const animTimeMs =
-    masterCurrentTimeMs - segmentIndex * laneSegmentDurationMs + fallTimeMs;
+  const totalTravelMs = groupDurationMs + fallTimeMs;
+  const animTimeMs = masterCurrentTimeMs - groupStartMs + fallTimeMs;
 
   const progress = animTimeMs / totalTravelMs;
 
-  // Linear interpolation: start + progress * (end - start)
   return -segmentHeightPx + progress * (containerHeightPx + segmentHeightPx);
 }

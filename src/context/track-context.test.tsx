@@ -35,7 +35,7 @@ describe("TrackProvider & useTrack", () => {
         isReady: true,
         totalDurationMs: 120000,
         events: [],
-        spans: [],
+        groups: [],
         error: null,
       });
     });

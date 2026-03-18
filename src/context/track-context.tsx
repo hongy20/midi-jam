@@ -8,7 +8,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import type { MidiEvent, NoteSpan } from "@/lib/midi/midi-parser";
+import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
+import type { MidiEvent } from "@/lib/midi/midi-parser";
 
 export type TrackStatus =
   | { isLoading: true; isReady: false; error: null }
@@ -18,7 +19,7 @@ export type TrackStatus =
       isReady: true;
       totalDurationMs: number;
       events: MidiEvent[];
-      spans: NoteSpan[];
+      groups: SegmentGroup[];
       error: null;
     };
 

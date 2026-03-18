@@ -1,45 +1,30 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { LANE_SEGMENT_DURATION_MS } from "@/lib/midi/constant";
 import {
-  computeSegmentLifespans,
   computeSegmentTranslateY,
-  filterSpansForSegment,
   getVisibleSegmentIndexes,
+  type SegmentGroup,
 } from "@/lib/midi/lane-segment-utils";
-import type { NoteSpan } from "@/lib/midi/midi-parser";
 import { BackgroundLane } from "./background-lane";
 import { LaneSegment } from "./lane-segment";
 
 interface LaneStageProps {
-  spans: NoteSpan[];
-  totalDurationMs: number;
+  groups: SegmentGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
   isPaused: boolean;
 }
 
 export function LaneStage({
-  spans,
-  totalDurationMs,
+  groups,
   scrollRef,
   getCurrentTimeMs,
   isPaused,
 }: LaneStageProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerHeight, setContainerHeight] = useState(0);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Use individual refs for each visible segment to apply transforms imperatively
   const segmentRefs = useRef<Map<number, HTMLDivElement>>(new Map());
-
-  // Pre-calculate the maximum visual lifespans of all segments on mount/params change
-  const segmentLifespans = useMemo(() => {
-    return computeSegmentLifespans(
-      spans,
-      totalDurationMs,
-      LANE_SEGMENT_DURATION_MS,
-    );
-  }, [spans, totalDurationMs]);
 
   // Track container height for positioning math
   useEffect(() => {
@@ -65,20 +50,17 @@ export function LaneStage({
     const update = () => {
       const timeMs = getCurrentTimeMs();
 
-      // 1. Update window indexing (drivers React state change only when segment changes)
-      const newIndex = Math.floor(timeMs / LANE_SEGMENT_DURATION_MS);
-      if (newIndex !== currentIndex) {
-        setCurrentIndex(newIndex);
-      }
-
-      // 2. Drive transforms for all CURRENTLY MOUNTED segments in the Map
+      // Drive transforms for all CURRENTLY MOUNTED segments in the Map
       if (containerHeight > 0) {
         for (const [idx, element] of segmentRefs.current.entries()) {
+          const group = groups[idx];
+          if (!group) continue;
+
           const ty = computeSegmentTranslateY(
             timeMs,
-            idx,
+            group.startMs,
+            group.durationMs,
             containerHeight,
-            LANE_SEGMENT_DURATION_MS,
           );
           element.style.transform = `translateY(${ty}px)`;
         }
@@ -89,18 +71,20 @@ export function LaneStage({
 
     rafId = requestAnimationFrame(update);
     return () => cancelAnimationFrame(rafId);
-  }, [currentIndex, getCurrentTimeMs, containerHeight, isPaused]);
+  }, [getCurrentTimeMs, containerHeight, isPaused, groups]);
 
-  const visibleIndexes = useMemo(() => {
-    return getVisibleSegmentIndexes(
-      currentIndex * LANE_SEGMENT_DURATION_MS,
-      segmentLifespans,
-      LANE_SEGMENT_DURATION_MS,
-    );
-  }, [currentIndex, segmentLifespans]);
+  const [timeMs, setTimeMs] = useState(0);
 
-  // Unique set of segments to keep in DOM
-  const renderIndexes = Array.from(new Set(visibleIndexes));
+  // Poll current time to drive React-level mount/unmount decisions
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => setTimeMs(getCurrentTimeMs()), 250);
+    return () => clearInterval(interval);
+  }, [isPaused, getCurrentTimeMs]);
+
+  const renderIndexes = useMemo(() => {
+    return getVisibleSegmentIndexes(timeMs, groups);
+  }, [timeMs, groups]);
 
   return (
     <div
@@ -118,12 +102,7 @@ export function LaneStage({
           renderIndexes.map((idx) => (
             <LaneSegment
               key={idx}
-              segmentIndex={idx}
-              spans={filterSpansForSegment(
-                spans,
-                idx,
-                LANE_SEGMENT_DURATION_MS,
-              )}
+              group={groups[idx]}
               containerHeight={containerHeight}
               innerRef={(el) => {
                 if (el) {

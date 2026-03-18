@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { NoteSpan } from "@/lib/midi/midi-parser";
+import { buildSegmentGroups } from "@/lib/midi/lane-segment-utils";
 import { useDemoPlayback } from "./use-demo-playback";
 
 describe("useDemoPlayback", () => {
@@ -43,7 +43,9 @@ describe("useDemoPlayback", () => {
         containerRef,
         demoMode: true,
         isLoading: false,
-        spans: [{ note: 60 } as unknown as NoteSpan],
+        groups: buildSegmentGroups([
+          { note: 60, startTimeMs: 0, durationMs: 100, id: "1" } as any,
+        ]),
         onNoteOn,
         onNoteOff,
       }),
@@ -85,10 +87,10 @@ describe("useDemoPlayback", () => {
         containerRef,
         demoMode: true,
         isLoading: false,
-        spans: [
-          { note: 60 } as unknown as NoteSpan,
-          { note: 60 } as unknown as NoteSpan,
-        ],
+        groups: buildSegmentGroups([
+          { note: 60, startTimeMs: 0, durationMs: 100, id: "1" } as any,
+          { note: 60, startTimeMs: 200, durationMs: 100, id: "2" } as any,
+        ]),
         onNoteOn,
         onNoteOff,
       }),
