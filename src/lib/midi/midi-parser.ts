@@ -3,7 +3,7 @@ import { MIDI_MAX_NOTE, MIDI_MIN_NOTE, MIN_NOTE_GAP_MS } from "./constant";
 
 // FIXME: Can we merge MidiEvent and MIDINoteEvent?
 export interface MidiEvent {
-  time: number;
+  timeMs: number;
   type: "noteOn" | "noteOff";
   note: number;
   velocity: number;
@@ -12,8 +12,8 @@ export interface MidiEvent {
 export interface NoteSpan {
   id: string;
   note: number;
-  startTime: number;
-  duration: number;
+  startTimeMs: number;
+  durationMs: number;
   velocity: number;
 }
 
@@ -33,7 +33,12 @@ export function getMidiEvents(
     .filter((track) => track.instrument.family === instrument)
     .flatMap((track) => track.notes)
     .filter((note) => note.duration > 0)
-    .sort((a, b) => a.time - b.time);
+    .map((note) => ({
+      ...note,
+      timeMs: note.time * 1000,
+      durationMs: note.duration * 1000,
+    }))
+    .sort((a, b) => a.timeMs - b.timeMs);
 
   if (allNotes.length === 0) return [];
 
@@ -41,7 +46,7 @@ export function getMidiEvents(
   const slices: (typeof allNotes)[] = [];
   for (const note of allNotes) {
     const lastSlice = slices[slices.length - 1];
-    if (lastSlice && Math.abs(lastSlice[0].time - note.time) < 0.001) {
+    if (lastSlice && Math.abs(lastSlice[0].timeMs - note.timeMs) < 1) {
       lastSlice.push(note);
     } else {
       slices.push([note]);
@@ -49,17 +54,16 @@ export function getMidiEvents(
   }
 
   // 3. Process slices using a shared tracking map for collisions
-  const activePitchesAtTime = new Map<number, number>(); // pitch -> final (shifted) endTime
-  const gapS = MIN_NOTE_GAP_MS / 1000;
+  const activePitchesAtTime = new Map<number, number>(); // pitch -> final (shifted) endTimeMs
+  const gapMs = MIN_NOTE_GAP_MS;
 
   for (const slice of slices) {
     let needsShift = false;
 
     // Check if any note in the current chord collisions with a previous note of the same pitch.
-    // A collision is defined as starting before or exactly when a previous note ends.
     for (const note of slice) {
       const lastEndTime = activePitchesAtTime.get(note.midi);
-      if (lastEndTime !== undefined && note.time < lastEndTime + 0.001) {
+      if (lastEndTime !== undefined && note.timeMs < lastEndTime + 1) {
         needsShift = true;
         break;
       }
@@ -67,37 +71,37 @@ export function getMidiEvents(
 
     // Apply shift to the ENTIRE chord if any note needs it
     for (const note of slice) {
-      let eventTime = note.time;
-      let duration = note.duration;
+      let eventTimeMs = note.timeMs;
+      let durationMs = note.durationMs;
 
       if (needsShift) {
-        const originalEnd = note.time + note.duration;
-        eventTime = note.time + gapS;
+        const originalEndMs = note.timeMs + note.durationMs;
+        eventTimeMs = note.timeMs + gapMs;
 
         // Ensure we don't reduce duration below a safe minimum (20ms)
-        const minDuration = 0.02;
-        duration = Math.max(minDuration, originalEnd - eventTime);
+        const minDurationMs = 20;
+        durationMs = Math.max(minDurationMs, originalEndMs - eventTimeMs);
       }
 
       events.push({
-        time: eventTime,
+        timeMs: eventTimeMs,
         type: "noteOn",
         note: note.midi,
         velocity: note.velocity,
       });
       events.push({
-        time: eventTime + duration,
+        timeMs: eventTimeMs + durationMs,
         type: "noteOff",
         note: note.midi,
         velocity: 0,
       });
 
       // Update tracking with the final end time of this note to maintain chain gaps
-      activePitchesAtTime.set(note.midi, eventTime + duration);
+      activePitchesAtTime.set(note.midi, eventTimeMs + durationMs);
     }
   }
 
-  return events.sort((a, b) => a.time - b.time);
+  return events.sort((a, b) => a.timeMs - b.timeMs);
 }
 
 /**
@@ -105,22 +109,22 @@ export function getMidiEvents(
  */
 export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
   const spans: NoteSpan[] = [];
-  const activeNotes = new Map<number, { time: number; velocity: number }>();
+  const activeNotes = new Map<number, { timeMs: number; velocity: number }>();
 
   for (const event of events) {
     if (event.type === "noteOn") {
       activeNotes.set(event.note, {
-        time: event.time,
+        timeMs: event.timeMs,
         velocity: event.velocity,
       });
     } else if (event.type === "noteOff") {
       const start = activeNotes.get(event.note);
       if (start !== undefined) {
         spans.push({
-          id: `${event.note}-${start.time}`,
+          id: `${event.note}-${start.timeMs}`,
           note: event.note,
-          startTime: start.time,
-          duration: event.time - start.time,
+          startTimeMs: start.timeMs,
+          durationMs: event.timeMs - start.timeMs,
           velocity: start.velocity,
         });
         activeNotes.delete(event.note);
@@ -128,7 +132,7 @@ export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
     }
   }
 
-  return spans.sort((a, b) => a.startTime - b.startTime);
+  return spans.sort((a, b) => a.startTimeMs - b.startTimeMs);
 }
 
 /**
@@ -184,7 +188,7 @@ export function getBarLines(midi: Midi): number[] {
         currentTick < nextSegmentStartTick &&
         midi.header.ticksToSeconds(currentTick) <= duration
       ) {
-        barLines.push(midi.header.ticksToSeconds(currentTick));
+        barLines.push(midi.header.ticksToSeconds(currentTick) * 1000);
         currentTick += ticksPerBar;
 
         if (barLines.length >= MAX_BARS) {

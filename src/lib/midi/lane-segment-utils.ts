@@ -37,8 +37,8 @@ export function computeSegmentLifespans(
   );
 
   for (const span of spans) {
-    const startTimeMs = span.startTime * 1000;
-    const endTimeMs = (span.startTime + span.duration) * 1000;
+    const startTimeMs = span.startTimeMs;
+    const endTimeMs = span.startTimeMs + span.durationMs;
     const segmentIndex = Math.floor(startTimeMs / laneSegmentDurationMs);
 
     if (segmentIndex >= 0 && segmentIndex < segmentCount) {
@@ -101,11 +101,8 @@ export function filterSpansForSegment(
   const windowEndMs = windowStartMs + laneSegmentDurationMs;
 
   return spans.filter((span) => {
-    // Note times in spans are in seconds and relative to the song start (post lead-in).
-    const startTimeMs = span.startTime * 1000;
-
     // A span is owned by this segment if it starts within this window block
-    return startTimeMs >= windowStartMs && startTimeMs < windowEndMs;
+    return span.startTimeMs >= windowStartMs && span.startTimeMs < windowEndMs;
   });
 }
 

@@ -44,7 +44,7 @@ describe("midi-parser", () => {
     const spans = getNoteSpans(events);
     expect(spans).toHaveLength(2);
     expect(spans[0].note).toBe(60);
-    expect(spans[0].duration).toBe(1);
+    expect(spans[0].durationMs).toBe(1000);
     expect(spans[1].note).toBe(62);
   });
 
@@ -62,21 +62,21 @@ describe("midi-parser", () => {
     } as unknown as Midi;
 
     const events = getMidiEvents(sequentialMidi, "piano");
-    // Events: 60-On(0), 60-Off(1), 60-On(1.03), 60-Off(2)
+    // Events: 60-On(0), 60-Off(1000), 60-On(1010), 60-Off(2000)
     expect(events).toHaveLength(4);
 
     expect(events[0].type).toBe("noteOn");
-    expect(events[0].time).toBe(0);
+    expect(events[0].timeMs).toBe(0);
 
     expect(events[1].type).toBe("noteOff");
-    expect(events[1].time).toBe(1);
+    expect(events[1].timeMs).toBe(1000);
 
-    // Second note should be shifted by 10ms (0.01s)
+    // Second note should be shifted by MIN_NOTE_GAP_MS (10ms)
     expect(events[2].type).toBe("noteOn");
-    expect(events[2].time).toBe(1.01);
+    expect(events[2].timeMs).toBe(1010);
 
     expect(events[3].type).toBe("noteOff");
-    expect(events[3].time).toBe(2.0);
+    expect(events[3].timeMs).toBe(2000);
   });
 
   it("getMidiEvents shifts entire chords if one note has a collision", () => {
@@ -95,15 +95,15 @@ describe("midi-parser", () => {
     } as unknown as Midi;
 
     const events = getMidiEvents(chordMidi, "piano");
-    // Events: 60-On(0), 60-Off(1), [60-On(1.01), 64-On(1.01)], [60-Off(2), 64-Off(2)]
+    // Events: 60-On(0), 60-Off(1000), [60-On(1010), 64-On(1010)], [60-Off(2000), 64-Off(2000)]
     expect(events).toHaveLength(6);
 
     const chordOnEvents = events.filter(
-      (e) => e.type === "noteOn" && e.time > 0,
+      (e) => e.type === "noteOn" && e.timeMs > 0,
     );
     expect(chordOnEvents).toHaveLength(2);
-    expect(chordOnEvents[0].time).toBe(1.01);
-    expect(chordOnEvents[1].time).toBe(1.01);
+    expect(chordOnEvents[0].timeMs).toBe(1010);
+    expect(chordOnEvents[1].timeMs).toBe(1010);
   });
 
   it("getMidiEvents detects sequential collisions across different tracks", () => {
@@ -126,7 +126,7 @@ describe("midi-parser", () => {
     // Second note (from second track) should be shifted
     expect(events[2].note).toBe(60);
     expect(events[2].type).toBe("noteOn");
-    expect(events[2].time).toBe(1.01);
+    expect(events[2].timeMs).toBe(1010);
   });
 
   it("getMidiEvents detects and shifts overlapping notes of the same pitch", () => {
@@ -143,10 +143,10 @@ describe("midi-parser", () => {
     } as unknown as Midi;
 
     const events = getMidiEvents(overlappingMidi, "piano");
-    // Should shift second note to start at 0.5 + gap
+    // Should shift second note to start at 500 + gap
     expect(
-      events.filter((e) => e.note === 60 && e.type === "noteOn")[1].time,
-    ).toBe(0.51);
+      events.filter((e) => e.note === 60 && e.type === "noteOn")[1].timeMs,
+    ).toBe(510);
   });
   it("getNoteRange returns correct min/max", () => {
     const events = getMidiEvents(mockMidi, "piano");
@@ -162,8 +162,8 @@ describe("midi-parser", () => {
     const barLines = getBarLines(mockMidi);
     // 4/4 at 480 PPQ -> 4 * 480 = 1920 ticks per bar
     // ticksToSeconds(0)=0, 1920/480=4, 3840/480=8, 5760/480=12...
-    // duration=10, so 0, 4, 8 are expected
-    expect(barLines).toEqual([0, 4, 8]);
+    // duration=10, so 0, 4, 8 are expected in ms
+    expect(barLines).toEqual([0, 4000, 8000]);
   });
 
   it("getBarLines handles multiple time signatures", () => {
@@ -180,10 +180,10 @@ describe("midi-parser", () => {
     } as unknown as Midi;
 
     const barLines = getBarLines(multiTSMidi);
-    // Segment 1 (4/4): tick 0 -> 0s
-    // Next TS at tick 1920 (4s).
-    // Segment 2 (3/4): tick 1920 -> 4s, tick 1920+(3*480)=3360 -> 7s, tick 3360+(3*480)=4800 -> 10s
-    expect(barLines).toEqual([0, 4, 7, 10]);
+    // Segment 1 (4/4): tick 0 -> 0ms
+    // Next TS at tick 1920 (4000ms).
+    // Segment 2 (3/4): tick 1920 -> 4000ms, tick 1920+(3*480)=3360 -> 7000ms, tick 3360+(3*480)=4800 -> 10000ms
+    expect(barLines).toEqual([0, 4000, 7000, 10000]);
   });
 
   it("getBarLines respects MAX_BARS limit", () => {

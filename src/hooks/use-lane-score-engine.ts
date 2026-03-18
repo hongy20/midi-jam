@@ -39,7 +39,7 @@ export function useLaneScoreEngine({
       let nextIndex = 0;
       for (let i = 0; i < modelEvents.length; i++) {
         const modelEvent = modelEvents[i];
-        const targetTimeMs = modelEvent.time * 1000;
+        const targetTimeMs = modelEvent.timeMs;
 
         if (targetTimeMs < initialTimeMs - GOOD_THRESHOLD) {
           processedNotesRef.current.add(i);
@@ -80,7 +80,7 @@ export function useLaneScoreEngine({
         const modelEvent = modelEvents[i];
         if (modelEvent.type !== "noteOn") continue;
 
-        const targetTimeMs = modelEvent.time * 1000;
+        const targetTimeMs = modelEvent.timeMs;
         const delta = Math.abs(currentTimeMs - targetTimeMs);
 
         // If this event is already too far in the future, we can stop searching
@@ -133,13 +133,13 @@ export function useLaneScoreEngine({
         const modelEvent = modelEvents[i];
         if (modelEvent.type !== "noteOn") {
           // Advance window for noteOff events too if we've passed them
-          if (modelEvent.time * 1000 < currentTimeMs - GOOD_THRESHOLD) {
+          if (modelEvent.timeMs < currentTimeMs - GOOD_THRESHOLD) {
             currentIndexRef.current = i + 1;
           }
           continue;
         }
 
-        const targetTimeMs = modelEvent.time * 1000;
+        const targetTimeMs = modelEvent.timeMs;
 
         // If this note is more than GOOD_THRESHOLD past the target line, it's a miss
         if (currentTimeMs > targetTimeMs + GOOD_THRESHOLD) {
