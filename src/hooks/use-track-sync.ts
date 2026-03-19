@@ -51,10 +51,19 @@ export function useTrackSync() {
         const groups = buildSegmentGroups(spans, LANE_SEGMENT_DURATION_MS);
 
         lastLoadedTrackId.current = selectedTrack.id;
+
+        // Tie totalDurationMs to the actual visual end of the last segment.
+        // This ensures the game timeline perfectly matches the visual environment
+        // and correctly respects lead-out buffers added during segment grouping.
+        const lastGroup = groups[groups.length - 1];
+        const totalDurationMs = lastGroup
+          ? lastGroup.startMs + lastGroup.durationMs
+          : midi.duration * 1000;
+
         setTrackStatus({
           isLoading: false,
           isReady: true,
-          totalDurationMs: midi.duration * 1000,
+          totalDurationMs,
           events,
           groups,
           error: null,
