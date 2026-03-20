@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 interface UseLaneTimelineProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -20,13 +20,13 @@ export function useLaneTimeline({
   const animationRef = useRef<Animation | null>(null);
 
   // Initialize and manage the Web Animation (internal clock only)
-  // We use useLayoutEffect to ensure the clock is ready before child components mount.
-  useLayoutEffect(() => {
+  useEffect(() => {
     const container = containerRef.current;
     if (!container || totalDurationMs <= 0) return;
 
     // We still create a "dummy" animation on the container itself (or an invisible div)
     // to leverage the Web Animation API's built-in clock, playbackRate, and pause/resume logic.
+    // This animation doesn't need to move anything visible.
     const keyframes = [{ opacity: 1 }, { opacity: 1 }];
 
     const animation = container.animate(keyframes, {
@@ -81,9 +81,8 @@ export function useLaneTimeline({
   }, [isPaused, speed]);
 
   const getCurrentTimeMs = useCallback(() => {
-    if (!animationRef.current) return initialTimeMs ?? 0;
-    return (animationRef.current.currentTime as number) ?? initialTimeMs ?? 0;
-  }, [initialTimeMs]);
+    return (animationRef.current?.currentTime as number) ?? 0;
+  }, []);
 
   const getProgress = useCallback((): number => {
     const animation = animationRef.current;

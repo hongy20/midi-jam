@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { LANE_SCROLL_DURATION_MS } from "@/lib/midi/constant";
 import {
   getVisibleSegmentIndexes,
@@ -12,7 +12,6 @@ interface LaneStageProps {
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
   isPaused: boolean;
-  speed: number;
 }
 
 export function LaneStage({
@@ -20,22 +19,32 @@ export function LaneStage({
   scrollRef,
   getCurrentTimeMs,
   isPaused,
-  speed,
 }: LaneStageProps) {
   const [isMounted, setIsMounted] = useState(false);
-  const [timeMs, setTimeMs] = useState(getCurrentTimeMs);
+  const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
 
-  // Poll current time to drive React-level mount/unmount decisions
+  // Manage visibility and hydration guard purely on the client.
   useEffect(() => {
     setIsMounted(true);
-    if (isPaused) return;
-    const interval = setInterval(() => setTimeMs(getCurrentTimeMs()), 250);
-    return () => clearInterval(interval);
-  }, [isPaused, getCurrentTimeMs]);
 
-  const renderIndexes = useMemo(() => {
-    return getVisibleSegmentIndexes(timeMs, groups, LANE_SCROLL_DURATION_MS);
-  }, [timeMs, groups]);
+    const updateVisibility = () => {
+      const timeMs = getCurrentTimeMs();
+      const indexes = getVisibleSegmentIndexes(
+        timeMs,
+        groups,
+        LANE_SCROLL_DURATION_MS,
+      );
+      setVisibleIndexes(indexes);
+    };
+
+    // Initial calculation on mount
+    updateVisibility();
+
+    if (isPaused) return;
+
+    const interval = setInterval(updateVisibility, 250);
+    return () => clearInterval(interval);
+  }, [groups, getCurrentTimeMs, isPaused]);
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-background/5">
@@ -43,12 +52,11 @@ export function LaneStage({
 
       <div ref={scrollRef} className="absolute inset-0 overflow-hidden">
         {isMounted &&
-          renderIndexes.map((idx) => (
+          visibleIndexes.map((idx) => (
             <LaneSegment
               key={idx}
               group={groups[idx]}
               getCurrentTimeMs={getCurrentTimeMs}
-              isPaused={isPaused}
             />
           ))}
       </div>

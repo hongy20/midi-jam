@@ -8,7 +8,7 @@
 }
 
 .container {
-  /* Inherit layout variables from parent/global context */
+  /* The physical height of the playable area (viewport minus UI components) */
   --container-height: calc(100dvh - var(--header-height) - var(--footer-height));
 
   /* Starting position: The segment is moved entirely above the container.
@@ -19,20 +19,19 @@
     -1
   );
 
+  /* Target position: The top of the segment reaches the bottom of the container. */
   --translate-y-to: var(--container-height);
 
   display: grid;
   width: 100%;
   position: absolute;
   top: 0;
-
-  /* Columns = End Unit - Start Unit. Matches the VirtualInstrument grid for alignment. */
   grid-template-columns: repeat(
       calc(var(--end-unit) - var(--start-unit)),
       minmax(0, 1fr)
     );
-
-  /* Total travel distance is (height + container-height) */
+  /* Segment height corresponds to LANE_SEGMENT_DURATION_MS.
+     Speed is 1 container height per --lane-scroll-duration-ms. */
   height: calc(
     var(--container-height) *
     (var(--segment-duration-ms) / var(--lane-scroll-duration-ms))
@@ -53,10 +52,6 @@
   animation: fall var(--anim-duration) linear var(--anim-delay) both;
 }
 
-.container[data-paused="true"] {
-  animation-play-state: paused;
-}
-
 .note {
   position: absolute;
   width: 100%;
@@ -64,17 +59,16 @@
   border: 1px solid
     color-mix(
       in srgb,
-      currentColor calc(var(--note-border-opacity, 0.4) * 100%),
+      currentColor calc(var(--note-border-opacity) * 100%),
       transparent
     );
   box-shadow: var(--note-shadow);
   transition: opacity 300ms;
   min-width: 0;
-  z-index: 10;
 
   background-color: color-mix(
     in srgb,
-    currentColor calc(20% + 20% * var(--is-black, 0)),
+    currentColor calc(20% + 20% * var(--is-black)),
     transparent
   );
 }

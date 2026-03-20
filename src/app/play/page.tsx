@@ -245,7 +245,6 @@ export default function PlayPage() {
           scrollRef={scrollRef}
           getCurrentTimeMs={getCurrentTimeMs}
           isPaused={isPaused}
-          speed={speed}
         />
       )}
     </PageLayout>

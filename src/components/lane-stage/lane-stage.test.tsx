@@ -63,7 +63,6 @@ describe("LaneStage", () => {
         scrollRef={scrollRef}
         getCurrentTimeMs={() => 0}
         isPaused={false}
-        speed={1.0}
       />,
     );
     const note60 = queryByAttribute("data-pitch", container, "60");

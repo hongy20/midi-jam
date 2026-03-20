@@ -9,18 +9,14 @@ import styles from "./lane-segment.module.css";
 interface LaneSegmentProps {
   group: SegmentGroup;
   getCurrentTimeMs: () => number;
-  isPaused: boolean;
 }
 
-export function LaneSegment({
-  group,
-  getCurrentTimeMs,
-  isPaused,
-}: LaneSegmentProps) {
+export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Phase-lock the CSS animation to the master clock at the exact moment this
-  // element is inserted into the DOM.
+  // element is inserted into the DOM. useLayoutEffect fires synchronously after
+  // browser commit, giving the tightest possible time snapshot.
   useLayoutEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -47,7 +43,6 @@ export function LaneSegment({
     <div
       ref={containerRef}
       className={styles.container}
-      data-paused={isPaused}
       style={
         {
           "--segment-duration-ms": group.durationMs,
