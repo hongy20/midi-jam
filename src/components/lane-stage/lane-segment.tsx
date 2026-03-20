@@ -31,12 +31,12 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
   }, [getCurrentTimeMs, group.startMs]);
 
   const debugColor = [
-    "rgba(255, 0, 0, 0.05)",
-    "rgba(0, 255, 0, 0.05)",
-    "rgba(0, 0, 255, 0.05)",
-    "rgba(255, 255, 0, 0.05)",
-    "rgba(255, 0, 255, 0.05)",
-    "rgba(0, 255, 255, 0.05)",
+    "rgba(255, 0, 0, 0.15)",
+    "rgba(0, 255, 0, 0.15)",
+    "rgba(0, 0, 255, 0.15)",
+    "rgba(255, 255, 0, 0.15)",
+    "rgba(255, 0, 255, 0.15)",
+    "rgba(0, 255, 255, 0.15)",
   ][group.index % 6];
 
   return (
