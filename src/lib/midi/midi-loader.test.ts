@@ -12,7 +12,13 @@ interface MockMidi {
     update: () => void;
   };
   tracks: {
-    notes: { ticks: number; duration: number; time: number; midi?: number; velocity?: number }[];
+    notes: {
+      ticks: number;
+      duration: number;
+      time: number;
+      midi?: number;
+      velocity?: number;
+    }[];
     controlChanges: {
       [key: number]: { ticks: number }[];
     };
