@@ -84,7 +84,9 @@ function patchMidi(midi: Midi): Midi {
   // use notes to calculate the total duration, ignoring control changes.
   const targetDurationS = midi.duration + leadOutS;
   if (midi.tracks.length > 0) {
-    const targetTicks = Math.round(midi.header.secondsToTicks(targetDurationS));
+    const _targetTicks = Math.round(
+      midi.header.secondsToTicks(targetDurationS),
+    );
     const duration = 0.1; // 100ms
     midi.tracks[0].notes.push({
       midi: MIDI_DUMMY_NOTE_PITCH, // Inaudible dummy note
