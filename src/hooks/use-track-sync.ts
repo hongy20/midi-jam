@@ -49,11 +49,11 @@ export function useTrackSync() {
         const events = getMidiEvents(midi);
         const spans = getNoteSpans(events);
         const totalDurationMs = midi.duration * 1000;
-        const groups = buildSegmentGroups(
+        const groups = buildSegmentGroups({
           spans,
           totalDurationMs,
-          LANE_SEGMENT_DURATION_MS,
-        );
+          thresholdMs: LANE_SEGMENT_DURATION_MS,
+        });
 
         lastLoadedTrackId.current = selectedTrack.id;
 

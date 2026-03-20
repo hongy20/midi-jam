@@ -22,8 +22,8 @@ global.ResizeObserver = class ResizeObserver {
 };
 
 describe("LaneStage", () => {
-  const mockGroups = buildSegmentGroups(
-    [
+  const mockGroups = buildSegmentGroups({
+    spans: [
       {
         id: "1",
         note: 60,
@@ -39,8 +39,8 @@ describe("LaneStage", () => {
         velocity: 0.8,
       },
     ],
-    3000,
-  );
+    totalDurationMs: 3000,
+  });
 
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };

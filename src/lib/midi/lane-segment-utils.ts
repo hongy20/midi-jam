@@ -18,6 +18,12 @@ export interface SegmentGroup {
   spans: NoteSpan[];
 }
 
+export interface BuildSegmentGroupsOptions {
+  spans: NoteSpan[];
+  totalDurationMs: number;
+  thresholdMs?: number;
+}
+
 /**
  * Groups notes into discrete clusters for rendering.
  *
@@ -27,11 +33,11 @@ export interface SegmentGroup {
  *    This ensures a seamless, non-overlapping visual experience and provides natural
  *    lead-in/lead-out buffers for animations.
  */
-export function buildSegmentGroups(
-  spans: NoteSpan[],
-  totalDurationMs: number,
+export function buildSegmentGroups({
+  spans,
+  totalDurationMs,
   thresholdMs = 10000,
-): SegmentGroup[] {
+}: BuildSegmentGroupsOptions): SegmentGroup[] {
   if (spans.length === 0) return [];
 
   // Pass 1: Core Discovery (find raw note clusters)

@@ -43,8 +43,8 @@ describe("useDemoPlayback", () => {
         containerRef,
         demoMode: true,
         isLoading: false,
-        groups: buildSegmentGroups(
-          [
+        groups: buildSegmentGroups({
+          spans: [
             {
               note: 60,
               startTimeMs: 0,
@@ -53,8 +53,8 @@ describe("useDemoPlayback", () => {
               velocity: 100,
             },
           ],
-          1000,
-        ),
+          totalDurationMs: 1000,
+        }),
         onNoteOn,
         onNoteOff,
       }),
@@ -96,8 +96,8 @@ describe("useDemoPlayback", () => {
         containerRef,
         demoMode: true,
         isLoading: false,
-        groups: buildSegmentGroups(
-          [
+        groups: buildSegmentGroups({
+          spans: [
             {
               note: 60,
               startTimeMs: 0,
@@ -113,8 +113,8 @@ describe("useDemoPlayback", () => {
               velocity: 100,
             },
           ],
-          1000,
-        ),
+          totalDurationMs: 1000,
+        }),
         onNoteOn,
         onNoteOff,
       }),

@@ -23,7 +23,11 @@ describe("lane-segment-utils clustering", () => {
         },
       ];
       // Gap is from 2000ms to 12000ms. Midpoint is 7000ms.
-      const groups = buildSegmentGroups(spans, 15000, threshold);
+      const groups = buildSegmentGroups({
+        spans,
+        totalDurationMs: 15000,
+        thresholdMs: threshold,
+      });
 
       expect(groups).toHaveLength(2);
 
@@ -48,7 +52,11 @@ describe("lane-segment-utils clustering", () => {
           velocity: 1,
         },
       ];
-      const groups = buildSegmentGroups(spans, 15000, threshold);
+      const groups = buildSegmentGroups({
+        spans,
+        totalDurationMs: 15000,
+        thresholdMs: threshold,
+      });
 
       expect(groups).toHaveLength(2);
       expect(groups[0].spans[0].id).toBe("1");
@@ -75,7 +83,11 @@ describe("lane-segment-utils clustering", () => {
           velocity: 1,
         },
       ];
-      const groups = buildSegmentGroups(spans, 15000, threshold);
+      const groups = buildSegmentGroups({
+        spans,
+        totalDurationMs: 15000,
+        thresholdMs: threshold,
+      });
 
       expect(groups).toHaveLength(2);
       expect(groups[0].spans).toHaveLength(1);
@@ -86,7 +98,11 @@ describe("lane-segment-utils clustering", () => {
       const spans: NoteSpan[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 30000, velocity: 1 },
       ];
-      const groups = buildSegmentGroups(spans, 40000, threshold);
+      const groups = buildSegmentGroups({
+        spans,
+        totalDurationMs: 40000,
+        thresholdMs: threshold,
+      });
 
       expect(groups).toHaveLength(1);
       expect(groups[0].durationMs).toBe(40000);
