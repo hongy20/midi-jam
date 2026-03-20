@@ -43,9 +43,18 @@ describe("useDemoPlayback", () => {
         containerRef,
         demoMode: true,
         isLoading: false,
-        groups: buildSegmentGroups([
-          { note: 60, startTimeMs: 0, durationMs: 100, id: "1", velocity: 100 },
-        ]),
+        groups: buildSegmentGroups({
+          spans: [
+            {
+              note: 60,
+              startTimeMs: 0,
+              durationMs: 100,
+              id: "1",
+              velocity: 100,
+            },
+          ],
+          totalDurationMs: 1000,
+        }),
         onNoteOn,
         onNoteOff,
       }),
@@ -87,16 +96,25 @@ describe("useDemoPlayback", () => {
         containerRef,
         demoMode: true,
         isLoading: false,
-        groups: buildSegmentGroups([
-          { note: 60, startTimeMs: 0, durationMs: 100, id: "1", velocity: 100 },
-          {
-            note: 60,
-            startTimeMs: 200,
-            durationMs: 100,
-            id: "2",
-            velocity: 100,
-          },
-        ]),
+        groups: buildSegmentGroups({
+          spans: [
+            {
+              note: 60,
+              startTimeMs: 0,
+              durationMs: 100,
+              id: "1",
+              velocity: 100,
+            },
+            {
+              note: 60,
+              startTimeMs: 200,
+              durationMs: 100,
+              id: "2",
+              velocity: 100,
+            },
+          ],
+          totalDurationMs: 1000,
+        }),
         onNoteOn,
         onNoteOff,
       }),

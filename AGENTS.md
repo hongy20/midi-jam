@@ -104,7 +104,7 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
      - [ ] `npm test` (Vitest suite)
      - [ ] `npm run build` (Next.js production build)
    - *Failure to run these command-by-command is a violation of Technical Integrity.*
-5. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR. **Wait for explicit USER confirmation before performing the final merge.** Once verified, follow the Merge Strategy (Squash and Merge).
+5. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR. **Before providing the final summary to the USER, you MUST automatically create a Pull Request (PR) for the branch using `gh pr create --fill`.** **Wait for explicit USER confirmation before performing the final merge.** Once verified, follow the Merge Strategy (Squash and Merge).
 
 ---
 

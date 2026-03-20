@@ -22,22 +22,25 @@ global.ResizeObserver = class ResizeObserver {
 };
 
 describe("LaneStage", () => {
-  const mockGroups = buildSegmentGroups([
-    {
-      id: "1",
-      note: 60,
-      startTimeMs: 0,
-      durationMs: 1000,
-      velocity: 0.8,
-    },
-    {
-      id: "2",
-      note: 61,
-      startTimeMs: 1000,
-      durationMs: 1000,
-      velocity: 0.8,
-    },
-  ]);
+  const mockGroups = buildSegmentGroups({
+    spans: [
+      {
+        id: "1",
+        note: 60,
+        startTimeMs: 0,
+        durationMs: 1000,
+        velocity: 0.8,
+      },
+      {
+        id: "2",
+        note: 61,
+        startTimeMs: 1000,
+        durationMs: 1000,
+        velocity: 0.8,
+      },
+    ],
+    totalDurationMs: 3000,
+  });
 
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };
