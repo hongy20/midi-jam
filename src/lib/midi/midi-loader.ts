@@ -84,20 +84,13 @@ function patchMidi(midi: Midi): Midi {
   // use notes to calculate the total duration, ignoring control changes.
   const targetDurationS = midi.duration + leadOutS;
   if (midi.tracks.length > 0) {
-    const _targetTicks = Math.round(
-      midi.header.secondsToTicks(targetDurationS),
-    );
     const duration = 0.1; // 100ms
-    midi.tracks[0].notes.push({
+    midi.tracks[0].addNote({
       midi: MIDI_DUMMY_NOTE_PITCH, // Inaudible dummy note
       time: targetDurationS - duration,
       duration,
       velocity: 0, // Silent
-      name: "C-1",
-      octave: -1,
-      ticks: Math.round(midi.header.secondsToTicks(targetDurationS - 0.1)),
-      durationTicks: Math.round(midi.header.secondsToTicks(0.1)),
-    } as any);
+    });
   }
 
   // Final update to ensure duration and other properties are synchronized.
