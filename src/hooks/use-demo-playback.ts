@@ -34,7 +34,7 @@ export function useDemoPlayback({
         // Process exits (Off) first
         for (const entry of exits) {
           const pitch = Number(entry.target.getAttribute("data-pitch"));
-          if (Number.isNaN(pitch) || pitch === 0) continue;
+          if (Number.isNaN(pitch)) continue;
 
           const currentCount = activeCounts.get(pitch) || 0;
           if (currentCount > 0) {
@@ -49,7 +49,7 @@ export function useDemoPlayback({
         // Process entries (On) second
         for (const entry of entriesIn) {
           const pitch = Number(entry.target.getAttribute("data-pitch"));
-          if (Number.isNaN(pitch) || pitch === 0) continue;
+          if (Number.isNaN(pitch)) continue;
 
           const currentCount = activeCounts.get(pitch) || 0;
           activeCounts.set(pitch, currentCount + 1);
