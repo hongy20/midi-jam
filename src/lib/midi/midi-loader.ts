@@ -87,12 +87,12 @@ function patchMidi(midi: Midi): Midi {
     const targetTicks = Math.round(midi.header.secondsToTicks(targetDurationS));
     midi.tracks[0].notes.push({
       midi: MIDI_DUMMY_NOTE_PITCH, // Inaudible dummy note
-      time: targetDurationS,
+      time: targetDurationS - 0.1,
       duration: 0.1,
       velocity: 0, // Silent
       name: "C-1",
       octave: -1,
-      ticks: targetTicks,
+      ticks: Math.round(midi.header.secondsToTicks(targetDurationS - 0.1)),
       durationTicks: Math.round(midi.header.secondsToTicks(0.1)),
     } as any);
   }
