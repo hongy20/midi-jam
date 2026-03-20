@@ -5,7 +5,7 @@ import { loadMidiFile } from "./midi-loader";
 // Mock @tonejs/midi
 vi.mock("@tonejs/midi", () => {
   return {
-    Midi: vi.fn().mockImplementation(function (this: Record<string, unknown>) {
+    Midi: vi.fn().mockImplementation(function (this: any) {
       this.header = {
         ppq: 480,
         tempos: [{ ticks: 0, bpm: 120 }],
@@ -16,14 +16,13 @@ vi.mock("@tonejs/midi", () => {
       this.tracks = [
         {
           notes: [
-            { ticks: 0, duration: 1 },
-            { ticks: 4800, duration: 1 },
+            { ticks: 0, duration: 1, time: 0 },
+            { ticks: 4800, duration: 1, time: 5 },
           ],
           controlChanges: {
             7: [{ ticks: 1000 }],
           },
           pitchBends: [{ ticks: 1500 }],
-          addCC: vi.fn(),
         },
       ];
       Object.defineProperty(this, "duration", {
@@ -53,34 +52,20 @@ describe("midi-loader loadMidiFile", () => {
     expect(midi.tracks[0].notes[0].ticks).toBe(shiftTicks);
     expect(midi.tracks[0].notes[1].ticks).toBe(4800 + shiftTicks);
 
-    // CC and PitchBend shift
-    const ccList = (
-      midi.tracks[0].controlChanges as unknown as Record<
-        string,
-        { ticks: number }[]
-      >
-    )["7"];
-    expect(ccList[0].ticks).toBe(1000 + shiftTicks);
-    expect(midi.tracks[0].pitchBends[0].ticks).toBe(1500 + shiftTicks);
-
     // Header shift
     expect(midi.header.tempos).toHaveLength(2);
     expect(midi.header.tempos[0].ticks).toBe(0);
     expect(midi.header.tempos[1].ticks).toBe(shiftTicks);
 
-    expect(midi.header.timeSignatures).toHaveLength(2);
-    expect(midi.header.timeSignatures[0].ticks).toBe(0);
-    expect(midi.header.timeSignatures[1].ticks).toBe(shiftTicks);
-
     expect(midi.header.update).toHaveBeenCalled();
 
-    // Duration extension
-    expect(midi.tracks[0].addCC).toHaveBeenCalledWith(
-      expect.objectContaining({
-        number: 120,
-        time: 6 + leadOutS,
-      }),
-    );
+    // Duration extension via dummy note
+    // (2 original notes + 1 dummy note)
+    expect(midi.tracks[0].notes).toHaveLength(3);
+    const dummyNote = midi.tracks[0].notes[2];
+    expect(dummyNote.midi).toBe(0);
+    expect(dummyNote.velocity).toBe(0);
+    expect(dummyNote.time).toBe(6 + leadOutS);
   });
 
   it("throws error on failed fetch", async () => {

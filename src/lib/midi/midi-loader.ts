@@ -75,15 +75,22 @@ function patchMidi(midi: Midi): Midi {
   // 5. Update header to recalculate time-to-tick mappings.
   midi.header.update();
 
-  // 6. Extend duration by adding a lead-out CC event.
-  // We use addCC which handles tick calculation from time automatically.
+  // 6. Extend duration by adding a silent dummy note at the very end.
+  // We use a dummy note because some MIDI parsers (like Tone.js/midi) may only
+  // use notes to calculate the total duration, ignoring control changes.
   const targetDurationS = midi.duration + leadOutS;
   if (midi.tracks.length > 0) {
-    midi.tracks[0].addCC({
-      number: 120, // All Sound Off
+    const targetTicks = Math.round(midi.header.secondsToTicks(targetDurationS));
+    midi.tracks[0].notes.push({
+      midi: 0, // Inaudible dummy note
       time: targetDurationS,
-      value: 0,
-    });
+      duration: 0.1,
+      velocity: 0, // Silent
+      name: "C-1",
+      octave: -1,
+      ticks: targetTicks,
+      durationTicks: Math.round(midi.header.secondsToTicks(0.1)),
+    } as any);
   }
 
   // Final update to ensure duration and other properties are synchronized.

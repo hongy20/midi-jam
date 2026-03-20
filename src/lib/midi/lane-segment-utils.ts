@@ -89,10 +89,12 @@ export function buildSegmentGroups(
     const startMs =
       i === 0 ? 0 : (rawClusters[i - 1].maxEndMs + cluster.minStartMs) / 2;
 
-    // End bound: midpoint with next, or current cluster end + LEAD_OUT for the last group
+    // End bound: midpoint with next, or current cluster end for the last group.
+    // The dummy note added in midi-loader.ts ensures that cluster.maxEndMs
+    // already includes the required LEAD_OUT_DEFAULT_MS.
     const endMs =
       i === rawClusters.length - 1
-        ? cluster.maxEndMs + LEAD_OUT_DEFAULT_MS
+        ? cluster.maxEndMs
         : (cluster.maxEndMs + rawClusters[i + 1].minStartMs) / 2;
 
     groups.push({

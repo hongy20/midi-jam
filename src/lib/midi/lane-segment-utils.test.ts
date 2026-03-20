@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { LANE_SCROLL_DURATION_MS, LEAD_OUT_DEFAULT_MS } from "./constant";
+import { LANE_SCROLL_DURATION_MS } from "./constant";
 import {
   buildSegmentGroups,
   computeLaneSegmentAnimationDelay,
@@ -31,9 +31,10 @@ describe("lane-segment-utils clustering", () => {
       expect(groups[0].startMs).toBe(0);
       expect(groups[0].durationMs).toBe(7000);
 
-      // Second group: Starts at 7000, ends at maxEnd (13000) + LEAD_OUT (800).
+      // Second group: Starts at 7000, ends at maxEnd (13000).
+      // (The dummy note cluster would naturally extend this in a real scenario).
       expect(groups[1].startMs).toBe(7000);
-      expect(groups[1].durationMs).toBe(13000 + LEAD_OUT_DEFAULT_MS - 7000);
+      expect(groups[1].durationMs).toBe(13000 - 7000);
     });
 
     it("breaks groups exceeding the threshold", () => {
@@ -81,14 +82,14 @@ describe("lane-segment-utils clustering", () => {
       expect(groups[1].spans).toHaveLength(2);
     });
 
-    it("allows durationMs to be large for long notes and includes lead-out", () => {
+    it("allows durationMs to be large for long notes", () => {
       const spans: NoteSpan[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 30000, velocity: 1 },
       ];
       const groups = buildSegmentGroups(spans, threshold);
 
       expect(groups).toHaveLength(1);
-      expect(groups[0].durationMs).toBe(30000 + LEAD_OUT_DEFAULT_MS);
+      expect(groups[0].durationMs).toBe(30000);
     });
   });
 
