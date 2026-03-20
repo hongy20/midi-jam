@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import {
   computeLaneSegmentAnimationDelay,
   type SegmentGroup,
@@ -9,6 +9,7 @@ import styles from "./lane-segment.module.css";
 interface LaneSegmentProps {
   group: SegmentGroup;
   getCurrentTimeMs: () => number;
+  speed: number;
 }
 
 export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
@@ -43,6 +44,7 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
     <div
       ref={containerRef}
       className={styles.container}
+      data-group-index={group.index}
       style={
         {
           "--segment-duration-ms": group.durationMs,

@@ -62,7 +62,7 @@ export function OptionItem({
       title: "Playback Speed",
       description: "Adjust note fall tempo",
       options: [
-        { label: "Slow", value: 0.1 },
+        { label: "Slow", value: 0.2 },
         { label: "Normal", value: 1.0 },
         { label: "Fast", value: 2.0 },
       ],
