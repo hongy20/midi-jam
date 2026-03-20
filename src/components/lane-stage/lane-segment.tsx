@@ -10,14 +10,12 @@ interface LaneSegmentProps {
   group: SegmentGroup;
   getCurrentTimeMs: () => number;
   isPaused: boolean;
-  speed: number;
 }
 
 export function LaneSegment({
   group,
   getCurrentTimeMs,
   isPaused,
-  speed,
 }: LaneSegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 

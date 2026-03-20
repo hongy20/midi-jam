@@ -22,7 +22,7 @@ export function LaneStage({
   isPaused,
   speed,
 }: LaneStageProps) {
-  const [timeMs, setTimeMs] = useState(0);
+  const [timeMs, setTimeMs] = useState(getCurrentTimeMs);
 
   // Poll current time to drive React-level mount/unmount decisions
   useEffect(() => {
@@ -46,7 +46,6 @@ export function LaneStage({
             group={groups[idx]}
             getCurrentTimeMs={getCurrentTimeMs}
             isPaused={isPaused}
-            speed={speed}
           />
         ))}
       </div>
