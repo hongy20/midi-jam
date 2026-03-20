@@ -60,7 +60,7 @@ export function useDemoPlayback({
       },
       {
         root: container,
-        rootMargin: "-100% 0px 1px 0px",
+        rootMargin: "-100% 0px 0px 0px",
         threshold: [0, 1],
       },
     );
