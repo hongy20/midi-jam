@@ -8,8 +8,7 @@
 }
 
 .container {
-  --header-height: 5rem;
-  --footer-height: 151px;
+  /* Inherit layout variables from parent/global context */
   --container-height: calc(100dvh - var(--header-height) - var(--footer-height));
 
   /* Starting position: The segment is moved entirely above the container.
@@ -26,6 +25,12 @@
   width: 100%;
   position: absolute;
   top: 0;
+
+  /* Columns = End Unit - Start Unit. Matches the VirtualInstrument grid for alignment. */
+  grid-template-columns: repeat(
+      calc(var(--end-unit) - var(--start-unit)),
+      minmax(0, 1fr)
+    );
 
   /* Total travel distance is (height + container-height) */
   height: calc(
@@ -55,16 +60,21 @@
 .note {
   position: absolute;
   width: 100%;
-
-  /* High Contrast Styling */
-  background: var(--accent-primary);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow:
-    0 0 15px var(--accent-primary),
-    inset 0 0 10px rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
+  border-radius: var(--note-radius);
+  border: 1px solid
+    color-mix(
+      in srgb,
+      currentColor calc(var(--note-border-opacity, 0.4) * 100%),
+      transparent
+    );
+  box-shadow: var(--note-shadow);
+  transition: opacity 300ms;
+  min-width: 0;
   z-index: 10;
 
-  /* Ensure smooth movement without snapping */
-  transition: transform 0.1s linear;
+  background-color: color-mix(
+    in srgb,
+    currentColor calc(20% + 20% * var(--is-black, 0)),
+    transparent
+  );
 }
