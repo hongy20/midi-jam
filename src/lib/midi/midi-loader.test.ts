@@ -89,7 +89,7 @@ describe("midi-loader loadMidiFile", () => {
     const dummyNote = midi.tracks[0].notes[2];
     expect(dummyNote.midi).toBe(0);
     expect(dummyNote.velocity).toBe(0);
-    expect(dummyNote.time).toBe(6 + leadOutS - 0.1);
+    expect(dummyNote.time).toBe(6 + leadInS + leadOutS - 0.1);
   });
 
   it("throws error on failed fetch", async () => {
