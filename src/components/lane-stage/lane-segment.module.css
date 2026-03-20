@@ -38,18 +38,8 @@
   );
   will-change: transform;
 
-  /* Total travel duration scaled by playback speed */
-  --anim-duration: calc(
-    (var(--segment-duration-ms) + var(--lane-scroll-duration-ms)) /
-    var(--speed) *
-    1ms
-  );
-
-  /* animation vars are written imperatively in useLayoutEffect */
-  --anim-delay: calc(var(--anim-delay-raw) / var(--speed) * 1ms);
-
+  /* Total travel duration scaling is now handled by WAAPI */
   transform: translateY(var(--translate-y-from));
-  animation: fall var(--anim-duration) linear var(--anim-delay) both;
 }
 
 .note {

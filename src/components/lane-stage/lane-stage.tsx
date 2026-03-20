@@ -12,6 +12,7 @@ interface LaneStageProps {
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
   isPaused: boolean;
+  speed: number;
 }
 
 export function LaneStage({
@@ -19,6 +20,7 @@ export function LaneStage({
   scrollRef,
   getCurrentTimeMs,
   isPaused,
+  speed,
 }: LaneStageProps) {
   const [timeMs, setTimeMs] = useState(0);
 
@@ -43,6 +45,7 @@ export function LaneStage({
             key={idx}
             group={groups[idx]}
             getCurrentTimeMs={getCurrentTimeMs}
+            speed={speed}
           />
         ))}
       </div>

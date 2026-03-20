@@ -1,34 +1,64 @@
-import { useLayoutEffect, useRef } from "react";
-import {
-  computeLaneSegmentAnimationDelay,
-  type SegmentGroup,
-} from "@/lib/midi/lane-segment-utils";
+import { useEffect, useLayoutEffect, useRef } from "react";
+import { LANE_SCROLL_DURATION_MS } from "@/lib/midi/constant";
+import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./lane-segment.module.css";
 
 interface LaneSegmentProps {
   group: SegmentGroup;
   getCurrentTimeMs: () => number;
+  speed: number;
 }
 
-export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
+export function LaneSegment({
+  group,
+  getCurrentTimeMs,
+  speed,
+}: LaneSegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<Animation | null>(null);
 
-  // Phase-lock the CSS animation to the master clock at the exact moment this
-  // element is inserted into the DOM. useLayoutEffect fires synchronously after
-  // browser commit, giving the tightest possible time snapshot.
+  // Phase-lock the WAAPI animation to the master clock at the exact moment this
+  // element is inserted into the DOM.
   useLayoutEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const mountTimeMs = getCurrentTimeMs();
-    const delayMs = computeLaneSegmentAnimationDelay(
-      mountTimeMs,
-      group.startMs,
+    // 1. Create the animation using the standard WAAPI syntax.
+    // Keyframes match the old CSS @keyframes 'fall'.
+    const animation = el.animate(
+      [
+        { transform: "translateY(var(--translate-y-from))" },
+        { transform: "translateY(var(--translate-y-to))" },
+      ],
+      {
+        duration: group.durationMs + LANE_SCROLL_DURATION_MS,
+        easing: "linear",
+        fill: "both",
+      },
     );
 
-    el.style.setProperty("--anim-delay-raw", `${delayMs}`);
-  }, [getCurrentTimeMs, group.startMs]);
+    // 2. Set the initial phase based on the current master clock.
+    const mountTimeMs = getCurrentTimeMs();
+    animation.currentTime =
+      mountTimeMs - group.startMs + LANE_SCROLL_DURATION_MS;
+    animation.playbackRate = speed;
+
+    animationRef.current = animation;
+
+    return () => {
+      animation.cancel();
+      animationRef.current = null;
+    };
+  }, [getCurrentTimeMs, group.startMs, group.durationMs, speed]);
+
+  // Keep playbackRate in sync with the global speed setting if it changes
+  // while the segment is already mounted.
+  useEffect(() => {
+    if (animationRef.current) {
+      animationRef.current.playbackRate = speed;
+    }
+  }, [speed]);
 
   const debugColor = [
     "rgba(255, 0, 0, 0.15)",

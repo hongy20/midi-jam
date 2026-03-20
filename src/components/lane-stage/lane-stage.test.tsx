@@ -21,6 +21,19 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
 };
 
+// Mock Element.prototype.animate
+if (typeof Element !== "undefined" && !Element.prototype.animate) {
+  Element.prototype.animate = () =>
+    ({
+      cancel: () => {},
+      play: () => {},
+      pause: () => {},
+      finish: () => {},
+      currentTime: 0,
+      playbackRate: 1,
+    }) as unknown as Animation;
+}
+
 describe("LaneStage", () => {
   const mockGroups = buildSegmentGroups({
     spans: [
@@ -50,6 +63,7 @@ describe("LaneStage", () => {
         scrollRef={scrollRef}
         getCurrentTimeMs={() => 0}
         isPaused={false}
+        speed={1.0}
       />,
     );
     const note60 = queryByAttribute("data-pitch", container, "60");
