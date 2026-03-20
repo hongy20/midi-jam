@@ -147,19 +147,18 @@ export default function PlayPage() {
     onNoteOff: handleNoteOff,
   });
 
-  const realNoteCount = events.length;
   // Update finish callback ref in an effect to avoid render-phase side effects
   useEffect(() => {
     handleFinishRef.current = () => {
       setSessionResults({
         score,
-        accuracy: Math.floor((score / (realNoteCount * 100)) * 100) || 0,
+        accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
         combo,
       });
       setGameSession(null);
       toScore();
     };
-  }, [score, combo, realNoteCount, setGameSession, setSessionResults, toScore]);
+  }, [score, combo, events.length, setGameSession, setSessionResults, toScore]);
 
   // Handle Pause
   const handleTogglePause = useCallback(() => {
