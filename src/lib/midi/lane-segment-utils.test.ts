@@ -23,7 +23,7 @@ describe("lane-segment-utils clustering", () => {
         },
       ];
       // Gap is from 2000ms to 12000ms. Midpoint is 7000ms.
-      const groups = buildSegmentGroups(spans, threshold);
+      const groups = buildSegmentGroups(spans, 15000, threshold);
 
       expect(groups).toHaveLength(2);
 
@@ -31,10 +31,10 @@ describe("lane-segment-utils clustering", () => {
       expect(groups[0].startMs).toBe(0);
       expect(groups[0].durationMs).toBe(7000);
 
-      // Second group: Starts at 7000, ends at maxEnd (13000).
+      // Second group: Starts at 7000, ends at totalDurationMs (15000).
       // (The dummy note cluster would naturally extend this in a real scenario).
       expect(groups[1].startMs).toBe(7000);
-      expect(groups[1].durationMs).toBe(13000 - 7000);
+      expect(groups[1].durationMs).toBe(15000 - 7000);
     });
 
     it("breaks groups exceeding the threshold", () => {
@@ -48,7 +48,7 @@ describe("lane-segment-utils clustering", () => {
           velocity: 1,
         },
       ];
-      const groups = buildSegmentGroups(spans, threshold);
+      const groups = buildSegmentGroups(spans, 15000, threshold);
 
       expect(groups).toHaveLength(2);
       expect(groups[0].spans[0].id).toBe("1");
@@ -75,7 +75,7 @@ describe("lane-segment-utils clustering", () => {
           velocity: 1,
         },
       ];
-      const groups = buildSegmentGroups(spans, threshold);
+      const groups = buildSegmentGroups(spans, 15000, threshold);
 
       expect(groups).toHaveLength(2);
       expect(groups[0].spans).toHaveLength(1);
@@ -86,10 +86,10 @@ describe("lane-segment-utils clustering", () => {
       const spans: NoteSpan[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 30000, velocity: 1 },
       ];
-      const groups = buildSegmentGroups(spans, threshold);
+      const groups = buildSegmentGroups(spans, 40000, threshold);
 
       expect(groups).toHaveLength(1);
-      expect(groups[0].durationMs).toBe(30000);
+      expect(groups[0].durationMs).toBe(40000);
     });
   });
 

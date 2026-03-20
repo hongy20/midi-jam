@@ -29,6 +29,7 @@ export interface SegmentGroup {
  */
 export function buildSegmentGroups(
   spans: NoteSpan[],
+  totalDurationMs: number,
   thresholdMs = 10000,
 ): SegmentGroup[] {
   if (spans.length === 0) return [];
@@ -89,12 +90,12 @@ export function buildSegmentGroups(
     const startMs =
       i === 0 ? 0 : (rawClusters[i - 1].maxEndMs + cluster.minStartMs) / 2;
 
-    // End bound: midpoint with next, or current cluster end for the last group.
-    // The dummy note added in midi-loader.ts ensures that cluster.maxEndMs
-    // already includes the required LEAD_OUT_DEFAULT_MS.
+    // End bound: midpoint with next, or the total song duration for the last group.
+    // Stretching the final segment visually until the true end of the song
+    // creates natural empty space for the visual lead-out.
     const endMs =
       i === rawClusters.length - 1
-        ? cluster.maxEndMs
+        ? Math.max(cluster.maxEndMs, totalDurationMs)
         : (cluster.maxEndMs + rawClusters[i + 1].minStartMs) / 2;
 
     groups.push({
