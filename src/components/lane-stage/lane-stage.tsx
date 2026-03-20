@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { LANE_SCROLL_DURATION_MS } from "@/lib/midi/constant";
 import {
   getVisibleSegmentIndexes,
   type SegmentGroup,
@@ -29,7 +30,7 @@ export function LaneStage({
   }, [isPaused, getCurrentTimeMs]);
 
   const renderIndexes = useMemo(() => {
-    return getVisibleSegmentIndexes(timeMs, groups);
+    return getVisibleSegmentIndexes(timeMs, groups, LANE_SCROLL_DURATION_MS);
   }, [timeMs, groups]);
 
   return (

@@ -117,12 +117,13 @@ export function buildSegmentGroups({
 
 /**
  * Returns an array of segment indexes that should be visibly mounted in the DOM.
- * We follow a sliding window strategy of [prev, current, next] to ensure a smooth
- * mounting buffer, even if the clusters are large or sparse.
+ * We follow an aggressive strategy: a segment is only mounted if it is within
+ * the scrolling window [T - scrollDurationMs, T + scrollDurationMs].
  */
 export function getVisibleSegmentIndexes(
   currentTimeMs: number,
   segmentGroups: SegmentGroup[],
+  scrollDurationMs: number,
 ): number[] {
   if (segmentGroups.length === 0) return [];
 
@@ -137,10 +138,22 @@ export function getVisibleSegmentIndexes(
   }
 
   const visible: number[] = [];
-  // Return [currentIndex - 1, currentIndex, currentIndex + 1], clamped to bounds
+  // Check the sliding window [currentIndex - 1, currentIndex, currentIndex + 1]
+  // against the actual visibility bounds.
   for (let i = currentIndex - 1; i <= currentIndex + 1; i++) {
     if (i >= 0 && i < segmentGroups.length) {
-      visible.push(i);
+      const group = segmentGroups[i];
+      const groupEndMs = group.startMs + group.durationMs;
+
+      // A segment is visible if it hasn't completely scrolled past the bottom
+      // AND its first note could have started appearing at the top.
+      const isVisible =
+        currentTimeMs >= group.startMs - scrollDurationMs &&
+        currentTimeMs <= groupEndMs + scrollDurationMs;
+
+      if (isVisible) {
+        visible.push(i);
+      }
     }
   }
 
