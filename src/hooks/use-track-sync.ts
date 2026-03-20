@@ -51,6 +51,7 @@ export function useTrackSync() {
         const groups = buildSegmentGroups(spans, LANE_SEGMENT_DURATION_MS);
 
         lastLoadedTrackId.current = selectedTrack.id;
+
         setTrackStatus({
           isLoading: false,
           isReady: true,

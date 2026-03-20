@@ -1,5 +1,9 @@
 import { Midi } from "@tonejs/midi";
-import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "./constant";
+import {
+  LEAD_IN_DEFAULT_MS,
+  LEAD_OUT_DEFAULT_MS,
+  MIDI_DUMMY_NOTE_PITCH,
+} from "./constant";
 
 /**
  * Patches a MIDI object to include lead-in and lead-out margins.
@@ -75,14 +79,17 @@ function patchMidi(midi: Midi): Midi {
   // 5. Update header to recalculate time-to-tick mappings.
   midi.header.update();
 
-  // 6. Extend duration by adding a lead-out CC event.
-  // We use addCC which handles tick calculation from time automatically.
+  // 6. Extend duration by adding a silent dummy note at the very end.
+  // We use a dummy note because some MIDI parsers (like Tone.js/midi) may only
+  // use notes to calculate the total duration, ignoring control changes.
   const targetDurationS = midi.duration + leadOutS;
   if (midi.tracks.length > 0) {
-    midi.tracks[0].addCC({
-      number: 120, // All Sound Off
-      time: targetDurationS,
-      value: 0,
+    const duration = 0.1; // 100ms
+    midi.tracks[0].addNote({
+      midi: MIDI_DUMMY_NOTE_PITCH, // Inaudible dummy note
+      time: targetDurationS - duration,
+      duration,
+      velocity: 0, // Silent
     });
   }
 

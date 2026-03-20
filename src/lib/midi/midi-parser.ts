@@ -1,5 +1,10 @@
 import type { Midi } from "@tonejs/midi";
-import { MIDI_MAX_NOTE, MIDI_MIN_NOTE, MIN_NOTE_GAP_MS } from "./constant";
+import {
+  MIDI_DUMMY_NOTE_PITCH,
+  MIDI_MAX_NOTE,
+  MIDI_MIN_NOTE,
+  MIN_NOTE_GAP_MS,
+} from "./constant";
 
 // FIXME: Can we merge MidiEvent and MIDINoteEvent?
 export interface MidiEvent {
@@ -32,7 +37,7 @@ export function getMidiEvents(
   const allNotes = midi.tracks
     .filter((track) => track.instrument.family === instrument)
     .flatMap((track) => track.notes)
-    .filter((note) => note.duration > 0)
+    .filter((note) => note.duration > 0 && note.midi !== MIDI_DUMMY_NOTE_PITCH)
     .map((note) => ({
       ...note,
       timeMs: note.time * 1000,
