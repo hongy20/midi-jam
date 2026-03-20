@@ -41,7 +41,13 @@ vi.mock("@tonejs/midi", () => {
       [key: number]: { ticks: number }[];
     };
     pitchBends: { ticks: number }[];
-    addNote: (noteDetails: { ticks: number; duration: number; time: number; midi?: number; velocity?: number }) => void;
+    addNote: (noteDetails: {
+      ticks: number;
+      duration: number;
+      time: number;
+      midi?: number;
+      velocity?: number;
+    }) => void;
   }
 
   return {
@@ -54,7 +60,8 @@ vi.mock("@tonejs/midi", () => {
         update: vi.fn(),
       };
       // Define the track object separately to add the addNote method
-      const track: MockTrack = { // Explicitly type track as MockTrack
+      const track: MockTrack = {
+        // Explicitly type track as MockTrack
         notes: [
           { ticks: 0, duration: 1, time: 0 },
           { ticks: 4800, duration: 1, time: 5 },
@@ -64,13 +71,16 @@ vi.mock("@tonejs/midi", () => {
         },
         pitchBends: [{ ticks: 1500 }],
         // Add the addNote method to the mock track, now with typed 'this'
-        addNote: vi.fn(function(this: MockTrack, noteDetails: {
-          ticks: number;
-          duration: number;
-          time: number;
-          midi?: number;
-          velocity?: number;
-        }) {
+        addNote: vi.fn(function (
+          this: MockTrack,
+          noteDetails: {
+            ticks: number;
+            duration: number;
+            time: number;
+            midi?: number;
+            velocity?: number;
+          },
+        ) {
           this.notes.push(noteDetails);
         }),
       };
