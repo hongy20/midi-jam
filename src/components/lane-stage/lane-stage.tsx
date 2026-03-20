@@ -45,6 +45,7 @@ export function LaneStage({
             key={idx}
             group={groups[idx]}
             getCurrentTimeMs={getCurrentTimeMs}
+            isPaused={isPaused}
             speed={speed}
           />
         ))}

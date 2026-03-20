@@ -7,12 +7,14 @@ import styles from "./lane-segment.module.css";
 interface LaneSegmentProps {
   group: SegmentGroup;
   getCurrentTimeMs: () => number;
+  isPaused: boolean;
   speed: number;
 }
 
 export function LaneSegment({
   group,
   getCurrentTimeMs,
+  isPaused,
   speed,
 }: LaneSegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,30 +46,40 @@ export function LaneSegment({
       mountTimeMs - group.startMs + LANE_SCROLL_DURATION_MS;
     animation.playbackRate = speed;
 
+    if (isPaused) {
+      animation.pause();
+    } else {
+      animation.play();
+    }
+
     animationRef.current = animation;
 
     return () => {
       animation.cancel();
       animationRef.current = null;
     };
-  }, [getCurrentTimeMs, group.startMs, group.durationMs, speed]);
+  }, [getCurrentTimeMs, group.startMs, group.durationMs, isPaused, speed]);
 
-  // Keep playbackRate in sync with the global speed setting if it changes
-  // while the segment is already mounted.
+  // Handle Play/Pause and Speed updates smoothly
   useEffect(() => {
-    if (animationRef.current) {
-      animationRef.current.playbackRate = speed;
-    }
-  }, [speed]);
+    const animation = animationRef.current;
+    if (!animation) return;
 
-  const debugColor = [
-    "rgba(255, 0, 0, 0.15)",
-    "rgba(0, 255, 0, 0.15)",
-    "rgba(0, 0, 255, 0.15)",
-    "rgba(255, 255, 0, 0.15)",
-    "rgba(255, 0, 255, 0.15)",
-    "rgba(0, 255, 255, 0.15)",
-  ][group.index % 6];
+    animation.playbackRate = speed;
+
+    if (isPaused) {
+      if (animation.playState !== "paused") {
+        animation.pause();
+      }
+    } else {
+      if (
+        animation.playState !== "running" &&
+        animation.playState !== "finished"
+      ) {
+        animation.play();
+      }
+    }
+  }, [isPaused, speed]);
 
   return (
     <div
@@ -76,7 +88,6 @@ export function LaneSegment({
       style={
         {
           "--segment-duration-ms": group.durationMs,
-          backgroundColor: debugColor,
         } as React.CSSProperties
       }
     >
