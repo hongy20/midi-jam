@@ -34,7 +34,8 @@
      Speed is 1 container height per --lane-scroll-duration-ms. */
   height: calc(
     var(--container-height) *
-    (var(--segment-duration-ms) / var(--lane-scroll-duration-ms))
+    (var(--segment-duration-ms) / var(--lane-scroll-duration-ms)) +
+    1px
   );
   will-change: transform;
 
