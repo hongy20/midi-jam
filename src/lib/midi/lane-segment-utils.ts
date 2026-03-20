@@ -92,9 +92,12 @@ export function buildSegmentGroups({
   for (let i = 0; i < rawClusters.length; i++) {
     const cluster = rawClusters[i];
 
-    // Start bound: midpoint with previous, or 0 for the first group
+    // Start bound: midpoint with previous, or 0 for the first group.
+    // We round to the nearest integer to avoid sub-pixel misalignment in CSS.
     const startMs =
-      i === 0 ? 0 : (rawClusters[i - 1].maxEndMs + cluster.minStartMs) / 2;
+      i === 0
+        ? 0
+        : Math.round((rawClusters[i - 1].maxEndMs + cluster.minStartMs) / 2);
 
     // End bound: midpoint with next, or the total song duration for the last group.
     // Stretching the final segment visually until the true end of the song
@@ -102,12 +105,14 @@ export function buildSegmentGroups({
     const endMs =
       i === rawClusters.length - 1
         ? Math.max(cluster.maxEndMs, totalDurationMs)
-        : (cluster.maxEndMs + rawClusters[i + 1].minStartMs) / 2;
+        : Math.round((cluster.maxEndMs + rawClusters[i + 1].minStartMs) / 2);
 
     groups.push({
       index: i,
       startMs,
-      durationMs: endMs - startMs,
+      // We add a tiny (1ms) bleed to the duration to ensure segments visually
+      // overlap, hiding any sub-pixel gaps caused by browser compositor rounding.
+      durationMs: endMs - startMs + 1,
       spans: cluster.spans,
     });
   }

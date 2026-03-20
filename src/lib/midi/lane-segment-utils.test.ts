@@ -33,12 +33,12 @@ describe("lane-segment-utils clustering", () => {
 
       // First group: Starts at 0, ends at midpoint 7000.
       expect(groups[0].startMs).toBe(0);
-      expect(groups[0].durationMs).toBe(7000);
+      expect(groups[0].durationMs).toBe(7000 + 1);
 
       // Second group: Starts at 7000, ends at totalDurationMs (15000).
       // (The dummy note cluster would naturally extend this in a real scenario).
       expect(groups[1].startMs).toBe(7000);
-      expect(groups[1].durationMs).toBe(15000 - 7000);
+      expect(groups[1].durationMs).toBe(15000 - 7000 + 1);
     });
 
     it("breaks groups exceeding the threshold", () => {
@@ -61,8 +61,10 @@ describe("lane-segment-utils clustering", () => {
       expect(groups).toHaveLength(2);
       expect(groups[0].spans[0].id).toBe("1");
       expect(groups[1].spans[0].id).toBe("2");
-      // Seamless stitching
-      expect(groups[0].startMs + groups[0].durationMs).toBe(groups[1].startMs);
+      // Seamless stitching (shifted by 1 due to overlap bleed)
+      expect(groups[0].startMs + groups[0].durationMs).toBe(
+        groups[1].startMs + 1,
+      );
     });
 
     it("protects chords from being split across groups", () => {
@@ -105,7 +107,7 @@ describe("lane-segment-utils clustering", () => {
       });
 
       expect(groups).toHaveLength(1);
-      expect(groups[0].durationMs).toBe(40000);
+      expect(groups[0].durationMs).toBe(40000 + 1);
     });
   });
 
