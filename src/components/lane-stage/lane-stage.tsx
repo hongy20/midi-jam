@@ -45,21 +45,6 @@ export function LaneStage({
           />
         ))}
       </div>
-
-      {/* Debug: Visual Hit Zone (Matching IntersectionObserver rootMargin: -99% 0px 0px 0px) */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: "1%",
-          backgroundColor: "rgba(255, 0, 0, 0.2)",
-          borderTop: "1px solid rgba(255, 0, 0, 0.4)",
-          pointerEvents: "none",
-          zIndex: 10,
-        }}
-      />
     </div>
   );
 }
