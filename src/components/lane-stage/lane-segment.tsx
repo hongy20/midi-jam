@@ -1,6 +1,8 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
-import { LANE_SCROLL_DURATION_MS } from "@/lib/midi/constant";
-import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
+import { useLayoutEffect, useRef } from "react";
+import {
+  computeLaneSegmentAnimationDelay,
+  type SegmentGroup,
+} from "@/lib/midi/lane-segment-utils";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./lane-segment.module.css";
 
@@ -18,68 +20,21 @@ export function LaneSegment({
   speed,
 }: LaneSegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<Animation | null>(null);
 
-  // Phase-lock the WAAPI animation to the master clock at the exact moment this
+  // Phase-lock the CSS animation to the master clock at the exact moment this
   // element is inserted into the DOM.
   useLayoutEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    // 1. Create the animation using the standard WAAPI syntax.
-    // Keyframes match the old CSS @keyframes 'fall'.
-    const animation = el.animate(
-      [
-        { transform: "translateY(var(--translate-y-from))" },
-        { transform: "translateY(var(--translate-y-to))" },
-      ],
-      {
-        duration: group.durationMs + LANE_SCROLL_DURATION_MS,
-        easing: "linear",
-        fill: "both",
-      },
+    const mountTimeMs = getCurrentTimeMs();
+    const delayMs = computeLaneSegmentAnimationDelay(
+      mountTimeMs,
+      group.startMs,
     );
 
-    // 2. Set the initial phase based on the current master clock.
-    const mountTimeMs = getCurrentTimeMs();
-    animation.currentTime =
-      mountTimeMs - group.startMs + LANE_SCROLL_DURATION_MS;
-    animation.playbackRate = speed;
-
-    if (isPaused) {
-      animation.pause();
-    } else {
-      animation.play();
-    }
-
-    animationRef.current = animation;
-
-    return () => {
-      animation.cancel();
-      animationRef.current = null;
-    };
-  }, [getCurrentTimeMs, group.startMs, group.durationMs, isPaused, speed]);
-
-  // Handle Play/Pause and Speed updates smoothly
-  useEffect(() => {
-    const animation = animationRef.current;
-    if (!animation) return;
-
-    animation.playbackRate = speed;
-
-    if (isPaused) {
-      if (animation.playState !== "paused") {
-        animation.pause();
-      }
-    } else {
-      if (
-        animation.playState !== "running" &&
-        animation.playState !== "finished"
-      ) {
-        animation.play();
-      }
-    }
-  }, [isPaused, speed]);
+    el.style.setProperty("--anim-delay-raw", `${delayMs}`);
+  }, [getCurrentTimeMs, group.startMs]);
 
   const debugColor = [
     "rgba(255, 0, 0, 0.15)",
@@ -94,6 +49,7 @@ export function LaneSegment({
     <div
       ref={containerRef}
       className={styles.container}
+      data-paused={isPaused}
       style={
         {
           "--segment-duration-ms": group.durationMs,

@@ -8,7 +8,8 @@
 }
 
 .container {
-  /* The physical height of the playable area (viewport minus UI components) */
+  --header-height: 5rem;
+  --footer-height: 151px;
   --container-height: calc(100dvh - var(--header-height) - var(--footer-height));
 
   /* Starting position: The segment is moved entirely above the container.
@@ -19,47 +20,51 @@
     -1
   );
 
-  /* Target position: The top of the segment reaches the bottom of the container. */
   --translate-y-to: var(--container-height);
 
   display: grid;
   width: 100%;
   position: absolute;
   top: 0;
-  grid-template-columns: repeat(
-      calc(var(--end-unit) - var(--start-unit)),
-      minmax(0, 1fr)
-    );
-  /* Segment height corresponds to LANE_SEGMENT_DURATION_MS.
-     Speed is 1 container height per --lane-scroll-duration-ms. */
+
+  /* Total travel distance is (height + container-height) */
   height: calc(
     var(--container-height) *
-    (var(--segment-duration-ms) / var(--lane-scroll-duration-ms)) +
-    1px
+    (var(--segment-duration-ms) / var(--lane-scroll-duration-ms))
   );
   will-change: transform;
 
-  /* Total travel duration scaling is now handled by WAAPI */
+  /* Total travel duration scaled by playback speed */
+  --anim-duration: calc(
+    (var(--segment-duration-ms) + var(--lane-scroll-duration-ms)) /
+    var(--speed) *
+    1ms
+  );
+
+  /* animation vars are written imperatively in useLayoutEffect */
+  --anim-delay: calc(var(--anim-delay-raw) / var(--speed) * 1ms);
+
   transform: translateY(var(--translate-y-from));
+  animation: fall var(--anim-duration) linear var(--anim-delay) both;
+}
+
+.container[data-paused="true"] {
+  animation-play-state: paused;
 }
 
 .note {
   position: absolute;
   width: 100%;
-  border-radius: var(--note-radius);
-  border: 1px solid
-    color-mix(
-      in srgb,
-      currentColor calc(var(--note-border-opacity) * 100%),
-      transparent
-    );
-  box-shadow: var(--note-shadow);
-  transition: opacity 300ms;
-  min-width: 0;
 
-  background-color: color-mix(
-    in srgb,
-    currentColor calc(20% + 20% * var(--is-black)),
-    transparent
-  );
+  /* High Contrast Styling */
+  background: var(--accent-primary);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 0 15px var(--accent-primary),
+    inset 0 0 10px rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  z-index: 10;
+
+  /* Ensure smooth movement without snapping */
+  transition: transform 0.1s linear;
 }
