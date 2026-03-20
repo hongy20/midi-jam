@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { MIDI_DUMMY_NOTE_PITCH } from "@/lib/midi/constant";
 import type { MidiEvent } from "@/lib/midi/midi-parser";
 import { useMIDINotes } from "./use-midi-notes";
 
@@ -78,7 +79,11 @@ export function useLaneScoreEngine({
       // Since modelEvents is sorted by time, we can stop if we go too far past currentTimeMs
       for (let i = currentIndexRef.current; i < modelEvents.length; i++) {
         const modelEvent = modelEvents[i];
-        if (modelEvent.type !== "noteOn") continue;
+        if (
+          modelEvent.type !== "noteOn" ||
+          modelEvent.note === MIDI_DUMMY_NOTE_PITCH
+        )
+          continue;
 
         const targetTimeMs = modelEvent.timeMs;
         const delta = Math.abs(currentTimeMs - targetTimeMs);
@@ -131,7 +136,10 @@ export function useLaneScoreEngine({
 
       for (let i = currentIndexRef.current; i < modelEvents.length; i++) {
         const modelEvent = modelEvents[i];
-        if (modelEvent.type !== "noteOn") {
+        if (
+          modelEvent.type !== "noteOn" ||
+          modelEvent.note === MIDI_DUMMY_NOTE_PITCH
+        ) {
           // Advance window for noteOff events too if we've passed them
           if (modelEvent.timeMs < currentTimeMs - GOOD_THRESHOLD) {
             currentIndexRef.current = i + 1;

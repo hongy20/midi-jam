@@ -1,5 +1,9 @@
 import { Midi } from "@tonejs/midi";
-import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "./constant";
+import {
+  LEAD_IN_DEFAULT_MS,
+  LEAD_OUT_DEFAULT_MS,
+  MIDI_DUMMY_NOTE_PITCH,
+} from "./constant";
 
 /**
  * Patches a MIDI object to include lead-in and lead-out margins.
@@ -82,7 +86,7 @@ function patchMidi(midi: Midi): Midi {
   if (midi.tracks.length > 0) {
     const targetTicks = Math.round(midi.header.secondsToTicks(targetDurationS));
     midi.tracks[0].notes.push({
-      midi: 0, // Inaudible dummy note
+      midi: MIDI_DUMMY_NOTE_PITCH, // Inaudible dummy note
       time: targetDurationS,
       duration: 0.1,
       velocity: 0, // Silent

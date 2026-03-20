@@ -152,13 +152,13 @@ export default function PlayPage() {
     handleFinishRef.current = () => {
       setSessionResults({
         score,
-        accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
+        accuracy: Math.floor((score / (realNoteCount * 100)) * 100) || 0,
         combo,
       });
       setGameSession(null);
       toScore();
     };
-  }, [score, combo, events.length, setGameSession, setSessionResults, toScore]);
+  }, [score, combo, events, setGameSession, setSessionResults, toScore]);
 
   // Handle Pause
   const handleTogglePause = useCallback(() => {
