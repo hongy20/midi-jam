@@ -147,6 +147,7 @@ export default function PlayPage() {
     onNoteOff: handleNoteOff,
   });
 
+  const realNoteCount = events.length;
   // Update finish callback ref in an effect to avoid render-phase side effects
   useEffect(() => {
     handleFinishRef.current = () => {
@@ -158,7 +159,7 @@ export default function PlayPage() {
       setGameSession(null);
       toScore();
     };
-  }, [score, combo, events, setGameSession, setSessionResults, toScore]);
+  }, [score, combo, realNoteCount, setGameSession, setSessionResults, toScore]);
 
   // Handle Pause
   const handleTogglePause = useCallback(() => {

@@ -83,4 +83,3 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
     </div>
   );
 }
-

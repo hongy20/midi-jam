@@ -3,9 +3,27 @@ import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "./constant";
 import { loadMidiFile } from "./midi-loader";
 
 // Mock @tonejs/midi
+interface MockMidi {
+  header: {
+    ppq: number;
+    tempos: { ticks: number; bpm: number }[];
+    timeSignatures: { ticks: number; timeSignature: [number, number] }[];
+    secondsToTicks: (seconds: number) => number;
+    update: () => void;
+  };
+  tracks: {
+    notes: { ticks: number; duration: number; time: number; midi?: number; velocity?: number }[];
+    controlChanges: {
+      [key: number]: { ticks: number }[];
+    };
+    pitchBends: { ticks: number }[];
+  }[];
+  duration: number;
+}
+
 vi.mock("@tonejs/midi", () => {
   return {
-    Midi: vi.fn().mockImplementation(function (this: any) {
+    Midi: vi.fn().mockImplementation(function (this: MockMidi) {
       this.header = {
         ppq: 480,
         tempos: [{ ticks: 0, bpm: 120 }],

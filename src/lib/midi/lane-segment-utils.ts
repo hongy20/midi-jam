@@ -1,4 +1,4 @@
-import { LANE_SCROLL_DURATION_MS, LEAD_OUT_DEFAULT_MS } from "./constant";
+import { LANE_SCROLL_DURATION_MS } from "./constant";
 import type { NoteSpan } from "./midi-parser";
 
 /**
