@@ -22,10 +22,12 @@ export function LaneStage({
   isPaused,
   speed,
 }: LaneStageProps) {
+  const [isMounted, setIsMounted] = useState(false);
   const [timeMs, setTimeMs] = useState(getCurrentTimeMs);
 
   // Poll current time to drive React-level mount/unmount decisions
   useEffect(() => {
+    setIsMounted(true);
     if (isPaused) return;
     const interval = setInterval(() => setTimeMs(getCurrentTimeMs()), 250);
     return () => clearInterval(interval);
@@ -40,14 +42,15 @@ export function LaneStage({
       <BackgroundLane />
 
       <div ref={scrollRef} className="absolute inset-0 overflow-hidden">
-        {renderIndexes.map((idx) => (
-          <LaneSegment
-            key={idx}
-            group={groups[idx]}
-            getCurrentTimeMs={getCurrentTimeMs}
-            isPaused={isPaused}
-          />
-        ))}
+        {isMounted &&
+          renderIndexes.map((idx) => (
+            <LaneSegment
+              key={idx}
+              group={groups[idx]}
+              getCurrentTimeMs={getCurrentTimeMs}
+              isPaused={isPaused}
+            />
+          ))}
       </div>
     </div>
   );
