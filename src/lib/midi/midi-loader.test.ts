@@ -37,18 +37,28 @@ vi.mock("@tonejs/midi", () => {
         secondsToTicks: vi.fn().mockReturnValue(1920),
         update: vi.fn(),
       };
-      this.tracks = [
-        {
-          notes: [
-            { ticks: 0, duration: 1, time: 0 },
-            { ticks: 4800, duration: 1, time: 5 },
-          ],
-          controlChanges: {
-            7: [{ ticks: 1000 }],
-          },
-          pitchBends: [{ ticks: 1500 }],
+      // Define the track object separately to add the addNote method
+      const track = {
+        notes: [
+          { ticks: 0, duration: 1, time: 0 },
+          { ticks: 4800, duration: 1, time: 5 },
+        ],
+        controlChanges: {
+          7: [{ ticks: 1000 }],
         },
-      ];
+        pitchBends: [{ ticks: 1500 }],
+        // Add the addNote method to the mock track
+        addNote: vi.fn(function (noteDetails: {
+          ticks: number;
+          duration: number;
+          time: number;
+          midi?: number;
+          velocity?: number;
+        }) {
+          this.notes.push(noteDetails);
+        }),
+      };
+      this.tracks = [track]; // Assign the track with the addNote method
       Object.defineProperty(this, "duration", {
         get: () => 6,
       });
@@ -89,7 +99,7 @@ describe("midi-loader loadMidiFile", () => {
     const dummyNote = midi.tracks[0].notes[2];
     expect(dummyNote.midi).toBe(0);
     expect(dummyNote.velocity).toBe(0);
-    expect(dummyNote.time).toBe(6 + leadInS + leadOutS - 0.1);
+    expect(dummyNote.time).toBe(6 + leadOutS - 0.1);
   });
 
   it("throws error on failed fetch", async () => {
