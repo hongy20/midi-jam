@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { LANE_SCROLL_DURATION_MS } from "@/lib/midi/constant";
 import {
   getVisibleSegmentIndexes,
@@ -12,7 +12,6 @@ interface LaneStageProps {
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
   isPaused: boolean;
-  speed: number;
 }
 
 export function LaneStage({
@@ -20,7 +19,6 @@ export function LaneStage({
   scrollRef,
   getCurrentTimeMs,
   isPaused,
-  speed,
 }: LaneStageProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
@@ -77,12 +75,12 @@ export function LaneStage({
         const rect2 = el2.getBoundingClientRect();
 
         console.log(
-          `group ${idx1}, bottom: ${rect1.bottom.toFixed(2)}, top: ${rect1.top.toFixed(2)} && group ${idx2}, bottom: ${rect2.bottom.toFixed(2)}, top: ${rect2.top.toFixed(2)}, speed: ${speed}`,
+          `group ${idx1}, bottom: ${rect1.bottom.toFixed(2)}, top: ${rect1.top.toFixed(2)} && group ${idx2}, bottom: ${rect2.bottom.toFixed(2)}, top: ${rect2.top.toFixed(2)}`,
         );
         loggedPairsRef.current.add(pairId);
       }
     }
-  }, [visibleIndexes, scrollRef, speed]);
+  }, [visibleIndexes, scrollRef]);
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-background/5">
@@ -95,7 +93,6 @@ export function LaneStage({
               key={idx}
               group={groups[idx]}
               getCurrentTimeMs={getCurrentTimeMs}
-              speed={speed}
             />
           ))}
       </div>
