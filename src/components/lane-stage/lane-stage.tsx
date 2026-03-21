@@ -20,14 +20,11 @@ export function LaneStage({
   getCurrentTimeMs,
   isPaused,
 }: LaneStageProps) {
-  const [isMounted, setIsMounted] = useState(false);
   const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
   const loggedPairsRef = useRef<Set<string>>(new Set());
 
   // Manage visibility and hydration guard purely on the client.
   useEffect(() => {
-    setIsMounted(true);
-
     let rafId: number;
     const updateVisibility = () => {
       const timeMs = getCurrentTimeMs();
@@ -70,15 +67,15 @@ export function LaneStage({
       const idx2 = el2.dataset.groupIndex;
       const pairId = `${idx1}-${idx2}`;
 
-      if (!loggedPairsRef.current.has(pairId)) {
+      // if (!loggedPairsRef.current.has(pairId)) {
         const rect1 = el1.getBoundingClientRect();
         const rect2 = el2.getBoundingClientRect();
 
         console.log(
-          `group ${idx1}, bottom: ${rect1.bottom.toFixed(2)}, top: ${rect1.top.toFixed(2)} && group ${idx2}, bottom: ${rect2.bottom.toFixed(2)}, top: ${rect2.top.toFixed(2)}`,
+          `group ${idx1}, bottom: ${rect1.bottom.toFixed(2)}, top: ${rect1.top.toFixed(2)} && group ${idx2}, bottom: ${rect2.bottom.toFixed(2)}, top: ${rect2.top.toFixed(2)} [${Number(rect1.top.toFixed(2)) - Number(rect2.bottom.toFixed(2))}]`,
         );
-        loggedPairsRef.current.add(pairId);
-      }
+        // loggedPairsRef.current.add(pairId);
+      // }
     }
   }, [visibleIndexes, scrollRef]);
 
@@ -87,14 +84,13 @@ export function LaneStage({
       <BackgroundLane />
 
       <div ref={scrollRef} className="absolute inset-0 overflow-hidden">
-        {isMounted &&
-          visibleIndexes.map((idx) => (
-            <LaneSegment
-              key={idx}
-              group={groups[idx]}
-              getCurrentTimeMs={getCurrentTimeMs}
-            />
-          ))}
+        {visibleIndexes.map((idx) => (
+          <LaneSegment
+            key={idx}
+            group={groups[idx]}
+            getCurrentTimeMs={getCurrentTimeMs}
+          />
+        ))}
       </div>
     </div>
   );
