@@ -5,150 +5,117 @@ import { useLaneTimeline } from "./use-lane-timeline";
 describe("useLaneTimeline hook", () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    vi.spyOn(performance, "now").mockReturnValue(0);
   });
 
   afterEach(() => {
     vi.useRealTimers();
-    vi.unstubAllGlobals();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
-  it("initializes and plays Web Animation clock", () => {
-    const mockAnimation = {
-      play: vi.fn(),
-      pause: vi.fn(),
-      cancel: vi.fn(),
-      playbackRate: 1,
-      playState: "running",
-      currentTime: 0,
-    };
-    const animateMock = vi.fn().mockReturnValue(mockAnimation);
+  const mockOnFinish = vi.fn();
 
-    const container = {
-      animate: animateMock,
-    } as unknown as HTMLDivElement;
-    const containerRef = { current: container };
-
-    renderHook(() =>
+  it("calculates progress and time correctly", () => {
+    const { result } = renderHook(() =>
       useLaneTimeline({
-        containerRef,
-        totalDurationMs: 1000,
+        totalDurationMs: 10000,
         speed: 1,
+        onFinish: mockOnFinish,
       }),
     );
 
-    expect(animateMock).toHaveBeenCalledWith([{ opacity: 1 }, { opacity: 1 }], {
-      duration: 1000,
-      fill: "both",
-      easing: "linear",
-    });
-    expect(mockAnimation.play).toHaveBeenCalled();
+    // After 5 seconds
+    vi.spyOn(performance, "now").mockReturnValue(5000);
+    expect(result.current.getCurrentTimeMs()).toBe(5000);
+    expect(result.current.getProgress()).toBe(0.5);
+
+    // After 10 seconds
+    vi.spyOn(performance, "now").mockReturnValue(10000);
+    expect(result.current.getCurrentTimeMs()).toBe(10000);
+    expect(result.current.getProgress()).toBe(1);
   });
 
-  it("resets timeline correctly", () => {
-    const mockAnimation = {
-      play: vi.fn(),
-      pause: vi.fn(),
-      cancel: vi.fn(),
-      playbackRate: 1,
-      playState: "running",
-      _currentTime: 500,
-      get currentTime() {
-        return this._currentTime;
-      },
-      set currentTime(v) {
-        this._currentTime = v;
-      },
-    };
-    const animateMock = vi.fn().mockReturnValue(mockAnimation);
-
-    const container = {
-      animate: animateMock,
-    } as unknown as HTMLDivElement;
-    const containerRef = { current: container };
-
+  it("handles speed correctly", () => {
     const { result } = renderHook(() =>
       useLaneTimeline({
-        containerRef,
-        totalDurationMs: 1000,
+        totalDurationMs: 10000,
+        speed: 2,
+        onFinish: mockOnFinish,
+      }),
+    );
+
+    // After 2.5 seconds real time, 5 seconds game time should have passed
+    vi.spyOn(performance, "now").mockReturnValue(2500);
+    expect(result.current.getCurrentTimeMs()).toBe(5000);
+    expect(result.current.getProgress()).toBe(0.5);
+  });
+
+  it("calls onFinish at the correct time", () => {
+    renderHook(() =>
+      useLaneTimeline({
+        totalDurationMs: 10000,
         speed: 1,
+        onFinish: mockOnFinish,
       }),
     );
 
     act(() => {
-      result.current.resetTimeline();
+      vi.advanceTimersByTime(9999);
     });
+    expect(mockOnFinish).not.toHaveBeenCalled();
 
-    expect(mockAnimation.currentTime).toBe(0);
-    expect(mockAnimation.play).toHaveBeenCalledTimes(2); // Initial + reset
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+    expect(mockOnFinish).toHaveBeenCalled();
   });
 
-  it("applies initialTimeMs correctly", () => {
-    const mockAnimation = {
-      play: vi.fn(),
-      pause: vi.fn(),
-      cancel: vi.fn(),
-      _currentTime: 0,
-      get currentTime() {
-        return this._currentTime;
-      },
-      set currentTime(v) {
-        this._currentTime = v;
-      },
-      playbackRate: 1,
-      playState: "running",
-    };
-    const animateMock = vi.fn().mockReturnValue(mockAnimation);
+  it("handles speed changes mid-playback", () => {
+    const { result, rerender } = renderHook(
+      ({ speed }) =>
+        useLaneTimeline({
+          totalDurationMs: 10000,
+          speed,
+          onFinish: mockOnFinish,
+        }),
+      { initialProps: { speed: 1 } },
+    );
 
-    const container = {
-      animate: animateMock,
-    } as unknown as HTMLDivElement;
-    const containerRef = { current: container };
+    // Run for 2 seconds at 1x speed
+    vi.spyOn(performance, "now").mockReturnValue(2000);
+    expect(result.current.getCurrentTimeMs()).toBe(2000);
 
-    renderHook(() =>
+    // Change speed to 2x
+    rerender({ speed: 2 });
+
+    // After another 2 seconds real time (4s total), 6s of game time should have passed
+    // (2s at 1x + 2s at 2x = 2000ms + 4000ms = 6000ms)
+    vi.spyOn(performance, "now").mockReturnValue(4000);
+    expect(result.current.getCurrentTimeMs()).toBe(6000);
+  });
+
+  it("resets timeline correctly", () => {
+    const { result } = renderHook(() =>
       useLaneTimeline({
-        containerRef,
-        totalDurationMs: 1000,
+        totalDurationMs: 10000,
         speed: 1,
-        initialTimeMs: 500,
+        onFinish: mockOnFinish,
       }),
     );
 
-    expect(mockAnimation.currentTime).toBe(500);
-  });
+    // Run for 3 seconds
+    vi.spyOn(performance, "now").mockReturnValue(3000);
+    expect(result.current.getCurrentTimeMs()).toBe(3000);
 
-  it("updates speed (playbackRate) when speed prop changes", () => {
-    const mockAnimation = {
-      play: vi.fn(),
-      pause: vi.fn(),
-      cancel: vi.fn(),
-      playbackRate: 1,
-      playState: "running",
-      currentTime: 0,
-    };
-    const animateMock = vi.fn().mockReturnValue(mockAnimation);
+    // Reset
+    act(() => {
+      // We must mock performance.now() again at the time of reset
+      vi.spyOn(performance, "now").mockReturnValue(3000);
+      result.current.resetTimeline();
+    });
 
-    const container = {
-      animate: animateMock,
-    } as unknown as HTMLDivElement;
-    const containerRef = { current: container };
-
-    const { rerender } = renderHook(
-      ({ speed }) =>
-        useLaneTimeline({
-          containerRef,
-          totalDurationMs: 1000,
-          speed,
-        }),
-      {
-        initialProps: { speed: 1 },
-      },
-    );
-
-    expect(mockAnimation.playbackRate).toBe(1);
-
-    rerender({ speed: 2 });
-
-    expect(mockAnimation.playbackRate).toBe(2);
+    // After another 2 seconds real time (5s total), game time should only be 2s
+    vi.spyOn(performance, "now").mockReturnValue(5000);
+    expect(result.current.getCurrentTimeMs()).toBe(2000);
   });
 });
