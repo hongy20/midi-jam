@@ -10,7 +10,6 @@ import {
 } from "react";
 
 export interface GameSession {
-  isPaused: boolean;
   score: number;
   combo: number;
   currentTimeMs: number;

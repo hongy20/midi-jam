@@ -9,7 +9,6 @@ interface ScoreWidgetProps {
   combo: number;
   lastHitQuality: HitQuality;
   getProgress: () => number;
-  isPaused: boolean;
 }
 
 export function ScoreWidget({
@@ -17,14 +16,11 @@ export function ScoreWidget({
   combo,
   lastHitQuality,
   getProgress,
-  isPaused,
 }: ScoreWidgetProps) {
   const progressBarFillRef = useRef<HTMLDivElement>(null);
   const progressValueRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (isPaused) return;
-
     let rafId: number;
 
     const update = () => {
@@ -44,7 +40,7 @@ export function ScoreWidget({
     rafId = requestAnimationFrame(update);
 
     return () => cancelAnimationFrame(rafId);
-  }, [isPaused, getProgress]);
+  }, [getProgress]);
 
   return (
     <div className={styles.container}>

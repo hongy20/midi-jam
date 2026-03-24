@@ -11,7 +11,6 @@ interface UseLaneScoreEngineProps {
   midiInput: WebMidi.MIDIInput | null;
   modelEvents: MidiEvent[];
   getCurrentTimeMs: () => number;
-  isPlaying: boolean;
   initialScore?: number;
   initialCombo?: number;
   initialTimeMs?: number;
@@ -21,7 +20,6 @@ export function useLaneScoreEngine({
   midiInput,
   modelEvents,
   getCurrentTimeMs,
-  isPlaying,
   initialScore = 0,
   initialCombo = 0,
   initialTimeMs = 0,
@@ -66,7 +64,7 @@ export function useLaneScoreEngine({
       note: number;
       velocity: number;
     }) => {
-      if (!isPlaying || event.type === "note-off") return;
+      if (event.type === "note-off") return;
 
       const currentTimeMs = getCurrentTimeMs();
 
@@ -117,15 +115,13 @@ export function useLaneScoreEngine({
         setCombo(0);
       }
     },
-    [isPlaying, modelEvents, getCurrentTimeMs, combo],
+    [modelEvents, getCurrentTimeMs, combo],
   );
 
   useMIDINotes(midiInput, handleLiveNote);
 
   // Miss detection and window advancement
   useEffect(() => {
-    if (!isPlaying) return;
-
     const interval = setInterval(() => {
       const currentTimeMs = getCurrentTimeMs();
 
@@ -158,7 +154,7 @@ export function useLaneScoreEngine({
     }, 100);
 
     return () => clearInterval(interval);
-  }, [isPlaying, modelEvents, getCurrentTimeMs]);
+  }, [modelEvents, getCurrentTimeMs]);
 
   return {
     score,

@@ -1,110 +1,69 @@
 import { useCallback, useEffect, useRef } from "react";
 
 interface UseLaneTimelineProps {
-  containerRef: React.RefObject<HTMLDivElement | null>;
   totalDurationMs: number;
   speed: number;
-  isPaused: boolean;
-  initialTimeMs?: number;
-  onFinish?: () => void;
+  initialProgress?: number;
+  onFinish: () => void;
 }
 
 export function useLaneTimeline({
-  containerRef,
   totalDurationMs,
   speed,
-  isPaused,
-  initialTimeMs,
+  initialProgress = 0,
   onFinish,
 }: UseLaneTimelineProps) {
-  const animationRef = useRef<Animation | null>(null);
-
-  // Initialize and manage the Web Animation (internal clock only)
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container || totalDurationMs <= 0) return;
-
-    // We still create a "dummy" animation on the container itself (or an invisible div)
-    // to leverage the Web Animation API's built-in clock, playbackRate, and pause/resume logic.
-    // This animation doesn't need to move anything visible.
-    const keyframes = [{ opacity: 1 }, { opacity: 1 }];
-
-    const animation = container.animate(keyframes, {
-      duration: totalDurationMs,
-      fill: "both",
-      easing: "linear",
-    });
-
-    // Restore state using props and saved progress
-    animation.playbackRate = speed;
-    animation.currentTime = initialTimeMs ?? 0;
-
-    if (isPaused) {
-      animation.pause();
-    } else {
-      animation.play();
-    }
-
-    animation.onfinish = () => {
-      onFinish?.();
-    };
-
-    animationRef.current = animation;
-
-    return () => {
-      if (animationRef.current) {
-        animationRef.current.cancel();
-        animationRef.current = null;
-      }
-    };
-  }, [containerRef, totalDurationMs, onFinish, speed, isPaused, initialTimeMs]);
-
-  // Handle Play/Pause and Speed updates smoothly
-  useEffect(() => {
-    const animation = animationRef.current;
-    if (!animation) return;
-
-    animation.playbackRate = speed;
-
-    if (isPaused) {
-      if (animation.playState !== "paused") {
-        animation.pause();
-      }
-    } else {
-      if (
-        animation.playState !== "running" &&
-        animation.playState !== "finished"
-      ) {
-        animation.play();
-      }
-    }
-  }, [isPaused, speed]);
+  const baseGameTimeRef = useRef(initialProgress * totalDurationMs);
+  const syncRealTimeRef = useRef(performance.now());
+  const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
 
   const getCurrentTimeMs = useCallback(() => {
-    return (animationRef.current?.currentTime as number) ?? 0;
-  }, []);
+    if (totalDurationMs <= 0) return 0;
+    const elapsedRealTime = performance.now() - syncRealTimeRef.current;
+    return Math.min(
+      totalDurationMs,
+      baseGameTimeRef.current + elapsedRealTime * speed,
+    );
+  }, [totalDurationMs, speed]);
 
-  const getProgress = useCallback((): number => {
-    const animation = animationRef.current;
-    if (!animation || !animation.effect) return 0;
+  const getProgress = useCallback(() => {
+    if (totalDurationMs <= 0) return 0;
+    return getCurrentTimeMs() / totalDurationMs;
+  }, [totalDurationMs, getCurrentTimeMs]);
 
-    const timing = animation.effect.getComputedTiming();
-    return timing.progress !== null && timing.progress !== undefined
-      ? timing.progress
-      : 0;
-  }, []);
+  useEffect(() => {
+    if (totalDurationMs <= 0) return;
+
+    const elapsedRealTime = performance.now() - syncRealTimeRef.current;
+    baseGameTimeRef.current += elapsedRealTime * speed;
+    syncRealTimeRef.current = performance.now();
+
+    if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current);
+
+    const remainingGameTime = totalDurationMs - baseGameTimeRef.current;
+    if (remainingGameTime > 0) {
+      const realTimeRemaining = remainingGameTime / speed;
+      timeoutIdRef.current = setTimeout(onFinish, realTimeRemaining);
+    } else {
+      // If we are already over, finish immediately
+      onFinish();
+    }
+
+    return () => {
+      if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current);
+    };
+  }, [totalDurationMs, speed, onFinish]);
 
   const resetTimeline = useCallback(() => {
-    const animation = animationRef.current;
-    if (animation) {
-      animation.currentTime = 0;
-      if (!isPaused) {
-        animation.play();
-      } else {
-        animation.pause();
-      }
+    baseGameTimeRef.current = 0;
+    syncRealTimeRef.current = performance.now();
+
+    if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current);
+    if (totalDurationMs > 0) {
+      const realTimeRemaining = totalDurationMs / speed;
+      timeoutIdRef.current = setTimeout(onFinish, realTimeRemaining);
     }
-  }, [isPaused]);
+  }, [totalDurationMs, speed, onFinish]);
 
   return {
     getCurrentTimeMs,

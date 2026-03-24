@@ -11,14 +11,12 @@ interface LaneStageProps {
   groups: SegmentGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
-  isPaused: boolean;
 }
 
 export function LaneStage({
   groups,
   scrollRef,
   getCurrentTimeMs,
-  isPaused,
 }: LaneStageProps) {
   const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
   const loggedPairsRef = useRef<Set<string>>(new Set());
@@ -34,9 +32,7 @@ export function LaneStage({
         LANE_SCROLL_DURATION_MS,
       );
       setVisibleIndexes(indexes);
-      if (!isPaused) {
-        rafId = requestAnimationFrame(updateVisibility);
-      }
+      rafId = requestAnimationFrame(updateVisibility);
     };
 
     // Initial calculation on mount
@@ -45,7 +41,7 @@ export function LaneStage({
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [groups, getCurrentTimeMs, isPaused]);
+  }, [groups, getCurrentTimeMs]);
 
   // Refined vertical position logging for gap investigation
   useLayoutEffect(() => {
@@ -68,13 +64,13 @@ export function LaneStage({
       const pairId = `${idx1}-${idx2}`;
 
       // if (!loggedPairsRef.current.has(pairId)) {
-        const rect1 = el1.getBoundingClientRect();
-        const rect2 = el2.getBoundingClientRect();
+      const rect1 = el1.getBoundingClientRect();
+      const rect2 = el2.getBoundingClientRect();
 
-        console.log(
-          `group ${idx1}, bottom: ${rect1.bottom.toFixed(2)}, top: ${rect1.top.toFixed(2)} && group ${idx2}, bottom: ${rect2.bottom.toFixed(2)}, top: ${rect2.top.toFixed(2)} [${Number(rect1.top.toFixed(2)) - Number(rect2.bottom.toFixed(2))}]`,
-        );
-        // loggedPairsRef.current.add(pairId);
+      console.log(
+        `group ${idx1}, bottom: ${rect1.bottom.toFixed(2)}, top: ${rect1.top.toFixed(2)} && group ${idx2}, bottom: ${rect2.bottom.toFixed(2)}, top: ${rect2.top.toFixed(2)} [${Number(rect1.top.toFixed(2)) - Number(rect2.bottom.toFixed(2))}]`,
+      );
+      // loggedPairsRef.current.add(pairId);
       // }
     }
   }, [visibleIndexes, scrollRef]);
