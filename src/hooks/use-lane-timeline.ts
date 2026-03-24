@@ -1,14 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
 
-// Custom hook to get the previous value of a prop or state
-function usePrevious<T>(value: T): T | undefined {
-  const ref = useRef<T>(null);
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
-
 interface UseLaneTimelineProps {
   totalDurationMs: number;
   speed: number;
@@ -25,8 +16,6 @@ export function useLaneTimeline({
   const baseGameTimeRef = useRef(initialProgress * totalDurationMs);
   const syncRealTimeRef = useRef(performance.now());
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
-
-  const prevSpeed = usePrevious(speed);
 
   const getCurrentTimeMs = useCallback(() => {
     if (totalDurationMs <= 0) return 0;
@@ -46,9 +35,7 @@ export function useLaneTimeline({
     if (totalDurationMs <= 0) return;
 
     const elapsedRealTime = performance.now() - syncRealTimeRef.current;
-    const lastSpeed = prevSpeed ?? speed; // On first render, prevSpeed is undefined
-
-    baseGameTimeRef.current += elapsedRealTime * lastSpeed;
+    baseGameTimeRef.current += elapsedRealTime * speed;
     syncRealTimeRef.current = performance.now();
 
     if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current);
@@ -65,7 +52,7 @@ export function useLaneTimeline({
     return () => {
       if (timeoutIdRef.current) clearTimeout(timeoutIdRef.current);
     };
-  }, [totalDurationMs, speed, onFinish, prevSpeed]);
+  }, [totalDurationMs, speed, onFinish]);
 
   const resetTimeline = useCallback(() => {
     baseGameTimeRef.current = 0;
