@@ -72,10 +72,12 @@ export default function PlayPage() {
   }, []);
 
   const { getCurrentTimeMs, getProgress } = useLaneTimeline({
-    containerRef: scrollRef,
     totalDurationMs,
     speed,
-    initialTimeMs: gameSession?.currentTimeMs ?? 0,
+    initialProgress:
+      totalDurationMs > 0
+        ? (gameSession?.currentTimeMs ?? 0) / totalDurationMs
+        : 0,
     onFinish: onFinishProxy,
   });
 
@@ -139,7 +141,6 @@ export default function PlayPage() {
   // Handle Pause
   const handlePause = useCallback(() => {
     setGameSession({
-      isPaused: true,
       score,
       combo,
       currentTimeMs: getCurrentTimeMs(),

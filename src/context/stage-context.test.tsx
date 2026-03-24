@@ -29,7 +29,6 @@ describe("StageProvider & useStage", () => {
     const { result } = renderHook(() => useStage(), { wrapper });
 
     const mockSession = {
-      isPaused: false,
       score: 100,
       combo: 5,
       currentTimeMs: 5000,

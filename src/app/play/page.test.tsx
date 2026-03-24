@@ -227,7 +227,11 @@ describe("Play Page", () => {
     // Should navigate to pause page
     expect(mockNavigation.toPause).toHaveBeenCalled();
     expect(mockSetGameSession).toHaveBeenCalledWith(
-      expect.objectContaining({ isPaused: true }),
+      expect.objectContaining({
+        score: expect.any(Number),
+        combo: expect.any(Number),
+        currentTimeMs: expect.any(Number),
+      }),
     );
   });
 });
