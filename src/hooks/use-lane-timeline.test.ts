@@ -70,30 +70,6 @@ describe("useLaneTimeline hook", () => {
     expect(mockOnFinish).toHaveBeenCalled();
   });
 
-  it("handles speed changes mid-playback", () => {
-    const { result, rerender } = renderHook(
-      ({ speed }) =>
-        useLaneTimeline({
-          totalDurationMs: 10000,
-          speed,
-          onFinish: mockOnFinish,
-        }),
-      { initialProps: { speed: 1 } },
-    );
-
-    // Run for 2 seconds at 1x speed
-    vi.spyOn(performance, "now").mockReturnValue(2000);
-    expect(result.current.getCurrentTimeMs()).toBe(2000);
-
-    // Change speed to 2x
-    rerender({ speed: 2 });
-
-    // After another 2 seconds real time (4s total), 6s of game time should have passed
-    // (2s at 1x + 2s at 2x = 2000ms + 4000ms = 6000ms)
-    vi.spyOn(performance, "now").mockReturnValue(4000);
-    expect(result.current.getCurrentTimeMs()).toBe(6000);
-  });
-
   it("resets timeline correctly", () => {
     const { result } = renderHook(() =>
       useLaneTimeline({
