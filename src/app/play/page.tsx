@@ -141,7 +141,6 @@ export default function PlayPage() {
   // Handle Pause
   const handlePause = useCallback(() => {
     setGameSession({
-      isPaused: true,
       score,
       combo,
       currentTimeMs: getCurrentTimeMs(),
