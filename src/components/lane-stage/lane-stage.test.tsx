@@ -49,8 +49,7 @@ describe("LaneStage", () => {
         groups={mockGroups}
         scrollRef={scrollRef}
         getCurrentTimeMs={() => 0}
-        isPaused={false}
-      />,
+      />
     );
     const note60 = queryByAttribute("data-pitch", container, "60");
     const note61 = queryByAttribute("data-pitch", container, "61");

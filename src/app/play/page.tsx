@@ -60,12 +60,10 @@ export default function PlayPage() {
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
 
-  const [isPaused, setIsPaused] = useState(false);
-
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleFinishRef = useRef<() => void>(() => {});
 
-  const isPlaying = !isPaused && totalDurationMs > 0;
+  const isPlaying = totalDurationMs > 0 && !isLoading;
 
   useWakeLock(isPlaying);
 
@@ -160,7 +158,6 @@ export default function PlayPage() {
 
   // Handle Pause
   const handleTogglePause = useCallback(() => {
-    setIsPaused(true);
     setGameSession({
       isPaused: true,
       score,
@@ -199,7 +196,6 @@ export default function PlayPage() {
                 combo={combo}
                 lastHitQuality={lastHitQuality}
                 getProgress={getProgress}
-                isPaused={isPaused}
               />
             </div>
           </div>
@@ -242,7 +238,6 @@ export default function PlayPage() {
           groups={groups}
           scrollRef={scrollRef}
           getCurrentTimeMs={getCurrentTimeMs}
-          isPaused={isPaused}
         />
       )}
     </PageLayout>
