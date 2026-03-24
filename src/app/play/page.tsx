@@ -77,7 +77,6 @@ export default function PlayPage() {
     containerRef: scrollRef,
     totalDurationMs,
     speed,
-    isPaused,
     initialTimeMs: gameSession?.currentTimeMs ?? 0,
     onFinish: onFinishProxy,
   });
