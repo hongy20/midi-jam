@@ -1,14 +1,39 @@
-# Lifecycle-Driven Gameplay Implementation Plan
+# Lifecycle-Driven Gameplay (Pause/Resume Refactor)
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 **Goal:** Simplify gameplay pause/resume logic by relying on React component mount/unmount lifecycle.
 
-**Architecture:** Remove the `isPaused` state from the `/play` route. Use the `StageContext` to persist session state between routes. Hooks and components will start their logic on mount and stop on unmount, naturally "pausing" when the user navigates to `/pause`.
+**Architecture:** "Mounted is Running"
+The presence of the `/play` component in the DOM is the definitive signal that the game is active.
+- **Start/Resume**: The `/play` component mounts. Hooks initialize using persisted values from `StageContext` (`currentTimeMs`, `score`, `combo`).
+- **Pause**: The user navigates to `/pause`. The `/play` component unmounts. Standard React cleanup (clearing intervals, canceling animations, stopping audio) "pauses" the game state.
+- **Stop/Reset**: Disconnecting a MIDI device or explicitly ending the session redirects to `/` (Home), where `resetAll()` is called on mount to hard-reset the application.
 
 **Tech Stack:** React 19, Next.js 15, Web Animation API, Vitest.
 
+## Design Details
+
+### Key Components & Hooks
+- **`PlayPage`**: Remove `isPaused` state. On MIDI device loss, redirect to home. `handleTogglePause` saves the current session state and navigates to `/pause`.
+- **`useLaneTimeline`**: Remove `isPaused` prop. The Web Animation starts immediately on mount using `initialTimeMs`. The cleanup function handles canceling the animation on unmount.
+- **`useLaneScoreEngine`**: Remove `isPlaying` prop. Scoring and miss-detection intervals start on mount and clear on unmount.
+- **`LaneStage` & `ScoreWidget`**: Remove `isPaused` props. Polling intervals and `requestAnimationFrame` loops run for the duration of the component's mount cycle.
+
+### Data Flow
+1. **Play -> Pause**:
+   - `PlayPage` saves `currentTimeMs`, `score`, and `combo` to `StageContext`.
+   - `toPause()` is called.
+   - `/play` unmounts -> Animations/Intervals stop.
+2. **Pause -> Play**:
+   - `toPlay()` is called.
+   - `/play` mounts.
+   - Hooks read `initialTimeMs`, `initialScore`, and `initialCombo` from `StageContext`.
+   - Gameplay resumes seamlessly from the saved state.
+
 ---
+
+## Implementation Tasks
 
 ### Task 1: Update `useLaneTimeline` Hook
 
