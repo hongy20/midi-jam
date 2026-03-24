@@ -85,7 +85,6 @@ export default function PlayPage() {
     midiInput: selectedMIDIInput,
     modelEvents: events,
     getCurrentTimeMs,
-    isPlaying,
     initialScore: gameSession?.score ?? 0,
     initialCombo: gameSession?.combo ?? 0,
     initialTimeMs: gameSession?.currentTimeMs ?? 0,

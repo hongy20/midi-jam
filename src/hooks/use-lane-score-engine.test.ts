@@ -29,7 +29,6 @@ describe("useLaneScoreEngine hook", () => {
         midiInput: {} as WebMidi.MIDIInput,
         modelEvents,
         getCurrentTimeMs: () => 3000,
-        isPlaying: true,
       }),
     );
 
@@ -53,7 +52,6 @@ describe("useLaneScoreEngine hook", () => {
         midiInput: {} as WebMidi.MIDIInput,
         modelEvents,
         getCurrentTimeMs: () => 3000,
-        isPlaying: true,
       }),
     );
 
@@ -94,7 +92,6 @@ describe("useLaneScoreEngine hook", () => {
         midiInput: {} as WebMidi.MIDIInput,
         modelEvents: largeModelEvents,
         getCurrentTimeMs: () => 5000 * 1000 + 2000, // At 5000 seconds
-        isPlaying: true,
       }),
     );
 
@@ -123,7 +120,6 @@ describe("useLaneScoreEngine hook", () => {
         midiInput: {} as WebMidi.MIDIInput,
         modelEvents: modelEventsRestore,
         getCurrentTimeMs: () => 7000,
-        isPlaying: true,
         initialScore: 500,
         initialCombo: 5,
         initialTimeMs: 5000, // We are resuming at 5s, past the 3s note
