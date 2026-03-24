@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { LANE_SCROLL_DURATION_MS } from "@/lib/midi/constant";
 import {
   getVisibleSegmentIndexes,
@@ -19,7 +19,6 @@ export function LaneStage({
   getCurrentTimeMs,
 }: LaneStageProps) {
   const [visibleIndexes, setVisibleIndexes] = useState<number[]>([]);
-  const loggedPairsRef = useRef<Set<string>>(new Set());
 
   // Manage visibility and hydration guard purely on the client.
   useEffect(() => {
@@ -61,17 +60,13 @@ export function LaneStage({
       const el2 = elements[i + 1];
       const idx1 = el1.dataset.groupIndex;
       const idx2 = el2.dataset.groupIndex;
-      const pairId = `${idx1}-${idx2}`;
 
-      // if (!loggedPairsRef.current.has(pairId)) {
       const rect1 = el1.getBoundingClientRect();
       const rect2 = el2.getBoundingClientRect();
 
       console.log(
         `group ${idx1}, bottom: ${rect1.bottom.toFixed(2)}, top: ${rect1.top.toFixed(2)} && group ${idx2}, bottom: ${rect2.bottom.toFixed(2)}, top: ${rect2.top.toFixed(2)} [${Number(rect1.top.toFixed(2)) - Number(rect2.bottom.toFixed(2))}]`,
       );
-      // loggedPairsRef.current.add(pairId);
-      // }
     }
   }, [visibleIndexes, scrollRef]);
 
