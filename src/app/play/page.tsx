@@ -29,7 +29,7 @@ import {
 import styles from "./page.module.css";
 
 export default function PlayPage() {
-  const { toScore, toPause, toHome } = useNavigation();
+  const { toScore, toPause } = useNavigation();
   const { selectedTrack } = useCollection();
   const { selectedMIDIInput, selectedMIDIOutput } = useGear();
   const { trackStatus } = useTrack();
@@ -87,14 +87,6 @@ export default function PlayPage() {
     initialCombo: gameSession?.combo ?? 0,
     initialTimeMs: gameSession?.currentTimeMs ?? 0,
   });
-
-  // Hard reset and redirect to home if device is disconnected mid-play
-  useEffect(() => {
-    if (isPlaying && !selectedMIDIInput) {
-      setGameSession(null);
-      toHome();
-    }
-  }, [isPlaying, selectedMIDIInput, toHome, setGameSession]);
 
   const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
 

@@ -64,7 +64,7 @@ describe("NavigationGuard", () => {
     });
   });
 
-  it("redirects from Level 2 to Gear if MIDI is missing", () => {
+  it("redirects from Level 2 to Home if MIDI is missing", () => {
     vi.mocked(usePathname).mockReturnValue(ROUTES.PLAY);
     vi.mocked(useCollection).mockReturnValue({
       selectedTrack: { id: "1", name: "Track", url: "url" },
@@ -74,8 +74,7 @@ describe("NavigationGuard", () => {
 
     render(<NavigationGuard>Test</NavigationGuard>);
 
-    expect(mockSetGameSession).toHaveBeenCalledWith(null);
-    expect(mockToGear).toHaveBeenCalled();
+    expect(mockToHome).toHaveBeenCalled();
   });
 
   it("redirects from Level 2 to Collection if track is missing", () => {

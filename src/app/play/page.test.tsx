@@ -230,28 +230,4 @@ describe("Play Page", () => {
       expect.objectContaining({ isPaused: true }),
     );
   });
-
-  it("redirects to home and resets session on device loss during play", () => {
-    const { rerender } = render(<PlayPage />);
-
-    // Initially we have a device
-    expect(screen.getByText(/Piano/)).toBeInTheDocument();
-
-    // Simulate device loss by updating the mock and rerendering
-    vi.mocked(useGear).mockReturnValue({
-      selectedMIDIInput: null,
-      selectedMIDIOutput: null,
-      selectMIDIInput: vi.fn(),
-      selectMIDIOutput: vi.fn(),
-      inputs: [],
-      outputs: [],
-      isLoading: false,
-      error: null,
-    });
-
-    rerender(<PlayPage />);
-
-    expect(mockSetGameSession).toHaveBeenCalledWith(null);
-    expect(mockNavigation.toHome).toHaveBeenCalled();
-  });
 });
