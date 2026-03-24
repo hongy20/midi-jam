@@ -137,7 +137,7 @@ export default function PlayPage() {
   }, [score, combo, events.length, setGameSession, setSessionResults, toScore]);
 
   // Handle Pause
-  const handleTogglePause = useCallback(() => {
+  const handlePause = useCallback(() => {
     setGameSession({
       isPaused: true,
       score,
@@ -183,7 +183,7 @@ export default function PlayPage() {
           <div className="flex items-center gap-4 sm:gap-8">
             <Button
               variant="secondary"
-              onClick={handleTogglePause}
+              onClick={handlePause}
               size="sm"
               icon={Pause}
             />

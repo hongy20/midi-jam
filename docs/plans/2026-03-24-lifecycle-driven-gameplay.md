@@ -15,7 +15,7 @@ The presence of the `/play` component in the DOM is the definitive signal that t
 ## Design Details
 
 ### Key Components & Hooks
-- **`PlayPage`**: Remove `isPaused` state. On MIDI device loss, redirect to home. `handleTogglePause` saves the current session state and navigates to `/pause`.
+- **`PlayPage`**: Remove `isPaused` state. On MIDI device loss, redirect to home. `handlePause` saves the current session state and navigates to `/pause`.
 - **`useLaneTimeline`**: Remove `isPaused` prop. The Web Animation starts immediately on mount using `initialTimeMs`. The cleanup function handles canceling the animation on unmount.
 - **`useLaneScoreEngine`**: Remove `isPlaying` prop. Scoring and miss-detection intervals start on mount and clear on unmount.
 - **`LaneStage` & `ScoreWidget`**: Remove `isPaused` props. Polling intervals and `requestAnimationFrame` loops run for the duration of the component's mount cycle.
@@ -120,7 +120,7 @@ git commit -m "refactor: remove isPaused from ScoreWidget and LaneStage"
 
 **Step 1: Remove `isPaused` state and update handlers**
 - Remove `const [isPaused, setIsPaused] = useState(false)`.
-- Update `handleTogglePause` to only save session and navigate.
+- Update `handlePause` to only save session and navigate.
 - Update device-loss effect to navigate to home.
 
 **Step 2: Update JSX**
