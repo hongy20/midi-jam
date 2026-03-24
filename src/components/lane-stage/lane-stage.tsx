@@ -11,23 +11,20 @@ interface LaneStageProps {
   groups: SegmentGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
-  isPaused: boolean;
 }
 
 export function LaneStage({
   groups,
   scrollRef,
   getCurrentTimeMs,
-  isPaused,
 }: LaneStageProps) {
   const [timeMs, setTimeMs] = useState(0);
 
   // Poll current time to drive React-level mount/unmount decisions
   useEffect(() => {
-    if (isPaused) return;
     const interval = setInterval(() => setTimeMs(getCurrentTimeMs()), 250);
     return () => clearInterval(interval);
-  }, [isPaused, getCurrentTimeMs]);
+  }, [getCurrentTimeMs]);
 
   const renderIndexes = useMemo(() => {
     return getVisibleSegmentIndexes(timeMs, groups, LANE_SCROLL_DURATION_MS);

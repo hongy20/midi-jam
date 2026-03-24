@@ -8,7 +8,6 @@ describe("ScoreWidget", () => {
     combo: 15,
     lastHitQuality: "perfect" as const,
     getProgress: () => 0.45,
-    isPaused: false,
   };
 
   it("renders score, combo and updates progress", async () => {
@@ -29,20 +28,5 @@ describe("ScoreWidget", () => {
     expect(screen.getByText(/%/)).toBeInTheDocument();
 
     vi.useRealTimers();
-  });
-
-  it("stops interval when paused", () => {
-    const getProgress = vi.fn(() => 0.5);
-    const { unmount } = render(
-      <ScoreWidget
-        {...defaultProps}
-        getProgress={getProgress}
-        isPaused={true}
-      />,
-    );
-
-    // Should not call getProgress immediately if paused
-    expect(getProgress).not.toHaveBeenCalled();
-    unmount();
   });
 });

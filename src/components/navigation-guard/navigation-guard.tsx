@@ -22,8 +22,7 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
       case ROUTES.PLAY:
       case ROUTES.PAUSE:
         if (!selectedMIDIInput) {
-          setGameSession(null);
-          toGear();
+          toHome();
         } else if (!selectedTrack) {
           setGameSession(null);
           toCollection();

@@ -34,7 +34,6 @@ describe("useLaneTimeline hook", () => {
         containerRef,
         totalDurationMs: 1000,
         speed: 1,
-        isPaused: false,
       }),
     );
 
@@ -44,42 +43,6 @@ describe("useLaneTimeline hook", () => {
       easing: "linear",
     });
     expect(mockAnimation.play).toHaveBeenCalled();
-  });
-
-  it("pauses animation when isPaused is true", () => {
-    const mockAnimation = {
-      play: vi.fn(),
-      pause: vi.fn(),
-      cancel: vi.fn(),
-      playbackRate: 1,
-      playState: "running",
-      currentTime: 0,
-    };
-    const animateMock = vi.fn().mockReturnValue(mockAnimation);
-
-    const container = {
-      animate: animateMock,
-    } as unknown as HTMLDivElement;
-    const containerRef = { current: container };
-
-    const { rerender } = renderHook(
-      ({ isPaused }) =>
-        useLaneTimeline({
-          containerRef,
-          totalDurationMs: 1000,
-          speed: 1,
-          isPaused,
-        }),
-      {
-        initialProps: { isPaused: false },
-      },
-    );
-
-    expect(mockAnimation.play).toHaveBeenCalled();
-
-    rerender({ isPaused: true });
-
-    expect(mockAnimation.pause).toHaveBeenCalled();
   });
 
   it("resets timeline correctly", () => {
@@ -109,7 +72,6 @@ describe("useLaneTimeline hook", () => {
         containerRef,
         totalDurationMs: 1000,
         speed: 1,
-        isPaused: false,
       }),
     );
 
@@ -148,11 +110,45 @@ describe("useLaneTimeline hook", () => {
         containerRef,
         totalDurationMs: 1000,
         speed: 1,
-        isPaused: false,
         initialTimeMs: 500,
       }),
     );
 
     expect(mockAnimation.currentTime).toBe(500);
+  });
+
+  it("updates speed (playbackRate) when speed prop changes", () => {
+    const mockAnimation = {
+      play: vi.fn(),
+      pause: vi.fn(),
+      cancel: vi.fn(),
+      playbackRate: 1,
+      playState: "running",
+      currentTime: 0,
+    };
+    const animateMock = vi.fn().mockReturnValue(mockAnimation);
+
+    const container = {
+      animate: animateMock,
+    } as unknown as HTMLDivElement;
+    const containerRef = { current: container };
+
+    const { rerender } = renderHook(
+      ({ speed }) =>
+        useLaneTimeline({
+          containerRef,
+          totalDurationMs: 1000,
+          speed,
+        }),
+      {
+        initialProps: { speed: 1 },
+      },
+    );
+
+    expect(mockAnimation.playbackRate).toBe(1);
+
+    rerender({ speed: 2 });
+
+    expect(mockAnimation.playbackRate).toBe(2);
   });
 });

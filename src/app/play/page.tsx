@@ -60,12 +60,10 @@ export default function PlayPage() {
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
 
-  const [isPaused, setIsPaused] = useState(false);
-
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleFinishRef = useRef<() => void>(() => {});
 
-  const isPlaying = !isPaused && totalDurationMs > 0;
+  const isPlaying = totalDurationMs > 0 && !isLoading;
 
   useWakeLock(isPlaying);
 
@@ -77,7 +75,6 @@ export default function PlayPage() {
     containerRef: scrollRef,
     totalDurationMs,
     speed,
-    isPaused,
     initialTimeMs: gameSession?.currentTimeMs ?? 0,
     onFinish: onFinishProxy,
   });
@@ -86,31 +83,10 @@ export default function PlayPage() {
     midiInput: selectedMIDIInput,
     modelEvents: events,
     getCurrentTimeMs,
-    isPlaying,
     initialScore: gameSession?.score ?? 0,
     initialCombo: gameSession?.combo ?? 0,
     initialTimeMs: gameSession?.currentTimeMs ?? 0,
   });
-
-  // Auto-pause and save session if device is disconnected mid-play
-  useEffect(() => {
-    if (isPlaying && !selectedMIDIInput) {
-      setGameSession({
-        isPaused: true,
-        score,
-        combo,
-        currentTimeMs: getCurrentTimeMs(),
-      });
-      // NavigationGuard will handle the redirect to gear
-    }
-  }, [
-    isPlaying,
-    selectedMIDIInput,
-    score,
-    combo,
-    getCurrentTimeMs,
-    setGameSession,
-  ]);
 
   const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
 
@@ -161,8 +137,7 @@ export default function PlayPage() {
   }, [score, combo, events.length, setGameSession, setSessionResults, toScore]);
 
   // Handle Pause
-  const handleTogglePause = useCallback(() => {
-    setIsPaused(true);
+  const handlePause = useCallback(() => {
     setGameSession({
       isPaused: true,
       score,
@@ -201,7 +176,6 @@ export default function PlayPage() {
                 combo={combo}
                 lastHitQuality={lastHitQuality}
                 getProgress={getProgress}
-                isPaused={isPaused}
               />
             </div>
           </div>
@@ -209,7 +183,7 @@ export default function PlayPage() {
           <div className="flex items-center gap-4 sm:gap-8">
             <Button
               variant="secondary"
-              onClick={handleTogglePause}
+              onClick={handlePause}
               size="sm"
               icon={Pause}
             />
@@ -244,7 +218,6 @@ export default function PlayPage() {
           groups={groups}
           scrollRef={scrollRef}
           getCurrentTimeMs={getCurrentTimeMs}
-          isPaused={isPaused}
         />
       )}
     </PageLayout>

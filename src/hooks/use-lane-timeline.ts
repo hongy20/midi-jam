@@ -4,7 +4,6 @@ interface UseLaneTimelineProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   totalDurationMs: number;
   speed: number;
-  isPaused: boolean;
   initialTimeMs?: number;
   onFinish?: () => void;
 }
@@ -13,7 +12,6 @@ export function useLaneTimeline({
   containerRef,
   totalDurationMs,
   speed,
-  isPaused,
   initialTimeMs,
   onFinish,
 }: UseLaneTimelineProps) {
@@ -36,14 +34,9 @@ export function useLaneTimeline({
     });
 
     // Restore state using props and saved progress
-    animation.playbackRate = speed;
     animation.currentTime = initialTimeMs ?? 0;
 
-    if (isPaused) {
-      animation.pause();
-    } else {
-      animation.play();
-    }
+    animation.play();
 
     animation.onfinish = () => {
       onFinish?.();
@@ -57,28 +50,15 @@ export function useLaneTimeline({
         animationRef.current = null;
       }
     };
-  }, [containerRef, totalDurationMs, onFinish, speed, isPaused, initialTimeMs]);
+  }, [containerRef, totalDurationMs, onFinish, initialTimeMs]);
 
-  // Handle Play/Pause and Speed updates smoothly
+  // Handle Speed updates smoothly
   useEffect(() => {
     const animation = animationRef.current;
     if (!animation) return;
 
     animation.playbackRate = speed;
-
-    if (isPaused) {
-      if (animation.playState !== "paused") {
-        animation.pause();
-      }
-    } else {
-      if (
-        animation.playState !== "running" &&
-        animation.playState !== "finished"
-      ) {
-        animation.play();
-      }
-    }
-  }, [isPaused, speed]);
+  }, [speed]);
 
   const getCurrentTimeMs = useCallback(() => {
     return (animationRef.current?.currentTime as number) ?? 0;
@@ -98,13 +78,9 @@ export function useLaneTimeline({
     const animation = animationRef.current;
     if (animation) {
       animation.currentTime = 0;
-      if (!isPaused) {
-        animation.play();
-      } else {
-        animation.pause();
-      }
+      animation.play();
     }
-  }, [isPaused]);
+  }, []);
 
   return {
     getCurrentTimeMs,
