@@ -12,7 +12,7 @@ import {
 export interface GameSession {
   score: number;
   combo: number;
-  currentTimeMs: number;
+  currentProgress: number;
 }
 
 export interface StageContextType {

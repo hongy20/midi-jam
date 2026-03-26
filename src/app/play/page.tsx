@@ -74,10 +74,7 @@ export default function PlayPage() {
   const { getCurrentTimeMs, getProgress } = useLaneTimeline({
     totalDurationMs,
     speed,
-    initialProgress:
-      totalDurationMs > 0
-        ? (gameSession?.currentTimeMs ?? 0) / totalDurationMs
-        : 0,
+    initialProgress: gameSession?.currentProgress ?? 0,
     onFinish: onFinishProxy,
   });
 
@@ -87,7 +84,7 @@ export default function PlayPage() {
     getCurrentTimeMs,
     initialScore: gameSession?.score ?? 0,
     initialCombo: gameSession?.combo ?? 0,
-    initialTimeMs: gameSession?.currentTimeMs ?? 0,
+    initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
   });
 
   const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
@@ -143,10 +140,10 @@ export default function PlayPage() {
     setGameSession({
       score,
       combo,
-      currentTimeMs: getCurrentTimeMs(),
+      currentProgress: getProgress(),
     });
     toPause();
-  }, [score, combo, getCurrentTimeMs, toPause, setGameSession]);
+  }, [score, combo, getProgress, toPause, setGameSession]);
 
   // Note: Redirects are handled by NavigationGuard
 

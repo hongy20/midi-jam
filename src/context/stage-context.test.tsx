@@ -28,16 +28,16 @@ describe("StageProvider & useStage", () => {
 
     const { result } = renderHook(() => useStage(), { wrapper });
 
-    const mockSession = {
-      score: 100,
-      combo: 5,
-      currentTimeMs: 5000,
+    const session = {
+      score: 1000,
+      combo: 10,
+      currentProgress: 0.5,
     };
 
     act(() => {
-      result.current.setGameSession(mockSession);
+      result.current.setGameSession(session);
     });
 
-    expect(result.current.gameSession).toEqual(mockSession);
+    expect(result.current.gameSession).toEqual(session);
   });
 });
