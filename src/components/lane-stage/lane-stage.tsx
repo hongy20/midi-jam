@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { LANE_SCROLL_DURATION_MS } from "@/lib/midi/constant";
 import {
   getVisibleSegmentIndexes,
@@ -18,17 +18,32 @@ export function LaneStage({
   scrollRef,
   getCurrentTimeMs,
 }: LaneStageProps) {
-  const [timeMs, setTimeMs] = useState(0);
+  const [renderIndexes, setRenderIndexes] = useState<number[]>(() =>
+    getVisibleSegmentIndexes(
+      getCurrentTimeMs(),
+      groups,
+      LANE_SCROLL_DURATION_MS,
+    ),
+  );
 
   // Poll current time to drive React-level mount/unmount decisions
   useEffect(() => {
-    const interval = setInterval(() => setTimeMs(getCurrentTimeMs()), 250);
+    const interval = setInterval(() => {
+      const timeMs = getCurrentTimeMs();
+      const indexes = getVisibleSegmentIndexes(
+        timeMs,
+        groups,
+        LANE_SCROLL_DURATION_MS,
+      );
+      setRenderIndexes((prev) => {
+        if (prev.join() === indexes.join()) {
+          return prev;
+        }
+        return indexes;
+      });
+    }, 250);
     return () => clearInterval(interval);
-  }, [getCurrentTimeMs]);
-
-  const renderIndexes = useMemo(() => {
-    return getVisibleSegmentIndexes(timeMs, groups, LANE_SCROLL_DURATION_MS);
-  }, [timeMs, groups]);
+  }, [getCurrentTimeMs, groups]);
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-background/5">

@@ -65,7 +65,6 @@
   border-radius: inherit;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 75ms;
 }
 
 /* Base colors for the glow layer */
@@ -76,12 +75,6 @@
     var(--piano-glow-playback-bg),
     var(--piano-glow-playback-bg) calc(var(--is-black) * 100%)
   );
-  box-shadow: inset 0 0 20px
-    color-mix(
-      in srgb,
-      var(--piano-glow-playback-shadow),
-      var(--piano-glow-playback-shadow) calc(var(--is-black) * 100%)
-    );
 }
 
 .key[data-live="true"]::after {
@@ -91,28 +84,11 @@
     var(--piano-glow-live-bg),
     var(--piano-glow-live-bg) calc(var(--is-black) * 100%)
   );
-  box-shadow:
-    inset 0 0 20px
-    color-mix(
-      in srgb,
-      var(--piano-glow-live-shadow),
-      var(--piano-glow-live-shadow) calc(var(--is-black) * 100%)
-    ),
-    0 0 15px
-    color-mix(
-      in srgb,
-      var(--piano-glow-live-bg),
-      var(--piano-glow-live-bg) calc(var(--is-black) * 100%)
-    );
 }
 
 /* "Both" state intensified glow (Indigo) */
 .key[data-live="true"][data-playback="true"]::after {
   background-color: var(--piano-glow-both-bg);
-  box-shadow:
-    inset 0 0 25px var(--piano-glow-both-shadow),
-    0 0 20px var(--piano-glow-both-bg),
-    inset 0 0 10px rgba(255, 255, 255, 0.8);
 }
 
 .label {
