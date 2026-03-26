@@ -40,6 +40,7 @@ describe("LaneStage", () => {
       },
     ],
     totalDurationMs: 3000,
+    thresholdMs: 10000,
   });
 
   it("renders notes", () => {

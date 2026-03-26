@@ -21,7 +21,7 @@ export interface SegmentGroup {
 export interface BuildSegmentGroupsOptions {
   spans: NoteSpan[];
   totalDurationMs: number;
-  thresholdMs?: number;
+  thresholdMs: number;
 }
 
 /**
@@ -36,7 +36,7 @@ export interface BuildSegmentGroupsOptions {
 export function buildSegmentGroups({
   spans,
   totalDurationMs,
-  thresholdMs = 10000,
+  thresholdMs,
 }: BuildSegmentGroupsOptions): SegmentGroup[] {
   if (spans.length === 0) return [];
 

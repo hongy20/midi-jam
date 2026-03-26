@@ -62,8 +62,6 @@
       currentColor calc(var(--note-border-opacity) * 100%),
       transparent
     );
-  box-shadow: var(--note-shadow);
-  transition: opacity 300ms;
   min-width: 0;
 
   background-color: color-mix(
