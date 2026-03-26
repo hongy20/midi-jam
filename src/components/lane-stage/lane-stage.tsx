@@ -19,7 +19,11 @@ export function LaneStage({
   getCurrentTimeMs,
 }: LaneStageProps) {
   const [renderIndexes, setRenderIndexes] = useState<number[]>(() =>
-    getVisibleSegmentIndexes(getCurrentTimeMs(), groups, LANE_SCROLL_DURATION_MS),
+    getVisibleSegmentIndexes(
+      getCurrentTimeMs(),
+      groups,
+      LANE_SCROLL_DURATION_MS,
+    ),
   );
 
   // Poll current time to drive React-level mount/unmount decisions
