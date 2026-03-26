@@ -61,11 +61,26 @@ export function LaneStage({
       const idx1 = el1.dataset.groupIndex;
       const idx2 = el2.dataset.groupIndex;
 
+      const group1 = groups[Number(idx1)];
+      const group2 = groups[Number(idx2)];
+
+      // Log the temporal data for the groups being measured
+      console.log(`[LaneStage] Measuring groups. Group ${idx1}: start=${group1.startMs}, duration=${group1.durationMs}. Group ${idx2}: start=${group2.startMs}, duration=${group2.durationMs}.`);
+      console.log(`[LaneStage] Temporal Adjacency Check: group[${idx1}].endMs (${group1.startMs + group1.durationMs}) vs group[${idx2}].startMs (${group2.startMs})`);
+
+
       const rect1 = el1.getBoundingClientRect();
       const rect2 = el2.getBoundingClientRect();
 
+      // Log with full precision
       console.log(
-        `group ${idx1}, bottom: ${rect1.bottom.toFixed(2)}, top: ${rect1.top.toFixed(2)} && group ${idx2}, bottom: ${rect2.bottom.toFixed(2)}, top: ${rect2.top.toFixed(2)} [${Number(rect1.top.toFixed(2)) - Number(rect2.bottom.toFixed(2))}]`,
+        `[LaneStage] Visuals for group ${idx1}: top=${rect1.top}, bottom=${rect1.bottom}, height=${rect1.height}`
+      );
+      console.log(
+        `[LaneStage] Visuals for group ${idx2}: top=${rect2.top}, bottom=${rect2.bottom}, height=${rect2.height}`
+      );
+      console.log(
+        `[LaneStage] GAP CHECK (rect1.top - rect2.bottom): [${rect1.top - rect2.bottom}]`
       );
     }
   }, [visibleIndexes, scrollRef]);

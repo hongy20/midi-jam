@@ -27,6 +27,8 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
       group.startMs,
     );
 
+    console.log(`[LaneSegment] Mounting group ${group.index}: mountTime=${mountTimeMs}, groupStart=${group.startMs}, calculated anim-delay=${delayMs}ms`);
+
     el.style.setProperty("--anim-delay-raw", `${delayMs}`);
   }, [getCurrentTimeMs, group.startMs]);
 
