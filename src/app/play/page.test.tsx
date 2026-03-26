@@ -230,7 +230,7 @@ describe("Play Page", () => {
       expect.objectContaining({
         score: expect.any(Number),
         combo: expect.any(Number),
-        currentTimeMs: expect.any(Number),
+        currentProgress: expect.any(Number),
       }),
     );
   });
