@@ -43,6 +43,8 @@ export function useMidiAudio(outputDevice: WebMidi.MIDIOutput | null = null) {
         return;
       }
 
+      // Offload to next tick as triggerAttack might be slow and take a few ms to finish,
+      // avoiding blocking the main thread during high-frequency note events.
       setTimeout(() => {
         if (!polySynthRef.current) return;
 
@@ -65,6 +67,7 @@ export function useMidiAudio(outputDevice: WebMidi.MIDIOutput | null = null) {
         outputDevice.send([MIDI_COMMAND_NOTE_OFF, midiNote, 0]);
         return;
       }
+      // Offload to next tick as triggerRelease might be slow and take a few ms to finish
       setTimeout(() => {
         if (!polySynthRef.current) return;
 
