@@ -57,7 +57,7 @@ export function buildSegmentGroups({
 
     if (
       currentGroupSpans.length > 0 &&
-      span.startTimeMs - currentStartMs >= thresholdMs &&
+      span.startTimeMs - currentMaxEndMs >= thresholdMs &&
       span.startTimeMs > lastStartTimeMs
     ) {
       rawClusters.push({
@@ -84,6 +84,22 @@ export function buildSegmentGroups({
       maxEndMs: currentMaxEndMs,
       spans: currentGroupSpans,
     });
+  }
+
+  // Pass 1.5: Tail Merge (merge tiny last segment with previous)
+  if (rawClusters.length >= 2) {
+    const lastCluster = rawClusters[rawClusters.length - 1];
+    const lastClusterDuration = lastCluster.maxEndMs - lastCluster.minStartMs;
+
+    if (lastClusterDuration < thresholdMs) {
+      const secondToLastCluster = rawClusters[rawClusters.length - 2];
+      secondToLastCluster.spans.push(...lastCluster.spans);
+      secondToLastCluster.maxEndMs = Math.max(
+        secondToLastCluster.maxEndMs,
+        lastCluster.maxEndMs,
+      );
+      rawClusters.pop();
+    }
   }
 
   // Pass 2: Boundary Stitching (Midpoint Buffering)
