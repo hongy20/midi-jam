@@ -62,7 +62,7 @@ export function buildSegmentGroups({
     // 3. AND we aren't at the very start (currentGroupSpans.length > 0)
     // OR:
     // 4. There is a huge natural gap (silence-only) >= thresholdMs (already covered by #1 and #2 if notes exist)
-    
+
     const timeInCluster = span.startTimeMs - currentStartMs;
     const isCleanGap = span.startTimeMs >= currentMaxEndMs;
 
