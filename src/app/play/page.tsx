@@ -189,12 +189,14 @@ export default function PlayPage() {
         </header>
       }
       footer={
-        <footer className="h-(--footer-height) w-full bg-background/50 border-t border-foreground/5">
-          <VirtualInstrument
-            inputDevice={selectedMIDIInput}
-            liveNotes={liveActiveNotes}
-            playbackNotes={playbackNotes}
-          />
+        <footer className="h-(--footer-height) w-full bg-background/50 border-t border-foreground/5 overflow-hidden transition-opacity duration-500">
+          {!isLoading && (
+            <VirtualInstrument
+              inputDevice={selectedMIDIInput}
+              liveNotes={liveActiveNotes}
+              playbackNotes={playbackNotes}
+            />
+          )}
         </footer>
       }
     >

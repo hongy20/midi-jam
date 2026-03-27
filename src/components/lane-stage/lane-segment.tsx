@@ -15,19 +15,25 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Phase-lock the CSS animation to the master clock at the exact moment this
-  // element is inserted into the DOM. useLayoutEffect fires synchronously after
-  // browser commit, giving the tightest possible time snapshot.
+  // element is physically painted. useLayoutEffect fires synchronously after
+  // DOM mutation, but requestAnimationFrame ensures we snapshot the time just
+  // as the compositor starts the animation.
   useLayoutEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const mountTimeMs = getCurrentTimeMs();
-    const delayMs = computeLaneSegmentAnimationDelay(
-      mountTimeMs,
-      group.startMs,
-    );
+    const frameId = requestAnimationFrame(() => {
+      const mountTimeMs = getCurrentTimeMs();
+      const delayMs = computeLaneSegmentAnimationDelay(
+        mountTimeMs,
+        group.startMs,
+      );
 
-    el.style.setProperty("--anim-delay-raw", `${delayMs}`);
+      el.style.setProperty("--anim-delay-raw", `${delayMs}`);
+      el.style.setProperty("--play-state", "running");
+    });
+
+    return () => cancelAnimationFrame(frameId);
   }, [getCurrentTimeMs, group.startMs]);
 
   const debugColor = [
