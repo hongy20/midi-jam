@@ -23,6 +23,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 - **Layering**: Separate **Static Layers** (backgrounds, lanes) from **Dynamic Layers** (active notes, feedback) to minimize DOM reconciliation.
 - **Stable DOM Tree**: Never mount/unmount elements for high-frequency (60fps) visual feedback (e.g., piano glows). Use stable elements and toggle attributes or classes via imperative Refs to bypass React reconciliation.
 - **Compositor Animations**: Strictly use `transform` and `opacity`. NEVER animate layout-triggering properties (`width`, `height`, `top`, `bottom`).
+- **CSS Performance Considerations**: Be mindful of CSS properties that are expensive for the GPU or compositor, especially when applied to many elements or during frequent updates. Avoid or minimize the use of properties like `backdrop-filter` (e.g., `backdrop-blur-md`), `box-shadow` (particularly complex ones), and `transition` properties on layout-affecting or frequently animated elements where they can cause significant rendering overhead. Prioritize CSS properties that can be efficiently handled by the browser's compositor, such as `transform` and `opacity`.
 - **Precision Alignment**: Use the **21-Unit Octave Grid** (3 units per white key, 2 per black key) for sub-pixel-perfect piano keyboard alignment.
 
 ## 3. Architecture & Styling Standards
