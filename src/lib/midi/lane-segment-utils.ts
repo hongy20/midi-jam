@@ -91,6 +91,8 @@ export function buildSegmentGroups({
     const lastCluster = rawClusters[rawClusters.length - 1];
     const lastClusterDuration = lastCluster.maxEndMs - lastCluster.minStartMs;
 
+    // Use thresholdMs for tail merge as specified in the plan.
+    // This ensures that very short final segments are merged with the previous one.
     if (lastClusterDuration < thresholdMs) {
       const secondToLastCluster = rawClusters[rawClusters.length - 2];
       secondToLastCluster.spans.push(...lastCluster.spans);

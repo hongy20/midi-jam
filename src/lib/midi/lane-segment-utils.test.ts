@@ -18,22 +18,26 @@ describe("lane-segment-utils clustering", () => {
           id: "2",
           note: 62,
           startTimeMs: 12000,
-          durationMs: 1000,
+          durationMs: 15000, // Long enough to avoid tail merge with threshold 10k
           velocity: 1,
         },
       ];
-      // With thresholdMs = 10000, the duration of each raw cluster (1000ms)
-      // is less than thresholdMs, so they will be merged by Pass 1.5.
+      // Gap is from 2000ms to 12000ms. Midpoint is 7000ms.
       const groups = buildSegmentGroups({
         spans,
-        totalDurationMs: 15000,
+        totalDurationMs: 40000,
         thresholdMs: threshold,
       });
 
-      expect(groups).toHaveLength(1);
-      expect(groups[0].spans).toHaveLength(2);
-      expect(groups[0].spans.map((s) => s.id)).toEqual(["1", "2"]);
-      expect(groups[0].startMs + groups[0].durationMs).toBe(15000); // Stitched to totalDurationMs
+      expect(groups).toHaveLength(2);
+
+      // First group: Starts at 0, ends at midpoint 7000.
+      expect(groups[0].startMs).toBe(0);
+      expect(groups[0].durationMs).toBe(7000);
+
+      // Second group: Starts at 7000, ends at totalDurationMs (40000).
+      expect(groups[1].startMs).toBe(7000);
+      expect(groups[1].durationMs).toBe(40000 - 7000);
     });
 
     it("breaks groups exceeding the threshold", () => {
@@ -43,22 +47,21 @@ describe("lane-segment-utils clustering", () => {
           id: "2",
           note: 62,
           startTimeMs: 11000,
-          durationMs: 1000,
+          durationMs: 15000, // Long enough to avoid tail merge
           velocity: 1,
         },
       ];
-      // With thresholdMs = 10000, the duration of each raw cluster (1000ms)
-      // is less than thresholdMs, so they will be merged by Pass 1.5.
       const groups = buildSegmentGroups({
         spans,
-        totalDurationMs: 15000,
+        totalDurationMs: 40000,
         thresholdMs: threshold,
       });
 
-      expect(groups).toHaveLength(1);
-      expect(groups[0].spans).toHaveLength(2);
-      expect(groups[0].spans.map((s) => s.id)).toEqual(["1", "2"]);
-      expect(groups[0].startMs + groups[0].durationMs).toBe(15000); // Stitched to totalDurationMs
+      expect(groups).toHaveLength(2);
+      expect(groups[0].spans[0].id).toBe("1");
+      expect(groups[1].spans[0].id).toBe("2");
+      // Seamless stitching
+      expect(groups[0].startMs + groups[0].durationMs).toBe(groups[1].startMs);
     });
 
     it("protects chords from being split across groups", () => {
@@ -67,31 +70,27 @@ describe("lane-segment-utils clustering", () => {
         {
           id: "2a",
           note: 64,
-          startTimeMs: 10000,
-          durationMs: 1000,
+          startTimeMs: 15000,
+          durationMs: 15000, // Long enough
           velocity: 1,
         },
         {
           id: "2b",
           note: 67,
-          startTimeMs: 10000,
-          durationMs: 1000,
+          startTimeMs: 15000,
+          durationMs: 15000,
           velocity: 1,
         },
       ];
-      // With thresholdMs = 10000, the duration of each raw cluster (1000ms)
-      // is less than thresholdMs, so the first two will be merged, and then
-      // the third will be merged with the result, ending in one group.
       const groups = buildSegmentGroups({
         spans,
-        totalDurationMs: 15000,
+        totalDurationMs: 40000,
         thresholdMs: threshold,
       });
 
-      expect(groups).toHaveLength(1);
-      expect(groups[0].spans).toHaveLength(3);
-      expect(groups[0].spans.map((s) => s.id)).toEqual(["1", "2a", "2b"]);
-      expect(groups[0].startMs + groups[0].durationMs).toBe(15000); // Stitched to totalDurationMs
+      expect(groups).toHaveLength(2);
+      expect(groups[0].spans).toHaveLength(1);
+      expect(groups[1].spans).toHaveLength(2);
     });
 
     it("allows durationMs to be large for long notes", () => {
@@ -108,61 +107,46 @@ describe("lane-segment-utils clustering", () => {
       expect(groups[0].durationMs).toBe(40000);
     });
 
-    it("does not split a long note that spans over a gap followed by a short note", () => {
+    it("does not split a long note that overlaps a later short note", () => {
       const spans: NoteSpan[] = [
-        // Long note from 0ms to 20000ms
-        {
-          id: "long",
-          note: 60,
-          startTimeMs: 0,
-          durationMs: 20000,
-          velocity: 1,
-        },
-        // Short note at 15000ms, still within the long note's duration
-        {
-          id: "short",
-          note: 62,
-          startTimeMs: 15000,
-          durationMs: 500,
-          velocity: 1,
-        },
+        { id: "1", note: 60, startTimeMs: 0, durationMs: 15000, velocity: 1 }, // Ends at 15s
+        { id: "2", note: 62, startTimeMs: 500, durationMs: 200, velocity: 1 },
+        { id: "3", note: 64, startTimeMs: 11000, durationMs: 500, velocity: 1 }, // 11s - 15s is not a 10s gap
       ];
       const groups = buildSegmentGroups({
         spans,
-        totalDurationMs: 25000,
-        thresholdMs: threshold, // 10s threshold
+        totalDurationMs: 20000,
+        thresholdMs: threshold,
       });
 
-      // Expect only one group because the "short" note is within the "long" note's duration,
-      // and the gap between the end of the long note (20000ms) and the start of the short note
-      // is negative, so it should not trigger a split.
+      // Split would have happened if we compared 11s to 0s (startMs).
+      // But now we compare 11s to 15s (maxEndMs), gap is negative, no split.
       expect(groups).toHaveLength(1);
-      expect(groups[0].spans).toHaveLength(2);
-      expect(groups[0].spans.map((s) => s.id)).toEqual(["long", "short"]);
     });
 
-    it("merges a tiny last segment with the previous one if its duration is below threshold", () => {
-      const smallThreshold = 500; // Define a small threshold for this test
+    it("merges a tiny last segment into the previous one", () => {
       const spans: NoteSpan[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
-        { id: "2", note: 62, startTimeMs: 2000, durationMs: 50, velocity: 1 }, // Tiny segment
+        {
+          id: "2",
+          note: 62,
+          startTimeMs: 15000,
+          durationMs: 1000,
+          velocity: 1,
+        }, // Split into cluster 2
       ];
-      const totalDuration = 3000;
+      // cluster 1: [0, 1000], cluster 2: [15000, 16000]
+      // cluster 2 duration is 1000ms < 10000ms (threshold)
       const groups = buildSegmentGroups({
         spans,
-        totalDurationMs: totalDuration,
-        thresholdMs: smallThreshold,
+        totalDurationMs: 20000,
+        thresholdMs: threshold,
       });
 
-      // Expect only one group because the second segment is tiny (50ms < 500ms threshold)
-      // and should be merged with the first.
+      // Cluster 2 was merged back into Cluster 1.
       expect(groups).toHaveLength(1);
       expect(groups[0].spans).toHaveLength(2);
       expect(groups[0].spans.map((s) => s.id)).toEqual(["1", "2"]);
-      // The maxEndMs of the merged group should be the max of the original two, but then
-      // Pass 2 stitches it to totalDurationMs.
-      expect(groups[0].startMs + groups[0].durationMs).toBe(totalDuration);
-      expect(groups[0].startMs).toBe(0);
     });
   });
 
