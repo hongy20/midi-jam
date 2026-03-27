@@ -126,8 +126,6 @@ describe("Play Page", () => {
     vi.mocked(useMidiAudio).mockReturnValue({
       playNote: vi.fn(),
       stopNote: vi.fn(),
-      stopAllNotes: vi.fn(),
-      playCountdownBeep: vi.fn(),
     });
     vi.mocked(useActiveNotes).mockReturnValue(new Set());
     vi.mocked(useLaneScoreEngine).mockReturnValue({

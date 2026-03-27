@@ -38,7 +38,7 @@ describe("useMidiAudio", () => {
       send: vi.fn(),
     } as unknown as WebMidi.MIDIOutput;
 
-    const { result } = renderHook(() => useMidiAudio(true, mockOutput));
+    const { result } = renderHook(() => useMidiAudio(mockOutput));
 
     result.current.playNote(60, 0.8);
     expect(mockOutput.send).toHaveBeenCalledWith([
@@ -49,29 +49,15 @@ describe("useMidiAudio", () => {
 
     result.current.stopNote(60);
     expect(mockOutput.send).toHaveBeenCalledWith([0x80, 60, 0]);
-
-    result.current.stopAllNotes();
-    expect(mockOutput.send).toHaveBeenCalledWith([0xb0, 123, 0]);
   });
 
-  it("should play audio using Tone.js when demoMode is true and no outputDevice", () => {
-    const { result } = renderHook(() => useMidiAudio(true, null));
+  it("should play audio using Tone.js when no outputDevice is provided", () => {
+    const { result } = renderHook(() => useMidiAudio(null));
 
     result.current.playNote(60, 0.8);
     // Since we can't easily check the internal polySynthRef.current calls in this setup
     // without exposing it, we've at least covered the execution path.
 
     result.current.stopNote(60);
-    result.current.stopAllNotes();
-  });
-
-  it("should not play audio when demoMode is false", () => {
-    const { result } = renderHook(() => useMidiAudio(false, null));
-    result.current.playNote(60, 0.8);
-  });
-
-  it("should play countdown beep", () => {
-    const { result } = renderHook(() => useMidiAudio());
-    result.current.playCountdownBeep(true);
   });
 });

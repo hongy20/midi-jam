@@ -87,9 +87,9 @@ export default function PlayPage() {
     initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
   });
 
-  const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
+  const { playNote, stopNote } = useMidiAudio(selectedMIDIOutput);
 
-  const handleNoteOn = useCallback(
+  const onNoteOn = useCallback(
     (note: number, velocity: number) => {
       setPlaybackNotes((prev) => {
         const next = new Set(prev);
@@ -101,7 +101,7 @@ export default function PlayPage() {
     [playNote],
   );
 
-  const handleNoteOff = useCallback(
+  const onNoteOff = useCallback(
     (note: number) => {
       setPlaybackNotes((prev) => {
         const next = new Set(prev);
@@ -118,8 +118,8 @@ export default function PlayPage() {
     demoMode,
     isLoading,
     groups,
-    onNoteOn: handleNoteOn,
-    onNoteOff: handleNoteOff,
+    onNoteOn,
+    onNoteOff,
   });
 
   // Update finish callback ref in an effect to avoid render-phase side effects
