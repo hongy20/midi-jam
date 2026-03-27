@@ -146,10 +146,14 @@ describe("useDemoPlayback", () => {
         {
           target: note2,
           isIntersecting: true,
+          rootBounds: { bottom: 1000 },
+          boundingClientRect: { top: 500 },
         } as unknown as IntersectionObserverEntry,
         {
           target: note1,
           isIntersecting: false,
+          rootBounds: { bottom: 1000 },
+          boundingClientRect: { top: 1100 },
         } as unknown as IntersectionObserverEntry,
       ],
       {} as IntersectionObserver,
