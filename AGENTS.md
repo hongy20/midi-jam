@@ -86,7 +86,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 **ONE PLAN PER TASK.** This is a non-negotiable hard constraint for technical integrity.
 
 - **Initial Action**: The first command of every task MUST be to create a descriptive feature branch: `git checkout -b feature/[name]` or `git checkout -b fix/[name]`.
-- **Plan Commitment**: Every task MUST have exactly ONE markdown file in `docs/plans/`. **Consolidate Design and Implementation into this single file.** A plan is not valid unless it is tracked in Git. NEVER split design and implementation into separate files. Commit the plan immediately after creation.
+- **Plan Commitment**: Every task MUST have exactly ONE markdown file in `docs/plans/`. **The filename MUST follow the `YYYY-MM-DD-kebab-case-name.md` naming convention.** **Consolidate Design and Implementation into this single file.** A plan is not valid unless it is tracked in Git. NEVER split design and implementation into separate files. Commit the plan immediately after creation.
 - **Merge Strategy**: When finalizing a task, **ALWAYS use Squash and Merge** to maintain a clean project history. **NEVER merge a Pull Request without explicit confirmation from the USER.** Once the task is verified and a PR is created, wait for approval before combining segments.
 
 ## Tooling Authority

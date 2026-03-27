@@ -18,14 +18,14 @@ describe("lane-segment-utils clustering", () => {
           id: "2",
           note: 62,
           startTimeMs: 12000,
-          durationMs: 1000,
+          durationMs: 15000, // Long enough to avoid tail merge with threshold 10k
           velocity: 1,
         },
       ];
       // Gap is from 2000ms to 12000ms. Midpoint is 7000ms.
       const groups = buildSegmentGroups({
         spans,
-        totalDurationMs: 15000,
+        totalDurationMs: 40000,
         thresholdMs: threshold,
       });
 
@@ -35,10 +35,9 @@ describe("lane-segment-utils clustering", () => {
       expect(groups[0].startMs).toBe(0);
       expect(groups[0].durationMs).toBe(7000);
 
-      // Second group: Starts at 7000, ends at totalDurationMs (15000).
-      // (The dummy note cluster would naturally extend this in a real scenario).
+      // Second group: Starts at 7000, ends at totalDurationMs (40000).
       expect(groups[1].startMs).toBe(7000);
-      expect(groups[1].durationMs).toBe(15000 - 7000);
+      expect(groups[1].durationMs).toBe(40000 - 7000);
     });
 
     it("breaks groups exceeding the threshold", () => {
@@ -48,13 +47,13 @@ describe("lane-segment-utils clustering", () => {
           id: "2",
           note: 62,
           startTimeMs: 11000,
-          durationMs: 1000,
+          durationMs: 15000, // Long enough to avoid tail merge
           velocity: 1,
         },
       ];
       const groups = buildSegmentGroups({
         spans,
-        totalDurationMs: 15000,
+        totalDurationMs: 40000,
         thresholdMs: threshold,
       });
 
@@ -71,21 +70,21 @@ describe("lane-segment-utils clustering", () => {
         {
           id: "2a",
           note: 64,
-          startTimeMs: 10000,
-          durationMs: 1000,
+          startTimeMs: 15000,
+          durationMs: 15000, // Long enough
           velocity: 1,
         },
         {
           id: "2b",
           note: 67,
-          startTimeMs: 10000,
-          durationMs: 1000,
+          startTimeMs: 15000,
+          durationMs: 15000,
           velocity: 1,
         },
       ];
       const groups = buildSegmentGroups({
         spans,
-        totalDurationMs: 15000,
+        totalDurationMs: 40000,
         thresholdMs: threshold,
       });
 
@@ -106,6 +105,48 @@ describe("lane-segment-utils clustering", () => {
 
       expect(groups).toHaveLength(1);
       expect(groups[0].durationMs).toBe(40000);
+    });
+
+    it("does not split a long note that overlaps a later short note", () => {
+      const spans: NoteSpan[] = [
+        { id: "1", note: 60, startTimeMs: 0, durationMs: 15000, velocity: 1 }, // Ends at 15s
+        { id: "2", note: 62, startTimeMs: 500, durationMs: 200, velocity: 1 },
+        { id: "3", note: 64, startTimeMs: 11000, durationMs: 500, velocity: 1 }, // 11s - 15s is not a 10s gap
+      ];
+      const groups = buildSegmentGroups({
+        spans,
+        totalDurationMs: 20000,
+        thresholdMs: threshold,
+      });
+
+      // Split would have happened if we compared 11s to 0s (startMs).
+      // But now we compare 11s to 15s (maxEndMs), gap is negative, no split.
+      expect(groups).toHaveLength(1);
+    });
+
+    it("merges a tiny last segment into the previous one", () => {
+      const spans: NoteSpan[] = [
+        { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
+        {
+          id: "2",
+          note: 62,
+          startTimeMs: 15000,
+          durationMs: 100,
+          velocity: 1,
+        }, // Split into cluster 2
+      ];
+      // cluster 1: [0, 1000], cluster 2: [15000, 15100]
+      // cluster 2 duration is 100ms < 500ms (minTailDuration)
+      const groups = buildSegmentGroups({
+        spans,
+        totalDurationMs: 20000,
+        thresholdMs: threshold,
+      });
+
+      // Cluster 2 was merged back into Cluster 1.
+      expect(groups).toHaveLength(1);
+      expect(groups[0].spans).toHaveLength(2);
+      expect(groups[0].spans.map((s) => s.id)).toEqual(["1", "2"]);
     });
   });
 
