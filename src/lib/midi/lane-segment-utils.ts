@@ -55,9 +55,21 @@ export function buildSegmentGroups({
   for (const span of spans) {
     const spanEndMs = span.startTimeMs + span.durationMs;
 
+    // Split logic:
+    // Split if:
+    // 1. Current group has existed for at least thresholdMs
+    // 2. AND we are at a "clean" split point (the new note starts after or at the end of all previous notes in this cluster)
+    // 3. AND we aren't at the very start (currentGroupSpans.length > 0)
+    // OR:
+    // 4. There is a huge natural gap (silence-only) >= thresholdMs (already covered by #1 and #2 if notes exist)
+    
+    const timeInCluster = span.startTimeMs - currentStartMs;
+    const isCleanGap = span.startTimeMs >= currentMaxEndMs;
+
     if (
       currentGroupSpans.length > 0 &&
-      span.startTimeMs - currentMaxEndMs >= thresholdMs &&
+      timeInCluster >= thresholdMs &&
+      isCleanGap &&
       span.startTimeMs > lastStartTimeMs
     ) {
       rawClusters.push({
@@ -91,9 +103,10 @@ export function buildSegmentGroups({
     const lastCluster = rawClusters[rawClusters.length - 1];
     const lastClusterDuration = lastCluster.maxEndMs - lastCluster.minStartMs;
 
-    // Use thresholdMs for tail merge as specified in the plan.
-    // This ensures that very short final segments are merged with the previous one.
-    if (lastClusterDuration < thresholdMs) {
+    // If the last cluster is very tiny (e.g. less than 20% of the threshold or < 500ms),
+    // merge it with the previous one to avoid a flicker or isolated tail.
+    const minTailDuration = Math.min(500, thresholdMs * 0.2);
+    if (lastClusterDuration < minTailDuration) {
       const secondToLastCluster = rawClusters[rawClusters.length - 2];
       secondToLastCluster.spans.push(...lastCluster.spans);
       secondToLastCluster.maxEndMs = Math.max(

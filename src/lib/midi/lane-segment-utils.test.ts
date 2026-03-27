@@ -131,12 +131,12 @@ describe("lane-segment-utils clustering", () => {
           id: "2",
           note: 62,
           startTimeMs: 15000,
-          durationMs: 1000,
+          durationMs: 100,
           velocity: 1,
         }, // Split into cluster 2
       ];
-      // cluster 1: [0, 1000], cluster 2: [15000, 16000]
-      // cluster 2 duration is 1000ms < 10000ms (threshold)
+      // cluster 1: [0, 1000], cluster 2: [15000, 15100]
+      // cluster 2 duration is 100ms < 500ms (minTailDuration)
       const groups = buildSegmentGroups({
         spans,
         totalDurationMs: 20000,
