@@ -28,7 +28,14 @@ export function useDemoPlayback({
     const observer = new IntersectionObserver(
       (entries) => {
         // Partition entries to process exits (Off) before entries (On)
-        const exits = entries.filter((e) => !e.isIntersecting);
+        const exits = entries
+          .filter((e) => !e.isIntersecting)
+          .filter(
+            (e) =>
+              // Only trigger Note Off if the element exits through the bottom
+              // (This prevents premature off events for elements entering from the top)
+              e.rootBounds && e.boundingClientRect.top > e.rootBounds.bottom,
+          );
         const entriesIn = entries.filter((e) => e.isIntersecting);
 
         // Process exits (Off) first
