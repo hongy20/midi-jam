@@ -87,7 +87,7 @@ export default function PlayPage() {
     initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
   });
 
-  const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIOutput);
+  const { playNote, stopNote } = useMidiAudio(selectedMIDIOutput);
 
   const handleNoteOn = useCallback(
     (note: number, velocity: number) => {
@@ -96,7 +96,9 @@ export default function PlayPage() {
         next.add(note);
         return next;
       });
-      playNote(note, velocity);
+      setTimeout(() => {
+        playNote(note, velocity);
+      }, 0);
     },
     [playNote],
   );
@@ -108,7 +110,9 @@ export default function PlayPage() {
         next.delete(note);
         return next;
       });
-      stopNote(note);
+      setTimeout(() => {
+        stopNote(note);
+      }, 0);
     },
     [stopNote],
   );
