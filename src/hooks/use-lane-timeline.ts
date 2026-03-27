@@ -17,6 +17,16 @@ export function useLaneTimeline({
   const syncRealTimeRef = useRef(performance.now());
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
 
+  const wasReadyRef = useRef(false);
+
+  // Initialize sync clock exactly at the frame the track transitions from loading to ready
+  if (totalDurationMs > 0 && !wasReadyRef.current) {
+    syncRealTimeRef.current = performance.now();
+    wasReadyRef.current = true;
+  } else if (totalDurationMs <= 0) {
+    wasReadyRef.current = false;
+  }
+
   const getCurrentTimeMs = useCallback(() => {
     if (totalDurationMs <= 0) return 0;
     const elapsedRealTime = performance.now() - syncRealTimeRef.current;

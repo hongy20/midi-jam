@@ -50,7 +50,6 @@
 
   transform: translateY(var(--translate-y-from));
   animation: fall var(--anim-duration) linear var(--anim-delay) both;
-  animation-play-state: var(--play-state, paused);
 }
 
 .note {
