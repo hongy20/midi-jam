@@ -46,7 +46,7 @@ describe("lane-segment-utils integration with real MIDI", () => {
         const groups = buildSegmentGroups({
             spans: firstSpans,
             totalDurationMs: 25000,
-            thresholdMs: 10000,
+            thresholdMs: 5000,
         });
 
         console.log(`Blue (first 25s): groups=${groups.length}`);

@@ -103,10 +103,10 @@ export function buildSegmentGroups({
     const lastCluster = rawClusters[rawClusters.length - 1];
     const lastClusterDuration = lastCluster.maxEndMs - lastCluster.minStartMs;
 
-    // If the last cluster is very tiny (e.g. less than 20% of the threshold or < 500ms),
-    // merge it with the previous one to avoid a flicker or isolated tail.
-    const minTailDuration = Math.min(500, thresholdMs * 0.2);
-    if (lastClusterDuration < minTailDuration) {
+    // Use a fraction of thresholdMs for the "too tiny" check.
+    // If we merge anything < thresholdMs, we might lose valid segments
+    // at the end of the song (e.g. a 4s segment when the goal is 5s).
+    if (lastClusterDuration < thresholdMs / 2) {
       const secondToLastCluster = rawClusters[rawClusters.length - 2];
       secondToLastCluster.spans.push(...lastCluster.spans);
       secondToLastCluster.maxEndMs = Math.max(
