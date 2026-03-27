@@ -43,15 +43,17 @@ export function useMidiAudio(outputDevice: WebMidi.MIDIOutput | null = null) {
         return;
       }
 
-      if (!polySynthRef.current) return;
+      setTimeout(() => {
+        if (!polySynthRef.current) return;
 
-      // Ensure AudioContext is started
-      if (Tone.getContext().state !== "running") {
-        Tone.start();
-      }
+        // Ensure AudioContext is started
+        if (Tone.getContext().state !== "running") {
+          Tone.start();
+        }
 
-      const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
-      polySynthRef.current.triggerAttack(frequency, Tone.now(), velocity);
+        const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
+        polySynthRef.current.triggerAttack(frequency, Tone.now(), velocity);
+      }, 0);
     },
     [outputDevice],
   );
@@ -63,11 +65,12 @@ export function useMidiAudio(outputDevice: WebMidi.MIDIOutput | null = null) {
         outputDevice.send([MIDI_COMMAND_NOTE_OFF, midiNote, 0]);
         return;
       }
+      setTimeout(() => {
+        if (!polySynthRef.current) return;
 
-      if (!polySynthRef.current) return;
-
-      const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
-      polySynthRef.current.triggerRelease(frequency, Tone.now());
+        const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
+        polySynthRef.current.triggerRelease(frequency, Tone.now());
+      }, 0);
     },
     [outputDevice],
   );

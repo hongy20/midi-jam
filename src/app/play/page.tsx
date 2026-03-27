@@ -89,30 +89,26 @@ export default function PlayPage() {
 
   const { playNote, stopNote } = useMidiAudio(selectedMIDIOutput);
 
-  const handleNoteOn = useCallback(
+  const onNoteOn = useCallback(
     (note: number, velocity: number) => {
       setPlaybackNotes((prev) => {
         const next = new Set(prev);
         next.add(note);
         return next;
       });
-      setTimeout(() => {
-        playNote(note, velocity);
-      }, 0);
+      playNote(note, velocity);
     },
     [playNote],
   );
 
-  const handleNoteOff = useCallback(
+  const onNoteOff = useCallback(
     (note: number) => {
       setPlaybackNotes((prev) => {
         const next = new Set(prev);
         next.delete(note);
         return next;
       });
-      setTimeout(() => {
-        stopNote(note);
-      }, 0);
+      stopNote(note);
     },
     [stopNote],
   );
@@ -122,8 +118,8 @@ export default function PlayPage() {
     demoMode,
     isLoading,
     groups,
-    onNoteOn: handleNoteOn,
-    onNoteOff: handleNoteOff,
+    onNoteOn,
+    onNoteOff,
   });
 
   // Update finish callback ref in an effect to avoid render-phase side effects
