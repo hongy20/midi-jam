@@ -4,29 +4,23 @@ import { ScoreWidget } from "./score-widget";
 
 describe("ScoreWidget", () => {
   const defaultProps = {
-    score: 1250,
-    combo: 15,
-    lastHitQuality: "perfect" as const,
+    getScore: () => 1250,
+    getCombo: () => 15,
+    getLastHitQuality: () => "perfect" as const,
     getProgress: () => 0.45,
   };
 
-  it("renders score, combo and updates progress", async () => {
-    vi.useFakeTimers();
+  it("renders score, combo and updates progress via rAF", async () => {
     render(<ScoreWidget {...defaultProps} />);
 
-    expect(screen.getByText(/1,250/)).toBeInTheDocument();
-    expect(screen.getByText(/x/)).toBeInTheDocument();
-    expect(screen.getByText(/15/)).toBeInTheDocument();
-    expect(screen.getByText(/perfect/)).toBeInTheDocument();
-
-    // Advance time to trigger progress update interval
+    // rAF loop takes a frame to update the DOM
     await act(async () => {
-      vi.advanceTimersByTime(200);
+      await new Promise((resolve) => requestAnimationFrame(resolve));
     });
 
-    expect(screen.getByText(/45/)).toBeInTheDocument();
-    expect(screen.getByText(/%/)).toBeInTheDocument();
-
-    vi.useRealTimers();
+    expect(screen.getByText(/1,250/)).toBeInTheDocument();
+    expect(screen.getByText(/15/)).toBeInTheDocument();
+    expect(screen.getByText(/PERFECT!/)).toBeInTheDocument();
+    expect(screen.getByText(/45%/)).toBeInTheDocument();
   });
 });

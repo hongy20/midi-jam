@@ -78,7 +78,7 @@ export default function PlayPage() {
     onFinish: onFinishProxy,
   });
 
-  const { score, combo, lastHitQuality } = useLaneScoreEngine({
+  const { getScore, getCombo, getLastHitQuality } = useLaneScoreEngine({
     midiInput: selectedMIDIInput,
     modelEvents: events,
     getCurrentTimeMs,
@@ -125,25 +125,34 @@ export default function PlayPage() {
   // Update finish callback ref in an effect to avoid render-phase side effects
   useEffect(() => {
     handleFinishRef.current = () => {
+      const finalScore = getScore();
+      const finalCombo = getCombo();
       setSessionResults({
-        score,
-        accuracy: Math.floor((score / (events.length * 100)) * 100) || 0,
-        combo,
+        score: finalScore,
+        accuracy: Math.floor((finalScore / (events.length * 100)) * 100) || 0,
+        combo: finalCombo,
       });
       setGameSession(null);
       toScore();
     };
-  }, [score, combo, events.length, setGameSession, setSessionResults, toScore]);
+  }, [
+    events.length,
+    setGameSession,
+    setSessionResults,
+    toScore,
+    getScore,
+    getCombo,
+  ]);
 
   // Handle Pause
   const handlePause = useCallback(() => {
     setGameSession({
-      score,
-      combo,
+      score: getScore(),
+      combo: getCombo(),
       currentProgress: getProgress(),
     });
     toPause();
-  }, [score, combo, getProgress, toPause, setGameSession]);
+  }, [getScore, getCombo, getProgress, toPause, setGameSession]);
 
   // Note: Redirects are handled by NavigationGuard
 
@@ -170,9 +179,9 @@ export default function PlayPage() {
                 {selectedMIDIInput.name} • {selectedTrack.name}
               </span>
               <ScoreWidget
-                score={score}
-                combo={combo}
-                lastHitQuality={lastHitQuality}
+                getScore={getScore}
+                getCombo={getCombo}
+                getLastHitQuality={getLastHitQuality}
                 getProgress={getProgress}
               />
             </div>
