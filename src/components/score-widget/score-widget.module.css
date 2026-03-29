@@ -46,6 +46,10 @@
   font-style: italic;
   letter-spacing: -0.05em;
   animation: bounce 0.5s ease infinite alternate;
+  will-change: transform, opacity;
+  transition:
+    opacity 0.2s ease,
+    color 0.1s ease;
 }
 
 .perfect {
@@ -117,4 +121,5 @@
   width: 100%;
   background-color: var(--foreground);
   transform-origin: left;
+  transform: scaleX(0); /* Default state before rAF takes over */
 }

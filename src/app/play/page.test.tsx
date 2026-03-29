@@ -129,9 +129,9 @@ describe("Play Page", () => {
     });
     vi.mocked(useActiveNotes).mockReturnValue(new Set());
     vi.mocked(useLaneScoreEngine).mockReturnValue({
-      score: 0,
-      combo: 0,
-      lastHitQuality: null,
+      getScore: () => 0,
+      getCombo: () => 0,
+      getLastHitQuality: () => null,
       resetScore: vi.fn(),
     });
     vi.mocked(useLaneTimeline).mockReturnValue({
@@ -166,9 +166,9 @@ describe("Play Page", () => {
     });
 
     vi.mocked(useLaneScoreEngine).mockReturnValue({
-      score: 1500,
-      combo: 42,
-      lastHitQuality: "perfect",
+      getScore: () => 1500,
+      getCombo: () => 42,
+      getLastHitQuality: () => "perfect",
       resetScore: vi.fn(),
     });
 

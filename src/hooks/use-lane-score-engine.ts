@@ -24,9 +24,9 @@ export function useLaneScoreEngine({
   initialCombo = 0,
   initialTimeMs = 0,
 }: UseLaneScoreEngineProps) {
-  const [score, setScore] = useState(initialScore);
-  const [combo, setCombo] = useState(initialCombo);
-  const [lastHitQuality, setLastHitQuality] = useState<HitQuality>(null);
+  const scoreRef = useRef(initialScore);
+  const comboRef = useRef(initialCombo);
+  const lastHitQualityRef = useRef<HitQuality>(null);
 
   const processedNotesRef = useRef<Set<number>>(new Set());
   const currentIndexRef = useRef(0);
@@ -51,9 +51,9 @@ export function useLaneScoreEngine({
   }, [initialTimeMs, modelEvents]);
 
   const resetScore = useCallback(() => {
-    setScore(0);
-    setCombo(0);
-    setLastHitQuality(null);
+    scoreRef.current = 0;
+    comboRef.current = 0;
+    lastHitQualityRef.current = null;
     processedNotesRef.current.clear();
     currentIndexRef.current = 0;
   }, []);
@@ -107,15 +107,16 @@ export function useLaneScoreEngine({
           points = 100;
         }
 
-        setLastHitQuality(quality);
-        setScore((s) => s + points * (1 + Math.floor(combo / 10) * 0.1));
-        setCombo((c) => c + 1);
+        lastHitQualityRef.current = quality;
+        scoreRef.current +=
+          points * (1 + Math.floor(comboRef.current / 10) * 0.1);
+        comboRef.current += 1;
       } else {
-        setLastHitQuality("miss");
-        setCombo(0);
+        lastHitQualityRef.current = "miss";
+        comboRef.current = 0;
       }
     },
-    [modelEvents, getCurrentTimeMs, combo],
+    [modelEvents, getCurrentTimeMs],
   );
 
   useMIDINotes(midiInput, handleLiveNote);
@@ -141,8 +142,8 @@ export function useLaneScoreEngine({
         if (currentTimeMs > targetTimeMs + GOOD_THRESHOLD) {
           if (!processedNotesRef.current.has(i)) {
             processedNotesRef.current.add(i);
-            setLastHitQuality("miss");
-            setCombo(0);
+            lastHitQualityRef.current = "miss";
+            comboRef.current = 0;
           }
           // Advance the window past this missed note
           currentIndexRef.current = i + 1;
@@ -157,9 +158,9 @@ export function useLaneScoreEngine({
   }, [modelEvents, getCurrentTimeMs]);
 
   return {
-    score,
-    combo,
-    lastHitQuality,
+    getScore: useCallback(() => scoreRef.current, []),
+    getCombo: useCallback(() => comboRef.current, []),
+    getLastHitQuality: useCallback(() => lastHitQualityRef.current, []),
     resetScore,
   };
 }

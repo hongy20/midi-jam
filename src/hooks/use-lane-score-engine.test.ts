@@ -36,9 +36,9 @@ describe("useLaneScoreEngine hook", () => {
       onNoteCallback({ type: "note-on", note: 60, velocity: 0.7 });
     });
 
-    expect(result.current.score).toBeGreaterThan(0);
-    expect(result.current.combo).toBe(1);
-    expect(result.current.lastHitQuality).toBe("perfect");
+    expect(result.current.getScore()).toBeGreaterThan(0);
+    expect(result.current.getCombo()).toBe(1);
+    expect(result.current.getLastHitQuality()).toBe("perfect");
   });
 
   it("resets combo on miss (wrong note)", () => {
@@ -59,15 +59,15 @@ describe("useLaneScoreEngine hook", () => {
     act(() => {
       onNoteCallback({ type: "note-on", note: 60, velocity: 0.7 });
     });
-    expect(result.current.combo).toBe(1);
+    expect(result.current.getCombo()).toBe(1);
 
     // Then a wrong note
     act(() => {
       onNoteCallback({ type: "note-on", note: 62, velocity: 0.7 });
     });
 
-    expect(result.current.combo).toBe(0);
-    expect(result.current.lastHitQuality).toBe("miss");
+    expect(result.current.getCombo()).toBe(0);
+    expect(result.current.getLastHitQuality()).toBe("miss");
   });
 
   it("processes hits correctly with many model events", () => {
@@ -99,9 +99,9 @@ describe("useLaneScoreEngine hook", () => {
       onNoteCallback({ type: "note-on", note: 60, velocity: 0.7 });
     });
 
-    expect(result.current.score).toBeGreaterThan(0);
-    expect(result.current.combo).toBe(1);
-    expect(result.current.lastHitQuality).toBe("perfect");
+    expect(result.current.getScore()).toBeGreaterThan(0);
+    expect(result.current.getCombo()).toBe(1);
+    expect(result.current.getLastHitQuality()).toBe("perfect");
   });
 
   it("restores state from initial props", () => {
@@ -126,16 +126,16 @@ describe("useLaneScoreEngine hook", () => {
       }),
     );
 
-    expect(result.current.score).toBe(500);
-    expect(result.current.combo).toBe(5);
+    expect(result.current.getScore()).toBe(500);
+    expect(result.current.getCombo()).toBe(5);
 
     // Hit the 7s note
     act(() => {
       onNoteCallback({ type: "note-on", note: 62, velocity: 0.7 });
     });
 
-    expect(result.current.score).toBeGreaterThan(500);
-    expect(result.current.combo).toBe(6);
-    expect(result.current.lastHitQuality).toBe("perfect");
+    expect(result.current.getScore()).toBeGreaterThan(500);
+    expect(result.current.getCombo()).toBe(6);
+    expect(result.current.getLastHitQuality()).toBe("perfect");
   });
 });
