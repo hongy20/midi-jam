@@ -21,13 +21,34 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
     const el = containerRef.current;
     if (!el) return;
 
+    // Capture the exact real-world time this component evaluates its phase lock
+    const mountTimeReal = performance.now();
     const mountTimeMs = getCurrentTimeMs();
+
+    // JS-computed delay calculates the exact master-timeline offset.
+    // e.g., if we are exactly on time for groupStartMs, delayMs = -LANE_SCROLL_DURATION_MS
     const delayMs = computeLaneSegmentAnimationDelay(
       mountTimeMs,
       group.startMs,
     );
 
+    // Apply the delay variable for the CSS engine. The CSS `animation` property maps this
+    // directly to the local timeline `delay`.
     el.style.setProperty("--anim-delay-raw", `${delayMs}`);
+
+    // Use a RAF to synchronize with the exact vsync frame.
+    // By explicitly setting `startTime` to the exact `mountTimeReal` used to compute
+    // the CSS delay, we perfectly cancel out the T_vsync - T_mount error,
+    // eliminating all sub-frame (vsync) polling gaps while maintaining the idle pre-roll time.
+    const rafId = requestAnimationFrame(() => {
+      const anims = el.getAnimations();
+      for (const anim of anims) {
+        // Explicitly anchoring to the performance.now() snapshot.
+        anim.startTime = mountTimeReal;
+      }
+    });
+
+    return () => cancelAnimationFrame(rafId);
   }, [getCurrentTimeMs, group.startMs]);
 
   const debugColor = [

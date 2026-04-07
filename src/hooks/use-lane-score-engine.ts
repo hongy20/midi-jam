@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import type { MidiEvent } from "@/lib/midi/midi-parser";
 import { useMIDINotes } from "./use-midi-notes";
 
