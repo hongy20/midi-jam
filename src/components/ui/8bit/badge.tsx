@@ -1,9 +1,7 @@
+import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { type VariantProps, cva } from "class-variance-authority";
-
-import { cn } from "@/lib/utils";
-
 import { Badge as ShadcnBadge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 export const badgeVariants = cva("", {
   variants: {
@@ -41,7 +39,7 @@ const Badge = React.forwardRef<HTMLDivElement, BitBadgeProps>(
         c.startsWith("bg-") ||
         c.startsWith("border-") ||
         c.startsWith("text-") ||
-        c.startsWith("rounded-")
+        c.startsWith("rounded-"),
     );
 
     // Container should accept all non-visual utility classes (e.g., size, spacing, layout)
@@ -52,7 +50,7 @@ const Badge = React.forwardRef<HTMLDivElement, BitBadgeProps>(
           c.startsWith("border-") ||
           c.startsWith("text-") ||
           c.startsWith("rounded-")
-        )
+        ),
     );
 
     return (
@@ -67,8 +65,9 @@ const Badge = React.forwardRef<HTMLDivElement, BitBadgeProps>(
             "rounded-none",
             "w-full",
             font !== "normal" && "retro",
-            visualClasses
+            visualClasses,
           )}
+          /* biome-ignore lint/suspicious/noExplicitAny: variant alignment between shadcn and 8bitcn */
           variant={variant as any}
         >
           {children}
@@ -79,7 +78,7 @@ const Badge = React.forwardRef<HTMLDivElement, BitBadgeProps>(
           className={cn(
             "-left-1.5 absolute inset-y-[4px] w-1.5",
             color,
-            visualClasses
+            visualClasses,
           )}
         />
         {/* Right pixel bar */}
@@ -87,12 +86,12 @@ const Badge = React.forwardRef<HTMLDivElement, BitBadgeProps>(
           className={cn(
             "-right-1.5 absolute inset-y-[4px] w-1.5",
             color,
-            visualClasses
+            visualClasses,
           )}
         />
       </div>
     );
-  }
+  },
 );
 Badge.displayName = "BitBadge";
 

@@ -1,9 +1,7 @@
+import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { type VariantProps, cva } from "class-variance-authority";
-
-import { cn } from "@/lib/utils";
-
 import { Button as ShadcnButton } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import "@/components/ui/8bit/styles/retro.css";
 
@@ -50,9 +48,11 @@ const Button = React.forwardRef<HTMLButtonElement, BitButtonProps>(
           "rounded-none active:translate-y-1 transition-transform relative inline-flex items-center justify-center gap-1.5 border-none",
           size === "icon" && "mx-1 my-0",
           font !== "normal" && "retro",
-          className
+          className,
         )}
+        /* biome-ignore lint/suspicious/noExplicitAny: size alignment between shadcn and 8bitcn */
         size={size as any}
+        /* biome-ignore lint/suspicious/noExplicitAny: variant alignment between shadcn and 8bitcn */
         variant={variant as any}
         asChild={asChild}
       >
@@ -143,7 +143,7 @@ const Button = React.forwardRef<HTMLButtonElement, BitButtonProps>(
         )}
       </ShadcnButton>
     );
-  }
+  },
 );
 Button.displayName = "BitButton";
 

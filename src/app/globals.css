@@ -2,6 +2,7 @@
 
 /* 1. Global Variables & Constants */
 @import "../styles/variables.css";
+@import "../styles/base.css";
 
 /* 2. Themes (8bitcn) */
 :root {
@@ -45,7 +46,7 @@
   --piano-glow-playback-bg: var(--accent);
   --piano-glow-live-bg: var(--chart-2);
   --piano-glow-both-bg: var(--primary);
-  
+
   --lane-white: color-mix(in srgb, var(--background), transparent 95%);
   --lane-black: color-mix(in srgb, var(--primary), transparent 90%);
 }
@@ -168,6 +169,3 @@
   --piano-key-white: oklch(0.9 0 0);
   --piano-key-black: oklch(0.2 0 0);
 }
-
-/* 3. Base Styles & Utilities */
-@import "../styles/base.css";

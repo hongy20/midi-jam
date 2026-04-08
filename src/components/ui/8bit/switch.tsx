@@ -1,5 +1,5 @@
+import { cva } from "class-variance-authority";
 import React from "react";
-import { type VariantProps, cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 import "@/components/ui/8bit/styles/retro.css";
 
@@ -15,7 +15,7 @@ const switchVariants = cva(
     defaultVariants: {
       checked: false,
     },
-  }
+  },
 );
 
 interface SwitchProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -35,11 +35,11 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
       <span
         className={cn(
           "pointer-events-none block h-4 w-4 border-4 border-foreground dark:border-ring bg-background transition-transform",
-          checked ? "translate-x-10" : "translate-x-0"
+          checked ? "translate-x-10" : "translate-x-0",
         )}
       />
     </button>
-  )
+  ),
 );
 Switch.displayName = "BitSwitch";
 

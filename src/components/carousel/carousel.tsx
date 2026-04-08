@@ -176,8 +176,6 @@ export function Carousel({
         <ChevronLeft className="size-4" />
       </Button>
 
-
-
       {/* biome-ignore lint/a11y/noStaticElementInteractions: This is a scroll container with custom interaction tracking to handle programmatic vs manual scrolling. */}
       <div
         ref={scrollContainerRef}
@@ -222,8 +220,6 @@ export function Carousel({
       >
         <ChevronRight className="size-4" />
       </Button>
-
-
     </div>
   );
 }

@@ -1,8 +1,5 @@
+import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { type VariantProps, cva } from "class-variance-authority";
-
-import { cn } from "@/lib/utils";
-
 import {
   Dialog as ShadcnDialog,
   DialogClose as ShadcnDialogClose,
@@ -13,6 +10,7 @@ import {
   DialogTitle as ShadcnDialogTitle,
   DialogTrigger as ShadcnDialogTrigger,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 
 import "@/components/ui/8bit/styles/retro.css";
 
@@ -42,11 +40,12 @@ export interface BitDialogProps
 const DialogTitle = React.forwardRef<HTMLDivElement, BitDialogProps>(
   ({ className, font, ...props }, ref) => (
     <ShadcnDialogTitle
+      /* biome-ignore lint/suspicious/noExplicitAny: ref alignment with legacy shadcn components */
       ref={ref as any}
       className={cn(font !== "normal" && "retro", className)}
       {...props}
     />
-  )
+  ),
 );
 DialogTitle.displayName = "BitDialogTitle";
 
@@ -54,11 +53,12 @@ const DialogContent = React.forwardRef<HTMLDivElement, BitDialogProps>(
   ({ className, children, font, ...props }, ref) => {
     return (
       <ShadcnDialogContent
+        /* biome-ignore lint/suspicious/noExplicitAny: ref alignment with legacy shadcn components */
         ref={ref as any}
         className={cn(
           "bg-card rounded-none border-none",
           font !== "normal" && "retro",
-          className
+          className,
         )}
         {...props}
       >
@@ -74,7 +74,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, BitDialogProps>(
         />
       </ShadcnDialogContent>
     );
-  }
+  },
 );
 DialogContent.displayName = "BitDialogContent";
 

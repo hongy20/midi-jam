@@ -3,8 +3,9 @@
 import { Pause } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/8bit/button";
-import { Card } from "@/components/ui/8bit/card";
+
 function _dummy() {}
+
 import { LaneStage } from "@/components/lane-stage/lane-stage";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { ScoreWidget } from "@/components/score-widget/score-widget";

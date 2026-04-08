@@ -1,8 +1,5 @@
+import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { type VariantProps, cva } from "class-variance-authority";
-
-import { cn } from "@/lib/utils";
-
 import {
   Card as ShadcnCard,
   CardContent as ShadcnCardContent,
@@ -11,6 +8,7 @@ import {
   CardHeader as ShadcnCardHeader,
   CardTitle as ShadcnCardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 import "@/components/ui/8bit/styles/retro.css";
 
@@ -39,7 +37,7 @@ const Card = React.forwardRef<HTMLDivElement, BitCardProps>(
         ref={ref}
         className={cn(
           "relative bg-card text-card-foreground border-y-6 border-foreground dark:border-ring p-0!",
-          className
+          className,
         )}
       >
         <ShadcnCard
@@ -47,17 +45,19 @@ const Card = React.forwardRef<HTMLDivElement, BitCardProps>(
           className={cn(
             "rounded-none border-0 w-full! h-full flex flex-col bg-card text-card-foreground shadow-none",
             font !== "normal" && "retro",
-            className
+            className,
           )}
         />
 
         <div
-          className={cn("absolute inset-0 border-x-6 -mx-1.5 border-inherit pointer-events-none")}
+          className={cn(
+            "absolute inset-0 border-x-6 -mx-1.5 border-inherit pointer-events-none",
+          )}
           aria-hidden="true"
         />
       </div>
     );
-  }
+  },
 );
 Card.displayName = "BitCard";
 
@@ -68,7 +68,7 @@ const CardHeader = React.forwardRef<HTMLDivElement, BitCardProps>(
       className={cn(font !== "normal" && "retro", className)}
       {...props}
     />
-  )
+  ),
 );
 CardHeader.displayName = "BitCardHeader";
 
@@ -79,7 +79,7 @@ const CardTitle = React.forwardRef<HTMLDivElement, BitCardProps>(
       className={cn(font !== "normal" && "retro", className)}
       {...props}
     />
-  )
+  ),
 );
 CardTitle.displayName = "BitCardTitle";
 
@@ -90,7 +90,7 @@ const CardDescription = React.forwardRef<HTMLDivElement, BitCardProps>(
       className={cn(font !== "normal" && "retro", className)}
       {...props}
     />
-  )
+  ),
 );
 CardDescription.displayName = "BitCardDescription";
 
@@ -101,7 +101,7 @@ const CardContent = React.forwardRef<HTMLDivElement, BitCardProps>(
       className={cn("flex-1", font !== "normal" && "retro", className)}
       {...props}
     />
-  )
+  ),
 );
 CardContent.displayName = "BitCardContent";
 
@@ -113,7 +113,7 @@ const CardFooter = React.forwardRef<HTMLDivElement, BitCardProps>(
       className={cn(font !== "normal" && "retro", className)}
       {...props}
     />
-  )
+  ),
 );
 CardFooter.displayName = "BitCardFooter";
 

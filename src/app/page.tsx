@@ -1,11 +1,17 @@
 "use client";
 
-import { Play, Settings, AlertTriangle } from "lucide-react";
+import { AlertTriangle, Play, Settings } from "lucide-react";
 import { useEffect } from "react";
-import { Button } from "@/components/ui/8bit/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/8bit/card";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageLayout } from "@/components/page-layout/page-layout";
+import { Button } from "@/components/ui/8bit/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/8bit/card";
 import { useHome } from "@/context/home-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useAppReset } from "@/hooks/use-track-sync";
@@ -25,7 +31,9 @@ export default function WelcomePage() {
       className={styles.page}
       footer={
         <PageFooter>
-          <span className="retro text-[10px] opacity-60">The ultimate immersive musical experience</span>
+          <span className="retro text-[10px] opacity-60">
+            The ultimate immersive musical experience
+          </span>
         </PageFooter>
       }
     >
@@ -82,8 +90,9 @@ export default function WelcomePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6!">
-               <p className="retro text-[10px] leading-relaxed text-foreground/70">
-                This frequency requires Web MIDI API. Please deploy a modern Chromium browser or Android device.
+              <p className="retro text-[10px] leading-relaxed text-foreground/70">
+                This frequency requires Web MIDI API. Please deploy a modern
+                Chromium browser or Android device.
               </p>
             </CardContent>
           </Card>

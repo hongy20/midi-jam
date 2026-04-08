@@ -1,8 +1,7 @@
 "use client";
 
-import { ArrowLeft, Dices, Play, Music } from "lucide-react";
+import { ArrowLeft, Dices, Music, Play } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { Button } from "@/components/ui/8bit/button";
 import { Carousel } from "@/components/carousel/carousel";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
@@ -11,6 +10,7 @@ import {
   type CollectionTrack,
   TrackCard,
 } from "@/components/track-card/track-card";
+import { Button } from "@/components/ui/8bit/button";
 import { useCollection } from "@/context/collection-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { getSoundTracks } from "@/lib/action/sound-track";

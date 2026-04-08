@@ -2,12 +2,12 @@
 
 import { ArrowLeft, ChevronRight, Search } from "lucide-react";
 import { useEffect } from "react";
-import { Button } from "@/components/ui/8bit/button";
 import { GearCard } from "@/components/gear-card/gear-card";
-import { Card, CardContent } from "@/components/ui/8bit/card";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
+import { Button } from "@/components/ui/8bit/button";
+import { Card, CardContent } from "@/components/ui/8bit/card";
 import { useGear } from "@/context/gear-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
@@ -43,19 +43,14 @@ export default function GearPage() {
     <PageLayout
       header={
         <PageHeader title="SELECT GEAR">
-           <div className="retro text-[10px] opacity-40 uppercase tracking-widest hidden sm:block">
+          <div className="retro text-[10px] opacity-40 uppercase tracking-widest hidden sm:block">
             Midi Input Configuration
           </div>
         </PageHeader>
       }
       footer={
         <PageFooter>
-          <Button
-            variant="secondary"
-            onClick={toHome}
-            size="sm"
-            font="retro"
-          >
+          <Button variant="secondary" onClick={toHome} size="sm" font="retro">
             <ArrowLeft className="size-4 mr-2" />
             BACK
           </Button>
@@ -82,10 +77,12 @@ export default function GearPage() {
             </div>
           ) : error ? (
             <div className="flex-1 flex items-center justify-center">
-               <Card className="border-8 border-destructive max-w-md w-full">
+              <Card className="border-8 border-destructive max-w-md w-full">
                 <CardContent className="p-8! text-center flex flex-col gap-4 text-destructive">
                   <div className="retro text-lg!">CRITICAL ERROR</div>
-                  <div className="retro text-[10px] leading-relaxed opacity-80">{error}</div>
+                  <div className="retro text-[10px] leading-relaxed opacity-80">
+                    {error}
+                  </div>
                 </CardContent>
               </Card>
             </div>
