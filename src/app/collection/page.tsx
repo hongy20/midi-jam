@@ -98,7 +98,7 @@ export default function CollectionPage() {
         ) : tracks.length === 0 ? (
           <p className="retro text-center text-foreground/20 text-[10px] uppercase tracking-[0.3em] leading-loose flex flex-col items-center gap-6">
             <Music className="size-16 opacity-20" />
-            Archive empty.
+            No songs found. Please refresh or try again later.
           </p>
         ) : (
           <>
@@ -107,7 +107,7 @@ export default function CollectionPage() {
             </div>
 
             <p className="retro text-[8px] opacity-40 uppercase tracking-widest text-center mb-4">
-              Scroll through the collection to select your next challenge
+              Select a song below to continue.
             </p>
 
             <Carousel

@@ -22,24 +22,17 @@ export default function ScorePage() {
   };
 
   const getAccuracyLabel = (accuracy: number) => {
-    if (accuracy >= 98) return "FLAWLESS PERFORMANCE!";
-    if (accuracy >= 91) return "OUTSTANDING!";
-    if (accuracy >= 71) return "GREAT JOB!";
-    if (accuracy >= 41) return "NOT BAD!";
-    return "KEEP PRACTICING!";
+    if (accuracy >= 91) return "Outstanding!";
+    if (accuracy >= 71) return "Great Job!";
+    if (accuracy >= 41) return "Not Bad!";
+    return "Keep Practicing!";
   };
 
   const titleLabel = getAccuracyLabel(stats.accuracy);
 
   return (
     <PageLayout
-      header={
-        <PageHeader title="MISSION COMPLETE">
-          <div className="retro text-[10px] opacity-40 uppercase tracking-widest hidden sm:block">
-            Performance Analysis
-          </div>
-        </PageHeader>
-      }
+      header={<PageHeader title="Final Score" />}
       footer={
         <PageFooter>
           <Button
