@@ -2,13 +2,10 @@
 
 import { Pause } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "@/components/ui/8bit/button";
-
-function _dummy() {}
-
 import { LaneStage } from "@/components/lane-stage/lane-stage";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { ScoreWidget } from "@/components/score-widget/score-widget";
+import { Button } from "@/components/ui/8bit/button";
 import { VirtualInstrument } from "@/components/virtual-instrument/virtual-instrument";
 import { useCollection } from "@/context/collection-context";
 import { useGear } from "@/context/gear-context";
