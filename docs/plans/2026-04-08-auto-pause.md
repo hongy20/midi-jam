@@ -10,7 +10,7 @@ We will abstract the window focus and visibility logic into a dedicated React ho
 
 ### Data Flow
 - `useAutoPause` will accept a single `onPause` callback function.
-- It will bind listeners to `window.addEventListener('blur')` and `document.addEventListener('visibilitychange')`.
+- It will bind listeners to `window.addEventListener('blur', ...)` and `document.addEventListener('visibilitychange', ...)`.
 - To prevent duplicate triggers if a scenario fires both events simultaneously, the hook will use a simple internal ref-based guard and directly call the callback if focus is lost or visibility is hidden.
 - In `src/app/play/page.tsx`, we will pass the existing `handlePause` function to this new hook.
 
@@ -18,3 +18,35 @@ We will abstract the window focus and visibility logic into a dedicated React ho
 - **Simultaneous Events**: Both events might fire practically simultaneously when switching tabs. The hook safely debounces them internally.
 - **Unfocus vs Hidden**: We'll make sure `document.visibilityState === 'hidden'` or `document.hasFocus() === false` is verified.
 - **Demo Mode**: Because `handlePause` is integrated simply into `PlayPage.tsx`, it will seamlessly trigger during Demo Mode the same way it does during manual play.
+
+## 3. Implementation Plan
+
+### Hooks
+#### [NEW] `src/hooks/use-auto-pause.ts`
+- Create a `useAutoPause` hook that accepts an `onPause` callback.
+- Implement `useEffect` to manage `blur` and `visibilitychange` events.
+- Use a `ref` to track "debouncing" of simultaneous events.
+
+### Components
+#### `src/app/play/page.tsx`
+- Import and use `useAutoPause` hook.
+- Pass the existing `handlePause` callback to the hook.
+
+### Testing
+#### [NEW] `src/hooks/use-auto-pause.test.ts`
+- Mock `window.addEventListener` and `document.addEventListener`.
+- Simulate `blur` and `visibilitychange` events.
+- Assert that `onPause` is called correctly and only once for simultaneous triggers.
+
+## 4. Verification Plan
+
+### Automated Tests
+- Run `npm test src/hooks/use-auto-pause.test.ts`.
+- Run `npm run lint`.
+- Run `npm run type-check`.
+
+### Manual Verification
+- Start the game (`npm run dev`).
+- Switch tabs while playing; verify it pauses.
+- Click out of the browser window; verify it pauses.
+- Check Demo Mode; verify it also pauses.
