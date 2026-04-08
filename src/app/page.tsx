@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, Play, Settings } from "lucide-react";
+import { Play, Settings } from "lucide-react";
 import { useEffect } from "react";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageLayout } from "@/components/page-layout/page-layout";
@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/8bit/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/8bit/card";
@@ -75,12 +74,8 @@ export default function WelcomePage() {
           <Card className="max-w-md border-8 border-destructive shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)]">
             <CardHeader>
               <CardTitle className="retro text-destructive flex items-center justify-center gap-2">
-                <AlertTriangle className="size-6" />
-                SYSTEM ERROR
+                UNSUPPORTED BROWSER
               </CardTitle>
-              <CardDescription className="retro text-[10px] uppercase opacity-80 mt-2">
-                Unsupported Environment Detected
-              </CardDescription>
             </CardHeader>
             <CardContent className="p-6!">
               <p className="retro text-[10px] leading-relaxed text-foreground/70">
