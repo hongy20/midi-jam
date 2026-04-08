@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, LogOut, Settings } from "lucide-react";
+import { ArrowLeft, LogOut } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import {
