@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, Home, RotateCcw, Trophy } from "lucide-react";
+import { ChevronRight, RotateCcw } from "lucide-react";
 import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
@@ -41,8 +41,7 @@ export default function ScorePage() {
             size="sm"
             font="retro"
           >
-            <Home className="size-4 mr-2" />
-            MENU
+            Main Menu
           </Button>
           <Button
             variant="secondary"
@@ -53,7 +52,7 @@ export default function ScorePage() {
             size="sm"
             font="retro"
           >
-            SONGS
+            Songs
             <ChevronRight className="size-4 ml-2" />
           </Button>
           <Button
@@ -71,31 +70,27 @@ export default function ScorePage() {
       }
     >
       <main className="w-full h-full overflow-hidden py-12 px-4 sm:px-8 max-w-4xl mx-auto flex flex-col items-center justify-center gap-12 sm:gap-16">
-        <header className="flex flex-col items-center gap-6 text-center">
-          <Trophy className="size-24 text-primary bg-primary/10 p-6 border-8 border-foreground dark:border-ring shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)] mb-4 animate-bounce shrink-0" />
-
-          <h1 className="retro text-3xl sm:text-4xl md:text-5xl font-black bg-foreground text-background px-6 py-4 border-8 border-foreground dark:border-ring uppercase leading-tight select-none">
-            {titleLabel}
-          </h1>
-        </header>
+        <h1 className="retro text-3xl sm:text-4xl md:text-5xl font-black bg-foreground text-background px-6 py-4 border-8 border-foreground dark:border-ring uppercase leading-tight select-none text-center">
+          {titleLabel}
+        </h1>
 
         <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           <StatCard
-            label="TOTAL SCORE"
+            label="Total Score"
             value={stats.score.toLocaleString()}
             variant="large"
             className="col-span-2 shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)]"
           />
 
           <StatCard
-            label="ACCURACY"
+            label="Accuracy"
             value={`${stats.accuracy}%`}
             variant="small"
             className="col-span-1 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]"
           />
 
           <StatCard
-            label="MAX COMBO"
+            label="Max Combo"
             value={stats.combo}
             variant="small"
             className="col-span-1 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]"

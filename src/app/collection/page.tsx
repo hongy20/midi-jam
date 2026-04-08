@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Dices, Music, Play } from "lucide-react";
+import { ArrowLeft, Dices, Play } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Carousel } from "@/components/carousel/carousel";
 import { PageFooter } from "@/components/page-footer/page-footer";
@@ -96,8 +96,7 @@ export default function CollectionPage() {
             Searching for tracks...
           </p>
         ) : tracks.length === 0 ? (
-          <p className="retro text-center text-foreground/20 text-[10px] uppercase tracking-[0.3em] leading-loose flex flex-col items-center gap-6">
-            <Music className="size-16 opacity-20" />
+          <p className="retro text-center text-foreground/20 text-[10px] uppercase tracking-[0.3em] leading-loose">
             No songs found. Please refresh or try again later.
           </p>
         ) : (

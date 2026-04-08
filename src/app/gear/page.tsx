@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ChevronRight, Search } from "lucide-react";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 import { useEffect } from "react";
 import { GearCard } from "@/components/gear-card/gear-card";
 import { PageFooter } from "@/components/page-footer/page-footer";
