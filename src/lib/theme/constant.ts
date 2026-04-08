@@ -1,7 +1,6 @@
-export const THEME_NEON = "neon";
-export const THEME_DARK = "dark";
-export const THEME_LIGHT = "light";
+export const THEME_DEFAULT = "default";
+export const THEME_NINTENDO = "nintendo";
 
-export const THEMES = [THEME_NEON, THEME_DARK, THEME_LIGHT] as const;
+export const THEMES = [THEME_DEFAULT, THEME_NINTENDO] as const;
 
 export type Theme = (typeof THEMES)[number];

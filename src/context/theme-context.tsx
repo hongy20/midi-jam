@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { THEME_NEON, type Theme } from "@/lib/theme/constant";
+import { THEME_DEFAULT, type Theme } from "@/lib/theme/constant";
 
 interface ThemeContextType {
   theme: Theme;
@@ -17,7 +17,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(THEME_NEON);
+  const [theme, setThemeState] = useState<Theme>(THEME_DEFAULT);
 
   useEffect(() => {
     // Load theme from localStorage on mount
