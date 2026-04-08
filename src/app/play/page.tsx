@@ -145,11 +145,8 @@ export default function PlayPage() {
     getCombo,
   ]);
 
-
-
   // Handle Pause
   const handlePause = useCallback(() => {
-    console.log("[PlayPage] handlePause executing! Calling toPause()");
     setGameSession({
       score: getScore(),
       combo: getCombo(),

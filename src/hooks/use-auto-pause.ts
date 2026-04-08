@@ -5,17 +5,13 @@ import { useEffect } from "react";
  */
 export function useAutoPause(onPause: () => void) {
   useEffect(() => {
-    console.log("[AutoPause] Hook initialized!");
-
     const handleFocusLoss = () => {
-      console.log("[AutoPause] FOCUS LOSS TRIGGER!!");
       onPause();
     };
 
     const handleVisibility = () => {
-      console.log("[AutoPause] VISIBILITY TRIGGER!! state:", document.visibilityState);
       if (document.visibilityState === "hidden") {
-         onPause();
+        onPause();
       }
     };
 

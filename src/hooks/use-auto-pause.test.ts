@@ -53,5 +53,4 @@ describe("useAutoPause", () => {
 
     expect(onPause).not.toHaveBeenCalled();
   });
-
 });
