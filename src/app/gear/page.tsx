@@ -69,12 +69,9 @@ export default function GearPage() {
       <main className="w-full h-full max-h-full max-w-full overflow-hidden flex flex-col gap-8 py-8 px-4 sm:px-8">
         <div className="max-w-4xl mx-auto w-full flex flex-col gap-8 h-full">
           {isLoading ? (
-            <div className="flex-1 flex flex-col items-center justify-center gap-6">
-              <div className="w-16 h-16 border-8 border-foreground/10 border-t-primary animate-spin" />
-              <p className="retro text-center text-foreground/60 text-[10px] uppercase tracking-widest">
-                Scanning MIDI Ports...
-              </p>
-            </div>
+            <p className="flex-1 retro text-center text-foreground/60 text-[10px] uppercase tracking-[0.5em] flex flex-col items-center justify-center gap-6 before:content-[''] before:block before:size-16 before:border-8 before:border-foreground/10 before:border-t-primary before:animate-spin">
+              Scanning MIDI Ports...
+            </p>
           ) : error ? (
             <div className="flex-1 flex items-center justify-center">
               <Card className="border-8 border-destructive max-w-md w-full">

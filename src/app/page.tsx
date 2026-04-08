@@ -38,22 +38,19 @@ export default function WelcomePage() {
       }
     >
       <main className="w-full h-full flex flex-col gap-12 items-center justify-center text-center p-4">
-        <div className="flex flex-col gap-2">
+        <header className="flex flex-col gap-2">
           <h1 className="text-5xl md:text-7xl font-black retro tracking-tight bg-foreground text-background px-6 py-4 border-8 border-foreground dark:border-ring shadow-[12px_12px_0px_0px_rgba(0,0,0,0.2)]">
             MIDI JAM
           </h1>
-          <span className="retro text-xs opacity-60 uppercase tracking-widest mt-4">
+          <p className="retro text-xs opacity-60 uppercase tracking-widest mt-4">
             Press Start to Play
-          </span>
-        </div>
+          </p>
+        </header>
 
         {isLoading ? (
-          <div className="flex flex-col items-center gap-6 mt-8">
-            <div className="w-16 h-16 border-8 border-foreground/20 border-t-foreground animate-spin" />
-            <span className="retro font-bold uppercase tracking-widest text-[10px] opacity-60">
-              Initializing Engine...
-            </span>
-          </div>
+          <p className="mt-8 retro font-bold uppercase tracking-[0.5em] text-[10px] opacity-60 flex flex-col items-center gap-6 before:content-[''] before:block before:size-16 before:border-8 before:border-foreground/20 before:border-t-foreground before:animate-spin">
+            Initializing Engine...
+          </p>
         ) : isSupported ? (
           <Card className="w-full max-w-sm border-8 border-foreground dark:border-ring shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)]">
             <CardContent className="flex flex-col gap-6 p-8!">

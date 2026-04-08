@@ -57,22 +57,20 @@ export default function OptionsPage() {
       }
     >
       <main className="flex flex-col gap-6 py-8 px-4 sm:px-8 max-w-4xl mx-auto w-full overflow-y-auto no-scrollbar">
-        <div className="text-center mb-4">
-          <div className="inline-block bg-accent px-4 py-2 border-4 border-foreground dark:border-ring retro text-[10px] uppercase tracking-widest mb-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
-            ENVIRONMENT PARAMETERS
-          </div>
+        <div className="bg-accent px-4 py-2 border-4 border-foreground dark:border-ring retro text-[10px] uppercase tracking-widest mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] self-center">
+          ENVIRONMENT PARAMETERS
         </div>
 
         {optionTypes.map((type) => (
           <OptionItem key={type} type={type} className="w-full" />
         ))}
 
-        <div className="mt-8 p-6 border-8 border-foreground/10 flex flex-col items-center gap-4 opacity-40">
+        <footer className="mt-8 p-6 border-8 border-foreground/10 flex flex-col items-center gap-4 opacity-40">
           <Settings className="size-12 animate-spin-slow" />
           <p className="retro text-[8px] uppercase tracking-[0.2em]">
             Engine Version 1.0.4-Retro
           </p>
-        </div>
+        </footer>
       </main>
     </PageLayout>
   );

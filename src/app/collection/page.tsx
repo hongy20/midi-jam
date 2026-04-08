@@ -92,29 +92,23 @@ export default function CollectionPage() {
     >
       <main className="w-full h-full py-8 px-4 sm:px-8 min-h-0 flex flex-col justify-center gap-8 overflow-hidden">
         {isLoading ? (
-          <div className="flex flex-col items-center gap-6">
-            <div className="w-16 h-16 border-8 border-foreground/10 border-t-primary animate-spin" />
-            <p className="retro text-center text-foreground/60 text-[10px] uppercase tracking-widest animate-pulse">
-              Retrieving Track List...
-            </p>
-          </div>
+          <p className="retro text-center text-foreground/60 text-[10px] uppercase tracking-[0.5em] animate-pulse flex flex-col items-center gap-6 before:content-[''] before:block before:size-16 before:border-8 before:border-foreground/10 before:border-t-primary before:animate-spin">
+            Retrieving Track List...
+          </p>
         ) : tracks.length === 0 ? (
-          <div className="flex flex-col items-center gap-6 opacity-40 text-center">
-            <Music className="size-16" />
-            <p className="retro text-[10px] uppercase tracking-widest leading-loose">
-              Archive empty. Connect to network to download tracks.
-            </p>
-          </div>
+          <p className="retro text-center text-foreground/20 text-[10px] uppercase tracking-[0.3em] leading-loose flex flex-col items-center gap-6">
+            <Music className="size-16 opacity-20" />
+            Archive empty.
+          </p>
         ) : (
           <>
-            <div className="text-center">
-              <div className="inline-block bg-accent px-4 py-2 border-4 border-foreground dark:border-ring retro text-[10px] uppercase tracking-widest mb-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
-                {tracks.length} TRACKS FOUND
-              </div>
-              <p className="retro text-[8px] opacity-40 uppercase mt-4">
-                Scroll through the collection to select your next challenge
-              </p>
+            <div className="bg-accent px-4 py-2 border-4 border-foreground dark:border-ring retro text-[10px] uppercase tracking-widest mb-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] self-center">
+              {tracks.length} TRACKS FOUND
             </div>
+
+            <p className="retro text-[8px] opacity-40 uppercase tracking-widest text-center mb-4">
+              Scroll through the collection to select your next challenge
+            </p>
 
             <Carousel
               selectedIndex={tracks.findIndex(

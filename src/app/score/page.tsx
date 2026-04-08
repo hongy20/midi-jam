@@ -78,15 +78,13 @@ export default function ScorePage() {
       }
     >
       <main className="w-full h-full overflow-hidden py-12 px-4 sm:px-8 max-w-4xl mx-auto flex flex-col items-center justify-center gap-12 sm:gap-16">
-        <div className="flex flex-col items-center gap-6 text-center">
-          <div className="inline-block bg-primary px-6 py-3 border-8 border-foreground dark:border-ring shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)] mb-4">
-            <Trophy className="size-12 text-primary-foreground animate-bounce" />
-          </div>
+        <header className="flex flex-col items-center gap-6 text-center">
+          <Trophy className="size-24 text-primary bg-primary/10 p-6 border-8 border-foreground dark:border-ring shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)] mb-4 animate-bounce shrink-0" />
 
           <h1 className="retro text-3xl sm:text-4xl md:text-5xl font-black bg-foreground text-background px-6 py-4 border-8 border-foreground dark:border-ring uppercase leading-tight select-none">
             {titleLabel}
           </h1>
-        </div>
+        </header>
 
         <div className="w-full grid grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           <StatCard

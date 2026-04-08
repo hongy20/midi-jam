@@ -53,17 +53,15 @@ export default function PausePage() {
         {/* Info Card */}
         <Card className="w-full border-8 border-primary/20 bg-background shadow-[12px_12px_0px_0px_rgba(0,0,0,0.05)]">
           <CardContent className="p-8 flex flex-col items-center text-center gap-4">
-            <div className="bg-primary/10 p-4 border-4 border-primary/20">
-              <Music className="size-8 text-primary" />
-            </div>
-            <div>
-              <span className="retro text-[8px] opacity-40 uppercase tracking-[0.3em] mb-2 block">
+            <Music className="size-16 text-primary bg-primary/10 p-4 border-4 border-primary/20 shrink-0" />
+            <div className="flex flex-col gap-2 shrink-0">
+              <span className="retro text-[8px] opacity-40 uppercase tracking-[0.3em] mb-1">
                 SOURCE CHANNEL
               </span>
-              <h2 className="retro text-xl sm:text-2xl md:text-3xl uppercase tracking-tighter leading-tight mb-1">
+              <h2 className="retro text-xl sm:text-2xl md:text-3xl uppercase tracking-tighter leading-tight">
                 {selectedTrack.name}
               </h2>
-              <span className="retro text-[10px] text-primary uppercase tracking-widest block mt-3 px-3 py-1 bg-primary/5 border border-primary/10">
+              <span className="retro text-[10px] text-primary uppercase tracking-widest mt-2 px-3 py-1 bg-primary/5 border border-primary/10 self-center">
                 {selectedMIDIInput.name}
               </span>
             </div>
