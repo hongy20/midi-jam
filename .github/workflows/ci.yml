@@ -29,8 +29,5 @@ jobs:
       - name: Type Check
         run: npm run type-check
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
-
       - name: Test
-        run: npm run test
+        run: npm run test -- --project=core

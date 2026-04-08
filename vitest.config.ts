@@ -23,6 +23,7 @@ export default defineConfig({
       {
         extends: true,
         test: {
+          name: "core",
           environment: "jsdom",
           globals: true,
           setupFiles: "./src/test/setup.ts",
