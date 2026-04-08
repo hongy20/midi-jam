@@ -51,4 +51,3 @@ export const LANE_SCROLL_DURATION_MS = 3000;
  * Must exceed the LaneStage setInterval period (250ms) so that the segment is
  * always present before its background becomes visible, preventing a polling gap.
  */
-export const LANE_SEGMENT_PREMOUNT_BUFFER_MS = 500;

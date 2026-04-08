@@ -1,7 +1,4 @@
-import {
-  LANE_SCROLL_DURATION_MS,
-  LANE_SEGMENT_PREMOUNT_BUFFER_MS,
-} from "./constant";
+import { LANE_SCROLL_DURATION_MS } from "./constant";
 
 import type { NoteSpan } from "./midi-parser";
 
@@ -182,12 +179,9 @@ export function getVisibleSegmentIndexes(
 
       // A segment is visible if it hasn't completely scrolled past the bottom
       // AND it is within the pre-mount window above the viewport.
-      // The lower bound is expanded by LANE_SEGMENT_PREMOUNT_BUFFER_MS so the
-      // segment is always in the DOM before its background becomes visible,
-      // eliminating the polling-latency gap at group boundaries.
+      // The lower bound is exactly on visual entry.
       const isVisible =
-        currentTimeMs >=
-          group.startMs - scrollDurationMs - LANE_SEGMENT_PREMOUNT_BUFFER_MS &&
+        currentTimeMs >= group.startMs - scrollDurationMs &&
         currentTimeMs <= groupEndMs + scrollDurationMs;
 
       if (isVisible) {

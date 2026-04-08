@@ -163,7 +163,7 @@ describe("lane-segment-utils clustering", () => {
       const visibleStart = getVisibleSegmentIndexes(0, groups, sd);
       expect(visibleStart).toEqual([0]);
 
-      // T=7000: Group 1 should now be mounting as it's within early-scroll buffer.
+      // T=7000: Group 1 should now be mounting as it's exactly at the entry boundary.
       const visibleMount = getVisibleSegmentIndexes(7000, groups, sd);
       expect(visibleMount).toEqual([0, 1]);
 
