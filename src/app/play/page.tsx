@@ -14,6 +14,7 @@ import { useScore } from "@/context/score-context";
 import { useStage } from "@/context/stage-context";
 import { useTrack } from "@/context/track-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
+import { useAutoPause } from "@/hooks/use-auto-pause";
 import { useDemoPlayback } from "@/hooks/use-demo-playback";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
@@ -153,6 +154,9 @@ export default function PlayPage() {
     });
     toPause();
   }, [getScore, getCombo, getProgress, toPause, setGameSession]);
+
+  // Auto-pause when losing focus or switching tabs
+  useAutoPause(handlePause);
 
   // Note: Redirects are handled by NavigationGuard
 
