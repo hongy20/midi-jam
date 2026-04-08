@@ -37,13 +37,7 @@ export default function OptionsPage() {
 
   return (
     <PageLayout
-      header={
-        <PageHeader title="SYSTEM SETTINGS">
-          <div className="retro text-[10px] opacity-40 uppercase tracking-widest hidden sm:block">
-            Configuration Panel
-          </div>
-        </PageHeader>
-      }
+      header={<PageHeader title="Options" />}
       footer={
         <PageFooter>
           <Suspense fallback={<div className="w-20" />}>

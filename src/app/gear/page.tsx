@@ -41,13 +41,7 @@ export default function GearPage() {
 
   return (
     <PageLayout
-      header={
-        <PageHeader title="SELECT GEAR">
-          <div className="retro text-[10px] opacity-40 uppercase tracking-widest hidden sm:block">
-            Midi Input Configuration
-          </div>
-        </PageHeader>
-      }
+      header={<PageHeader title="Gear" />}
       footer={
         <PageFooter>
           <Button variant="secondary" onClick={toHome} size="sm" font="retro">

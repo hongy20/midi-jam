@@ -27,13 +27,7 @@ export default function PausePage() {
 
   return (
     <PageLayout
-      header={
-        <PageHeader title="GAME SUSPENDED">
-          <div className="retro text-[10px] opacity-40 uppercase tracking-widest hidden sm:block text-primary animate-pulse">
-            System Standby
-          </div>
-        </PageHeader>
-      }
+      header={<PageHeader title="Game Paused" />}
       footer={
         <PageFooter>
           <Button
