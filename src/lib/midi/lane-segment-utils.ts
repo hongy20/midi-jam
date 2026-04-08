@@ -1,4 +1,5 @@
 import { LANE_SCROLL_DURATION_MS } from "./constant";
+
 import type { NoteSpan } from "./midi-parser";
 
 /**
@@ -177,7 +178,8 @@ export function getVisibleSegmentIndexes(
       const groupEndMs = group.startMs + group.durationMs;
 
       // A segment is visible if it hasn't completely scrolled past the bottom
-      // AND its first note could have started appearing at the top.
+      // AND it is within the pre-mount window above the viewport.
+      // The lower bound is exactly on visual entry.
       const isVisible =
         currentTimeMs >= group.startMs - scrollDurationMs &&
         currentTimeMs <= groupEndMs + scrollDurationMs;
