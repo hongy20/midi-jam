@@ -54,13 +54,6 @@ export default function OptionsPage() {
         {optionTypes.map((type) => (
           <OptionItem key={type} type={type} className="w-full" />
         ))}
-
-        <footer className="mt-8 p-6 border-8 border-foreground/10 flex flex-col items-center gap-4 opacity-40">
-          <Settings className="size-12 animate-spin-slow" />
-          <p className="retro text-[8px] uppercase tracking-[0.2em]">
-            Engine Version 1.0.4-Retro
-          </p>
-        </footer>
       </main>
     </PageLayout>
   );
