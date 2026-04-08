@@ -7,7 +7,6 @@ import { PageFooter } from "@/components/page-footer/page-footer";
 import { PageHeader } from "@/components/page-header/page-header";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { Button } from "@/components/ui/8bit/button";
-import { Card, CardContent } from "@/components/ui/8bit/card";
 import { useGear } from "@/context/gear-context";
 import { useNavigation } from "@/hooks/use-navigation";
 
@@ -66,16 +65,9 @@ export default function GearPage() {
             Searching for gear...
           </p>
         ) : error ? (
-          <div className="flex-1 flex items-center justify-center">
-            <Card className="border-8 border-destructive max-w-md w-full">
-              <CardContent className="p-8! text-center flex flex-col gap-4 text-destructive">
-                <div className="retro text-lg!">CRITICAL ERROR</div>
-                <div className="retro text-[10px] leading-relaxed opacity-80">
-                  {error}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <p className="flex-1 retro text-center text-destructive text-[10px] uppercase tracking-widest leading-relaxed flex items-center justify-center px-8">
+            {error}
+          </p>
         ) : inputs.length === 0 ? (
           <p className="flex-1 retro text-center text-foreground/60 text-[10px] uppercase tracking-[0.3em] flex flex-col items-center justify-center gap-6">
             No gear found. Please connect a keyboard and refresh.
