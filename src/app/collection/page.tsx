@@ -101,10 +101,6 @@ export default function CollectionPage() {
           </p>
         ) : (
           <>
-            <div className="bg-accent px-4 py-2 border-4 border-foreground dark:border-ring retro text-[10px] uppercase tracking-widest mb-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] self-center">
-              {tracks.length} TRACKS FOUND
-            </div>
-
             <p className="retro text-[8px] opacity-40 uppercase tracking-widest text-center mb-4">
               Select a song below to continue.
             </p>
