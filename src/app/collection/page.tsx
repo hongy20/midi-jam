@@ -93,7 +93,7 @@ export default function CollectionPage() {
       <main className="w-full h-full py-8 px-4 sm:px-8 min-h-0 flex flex-col justify-center gap-8 overflow-hidden">
         {isLoading ? (
           <p className="retro text-center text-foreground/60 text-[10px] uppercase tracking-[0.5em] animate-pulse flex flex-col items-center gap-6 before:content-[''] before:block before:size-16 before:border-8 before:border-foreground/10 before:border-t-primary before:animate-spin">
-            Retrieving Track List...
+            Searching for tracks...
           </p>
         ) : tracks.length === 0 ? (
           <p className="retro text-center text-foreground/20 text-[10px] uppercase tracking-[0.3em] leading-loose flex flex-col items-center gap-6">
