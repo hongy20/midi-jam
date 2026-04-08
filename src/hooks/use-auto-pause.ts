@@ -1,39 +1,30 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 /**
- * Hook to automatically trigger a pause callback when the window loses focus
- * or the document becomes hidden (e.g., tab switch).
- *
- * It includes a small debounce/guard to prevent double-firing when both
- * 'blur' and 'visibilitychange' trigger at the same time.
+ * Simplified useAutoPause hook: triggers immediately on focus loss or visibility change.
  */
 export function useAutoPause(onPause: () => void) {
-  const lastTriggeredRef = useRef<number>(0);
-  const DEBOUNCE_MS = 100;
-
   useEffect(() => {
-    const handlePauseTrigger = () => {
-      const now = Date.now();
-      if (now - lastTriggeredRef.current < DEBOUNCE_MS) {
-        return;
-      }
+    console.log("[AutoPause] Hook initialized!");
 
-      // Check if we should actually pause
-      const isHidden = document.visibilityState === "hidden";
-      const isUnfocused = !document.hasFocus();
+    const handleFocusLoss = () => {
+      console.log("[AutoPause] FOCUS LOSS TRIGGER!!");
+      onPause();
+    };
 
-      if (isHidden || isUnfocused) {
-        lastTriggeredRef.current = now;
-        onPause();
+    const handleVisibility = () => {
+      console.log("[AutoPause] VISIBILITY TRIGGER!! state:", document.visibilityState);
+      if (document.visibilityState === "hidden") {
+         onPause();
       }
     };
 
-    window.addEventListener("blur", handlePauseTrigger);
-    document.addEventListener("visibilitychange", handlePauseTrigger);
+    window.addEventListener("blur", handleFocusLoss);
+    document.addEventListener("visibilitychange", handleVisibility);
 
     return () => {
-      window.removeEventListener("blur", handlePauseTrigger);
-      document.removeEventListener("visibilitychange", handlePauseTrigger);
+      window.removeEventListener("blur", handleFocusLoss);
+      document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [onPause]);
 }

@@ -145,8 +145,12 @@ export default function PlayPage() {
     getCombo,
   ]);
 
+  const [isNavigatingToPause, setIsNavigatingToPause] = useState(false);
+
   // Handle Pause
   const handlePause = useCallback(() => {
+    console.log("[PlayPage] handlePause executing! Calling toPause()");
+    setIsNavigatingToPause(true); // Synchronously trigger unmounts
     setGameSession({
       score: getScore(),
       combo: getCombo(),
@@ -160,7 +164,7 @@ export default function PlayPage() {
 
   // Note: Redirects are handled by NavigationGuard
 
-  if (!selectedTrack || !selectedMIDIInput) {
+  if (!selectedTrack || !selectedMIDIInput || isNavigatingToPause) {
     return null;
   }
 

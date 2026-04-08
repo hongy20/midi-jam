@@ -54,34 +54,4 @@ describe("useAutoPause", () => {
     expect(onPause).not.toHaveBeenCalled();
   });
 
-  it("debounces simultaneous events and calls onPause only once", () => {
-    renderHook(() => useAutoPause(onPause));
-
-    vi.spyOn(document, "hasFocus").mockReturnValue(false);
-    Object.defineProperty(document, "visibilityState", {
-      configurable: true,
-      get: () => "hidden",
-    });
-
-    // Dispatch both events at the same time
-    window.dispatchEvent(new Event("blur"));
-    document.dispatchEvent(new Event("visibilitychange"));
-
-    expect(onPause).toHaveBeenCalledTimes(1);
-  });
-
-  it("allows subsequent triggers after the debounce period", () => {
-    renderHook(() => useAutoPause(onPause));
-
-    vi.spyOn(document, "hasFocus").mockReturnValue(false);
-
-    window.dispatchEvent(new Event("blur"));
-    expect(onPause).toHaveBeenCalledTimes(1);
-
-    // Fast forward past DEBOUNCE_MS (100ms)
-    vi.advanceTimersByTime(200);
-
-    window.dispatchEvent(new Event("blur"));
-    expect(onPause).toHaveBeenCalledTimes(2);
-  });
 });
