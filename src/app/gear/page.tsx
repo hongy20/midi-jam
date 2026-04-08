@@ -60,47 +60,45 @@ export default function GearPage() {
         </PageFooter>
       }
     >
-      <main className="w-full h-full max-h-full max-w-full overflow-hidden flex flex-col gap-8 py-8 px-4 sm:px-8">
-        <div className="max-w-4xl mx-auto w-full flex flex-col gap-8 h-full">
-          {isLoading ? (
-            <p className="flex-1 retro text-center text-foreground/60 text-[10px] uppercase tracking-[0.5em] flex flex-col items-center justify-center gap-6 before:content-[''] before:block before:size-16 before:border-8 before:border-foreground/10 before:border-t-primary before:animate-spin">
-              Searching for gear...
+      <main className="w-full h-full max-h-full max-w-4xl mx-auto overflow-hidden flex flex-col gap-8 py-8 px-4 sm:px-8">
+        {isLoading ? (
+          <p className="flex-1 retro text-center text-foreground/60 text-[10px] uppercase tracking-[0.5em] flex flex-col items-center justify-center gap-6 before:content-[''] before:block before:size-16 before:border-8 before:border-foreground/10 before:border-t-primary before:animate-spin">
+            Searching for gear...
+          </p>
+        ) : error ? (
+          <div className="flex-1 flex items-center justify-center">
+            <Card className="border-8 border-destructive max-w-md w-full">
+              <CardContent className="p-8! text-center flex flex-col gap-4 text-destructive">
+                <div className="retro text-lg!">CRITICAL ERROR</div>
+                <div className="retro text-[10px] leading-relaxed opacity-80">
+                  {error}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        ) : inputs.length === 0 ? (
+          <p className="flex-1 retro text-center text-foreground/60 text-[10px] uppercase tracking-[0.3em] flex flex-col items-center justify-center gap-6">
+            No gear found. Please connect a keyboard and refresh.
+          </p>
+        ) : (
+          <>
+            <p className="retro text-center text-foreground/60 text-[10px] uppercase tracking-widest mb-4">
+              Play a note on your gear to select it, or tap a card below.
             </p>
-          ) : error ? (
-            <div className="flex-1 flex items-center justify-center">
-              <Card className="border-8 border-destructive max-w-md w-full">
-                <CardContent className="p-8! text-center flex flex-col gap-4 text-destructive">
-                  <div className="retro text-lg!">CRITICAL ERROR</div>
-                  <div className="retro text-[10px] leading-relaxed opacity-80">
-                    {error}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          ) : inputs.length === 0 ? (
-            <p className="flex-1 retro text-center text-foreground/60 text-[10px] uppercase tracking-[0.3em] flex flex-col items-center justify-center gap-6">
-              No gear found. Please connect a keyboard and refresh.
-            </p>
-          ) : (
-            <>
-              <p className="retro text-center text-foreground/60 text-[10px] uppercase tracking-widest mb-4">
-                Play a note on your gear to select it, or tap a card below.
-              </p>
 
-              <div className="flex-1 flex items-center gap-8 overflow-x-auto snap-x snap-mandatory py-10 px-4 -mx-4 no-scrollbar">
-                {inputs.map((inst) => (
-                  <GearCard
-                    key={inst.id}
-                    instrument={inst}
-                    isSelected={selectedMIDIInput?.id === inst.id}
-                    onClick={() => selectMIDIInput(inst)}
-                    className="shrink-0 w-[240px] sm:w-[280px] h-[360px] snap-center"
-                  />
-                ))}
-              </div>
-            </>
-          )}
-        </div>
+            <div className="flex-1 flex items-center gap-8 overflow-x-auto snap-x snap-mandatory py-10 px-4 -mx-4 no-scrollbar">
+              {inputs.map((inst) => (
+                <GearCard
+                  key={inst.id}
+                  instrument={inst}
+                  isSelected={selectedMIDIInput?.id === inst.id}
+                  onClick={() => selectMIDIInput(inst)}
+                  className="shrink-0 w-[calc(100%-2rem)] sm:w-[320px] snap-center"
+                />
+              ))}
+            </div>
+          </>
+        )}
       </main>
     </PageLayout>
   );
