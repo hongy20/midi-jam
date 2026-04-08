@@ -30,11 +30,7 @@ export default function WelcomePage() {
     <PageLayout
       className={styles.page}
       footer={
-        <PageFooter>
-          <span className="retro text-[10px] opacity-60">
-            The ultimate immersive musical experience
-          </span>
-        </PageFooter>
+        <PageFooter>The ultimate immersive musical experience</PageFooter>
       }
     >
       <main className="w-full h-full flex flex-col gap-12 items-center justify-center text-center p-4">
