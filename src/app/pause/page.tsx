@@ -119,10 +119,6 @@ export default function PausePage() {
             </div>
           </Button>
         </div>
-
-        <div className="retro text-[8px] opacity-10 uppercase tracking-[0.5em] mt-8 text-center sm:text-left w-full border-t-8 border-foreground/5 pt-8">
-          Performance data cached. Signal strength nominal.
-        </div>
       </main>
     </PageLayout>
   );
