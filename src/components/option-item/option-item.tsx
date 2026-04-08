@@ -4,7 +4,10 @@ import type { HTMLAttributes } from "react";
 import { useOptions } from "@/context/options-context";
 import { useTheme } from "@/context/theme-context";
 import { THEMES, type Theme } from "@/lib/theme/constant";
-import styles from "./option-item.module.css";
+import { Card, CardContent } from "@/components/ui/8bit/card";
+import { Button } from "@/components/ui/8bit/button";
+import { Switch } from "@/components/ui/8bit/switch";
+import { cn } from "@/lib/utils";
 
 export type OptionType = "theme" | "speed" | "demo";
 
@@ -51,28 +54,28 @@ export function OptionItem({
   const configs: Record<OptionType, Config> = {
     theme: {
       type: "theme",
-      title: "Visual Theme",
-      description: "Toggle global application style",
+      title: "VISUAL THEME",
+      description: "Switch between different color palettes",
       options: THEMES,
       current: theme,
       onSelect: (val: Theme) => setTheme(val),
     },
     speed: {
       type: "speed",
-      title: "Playback Speed",
-      description: "Adjust note fall tempo",
+      title: "TEMPO SCALE",
+      description: "Adjust the rate of falling notes",
       options: [
-        { label: "Slow", value: 0.5 },
-        { label: "Normal", value: 1.0 },
-        { label: "Fast", value: 2.0 },
+        { label: "SLOW", value: 0.5 },
+        { label: "NORM", value: 1.0 },
+        { label: "FAST", value: 2.0 },
       ],
       current: speed,
       onSelect: (val: number) => setSpeed(val),
     },
     demo: {
       type: "demo",
-      title: "Demo Mode",
-      description: "Auto-play previews without gear",
+      title: "AUTOPILOT",
+      description: "Let the system play for you (Preview)",
       current: demoMode,
       onToggle: () => setDemoMode(!demoMode),
     },
@@ -81,57 +84,54 @@ export function OptionItem({
   const config = configs[type];
 
   return (
-    <div className={`${styles.card} ${className}`} {...props}>
-      <div className={styles.info}>
-        <span className={styles.title}>{config.title}</span>
-        <span className={styles.description}>{config.description}</span>
-      </div>
+    <Card className={cn("border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]", className)} {...props}>
+      <CardContent className="p-6! flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="flex flex-col gap-2 text-center sm:text-left">
+          <span className="retro text-sm! uppercase tracking-tight">{config.title}</span>
+          <span className="retro text-[8px] opacity-40 uppercase tracking-widest">{config.description}</span>
+        </div>
 
-      <div className={styles.controls}>
-        {config.type === "demo" ? (
-          <button
-            type="button"
-            onClick={config.onToggle}
-            className={`${styles.toggle} ${
-              config.current ? styles.toggleActive : styles.toggleInactive
-            }`}
-          >
-            <div
-              className={`${styles.toggleKnob} ${
-                config.current ? styles.knobActive : styles.knobInactive
-              }`}
-            />
-          </button>
-        ) : (
-          <div className={styles.buttonGroup}>
-            {config.type === "theme"
-              ? config.options.map((opt) => (
-                  <button
-                    key={opt}
-                    type="button"
-                    onClick={() => config.onSelect(opt)}
-                    className={`${styles.optionButton} ${
-                      config.current === opt ? styles.itemSelected : ""
-                    }`}
-                  >
-                    {opt}
-                  </button>
-                ))
-              : config.options.map((opt) => (
-                  <button
-                    key={opt.label}
-                    type="button"
-                    onClick={() => config.onSelect(opt.value)}
-                    className={`${styles.optionButton} ${
-                      config.current === opt.value ? styles.itemSelected : ""
-                    }`}
-                  >
-                    {opt.label}
-                  </button>
-                ))}
-          </div>
-        )}
-      </div>
-    </div>
+        <div className="flex items-center gap-4">
+          {config.type === "demo" ? (
+             <div className="flex items-center gap-4">
+               <span className={cn("retro text-[8px] uppercase", !config.current ? "opacity-100" : "opacity-20")}>OFF</span>
+               <Switch 
+                checked={config.current} 
+                onClick={config.onToggle}
+               />
+               <span className={cn("retro text-[8px] uppercase", config.current ? "opacity-100 text-primary" : "opacity-20")}>ON</span>
+             </div>
+          ) : (
+            <div className="flex flex-wrap justify-center gap-3">
+              {config.type === "theme"
+                ? config.options.map((opt) => (
+                    <Button
+                      key={opt}
+                      onClick={() => config.onSelect(opt)}
+                      variant={config.current === opt ? "default" : "secondary"}
+                      size="sm"
+                      font="retro"
+                      className="px-4 text-[10px]!"
+                    >
+                      {opt.toUpperCase()}
+                    </Button>
+                  ))
+                : config.options.map((opt) => (
+                    <Button
+                      key={opt.label}
+                      onClick={() => config.onSelect(opt.value)}
+                      variant={config.current === opt.value ? "default" : "secondary"}
+                      size="sm"
+                      font="retro"
+                      className="px-4 text-[10px]!"
+                    >
+                      {opt.label}
+                    </Button>
+                  ))}
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
