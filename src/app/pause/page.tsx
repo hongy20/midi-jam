@@ -38,7 +38,7 @@ export default function PausePage() {
             className="w-full sm:w-auto"
           >
             <Play className="size-5 mr-2" />
-            RESUME JAM
+            RESUME
           </Button>
         </PageFooter>
       }
@@ -50,7 +50,7 @@ export default function PausePage() {
             <Music className="size-16 text-primary bg-primary/10 p-4 border-4 border-primary/20 shrink-0" />
             <div className="flex flex-col gap-2 shrink-0">
               <span className="retro text-[8px] opacity-40 uppercase tracking-[0.3em] mb-1">
-                SOURCE CHANNEL
+                Currently Playing
               </span>
               <h2 className="retro text-xl sm:text-2xl md:text-3xl uppercase tracking-tighter leading-tight">
                 {selectedTrack.name}

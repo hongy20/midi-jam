@@ -26,7 +26,7 @@ function BackButton() {
       font="retro"
     >
       <ArrowLeft className="size-4 mr-2" />
-      BACK
+      Back
     </Button>
   );
 }
@@ -37,24 +37,20 @@ export default function OptionsPage() {
 
   return (
     <PageLayout
-      header={<PageHeader title="Options" />}
+      header={<PageHeader title="Settings" />}
       footer={
         <PageFooter>
           <Suspense fallback={<div className="w-20" />}>
             <BackButton />
           </Suspense>
           <Button onClick={() => toHome()} size="sm" font="retro">
-            QUIT TO MENU
+            Exit
             <LogOut className="size-4 ml-2" />
           </Button>
         </PageFooter>
       }
     >
       <main className="flex flex-col gap-6 py-8 px-4 sm:px-8 max-w-4xl mx-auto w-full overflow-y-auto no-scrollbar">
-        <div className="bg-accent px-4 py-2 border-4 border-foreground dark:border-ring retro text-[10px] uppercase tracking-widest mb-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)] self-center">
-          ENVIRONMENT PARAMETERS
-        </div>
-
         {optionTypes.map((type) => (
           <OptionItem key={type} type={type} className="w-full" />
         ))}

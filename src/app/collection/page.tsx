@@ -76,7 +76,7 @@ export default function CollectionPage() {
             font="retro"
           >
             <ArrowLeft className="size-4 mr-2" />
-            GEAR
+            Select Gear
           </Button>
           <Button
             onClick={() => toPlay()}
@@ -84,7 +84,7 @@ export default function CollectionPage() {
             size="sm"
             font="retro"
           >
-            START JAM
+            PLAY
             <Play className="size-4 ml-2 fill-current" />
           </Button>
         </PageFooter>

@@ -41,12 +41,12 @@ export default function GearPage() {
 
   return (
     <PageLayout
-      header={<PageHeader title="Gear" />}
+      header={<PageHeader title="Choose Gear" />}
       footer={
         <PageFooter>
           <Button variant="secondary" onClick={toHome} size="sm" font="retro">
             <ArrowLeft className="size-4 mr-2" />
-            BACK
+            Main Menu
           </Button>
           <Button
             onClick={() => toCollection()}
@@ -64,7 +64,7 @@ export default function GearPage() {
         <div className="max-w-4xl mx-auto w-full flex flex-col gap-8 h-full">
           {isLoading ? (
             <p className="flex-1 retro text-center text-foreground/60 text-[10px] uppercase tracking-[0.5em] flex flex-col items-center justify-center gap-6 before:content-[''] before:block before:size-16 before:border-8 before:border-foreground/10 before:border-t-primary before:animate-spin">
-              Scanning MIDI Ports...
+              Searching for gear...
             </p>
           ) : error ? (
             <div className="flex-1 flex items-center justify-center">
@@ -78,24 +78,14 @@ export default function GearPage() {
               </Card>
             </div>
           ) : inputs.length === 0 ? (
-            <div className="flex-1 flex items-center justify-center">
-              <div className="flex flex-col items-center gap-6 opacity-40 max-w-xs text-center">
-                <Search className="size-16" />
-                <p className="retro text-[10px] uppercase tracking-widest leading-loose">
-                  No gear detected. Connect your device and check connection.
-                </p>
-              </div>
-            </div>
+            <p className="flex-1 retro text-center text-foreground/60 text-[10px] uppercase tracking-[0.3em] flex flex-col items-center justify-center gap-6">
+              No gear found. Please connect a keyboard and refresh.
+            </p>
           ) : (
             <>
-              <div className="text-center px-4">
-                <div className="inline-block bg-accent px-4 py-2 border-4 border-foreground dark:border-ring retro text-[10px] uppercase tracking-widest mb-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,0.1)]">
-                  AUTO-DETECT ACTIVE
-                </div>
-                <p className="retro text-[8px] opacity-40 uppercase mt-4">
-                  Play a note on your gear to select or tap a card below
-                </p>
-              </div>
+              <p className="retro text-center text-foreground/60 text-[10px] uppercase tracking-widest mb-4">
+                Play a note on your gear to select it, or tap a card below.
+              </p>
 
               <div className="flex-1 flex items-center gap-8 overflow-x-auto snap-x snap-mandatory py-10 px-4 -mx-4 no-scrollbar">
                 {inputs.map((inst) => (
