@@ -45,9 +45,3 @@ export const LANE_SEGMENT_DURATION_MS = 5 * 1000;
 
 /** Time in ms for a note to scroll one full container height at speed 1.0 */
 export const LANE_SCROLL_DURATION_MS = 3000;
-
-/**
- * How far ahead of a segment's visual entry point it is pre-mounted into the DOM.
- * Must exceed the LaneStage setInterval period (250ms) so that the segment is
- * always present before its background becomes visible, preventing a polling gap.
- */
