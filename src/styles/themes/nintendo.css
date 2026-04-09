@@ -42,7 +42,7 @@
     --piano-glow-both-bg: oklch(0.5 0.2 280);
   }
 
-  .dark [data-theme="nintendo"] {
+  [data-theme="nintendo"].dark {
     --primary: oklch(0.5 0.2 280);
     --primary-foreground: oklch(0.9 0.05 280);
     --background: oklch(0.16 0.05 260);
