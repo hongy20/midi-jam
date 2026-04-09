@@ -36,39 +36,3 @@ export const Unsupported: Story = {
     isSupported: false,
   },
 };
-
-export const MobilePortrait: Story = {
-  args: {
-    isLoading: false,
-    isSupported: true,
-  },
-  parameters: {
-    viewport: {
-      defaultViewport: "iphone14",
-    },
-  },
-};
-
-export const MobileLandscape: Story = {
-  args: {
-    isLoading: false,
-    isSupported: true,
-  },
-  parameters: {
-    viewport: {
-      defaultViewport: "iphone14landscape",
-    },
-  },
-};
-
-export const TabletPortrait: Story = {
-  args: {
-    isLoading: false,
-    isSupported: true,
-  },
-  parameters: {
-    viewport: {
-      defaultViewport: "ipadair",
-    },
-  },
-};
