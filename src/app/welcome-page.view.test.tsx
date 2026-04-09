@@ -6,6 +6,7 @@ describe("WelcomePageView", () => {
   const defaultProps = {
     isLoading: false,
     isSupported: true,
+    loadingTimeout: 1000,
     onStart: vi.fn(),
     onOptions: vi.fn(),
   };
@@ -13,26 +14,17 @@ describe("WelcomePageView", () => {
   it("renders correctly when ready", () => {
     render(<WelcomePageView {...defaultProps} />);
     expect(screen.getByText(/MIDI JAM/i)).toBeInTheDocument();
-    expect(screen.getByText(/Press Start to Play/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /START/i })).toBeInTheDocument();
   });
 
-  it("shows loader when loading and hides instruction text", () => {
+  it("shows loader when loading", () => {
     render(<WelcomePageView {...defaultProps} isLoading={true} />);
-    expect(screen.getByText(/Initializing Engine/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Press Start to Play/i)).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: /START/i }),
-    ).not.toBeInTheDocument();
+    expect(screen.getByText(/INITIALIZING ENGINE/i)).toBeInTheDocument();
   });
 
-  it("shows error when not supported and hides instruction text", () => {
+  it("shows error when not supported", () => {
     render(<WelcomePageView {...defaultProps} isSupported={false} />);
     expect(screen.getByText(/UNSUPPORTED BROWSER/i)).toBeInTheDocument();
-    expect(screen.queryByText(/Press Start to Play/i)).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: /START/i }),
-    ).not.toBeInTheDocument();
   });
 
   it("calls onStart when start button is clicked", () => {

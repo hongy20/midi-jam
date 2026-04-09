@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useHome } from "@/context/home-context";
+import { INITIAL_LOADING_TIMEOUT, useHome } from "@/context/home-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useAppReset } from "@/hooks/use-track-sync";
 import { WelcomePageView } from "./welcome-page.view";
@@ -19,6 +19,7 @@ export default function WelcomePage() {
     <WelcomePageView
       isLoading={isLoading}
       isSupported={isSupported}
+      loadingTimeout={INITIAL_LOADING_TIMEOUT}
       onStart={() => toGear()}
       onOptions={() => toOptions()}
     />
