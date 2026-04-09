@@ -29,6 +29,7 @@ export function HomePageView({
       label: "START GAME",
       onClick: onStart,
       icon: Play,
+      variant: "default" as const,
     },
     {
       label: "Options",
@@ -41,7 +42,7 @@ export function HomePageView({
   const stats = [{ label: "SONGS", value: String(songsCount) }];
 
   return (
-    <main>
+    <main className="flex h-dvh items-center justify-center">
       <Hero3 title="MIDI JAM" actions={actions} stats={stats} />
     </main>
   );
