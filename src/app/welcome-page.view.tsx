@@ -10,9 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/8bit/card";
 
-import { cn } from "@/lib/utils";
-import styles from "./welcome-page.view.module.css";
-
 interface WelcomePageViewProps {
   isLoading: boolean;
   isSupported: boolean;
@@ -38,7 +35,7 @@ export function WelcomePageView({
 }: WelcomePageViewProps) {
   if (isLoading) {
     return (
-      <main className={cn(styles.page, "flex items-center justify-center")}>
+      <main className="flex items-center justify-center">
         <LoadingScreen
           autoProgress
           autoProgressDuration={loadingTimeout}
@@ -65,7 +62,7 @@ export function WelcomePageView({
     : [];
 
   return (
-    <main className={styles.page}>
+    <main>
       <Hero3 title="MIDI JAM" actions={actions} stats={[]}>
         {!isSupported && (
           <Card className="max-w-md mx-auto border-8 border-destructive shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)]">
