@@ -10,7 +10,7 @@ const LOADING_TIPS = [
 
 export default function HomeLoading() {
   return (
-    <main className="flex items-center justify-center">
+    <main className="flex h-dvh items-center justify-center">
       <LoadingScreen progress={null} tips={LOADING_TIPS} />
     </main>
   );
