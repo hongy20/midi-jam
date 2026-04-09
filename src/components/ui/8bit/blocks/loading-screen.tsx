@@ -4,6 +4,14 @@ import { useEffect, useState } from "react";
 import { Progress } from "@/components/ui/8bit/progress";
 import { cn } from "@/lib/utils";
 
+const DEFAULT_TIPS = [
+  "Press any key to continue...",
+  "Did you know? Saving often prevents lost progress!",
+  "Tip: Explore every corner for hidden treasures.",
+  "Remember to take breaks during long gaming sessions!",
+  "Pro tip: Read the manual for secret moves.",
+];
+
 export interface LoadingScreenProps extends React.ComponentProps<"div"> {
   title?: string;
   tips?: string[];
@@ -17,8 +25,8 @@ export interface LoadingScreenProps extends React.ComponentProps<"div"> {
 
 export default function LoadingScreen({
   className,
-  title = "INITIALIZING ENGINE",
-  tips = [],
+  title = "LOADING",
+  tips = DEFAULT_TIPS,
   progress = 0,
   showPercentage = true,
   tipInterval = 3000,
@@ -39,7 +47,7 @@ export default function LoadingScreen({
     }
 
     setInternalProgress(0);
-    const step = 2;
+    const step = 5;
     const steps = 100 / step;
     const intervalTime = autoProgressDuration / steps;
 
@@ -97,7 +105,7 @@ export default function LoadingScreen({
       {/* Tips section */}
       {tips.length > 0 && (
         <div className="w-full max-w-md min-h-16 flex items-center justify-center">
-          <p className="retro text-[0.625rem] md:text-xs text-center text-muted-foreground leading-relaxed">
+          <p className="retro text-[0.625rem] md:text-xs text-center text-muted-foreground leading-relaxed animate-pulse">
             {tips[currentTipIndex]}
           </p>
         </div>

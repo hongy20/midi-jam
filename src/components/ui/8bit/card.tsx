@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
 import {
   Card as ShadcnCard,
+  CardAction as ShadcnCardAction,
   CardContent as ShadcnCardContent,
   CardDescription as ShadcnCardDescription,
   CardFooter as ShadcnCardFooter,
@@ -30,98 +30,106 @@ export interface BitCardProps
   asChild?: boolean;
 }
 
-const Card = React.forwardRef<HTMLDivElement, BitCardProps>(
-  ({ className, font, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
+function Card({ className, font, ...props }: BitCardProps) {
+  return (
+    <div
+      className={cn(
+        "relative bg-card text-card-foreground border-y-6 border-foreground dark:border-ring p-0!",
+        className,
+      )}
+    >
+      <ShadcnCard
+        {...props}
         className={cn(
-          "relative bg-card text-card-foreground border-y-6 border-foreground dark:border-ring p-0!",
+          "rounded-none border-0 w-full! h-full flex flex-col bg-card text-card-foreground shadow-none",
+          font !== "normal" && "retro",
           className,
         )}
-      >
-        <ShadcnCard
-          {...props}
-          className={cn(
-            "rounded-none border-0 w-full! h-full flex flex-col bg-card text-card-foreground shadow-none",
-            font !== "normal" && "retro",
-            className,
-          )}
-        />
+      />
 
-        <div
-          className={cn(
-            "absolute inset-0 border-x-6 -mx-1.5 border-inherit pointer-events-none",
-          )}
-          aria-hidden="true"
-        />
-      </div>
-    );
-  },
-);
-Card.displayName = "BitCard";
+      <div
+        className={cn(
+          "absolute inset-0 border-x-6 -mx-1.5 border-inherit pointer-events-none",
+        )}
+        aria-hidden="true"
+      />
+    </div>
+  );
+}
 
-const CardHeader = React.forwardRef<HTMLDivElement, BitCardProps>(
-  ({ className, font, ...props }, ref) => (
+function CardHeader({ ...props }: BitCardProps) {
+  const { className, font } = props;
+
+  return (
     <ShadcnCardHeader
-      ref={ref}
       className={cn(font !== "normal" && "retro", className)}
       {...props}
     />
-  ),
-);
-CardHeader.displayName = "BitCardHeader";
+  );
+}
 
-const CardTitle = React.forwardRef<HTMLDivElement, BitCardProps>(
-  ({ className, font, ...props }, ref) => (
+function CardTitle({ ...props }: BitCardProps) {
+  const { className, font } = props;
+
+  return (
     <ShadcnCardTitle
-      ref={ref}
       className={cn(font !== "normal" && "retro", className)}
       {...props}
     />
-  ),
-);
-CardTitle.displayName = "BitCardTitle";
+  );
+}
 
-const CardDescription = React.forwardRef<HTMLDivElement, BitCardProps>(
-  ({ className, font, ...props }, ref) => (
+function CardDescription({ ...props }: BitCardProps) {
+  const { className, font } = props;
+
+  return (
     <ShadcnCardDescription
-      ref={ref}
       className={cn(font !== "normal" && "retro", className)}
       {...props}
     />
-  ),
-);
-CardDescription.displayName = "BitCardDescription";
+  );
+}
 
-const CardContent = React.forwardRef<HTMLDivElement, BitCardProps>(
-  ({ className, font, ...props }, ref) => (
+function CardAction({ ...props }: BitCardProps) {
+  const { className, font } = props;
+
+  return (
+    <ShadcnCardAction
+      className={cn(font !== "normal" && "retro", className)}
+      {...props}
+    />
+  );
+}
+
+function CardContent({ ...props }: BitCardProps) {
+  const { className, font } = props;
+
+  return (
     <ShadcnCardContent
-      ref={ref}
       className={cn("flex-1", font !== "normal" && "retro", className)}
       {...props}
     />
-  ),
-);
-CardContent.displayName = "BitCardContent";
+  );
+}
 
-const CardFooter = React.forwardRef<HTMLDivElement, BitCardProps>(
-  ({ className, font, ...props }, ref) => (
+function CardFooter({ ...props }: BitCardProps) {
+  const { className, font } = props;
+
+  return (
     <ShadcnCardFooter
-      ref={ref}
       data-slot="card-footer"
       className={cn(font !== "normal" && "retro", className)}
       {...props}
     />
-  ),
-);
-CardFooter.displayName = "BitCardFooter";
+  );
+}
 
 export {
   Card,
   CardHeader,
   CardFooter,
   CardTitle,
+  CardAction,
   CardDescription,
   CardContent,
 };
