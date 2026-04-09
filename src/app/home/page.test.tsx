@@ -23,6 +23,10 @@ describe("HomePageClient", () => {
     resetAll: vi.fn(),
   };
 
+  const defaultProps = {
+    songsCount: 10,
+  };
+
   beforeEach(() => {
     vi.resetAllMocks();
     vi.mocked(useNavigation).mockReturnValue(mockNavigation as any);
@@ -35,25 +39,27 @@ describe("HomePageClient", () => {
     });
   });
 
-  it("renders the title and start button", () => {
-    render(<HomePageClient />);
+  it("renders the title, start button, and song count", () => {
+    render(<HomePageClient { ...defaultProps } />);
     expect(screen.getByText(/Midi Jam/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /START/i })).toBeInTheDocument();
+    expect(screen.getByText(/10/i)).toBeInTheDocument();
+    expect(screen.getByText(/SONGS/i)).toBeInTheDocument();
   });
 
   it("calls resetAll on mount", () => {
-    render(<HomePageClient />);
+    render(<HomePageClient { ...defaultProps } />);
     expect(mockAppReset.resetAll).toHaveBeenCalled();
   });
 
   it("navigates to gear on start click", () => {
-    render(<HomePageClient />);
+    render(<HomePageClient { ...defaultProps } />);
     fireEvent.click(screen.getByRole("button", { name: /START/i }));
     expect(mockNavigation.toGear).toHaveBeenCalled();
   });
 
   it("navigates to options on options click", () => {
-    render(<HomePageClient />);
+    render(<HomePageClient { ...defaultProps } />);
     fireEvent.click(screen.getByRole("button", { name: /Options/i }));
     expect(mockNavigation.toOptions).toHaveBeenCalled();
   });

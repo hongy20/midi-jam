@@ -47,7 +47,8 @@ const METADATA: Record<
   },
 };
 
-export async function getSoundTracks() {
+export async function getSoundTracks(minDelayMs = 0) {
+  const startTime = Date.now();
   try {
     const midiDir = path.join(process.cwd(), "public", "midi");
     const files = await fs.readdir(midiDir);
@@ -65,6 +66,12 @@ export async function getSoundTracks() {
         };
       })
       .sort((a, b) => a.name.localeCompare(b.name));
+
+    const elapsed = Date.now() - startTime;
+    const remaining = Math.max(0, minDelayMs - elapsed);
+    if (remaining > 0) {
+      await new Promise((r) => setTimeout(r, remaining));
+    }
 
     return midiFiles;
   } catch (error) {
