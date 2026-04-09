@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import Hero3 from "@/components/8bit/hero3";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/8bit/card";
 
@@ -11,9 +10,6 @@ export default function HomeError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
 
   if (error.message === "MIDI_UNSUPPORTED") {
     return (
