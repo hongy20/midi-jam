@@ -1,0 +1,49 @@
+"use client";
+
+import { Play, Settings } from "lucide-react";
+import { useEffect } from "react";
+import Hero3 from "@/components/8bit/hero3";
+import LoadingScreen from "@/components/8bit/loading-screen";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/8bit/card";
+
+interface HomePageViewProps {
+  onStart: () => void;
+  onOptions: () => void;
+}
+
+export function HomePageView({
+  onStart,
+  onOptions,
+}: HomePageViewProps) {
+  useEffect(() => {
+    const isSupported = typeof navigator !== "undefined" && "requestMIDIAccess" in navigator;
+    if (!isSupported) {
+      throw new Error("MIDI_UNSUPPORTED");
+    }
+  }, []);
+
+  const actions = [
+    {
+      label: "START GAME",
+      onClick: onStart,
+      icon: Play,
+    },
+    {
+      label: "Options",
+      onClick: onOptions,
+      variant: "secondary" as const,
+      icon: Settings,
+    },
+  ];
+
+  return (
+    <main>
+      <Hero3 title="MIDI JAM" actions={actions} stats={[]} />
+    </main>
+  );
+}
