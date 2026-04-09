@@ -12,7 +12,7 @@ describe("HomePageView", () => {
   beforeEach(() => {
     vi.resetAllMocks();
     // Mock MIDI support
-    Object.defineProperty(global.navigator, 'requestMIDIAccess', {
+    Object.defineProperty(global.navigator, "requestMIDIAccess", {
       value: vi.fn().mockResolvedValue({}),
       configurable: true,
     });
