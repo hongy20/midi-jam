@@ -9,3 +9,17 @@
 .pixelated {
   image-rendering: pixelated;
 }
+
+@keyframes scan-wrap {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 100% 0;
+  }
+}
+
+.animate-scan-wrap {
+  background-size: 200% 100%;
+  animation: scan-wrap 2s linear infinite;
+}

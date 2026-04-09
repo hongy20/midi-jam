@@ -69,6 +69,8 @@ export default function LoadingScreen({
 
   const isFullscreen = variant === "fullscreen";
   const displayProgress = autoProgress ? internalProgress : progress;
+  const isIndeterminate =
+    displayProgress === null || displayProgress === undefined;
 
   const content = (
     <div className="flex flex-col items-center justify-center gap-6 p-8">
@@ -81,7 +83,7 @@ export default function LoadingScreen({
 
       {/* Progress section */}
       <div className="w-full max-w-md space-y-2">
-        {showPercentage && (
+        {!isIndeterminate && showPercentage && (
           <div className="flex justify-end">
             <span className="retro text-xs text-muted-foreground">
               {Math.round(displayProgress)}%

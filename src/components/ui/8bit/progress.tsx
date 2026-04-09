@@ -37,6 +37,7 @@ const Progress = React.forwardRef<
   // Extract height from className if present
   const heightMatch = className?.match(/h-(\d+|\[.*?\])/);
   const heightClass = heightMatch ? heightMatch[0] : "h-2";
+  const isIndeterminate = value === null || value === undefined;
 
   return (
     <div className={cn("relative w-full", className)}>
@@ -57,14 +58,16 @@ const Progress = React.forwardRef<
             "h-full transition-all",
             variant === "retro" ? "flex w-full" : "w-full flex-1",
             variant !== "retro" && (progressBg || "bg-primary"),
+            isIndeterminate &&
+              "animate-scan-wrap bg-linear-to-r from-transparent via-primary/50 to-transparent",
           )}
           style={
-            variant === "retro"
+            variant === "retro" || isIndeterminate
               ? undefined
               : { transform: `translateX(-${100 - (value || 0)}%)` }
           }
         >
-          {variant === "retro" && (
+          {variant === "retro" && !isIndeterminate && (
             <div className="flex w-full h-full">
               {Array.from({ length: 20 }).map((_, i) => {
                 const filledSquares = Math.round(((value || 0) / 100) * 20);
@@ -82,6 +85,9 @@ const Progress = React.forwardRef<
                 );
               })}
             </div>
+          )}
+          {variant === "retro" && isIndeterminate && (
+            <div className="flex w-full h-full animate-scan-wrap bg-[length:200%_100%] bg-linear-to-r from-transparent via-primary to-transparent opacity-80" />
           )}
         </ProgressPrimitive.Indicator>
       </ProgressPrimitive.Root>
