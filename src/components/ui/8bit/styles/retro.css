@@ -10,23 +10,23 @@
   image-rendering: pixelated;
 }
 
-@keyframes scan-wrap {
+@keyframes barber-pole {
   from {
     background-position: 0 0;
   }
   to {
-    background-position: 32px 0;
+    background-position: 40px 0;
   }
 }
 
 .animate-scan-wrap {
   background: repeating-linear-gradient(
-    to right,
+    -45deg,
     var(--primary) 0,
-    var(--primary) 16px,
-    color-mix(in srgb, var(--primary), black 20%) 16px,
-    color-mix(in srgb, var(--primary), black 20%) 32px
+    var(--primary) 20px,
+    color-mix(in srgb, var(--primary), white 20%) 20px,
+    color-mix(in srgb, var(--primary), white 20%) 40px
   );
-  background-size: 32px 100%;
-  animation: scan-wrap 1s linear infinite;
+  background-size: 40px 40px;
+  animation: barber-pole 1s linear infinite;
 }
