@@ -2,10 +2,10 @@
 
 import { Pause } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "@/components/button/button";
 import { LaneStage } from "@/components/lane-stage/lane-stage";
 import { PageLayout } from "@/components/page-layout/page-layout";
 import { ScoreWidget } from "@/components/score-widget/score-widget";
+import { Button } from "@/components/ui/8bit/button";
 import { VirtualInstrument } from "@/components/virtual-instrument/virtual-instrument";
 import { useCollection } from "@/context/collection-context";
 import { useGear } from "@/context/gear-context";
@@ -176,10 +176,10 @@ export default function PlayPage() {
         } as React.CSSProperties
       }
       header={
-        <header className="w-full p-4 sm:p-8 flex justify-between items-center layout-padding bg-background/50 border-b border-foreground/5">
+        <header className="w-full p-4 sm:p-6 flex justify-between items-center bg-background/80 backdrop-blur-sm border-b-4 border-foreground dark:border-ring">
           <div className="flex items-center gap-4 flex-1">
             <div className="flex flex-col">
-              <span className="text-foreground/50 font-bold uppercase tracking-[0.2em] text-[10px] mb-0.5">
+              <span className="text-foreground/60 font-black uppercase tracking-[0.2em] text-[10px] mb-1 retro">
                 {selectedMIDIInput.name} • {selectedTrack.name}
               </span>
               <ScoreWidget
@@ -191,13 +191,15 @@ export default function PlayPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 sm:gap-8">
+          <div className="flex items-center gap-4">
             <Button
               variant="secondary"
               onClick={handlePause}
-              size="sm"
-              icon={Pause}
-            />
+              size="icon"
+              font="retro"
+            >
+              <Pause className="size-4" />
+            </Button>
           </div>
         </header>
       }

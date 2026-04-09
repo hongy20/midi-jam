@@ -2,11 +2,8 @@
 
 /* 1. Global Variables & Constants */
 @import "../styles/variables.css";
-
-/* 2. Themes */
-@import "../styles/themes/neon.css";
-@import "../styles/themes/dark.css";
-@import "../styles/themes/light.css";
-
-/* 3. Base Styles & Utilities */
 @import "../styles/base.css";
+
+/* 2. Structured Themes */
+@import "../styles/themes/default.css";
+@import "../styles/themes/nintendo.css";

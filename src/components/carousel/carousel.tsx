@@ -12,7 +12,7 @@ import {
   useLayoutEffect,
   useRef,
 } from "react";
-import { Button } from "@/components/button/button";
+import { Button } from "@/components/ui/8bit/button";
 import styles from "./carousel.module.css";
 
 interface CarouselProps extends HTMLAttributes<HTMLDivElement> {
@@ -166,13 +166,15 @@ export function Carousel({
     <div className={`${styles.carousel} ${className}`} {...props}>
       <Button
         variant="secondary"
-        icon={ChevronLeft}
         onClick={handlePrev}
         disabled={isFirst}
         className={`${styles.prev} z-20 hidden sm:flex`}
         aria-label="Previous item"
         size="sm"
-      />
+        font="retro"
+      >
+        <ChevronLeft className="size-4" />
+      </Button>
 
       {/* biome-ignore lint/a11y/noStaticElementInteractions: This is a scroll container with custom interaction tracking to handle programmatic vs manual scrolling. */}
       <div
@@ -209,13 +211,15 @@ export function Carousel({
 
       <Button
         variant="secondary"
-        icon={ChevronRight}
         onClick={handleNext}
         disabled={isLast}
         className={`${styles.next} z-20 hidden sm:flex`}
         aria-label="Next item"
         size="sm"
-      />
+        font="retro"
+      >
+        <ChevronRight className="size-4" />
+      </Button>
     </div>
   );
 }
