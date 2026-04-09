@@ -41,8 +41,8 @@ function useCarousel() {
 }
 
 const Carousel = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & CarouselProps
+  HTMLElement,
+  React.HTMLAttributes<HTMLElement> & CarouselProps
 >(
   (
     {
@@ -134,16 +134,16 @@ const Carousel = React.forwardRef<
           canScrollNext,
         }}
       >
-        <div
+        <section
           ref={ref}
           onKeyDownCapture={handleKeyDown}
           className={cn("relative", className)}
-          role="region"
+          aria-label="Carousel"
           aria-roledescription="carousel"
           {...props}
         >
           {children}
-        </div>
+        </section>
       </CarouselContext.Provider>
     );
   },
@@ -173,15 +173,15 @@ const CarouselContent = React.forwardRef<
 CarouselContent.displayName = "CarouselContent";
 
 const CarouselItem = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
+  HTMLElement,
+  React.HTMLAttributes<HTMLElement>
 >(({ className, ...props }, ref) => {
   const { orientation } = useCarousel();
 
   return (
-    <div
+    <section
       ref={ref}
-      role="group"
+      aria-label="Slide"
       aria-roledescription="slide"
       className={cn(
         "min-w-0 shrink-0 grow-0 basis-full",
@@ -227,6 +227,7 @@ const CarouselPrevious = React.forwardRef<
         color="currentColor"
         aria-label="arrow-left"
       >
+        <title>Previous Slide</title>
         <rect x="64" y="120" width="14" height="14" rx="1"></rect>
         <rect x="96" y="120" width="14" height="14" rx="1"></rect>
         <rect x="80" y="120" width="14" height="14" rx="1"></rect>
@@ -282,6 +283,7 @@ const CarouselNext = React.forwardRef<
         color="currentColor"
         aria-label="arrow-right"
       >
+        <title>Next Slide</title>
         <rect x="64" y="120" width="14" height="14" rx="1"></rect>
         <rect x="96" y="120" width="14" height="14" rx="1"></rect>
         <rect x="80" y="120" width="14" height="14" rx="1"></rect>

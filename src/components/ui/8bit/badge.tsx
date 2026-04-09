@@ -20,8 +20,8 @@ export const badgeVariants = cva("", {
   },
 });
 
-export interface BitButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+export interface BitBadgeProps
+  extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {
   asChild?: boolean;
 }
@@ -32,7 +32,7 @@ function Badge({
   font,
   variant,
   ...props
-}: BitButtonProps) {
+}: BitBadgeProps) {
   const color = badgeVariants({ variant, font });
 
   const classes = className.split(" ");

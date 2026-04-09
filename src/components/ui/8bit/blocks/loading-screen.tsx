@@ -36,7 +36,6 @@ export default function LoadingScreen({
   ...props
 }: LoadingScreenProps) {
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
-  const [showCursor, setShowCursor] = useState(true);
   const [internalProgress, setInternalProgress] = useState<number>(
     autoProgress ? 0 : (progress ?? 0),
   );
@@ -75,14 +74,6 @@ export default function LoadingScreen({
 
     return () => clearInterval(tipTimer);
   }, [tips, tipInterval]);
-
-  useEffect(() => {
-    const cursorTimer = setInterval(() => {
-      setShowCursor((prev) => !prev);
-    }, 530);
-
-    return () => clearInterval(cursorTimer);
-  }, []);
 
   const isFullscreen = variant === "fullscreen";
   const displayProgress = autoProgress ? internalProgress : progress;
