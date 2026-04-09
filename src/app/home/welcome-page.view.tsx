@@ -1,6 +1,7 @@
 "use client";
 
 import { Play, Settings } from "lucide-react";
+import { useEffect } from "react";
 import Hero3 from "@/components/8bit/hero3";
 import LoadingScreen from "@/components/8bit/loading-screen";
 import {
@@ -19,6 +20,13 @@ export function WelcomePageView({
   onStart,
   onOptions,
 }: WelcomePageViewProps) {
+  useEffect(() => {
+    const isSupported = typeof navigator !== "undefined" && "requestMIDIAccess" in navigator;
+    if (!isSupported) {
+      throw new Error("MIDI_UNSUPPORTED");
+    }
+  }, []);
+
   const actions = [
     {
       label: "START GAME",

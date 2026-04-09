@@ -1,27 +1,9 @@
-"use client";
+import { INITIAL_LOADING_TIMEOUT } from "@/lib/constants";
+import { WelcomePageContainer } from "./welcome-page.container";
 
-import { useEffect } from "react";
-import { INITIAL_LOADING_TIMEOUT, useHome } from "@/context/home-context";
-import { useNavigation } from "@/hooks/use-navigation";
-import { useAppReset } from "@/hooks/use-track-sync";
-import { WelcomePageView } from "./welcome-page.view";
+export default async function WelcomePage() {
+  // Artificial delay to show the loading screen for visual polish
+  await new Promise((r) => setTimeout(r, INITIAL_LOADING_TIMEOUT));
 
-export default function WelcomePage() {
-  const { toGear, toOptions } = useNavigation();
-  const { isLoading, isSupported } = useHome();
-  const { resetAll } = useAppReset();
-
-  useEffect(() => {
-    resetAll();
-  }, [resetAll]);
-
-  return (
-    <WelcomePageView
-      isLoading={isLoading}
-      isSupported={isSupported}
-      loadingTimeout={INITIAL_LOADING_TIMEOUT}
-      onStart={() => toGear()}
-      onOptions={() => toOptions()}
-    />
-  );
+  return <WelcomePageContainer />;
 }
