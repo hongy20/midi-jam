@@ -20,6 +20,7 @@ export interface HeroAction {
   onClick?: () => void;
   variant?: "default" | "destructive" | "ghost" | "outline" | "secondary";
   icon?: ElementType;
+  className?: string;
 }
 
 export interface Hero3Props {
@@ -128,6 +129,7 @@ export default function Hero3({
                   variant={action.variant}
                   size="lg"
                   font="retro"
+                  className={action.className}
                 >
                   <Link href={action.href}>{content}</Link>
                 </Button>
@@ -138,6 +140,7 @@ export default function Hero3({
                   variant={action.variant}
                   size="lg"
                   font="retro"
+                  className={action.className}
                 >
                   {content}
                 </Button>

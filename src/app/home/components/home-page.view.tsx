@@ -30,12 +30,14 @@ export function HomePageView({
       onClick: onStart,
       icon: Play,
       variant: "default" as const,
+      className: "w-48",
     },
     {
       label: "Options",
       onClick: onOptions,
       variant: "secondary" as const,
       icon: Settings,
+      className: "w-48",
     },
   ];
 
