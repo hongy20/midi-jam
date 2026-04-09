@@ -37,9 +37,11 @@ export function WelcomePageView({
           <h1 className="text-5xl md:text-7xl font-black retro tracking-tight bg-foreground text-background px-6 py-4 border-8 border-foreground dark:border-ring shadow-[12px_12px_0px_0px_rgba(0,0,0,0.2)]">
             MIDI JAM
           </h1>
-          <p className="retro text-xs opacity-60 uppercase tracking-widest mt-4">
-            Press Start to Play
-          </p>
+          {!isLoading && isSupported && (
+            <p className="retro text-xs opacity-60 uppercase tracking-widest mt-4">
+              Press Start to Play
+            </p>
+          )}
         </header>
 
         {isLoading ? (
