@@ -1,6 +1,5 @@
 "use client";
 
-import { Play, Settings } from "lucide-react";
 import { useEffect } from "react";
 import Hero3 from "@/components/8bit/hero3";
 import { MIDI_UNSUPPORTED } from "../lib/constants";
@@ -28,7 +27,6 @@ export function HomePageView({
     {
       label: "START GAME",
       onClick: onStart,
-      icon: Play,
       variant: "default" as const,
       className: "w-48",
     },
@@ -36,7 +34,6 @@ export function HomePageView({
       label: "Options",
       onClick: onOptions,
       variant: "secondary" as const,
-      icon: Settings,
       className: "w-48",
     },
   ];
