@@ -2,6 +2,7 @@ import { expect, test } from "vitest";
 import { ROUTES } from "./routes";
 
 test("ROUTES should match the new arcade naming scheme", () => {
+  expect(ROUTES.HOME).toBe("/home");
   expect(ROUTES.COLLECTION).toBe("/collection");
   expect(ROUTES.GEAR).toBe("/gear");
   expect(ROUTES.PLAY).toBe("/play");
