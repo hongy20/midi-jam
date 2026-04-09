@@ -89,9 +89,6 @@ const Progress = React.forwardRef<
               })}
             </div>
           )}
-          {variant === "retro" && isIndeterminate && (
-            <div className="flex w-full h-full animate-scan-wrap opacity-80" />
-          )}
         </ProgressPrimitive.Indicator>
       </ProgressPrimitive.Root>
 

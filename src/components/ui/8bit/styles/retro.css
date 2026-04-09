@@ -10,23 +10,33 @@
   image-rendering: pixelated;
 }
 
-@keyframes barber-pole {
+@keyframes animate-scan-wrap-slide {
   from {
-    background-position: 0 0;
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
   }
   to {
-    background-position: 40px 0;
+    -webkit-mask-position: 32px 0;
+    mask-position: 32px 0;
   }
 }
 
 .animate-scan-wrap {
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--primary) 0,
-    var(--primary) 20px,
-    color-mix(in srgb, var(--primary), white 20%) 20px,
-    color-mix(in srgb, var(--primary), white 20%) 40px
-  );
-  background-size: 40px 40px;
-  animation: barber-pole 1s linear infinite;
+  position: relative;
+  background-color: color-mix(in srgb, var(--primary), transparent 50%);
+  overflow: hidden;
+}
+
+.animate-scan-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--primary);
+  /* A 4x4 pixel stepped diagonal stripe (8x8 viewBox scaled up to 32x32px) */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M0,0h4v1H0z M1,1h4v1H1z M2,2h4v1H2z M3,3h4v1H3z M4,4h4v1H4z M5,5h3v1H5z M0,5h1v1H0z M6,6h2v1H6z M0,6h2v1H0z M7,7h1v1H7z M0,7h3v1H0z' fill='black' shape-rendering='crispEdges'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M0,0h4v1H0z M1,1h4v1H1z M2,2h4v1H2z M3,3h4v1H3z M4,4h4v1H4z M5,5h3v1H5z M0,5h1v1H0z M6,6h2v1H6z M0,6h2v1H0z M7,7h1v1H7z M0,7h3v1H0z' fill='black' shape-rendering='crispEdges'/%3E%3C/svg%3E");
+  -webkit-mask-size: 32px 32px;
+  mask-size: 32px 32px;
+  animation: animate-scan-wrap-slide 1s linear infinite;
+  pointer-events: none;
 }
