@@ -13,6 +13,10 @@ Midi Jam is a high-performance web application for learning musical instruments 
 
 # Core Principles
 
+## 0. UI Component Management (CRITICAL)
+- **8bitcn Registry**: ALWAYS use `npx shadcn@latest add @8bitcn/[name]` to install 8bitcn components or blocks. 
+- **Prohibition**: DO NOT manually implement, "hallucinate", or copy-paste the code for these components/blocks unless the registry command fails and is explicitly approved by the user.
+
 ## 1. Unified Layout & State
 - **Viewport Locking**: All pages must use a full-screen layout (`100dvh`, `100dvw`) managed by CSS Grid.
 - **State Persistence**: Use React Context for cross-page state to ensure seamless transitions between setup (Gear/Collection) and the Stage (Play).
