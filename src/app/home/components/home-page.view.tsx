@@ -3,12 +3,6 @@
 import { Play, Settings } from "lucide-react";
 import { useEffect } from "react";
 import Hero3 from "@/components/8bit/hero3";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/8bit/card";
 
 interface HomePageViewProps {
   onStart: () => void;
@@ -22,7 +16,8 @@ export function HomePageView({
   songsCount,
 }: HomePageViewProps) {
   useEffect(() => {
-    const isSupported = typeof navigator !== "undefined" && "requestMIDIAccess" in navigator;
+    const isSupported =
+      typeof navigator !== "undefined" && "requestMIDIAccess" in navigator;
     if (!isSupported) {
       throw new Error("MIDI_UNSUPPORTED");
     }
@@ -42,9 +37,7 @@ export function HomePageView({
     },
   ];
 
-  const stats = [
-    { label: "SONGS", value: String(songsCount) },
-  ];
+  const stats = [{ label: "SONGS", value: String(songsCount) }];
 
   return (
     <main>

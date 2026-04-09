@@ -98,13 +98,7 @@ export function useAppReset() {
     resetStage();
     resetTrack();
     selectMIDIInput(null);
-  }, [
-    resetCollection,
-    resetScore,
-    resetStage,
-    resetTrack,
-    selectMIDIInput,
-  ]);
+  }, [resetCollection, resetScore, resetStage, resetTrack, selectMIDIInput]);
 
   return { resetAll };
 }
