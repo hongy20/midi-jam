@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { HomePageView } from "./home-page.view";
 
 const meta: Meta<typeof HomePageView> = {
-  title: "Pages/HomePage",
+  title: "App/Home/View",
   component: HomePageView,
   parameters: {
     layout: "fullscreen",

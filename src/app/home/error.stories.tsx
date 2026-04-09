@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import HomeError from "./error";
 
 const meta: Meta<typeof HomeError> = {
-  title: "Pages/Home/Error",
+  title: "App/Home/Error",
   component: HomeError,
   parameters: {
     layout: "fullscreen",
