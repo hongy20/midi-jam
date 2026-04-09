@@ -81,8 +81,8 @@ export function WelcomePageView({
             </CardHeader>
             <CardContent className="p-6!">
               <p className="retro text-[10px] leading-relaxed text-foreground/70">
-                This frequency requires Web MIDI API. Please deploy a modern
-                Chromium browser or Android device.
+                This app requires Web MIDI API. Please use Android Chrome or a
+                modern Chromium browser.
               </p>
             </CardContent>
           </Card>
