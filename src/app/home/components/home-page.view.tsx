@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import Hero3 from "@/components/8bit/hero3";
 import { MIDI_UNSUPPORTED } from "../lib/constants";
+import Hero3 from "@/components/ui/8bit/blocks/hero3";
 
 interface HomePageViewProps {
   onStart: () => void;

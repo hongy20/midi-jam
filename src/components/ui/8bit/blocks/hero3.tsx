@@ -1,29 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import type { ElementType, ReactNode } from "react";
+
+import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/8bit/badge";
 import { Button } from "@/components/ui/8bit/button";
 import { Card, CardContent } from "@/components/ui/8bit/card";
 import { cn } from "@/lib/utils";
+
 import "@/components/ui/8bit/styles/retro.css";
 
-export interface HeroStat {
+interface HeroStat {
   label: string;
   value: string;
 }
 
-export interface HeroAction {
+interface HeroAction {
   href?: string;
   label: string;
   onClick?: () => void;
   variant?: "default" | "destructive" | "ghost" | "outline" | "secondary";
-  icon?: ElementType;
-  className?: string;
 }
 
-export interface Hero3Props {
+interface Hero3Props {
   actions?: HeroAction[];
   children?: ReactNode;
   className?: string;
@@ -55,6 +55,15 @@ export default function Hero3({
   className,
   children,
 }: Hero3Props) {
+  const defaultStats: HeroStat[] =
+    stats.length > 0
+      ? stats
+      : [
+          { label: "COMPONENTS", value: "50+" },
+          { label: "GITHUB STARS", value: "1.7K" },
+          { label: "CONTRIBUTORS", value: "100+" },
+        ];
+
   return (
     <section
       className={cn(
@@ -93,59 +102,39 @@ export default function Hero3({
         )}
 
         {/* Stats row */}
-        {stats.length > 0 && (
-          <div className="mb-8 flex flex-wrap justify-center gap-4">
-            {stats.map((stat) => (
-              <Card key={stat.label}>
-                <CardContent className="flex flex-col items-center px-6 py-4">
-                  <span className="retro font-bold text-xl md:text-2xl">
-                    {stat.value}
-                  </span>
-                  <span className="retro mt-1 text-muted-foreground text-[10px]">
-                    {stat.label}
-                  </span>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
+        <div className="mb-8 flex flex-wrap justify-center gap-4">
+          {defaultStats.map((stat) => (
+            <Card key={stat.label}>
+              <CardContent className="flex flex-col items-center px-6 py-4">
+                <span className="retro font-bold text-xl md:text-2xl">
+                  {stat.value}
+                </span>
+                <span className="retro mt-1 text-muted-foreground text-[10px]">
+                  {stat.label}
+                </span>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
         {/* Actions */}
         {actions.length > 0 ? (
           <div className="flex flex-wrap justify-center gap-4">
-            {actions.map((action) => {
-              const Icon = action.icon;
-              const content = (
-                <>
-                  {Icon && <Icon className="size-5 mr-2" />}
-                  {action.label}
-                </>
-              );
-
-              return action.href ? (
-                <Button
-                  asChild
-                  key={action.label}
-                  variant={action.variant}
-                  size="lg"
-                  font="retro"
-                  className={action.className}
-                >
-                  <Link href={action.href}>{content}</Link>
+            {actions.map((action) =>
+              action.href ? (
+                <Button asChild key={action.label} variant={action.variant}>
+                  <Link href={action.href}>{action.label}</Link>
                 </Button>
               ) : (
                 <Button
                   key={action.label}
                   onClick={action.onClick}
                   variant={action.variant}
-                  size="lg"
-                  font="retro"
-                  className={action.className}
                 >
-                  {content}
+                  {action.label}
                 </Button>
-              );
-            })}
+              ),
+            )}
           </div>
         ) : (
           <div className="retro text-muted-foreground text-xs">
@@ -153,7 +142,7 @@ export default function Hero3({
           </div>
         )}
 
-        {children && <div className="mt-12">{children}</div>}
+        {children}
       </div>
     </section>
   );

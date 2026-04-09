@@ -8,35 +8,5 @@
 
 .pixelated {
   image-rendering: pixelated;
-}
-
-@keyframes animate-scan-wrap-slide {
-  from {
-    -webkit-mask-position: 0 0;
-    mask-position: 0 0;
-  }
-  to {
-    -webkit-mask-position: 64px 0;
-    mask-position: 64px 0;
-  }
-}
-
-.animate-scan-wrap {
-  position: relative;
-  background-color: color-mix(in srgb, var(--primary), transparent 50%);
-  overflow: hidden;
-}
-
-.animate-scan-wrap::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-color: var(--primary);
-  /* A 16x16 pixel stepped diagonal stripe (scaled up to 64px keeps the 4px step) */
-  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M0,0h8v1H0z M1,1h8v1H1z M2,2h8v1H2z M3,3h8v1H3z M4,4h8v1H4z M5,5h8v1H5z M6,6h8v1H6z M7,7h8v1H7z M8,8h8v1H8z M9,9h7v1H9z M0,9h1v1H0z M10,10h6v1H10z M0,10h2v1H0z M11,11h5v1H11z M0,11h3v1H0z M12,12h4v1H12z M0,12h4v1H0z M13,13h3v1H13z M0,13h5v1H0z M14,14h2v1H14z M0,14h6v1H0z M15,15h1v1H15z M0,15h7v1H0z' fill='black' shape-rendering='crispEdges'/%3E%3C/svg%3E");
-  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M0,0h8v1H0z M1,1h8v1H1z M2,2h8v1H2z M3,3h8v1H3z M4,4h8v1H4z M5,5h8v1H5z M6,6h8v1H6z M7,7h8v1H7z M8,8h8v1H8z M9,9h7v1H9z M0,9h1v1H0z M10,10h6v1H10z M0,10h2v1H0z M11,11h5v1H11z M0,11h3v1H0z M12,12h4v1H12z M0,12h4v1H0z M13,13h3v1H13z M0,13h5v1H0z M14,14h2v1H14z M0,14h6v1H0z M15,15h1v1H15z M0,15h7v1H0z' fill='black' shape-rendering='crispEdges'/%3E%3C/svg%3E");
-  -webkit-mask-size: 64px 64px;
-  mask-size: 64px 64px;
-  animation: animate-scan-wrap-slide 1.5s linear infinite;
-  pointer-events: none;
+  image-rendering: crisp-edges;
 }
