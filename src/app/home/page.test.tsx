@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useAppReset } from "@/hooks/use-track-sync";
-import { HomePageClient } from "./home-page.client";
+import { HomePageClient } from "./components/home-page.client";
 
 // Mock the hooks
 vi.mock("@/hooks/use-navigation", () => ({
