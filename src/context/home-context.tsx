@@ -17,6 +17,8 @@ export interface HomeContextType {
 
 const HomeContext = createContext<HomeContextType | undefined>(undefined);
 
+export const INITIAL_LOADING_TIMEOUT = 1000;
+
 export function HomeProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSupported, setIsSupported] = useState<boolean>(false);
@@ -30,7 +32,7 @@ export function HomeProvider({ children }: { children: ReactNode }) {
     // Provide a small window to show the loader for smoother experience
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, INITIAL_LOADING_TIMEOUT);
 
     return () => clearTimeout(timer);
   }, []);

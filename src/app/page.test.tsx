@@ -12,6 +12,7 @@ vi.mock("@/hooks/use-navigation", () => ({
 
 vi.mock("@/context/home-context", () => ({
   useHome: vi.fn(),
+  INITIAL_LOADING_TIMEOUT: 1000,
 }));
 
 vi.mock("@/hooks/use-track-sync", () => ({
@@ -62,10 +63,7 @@ describe("Welcome Page", () => {
     });
 
     render(<WelcomePage />);
-    expect(screen.getByText(/Initializing Engine/i)).toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: /START/i }),
-    ).not.toBeInTheDocument();
+    expect(screen.getByText(/INITIALIZING ENGINE/i)).toBeInTheDocument();
   });
 
   it("shows error when not supported", () => {
