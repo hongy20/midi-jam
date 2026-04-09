@@ -1,5 +1,5 @@
 export const ROUTES = {
-  HOME: "/",
+  HOME: "/home",
   COLLECTION: "/collection",
   GEAR: "/gear",
   PLAY: "/play",
