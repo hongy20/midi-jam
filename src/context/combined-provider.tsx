@@ -3,7 +3,6 @@
 import { useTrackSync } from "@/hooks/use-track-sync";
 import { CollectionProvider } from "./collection-context";
 import { GearProvider } from "./gear-context";
-import { HomeProvider } from "./home-context";
 import { OptionsProvider } from "./options-context";
 import { ScoreProvider } from "./score-context";
 import { StageProvider } from "./stage-context";
@@ -23,21 +22,19 @@ function Coordinator() {
  */
 export function CombinedProvider({ children }: { children: React.ReactNode }) {
   return (
-    <HomeProvider>
-      <GearProvider>
-        <OptionsProvider>
-          <CollectionProvider>
-            <TrackProvider>
-              <StageProvider>
-                <ScoreProvider>
-                  <Coordinator />
-                  {children}
-                </ScoreProvider>
-              </StageProvider>
-            </TrackProvider>
-          </CollectionProvider>
-        </OptionsProvider>
-      </GearProvider>
-    </HomeProvider>
+    <GearProvider>
+      <OptionsProvider>
+        <CollectionProvider>
+          <TrackProvider>
+            <StageProvider>
+              <ScoreProvider>
+                <Coordinator />
+                {children}
+              </ScoreProvider>
+            </StageProvider>
+          </TrackProvider>
+        </CollectionProvider>
+      </OptionsProvider>
+    </GearProvider>
   );
 }

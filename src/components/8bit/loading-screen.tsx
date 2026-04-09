@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 export interface LoadingScreenProps extends React.ComponentProps<"div"> {
   title?: string;
   tips?: string[];
-  progress?: number;
+  progress?: number | null;
   showPercentage?: boolean;
   tipInterval?: number;
   variant?: "default" | "fullscreen";
@@ -28,13 +28,13 @@ export default function LoadingScreen({
   ...props
 }: LoadingScreenProps) {
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
-  const [internalProgress, setInternalProgress] = useState(
-    autoProgress ? 0 : progress,
+  const [internalProgress, setInternalProgress] = useState<number>(
+    autoProgress ? 0 : (progress ?? 0),
   );
 
   useEffect(() => {
     if (!autoProgress) {
-      setInternalProgress(progress);
+      setInternalProgress(progress ?? 0);
       return;
     }
 
@@ -69,19 +69,17 @@ export default function LoadingScreen({
 
   const isFullscreen = variant === "fullscreen";
   const displayProgress = autoProgress ? internalProgress : progress;
+  const isIndeterminate =
+    displayProgress === null || displayProgress === undefined;
 
   const content = (
-    <div className="flex flex-col items-center justify-center gap-6 p-8">
+    <div className="flex flex-col items-center justify-center gap-6 p-8 animate-pulse">
       {/* Title */}
-      <h2
-        className={cn("retro text-xl md:text-2xl text-center", "animate-pulse")}
-      >
-        {title}
-      </h2>
+      <h2 className="retro text-xl md:text-2xl text-center">{title}</h2>
 
       {/* Progress section */}
       <div className="w-full max-w-md space-y-2">
-        {showPercentage && (
+        {!isIndeterminate && showPercentage && (
           <div className="flex justify-end">
             <span className="retro text-xs text-muted-foreground">
               {Math.round(displayProgress)}%
@@ -99,7 +97,7 @@ export default function LoadingScreen({
       {/* Tips section */}
       {tips.length > 0 && (
         <div className="w-full max-w-md min-h-16 flex items-center justify-center">
-          <p className="retro text-[0.625rem] md:text-xs text-center text-muted-foreground leading-relaxed animate-pulse">
+          <p className="retro text-[0.625rem] md:text-xs text-center text-muted-foreground leading-relaxed">
             {tips[currentTipIndex]}
           </p>
         </div>
