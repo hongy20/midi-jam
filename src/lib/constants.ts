@@ -1,1 +1,0 @@
-export const INITIAL_LOADING_TIMEOUT = 1000;

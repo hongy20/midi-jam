@@ -1,7 +1,13 @@
 "use client";
 
 import Hero3 from "@/components/8bit/hero3";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/8bit/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/8bit/card";
+import { MIDI_UNSUPPORTED } from "./lib/constants";
 
 export default function HomeError({
   error,
@@ -10,8 +16,7 @@ export default function HomeError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-
-  if (error.message === "MIDI_UNSUPPORTED") {
+  if (error.message === MIDI_UNSUPPORTED) {
     return (
       <main>
         <Hero3 title="MIDI JAM" actions={[]} stats={[]}>
@@ -23,7 +28,8 @@ export default function HomeError({
             </CardHeader>
             <CardContent className="p-6!">
               <p className="retro text-[10px] leading-relaxed text-foreground/70">
-                This app requires Web MIDI API. Please use Android Chrome or a modern Chromium browser.
+                This app requires Web MIDI API. Please use Android Chrome or a
+                modern Chromium browser.
               </p>
             </CardContent>
           </Card>
@@ -36,11 +42,13 @@ export default function HomeError({
     <main className="flex items-center justify-center p-8">
       <Card className="max-w-md border-8 border-destructive">
         <CardHeader>
-          <CardTitle className="retro text-destructive">Something went wrong!</CardTitle>
+          <CardTitle className="retro text-destructive">
+            Something went wrong!
+          </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <p className="retro text-[10px]">{error.message}</p>
-          <button 
+          <button
             type="button"
             className="retro bg-foreground text-background p-2 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => reset()}

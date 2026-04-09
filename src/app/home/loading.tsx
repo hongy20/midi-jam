@@ -1,5 +1,5 @@
 import LoadingScreen from "@/components/8bit/loading-screen";
-import { INITIAL_LOADING_TIMEOUT } from "@/lib/constants";
+import { INITIAL_LOADING_TIMEOUT } from "./lib/constants";
 
 const LOADING_TIPS = [
   "Tip: Connect your MIDI keyboard before starting for the best experience.",

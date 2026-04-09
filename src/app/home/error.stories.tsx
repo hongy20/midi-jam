@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import HomeError from "./error";
+import { MIDI_UNSUPPORTED } from "./lib/constants";
 
 const meta: Meta<typeof HomeError> = {
   title: "App/Home/Error",
@@ -17,7 +18,7 @@ type Story = StoryObj<typeof HomeError>;
 
 export const UnsupportedMIDI: Story = {
   args: {
-    error: new Error("MIDI_UNSUPPORTED"),
+    error: new Error(MIDI_UNSUPPORTED),
   },
 };
 

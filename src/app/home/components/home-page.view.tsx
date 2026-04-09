@@ -3,6 +3,7 @@
 import { Play, Settings } from "lucide-react";
 import { useEffect } from "react";
 import Hero3 from "@/components/8bit/hero3";
+import { MIDI_UNSUPPORTED } from "../lib/constants";
 
 interface HomePageViewProps {
   onStart: () => void;
@@ -19,7 +20,7 @@ export function HomePageView({
     const isSupported =
       typeof navigator !== "undefined" && "requestMIDIAccess" in navigator;
     if (!isSupported) {
-      throw new Error("MIDI_UNSUPPORTED");
+      throw new Error(MIDI_UNSUPPORTED);
     }
   }, []);
 
