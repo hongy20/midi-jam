@@ -3,9 +3,7 @@ import LoadingScreen from "@/components/8bit/loading-screen";
 const LOADING_TIPS = [
   "Tip: Connect your MIDI keyboard before starting for the best experience.",
   "Tip: Use the Gear menu to configure your MIDI inputs and instruments.",
-  "Tip: Lower your buffer size in Options if you experience audio latency.",
   "Did you know? You can play along with any MIDI song in your collection.",
-  "Tip: Use the sustain pedal for more expressive piano performances.",
 ];
 
 export default function HomeLoading() {
