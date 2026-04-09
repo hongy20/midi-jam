@@ -7,6 +7,9 @@ const meta: Meta<typeof WelcomePageView> = {
   parameters: {
     layout: "fullscreen",
   },
+  args: {
+    loadingTimeout: 1000,
+  },
   argTypes: {
     onStart: { action: "onStart" },
     onOptions: { action: "onOptions" },
