@@ -33,7 +33,7 @@ function BackButton() {
 
 export default function OptionsPage() {
   const { toHome } = useNavigation();
-  const optionTypes: OptionType[] = ["theme", "speed", "demo"];
+  const optionTypes: OptionType[] = ["theme", "mode", "speed", "demo"];
 
   return (
     <PageLayout

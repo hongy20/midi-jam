@@ -1,4 +1,9 @@
+import {
+  withThemeByClassName,
+  withThemeByDataAttribute,
+} from "@storybook/addon-themes";
 import type { Preview } from "@storybook/nextjs-vite";
+import { THEME_DEFAULT, THEME_NINTENDO } from "../src/lib/theme/constant";
 import "../src/app/globals.css";
 
 const preview: Preview = {
@@ -11,12 +16,27 @@ const preview: Preview = {
     },
 
     a11y: {
-      // 'todo' - show a11y violations in the test UI only
-      // 'error' - fail CI on a11y violations
-      // 'off' - skip a11y checks entirely
       test: "todo",
     },
   },
+
+  decorators: [
+    withThemeByDataAttribute({
+      themes: {
+        Default: THEME_DEFAULT,
+        Nintendo: THEME_NINTENDO,
+      },
+      defaultTheme: "Default",
+      attributeName: "data-theme",
+    }),
+    withThemeByClassName({
+      themes: {
+        Light: "",
+        Dark: "dark",
+      },
+      defaultTheme: "Light",
+    }),
+  ],
 };
 
 export default preview;

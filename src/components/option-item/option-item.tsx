@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/8bit/button";
 import { Card, CardContent } from "@/components/ui/8bit/card";
 import { Switch } from "@/components/ui/8bit/switch";
 import { useOptions } from "@/context/options-context";
-import { useTheme } from "@/context/theme-context";
+import { type ThemeMode, useTheme } from "@/context/theme-context";
 import { THEMES, type Theme } from "@/lib/theme/constant";
 import { cn } from "@/lib/utils";
 
-export type OptionType = "theme" | "speed" | "demo";
+export type OptionType = "theme" | "mode" | "speed" | "demo";
 
 interface OptionItemProps extends HTMLAttributes<HTMLDivElement> {
   type: OptionType;
@@ -22,6 +22,15 @@ type ThemeConfig = {
   options: readonly Theme[];
   current: Theme;
   onSelect: (val: Theme) => void;
+};
+
+type ModeConfig = {
+  type: "mode";
+  title: string;
+  description: string;
+  options: readonly ThemeMode[];
+  current: ThemeMode;
+  onSelect: (val: ThemeMode) => void;
 };
 
 type SpeedConfig = {
@@ -41,14 +50,14 @@ type DemoConfig = {
   onToggle: () => void;
 };
 
-type Config = ThemeConfig | SpeedConfig | DemoConfig;
+type Config = ThemeConfig | ModeConfig | SpeedConfig | DemoConfig;
 
 export function OptionItem({
   type,
   className = "",
   ...props
 }: OptionItemProps) {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, mode, setMode } = useTheme();
   const { speed, setSpeed, demoMode, setDemoMode } = useOptions();
 
   const configs: Record<OptionType, Config> = {
@@ -59,6 +68,14 @@ export function OptionItem({
       options: THEMES,
       current: theme,
       onSelect: (val: Theme) => setTheme(val),
+    },
+    mode: {
+      type: "mode",
+      title: "APPEARANCE",
+      description: "Switch between light and dark modes",
+      options: ["light", "dark"] as const,
+      current: mode,
+      onSelect: (val: ThemeMode) => setMode(val),
     },
     speed: {
       type: "speed",
@@ -124,11 +141,13 @@ export function OptionItem({
             </div>
           ) : (
             <div className="flex flex-wrap justify-center gap-3">
-              {config.type === "theme"
-                ? config.options.map((opt) => (
+              {config.type === "theme" || config.type === "mode"
+                ? config.options.map((opt: string) => (
                     <Button
                       key={opt}
-                      onClick={() => config.onSelect(opt)}
+                      onClick={() =>
+                        (config.onSelect as (val: string) => void)(opt)
+                      }
                       variant={config.current === opt ? "default" : "secondary"}
                       size="sm"
                       font="retro"
