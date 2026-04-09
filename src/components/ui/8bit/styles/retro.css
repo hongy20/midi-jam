@@ -15,20 +15,18 @@
     background-position: 0 0;
   }
   to {
-    background-position: 100% 0;
+    background-position: 32px 0;
   }
 }
 
 .animate-scan-wrap {
-  background: linear-gradient(
+  background: repeating-linear-gradient(
     to right,
-    transparent 0%,
-    transparent 45%,
-    var(--primary) 45%,
-    var(--primary) 55%,
-    transparent 55%,
-    transparent 100%
+    var(--primary) 0,
+    var(--primary) 16px,
+    color-mix(in srgb, var(--primary), black 20%) 16px,
+    color-mix(in srgb, var(--primary), black 20%) 32px
   );
-  background-size: 200% 100%;
-  animation: scan-wrap 2s linear infinite;
+  background-size: 32px 100%;
+  animation: scan-wrap 1s linear infinite;
 }
