@@ -56,10 +56,13 @@ const Progress = React.forwardRef<
           data-slot="progress-indicator"
           className={cn(
             "h-full transition-all",
-            variant === "retro" ? "flex w-full" : "w-full flex-1",
-            variant !== "retro" && (progressBg || "bg-primary"),
-            isIndeterminate &&
-              "animate-scan-wrap bg-linear-to-r from-transparent via-primary/50 to-transparent",
+            variant === "retro" || isIndeterminate
+              ? "flex w-full"
+              : "w-full flex-1",
+            variant !== "retro" &&
+              !isIndeterminate &&
+              (progressBg || "bg-primary"),
+            isIndeterminate && "animate-scan-wrap",
           )}
           style={
             variant === "retro" || isIndeterminate
@@ -87,7 +90,7 @@ const Progress = React.forwardRef<
             </div>
           )}
           {variant === "retro" && isIndeterminate && (
-            <div className="flex w-full h-full animate-scan-wrap bg-[length:200%_100%] bg-linear-to-r from-transparent via-primary to-transparent opacity-80" />
+            <div className="flex w-full h-full animate-scan-wrap opacity-80" />
           )}
         </ProgressPrimitive.Indicator>
       </ProgressPrimitive.Root>
