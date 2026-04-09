@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 export interface LoadingScreenProps extends React.ComponentProps<"div"> {
   title?: string;
   tips?: string[];
-  progress?: number;
+  progress?: number | null;
   showPercentage?: boolean;
   tipInterval?: number;
   variant?: "default" | "fullscreen";
@@ -28,13 +28,13 @@ export default function LoadingScreen({
   ...props
 }: LoadingScreenProps) {
   const [currentTipIndex, setCurrentTipIndex] = useState(0);
-  const [internalProgress, setInternalProgress] = useState(
-    autoProgress ? 0 : progress,
+  const [internalProgress, setInternalProgress] = useState<number>(
+    autoProgress ? 0 : (progress ?? 0),
   );
 
   useEffect(() => {
     if (!autoProgress) {
-      setInternalProgress(progress);
+      setInternalProgress(progress ?? 0);
       return;
     }
 
