@@ -10,7 +10,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/8bit/carousel";
 import { GearCard } from "./gear-card";
-import { GearEmptyState } from "./gear-empty-state";
+import { GearHeader } from "./gear-header";
 
 interface GearPageViewProps {
   inputs: WebMidi.MIDIInput[];
@@ -34,17 +34,16 @@ export function GearPageView({
   return (
     <main className="flex flex-col h-dvh items-center justify-evenly p-4 overflow-x-hidden text-center">
       {inputs.length === 0 ? (
-        <GearEmptyState />
+        <GearHeader
+          title="No gear found."
+          description="Please connect a keyboard to continue..."
+        />
       ) : (
         <>
-          <div className="flex flex-col gap-2">
-            <h2 className="retro font-bold text-lg sm:text-2xl md:text-3xl break-words">
-              CHOOSE GEAR
-            </h2>
-            <span className="mx-auto block max-w-xl retro text-muted-foreground text-[9px]">
-              Play a note on your gear to select it, or tap a card below.
-            </span>
-          </div>
+          <GearHeader
+            title="CHOOSE GEAR"
+            description="Play a note on your gear to select it, or tap a card below."
+          />
 
           <Carousel
             className="mx-auto w-full max-w-4xl px-10 sm:px-12"
