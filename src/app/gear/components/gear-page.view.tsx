@@ -31,7 +31,7 @@ export function GearPageView({
   return (
     <main className="flex flex-col h-dvh items-center justify-evenly p-4 overflow-x-hidden">
       {inputs.length === 0 ? (
-        <GearEmptyState className="flex-1 w-full flex items-center justify-center min-h-0 min-w-0" />
+        <GearEmptyState />
       ) : (
         <Feature3
           title="CHOOSE GEAR"
