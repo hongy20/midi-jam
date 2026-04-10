@@ -4,6 +4,7 @@ import { Piano } from "lucide-react";
 import Feature3, {
   type CarouselFeature,
 } from "@/components/ui/8bit/blocks/feature3";
+import { GearEmptyState } from "./gear-empty-state";
 
 interface GearPageViewProps {
   inputs: WebMidi.MIDIInput[];
