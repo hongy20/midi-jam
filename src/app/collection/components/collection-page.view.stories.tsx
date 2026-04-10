@@ -39,23 +39,10 @@ const meta: Meta<typeof CollectionPageView> = {
 export default meta;
 type Story = StoryObj<typeof CollectionPageView>;
 
-export const Loading: Story = {
-  args: {
-    tracks: [],
-    selectedTrack: null,
-    isLoading: true,
-    onSelect: (track) => console.log("Selected:", track),
-    onShuffle: () => console.log("Shuffle clicked"),
-    onContinue: () => console.log("Continue clicked"),
-    onBack: () => console.log("Back clicked"),
-  },
-};
-
 export const Empty: Story = {
   args: {
     tracks: [],
     selectedTrack: null,
-    isLoading: false,
     onSelect: (track) => console.log("Selected:", track),
     onShuffle: () => console.log("Shuffle clicked"),
     onContinue: () => console.log("Continue clicked"),
@@ -67,7 +54,6 @@ export const WithTracks: Story = {
   args: {
     tracks: mockTracks,
     selectedTrack: null,
-    isLoading: false,
     onSelect: (track) => console.log("Selected:", track),
     onShuffle: () => console.log("Shuffle clicked"),
     onContinue: () => console.log("Continue clicked"),
@@ -79,7 +65,6 @@ export const WithSelection: Story = {
   args: {
     tracks: mockTracks,
     selectedTrack: mockTracks[0],
-    isLoading: false,
     onSelect: (track) => console.log("Selected:", track),
     onShuffle: () => console.log("Shuffle clicked"),
     onContinue: () => console.log("Continue clicked"),

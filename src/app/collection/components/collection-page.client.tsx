@@ -7,22 +7,9 @@ import { getSoundTracks } from "@/lib/action/sound-track";
 import { CollectionPageView } from "./collection-page.view";
 import type { SongCardTrack } from "./song-card";
 
-export function CollectionPageClient() {
+export function CollectionPageClient({ tracks }: { tracks: SongCardTrack[] }) {
   const { toPlay, toGear } = useNavigation();
   const { setSelectedTrack, selectedTrack } = useCollection();
-
-  const [tracks, setTracks] = useState<SongCardTrack[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Fetch tracks on mount
-  useEffect(() => {
-    async function fetchTracks() {
-      const data = await getSoundTracks(800); // Add a small delay for smoother transition
-      setTracks(data);
-      setIsLoading(false);
-    }
-    fetchTracks();
-  }, []);
 
   const handleTrackSelection = useCallback(
     (track?: SongCardTrack) => {
@@ -49,7 +36,6 @@ export function CollectionPageClient() {
     <CollectionPageView
       tracks={tracks}
       selectedTrack={selectedTrack as SongCardTrack | null}
-      isLoading={isLoading}
       onSelect={handleTrackSelection}
       onShuffle={handleShuffle}
       onContinue={toPlay}

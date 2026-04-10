@@ -15,7 +15,6 @@ import { SongCard, type SongCardTrack } from "./song-card";
 interface CollectionPageViewProps {
   tracks: SongCardTrack[];
   selectedTrack: SongCardTrack | null;
-  isLoading: boolean;
   onSelect: (track: SongCardTrack) => void;
   onShuffle: () => void;
   onContinue: () => void;
@@ -25,7 +24,6 @@ interface CollectionPageViewProps {
 export function CollectionPageView({
   tracks,
   selectedTrack,
-  isLoading,
   onSelect,
   onShuffle,
   onContinue,
@@ -33,12 +31,7 @@ export function CollectionPageView({
 }: CollectionPageViewProps) {
   return (
     <main className="flex flex-col h-dvh items-center justify-evenly p-4 overflow-x-hidden text-center">
-      {isLoading ? (
-        <CollectionHeader
-          title="Searching tracks..."
-          description="Please wait while we load the collection..."
-        />
-      ) : tracks.length === 0 ? (
+      {tracks.length === 0 ? (
         <CollectionHeader
           title="No tracks found."
           description="Please check your library or try again later."
@@ -84,7 +77,7 @@ export function CollectionPageView({
           onClick={onShuffle}
           variant="secondary"
           className="w-48"
-          disabled={tracks.length <= 1 || isLoading}
+          disabled={tracks.length <= 1}
         >
           <Dices className="size-4 mr-2" />
           SHUFFLE
@@ -93,7 +86,7 @@ export function CollectionPageView({
           onClick={onContinue}
           variant="default"
           className="w-48"
-          disabled={!selectedTrack || isLoading}
+          disabled={!selectedTrack}
         >
           PLAY
           <Play className="size-4 ml-2 fill-current" />

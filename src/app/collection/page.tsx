@@ -1,3 +1,4 @@
+import { getSoundTracks } from "@/lib/action/sound-track";
 import { CollectionPageClient } from "./components/collection-page.client";
 
 export const metadata = {
@@ -5,6 +6,7 @@ export const metadata = {
   description: "Select a song from your collection to play",
 };
 
-export default function CollectionPage() {
-  return <CollectionPageClient />;
+export default async function CollectionPage() {
+  const tracks = await getSoundTracks(800);
+  return <CollectionPageClient tracks={tracks} />;
 }
