@@ -50,7 +50,7 @@ export const Empty: Story = {
   },
 };
 
-export const WithTracks: Story = {
+export const Default: Story = {
   args: {
     tracks: mockTracks,
     selectedTrack: null,
@@ -61,7 +61,7 @@ export const WithTracks: Story = {
   },
 };
 
-export const WithSelection: Story = {
+export const Selected: Story = {
   args: {
     tracks: mockTracks,
     selectedTrack: mockTracks[0],

@@ -9,7 +9,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/8bit/carousel";
+import { cn } from "@/lib/utils";
 import { CollectionHeader } from "./collection-header";
+import styles from "./collection-page.view.module.css";
 import { SongCard, type SongCardTrack } from "./song-card";
 
 interface CollectionPageViewProps {
@@ -76,7 +78,7 @@ export function CollectionPageView({
         <Button
           onClick={onShuffle}
           variant="secondary"
-          className="w-48"
+          className={cn("w-48", styles.shuffleButton)}
           disabled={tracks.length <= 1}
         >
           <Dices className="size-4 mr-2" />
