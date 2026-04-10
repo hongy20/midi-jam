@@ -45,23 +45,7 @@ export function GearPageView({
   return (
     <main className="flex h-dvh items-center justify-center">
       {inputs.length === 0 ? (
-        <div className="text-center px-8">
-          <h2 className="retro mb-6 font-bold text-2xl tracking-tight md:text-3xl text-foreground/60">
-            No gear found.
-          </h2>
-          <p className="retro text-muted-foreground text-[10px] uppercase tracking-[0.3em] mb-12">
-            Please connect a keyboard and refresh.
-          </p>
-          <div className="flex justify-center gap-4">
-            <button
-              type="button"
-              className="retro cursor-pointer bg-foreground p-3 text-background transition-opacity hover:opacity-80 px-8"
-              onClick={onBack}
-            >
-              BACK
-            </button>
-          </div>
-        </div>
+        <GearEmptyState onBack={onBack} />
       ) : (
         <Feature3
           title="CHOOSE GEAR"
