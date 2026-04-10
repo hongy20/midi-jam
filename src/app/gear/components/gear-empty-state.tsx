@@ -7,7 +7,7 @@ export function GearEmptyState() {
         No gear found.
       </h2>
       <p className="retro text-muted-foreground text-[10px] uppercase tracking-[0.3em] mb-12">
-        Please connect a keyboard and refresh.
+        Please connect a keyboard to continue...
       </p>
     </div>
   );
