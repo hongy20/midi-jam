@@ -1,9 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/8bit/badge";
-import { Button } from "@/components/ui/8bit/button";
 import {
   Card,
   CardContent,
@@ -29,15 +27,6 @@ export interface CarouselFeature {
   title: string;
 }
 
-export interface FeatureAction {
-  href?: string;
-  label: string;
-  onClick?: () => void;
-  variant?: "default" | "destructive" | "ghost" | "outline" | "secondary";
-  disabled?: boolean;
-  className?: string;
-}
-
 interface Feature3Props {
   className?: string;
   description?: string;
@@ -45,7 +34,6 @@ interface Feature3Props {
   title?: string;
   onItemClick?: (item: CarouselFeature) => void;
   selectedItemTitle?: string;
-  actions?: FeatureAction[];
 }
 
 const defaultItems: CarouselFeature[] = [
@@ -90,7 +78,6 @@ export default function Feature3({
   className,
   onItemClick,
   selectedItemTitle,
-  actions = [],
 }: Feature3Props) {
   return (
     <section className={cn("w-full px-4 py-16", className)}>
@@ -201,34 +188,6 @@ export default function Feature3({
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-
-        {actions.length > 0 && (
-          <div className="mt-12 flex flex-wrap justify-center gap-4">
-            {actions.map((action) =>
-              action.href ? (
-                <Button
-                  asChild
-                  key={action.label}
-                  variant={action.variant}
-                  className={cn("w-48", action.className)}
-                  disabled={action.disabled}
-                >
-                  <Link href={action.href}>{action.label}</Link>
-                </Button>
-              ) : (
-                <Button
-                  key={action.label}
-                  onClick={action.onClick}
-                  variant={action.variant}
-                  className={cn("w-48", action.className)}
-                  disabled={action.disabled}
-                >
-                  {action.label}
-                </Button>
-              ),
-            )}
-          </div>
-        )}
       </div>
     </section>
   );
