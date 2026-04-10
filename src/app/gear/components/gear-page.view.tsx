@@ -33,23 +33,21 @@ export function GearPageView({
     <main className="flex flex-col h-dvh items-center justify-center p-4">
       <div className="flex-1 w-full max-w-5xl flex items-center justify-center min-h-0">
         {inputs.length === 0 ? (
-          <section className="w-full px-4 py-16">
-            <div className="mx-auto max-w-5xl text-center">
-              <GearEmptyState />
-            </div>
-          </section>
+          <GearEmptyState />
         ) : (
           <Feature3
             title="CHOOSE GEAR"
             description="Play a note on your gear to select it, or tap a card below."
             items={items}
-            onItemClick={(item) => {
-              const input = inputs.find(
-                (i) => (i.name || "Unknown Device") === item.title,
-              );
+            onItemClick={(index) => {
+              const input = inputs[index];
               if (input) onSelect(input);
             }}
-            selectedItemTitle={selectedMIDIInput?.name || undefined}
+            selectedItemIndex={
+              selectedMIDIInput
+                ? inputs.findIndex((i) => i.id === selectedMIDIInput.id)
+                : undefined
+            }
           />
         )}
       </div>

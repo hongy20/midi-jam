@@ -32,8 +32,8 @@ interface Feature3Props {
   description?: string;
   items?: CarouselFeature[];
   title?: string;
-  onItemClick?: (item: CarouselFeature) => void;
-  selectedItemTitle?: string;
+  onItemClick?: (index: number) => void;
+  selectedItemIndex?: number;
 }
 
 const defaultItems: CarouselFeature[] = [
@@ -77,7 +77,7 @@ export default function Feature3({
   items = defaultItems,
   className,
   onItemClick,
-  selectedItemTitle,
+  selectedItemIndex,
 }: Feature3Props) {
   return (
     <section className={cn("w-full px-4 py-16", className)}>
@@ -102,8 +102,8 @@ export default function Feature3({
           opts={{ align: "start", loop: false }}
         >
           <CarouselContent>
-            {items.map((item) => {
-              const isSelected = selectedItemTitle === item.title;
+            {items.map((item, index) => {
+              const isSelected = selectedItemIndex === index;
               return (
                 <CarouselItem
                   className="pl-4 sm:basis-1/2 lg:basis-1/3"
@@ -112,7 +112,7 @@ export default function Feature3({
                   <div className="h-full p-2">
                     <button
                       type="button"
-                      onClick={() => onItemClick?.(item)}
+                      onClick={() => onItemClick?.(index)}
                       className={cn(
                         "group relative h-full w-full text-left outline-none focus-visible:ring-4 focus-visible:ring-foreground transition-all active:scale-95",
                         !onItemClick && "cursor-default active:scale-100",
