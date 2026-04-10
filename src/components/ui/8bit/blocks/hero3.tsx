@@ -21,6 +21,7 @@ interface HeroAction {
   label: string;
   onClick?: () => void;
   variant?: "default" | "destructive" | "ghost" | "outline" | "secondary";
+  className?: string;
 }
 
 interface Hero3Props {
@@ -122,7 +123,12 @@ export default function Hero3({
           <div className="flex flex-wrap justify-center gap-4">
             {actions.map((action) =>
               action.href ? (
-                <Button asChild key={action.label} variant={action.variant}>
+                <Button
+                  asChild
+                  key={action.label}
+                  variant={action.variant}
+                  className={action.className}
+                >
                   <Link href={action.href}>{action.label}</Link>
                 </Button>
               ) : (
@@ -130,6 +136,7 @@ export default function Hero3({
                   key={action.label}
                   onClick={action.onClick}
                   variant={action.variant}
+                  className={action.className}
                 >
                   {action.label}
                 </Button>
