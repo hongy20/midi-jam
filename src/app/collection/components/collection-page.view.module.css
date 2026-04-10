@@ -1,5 +1,0 @@
-.shuffleButton {
-  @media (height < 320px) {
-    display: none;
-  }
-}
