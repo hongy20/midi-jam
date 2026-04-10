@@ -80,7 +80,12 @@ export default function Feature3({
   selectedItemIndex,
 }: Feature3Props) {
   return (
-    <section className={cn("w-full h-full flex flex-col justify-evenly px-4 overflow-x-hidden", className)}>
+    <section
+      className={cn(
+        "w-full h-full flex flex-col justify-evenly px-4 overflow-x-hidden",
+        className,
+      )}
+    >
       <div className="mx-auto max-w-full text-center px-2">
         {(title || description) && (
           <div className="flex flex-col gap-2">
