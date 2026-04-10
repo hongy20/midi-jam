@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import RootLoading from "./loading";
+import Loading from "./loading";
 
-const meta: Meta<typeof RootLoading> = {
+const meta: Meta<typeof Loading> = {
   title: "App/Global/Loading",
-  component: RootLoading,
+  component: Loading,
   parameters: {
     layout: "fullscreen",
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof RootLoading>;
+type Story = StoryObj<typeof Loading>;
 
 export const Default: Story = {};

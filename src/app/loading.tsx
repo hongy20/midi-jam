@@ -9,7 +9,7 @@ const LOADING_TIPS = [
   "Did you know? MIDI Jam supports multiple simultaneous MIDI inputs.",
 ];
 
-export default function RootLoading() {
+export default function Loading() {
   return (
     <main className="flex h-dvh items-center justify-center">
       <LoadingScreen progress={null} tips={LOADING_TIPS} />

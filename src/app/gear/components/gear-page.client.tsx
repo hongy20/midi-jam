@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import RootLoading from "@/app/loading";
+import Loading from "@/app/loading";
 import { useGear } from "@/context/gear-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { GearPageView } from "./gear-page.view";
@@ -38,7 +38,7 @@ export function GearPageClient() {
   }
 
   if (isLoading) {
-    return <RootLoading />;
+    return <Loading />;
   }
 
   return (
