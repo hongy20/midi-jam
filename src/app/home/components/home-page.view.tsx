@@ -28,13 +28,13 @@ export function HomePageView({
       label: "START GAME",
       onClick: onStart,
       variant: "default" as const,
-      className: "w-40",
+      className: "w-48",
     },
     {
       label: "Options",
       onClick: onOptions,
       variant: "secondary" as const,
-      className: "w-40",
+      className: "w-48",
     },
   ];
 
