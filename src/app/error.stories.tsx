@@ -14,9 +14,9 @@ type Story = StoryObj<typeof GlobalError>;
 
 export const Default: Story = {
   args: {
-    error: new globalThis.Error(
+    error: new Error(
       "Critical system malfunction detected.",
-    ) as globalThis.Error & {
+    ) as Error & {
       digest?: string;
     },
   },
