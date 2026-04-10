@@ -80,12 +80,12 @@ export default function Feature3({
   selectedItemIndex,
 }: Feature3Props) {
   return (
-    <section className={cn("w-full px-4 py-16", className)}>
+    <section className={cn("w-full h-full flex flex-col justify-evenly", className)}>
       <div className="mx-auto max-w-5xl text-center">
         {(title || description) && (
-          <div className="mb-10">
+          <div className="flex flex-col gap-2">
             {title && (
-              <h2 className="retro mb-3 font-bold text-2xl tracking-tight md:text-3xl">
+              <h2 className="retro font-bold text-2xl tracking-tight md:text-3xl">
                 {title}
               </h2>
             )}

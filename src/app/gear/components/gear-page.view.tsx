@@ -28,10 +28,9 @@ export function GearPageView({
     description: input.manufacturer || "Generic MIDI Input",
     badge: input.id === selectedMIDIInput?.id ? "SELECTED" : undefined,
   }));
-
   return (
-    <main className="flex flex-col h-dvh items-center justify-between p-4 md:p-8 gap-4 md:gap-16 overflow-hidden">
-      <div className="flex-1 w-full max-w-5xl flex items-center justify-center min-h-0">
+    <main className="flex flex-col h-dvh items-center justify-evenly p-4 overflow-hidden">
+      <div className="flex-1 w-full flex items-center justify-center min-h-0 min-w-0">
         {inputs.length === 0 ? (
           <GearEmptyState />
         ) : (
@@ -52,7 +51,7 @@ export function GearPageView({
         )}
       </div>
 
-      <div className="w-full max-w-5xl pb-4 md:pb-12 flex flex-wrap justify-center gap-4 shrink-0">
+      <div className="w-full max-w-5xl flex flex-wrap justify-center gap-4 shrink-0 px-4 pb-4">
         <Button onClick={onBack} variant="secondary" className="w-48">
           MAIN MENU
         </Button>
