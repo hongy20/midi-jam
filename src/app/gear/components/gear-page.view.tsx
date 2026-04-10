@@ -46,7 +46,7 @@ export function GearPageView({
           />
 
           <Carousel
-            className="mx-auto w-full max-w-4xl px-10 sm:px-12"
+            className="mx-auto w-[calc(100%-6rem)] md:w-full max-w-4xl px-10 sm:px-12"
             opts={{ align: "start", loop: false }}
           >
             <CarouselContent>
