@@ -36,6 +36,12 @@ Refactor the `CollectionPage` from a monolithic client component into a modular 
   - Integrates the `8bitcn` Carousel with `SongCard` children.
   - Renders the primary action buttons (MAIN MENU / CONTINUE) in a bottom-centered group.
 
+#### [NEW] `collection-page.view.stories.tsx`
+- **Purpose**: Component documentation and preview.
+- **Features**: 
+  - Standard Storybook configuration.
+  - States: `Loading`, `Empty`, `With Tracks`, `With Selection`.
+
 ### 2. Implementation in `src/app/collection/page.tsx`
 - **Conversion**: Convert to a **Server Component**.
 - **Metadata**: Add standard Next.js metadata (title: "Collection | MIDI Jam").
@@ -55,6 +61,7 @@ The following files are verified to be unused after this refactor and will be de
 - `npm run lint` (Biome check)
 - `npm run type-check` (TypeScript check)
 - `npm test` (Ensure no regressions in existing tests)
+- **Storybook**: Run `npm run storybook` to verify component rendering in all states.
 
 ### Manual Verification
 - Navigate to `/collection` and verify the layout matches the immersive style of `/gear`.
