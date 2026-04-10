@@ -77,7 +77,7 @@ export function CollectionPageView({
         <Button
           onClick={onShuffle}
           variant="secondary"
-          className="w-48 [@media(height<320px)]:hidden"
+          className="w-48 [@media(height<350px)]:hidden"
           disabled={tracks.length <= 1}
         >
           <Dices className="size-4 mr-2" />
