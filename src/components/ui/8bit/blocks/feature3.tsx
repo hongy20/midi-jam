@@ -80,12 +80,12 @@ export default function Feature3({
   selectedItemIndex,
 }: Feature3Props) {
   return (
-    <section className={cn("w-full h-full flex flex-col justify-evenly", className)}>
-      <div className="mx-auto max-w-5xl text-center">
+    <section className={cn("w-full h-full flex flex-col justify-evenly px-4 overflow-x-hidden", className)}>
+      <div className="mx-auto max-w-full text-center px-2">
         {(title || description) && (
           <div className="flex flex-col gap-2">
             {title && (
-              <h2 className="retro font-bold text-2xl tracking-tight md:text-3xl">
+              <h2 className="retro font-bold text-lg sm:text-2xl md:text-3xl break-words">
                 {title}
               </h2>
             )}
@@ -98,7 +98,7 @@ export default function Feature3({
         )}
 
         <Carousel
-          className="mx-auto w-full max-w-4xl"
+          className="mx-auto w-full max-w-4xl px-10 sm:px-12"
           opts={{ align: "start", loop: false }}
         >
           <CarouselContent>
@@ -106,7 +106,7 @@ export default function Feature3({
               const isSelected = selectedItemIndex === index;
               return (
                 <CarouselItem
-                  className="pl-4 sm:basis-1/2 lg:basis-1/3"
+                  className="pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3"
                   key={item.title}
                 >
                   <div className="h-full p-2">

@@ -29,7 +29,7 @@ export function GearPageView({
     badge: input.id === selectedMIDIInput?.id ? "SELECTED" : undefined,
   }));
   return (
-    <main className="flex flex-col h-dvh items-center justify-evenly p-4 overflow-hidden">
+    <main className="flex flex-col h-dvh items-center justify-evenly p-4 overflow-x-hidden">
       <div className="flex-1 w-full flex items-center justify-center min-h-0 min-w-0">
         {inputs.length === 0 ? (
           <GearEmptyState />
