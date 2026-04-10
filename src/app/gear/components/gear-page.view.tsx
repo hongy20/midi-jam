@@ -26,7 +26,7 @@ export function GearPageView({
     icon: <Piano className="size-8" />,
     title: input.name || "Unknown Device",
     description: input.manufacturer || "Generic MIDI Input",
-    badge: input.id === selectedMIDIInput?.id ? "ACTIVE" : undefined,
+    badge: input.id === selectedMIDIInput?.id ? "SELECTED" : undefined,
   }));
 
   return (

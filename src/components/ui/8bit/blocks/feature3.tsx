@@ -174,11 +174,6 @@ export default function Feature3({
                           </CardDescription>
                         </CardContent>
                       </Card>
-                      {isSelected && (
-                        <div className="absolute -top-1 -right-1 bg-foreground text-background retro text-[7px] px-2 py-1 border-2 border-foreground z-20">
-                          SELECTED
-                        </div>
-                      )}
                     </button>
                   </div>
                 </CarouselItem>
