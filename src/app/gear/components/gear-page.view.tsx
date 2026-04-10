@@ -1,12 +1,10 @@
 "use client";
 
 import { Piano } from "lucide-react";
-import Link from "next/link";
 import Feature3, {
   type CarouselFeature,
 } from "@/components/ui/8bit/blocks/feature3";
 import { Button } from "@/components/ui/8bit/button";
-import { cn } from "@/lib/utils";
 import { GearEmptyState } from "./gear-empty-state";
 
 interface GearPageViewProps {
@@ -15,15 +13,6 @@ interface GearPageViewProps {
   onSelect: (input: WebMidi.MIDIInput) => void;
   onContinue: () => void;
   onBack: () => void;
-}
-
-interface FeatureAction {
-  href?: string;
-  label: string;
-  onClick?: () => void;
-  variant?: "default" | "destructive" | "ghost" | "outline" | "secondary";
-  disabled?: boolean;
-  className?: string;
 }
 
 export function GearPageView({
@@ -39,20 +28,6 @@ export function GearPageView({
     description: input.manufacturer || "Generic MIDI Input",
     badge: input.id === selectedMIDIInput?.id ? "ACTIVE" : undefined,
   }));
-
-  const actions: FeatureAction[] = [
-    {
-      label: "MAIN MENU",
-      onClick: onBack,
-      variant: "secondary" as const,
-    },
-    {
-      label: "CONTINUE",
-      onClick: onContinue,
-      variant: "default" as const,
-      disabled: !selectedMIDIInput,
-    },
-  ];
 
   return (
     <main className="flex flex-col h-dvh items-center justify-center p-4">
@@ -79,33 +54,19 @@ export function GearPageView({
         )}
       </div>
 
-      {actions.length > 0 && (
-        <div className="w-full max-w-5xl mt-auto pb-12 flex flex-wrap justify-center gap-4 shrink-0">
-          {actions.map((action) =>
-            action.href ? (
-              <Button
-                asChild
-                key={action.label}
-                variant={action.variant}
-                className={cn("w-48")}
-                disabled={action.disabled}
-              >
-                <Link href={action.href}>{action.label}</Link>
-              </Button>
-            ) : (
-              <Button
-                key={action.label}
-                onClick={action.onClick}
-                variant={action.variant}
-                className={cn("w-48")}
-                disabled={action.disabled}
-              >
-                {action.label}
-              </Button>
-            ),
-          )}
-        </div>
-      )}
+      <div className="w-full max-w-5xl mt-auto pb-12 flex flex-wrap justify-center gap-4 shrink-0">
+        <Button onClick={onBack} variant="secondary" className="w-48">
+          MAIN MENU
+        </Button>
+        <Button
+          onClick={onContinue}
+          variant="default"
+          className="w-48"
+          disabled={!selectedMIDIInput}
+        >
+          CONTINUE
+        </Button>
+      </div>
     </main>
   );
 }
