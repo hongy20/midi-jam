@@ -49,8 +49,7 @@ describe("NavigationGuard", () => {
       selectMIDIOutput: vi.fn(),
       inputs: [],
       outputs: [],
-      isLoading: false,
-      error: null,
+      accessPromise: Promise.resolve({} as WebMidi.MIDIAccess),
     });
     vi.mocked(useScore).mockReturnValue({
       sessionResults: null,
@@ -86,8 +85,7 @@ describe("NavigationGuard", () => {
       selectMIDIOutput: vi.fn(),
       inputs: [],
       outputs: [],
-      isLoading: false,
-      error: null,
+      accessPromise: Promise.resolve({} as WebMidi.MIDIAccess),
     });
 
     render(<NavigationGuard>Test</NavigationGuard>);

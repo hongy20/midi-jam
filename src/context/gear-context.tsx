@@ -11,14 +11,13 @@ export interface GearContextType {
   selectedMIDIOutput: WebMidi.MIDIOutput | null;
   selectMIDIInput: (input: WebMidi.MIDIInput | null) => void;
   selectMIDIOutput: (output: WebMidi.MIDIOutput | null) => void;
-  isLoading: boolean;
-  error: string | null;
+  accessPromise: Promise<WebMidi.MIDIAccess>;
 }
 
 const GearContext = createContext<GearContextType | undefined>(undefined);
 
 export function GearProvider({ children }: { children: ReactNode }) {
-  const { inputs, outputs, isLoading, error } = useMIDIDevices();
+  const { inputs, outputs, accessPromise } = useMIDIDevices();
   const { selectedMIDIInput, selectedMIDIOutput, selectMIDIInput } =
     useMIDISelection(inputs, outputs);
 
@@ -29,9 +28,8 @@ export function GearProvider({ children }: { children: ReactNode }) {
       selectedMIDIInput,
       selectedMIDIOutput,
       selectMIDIInput,
-      selectMIDIOutput: () => {}, // TODO: Implement if needed, current app-context has it as empty
-      isLoading,
-      error,
+      selectMIDIOutput: () => {}, // TODO: Implement if needed
+      accessPromise,
     }),
     [
       inputs,
@@ -39,8 +37,7 @@ export function GearProvider({ children }: { children: ReactNode }) {
       selectedMIDIInput,
       selectedMIDIOutput,
       selectMIDIInput,
-      isLoading,
-      error,
+      accessPromise,
     ],
   );
 

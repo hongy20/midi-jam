@@ -9,20 +9,17 @@ import {
 interface UseMIDIDevicesResult {
   inputs: WebMidi.MIDIInput[];
   outputs: WebMidi.MIDIOutput[];
-  isLoading: boolean;
-  error: string | null;
+  accessPromise: Promise<WebMidi.MIDIAccess>;
 }
 
 /**
  * A React hook that manages MIDI input and output device discovery and connection.
- * @returns An object containing the list of available inputs, outputs, loading state, and any error.
+ * @returns An object containing the list of available inputs, outputs, and the MIDI access promise.
  */
 export function useMIDIDevices(): UseMIDIDevicesResult {
+  const [accessPromise] = useState(() => requestMIDIAccess());
   const [inputs, setInputs] = useState<WebMidi.MIDIInput[]>([]);
   const [outputs, setOutputs] = useState<WebMidi.MIDIOutput[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [midiAccess, setMidiAccess] = useState<WebMidi.MIDIAccess | null>(null);
 
   const updateDevices = useCallback((access: WebMidi.MIDIAccess) => {
     setInputs(getMIDIInputDevices(access));
@@ -32,41 +29,28 @@ export function useMIDIDevices(): UseMIDIDevicesResult {
   useEffect(() => {
     let mounted = true;
 
-    async function setupMIDI() {
-      try {
-        const access = await requestMIDIAccess();
+    accessPromise
+      .then((access) => {
         if (!mounted) return;
-
-        setMidiAccess(access);
         updateDevices(access);
-        setIsLoading(false);
-      } catch (err) {
-        if (!mounted) return;
-        setError(err instanceof Error ? err.message : String(err));
-        setIsLoading(false);
-      }
-    }
 
-    setupMIDI();
+        const unsubscribe = onMIDIDevicesStateChange(access, () => {
+          if (!mounted) return;
+          updateDevices(access);
+        });
+
+        return () => {
+          unsubscribe();
+        };
+      })
+      .catch(() => {
+        // Error is handled by the promise itself when consumed via React.use()
+      });
 
     return () => {
       mounted = false;
     };
-  }, [updateDevices]);
+  }, [accessPromise, updateDevices]);
 
-  useEffect(() => {
-    if (!midiAccess) return;
-
-    const handleDevicesChange = () => {
-      updateDevices(midiAccess);
-    };
-
-    const unsubscribe = onMIDIDevicesStateChange(
-      midiAccess,
-      handleDevicesChange,
-    );
-    return unsubscribe;
-  }, [midiAccess, updateDevices]);
-
-  return { inputs, outputs, isLoading, error };
+  return { inputs, outputs, accessPromise };
 }

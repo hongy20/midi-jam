@@ -7,8 +7,7 @@ vi.mock("@/hooks/use-midi-devices", () => ({
   useMIDIDevices: vi.fn(() => ({
     inputs: [{ id: "input-1", name: "Mock Input" }],
     outputs: [{ id: "output-1", name: "Mock Output" }],
-    isLoading: false,
-    error: null,
+    accessPromise: Promise.resolve({} as WebMidi.MIDIAccess),
   })),
 }));
 

@@ -10,9 +10,10 @@ describe("useMIDIDevices", () => {
     vi.clearAllMocks();
   });
 
-  it("should start with an empty list and loading state", async () => {
+  it("should start with an empty list and provide an accessPromise", async () => {
     const mockMIDIAccess = {
       inputs: new Map(),
+      outputs: new Map(),
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
     };
@@ -24,11 +25,10 @@ describe("useMIDIDevices", () => {
 
     expect(result.current.inputs).toEqual([]);
     expect(result.current.outputs).toEqual([]);
-    expect(result.current.isLoading).toBe(true);
+    expect(result.current.accessPromise).toBeInstanceOf(Promise);
 
-    await waitFor(() => expect(result.current.isLoading).toBe(false));
-    expect(result.current.inputs).toEqual([]);
-    expect(result.current.outputs).toEqual([]);
+    await result.current.accessPromise;
+    await waitFor(() => expect(result.current.inputs).toEqual([]));
   });
 
   it("should return inputs and outputs when they are available", async () => {
@@ -46,20 +46,18 @@ describe("useMIDIDevices", () => {
 
     const { result } = renderHook(() => useMIDIDevices());
 
-    await waitFor(() => expect(result.current.isLoading).toBe(false));
-    expect(result.current.inputs).toEqual([mockInput]);
+    await result.current.accessPromise;
+    await waitFor(() => expect(result.current.inputs).toEqual([mockInput]));
     expect(result.current.outputs).toEqual([mockOutput]);
   });
 
-  it("should handle errors when requesting access", async () => {
-    vi.mocked(midiAccess.requestMIDIAccess).mockRejectedValue(
-      new Error("Access denied"),
-    );
+  it("should allow the accessPromise to reject on failure", async () => {
+    const error = new Error("Access denied");
+    vi.mocked(midiAccess.requestMIDIAccess).mockRejectedValue(error);
 
     const { result } = renderHook(() => useMIDIDevices());
 
-    await waitFor(() => expect(result.current.isLoading).toBe(false));
-    expect(result.current.error).toBe("Access denied");
+    await expect(result.current.accessPromise).rejects.toThrow("Access denied");
     expect(result.current.inputs).toEqual([]);
   });
 });

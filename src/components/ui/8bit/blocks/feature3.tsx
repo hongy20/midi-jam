@@ -32,6 +32,8 @@ interface Feature3Props {
   description?: string;
   items?: CarouselFeature[];
   title?: string;
+  onItemClick?: (index: number) => void;
+  selectedItemIndex?: number;
 }
 
 const defaultItems: CarouselFeature[] = [
@@ -74,14 +76,21 @@ export default function Feature3({
   description = "Swipe through to discover what makes this game legendary",
   items = defaultItems,
   className,
+  onItemClick,
+  selectedItemIndex,
 }: Feature3Props) {
   return (
-    <section className={cn("w-full px-4 py-16", className)}>
-      <div className="mx-auto max-w-5xl">
+    <section
+      className={cn(
+        "w-full h-full flex flex-col justify-evenly px-4 overflow-x-hidden",
+        className,
+      )}
+    >
+      <div className="mx-auto max-w-full text-center px-2">
         {(title || description) && (
-          <div className="mb-10 text-center">
+          <div className="flex flex-col gap-2">
             {title && (
-              <h2 className="retro mb-3 font-bold text-2xl tracking-tight md:text-3xl">
+              <h2 className="retro font-bold text-lg sm:text-2xl md:text-3xl break-words">
                 {title}
               </h2>
             )}
@@ -94,37 +103,87 @@ export default function Feature3({
         )}
 
         <Carousel
-          className="mx-auto w-full max-w-4xl"
-          opts={{ align: "start", loop: true }}
+          className="mx-auto w-full max-w-4xl px-10 sm:px-12"
+          opts={{ align: "start", loop: false }}
         >
           <CarouselContent>
-            {items.map((item) => (
-              <CarouselItem
-                className="pl-4 sm:basis-1/2 lg:basis-1/3"
-                key={item.title}
-              >
-                <div className="h-full p-2">
-                  <Card className="relative h-full">
-                    {item.badge && (
-                      <div className="absolute top-2 right-4 z-10">
-                        <Badge className="text-[7px]">{item.badge}</Badge>
-                      </div>
-                    )}
-                    <CardHeader className="pb-2">
-                      <div className="retro mb-2 text-2xl">{item.icon}</div>
-                      <CardTitle className="retro text-sm">
-                        {item.title}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription className="retro text-[9px] leading-relaxed">
-                        {item.description}
-                      </CardDescription>
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
+            {items.map((item, index) => {
+              const isSelected = selectedItemIndex === index;
+              return (
+                <CarouselItem
+                  className="pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3"
+                  key={item.title}
+                >
+                  <div className="h-full p-2">
+                    <button
+                      type="button"
+                      onClick={() => onItemClick?.(index)}
+                      className={cn(
+                        "group relative h-full w-full text-left outline-none focus-visible:ring-4 focus-visible:ring-foreground transition-all active:scale-95",
+                        !onItemClick && "cursor-default active:scale-100",
+                      )}
+                    >
+                      <Card
+                        className={cn(
+                          "relative h-full transition-colors border-8",
+                          isSelected
+                            ? "border-primary bg-primary text-primary-foreground shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]"
+                            : "border-foreground/10 hover:border-foreground/40",
+                        )}
+                      >
+                        {item.badge && (
+                          <div className="absolute top-2 right-4 z-10">
+                            <Badge
+                              className={cn(
+                                "text-[7px]",
+                                isSelected &&
+                                  "bg-primary-foreground text-primary",
+                              )}
+                            >
+                              {item.badge}
+                            </Badge>
+                          </div>
+                        )}
+                        <CardHeader className="pb-2">
+                          <div
+                            className={cn(
+                              "retro mb-2 text-2xl",
+                              isSelected
+                                ? "text-primary-foreground"
+                                : "text-foreground",
+                            )}
+                          >
+                            {item.icon}
+                          </div>
+                          <CardTitle
+                            className={cn(
+                              "retro text-sm",
+                              isSelected
+                                ? "text-primary-foreground"
+                                : "text-foreground",
+                            )}
+                          >
+                            {item.title}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <CardDescription
+                            className={cn(
+                              "retro text-[9px] leading-relaxed",
+                              isSelected
+                                ? "text-primary-foreground/70"
+                                : "text-muted-foreground",
+                            )}
+                          >
+                            {item.description}
+                          </CardDescription>
+                        </CardContent>
+                      </Card>
+                    </button>
+                  </div>
+                </CarouselItem>
+              );
+            })}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />

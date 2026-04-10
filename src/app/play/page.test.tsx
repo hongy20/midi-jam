@@ -86,8 +86,7 @@ describe("Play Page", () => {
       selectMIDIOutput: vi.fn(),
       inputs: [],
       outputs: [],
-      isLoading: false,
-      error: null,
+      accessPromise: Promise.resolve({} as WebMidi.MIDIAccess),
     });
 
     vi.mocked(useTrack).mockReturnValue({
