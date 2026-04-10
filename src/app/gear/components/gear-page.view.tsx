@@ -30,26 +30,25 @@ export function GearPageView({
   }));
   return (
     <main className="flex flex-col h-dvh items-center justify-evenly p-4 overflow-x-hidden">
-      <div className="flex-1 w-full flex items-center justify-center min-h-0 min-w-0">
-        {inputs.length === 0 ? (
-          <GearEmptyState />
-        ) : (
-          <Feature3
-            title="CHOOSE GEAR"
-            description="Play a note on your gear to select it, or tap a card below."
-            items={items}
-            onItemClick={(index) => {
-              const input = inputs[index];
-              if (input) onSelect(input);
-            }}
-            selectedItemIndex={
-              selectedMIDIInput
-                ? inputs.findIndex((i) => i.id === selectedMIDIInput.id)
-                : undefined
-            }
-          />
-        )}
-      </div>
+      {inputs.length === 0 ? (
+        <GearEmptyState className="flex-1 w-full flex items-center justify-center min-h-0 min-w-0" />
+      ) : (
+        <Feature3
+          title="CHOOSE GEAR"
+          description="Play a note on your gear to select it, or tap a card below."
+          items={items}
+          onItemClick={(index) => {
+            const input = inputs[index];
+            if (input) onSelect(input);
+          }}
+          selectedItemIndex={
+            selectedMIDIInput
+              ? inputs.findIndex((i) => i.id === selectedMIDIInput.id)
+              : undefined
+          }
+          className="flex-1 w-full flex items-center justify-center min-h-0 min-w-0"
+        />
+      )}
 
       <div className="w-full max-w-5xl flex flex-wrap justify-center gap-4 shrink-0 px-4 pb-4">
         <Button onClick={onBack} variant="secondary" className="w-48">

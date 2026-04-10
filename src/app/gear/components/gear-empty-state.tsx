@@ -1,8 +1,12 @@
-"use client";
+import { cn } from "@/lib/utils";
 
-export function GearEmptyState() {
+interface GearEmptyStateProps {
+  className?: string;
+}
+
+export function GearEmptyState({ className }: GearEmptyStateProps) {
   return (
-    <div className="text-center px-8">
+    <div className={cn("text-center px-8", className)}>
       <h2 className="retro mb-6 font-bold text-2xl tracking-tight md:text-3xl text-foreground/60">
         No gear found.
       </h2>
