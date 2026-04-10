@@ -45,7 +45,39 @@ export function GearPageView({
   return (
     <main className="flex h-dvh items-center justify-center">
       {inputs.length === 0 ? (
-        <GearEmptyState onBack={onBack} />
+        <section className="w-full px-4 py-16">
+          <div className="mx-auto max-w-5xl text-center">
+            <GearEmptyState />
+
+            {actions.length > 0 && (
+              <div className="mt-12 flex flex-wrap justify-center gap-4">
+                {actions.map((action) =>
+                  action.href ? (
+                    <Button
+                      asChild
+                      key={action.label}
+                      variant={action.variant}
+                      className={cn("w-48")}
+                      disabled={action.disabled}
+                    >
+                      <Link href={action.href}>{action.label}</Link>
+                    </Button>
+                  ) : (
+                    <Button
+                      key={action.label}
+                      onClick={action.onClick}
+                      variant={action.variant}
+                      className={cn("w-48")}
+                      disabled={action.disabled}
+                    >
+                      {action.label}
+                    </Button>
+                  ),
+                )}
+              </div>
+            )}
+          </div>
+        </section>
       ) : (
         <Feature3
           title="CHOOSE GEAR"

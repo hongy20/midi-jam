@@ -12,8 +12,4 @@ const meta: Meta<typeof GearEmptyState> = {
 export default meta;
 type Story = StoryObj<typeof GearEmptyState>;
 
-export const Default: Story = {
-  args: {
-    onBack: () => console.log("Back clicked"),
-  },
-};
+export const Default: Story = {};
