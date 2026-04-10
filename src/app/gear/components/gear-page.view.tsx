@@ -52,7 +52,7 @@ export function GearPageView({
             <CarouselContent>
               {inputs.map((input, index) => (
                 <CarouselItem
-                  className="pl-4 basis-[85%] sm:basis-1/2 lg:basis-1/3"
+                  className="pl-4 basis-[100%] sm:basis-1/2 lg:basis-1/3"
                   key={input.id}
                 >
                   <GearCard
