@@ -10,12 +10,13 @@ Refactor the Gear page to use `Feature3` directly, remove `PageLayout`, and adop
 - Add `selectedItemTitle` (or `selectedItemId`) to `Feature3Props`.
 - Update the item rendering to be interactive (e.g., wrap in a button or add `onClick` to `Card`) and show selection state.
 
-### 2. `src/app/gear/`
+### 2. `src/app/`
 #### [CREATE] `loading.tsx` & `loading.stories.tsx`
-- Implement a retro-style loading screen.
-#### [CREATE] `error.tsx` & `error.stories.tsx`
-- Implement a retro-style error screen.
-#### [MODIFY] `page.tsx`
+- Implement a global retro-style loading screen with combined tips.
+- Consolidate individual `loading.tsx` files from `home` and `gear` routes.
+#### [CREATE] `gear/error.tsx` & `gear/error.stories.tsx`
+- Implement a retro-style error screen for gear issues.
+#### [MODIFY] `gear/page.tsx`
 - Simplify to a wrapper that renders `GearPageClient`.
 
 ### 3. `src/app/gear/components/`
