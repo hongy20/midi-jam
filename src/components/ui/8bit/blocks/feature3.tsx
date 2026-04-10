@@ -29,7 +29,7 @@ export interface CarouselFeature {
   title: string;
 }
 
-interface FeatureAction {
+export interface FeatureAction {
   href?: string;
   label: string;
   onClick?: () => void;

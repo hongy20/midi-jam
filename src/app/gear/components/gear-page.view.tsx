@@ -1,9 +1,13 @@
 "use client";
 
 import { Piano } from "lucide-react";
+import Link from "next/link";
 import Feature3, {
   type CarouselFeature,
+  type FeatureAction,
 } from "@/components/ui/8bit/blocks/feature3";
+import { Button } from "@/components/ui/8bit/button";
+import { cn } from "@/lib/utils";
 import { GearEmptyState } from "./gear-empty-state";
 
 interface GearPageViewProps {
@@ -28,7 +32,7 @@ export function GearPageView({
     badge: input.id === selectedMIDIInput?.id ? "ACTIVE" : undefined,
   }));
 
-  const actions = [
+  const actions: FeatureAction[] = [
     {
       label: "MAIN MENU",
       onClick: onBack,
