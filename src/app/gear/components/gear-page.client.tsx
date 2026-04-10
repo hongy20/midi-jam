@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
-import Loading from "@/app/loading";
+import { use, useEffect } from "react";
 import { useGear } from "@/context/gear-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { GearPageView } from "./gear-page.view";
 
 export function GearPageClient() {
   const { toCollection, toHome } = useNavigation();
-  const { selectMIDIInput, selectedMIDIInput, inputs, isLoading, error } =
+  const { selectMIDIInput, selectedMIDIInput, inputs, accessPromise } =
     useGear();
+
+  // Suspends here until MIDI access is granted or errors out to error.tsx
+  use(accessPromise);
 
   useEffect(() => {
     // Attach listener to all inputs to detect activity and auto-select
@@ -32,14 +34,6 @@ export function GearPageClient() {
       });
     };
   }, [inputs, selectMIDIInput]);
-
-  if (error) {
-    throw new Error(error);
-  }
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
     <GearPageView

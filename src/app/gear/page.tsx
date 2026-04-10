@@ -1,4 +1,4 @@
-import { GearPageClient } from "./components/gear-page.client";
+import { GearPageBoundary } from "./components/gear-page-boundary";
 
 export const metadata = {
   title: "Gear | MIDI Jam",
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function GearPage() {
-  return <GearPageClient />;
+  return <GearPageBoundary />;
 }
