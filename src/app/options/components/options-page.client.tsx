@@ -2,8 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import type { Difficulty } from "@/components/ui/8bit/blocks/difficulty-select";
-import { useOptions } from "@/context/options-context";
+import { type Difficulty, useOptions } from "@/context/options-context";
 import { useTheme } from "@/context/theme-context";
 import { useNavigation } from "@/hooks/use-navigation";
 import { OptionsPageView } from "./options-page.view";

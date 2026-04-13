@@ -2,7 +2,7 @@
 
 import { ArrowLeft, Moon, Sun, Wand2 } from "lucide-react";
 import { SelectThemeDropdown } from "@/components/select-theme-dropdown";
-import type { Difficulty } from "@/components/ui/8bit/blocks/difficulty-select";
+import { type Difficulty } from "@/context/options-context";
 import { Button } from "@/components/ui/8bit/button";
 import {
   Card,
