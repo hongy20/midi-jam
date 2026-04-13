@@ -5,14 +5,14 @@ import PauseMenu from "@/components/ui/8bit/blocks/pause-menu";
 interface PausePageViewProps {
   onContinue: () => void;
   onRestart: () => void;
-  onSettings: () => void;
+  onOptions: () => void;
   onQuit: () => void;
 }
 
 export function PausePageView({
   onContinue,
   onRestart,
-  onSettings,
+  onOptions,
   onQuit,
 }: PausePageViewProps) {
   return (
@@ -20,7 +20,7 @@ export function PausePageView({
       <PauseMenu
         onContinue={onContinue}
         onRestart={onRestart}
-        onSettings={onSettings}
+        onOptions={onOptions}
         onQuit={onQuit}
       />
     </main>

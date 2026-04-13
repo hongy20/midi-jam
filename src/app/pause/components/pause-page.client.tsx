@@ -37,7 +37,7 @@ export function PausePageClient() {
         setGameSession(null);
         toPlay();
       }}
-      onSettings={() => toOptions("pause")}
+      onOptions={() => toOptions("pause")}
       onQuit={() => {
         if (gameSession && trackStatus.isReady) {
           const { score: currentScore, combo } = gameSession;

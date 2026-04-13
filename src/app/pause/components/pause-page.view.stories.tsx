@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { PausePageView } from "./pause-page.view";
 
 const meta: Meta<typeof PausePageView> = {
-  title: "Pages/Pause/PausePageView",
+  title: "App/Pause/View",
   component: PausePageView,
   parameters: {
     layout: "fullscreen",
@@ -10,7 +10,7 @@ const meta: Meta<typeof PausePageView> = {
   argTypes: {
     onContinue: { action: "continued" },
     onRestart: { action: "restarted" },
-    onSettings: { action: "settings clicked" },
+    onOptions: { action: "options clicked" },
     onQuit: { action: "quit" },
   },
 };

@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 interface PauseMenuProps extends React.ComponentProps<"div"> {
   onContinue?: () => void;
   onRestart?: () => void;
-  onSettings?: () => void;
+  onOptions?: () => void;
   onQuit?: () => void;
 }
 
@@ -19,7 +19,7 @@ export default function PauseMenu({
   className,
   onContinue,
   onRestart,
-  onSettings,
+  onOptions,
   onQuit,
   ...props
 }: PauseMenuProps) {
@@ -37,9 +37,9 @@ export default function PauseMenu({
       variant: "secondary" as const,
     },
     {
-      label: "SETTINGS",
+      label: "OPTIONS",
       icon: Settings,
-      action: onSettings,
+      action: onOptions,
       variant: "secondary" as const,
     },
     {
