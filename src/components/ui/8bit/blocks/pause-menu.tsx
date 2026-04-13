@@ -54,7 +54,7 @@ export default function PauseMenu({
   ];
 
   return (
-    <Card className={cn("w-full max-w-sm", className)} {...props}>
+    <Card className={cn(styles.cardContainer, className)} {...props}>
       <CardHeader className="flex flex-col items-center justify-center pt-8 pb-4">
         <CardTitle font="retro" className="text-xl">
           PAUSED
