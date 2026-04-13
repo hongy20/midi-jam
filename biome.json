@@ -38,5 +38,13 @@
         "organizeImports": "on"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["src/app/retro-globals.css"],
+      "linter": {
+        "enabled": false
+      }
+    }
+  ]
 }

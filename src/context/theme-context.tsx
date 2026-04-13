@@ -7,7 +7,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { THEME_DEFAULT, type Theme } from "@/lib/theme/constant";
+import { Theme } from "@/lib/themes";
 
 export type ThemeMode = "light" | "dark";
 
@@ -21,13 +21,13 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(THEME_DEFAULT);
+  const [theme, setThemeState] = useState<Theme>("default");
   const [mode, setModeState] = useState<ThemeMode>("light");
 
   useEffect(() => {
     // Load theme and mode from localStorage on mount
     const savedTheme = localStorage.getItem("midi-jam-theme") as Theme;
-    if (savedTheme) {
+    if (savedTheme && Object.values(Theme).includes(savedTheme)) {
       setThemeState(savedTheme);
     }
 
@@ -50,6 +50,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
+    // Apply theme classes to both body and documentElement
+    const targets = [document.body, document.documentElement];
+    for (const el of targets) {
+      const themeClasses = Array.from(el.classList).filter((className) =>
+        className.startsWith("theme-"),
+      );
+      for (const className of themeClasses) {
+        el.classList.remove(className);
+      }
+      el.classList.add(`theme-${theme}`);
+    }
+    // Also keep the data-theme for backward compatibility if any CSS uses it
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
