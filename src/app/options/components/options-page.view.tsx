@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/8bit/select";
 import { Toggle } from "@/components/ui/8bit/toggle";
 import { RetroModeSwitcher } from "@/components/ui/retro-mode-switcher";
+import { cn } from "@/lib/utils";
 import type { Theme } from "@/lib/themes";
 
 interface OptionsPageViewProps {
@@ -127,15 +128,12 @@ export function OptionsPageView({
       </div>
 
       <footer className="w-full max-w-2xl flex items-center justify-between py-6 shrink-0 border-t-8 border-muted mt-auto">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center">
           <RetroModeSwitcher
             isDarkMode={isDarkMode}
             onToggle={() => setDarkMode(!isDarkMode)}
-            className="size-10"
+            className="size-12"
           />
-          <span className="retro text-xs uppercase opacity-60">
-            {isDarkMode ? "DARK" : "LIGHT"} MODE
-          </span>
         </div>
 
         <Button
@@ -143,7 +141,6 @@ export function OptionsPageView({
           onClick={onBack}
           size="sm"
           font="retro"
-          className="px-6 h-12"
         >
           <ArrowLeft className="size-5 mr-3" />
           BACK
@@ -152,6 +149,3 @@ export function OptionsPageView({
     </main>
   );
 }
-
-// Helper for conditional classes since we don't have lucide/cn logic here
-import { cn } from "@/lib/utils";
