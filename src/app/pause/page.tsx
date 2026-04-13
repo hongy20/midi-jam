@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { PausePageClient } from "./components/pause-page.client";
 
-export const dynamic = "force-dynamic";
-
 export const metadata: Metadata = {
   title: "Game Paused | Midi Jam",
   description: "Gameplay is currently paused.",
