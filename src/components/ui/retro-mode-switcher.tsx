@@ -1,26 +1,25 @@
 "use client";
 
-import * as React from "react";
 import { Button } from "@/components/ui/8bit/button";
-import { useTheme } from "@/context/theme-context";
+import type { ThemeMode } from "@/context/theme-context";
 import { cn } from "@/lib/utils";
 
 interface RetroModeSwitcherProps {
   className?: string;
+  mode: ThemeMode;
+  onToggle: () => void;
 }
 
-export function RetroModeSwitcher({ className }: RetroModeSwitcherProps) {
-  const { mode, setMode } = useTheme();
-
-  const toggleTheme = React.useCallback(() => {
-    setMode(mode === "dark" ? "light" : "dark");
-  }, [mode, setMode]);
-
+export function RetroModeSwitcher({
+  className,
+  mode,
+  onToggle,
+}: RetroModeSwitcherProps) {
   return (
     <Button
       variant="ghost"
       className="group/toggle h-8 w-8 px-0"
-      onClick={toggleTheme}
+      onClick={onToggle}
     >
       <svg
         width="50"
@@ -30,7 +29,11 @@ export function RetroModeSwitcher({ className }: RetroModeSwitcherProps) {
         xmlns="http://www.w3.org/2000/svg"
         stroke="currentColor"
         strokeWidth="0.25"
-        className={cn("size-8 hidden [html.dark_&]:block", className)}
+        className={cn(
+          "size-8",
+          mode === "light" ? "hidden" : "block",
+          className,
+        )}
         role="img"
         aria-label="sun-dim"
       >
@@ -72,7 +75,11 @@ export function RetroModeSwitcher({ className }: RetroModeSwitcherProps) {
         xmlns="http://www.w3.org/2000/svg"
         stroke="currentColor"
         strokeWidth="0.25"
-        className={cn("hidden [html.light_&]:block size-8", className)}
+        className={cn(
+          "size-8",
+          mode === "dark" ? "hidden" : "block",
+          className,
+        )}
         role="img"
         aria-label="moon"
       >

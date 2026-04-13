@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/8bit/select";
-import { useTheme } from "@/context/theme-context";
+
 import { Theme } from "@/lib/themes";
 
 const themes = [
@@ -34,11 +34,18 @@ const themes = [
   { name: Theme.AncientRunes, color: "#009688" },
 ];
 
-export function SelectThemeDropdown() {
-  const { theme: activeTheme, setTheme: setActiveTheme } = useTheme();
+export interface SelectThemeDropdownProps {
+  activeTheme: Theme;
+  onThemeChange: (theme: Theme) => void;
+}
+
+export function SelectThemeDropdown({
+  activeTheme,
+  onThemeChange,
+}: SelectThemeDropdownProps) {
   return (
     <Select
-      onValueChange={(val) => setActiveTheme(val as Theme)}
+      onValueChange={(val) => onThemeChange(val as Theme)}
       value={activeTheme}
     >
       <SelectTrigger className="w-full">

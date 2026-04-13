@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { type Difficulty, useOptions } from "@/context/options-context";
+import { useTheme } from "@/context/theme-context";
 
 import { useNavigation } from "@/hooks/use-navigation";
 import { OptionsPageView } from "./options-page.view";
@@ -12,6 +13,7 @@ import { OptionsPageView } from "./options-page.view";
  * Maps context state and navigation to the pure view component.
  */
 export function OptionsPageClient() {
+  const { theme, setTheme, mode, setMode } = useTheme();
   const { speed, setSpeed, demoMode, setDemoMode } = useOptions();
   const { goBack } = useNavigation();
   const searchParams = useSearchParams();
@@ -19,6 +21,11 @@ export function OptionsPageClient() {
   // Navigation handlers
   const from = searchParams.get("from") ?? "/";
   const onBack = useCallback(() => goBack(from), [goBack, from]);
+
+  // Mode Toggle Handler
+  const onModeToggle = useCallback(() => {
+    setMode(mode === "dark" ? "light" : "dark");
+  }, [mode, setMode]);
 
   // Difficulty Mapping
   const difficulty = useMemo((): Difficulty => {
@@ -41,6 +48,10 @@ export function OptionsPageClient() {
 
   return (
     <OptionsPageView
+      activeTheme={theme}
+      onThemeChange={setTheme}
+      mode={mode}
+      onModeToggle={onModeToggle}
       difficulty={difficulty}
       onDifficultyChange={onDifficultyChange}
       demoMode={demoMode}

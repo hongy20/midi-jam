@@ -19,12 +19,18 @@ import {
 import { Toggle } from "@/components/ui/8bit/toggle";
 import { RetroModeSwitcher } from "@/components/ui/retro-mode-switcher";
 import type { Difficulty } from "@/context/options-context";
+import type { ThemeMode } from "@/context/theme-context";
+import type { Theme } from "@/lib/themes";
 
 interface OptionsPageViewProps {
   difficulty: Difficulty;
   onDifficultyChange: (val: Difficulty) => void;
   demoMode: boolean;
   setDemoMode: (enabled: boolean) => void;
+  activeTheme: Theme;
+  onThemeChange: (theme: Theme) => void;
+  mode: ThemeMode;
+  onModeToggle: () => void;
   onBack: () => void;
 }
 
@@ -33,6 +39,10 @@ export function OptionsPageView({
   onDifficultyChange,
   demoMode,
   setDemoMode,
+  activeTheme,
+  onThemeChange,
+  mode,
+  onModeToggle,
   onBack,
 }: OptionsPageViewProps) {
   return (
@@ -57,7 +67,10 @@ export function OptionsPageView({
             <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
               Customize the look and feel
             </p>
-            <SelectThemeDropdown />
+            <SelectThemeDropdown
+              activeTheme={activeTheme}
+              onThemeChange={onThemeChange}
+            />
           </CardContent>
         </Card>
 
@@ -116,7 +129,11 @@ export function OptionsPageView({
 
       <footer className="w-full max-w-2xl flex items-center justify-between py-6 shrink-0 border-t-8 border-muted mt-auto">
         <div className="flex items-center">
-          <RetroModeSwitcher className="size-7" />
+          <RetroModeSwitcher
+            mode={mode}
+            onToggle={onModeToggle}
+            className="size-7"
+          />
         </div>
 
         <Button variant="secondary" onClick={onBack} size="sm" font="retro">
