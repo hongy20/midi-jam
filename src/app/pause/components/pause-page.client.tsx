@@ -18,8 +18,14 @@ export function PausePageClient() {
 
   // Error guard: if we're on the pause page without an active session/selection, 
   // something is wrong. We throw to let the error boundary handle it.
-  if (!selectedTrack || !selectedMIDIInput) {
+  // We check for window to avoid breaking the Next.js build during prerendering.
+  if (typeof window !== "undefined" && (!selectedTrack || !selectedMIDIInput)) {
     throw new Error("Cannot access Pause page without an active track and MIDI input.");
+  }
+
+  // During SSR or if missing state, render nothing (or a skeleton)
+  if (!selectedTrack || !selectedMIDIInput) {
+    return null;
   }
 
   return (
