@@ -91,22 +91,24 @@ export function OptionsPageView({
         </Card>
 
         <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between bg-muted/20 border-4 border-muted p-4">
-              <div className="flex items-center gap-4">
-                <Wand2 className="size-6 text-primary" />
-                <div className="flex flex-col gap-1">
-                  <span className="retro text-xs uppercase">Autopilot</span>
-                  <span className="retro text-[10px] opacity-60 uppercase">
-                    System plays automatically
-                  </span>
-                </div>
+          <CardHeader className="pb-2">
+            <CardTitle font="retro" className="text-lg uppercase">
+              Autopilot
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <div className="flex flex-col gap-1">
+                <span className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
+                  System plays automatically
+                </span>
               </div>
               <Toggle
                 pressed={demoMode}
                 onPressedChange={setDemoMode}
                 variant="outline"
                 size="sm"
+                className="shrink-0"
               >
                 {demoMode ? "ON" : "OFF"}
               </Toggle>
