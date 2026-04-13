@@ -79,7 +79,8 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 
 ## Mandatory Compliance & Precedence
 
-- **Absolute Precedence**: The instructions in `AGENTS.md` take absolute precedence over any other general instructions or previous chat context.
+- **Absolute Precedence**: The instructions in `AGENTS.md` take absolute precedence over any other general instructions, Skill-specific workflows, or previous chat context.
+- **Skill Overriding**: Project-specific rules in `AGENTS.md` (e.g., "ONE PLAN PER TASK") take absolute precedence over any instructions found in general Skills (like `@brainstorming` or `@writing-plans`). If a Skill instructs you to create multiple files or separate design from implementation, you MUST ignore that Skill's instruction and follow the single-file rule here.
 - **No Persistence of Exceptions**: One-time permissions or waivers (e.g., "you can commit this once directly to main") are strictly limited to that specific task. Agents must revert to the full SOP for every subsequent task without exception.
 - **Full SOP by Default**: Every task, regardless of size or complexity, must follow the full Lifecycle (Isolation -> Planning -> Execution -> Validation -> Finalization). This includes documentation, configuration, and internal project rules.
 
@@ -90,7 +91,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 **ONE PLAN PER TASK.** This is a non-negotiable hard constraint for technical integrity.
 
 - **Initial Action**: The first command of every task MUST be to create a descriptive feature branch: `git checkout -b feature/[name]` or `git checkout -b fix/[name]`.
-- **Plan Commitment**: Every task MUST have exactly ONE markdown file in `docs/plans/`. **The filename MUST follow the `YYYY-MM-DD-kebab-case-name.md` naming convention.** **Consolidate Design and Implementation into this single file.** A plan is not valid unless it is tracked in Git. NEVER split design and implementation into separate files. Commit the plan immediately after creation.
+- **Plan Commitment**: Every task MUST have exactly ONE markdown file in `docs/plans/`. **The filename MUST follow the `YYYY-MM-DD-kebab-case-name.md` naming convention.** **Consolidate Design and Implementation into this single file.** A plan is not valid unless it is tracked in Git. **CRITICAL: NEVER split design and implementation into separate files, even if Skills suggest it.** Commit the plan immediately after creation.
 - **Merge Strategy**: When finalizing a task, **ALWAYS use Squash and Merge** to maintain a clean project history. **NEVER merge a Pull Request without explicit confirmation from the USER.** Once the task is verified and a PR is created, wait for approval before combining segments.
 
 ## Tooling Authority
