@@ -60,6 +60,9 @@ export function OptionsPageView({
               activeTheme={theme}
               setActiveTheme={setTheme}
             />
+            <p className="retro text-[10px] opacity-60 uppercase mt-2 text-wrap">
+              Customize the look and feel
+            </p>
           </CardContent>
         </Card>
 
