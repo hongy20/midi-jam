@@ -3,7 +3,3 @@
 /* 1. Global Variables & Constants */
 @import "../styles/variables.css";
 @import "../styles/base.css";
-
-/* 2. Structured Themes */
-@import "../styles/themes/default.css";
-@import "../styles/themes/nintendo.css";
