@@ -108,42 +108,28 @@ git commit -m "feat: update PausePage entry point to server component"
 **Goal**: Prevent layout breakage on small screens (< 400px height) by switching to a 2x2 grid for buttons.
 
 **Files**:
-- [NEW] `src/components/ui/8bit/blocks/pause-menu.module.css`
 - [MODIFY] `src/components/ui/8bit/blocks/pause-menu.tsx`
 
-**Step 1: Create the CSS Module**
-Implement the `grid-cols-2` switch and increase the card width for small heights.
+**Step 1: Apply Tailwind Responsive Classes**
+Implement the `grid-cols-2` switch and increase the card width for small heights directly in the TSX using arbitrary variants.
 
-```css
-.cardContainer {
-  width: 100%;
-  max-width: 24rem; /* Default max-w-sm */
-}
-
-.buttonGrid {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-/* Landscape/Short viewports: 2x2 grid for 4 buttons */
-@media (max-height: 450px) {
-  .cardContainer {
-    max-width: 36rem; /* Increase width to provide room for 2 columns */
-  }
-
-  .buttonGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, auto);
-    gap: 1.5rem; /* Increased gap to prevent button overlap */
-    padding: 0.5rem; /* Safety padding from card borders */
-  }
-}
+```tsx
+<Card className="w-full max-w-sm [@media(max-height:450px)]:max-w-2xl">
+  <div className="flex flex-col gap-4 [@media(max-height:450px)]:grid [@media(max-height:450px)]:grid-cols-2 [@media(max-height:450px)]:gap-6 [@media(max-height:450px)]:p-2">
+    ...
+  </div>
+</Card>
 ```
 
-**Step 2: Apply to Component**
-Refactor the `PauseMenu` to use `styles.cardContainer` and apply the fixed grid styles.
+**Step 2: Verification**
+- Use Browser Tools to simulate 400px height.
+- Verify Storybook at different heights.
+
+**Step 3: Commit**
+```bash
+git add src/components/ui/8bit/blocks/pause-menu.tsx
+git commit -m "fix: responsive button layout for small viewport heights using Tailwind"
+```
 
 **Step 3: Verification**
 - Use Browser Tools to simulate 400px height.

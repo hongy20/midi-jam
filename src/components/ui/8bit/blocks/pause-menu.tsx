@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/8bit/card";
 import { cn } from "@/lib/utils";
-import styles from "./pause-menu.module.css";
 
 interface PauseMenuProps extends React.ComponentProps<"div"> {
   onContinue?: () => void;
@@ -54,14 +53,25 @@ export default function PauseMenu({
   ];
 
   return (
-    <Card className={cn(styles.cardContainer, className)} {...props}>
+    <Card
+      className={cn(
+        "w-full max-w-sm [@media(max-height:450px)]:max-w-2xl",
+        className,
+      )}
+      {...props}
+    >
       <CardHeader className="flex flex-col items-center justify-center pt-8 pb-4">
         <CardTitle font="retro" className="text-xl">
           PAUSED
         </CardTitle>
       </CardHeader>
       <CardContent className="px-6 pb-8">
-        <div className={styles.buttonGrid}>
+        <div
+          className={cn(
+            "flex flex-col gap-4 w-full",
+            "[@media(max-height:450px)]:grid [@media(max-height:450px)]:grid-cols-2 [@media(max-height:450px)]:grid-rows-2 [@media(max-height:450px)]:gap-6 [@media(max-height:450px)]:p-2",
+          )}
+        >
           {menuItems.map((item) => (
             <Button
               key={item.label}
