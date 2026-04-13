@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/8bit/card";
 import { cn } from "@/lib/utils";
+import styles from "./pause-menu.module.css";
 
 interface PauseMenuProps extends React.ComponentProps<"div"> {
   onContinue?: () => void;
@@ -60,7 +61,7 @@ export default function PauseMenu({
         </CardTitle>
       </CardHeader>
       <CardContent className="px-6 pb-8">
-        <div className="flex flex-col gap-4">
+        <div className={styles.buttonGrid}>
           {menuItems.map((item) => (
             <Button
               key={item.label}

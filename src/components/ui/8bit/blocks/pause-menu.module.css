@@ -1,0 +1,16 @@
+.buttonGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Landscape / Small Viewport Height: Switch to 2x2 grid */
+@media (max-height: 450px) {
+  .buttonGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, auto);
+    gap: 0.75rem;
+  }
+}
