@@ -39,44 +39,22 @@ export function OptionsPageView({
   onBack,
 }: OptionsPageViewProps) {
   return (
-    <main className="h-dvh w-screen flex flex-col items-center justify-start p-4 md:p-8 bg-background overflow-y-auto no-scrollbar gap-8">
+    <main className="h-dvh w-screen flex flex-col items-center justify-start p-4 md:p-8 bg-background overflow-hidden">
       {/* Header */}
-      <div className="w-full max-w-2xl flex items-center justify-between shrink-0">
-        <Button
-          variant="secondary"
-          onClick={onBack}
-          size="sm"
-          font="retro"
-          className="px-4"
-        >
-          <ArrowLeft className="size-4 mr-2" />
-          BACK
-        </Button>
-        <h1 className="retro text-2xl md:text-3xl tracking-tighter uppercase">
+      <div className="w-full max-w-2xl flex items-center justify-center shrink-0 py-4">
+        <h1 className="retro text-2xl md:text-3xl tracking-tighter uppercase text-center">
           Settings
         </h1>
-        <div className="w-24" /> {/* Spacer */}
       </div>
 
-      <div className="w-full max-w-2xl flex flex-col gap-6 pb-12">
+      {/* Content Area */}
+      <div className="w-full max-w-2xl flex-1 flex flex-col gap-6 overflow-y-auto no-scrollbar pb-12">
         {/* Visual Theme Section */}
         <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardHeader className="pb-2">
             <CardTitle font="retro" className="text-lg uppercase">
               Visual Theme
             </CardTitle>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setDarkMode(!isDarkMode)}
-              className="px-2"
-            >
-              {isDarkMode ? (
-                <Moon className="size-4 text-primary" />
-              ) : (
-                <Sun className="size-4 text-primary" />
-              )}
-            </Button>
           </CardHeader>
           <CardContent>
             <SelectThemeDropdown
@@ -126,6 +104,35 @@ export function OptionsPageView({
           </CardContent>
         </Card>
       </div>
+
+      {/* Footer Actions */}
+      <footer className="w-full max-w-2xl flex items-center justify-between py-6 shrink-0 border-t-8 border-muted mt-auto">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setDarkMode(!isDarkMode)}
+          className="px-4 h-12"
+          font="retro"
+        >
+          {isDarkMode ? (
+            <Moon className="size-5 mr-3 text-primary" />
+          ) : (
+            <Sun className="size-5 mr-3 text-primary" />
+          )}
+          {isDarkMode ? "DARK" : "LIGHT"}
+        </Button>
+
+        <Button
+          variant="secondary"
+          onClick={onBack}
+          size="sm"
+          font="retro"
+          className="px-6 h-12"
+        >
+          <ArrowLeft className="size-5 mr-3" />
+          BACK
+        </Button>
+      </footer>
     </main>
   );
 }
