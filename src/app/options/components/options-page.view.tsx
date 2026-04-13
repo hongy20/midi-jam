@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowLeft, Moon, Sun, Wand2 } from "lucide-react";
+import { RetroModeSwitcher } from "@/components/ui/retro-mode-switcher";
 import { SelectThemeDropdown } from "@/components/select-theme-dropdown";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/8bit/select";
 import type { Difficulty } from "@/components/ui/8bit/blocks/difficulty-select";
@@ -119,27 +120,24 @@ export function OptionsPageView({
         </Card>
       </div>
 
-      {/* Footer Actions */}
       <footer className="w-full max-w-2xl flex items-center justify-between py-6 shrink-0 border-t-8 border-muted mt-auto">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setDarkMode(!isDarkMode)}
-          font="retro"
-        >
-          {isDarkMode ? (
-            <Moon className="size-5 mr-3 text-primary" />
-          ) : (
-            <Sun className="size-5 mr-3 text-primary" />
-          )}
-          {isDarkMode ? "DARK" : "LIGHT"}
-        </Button>
+        <div className="flex items-center gap-4">
+          <RetroModeSwitcher
+            isDarkMode={isDarkMode}
+            onToggle={() => setDarkMode(!isDarkMode)}
+            className="size-10"
+          />
+          <span className="retro text-xs uppercase opacity-60">
+            {isDarkMode ? "DARK" : "LIGHT"} MODE
+          </span>
+        </div>
 
         <Button
           variant="secondary"
           onClick={onBack}
           size="sm"
           font="retro"
+          className="px-6 h-12"
         >
           <ArrowLeft className="size-5 mr-3" />
           BACK
