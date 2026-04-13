@@ -1,9 +1,7 @@
 "use client";
 
 import { ArrowLeft, Moon, Sun, Wand2 } from "lucide-react";
-import { RetroModeSwitcher } from "@/components/ui/retro-mode-switcher";
 import { SelectThemeDropdown } from "@/components/select-theme-dropdown";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/8bit/select";
 import type { Difficulty } from "@/components/ui/8bit/blocks/difficulty-select";
 import { Button } from "@/components/ui/8bit/button";
 import {
@@ -12,7 +10,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/8bit/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/8bit/select";
 import { Toggle } from "@/components/ui/8bit/toggle";
+import { RetroModeSwitcher } from "@/components/ui/retro-mode-switcher";
 import type { Theme } from "@/lib/themes";
 
 interface OptionsPageViewProps {

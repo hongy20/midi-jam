@@ -122,7 +122,7 @@
   }
 }
 
-.theme-default {
+.theme-default, [data-theme="default"] {
   :root {
     --radius: 0.65rem;
     --background: oklch(1 0 0);
@@ -194,7 +194,7 @@
   }
 }
 
-.theme-sega {
+.theme-sega, [data-theme="sega"] {
   --radius: 0rem;
   --primary: oklch(0.5 0.2 260);
   --primary-foreground: oklch(0.9 0.02 260);
@@ -263,7 +263,7 @@
   }
 }
 
-.theme-nintendo {
+.theme-nintendo, [data-theme="nintendo"] {
   --radius: 0rem;
   --primary: oklch(0.5 0.2 280);
   --primary-foreground: oklch(0 0 0);
@@ -332,7 +332,7 @@
   }
 }
 
-.theme-gameboy {
+.theme-gameboy, [data-theme="gameboy"] {
   --radius: 0rem;
   --primary: oklch(0.7 0.2 120);
   --primary-foreground: oklch(0.2 0.1 140);
@@ -401,7 +401,7 @@
   }
 }
 
-.theme-atari {
+.theme-atari, [data-theme="atari"] {
   --radius: 0rem;
   --primary: oklch(0.5 0.2 60);
   --primary-foreground: oklch(0 0 0);
@@ -470,7 +470,7 @@
   }
 }
 
-.theme-arcade {
+.theme-arcade, [data-theme="arcade"] {
   --radius: 0rem;
   --primary: oklch(0.7 0.25 320);
   --primary-foreground: oklch(0.1 0.05 320);
@@ -539,7 +539,7 @@
   }
 }
 
-.theme-neo-geo {
+.theme-neo-geo, [data-theme="neo-geo"] {
   --radius: 0rem;
   --primary: oklch(0.65 0.25 25);
   --primary-foreground: oklch(0.98 0.01 25);
@@ -608,7 +608,7 @@
   }
 }
 
-.theme-soft-pop {
+.theme-soft-pop, [data-theme="soft-pop"] {
   --background: oklch(0.9789 0.0082 121.6272);
   --foreground: oklch(0 0 0);
   --card: oklch(1 0 0);
@@ -724,7 +724,7 @@
   }
 }
 
-.theme-vhs {
+.theme-vhs, [data-theme="vhs"] {
   --background: oklch(0.9768 0.0142 308.299);
   --foreground: oklch(0.2905 0.1432 302.7167);
   --card: oklch(1 0 0);
@@ -840,7 +840,7 @@
   }
 }
 
-.theme-pacman {
+.theme-pacman, [data-theme="pacman"] {
   --background: oklch(1 0 0);
   --foreground: oklch(0.2101 0.0318 264.6645);
   --card: oklch(0.9846 0.0017 247.8389);
@@ -945,7 +945,7 @@
   }
 }
 
-.theme-rusty-byte {
+.theme-rusty-byte, [data-theme="rusty-byte"] {
   --radius: 0.25rem;
   --primary: oklch(0.65 0.18 40);
   --primary-foreground: oklch(0.98 0.02 95);
@@ -1014,7 +1014,7 @@
   }
 }
 
-.theme-zelda {
+.theme-zelda, [data-theme="zelda"] {
   --radius: 0.25rem;
 
   /* GOLDEN YELLOW PRIMARY */

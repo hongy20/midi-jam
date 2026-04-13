@@ -1,10 +1,8 @@
 "use client";
 
 import * as React from "react";
-
-import { useTheme } from "@/context/theme-context";
-
 import { Button } from "@/components/ui/8bit/button";
+import { useTheme } from "@/context/theme-context";
 import { cn } from "@/lib/utils";
 
 interface RetroModeSwitcherProps {
@@ -21,7 +19,8 @@ export function RetroModeSwitcher({
   // Use props if provided, otherwise fallback to context (though we prefer props in the view)
   const { mode, setMode } = useTheme();
 
-  const currentMode = isDarkMode !== undefined ? (isDarkMode ? "dark" : "light") : mode;
+  const currentMode =
+    isDarkMode !== undefined ? (isDarkMode ? "dark" : "light") : mode;
 
   const toggleTheme = React.useCallback(() => {
     if (onToggle) {
