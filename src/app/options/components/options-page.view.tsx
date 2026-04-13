@@ -90,26 +90,29 @@ export function OptionsPageView({
           </CardContent>
         </Card>
 
-        {/* Autopilot Row */}
-        <div className="flex items-center justify-between p-4 bg-muted/20 border-8 border-muted shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
-          <div className="flex items-center gap-4">
-            <Wand2 className="size-6 text-primary" />
-            <div className="flex flex-col gap-1">
-              <span className="retro text-xs uppercase">Autopilot</span>
-              <span className="retro text-[10px] opacity-60 uppercase">
-                System plays automatically
-              </span>
+        <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between bg-muted/20 border-4 border-muted p-4">
+              <div className="flex items-center gap-4">
+                <Wand2 className="size-6 text-primary" />
+                <div className="flex flex-col gap-1">
+                  <span className="retro text-xs uppercase">Autopilot</span>
+                  <span className="retro text-[10px] opacity-60 uppercase">
+                    System plays automatically
+                  </span>
+                </div>
+              </div>
+              <Toggle
+                pressed={demoMode}
+                onPressedChange={setDemoMode}
+                variant="outline"
+                size="sm"
+              >
+                {demoMode ? "ON" : "OFF"}
+              </Toggle>
             </div>
-          </div>
-          <Toggle
-            pressed={demoMode}
-            onPressedChange={setDemoMode}
-            variant="outline"
-            size="sm"
-          >
-            {demoMode ? "ON" : "OFF"}
-          </Toggle>
-        </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Footer Actions */}
