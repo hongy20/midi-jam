@@ -46,16 +46,16 @@ export function OptionsPageView({
   onBack,
 }: OptionsPageViewProps) {
   return (
-    <main className="h-dvh w-screen flex flex-col items-center justify-start p-4 md:p-8 bg-background overflow-hidden">
+    <main className="h-dvh w-screen flex flex-col items-center justify-evenly p-4 bg-background overflow-hidden">
       {/* Header */}
-      <div className="w-full max-w-2xl flex items-center justify-center shrink-0 py-4">
+      <div className="w-full max-w-2xl flex items-center justify-center shrink-0">
         <h1 className="retro text-2xl md:text-3xl tracking-tighter uppercase text-center">
           Settings
         </h1>
       </div>
 
       {/* Content Area */}
-      <div className="w-full max-w-2xl flex-1 flex flex-col gap-6 overflow-y-auto no-scrollbar pb-12">
+      <div className="w-full max-w-2xl flex flex-col gap-6 overflow-y-auto no-scrollbar">
         {/* Visual Theme Section */}
         <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
           <CardHeader className="pb-2">
@@ -127,7 +127,7 @@ export function OptionsPageView({
         </Card>
       </div>
 
-      <footer className="w-full max-w-2xl flex items-center justify-between py-6 shrink-0 border-t-8 border-muted mt-auto">
+      <footer className="w-full max-w-2xl flex items-center justify-between border-muted">
         <div className="flex items-center">
           <RetroModeSwitcher
             mode={mode}
