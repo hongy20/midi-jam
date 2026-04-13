@@ -2,9 +2,8 @@
 
 import { ArrowLeft, Moon, Sun, Wand2 } from "lucide-react";
 import { SelectThemeDropdown } from "@/components/select-theme-dropdown";
-import DifficultySelect, {
-  type Difficulty,
-} from "@/components/ui/8bit/blocks/difficulty-select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/8bit/select";
+import type { Difficulty } from "@/components/ui/8bit/blocks/difficulty-select";
 import { Button } from "@/components/ui/8bit/button";
 import {
   Card,
@@ -65,14 +64,31 @@ export function OptionsPageView({
         </Card>
 
         {/* Gameplay Section */}
-        <DifficultySelect
-          value={difficulty}
-          onChange={onDifficultyChange}
-          title="Difficulty"
-          description="Adjust the note fall speed"
-          className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]"
-          vertical={false}
-        />
+        <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
+          <CardHeader className="pb-2">
+            <CardTitle font="retro" className="text-lg uppercase">
+              Difficulty
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-2">
+            <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
+              Adjust the note fall speed
+            </p>
+            <Select 
+              value={difficulty} 
+              onValueChange={(val) => onDifficultyChange(val as Difficulty)}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Difficulty" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="easy">EASY (0.5x)</SelectItem>
+                <SelectItem value="normal">NORMAL (1.0x)</SelectItem>
+                <SelectItem value="hard">HARD (2.0x)</SelectItem>
+              </SelectContent>
+            </Select>
+          </CardContent>
+        </Card>
 
         {/* System Section */}
         <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
