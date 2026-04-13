@@ -55,7 +55,7 @@ export function OptionsPageView({
               Visual Theme
             </CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex flex-col gap-2">
             <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
               Customize the look and feel
             </p>
@@ -77,8 +77,8 @@ export function OptionsPageView({
             <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
               Adjust the note fall speed
             </p>
-            <Select 
-              value={difficulty} 
+            <Select
+              value={difficulty}
               onValueChange={(val) => onDifficultyChange(val as Difficulty)}
             >
               <SelectTrigger className="w-full">
@@ -93,6 +93,7 @@ export function OptionsPageView({
           </CardContent>
         </Card>
 
+        {/* Autopilot Section */}
         <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
           <CardHeader className="pb-2">
             <CardTitle font="retro" className="text-lg uppercase">
@@ -101,11 +102,9 @@ export function OptionsPageView({
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
-              <div className="flex flex-col gap-1">
-                <span className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
-                  System plays automatically
-                </span>
-              </div>
+              <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
+                System plays automatically
+              </p>
               <Toggle
                 pressed={demoMode}
                 onPressedChange={setDemoMode}
