@@ -61,49 +61,28 @@ export function OptionsPageView({
       <div className="w-full max-w-2xl flex flex-col gap-6 pb-12">
         {/* Visual Theme Section */}
         <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
-          <CardHeader>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle font="retro" className="text-lg uppercase">
               Visual Theme
             </CardTitle>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setDarkMode(!isDarkMode)}
+              className="px-2"
+            >
+              {isDarkMode ? (
+                <Moon className="size-4 text-primary" />
+              ) : (
+                <Sun className="size-4 text-primary" />
+              )}
+            </Button>
           </CardHeader>
-          <CardContent className="flex flex-col gap-4">
+          <CardContent>
             <SelectThemeDropdown
               activeTheme={theme}
               setActiveTheme={setTheme}
             />
-
-            <div className="flex items-center justify-between p-4 bg-muted/20 border-4 border-muted">
-              <div className="flex flex-col gap-1">
-                <span className="retro text-xs uppercase">Appearance</span>
-                <span className="retro text-[10px] opacity-60 uppercase">
-                  Switch between light and dark
-                </span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Sun
-                  className={cn(
-                    "size-4",
-                    !isDarkMode ? "text-primary" : "opacity-20",
-                  )}
-                />
-                <Toggle
-                  pressed={isDarkMode}
-                  onPressedChange={setDarkMode}
-                  variant="outline"
-                  size="sm"
-                >
-                  <span className="text-[10px]">
-                    {isDarkMode ? "DARK" : "LIGHT"}
-                  </span>
-                </Toggle>
-                <Moon
-                  className={cn(
-                    "size-4",
-                    isDarkMode ? "text-primary" : "opacity-20",
-                  )}
-                />
-              </div>
-            </div>
           </CardContent>
         </Card>
 
