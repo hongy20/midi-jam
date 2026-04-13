@@ -69,14 +69,18 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 - **Grouped Status UI**: Use nested ternary operators to group loading, error, and success states into a single logical block within the JSX. This keeps the state-dependent UI cohesive.
 - **Minimal DOM Nesting**: Minimize container layers. Avoid wrapping elements in redundant `div`s for spacing, alignment, or positioning; instead, apply these rules to the parent container (e.g., using Flexbox/Grid properties on `<main>`). Use fragments `<></>` when a React wrapper is technically required but styling is not.
 
-## 6. Coding Patterns
-- **Nullish Coalescing**: Prefer `??` or ternary for default values over verbose checks.
-- **Iconography**: Use `lucide-react` exclusively. No inline SVG strings or emojis.
-## 7. Storybook Naming Convention
+## 7. Storybook Standards
+
+### 7.1 Naming Convention
 - **Pattern**: Always use the following hierarchy for the `title` in story files:
   - **Pages**: `App/[PageName]/View` (e.g., `App/Options/View`, `App/Pause/View`).
   - **Global Components**: `App/Global/[ComponentName]` (e.g., `App/Global/Loading`).
 - **Consistency**: All new stories must adhere to this pattern to maintain a clean and organized Storybook sidebar.
+
+### 7.2 Theme & Context Integration
+- **Unified Decorator**: All stories must be wrapped in `ThemeProvider` within the Storybook environment to ensure context compatibility.
+- **Theme Switching**: Use `globalTypes` (not the default decorators) to manage the 20+ retro themes via `data-theme` and Light/Dark mode via the `.dark` class. This ensures independent control and avoids CSS selector clashes.
+- **CSS Selectors**: Always ensure `retro-globals.css` supports both `.theme-name` (for runtime) and `[data-theme="name"]` (for Storybook) selectors.
 
 ---
 
@@ -87,6 +91,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 - **Absolute Precedence**: The instructions in `AGENTS.md` take absolute precedence over any other general instructions, Skill-specific workflows, or previous chat context.
 - **Skill Overriding**: Project-specific rules in `AGENTS.md` (e.g., "ONE PLAN PER TASK") take absolute precedence over any instructions found in general Skills (like `@brainstorming` or `@writing-plans`). If a Skill instructs you to create multiple files or separate design from implementation, you MUST ignore that Skill's instruction and follow the single-file rule here.
 - **No Persistence of Exceptions**: One-time permissions or waivers (e.g., "you can commit this once directly to main") are strictly limited to that specific task. Agents must revert to the full SOP for every subsequent task without exception.
+- **Commit Frequency**: Agents MUST commit changes at every logically complete sub-task or milestone. DO NOT wait until the end of the conversation to commit all changes. "Forgot to commit" is a violation of the SOP.
 - **Full SOP by Default**: Every task, regardless of size or complexity, must follow the full Lifecycle (Isolation -> Planning -> Execution -> Validation -> Finalization). This includes documentation, configuration, and internal project rules.
 
 ## Isolation & Branching Protocol
