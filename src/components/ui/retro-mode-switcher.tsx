@@ -33,8 +33,7 @@ export function RetroModeSwitcher({
   return (
     <Button
       variant="ghost"
-      className="group/toggle px-0"
-      size="icon"
+      className="group/toggle h-8 w-8 px-0"
       onClick={toggleTheme}
     >
       <svg

@@ -132,7 +132,7 @@ export function OptionsPageView({
           <RetroModeSwitcher
             isDarkMode={isDarkMode}
             onToggle={() => setDarkMode(!isDarkMode)}
-            className="size-12"
+            className="size-7"
           />
         </div>
 
