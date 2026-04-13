@@ -111,7 +111,6 @@ export function OptionsPageView({
           variant="outline"
           size="sm"
           onClick={() => setDarkMode(!isDarkMode)}
-          className="px-4 h-12"
           font="retro"
         >
           {isDarkMode ? (
@@ -127,7 +126,6 @@ export function OptionsPageView({
           onClick={onBack}
           size="sm"
           font="retro"
-          className="px-6 h-12"
         >
           <ArrowLeft className="size-5 mr-3" />
           BACK
