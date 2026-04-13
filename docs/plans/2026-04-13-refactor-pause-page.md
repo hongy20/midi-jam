@@ -52,7 +52,7 @@ git commit -m "feat: install 8bitcn pause-menu block"
 Write minimal implementation using the `PauseMenu` block inside a centered `main` tag.
 
 **Step 2: Create Storybook**
-Create `pause-page.view.stories.tsx` with mock handlers.
+Create `pause-page.view.stories.tsx`. Ensure the Storybook title follows the convention: `title: "App/Pause/View"`.
 
 **Step 3: Verification**
 Run: `npm run build-storybook` (or check in a running storybook instance).
