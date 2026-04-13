@@ -3,7 +3,7 @@ import type { Theme } from "@/lib/themes";
 import { OptionsPageView } from "./options-page.view";
 
 const meta: Meta<typeof OptionsPageView> = {
-  title: "Pages/OptionsPageView",
+  title: "App/Options/View",
   component: OptionsPageView,
   parameters: {
     layout: "fullscreen",

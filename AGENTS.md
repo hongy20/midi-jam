@@ -72,6 +72,11 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 ## 6. Coding Patterns
 - **Nullish Coalescing**: Prefer `??` or ternary for default values over verbose checks.
 - **Iconography**: Use `lucide-react` exclusively. No inline SVG strings or emojis.
+## 7. Storybook Naming Convention
+- **Pattern**: Always use the following hierarchy for the `title` in story files:
+  - **Pages**: `App/[PageName]/View` (e.g., `App/Options/View`, `App/Pause/View`).
+  - **Global Components**: `App/Global/[ComponentName]` (e.g., `App/Global/Loading`).
+- **Consistency**: All new stories must adhere to this pattern to maintain a clean and organized Storybook sidebar.
 
 ---
 

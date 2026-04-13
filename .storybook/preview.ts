@@ -3,8 +3,9 @@ import {
   withThemeByDataAttribute,
 } from "@storybook/addon-themes";
 import type { Preview } from "@storybook/nextjs-vite";
-import { THEME_DEFAULT, THEME_NINTENDO } from "../src/lib/theme/constant";
+import { Theme } from "../src/lib/themes";
 import "../src/app/globals.css";
+import "../src/app/retro-globals.css";
 
 const preview: Preview = {
   parameters: {
@@ -22,10 +23,10 @@ const preview: Preview = {
 
   decorators: [
     withThemeByDataAttribute({
-      themes: {
-        Default: THEME_DEFAULT,
-        Nintendo: THEME_NINTENDO,
-      },
+      themes: Object.entries(Theme).reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {} as Record<string, string>),
       defaultTheme: "Default",
       attributeName: "data-theme",
     }),
