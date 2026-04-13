@@ -42,10 +42,6 @@ export function OptionsPageClient() {
 
   return (
     <OptionsPageView
-      theme={theme}
-      setTheme={setTheme}
-      isDarkMode={mode === "dark"}
-      setDarkMode={(enabled) => setMode(enabled ? "dark" : "light")}
       difficulty={difficulty}
       onDifficultyChange={onDifficultyChange}
       demoMode={demoMode}

@@ -7,28 +7,14 @@ import { cn } from "@/lib/utils";
 
 interface RetroModeSwitcherProps {
   className?: string;
-  isDarkMode?: boolean;
-  onToggle?: () => void;
 }
 
-export function RetroModeSwitcher({
-  className,
-  isDarkMode,
-  onToggle,
-}: RetroModeSwitcherProps) {
-  // Use props if provided, otherwise fallback to context (though we prefer props in the view)
+export function RetroModeSwitcher({ className }: RetroModeSwitcherProps) {
   const { mode, setMode } = useTheme();
 
-  const currentMode =
-    isDarkMode !== undefined ? (isDarkMode ? "dark" : "light") : mode;
-
   const toggleTheme = React.useCallback(() => {
-    if (onToggle) {
-      onToggle();
-    } else {
-      setMode(currentMode === "dark" ? "light" : "dark");
-    }
-  }, [currentMode, onToggle, setMode]);
+    setMode(mode === "dark" ? "light" : "dark");
+  }, [mode, setMode]);
 
   return (
     <Button
@@ -44,7 +30,7 @@ export function RetroModeSwitcher({
         xmlns="http://www.w3.org/2000/svg"
         stroke="currentColor"
         strokeWidth="0.25"
-        className={cn("hidden [html.dark_&]:block", className)}
+        className={cn("size-8 hidden [html.dark_&]:block", className)}
         role="img"
         aria-label="sun-dim"
       >
@@ -86,7 +72,7 @@ export function RetroModeSwitcher({
         xmlns="http://www.w3.org/2000/svg"
         stroke="currentColor"
         strokeWidth="0.25"
-        className={cn("hidden [html.light_&]:block", className)}
+        className={cn("hidden [html.light_&]:block size-8", className)}
         role="img"
         aria-label="moon"
       >

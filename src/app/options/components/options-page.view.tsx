@@ -19,13 +19,8 @@ import {
 import { Toggle } from "@/components/ui/8bit/toggle";
 import { RetroModeSwitcher } from "@/components/ui/retro-mode-switcher";
 import type { Difficulty } from "@/context/options-context";
-import type { Theme } from "@/lib/themes";
 
 interface OptionsPageViewProps {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-  isDarkMode: boolean;
-  setDarkMode: (enabled: boolean) => void;
   difficulty: Difficulty;
   onDifficultyChange: (val: Difficulty) => void;
   demoMode: boolean;
@@ -34,10 +29,6 @@ interface OptionsPageViewProps {
 }
 
 export function OptionsPageView({
-  theme,
-  setTheme,
-  isDarkMode,
-  setDarkMode,
   difficulty,
   onDifficultyChange,
   demoMode,
@@ -66,10 +57,7 @@ export function OptionsPageView({
             <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
               Customize the look and feel
             </p>
-            <SelectThemeDropdown
-              activeTheme={theme}
-              setActiveTheme={setTheme}
-            />
+            <SelectThemeDropdown />
           </CardContent>
         </Card>
 
@@ -128,11 +116,7 @@ export function OptionsPageView({
 
       <footer className="w-full max-w-2xl flex items-center justify-between py-6 shrink-0 border-t-8 border-muted mt-auto">
         <div className="flex items-center">
-          <RetroModeSwitcher
-            isDarkMode={isDarkMode}
-            onToggle={() => setDarkMode(!isDarkMode)}
-            className="size-7"
-          />
+          <RetroModeSwitcher className="size-7" />
         </div>
 
         <Button variant="secondary" onClick={onBack} size="sm" font="retro">
