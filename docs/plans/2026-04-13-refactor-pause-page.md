@@ -1,4 +1,4 @@
-# PausePage Refactor Implementation Plan
+# Refactor PausePage Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
@@ -10,6 +10,22 @@
 
 ---
 
+## Design Summary
+
+### Components
+1. **`src/app/pause/page.tsx` (Server)**: Metadata definition and entry point.
+2. **`src/app/pause/components/pause-page.client.tsx` (Client Logic)**: Consumes contexts, implements error guard (throws if missing state), and renders the view.
+3. **`src/app/pause/components/pause-page.view.tsx` (Pure View)**: Centered `main` tag rendering the `@8bitcn/pause-menu`.
+4. **`src/components/ui/8bit/blocks/pause-menu.tsx` (8bitcn Block)**: Installed via CLI.
+
+### UI Simplification
+- Remove the "Currently Playing" card.
+- Consolidate actions to component defaults: `CONTINUE`, `RESTART`, `SETTINGS`, `QUIT`.
+
+---
+
+## Implementation Tasks
+
 ### Task 1: Install 8bitcn PauseMenu Block
 
 **Files:**
@@ -17,7 +33,6 @@
 
 **Step 1: Install the block**
 Run: `npx shadcn@latest add @8bitcn/pause-menu`
-Expected: File created at `src/components/ui/8bit/blocks/pause-menu.tsx`.
 
 **Step 2: Commit**
 ```bash
@@ -36,36 +51,11 @@ git commit -m "feat: install 8bitcn pause-menu block"
 **Step 1: Implement the view**
 Write minimal implementation using the `PauseMenu` block inside a centered `main` tag.
 
-```tsx
-import { PauseMenu } from "@/components/ui/8bit/blocks/pause-menu";
-
-interface PausePageViewProps {
-  onContinue: () => void;
-  onRestart: () => void;
-  onSettings: () => void;
-  onQuit: () => void;
-}
-
-export function PausePageView({ onContinue, onRestart, onSettings, onQuit }: PausePageViewProps) {
-  return (
-    <main className="min-h-[100dvh] flex items-center justify-center bg-background/80 backdrop-blur-sm">
-      <PauseMenu 
-        title="PAUSED"
-        onContinue={onContinue}
-        onRestart={onRestart}
-        onSettings={onSettings}
-        onQuit={onQuit}
-      />
-    </main>
-  );
-}
-```
-
 **Step 2: Create Storybook**
 Create `pause-page.view.stories.tsx` with mock handlers.
 
 **Step 3: Verification**
-Run: `npm run build-storybook` (or check in a running storybook instance if possible).
+Run: `npm run build-storybook` (or check in a running storybook instance).
 
 **Step 4: Commit**
 ```bash
@@ -81,7 +71,7 @@ git commit -m "feat: add PausePageView and Storybook"
 - [NEW] `src/app/pause/components/pause-page.client.tsx`
 
 **Step 1: Write the logic container**
-Consume hooks and implement error guard as per design.
+Consume hooks and implement error guard.
 
 **Step 2: Verification**
 Run: `npm run type-check`
