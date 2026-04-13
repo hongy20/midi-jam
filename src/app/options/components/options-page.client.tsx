@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { type Difficulty, useOptions } from "@/context/options-context";
-import { useTheme } from "@/context/theme-context";
+
 import { useNavigation } from "@/hooks/use-navigation";
 import { OptionsPageView } from "./options-page.view";
 
@@ -12,7 +12,6 @@ import { OptionsPageView } from "./options-page.view";
  * Maps context state and navigation to the pure view component.
  */
 export function OptionsPageClient() {
-  const { theme, setTheme, mode, setMode } = useTheme();
   const { speed, setSpeed, demoMode, setDemoMode } = useOptions();
   const { goBack } = useNavigation();
   const searchParams = useSearchParams();

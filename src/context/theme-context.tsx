@@ -3,6 +3,7 @@
 import {
   createContext,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -17,7 +18,6 @@ interface ThemeContextType {
   mode: ThemeMode;
   setMode: (mode: ThemeMode) => void;
 }
-
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -39,15 +39,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const setTheme = (newTheme: Theme) => {
+  const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
     localStorage.setItem("midi-jam-theme", newTheme);
-  };
+  }, []);
 
-  const setMode = (newMode: ThemeMode) => {
+  const setMode = useCallback((newMode: ThemeMode) => {
     setModeState(newMode);
     localStorage.setItem("midi-jam-mode", newMode);
-  };
+  }, []);
 
   useEffect(() => {
     // Apply theme classes to both body and documentElement
@@ -72,6 +72,36 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       document.documentElement.classList.remove("dark");
     }
   }, [mode]);
+
+  // Support 'D' key hotkey for toggling theme mode
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (
+        event.defaultPrevented ||
+        event.repeat ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.altKey ||
+        event.key.toLowerCase() !== "d"
+      ) {
+        return;
+      }
+
+      const target = event.target as HTMLElement;
+      const isTyping =
+        target.isContentEditable ||
+        ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
+
+      if (isTyping) {
+        return;
+      }
+
+      setMode(mode === "dark" ? "light" : "dark");
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [mode, setMode]);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, mode, setMode }}>
