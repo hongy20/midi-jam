@@ -1,0 +1,25 @@
+export const Theme = {
+  Default: "default",
+  Sega: "sega",
+  Gameboy: "gameboy",
+  Atari: "atari",
+  Nintendo: "nintendo",
+  Arcade: "arcade",
+  NeoGeo: "neo-geo",
+  SoftPop: "soft-pop",
+  Pacman: "pacman",
+  VHS: "vhs",
+  RustyByte: "rusty-byte",
+  Zelda: "zelda",
+  DungeonTorch: "dungeon-torch",
+  SpaceStation: "space-station",
+  PixelForest: "pixel-forest",
+  IceCavern: "ice-cavern",
+  LavaCore: "lava-core",
+  GlitchMode: "glitch-mode",
+  DwarvenVault: "dwarven-vault",
+  DragonHoard: "dragon-hoard",
+  AncientRunes: "ancient-runes",
+} as const;
+
+export type Theme = (typeof Theme)[keyof typeof Theme];

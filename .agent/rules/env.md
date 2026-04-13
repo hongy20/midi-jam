@@ -15,6 +15,15 @@ The agent must operate within the user's active NVM (Node Version Manager) envir
    - **Node Path**: /usr/local/bin/node
    - **NPM/NPX Path**: /usr/local/bin/npx
 
+## Global CLI Tools (GitHub CLI / gh)
+The agent must be able to access system-level binaries installed via Homebrew.
+
+### Path Injection:
+1. **PATH Update**: For every shell session or command involving `gh`, ensure the PATH includes:
+   `/opt/homebrew/bin:/usr/local/bin`
+2. **Execution Rule**: If `gh` is not found, prefix the command to include the path:
+   `PATH=$PATH:/opt/homebrew/bin:/usr/local/bin gh pr create ...`
+
 ### Verification:
-- Always run `node -v` to verify the environment is active before proceeding with complex scripts.
+- Always run `node -v` and `gh --version` to verify the environment is active before proceeding with complex scripts.
 - If a "command not found" error persists, fallback to using the absolute binary path for every invocation.

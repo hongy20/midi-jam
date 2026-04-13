@@ -3,11 +3,12 @@
 import {
   createContext,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useState,
 } from "react";
-import { THEME_DEFAULT, type Theme } from "@/lib/theme/constant";
+import { Theme } from "@/lib/themes";
 
 export type ThemeMode = "light" | "dark";
 
@@ -17,17 +18,16 @@ interface ThemeContextType {
   mode: ThemeMode;
   setMode: (mode: ThemeMode) => void;
 }
-
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(THEME_DEFAULT);
+  const [theme, setThemeState] = useState<Theme>("default");
   const [mode, setModeState] = useState<ThemeMode>("light");
 
   useEffect(() => {
     // Load theme and mode from localStorage on mount
     const savedTheme = localStorage.getItem("midi-jam-theme") as Theme;
-    if (savedTheme) {
+    if (savedTheme && Object.values(Theme).includes(savedTheme)) {
       setThemeState(savedTheme);
     }
 
@@ -39,17 +39,29 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const setTheme = (newTheme: Theme) => {
+  const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
     localStorage.setItem("midi-jam-theme", newTheme);
-  };
+  }, []);
 
-  const setMode = (newMode: ThemeMode) => {
+  const setMode = useCallback((newMode: ThemeMode) => {
     setModeState(newMode);
     localStorage.setItem("midi-jam-mode", newMode);
-  };
+  }, []);
 
   useEffect(() => {
+    // Apply theme classes to both body and documentElement
+    const targets = [document.body, document.documentElement];
+    for (const el of targets) {
+      const themeClasses = Array.from(el.classList).filter((className) =>
+        className.startsWith("theme-"),
+      );
+      for (const className of themeClasses) {
+        el.classList.remove(className);
+      }
+      el.classList.add(`theme-${theme}`);
+    }
+    // Also keep the data-theme for backward compatibility if any CSS uses it
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
 
@@ -60,6 +72,36 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       document.documentElement.classList.remove("dark");
     }
   }, [mode]);
+
+  // Support 'D' key hotkey for toggling theme mode
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (
+        event.defaultPrevented ||
+        event.repeat ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.altKey ||
+        event.key.toLowerCase() !== "d"
+      ) {
+        return;
+      }
+
+      const target = event.target as HTMLElement;
+      const isTyping =
+        target.isContentEditable ||
+        ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
+
+      if (isTyping) {
+        return;
+      }
+
+      setMode(mode === "dark" ? "light" : "dark");
+    }
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [mode, setMode]);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, mode, setMode }}>

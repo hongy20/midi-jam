@@ -9,6 +9,8 @@ import {
   useState,
 } from "react";
 
+export type Difficulty = "easy" | "normal" | "hard";
+
 export interface OptionsContextType {
   speed: number;
   demoMode: boolean;
