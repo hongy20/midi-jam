@@ -45,8 +45,10 @@ export function RetroModeSwitcher({
         stroke="currentColor"
         strokeWidth="0.25"
         className={cn("hidden [html.dark_&]:block", className)}
+        role="img"
         aria-label="sun-dim"
       >
+        <title>Switch to Light Mode</title>
         <rect x="120" y="88" width="14" height="14" rx="1"></rect>
         <rect x="104" y="88" width="14" height="14" rx="1"></rect>
         <rect x="88" y="104" width="14" height="14" rx="1"></rect>
@@ -85,8 +87,10 @@ export function RetroModeSwitcher({
         stroke="currentColor"
         strokeWidth="0.25"
         className={cn("hidden [html.light_&]:block", className)}
+        role="img"
         aria-label="moon"
       >
+        <title>Switch to Dark Mode</title>
         <rect x="104" y="56" width="14" height="14" rx="1"></rect>
         <rect x="88" y="56" width="14" height="14" rx="1"></rect>
         <rect x="72" y="72" width="14" height="14" rx="1"></rect>

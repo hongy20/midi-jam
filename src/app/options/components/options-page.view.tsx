@@ -1,8 +1,7 @@
 "use client";
 
-import { ArrowLeft, Moon, Sun, Wand2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { SelectThemeDropdown } from "@/components/select-theme-dropdown";
-import { type Difficulty } from "@/context/options-context";
 import { Button } from "@/components/ui/8bit/button";
 import {
   Card,
@@ -19,7 +18,7 @@ import {
 } from "@/components/ui/8bit/select";
 import { Toggle } from "@/components/ui/8bit/toggle";
 import { RetroModeSwitcher } from "@/components/ui/retro-mode-switcher";
-import { cn } from "@/lib/utils";
+import type { Difficulty } from "@/context/options-context";
 import type { Theme } from "@/lib/themes";
 
 interface OptionsPageViewProps {
@@ -136,12 +135,7 @@ export function OptionsPageView({
           />
         </div>
 
-        <Button
-          variant="secondary"
-          onClick={onBack}
-          size="sm"
-          font="retro"
-        >
+        <Button variant="secondary" onClick={onBack} size="sm" font="retro">
           <ArrowLeft className="size-5 mr-3" />
           BACK
         </Button>
