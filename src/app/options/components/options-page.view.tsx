@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
-import { SelectThemeDropdown } from "@/components/select-theme-dropdown";
 import { Button } from "@/components/ui/8bit/button";
 import {
   Card,
@@ -21,6 +20,7 @@ import { RetroModeSwitcher } from "@/components/ui/retro-mode-switcher";
 import type { Difficulty } from "@/context/options-context";
 import type { ThemeMode } from "@/context/theme-context";
 import type { Theme } from "@/lib/themes";
+import { SelectThemeDropdown } from "./select-theme-dropdown";
 
 interface OptionsPageViewProps {
   difficulty: Difficulty;
