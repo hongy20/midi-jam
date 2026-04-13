@@ -31,7 +31,6 @@ const preview: Preview = {
           value,
           title: key,
         })),
-        showName: true,
       },
     },
     mode: {
@@ -44,7 +43,6 @@ const preview: Preview = {
           { value: "light", title: "Light", icon: "circlehollow" },
           { value: "dark", title: "Dark", icon: "circle" },
         ],
-        showName: true,
       },
     },
   },
