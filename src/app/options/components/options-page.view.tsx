@@ -90,35 +90,26 @@ export function OptionsPageView({
           </CardContent>
         </Card>
 
-        {/* System Section */}
-        <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
-          <CardHeader>
-            <CardTitle font="retro" className="text-lg uppercase">
-              System
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-between p-4 bg-muted/20 border-4 border-muted">
-              <div className="flex items-center gap-4">
-                <Wand2 className="size-6 text-primary" />
-                <div className="flex flex-col gap-1">
-                  <span className="retro text-xs uppercase">Autopilot</span>
-                  <span className="retro text-[10px] opacity-60 uppercase">
-                    System plays automatically
-                  </span>
-                </div>
-              </div>
-              <Toggle
-                pressed={demoMode}
-                onPressedChange={setDemoMode}
-                variant="outline"
-                size="sm"
-              >
-                {demoMode ? "ON" : "OFF"}
-              </Toggle>
+        {/* Autopilot Row */}
+        <div className="flex items-center justify-between p-4 bg-muted/20 border-8 border-muted shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
+          <div className="flex items-center gap-4">
+            <Wand2 className="size-6 text-primary" />
+            <div className="flex flex-col gap-1">
+              <span className="retro text-xs uppercase">Autopilot</span>
+              <span className="retro text-[10px] opacity-60 uppercase">
+                System plays automatically
+              </span>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+          <Toggle
+            pressed={demoMode}
+            onPressedChange={setDemoMode}
+            variant="outline"
+            size="sm"
+          >
+            {demoMode ? "ON" : "OFF"}
+          </Toggle>
+        </div>
       </div>
 
       {/* Footer Actions */}
