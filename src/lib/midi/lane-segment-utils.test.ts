@@ -124,7 +124,7 @@ describe("lane-segment-utils clustering", () => {
       expect(groups).toHaveLength(1);
     });
 
-    it("merges a tiny last segment into the previous one", () => {
+    it("does not merge the last segment if it is visually large enough", () => {
       const spans: NoteSpan[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
         {
@@ -133,20 +133,117 @@ describe("lane-segment-utils clustering", () => {
           startTimeMs: 15000,
           durationMs: 100,
           velocity: 1,
-        }, // Split into cluster 2
+        },
       ];
-      // cluster 1: [0, 1000], cluster 2: [15000, 15100]
-      // cluster 2 duration is 100ms < 500ms (minTailDuration)
+      // totalDuration is 20000. thresholdMs is 10000.
+      // Note 2 starts at 15000. Remaining time is 5000ms.
+      // Since 5000ms >= 10000ms / 2, and the note is far from Note 1,
+      // it should form its own visually distinct segment [7500, 20000].
       const groups = buildSegmentGroups({
         spans,
         totalDurationMs: 20000,
         thresholdMs: threshold,
       });
 
-      // Cluster 2 was merged back into Cluster 1.
+      expect(groups).toHaveLength(2);
+      expect(groups[1].spans).toHaveLength(1);
+      expect(groups[1].startMs).toBe(8000);
+      expect(groups[1].durationMs).toBe(20000 - 8000);
+    });
+
+    it("groups connected notes that start exactly when previous notes end", () => {
+      const spans: NoteSpan[] = [
+        { id: "1", note: 60, startTimeMs: 0, durationMs: 6000, velocity: 1 }, // Exceeds 5s threshold
+        { id: "2", note: 62, startTimeMs: 6000, durationMs: 6000, velocity: 1 }, // Starts exactly at 6000
+      ];
+      const groups = buildSegmentGroups({
+        spans,
+        totalDurationMs: 20000,
+        thresholdMs: 5000,
+      });
+
+      // Should be 1 group because they are connected (span.startTimeMs <= currentMaxEndMs)
       expect(groups).toHaveLength(1);
-      expect(groups[0].spans).toHaveLength(2);
-      expect(groups[0].spans.map((s) => s.id)).toEqual(["1", "2"]);
+    });
+
+    it("does not split chords even if they exceed the threshold", () => {
+      const spans: NoteSpan[] = [
+        { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
+        {
+          id: "2a",
+          note: 64,
+          startTimeMs: 6000,
+          durationMs: 1000,
+          velocity: 1,
+        },
+        {
+          id: "2b",
+          note: 67,
+          startTimeMs: 6000,
+          durationMs: 1000,
+          velocity: 1,
+        },
+      ];
+      const groups = buildSegmentGroups({
+        spans,
+        totalDurationMs: 20000,
+        thresholdMs: 5000,
+      });
+
+      expect(groups).toHaveLength(2);
+      expect(groups[1].spans).toHaveLength(2); // Chord 2a, 2b together
+    });
+
+    it("groups connected notes with sub-millisecond gaps (floating point precision)", () => {
+      const spans: NoteSpan[] = [
+        {
+          id: "1",
+          note: 60,
+          startTimeMs: 0,
+          durationMs: 5000.00000000001,
+          velocity: 1,
+        },
+        {
+          id: "2",
+          note: 62,
+          startTimeMs: 5000.00000000002,
+          durationMs: 1000,
+          velocity: 1,
+        },
+      ];
+      const groups = buildSegmentGroups({
+        spans,
+        totalDurationMs: 20000,
+        thresholdMs: 4000,
+      });
+
+      // Should be 1 group despite the tiny gap
+      expect(groups).toHaveLength(1);
+    });
+
+    it("applies tail merge logic to avoid tiny segments at the end", () => {
+      const spans: NoteSpan[] = [
+        { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
+        { id: "2", note: 62, startTimeMs: 6000, durationMs: 1000, velocity: 1 },
+        {
+          id: "3",
+          note: 64,
+          startTimeMs: 12000,
+          durationMs: 1000,
+          velocity: 1,
+        },
+      ];
+      // totalDuration is 14000.
+      // If we attempt to split at Note 3 (12000), the remaining time in the song is 2000ms.
+      // 2000ms < 2500ms (thresholdMs / 2), so Note 3 should be merged into the current segment.
+      const groups = buildSegmentGroups({
+        spans,
+        totalDurationMs: 14000,
+        thresholdMs: 5000,
+      });
+
+      expect(groups).toHaveLength(2);
+      expect(groups[1].spans).toHaveLength(2); // Notes 2 and 3 merged
     });
   });
 

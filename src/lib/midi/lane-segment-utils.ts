@@ -41,108 +41,56 @@ export function buildSegmentGroups({
 }: BuildSegmentGroupsOptions): SegmentGroup[] {
   if (spans.length === 0) return [];
 
-  // Pass 1: Core Discovery (find raw note clusters)
-  const rawClusters: {
-    minStartMs: number;
-    maxEndMs: number;
-    spans: NoteSpan[];
-  }[] = [];
-
-  let currentStartMs = spans[0].startTimeMs;
-  let currentMaxEndMs = spans[0].startTimeMs + spans[0].durationMs;
+  const groups: SegmentGroup[] = [];
   let currentGroupSpans: NoteSpan[] = [];
-  let lastStartTimeMs = -1;
+  let currentStartMs = 0; // First segment starts at 0 (lead-in)
+  let currentMaxEndMs = 0;
 
-  for (const span of spans) {
+  spans.forEach((span, index) => {
     const spanEndMs = span.startTimeMs + span.durationMs;
+    const isFirstNote = currentGroupSpans.length === 0;
 
-    // Split logic:
-    // Split if:
-    // 1. Current group has existed for at least thresholdMs
-    // 2. AND we are at a "clean" split point (the new note starts after or at the end of all previous notes in this cluster)
-    // 3. AND we aren't at the very start (currentGroupSpans.length > 0)
-    // OR:
-    // 4. There is a huge natural gap (silence-only) >= thresholdMs (already covered by #1 and #2 if notes exist)
+    // Inclusion Criteria:
+    // 1. First note in a new segment.
+    // 2. Or the segment's visual duration is still under the threshold.
+    // 3. Or the note is connected to/overlapping with the current cluster extent.
+    // 4. Or starting a new segment now would leave a tiny "tail" at the end of the song.
+    const visualDuration = span.startTimeMs - currentStartMs;
+    const isUnderThreshold = visualDuration < thresholdMs;
+    const isConnected = span.startTimeMs <= currentMaxEndMs + 0.1;
+    const isTailTooSmall = totalDurationMs - span.startTimeMs < thresholdMs / 2;
 
-    const timeInCluster = span.startTimeMs - currentStartMs;
-    const isCleanGap = span.startTimeMs >= currentMaxEndMs;
+    if (isFirstNote || isUnderThreshold || isConnected || isTailTooSmall) {
+      currentGroupSpans.push(span);
+      currentMaxEndMs = Math.max(currentMaxEndMs, spanEndMs);
+    } else {
+      // Finalize current group and split
+      const nextNoteStartMs = span.startTimeMs;
+      const midpoint = (currentMaxEndMs + nextNoteStartMs) / 2;
 
-    if (
-      currentGroupSpans.length > 0 &&
-      timeInCluster >= thresholdMs &&
-      isCleanGap &&
-      span.startTimeMs > lastStartTimeMs
-    ) {
-      rawClusters.push({
-        minStartMs: currentStartMs,
-        maxEndMs: currentMaxEndMs,
+      groups.push({
+        index: groups.length,
+        startMs: currentStartMs,
+        durationMs: midpoint - currentStartMs,
         spans: currentGroupSpans,
       });
 
-      currentStartMs = span.startTimeMs;
-      currentMaxEndMs = spanEndMs;
-      currentGroupSpans = [];
-    }
-
-    currentGroupSpans.push(span);
-    lastStartTimeMs = span.startTimeMs;
-    if (spanEndMs > currentMaxEndMs) {
+      // Start new group from the midpoint
+      currentStartMs = midpoint;
+      currentGroupSpans = [span];
       currentMaxEndMs = spanEndMs;
     }
-  }
 
-  if (currentGroupSpans.length > 0) {
-    rawClusters.push({
-      minStartMs: currentStartMs,
-      maxEndMs: currentMaxEndMs,
-      spans: currentGroupSpans,
-    });
-  }
-
-  // Pass 1.5: Tail Merge (merge tiny last segment with previous)
-  if (rawClusters.length >= 2) {
-    const lastCluster = rawClusters[rawClusters.length - 1];
-    const lastClusterDuration = lastCluster.maxEndMs - lastCluster.minStartMs;
-
-    // Use a fraction of thresholdMs for the "too tiny" check.
-    // If we merge anything < thresholdMs, we might lose valid segments
-    // at the end of the song (e.g. a 4s segment when the goal is 5s).
-    if (lastClusterDuration < thresholdMs / 2) {
-      const secondToLastCluster = rawClusters[rawClusters.length - 2];
-      secondToLastCluster.spans.push(...lastCluster.spans);
-      secondToLastCluster.maxEndMs = Math.max(
-        secondToLastCluster.maxEndMs,
-        lastCluster.maxEndMs,
-      );
-      rawClusters.pop();
+    // Finalize the last group when we reach the end of the spans
+    if (index === spans.length - 1) {
+      groups.push({
+        index: groups.length,
+        startMs: currentStartMs,
+        durationMs: totalDurationMs - currentStartMs,
+        spans: currentGroupSpans,
+      });
     }
-  }
-
-  // Pass 2: Boundary Stitching (Midpoint Buffering)
-  const groups: SegmentGroup[] = [];
-
-  for (let i = 0; i < rawClusters.length; i++) {
-    const cluster = rawClusters[i];
-
-    // Start bound: midpoint with previous, or 0 for the first group
-    const startMs =
-      i === 0 ? 0 : (rawClusters[i - 1].maxEndMs + cluster.minStartMs) / 2;
-
-    // End bound: midpoint with next, or the total song duration for the last group.
-    // Stretching the final segment visually until the true end of the song
-    // creates natural empty space for the visual lead-out.
-    const endMs =
-      i === rawClusters.length - 1
-        ? Math.max(cluster.maxEndMs, totalDurationMs)
-        : (cluster.maxEndMs + rawClusters[i + 1].minStartMs) / 2;
-
-    groups.push({
-      index: i,
-      startMs,
-      durationMs: endMs - startMs,
-      spans: cluster.spans,
-    });
-  }
+  });
 
   return groups;
 }
