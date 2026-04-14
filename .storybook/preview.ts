@@ -1,6 +1,5 @@
 import type { Preview } from "@storybook/nextjs-vite";
 import * as React from "react";
-import { useEffect } from "react";
 import { ThemeProvider } from "../src/context/theme-context";
 import { Theme } from "../src/lib/themes";
 import "../src/app/globals.css";
@@ -50,21 +49,7 @@ const preview: Preview = {
   decorators: [
     (Story, context) => {
       const { theme, mode } = context.globals;
-      const html = document.documentElement;
-
-      useEffect(() => {
-        // Handle Retro Theme
-        html.setAttribute("data-theme", theme);
-
-        // Handle Light/Dark Mode
-        if (mode === "dark") {
-          html.classList.add("dark");
-        } else {
-          html.classList.remove("dark");
-        }
-      }, [theme, mode, html]);
-
-      return React.createElement(ThemeProvider, null, Story());
+      return React.createElement(ThemeProvider, { theme, mode }, Story());
     },
   ],
 };
