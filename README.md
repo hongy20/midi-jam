@@ -5,7 +5,8 @@ Midi Jam is an experimental project exploring **agentic coding** and demonstrati
 ## Core Features
 
 - **MIDI Connectivity**: Seamless connection to digital instruments via USB-A/Web MIDI API.
-- **88-Key Piano Visualizer**: High-performance, responsive visualizer with real-time feedback.
+- **88-Key Piano Visualizer**: High-performance, responsive visualizer with real-time feedback and 21-unit octave grid precision.
+- **8bitcn UI**: Retro-styled components and blocks powered by the [8bitcn](https://8bitcn.com) registry.
 - **Falldown Visuals**: Immersive piano roll visualizer for MIDI file playback.
 - **Scoring System**: Real-time accuracy tracking, combo counters, and persistent high scores.
 - **Playful UX**: Designed for an engaging and fun learning experience.
@@ -15,7 +16,7 @@ Midi Jam is an experimental project exploring **agentic coding** and demonstrati
 
 ### Prerequisites
 
-- **Node.js**: Implemented with Node 24 (other versions like 22.x+ may also work).
+- **Node.js**: Implemented with Node 24 (Next.js 16+ / React 19).
 - **MIDI Hardware**: A MIDI-compatible keyboard, drumset, or controller (connected via USB).
 - **Browser**: A modern browser with Web MIDI support (Chrome, Edge, etc.).
 
@@ -35,6 +36,8 @@ npm install
 npm run dev
 ```
 
+> **Note**: The development server runs on HTTPS by default (`--experimental-https`). You may need to trust local certificates in your browser.
+
 Open [https://localhost:3000](https://localhost:3000) to start jamming!
 
 ## Development
@@ -45,7 +48,8 @@ For detailed development principles, rendering patterns, and workflow instructio
 
 ### Available Scripts
 
-- `npm run dev`: Start development server.
+- `npm run dev`: Start development server (HTTPS).
+- `npm run storybook`: Launch Storybook for component development and preview.
 - `npm run build`: Create production build.
 - `npm run lint:fix`: Lint and format code with Biome.
 - `npm run type-check`: Run TypeScript type checking.
