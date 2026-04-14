@@ -18,19 +18,19 @@ export function RetroModeSwitcher({
   return (
     <Button
       variant="ghost"
-      className="group/toggle h-8 w-8 px-0"
+      className="group/toggle h-9 w-9 px-0"
       onClick={onToggle}
     >
       <svg
-        width="50"
-        height="50"
+        width="28"
+        height="28"
         viewBox="0 0 256 256"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
         stroke="currentColor"
         strokeWidth="0.25"
         className={cn(
-          "size-8",
+          "!size-7",
           mode === "light" ? "hidden" : "block",
           className,
         )}
@@ -68,15 +68,15 @@ export function RetroModeSwitcher({
         <rect x="152" y="136" width="14" height="14" rx="1"></rect>
       </svg>
       <svg
-        width="50"
-        height="50"
+        width="28"
+        height="28"
         viewBox="0 0 256 256"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
         stroke="currentColor"
         strokeWidth="0.25"
         className={cn(
-          "size-8",
+          "!size-7",
           mode === "dark" ? "hidden" : "block",
           className,
         )}
