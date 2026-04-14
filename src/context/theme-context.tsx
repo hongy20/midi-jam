@@ -20,24 +20,48 @@ interface ThemeContextType {
 }
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("default");
-  const [mode, setModeState] = useState<ThemeMode>("light");
+export function ThemeProvider({
+  children,
+  theme: forcedTheme,
+  mode: forcedMode,
+}: {
+  children: ReactNode;
+  theme?: Theme;
+  mode?: ThemeMode;
+}) {
+  const [theme, setThemeState] = useState<Theme>(forcedTheme || "default");
+  const [mode, setModeState] = useState<ThemeMode>(forcedMode || "light");
 
   useEffect(() => {
-    // Load theme and mode from localStorage on mount
-    const savedTheme = localStorage.getItem("midi-jam-theme") as Theme;
-    if (savedTheme && Object.values(Theme).includes(savedTheme)) {
-      setThemeState(savedTheme);
+    if (forcedTheme) {
+      setThemeState(forcedTheme);
+    }
+  }, [forcedTheme]);
+
+  useEffect(() => {
+    if (forcedMode) {
+      setModeState(forcedMode);
+    }
+  }, [forcedMode]);
+
+  useEffect(() => {
+    // Only load from localStorage if NOT forced
+    if (forcedTheme === undefined) {
+      const savedTheme = localStorage.getItem("midi-jam-theme") as Theme;
+      if (savedTheme && Object.values(Theme).includes(savedTheme)) {
+        setThemeState(savedTheme);
+      }
     }
 
-    const savedMode = localStorage.getItem("midi-jam-mode") as ThemeMode;
-    if (savedMode) {
-      setModeState(savedMode);
-    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      setModeState("dark");
+    if (forcedMode === undefined) {
+      const savedMode = localStorage.getItem("midi-jam-mode") as ThemeMode;
+      if (savedMode) {
+        setModeState(savedMode);
+      } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        setModeState("dark");
+      }
     }
-  }, []);
+  }, [forcedTheme, forcedMode]);
 
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
