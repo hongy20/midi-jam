@@ -43,19 +43,17 @@ export function useMidiAudio(outputDevice: WebMidi.MIDIOutput | null = null) {
         return;
       }
 
-      // Offload to next tick as triggerAttack might be slow and take a few ms to finish,
-      // avoiding blocking the main thread during high-frequency note events.
-      setTimeout(() => {
-        if (!polySynthRef.current) return;
+      // REMOVED setTimeout(0) for diagnostic clarity
+      if (!polySynthRef.current) return;
 
-        // Ensure AudioContext is started
-        if (Tone.getContext().state !== "running") {
-          Tone.start();
-        }
+      // Ensure AudioContext is started
+      if (Tone.getContext().state !== "running") {
+        Tone.start();
+      }
 
-        const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
-        polySynthRef.current.triggerAttack(frequency, Tone.now(), velocity);
-      }, 0);
+      console.log(`[AUDIO] TRIGGER_ON pitch=${midiNote} vel=${velocity}`);
+      const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
+      polySynthRef.current.triggerAttack(frequency, Tone.now(), velocity);
     },
     [outputDevice],
   );
@@ -67,13 +65,12 @@ export function useMidiAudio(outputDevice: WebMidi.MIDIOutput | null = null) {
         outputDevice.send([MIDI_COMMAND_NOTE_OFF, midiNote, 0]);
         return;
       }
-      // Offload to next tick as triggerRelease might be slow and take a few ms to finish
-      setTimeout(() => {
-        if (!polySynthRef.current) return;
+      // REMOVED setTimeout(0)
+      if (!polySynthRef.current) return;
 
-        const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
-        polySynthRef.current.triggerRelease(frequency, Tone.now());
-      }, 0);
+      console.log(`[AUDIO] TRIGGER_OFF pitch=${midiNote}`);
+      const frequency = Tone.Frequency(midiNote, "midi").toFrequency();
+      polySynthRef.current.triggerRelease(frequency, Tone.now());
     },
     [outputDevice],
   );

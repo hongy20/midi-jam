@@ -74,7 +74,7 @@ export function PlayPageClient() {
   const { getCurrentTimeMs, getProgress } = useLaneTimeline({
     totalDurationMs,
     speed,
-    initialProgress: gameSession?.currentProgress ?? 0,
+    initialProgress: gameSession?.currentProgress ?? 0.11,
     onFinish: onFinishProxy,
   });
 
@@ -96,6 +96,7 @@ export function PlayPageClient() {
         next.add(note);
         return next;
       });
+      console.log(`[CLIENT] onNoteOn pitch=${note} velocity=${velocity}`);
       playNote(note, velocity);
     },
     [playNote],
@@ -108,6 +109,7 @@ export function PlayPageClient() {
         next.delete(note);
         return next;
       });
+      console.log(`[CLIENT] onNoteOff pitch=${note}`);
       stopNote(note);
     },
     [stopNote],
