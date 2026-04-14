@@ -3,7 +3,7 @@
 Midi Jam is a high-performance web application for learning musical instruments (Piano, Drums) via Web MIDI. It features a rhythm-game-inspired "falldown" visualizer designed for low-latency, immersive gameplay.
 
 ## Tech Stack
-- **Framework**: Next.js 15+ (App Router)
+- **Framework**: Next.js 16+ (App Router)
 - **UI**: React 19 (React Compiler enabled)
 - **Styling**: Tailwind CSS v4
 - **Audio/MIDI**: Tone.js & Web MIDI API
@@ -19,7 +19,8 @@ Midi Jam is a high-performance web application for learning musical instruments 
 - **Prohibition**: DO NOT manually implement, "hallucinate", or copy-paste the code for these components/blocks unless the registry command fails and is explicitly approved by the user.
 
 ## 1. Unified Layout & State
-- **Viewport Locking**: All pages must use a full-screen layout (`100dvh`, `100dvw`) managed by CSS Grid.
+- **Viewport Locking**: All pages must use a full-screen layout (`100dvh`, `100dvw`) managed by CSS Grid or Flexbox.
+- **8bitcn Blocks**: Prefer using 8bitcn blocks (e.g., `Hero3`, `Feature3`, `LoadingScreen`) for layout structure. Legacy `PageLayout` is deprecated.
 - **State Persistence**: Use React Context for cross-page state to ensure seamless transitions between setup (Gear/Collection) and the Stage (Play).
 
 ## 2. High-Performance Rendering (60fps Target)
@@ -33,7 +34,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 
 ## 3. Architecture & Styling Standards
 - **CSS Isolation**: `globals.css` is reserved for theme variables and generic resets. Use **CSS Modules** (`[name].module.css`) for all page and component-specific styles.
-- **Semantic Theme Mapping**: Extract all visual properties (colors, fonts, shadows, radii) into semantic CSS variables within `globals.css`. Components must consume these functional aliases (e.g., `--piano-key-white`, `--ui-card-bg`) instead of hardcoding raw values or using direct theme primitives.
+- **Semantic Theme Mapping**: Extract all visual properties (colors, fonts, shadows, radii) into semantic CSS variables within `globals.css` (or imported variables). Components must consume these functional aliases (e.g., `--piano-key-white`, `--ui-card-bg`) instead of hardcoding raw values or using direct theme primitives.
 - **Iconography**: Use `lucide-react` exclusively. For custom icons, use standalone `.svg` files. No inline SVG strings or emojis.
 - **DOM Efficiency**:
   - **Flatten Trees**: Avoid redundant wrapping `div`s. If an element has only one child, consolidate them.
@@ -42,21 +43,19 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 ## 4. UI & Navigation Architecture
 
 ### Layout Hierarchy
-- **Root**: Every page must use `PageLayout` as its root component.
-- **Sections**:
-  - `PageHeader`: Reserved for **Context** (Active Titles, Contextual Icons) and secondary navigation actions.
-  - `PageFooter`: Reserved for primary **Actions** (Navigation, Primary Buttons, Branding).
-  - `<main>`: Reserved for **Content**. Must be direct child of `PageLayout`.
+- **Root**: Every page should follow the `PageClient` -> `PageView` architecture.
+- **Container**: Use `<main className="h-dvh">` as the primary container for all views.
+- **Deprecated**: `PageLayout`, `PageHeader`, and `PageFooter` components are deprecated in favor of page-specific components or 8bitcn blocks.
 
 ### Navigation Patterns
 - **Button Semantics**:
-  - **Primary Actions**: Use `UPPERCASE` labels (e.g., `CONTINUE`, `START`).
-  - **Secondary/Navigational**: Use `Title Case` (e.g., `Main Menu`, `Options`).
+  - **Primary & Navigational Actions**: Use `UPPERCASE` labels (e.g., `CONTINUE`, `START GAME`, `MAIN MENU`, `BACK`).
+  - **Secondary Settings**: Use `Title Case` (e.g., `Options`) for secondary navigational elements when embedded in complex blocks.
 
 ## 5. React & State Patterns
 
 ### Context & Hook Consumption
-- **Granular Hooks**: Prefer specialized hooks (`useGear`, `useTrack`, `useOptions`) over a monolithic context to prevent unnecessary re-renders.
+- **Granular Hooks**: Prefer specialized hooks (`useGear`, `useTrackSync`, `useOptions`) over a monolithic context to prevent unnecessary re-renders.
 - **Deep Destructuring**: Always destructure required properties directly in a single statement.
   - **✅ Good**: `const { selectedMIDIInput } = useGear();`
   - **❌ Bad**: `const gear = useGear(); const selectedMIDIInput = gear.selectedMIDIInput;`
@@ -65,9 +64,13 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
   - **❌ Bad**: `onClick={handleBack}`
 
 ### Component Structure
-- **HTML Attribute Extension**: Avoid automatically extending HTML attributes on every component. Only extend the relevant React HTML attribute types (e.g., `HTMLAttributes<HTMLDivElement>`) when the component is meant to support standard props such as `className`, `children`, or `style`. This allows the component to inherit common HTML props naturally, while keeping the API of internal or logic-focused components clean and minimal.
+- **Boundary/Client/View Pattern**: Pages should be split into:
+  - `page.tsx`: Server component/Metadata.
+  - `[Page]Client`: Logic, state management, and hook consumption.
+  - `[Page]View`: Pure UI component receiving props from the client.
+- **HTML Attribute Extension**: Avoid automatically extending HTML attributes on every component. Only extend the relevant React HTML attribute types (e.g., `HTMLAttributes<HTMLDivElement>`) when the component is meant to support standard props such as `className`, `children`, or `style`.
 - **List Abstraction**: When using `.map()` to render items with multiple tags or complex internal layers, always abstract the item into its own React component (e.g., `GearCard`). This component must be defined in its own module/file to keep the parent component's JSX flat and readable.
-- **Grouped Status UI**: Use nested ternary operators to group loading, error, and success states into a single logical block within the JSX. This keeps the state-dependent UI cohesive.
+- **Grouped Status UI**: Use nested ternary operators or dedicated boundary components to group loading, error, and success states into a single logical block within the JSX.
 - **Minimal DOM Nesting**: Minimize container layers. Avoid wrapping elements in redundant `div`s for spacing, alignment, or positioning; instead, apply these rules to the parent container (e.g., using Flexbox/Grid properties on `<main>`). Use fragments `<></>` when a React wrapper is technically required but styling is not.
 
 ## 7. Storybook Standards
