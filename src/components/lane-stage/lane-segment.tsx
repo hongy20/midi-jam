@@ -1,9 +1,9 @@
 import { useLayoutEffect, useRef } from "react";
+import gridStyles from "@/app/play/components/piano-keyboard/piano-grid.module.css";
 import {
   computeLaneSegmentAnimationDelay,
   type SegmentGroup,
 } from "@/lib/midi/lane-segment-utils";
-import gridStyles from "@/app/play/components/piano-keyboard/piano-grid.module.css";
 import styles from "./lane-segment.module.css";
 
 interface LaneSegmentProps {
