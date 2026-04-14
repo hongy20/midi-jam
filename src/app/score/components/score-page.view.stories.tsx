@@ -15,13 +15,11 @@ type Story = StoryObj<typeof ScorePageView>;
 export const Outstanding: Story = {
   args: {
     title: "Outstanding!",
-    stats: [{ id: 1, title: "Total Score", stats: "1,234,567" }],
-    report: [
-      { id: 1, title: "Accuracy", description: "98%" },
-      { id: 2, title: "Max Combo", description: 450 },
-    ],
+    score: "1,234,567",
+    accuracy: "98%",
+    combo: 450,
     onRetry: () => {},
-    onCollection: () => {},
+    onSongs: () => {},
     onHome: () => {},
   },
 };
@@ -30,10 +28,8 @@ export const Great: Story = {
   args: {
     ...Outstanding.args,
     title: "Great Job!",
-    report: [
-      { id: 1, title: "Accuracy", description: "75%" },
-      { id: 2, title: "Max Combo", description: 120 },
-    ],
+    accuracy: "75%",
+    combo: 120,
   },
 };
 
@@ -41,9 +37,7 @@ export const KeepPracticing: Story = {
   args: {
     ...Outstanding.args,
     title: "Keep Practicing!",
-    report: [
-      { id: 1, title: "Accuracy", description: "32%" },
-      { id: 2, title: "Max Combo", description: 15 },
-    ],
+    accuracy: "32%",
+    combo: 15,
   },
 };

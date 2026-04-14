@@ -1,64 +1,111 @@
 "use client";
 
-import { ChevronRight, RotateCcw } from "lucide-react";
-import VictoryScreen from "@/components/ui/8bit/blocks/victory-screen";
+import { ChevronRight, Home, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/8bit/button";
-
-export interface ScoreStat {
-  id: number;
-  title: string;
-  stats: string | number;
-}
-
-export interface ScoreReport {
-  id: number;
-  title: string;
-  description: string | number;
-}
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/8bit/card";
 
 interface ScorePageViewProps {
   title: string;
-  stats: ScoreStat[];
-  report: ScoreReport[];
+  score: string;
+  accuracy: string;
+  combo: number;
   onRetry: () => void;
-  onCollection: () => void;
+  onSongs: () => void;
   onHome: () => void;
 }
 
 export function ScorePageView({
   title,
-  stats,
-  report,
+  score,
+  accuracy,
+  combo,
   onRetry,
-  onCollection,
+  onSongs,
   onHome,
 }: ScorePageViewProps) {
   return (
-    <main className="w-screen h-[100dvh] flex flex-col items-center justify-center justify-evenly p-4 bg-background overflow-hidden select-none">
-      <VictoryScreen
-        title={title}
-        stats={stats}
-        battleReport={report}
-      />
+    <main className="h-dvh w-screen flex flex-col items-center justify-evenly px-4 bg-background overflow-hidden select-none">
+      {/* Header / Title */}
+      <div className="w-full max-w-2xl flex flex-col items-center gap-4 shrink-0">
+        <h1 className="retro text-3xl md:text-5xl font-black bg-foreground text-background px-6 py-4 border-8 border-foreground dark:border-ring uppercase leading-tight text-center shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)]">
+          {title}
+        </h1>
+      </div>
 
-      <div className="flex flex-wrap items-center justify-center gap-8">
-        <Button variant="secondary" onClick={onHome} size="sm" font="retro">
-          Main Menu
-        </Button>
+      {/* Stats Cards Area */}
+      <div className="w-full max-w-xl flex flex-col gap-6 overflow-y-auto no-scrollbar py-4">
+        {/* Total Score Card */}
+        <Card className="border-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)]">
+          <CardHeader className="pb-1">
+            <CardTitle font="retro" className="text-sm opacity-60 uppercase">
+              Total Score
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="retro text-4xl md:text-5xl font-black tracking-widest text-primary">
+              {score}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Detailed Stats Row */}
+        <div className="grid grid-cols-2 gap-6">
+          <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]">
+            <CardHeader className="pb-1">
+              <CardTitle font="retro" className="text-xs opacity-60 uppercase">
+                Accuracy
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="retro text-2xl md:text-3xl font-black">
+                {accuracy}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]">
+            <CardHeader className="pb-1">
+              <CardTitle font="retro" className="text-xs opacity-60 uppercase">
+                Max Combo
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="retro text-2xl md:text-3xl font-black">
+                {combo}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Footer Actions */}
+      <footer className="w-full max-w-xl flex flex-col gap-4 sm:flex-row items-center justify-between shrink-0">
+        <div className="flex gap-4">
+          <Button variant="secondary" onClick={onHome} size="sm" font="retro">
+            <Home className="size-4 mr-2" />
+            Home
+          </Button>
+          <Button variant="secondary" onClick={onSongs} size="sm" font="retro">
+            Songs
+            <ChevronRight className="size-4 ml-2" />
+          </Button>
+        </div>
+
         <Button
-          variant="secondary"
-          onClick={onCollection}
+          onClick={onRetry}
           size="sm"
           font="retro"
+          className="w-full sm:w-auto"
         >
-          Songs
-          <ChevronRight className="size-4 ml-2" />
-        </Button>
-        <Button onClick={onRetry} size="sm" font="retro">
           RETRY
           <RotateCcw className="size-4 ml-2" />
         </Button>
-      </div>
+      </footer>
     </main>
   );
 }

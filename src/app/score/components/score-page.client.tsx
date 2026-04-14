@@ -30,15 +30,6 @@ export function ScorePageClient() {
 
   const titleLabel = getAccuracyLabel(results.accuracy);
 
-  const stats = [
-    { id: 1, title: "Total Score", stats: results.score.toLocaleString() },
-  ];
-
-  const report = [
-    { id: 1, title: "Accuracy", description: `${results.accuracy}%` },
-    { id: 2, title: "Max Combo", description: results.combo },
-  ];
-
   const handleRetry = () => {
     setGameSession(null);
     toPlay();
@@ -52,10 +43,11 @@ export function ScorePageClient() {
   return (
     <ScorePageView
       title={titleLabel}
-      stats={stats}
-      report={report}
+      score={results.score.toLocaleString()}
+      accuracy={`${results.accuracy}%`}
+      combo={results.combo}
       onRetry={handleRetry}
-      onCollection={handleSongs}
+      onSongs={handleSongs}
       onHome={() => toHome()}
     />
   );
