@@ -1,42 +1,36 @@
-# Final Fix: Segment Boundary Buffering & Overlap
+# Refactor: Single-Pass Segment Grouping
 
-This plan implements a robust fix for the "stuck demo notes" bug by ensuring that every note is wrapped with a temporal buffer within its parent segment. This is achieved by allowing adjacent segments to **overlap temporally** at their boundaries.
+This plan refactors the `buildSegmentGroups` algorithm into a more predictable single-pass logic as requested. It ensures that notes are clustered together if they are temporally connected or if the segment hasn't reached its 5-second minimum duration.
+
+## User Review Required
+
+> [!IMPORTANT]
+> To satisfy the requirement that segments "touch" their neighbors, I will use the **midpoint of the gap** as the shared boundary.
+> 
+> Note: If the gap between clusters is very small (e.g., < 200ms), the buffer on each side will be proportionally smaller than 100ms. If a strict 100ms buffer is required even for tiny gaps, segments would have to **overlap** rather than "touch." I have proceeded with "touching" (shared boundary) per your latest instruction.
 
 ## Proposed Changes
 
-### [Component Name] MIDI Segment Utilities
+### MIDI Utilities
 
 #### [MODIFY] [lane-segment-utils.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/lib/midi/lane-segment-utils.ts)
 
-1.  **Enforce Temporal Buffer**:
-    - Update Pass 2 (Boundary Stitching) to ensure every segment starts at least **100ms** before its first note and ends at least **100ms** after its last note.
-    - If the gap between two segments is less than 200ms (or zero), the segments will now **overlap**.
-    - This guarantees that when a note ends at Time T, its parent segment remains mounted until `T + 100ms`, giving the `IntersectionObserver` ample time to trigger the `onNoteOff` event.
+Refactor `buildSegmentGroups` to:
+1.  **Iterative Pass**: Loop through `spans` once.
+2.  **Inclusion Logic**: Add a note to the current group if:
+    -   The visual duration (`span.startTimeMs - currentGroup.startMs`) is less than `thresholdMs`.
+    -   **OR** the note starts exactly when or before the previous notes end (`span.startTimeMs <= currentMaxEndMs`).
+3.  **Boundary Stitching**:
+    -   When starting a new group, set the previous group's `endMs` and the new group's `startMs` to the **midpoint** of the gap.
+    -   **Lead-in**: The first segment starts at `0`.
+    -   **Lead-out**: The last segment ends at `totalDurationMs`.
 
-### [Component Name] Demo Playback & Lifecycle
+### Verification Plan
 
-#### [MODIFY] [use-demo-playback.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/hooks/use-demo-playback.ts)
+#### Automated Tests
+-   **Reuse Existing Tests**: Verify that all existing tests pass with the new implementation.
+-   **[NEW] [lane-segment-utils.test.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/lib/midi/lane-segment-utils.test.ts)**: Add a test case for "Connected Notes" (Note A ends at 1000, Note B starts at 1000). Verify they now belong to the same segment.
 
-1.  **Recursive Unmount Handling**:
-    - Re-implement the robust `MutationObserver` logic that traverses the subtree of removed nodes to find any unmounted notes. This provides a second layer of defense.
-2.  **Diagnostic Cleanup**:
-    - Remove all `console.log` statements added during the investigation.
-
-#### [MODIFY] [play-page.client.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/play/components/play-page.client.tsx)
-
-- Restore the original `initialProgress: gameSession?.currentProgress ?? 0` logic.
-
-### [Component Name] Presentation Layer
-
-#### [MODIFY] [lane-segment.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/play/components/lane-stage/lane-segment.tsx)
-
-- Remove the diagnostic `data-start-time` attribute.
-
-## Verification Plan
-
-### Automated Tests
-- Run `npm test` to verify that the segment grouping logic still functions correctly.
-
-### Manual Verification
-- Run `npm run dev` and verify that the F#4 note (and all others) release correctly.
-- Ensure that the temporal overlap between segments doesn't cause any visual or performance regressions (overlapped segments are absolutely positioned and will simply render their respective notes).
+#### Manual Verification
+-   Run `npm run dev` and verify that song playback is smooth and segments are correctly mounted/unmounted at midpoints.
+-   Verify that the F#4 note at 15% is now correctly released.
