@@ -25,84 +25,111 @@ export interface NoteSpan {
 /**
  * Extracts all note on and note off events from a MIDI object,
  * sorted by time.
- * Introduces a minimal gap between sequential notes of the same pitch to ensure MIDI triggering.
+ * Performs "Monophonic Merging": If multiple tracks play the same pitch at the same time,
+ * they are merged into a single continuous span (union).
+ * Introduces a minimal gap between sequential notes of the same pitch to ensure MIDI triggering,
+ * shifting entire chords if necessary to maintain synchronization.
  */
 export function getMidiEvents(
   midi: Midi,
   instrument: "piano" | "drums" = "piano",
 ): MidiEvent[] {
-  const events: MidiEvent[] = [];
-
-  // 1. Merge all notes from all relevant tracks first to catch cross-track collisions
-  const allNotes = midi.tracks
+  // 1. Collect all piano notes from all tracks
+  const rawNotes = midi.tracks
     .filter((track) => track.instrument.family === instrument)
     .flatMap((track) => track.notes)
     .filter((note) => note.duration > 0 && note.midi !== MIDI_DUMMY_NOTE_PITCH)
     .map((note) => ({
-      ...note,
-      timeMs: note.time * 1000,
-      durationMs: note.duration * 1000,
+      pitch: note.midi,
+      startMs: note.time * 1000,
+      endMs: (note.time + note.duration) * 1000,
+      velocity: note.velocity,
     }))
-    .sort((a, b) => a.timeMs - b.timeMs);
+    .sort((a, b) => a.startMs - b.startMs);
 
-  if (allNotes.length === 0) return [];
+  if (rawNotes.length === 0) return [];
 
-  // 2. Group notes into time slices (chords) across all tracks
-  const slices: (typeof allNotes)[] = [];
-  for (const note of allNotes) {
-    const lastSlice = slices[slices.length - 1];
-    if (lastSlice && Math.abs(lastSlice[0].timeMs - note.timeMs) < 1) {
-      lastSlice.push(note);
+  // 2. Perform Monophonic Union Per Pitch
+  // Bridges strictly overlapping notes of the same pitch into single continuous spans.
+  const mergedSpansPerPitch = new Map<number, (typeof rawNotes)[0][]>();
+
+  for (const note of rawNotes) {
+    let pitchSpans = mergedSpansPerPitch.get(note.pitch);
+    if (!pitchSpans) {
+      pitchSpans = [];
+      mergedSpansPerPitch.set(note.pitch, pitchSpans);
+    }
+
+    const lastSpan = pitchSpans[pitchSpans.length - 1];
+    if (lastSpan && note.startMs < lastSpan.endMs) {
+      // Overlap detected: Extend the existing span
+      if (note.endMs > lastSpan.endMs) {
+        lastSpan.endMs = note.endMs;
+      }
+      if (note.velocity > lastSpan.velocity) {
+        lastSpan.velocity = note.velocity;
+      }
     } else {
-      slices.push([note]);
+      // Distinct note (touching or gap)
+      pitchSpans.push({ ...note });
     }
   }
 
-  // 3. Process slices using a shared tracking map for collisions
-  const activePitchesAtTime = new Map<number, number>(); // pitch -> final (shifted) endTimeMs
+  // 3. Group all merged spans into chords (slices) for unified gap shifting
+  const allMergedSpans = Array.from(mergedSpansPerPitch.values())
+    .flat()
+    .sort((a, b) => a.startMs - b.startMs);
+
+  const slices: (typeof allMergedSpans)[] = [];
+  for (const span of allMergedSpans) {
+    const lastSlice = slices[slices.length - 1];
+    // Chords are notes starting within 1ms of each other
+    if (lastSlice && Math.abs(lastSlice[0].startMs - span.startMs) < 1) {
+      lastSlice.push(span);
+    } else {
+      slices.push([span]);
+    }
+  }
+
+  // 4. Process slices, shifting any slice that causes a collision for any of its pitches
+  const events: MidiEvent[] = [];
+  const activePitchesAtTime = new Map<number, number>(); // pitch -> last (shifted) endTimeMs
   const gapMs = MIN_NOTE_GAP_MS;
 
   for (const slice of slices) {
     let needsShift = false;
-
-    // Check if any note in the current chord collisions with a previous note of the same pitch.
-    for (const note of slice) {
-      const lastEndTime = activePitchesAtTime.get(note.midi);
-      if (lastEndTime !== undefined && note.timeMs < lastEndTime + 1) {
+    for (const span of slice) {
+      const lastEnd = activePitchesAtTime.get(span.pitch);
+      if (lastEnd !== undefined && span.startMs < lastEnd + gapMs) {
         needsShift = true;
         break;
       }
     }
 
-    // Apply shift to the ENTIRE chord if any note needs it
-    for (const note of slice) {
-      let eventTimeMs = note.timeMs;
-      let durationMs = note.durationMs;
+    for (const span of slice) {
+      let shiftedStartMs = span.startMs;
+      let shiftedEndMs = span.endMs;
 
       if (needsShift) {
-        const originalEndMs = note.timeMs + note.durationMs;
-        eventTimeMs = note.timeMs + gapMs;
-
-        // Ensure we don't reduce duration below a safe minimum (20ms)
-        const minDurationMs = 20;
-        durationMs = Math.max(minDurationMs, originalEndMs - eventTimeMs);
+        shiftedStartMs = span.startMs + gapMs;
+        // Maintain original end time if possible to prevent song drift
+        shiftedEndMs = Math.max(shiftedStartMs + 20, span.endMs);
       }
 
       events.push({
-        timeMs: eventTimeMs,
+        timeMs: shiftedStartMs,
         type: "noteOn",
-        note: note.midi,
-        velocity: note.velocity,
+        note: span.pitch,
+        velocity: span.velocity,
       });
       events.push({
-        timeMs: eventTimeMs + durationMs,
+        timeMs: shiftedEndMs,
         type: "noteOff",
-        note: note.midi,
+        note: span.pitch,
         velocity: 0,
       });
 
-      // Update tracking with the final end time of this note to maintain chain gaps
-      activePitchesAtTime.set(note.midi, eventTimeMs + durationMs);
+      activePitchesAtTime.set(span.pitch, shiftedEndMs);
     }
   }
 
@@ -126,7 +153,7 @@ export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
       const start = activeNotes.get(event.note);
       if (start !== undefined) {
         spans.push({
-          id: `${event.note}-${start.timeMs}`,
+          id: `${event.note}-${start.timeMs}-${spans.length}`,
           note: event.note,
           startTimeMs: start.timeMs,
           durationMs: event.timeMs - start.timeMs,

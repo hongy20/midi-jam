@@ -129,7 +129,7 @@ describe("midi-parser", () => {
     expect(events[2].timeMs).toBe(1010);
   });
 
-  it("getMidiEvents detects and shifts overlapping notes of the same pitch", () => {
+  it("getMidiEvents merges overlapping notes of the same pitch", () => {
     const overlappingMidi = {
       tracks: [
         {
@@ -143,10 +143,10 @@ describe("midi-parser", () => {
     } as unknown as Midi;
 
     const events = getMidiEvents(overlappingMidi, "piano");
-    // Should shift second note to start at 500 + gap
-    expect(
-      events.filter((e) => e.note === 60 && e.type === "noteOn")[1].timeMs,
-    ).toBe(510);
+    // Should merge into a single note from 0 to 1.5
+    expect(events).toHaveLength(2);
+    expect(events[0].timeMs).toBe(0);
+    expect(events[1].timeMs).toBe(1500);
   });
   it("getNoteRange returns correct min/max", () => {
     const events = getMidiEvents(mockMidi, "piano");
