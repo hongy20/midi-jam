@@ -57,7 +57,7 @@ export function buildSegmentGroups({
     // 4. Or starting a new segment now would leave a tiny "tail" at the end of the song.
     const visualDuration = span.startTimeMs - currentStartMs;
     const isUnderThreshold = visualDuration < thresholdMs;
-    const isConnected = span.startTimeMs <= currentMaxEndMs + 0.1;
+    const isConnected = span.startTimeMs <= currentMaxEndMs + 1.0;
     const isTailTooSmall = totalDurationMs - span.startTimeMs < thresholdMs / 2;
 
     if (isFirstNote || isUnderThreshold || isConnected || isTailTooSmall) {
