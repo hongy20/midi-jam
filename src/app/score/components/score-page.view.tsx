@@ -31,8 +31,8 @@ export function ScorePageView({
   return (
     <main className="h-dvh w-screen flex flex-col items-center justify-evenly px-4 bg-background overflow-hidden select-none">
       {/* Header / Title */}
-      <div className="w-full max-w-2xl flex flex-col items-center gap-4 shrink-0">
-        <h1 className="retro text-3xl md:text-5xl font-black bg-foreground text-background px-6 py-4 border-8 border-foreground dark:border-ring uppercase leading-tight text-center shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)]">
+      <div className="w-full max-w-2xl flex items-center justify-center shrink-0">
+        <h1 className="retro text-2xl md:text-3xl tracking-tighter uppercase text-center">
           {title}
         </h1>
       </div>
