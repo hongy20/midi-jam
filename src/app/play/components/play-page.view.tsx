@@ -1,0 +1,108 @@
+"use client";
+
+import { Pause } from "lucide-react";
+import { LaneStage } from "@/components/lane-stage/lane-stage";
+import { Button } from "@/components/ui/8bit/button";
+import type { HitQuality } from "@/hooks/use-lane-score-engine";
+import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
+import { PianoKeyboard } from "./piano-keyboard/PianoKeyboard";
+import styles from "./play-page.view.module.css";
+import { ScoreWidget } from "./score-widget/score-widget";
+
+interface PlayPageViewProps {
+  selectedMIDIInput: { name?: string };
+  selectedTrack: { name: string };
+  getScore: () => number;
+  getCombo: () => number;
+  getLastHitQuality: () => HitQuality;
+  getProgress: () => number;
+  handlePause: () => void;
+  liveActiveNotes: Set<number>;
+  playbackNotes: Set<number>;
+  groups: SegmentGroup[];
+  scrollRef: React.RefObject<HTMLDivElement | null>;
+  getCurrentTimeMs: () => number;
+  startUnit: number;
+  endUnit: number;
+  speed: number;
+  laneScrollDurationMs: number;
+}
+
+/**
+ * PlayPageView handles only the "happy path" of data-ready gameplay.
+ * Separation of concerns: Presentation layer using semantic HTML and localized components.
+ */
+export function PlayPageView({
+  selectedMIDIInput,
+  selectedTrack,
+  getScore,
+  getCombo,
+  getLastHitQuality,
+  getProgress,
+  handlePause,
+  liveActiveNotes,
+  playbackNotes,
+  groups,
+  scrollRef,
+  getCurrentTimeMs,
+  startUnit,
+  endUnit,
+  speed,
+  laneScrollDurationMs,
+}: PlayPageViewProps) {
+  return (
+    <div
+      className={styles.container}
+      style={
+        {
+          "--start-unit": startUnit,
+          "--end-unit": endUnit,
+          "--lane-scroll-duration-ms": laneScrollDurationMs,
+          "--speed": speed,
+        } as React.CSSProperties
+      }
+    >
+      <header className={styles.header}>
+        <div className={styles.songInfo}>
+          <span className={styles.badge}>
+            {selectedMIDIInput.name} • {selectedTrack.name}
+          </span>
+          <ScoreWidget
+            getScore={getScore}
+            getCombo={getCombo}
+            getLastHitQuality={getLastHitQuality}
+            getProgress={getProgress}
+          />
+        </div>
+
+        <div className="flex items-center gap-4">
+          <Button
+            variant="secondary"
+            onClick={handlePause}
+            size="icon"
+            font="retro"
+          >
+            <Pause className="size-4" />
+          </Button>
+        </div>
+      </header>
+
+      <main className={styles.main}>
+        <LaneStage
+          groups={groups}
+          scrollRef={scrollRef}
+          getCurrentTimeMs={getCurrentTimeMs}
+        />
+      </main>
+
+      <footer className={styles.footer}>
+        <div className={styles.keyboardWrapper} data-testid="piano-keyboard">
+          <PianoKeyboard
+            liveNotes={liveActiveNotes}
+            playbackNotes={playbackNotes}
+          />
+        </div>
+      </footer>
+    </div>
+  );
+}
