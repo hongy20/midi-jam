@@ -14,16 +14,26 @@ const meta: Meta<typeof PianoKeyboard> = {
         style={
           {
             width: "100%",
-            height: "151px",
+            height: "100dvh",
             background: "var(--background)",
             display: "flex",
-            alignItems: "flex-end",
+            flexDirection: "column",
+            justifyContent: "flex-end",
             "--start-unit": "36",
             "--end-unit": "192",
           } as React.CSSProperties
         }
       >
-        <Story />
+        <div
+          style={{
+            height: "151px",
+            width: "100%",
+            display: "flex",
+            alignItems: "flex-end",
+          }}
+        >
+          <Story />
+        </div>
       </div>
     ),
   ],
