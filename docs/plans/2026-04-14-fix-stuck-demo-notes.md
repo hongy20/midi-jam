@@ -1,36 +1,40 @@
-# Refactor: Single-Pass Segment Grouping
+# Refactor: Single-Pass Segment Grouping (Final)
 
-This plan refactors the `buildSegmentGroups` algorithm into a more predictable single-pass logic as requested. It ensures that notes are clustered together if they are temporally connected or if the segment hasn't reached its 5-second minimum duration.
+This plan refactors the `buildSegmentGroups` algorithm into a clean, single-pass logic. It ensures notes are clustered correctly while avoiding small "tail" segments at the end of the song.
 
-## User Review Required
+## Finalized Logic
 
-> [!IMPORTANT]
-> To satisfy the requirement that segments "touch" their neighbors, I will use the **midpoint of the gap** as the shared boundary.
-> 
-> Note: If the gap between clusters is very small (e.g., < 200ms), the buffer on each side will be proportionally smaller than 100ms. If a strict 100ms buffer is required even for tiny gaps, segments would have to **overlap** rather than "touch." I have proceeded with "touching" (shared boundary) per your latest instruction.
+The algorithm will iterate through `spans` once, applying these rules for each note:
+
+### 1. Inclusion Criteria
+A note is added to the **current** segment if **any** of these are true:
+-   **Threshold**: The visual duration (`span.startTimeMs - startMs`) is under 5 seconds.
+-   **Connected**: The note starts exactly when (or before) the previous notes end (`span.startTimeMs <= maxEndMs`).
+-   **Tail Merge**: Starting a new segment now would leave less than 2.5 seconds (half of `thresholdMs`) before the end of the song.
+
+### 2. Splitting Logic
+If none of the above are true, a split is performed:
+-   The **shared boundary** between segments is the **midpoint** of the gap between `maxEndMs` and the new note's `startTimeMs`.
+-   This ensures segments "touch" perfectly without gaps, while providing a natural buffer for both.
+
+### 3. Lead-In / Lead-Out
+-   **First Segment**: Starts at `0`.
+-   **Last Segment**: Ends at `totalDurationMs`.
 
 ## Proposed Changes
 
 ### MIDI Utilities
 
 #### [MODIFY] [lane-segment-utils.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/lib/midi/lane-segment-utils.ts)
+-   Implement the logic described above.
+-   Replace the existing multi-pass discovery and stitching.
 
-Refactor `buildSegmentGroups` to:
-1.  **Iterative Pass**: Loop through `spans` once.
-2.  **Inclusion Logic**: Add a note to the current group if:
-    -   The visual duration (`span.startTimeMs - currentGroup.startMs`) is less than `thresholdMs`.
-    -   **OR** the note starts exactly when or before the previous notes end (`span.startTimeMs <= currentMaxEndMs`).
-3.  **Boundary Stitching**:
-    -   When starting a new group, set the previous group's `endMs` and the new group's `startMs` to the **midpoint** of the gap.
-    -   **Lead-in**: The first segment starts at `0`.
-    -   **Lead-out**: The last segment ends at `totalDurationMs`.
+### Test Suite
 
-### Verification Plan
+#### [MODIFY] [lane-segment-utils.test.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/lib/midi/lane-segment-utils.test.ts)
+-   Add a test case for "Connected Notes" (Note A ends at 1000, Note B starts at 1000).
+-   Add a test case for the new "Tail Merge" logic within the single-pass iteration.
 
-#### Automated Tests
--   **Reuse Existing Tests**: Verify that all existing tests pass with the new implementation.
--   **[NEW] [lane-segment-utils.test.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/lib/midi/lane-segment-utils.test.ts)**: Add a test case for "Connected Notes" (Note A ends at 1000, Note B starts at 1000). Verify they now belong to the same segment.
-
-#### Manual Verification
--   Run `npm run dev` and verify that song playback is smooth and segments are correctly mounted/unmounted at midpoints.
--   Verify that the F#4 note at 15% is now correctly released.
+## Verification Plan
+-   Run `npm test` to ensure zero regressions in existing clustering behavior.
+-   Manual verification in demo mode to confirm notes (like F#4) release correctly.
