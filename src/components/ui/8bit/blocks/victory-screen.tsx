@@ -54,7 +54,6 @@ export interface VictoryScreenProps
   itemsObtained?: VictoryScreenItems[];
   battleReport?: VictoryScreenBattleReport[];
   stats?: VictoryScreenStats[];
-  actions?: React.ReactNode;
   className?: string;
   showItemIcon?: boolean;
 }
@@ -64,7 +63,6 @@ function VictoryScreen({
   itemsObtained,
   stats,
   battleReport,
-  actions,
   showItemIcon = true,
   ...props
 }: VictoryScreenProps) {
@@ -168,12 +166,6 @@ function VictoryScreen({
           )}
         </div>
       </CardContent>
-
-      {actions && (
-        <div className="p-6 border-t-8 border-foreground/10 bg-background/50 flex flex-wrap items-center justify-center gap-4">
-          {actions}
-        </div>
-      )}
     </Card>
   );
 }
