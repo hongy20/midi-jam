@@ -21,13 +21,13 @@ export default function NotFound1({
   cta = "Return to Home Page",
   href = "/",
   onAction,
-  imageSrc = "/images/8bit-ogre.png",
+  imageSrc,
   className,
 }: NotFound1Props) {
   return (
     <div
       className={cn(
-        "retro grid w-full place-content-center gap-5 bg-background px-4 py-16 text-center md:py-24",
+        "retro grid w-full place-content-center gap-5 bg-background px-4 py-4 text-center",
         className,
       )}
     >
