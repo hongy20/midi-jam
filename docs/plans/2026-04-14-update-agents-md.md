@@ -6,11 +6,11 @@ Outdated documentation in `AGENTS.md` is being corrected to align with the curre
 
 - [x] Identify conflicts between `AGENTS.md` and real code (Tech Stack, Layout, Components).
 - [x] Update `AGENTS.md` with accurate architectural patterns and tech stack.
-- [ ] Verify changes (Lint, Type Check, Test).
+- [x] Verify changes (Lint, Type Check, Test).
 
 ## Verification Plan
 
-- [ ] `npm run lint` (Biome check)
-- [ ] `npm run type-check` (TypeScript tsc)
-- [ ] `npm test` (Vitest suite)
-- [ ] `npm run build` (Next.js production build)
+- [x] `npm run lint` (Biome check)
+- [x] `npm run type-check` (TypeScript tsc)
+- [x] `npm test` (Vitest suite)
+- [x] `npm run build` (Next.js production build)
