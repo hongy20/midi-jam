@@ -45,3 +45,6 @@ export const LANE_SEGMENT_DURATION_MS = 5 * 1000;
 
 /** Time in ms for a note to scroll one full container height at speed 1.0 */
 export const LANE_SCROLL_DURATION_MS = 3000;
+
+/** Extra time in ms to keep segments in the DOM after they finish scrolling to ensure IO callbacks fire */
+export const LANE_UNMOUNT_GRACE_PERIOD_MS = 1000;

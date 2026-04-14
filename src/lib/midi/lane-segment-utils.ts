@@ -1,4 +1,7 @@
-import { LANE_SCROLL_DURATION_MS } from "./constant";
+import {
+  LANE_SCROLL_DURATION_MS,
+  LANE_UNMOUNT_GRACE_PERIOD_MS,
+} from "./constant";
 
 import type { NoteSpan } from "./midi-parser";
 
@@ -182,7 +185,8 @@ export function getVisibleSegmentIndexes(
       // The lower bound is exactly on visual entry.
       const isVisible =
         currentTimeMs >= group.startMs - scrollDurationMs &&
-        currentTimeMs <= groupEndMs + scrollDurationMs;
+        currentTimeMs <=
+          groupEndMs + scrollDurationMs + LANE_UNMOUNT_GRACE_PERIOD_MS;
 
       if (isVisible) {
         visible.push(i);
