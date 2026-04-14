@@ -3,11 +3,11 @@
 import { ChevronRight, Home, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/8bit/button";
 import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/8bit/card";
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "@/components/ui/8bit/table";
 
 interface ScorePageViewProps {
   title: string;
@@ -37,54 +37,40 @@ export function ScorePageView({
         </h1>
       </div>
 
-      {/* Stats Cards Area */}
-      <div className="w-full max-w-xl flex flex-col gap-6 overflow-y-auto no-scrollbar py-4">
-        {/* Total Score Card */}
-        <Card className="border-8 shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)]">
-          <CardHeader className="pb-1">
-            <CardTitle font="retro" className="text-sm opacity-60 uppercase">
-              Total Score
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="retro text-4xl md:text-5xl font-black tracking-widest text-primary">
-              {score}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Detailed Stats Row */}
-        <div className="grid grid-cols-2 gap-6">
-          <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]">
-            <CardHeader className="pb-1">
-              <CardTitle font="retro" className="text-xs opacity-60 uppercase">
+      {/* Stats Table Area */}
+      <div className="w-full max-w-md flex flex-col items-center py-4">
+        <Table className="w-full">
+          <TableBody>
+            <TableRow>
+              <TableCell className="opacity-60 uppercase text-xs">
+                Total Score
+              </TableCell>
+              <TableCell className="text-right text-2xl font-black text-primary">
+                {score}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="opacity-60 uppercase text-xs">
                 Accuracy
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="retro text-2xl md:text-3xl font-black">
+              </TableCell>
+              <TableCell className="text-right text-2xl font-black">
                 {accuracy}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]">
-            <CardHeader className="pb-1">
-              <CardTitle font="retro" className="text-xs opacity-60 uppercase">
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="opacity-60 uppercase text-xs border-b-0">
                 Max Combo
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="retro text-2xl md:text-3xl font-black">
+              </TableCell>
+              <TableCell className="text-right text-2xl font-black border-b-0">
                 {combo}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
 
       {/* Footer Actions */}
-      <footer className="w-full max-w-xl flex flex-wrap items-center justify-center gap-4 shrink-0 px-4 sm:px-0">
+      <footer className="w-full flex flex-wrap items-center justify-center gap-4 shrink-0 px-4 sm:px-0">
         <Button
           variant="secondary"
           onClick={onHome}
