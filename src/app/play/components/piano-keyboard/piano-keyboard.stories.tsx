@@ -5,9 +5,28 @@ const meta: Meta<typeof PianoKeyboard> = {
   title: "App/Play/Components/PianoKeyboard",
   component: PianoKeyboard,
   parameters: {
-    layout: "centered",
+    layout: "fullscreen",
   },
   tags: ["autodocs"],
+  decorators: [
+    (Story) => (
+      <div
+        style={
+          {
+            width: "100%",
+            height: "151px",
+            background: "var(--background)",
+            display: "flex",
+            alignItems: "flex-end",
+            "--start-unit": "36",
+            "--end-unit": "192",
+          } as React.CSSProperties
+        }
+      >
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export default meta;

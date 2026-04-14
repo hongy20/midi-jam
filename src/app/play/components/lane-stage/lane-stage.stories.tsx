@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
 import { LaneStage } from "./lane-stage";
 
 const meta: Meta<typeof LaneStage> = {
