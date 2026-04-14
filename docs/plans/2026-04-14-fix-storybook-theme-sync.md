@@ -11,7 +11,7 @@ In Storybook, when switching between different themes via the toolbar, the theme
 1. Modify `ThemeProvider` to accept optional `theme` and `mode` props that override its internal state.
 2. Synchronize `ThemeProvider` state with Storybook globals in `.storybook/preview.ts`.
 3. Fix malformed CSS in `theme-default` section of `src/app/retro-globals.css`.
-4. Fix `bg-transparent` issue in `8bit/select.tsx` trigger.
+4. Fix background issue in `8bit/select.tsx` trigger (use `bg-input/30` as per 8bitcn.com/themes).
 
 ## Tasks
 1. [x] Update `src/context/theme-context.tsx` to accept `theme` and `mode` props.

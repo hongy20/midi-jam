@@ -73,7 +73,7 @@ function SelectTrigger({ children, ...props }: BitSelectTriggerProps) {
   return (
     <div
       className={cn(
-        "relative border-y-6 border-foreground dark:border-ring bg-background",
+        "relative border-y-6 border-foreground dark:border-ring bg-input/30",
         className,
         font !== "normal" && "retro",
       )}
