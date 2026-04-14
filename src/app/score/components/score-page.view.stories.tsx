@@ -20,7 +20,6 @@ export const Outstanding: Story = {
       { id: 1, title: "Accuracy", description: "98%" },
       { id: 2, title: "Max Combo", description: 450 },
     ],
-    date: "APR 14, 2026",
     onRetry: () => {},
     onCollection: () => {},
     onHome: () => {},

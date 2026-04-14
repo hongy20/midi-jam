@@ -20,7 +20,6 @@ interface ScorePageViewProps {
   title: string;
   stats: ScoreStat[];
   report: ScoreReport[];
-  date: string;
   onRetry: () => void;
   onCollection: () => void;
   onHome: () => void;
@@ -30,7 +29,6 @@ export function ScorePageView({
   title,
   stats,
   report,
-  date,
   onRetry,
   onCollection,
   onHome,
@@ -62,13 +60,6 @@ export function ScorePageView({
           </>
         }
       />
-
-      {/* Footer text if needed - though actions slot is better */}
-      <div className="fixed bottom-4 left-0 right-0 text-center pointer-events-none">
-        <div className="retro text-[8px] opacity-20 uppercase tracking-[0.4em]">
-          Recording achieved on {date}
-        </div>
-      </div>
     </main>
   );
 }

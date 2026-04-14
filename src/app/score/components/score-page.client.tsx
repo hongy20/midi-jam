@@ -39,18 +39,6 @@ export function ScorePageClient() {
     { id: 2, title: "Max Combo", description: results.combo },
   ];
 
-  const formattedDate = useMemo(
-    () =>
-      new Date()
-        .toLocaleDateString("en-US", {
-          month: "short",
-          day: "2-digit",
-          year: "numeric",
-        })
-        .toUpperCase(),
-    [],
-  );
-
   const handleRetry = () => {
     setGameSession(null);
     toPlay();
@@ -66,7 +54,6 @@ export function ScorePageClient() {
       title={titleLabel}
       stats={stats}
       report={report}
-      date={formattedDate}
       onRetry={handleRetry}
       onCollection={handleSongs}
       onHome={() => toHome()}
