@@ -34,6 +34,8 @@ export interface BuildSegmentGroupsOptions {
  *    This ensures a seamless, non-overlapping visual experience and provides natural
  *    lead-in/lead-out buffers for animations.
  */
+const CLUSTER_CONNECTION_GAP_MS = 10;
+
 export function buildSegmentGroups({
   spans,
   totalDurationMs,
@@ -57,7 +59,8 @@ export function buildSegmentGroups({
     // 4. Or starting a new segment now would leave a tiny "tail" at the end of the song.
     const visualDuration = span.startTimeMs - currentStartMs;
     const isUnderThreshold = visualDuration < thresholdMs;
-    const isConnected = span.startTimeMs <= currentMaxEndMs + 1.0;
+    const isConnected =
+      span.startTimeMs <= currentMaxEndMs + CLUSTER_CONNECTION_GAP_MS;
     const isTailTooSmall = totalDurationMs - span.startTimeMs < thresholdMs / 2;
 
     if (isFirstNote || isUnderThreshold || isConnected || isTailTooSmall) {
