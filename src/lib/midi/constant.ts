@@ -45,3 +45,6 @@ export const LANE_SEGMENT_DURATION_MS = 5 * 1000;
 
 /** Time in ms for a note to scroll one full container height at speed 1.0 */
 export const LANE_SCROLL_DURATION_MS = 3000;
+
+/** Threshold for considering two notes 'connected' in a cluster (in milliseconds) */
+export const CLUSTER_CONNECTION_GAP_MS = 10;

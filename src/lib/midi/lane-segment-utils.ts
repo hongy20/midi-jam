@@ -1,4 +1,4 @@
-import { LANE_SCROLL_DURATION_MS } from "./constant";
+import { CLUSTER_CONNECTION_GAP_MS, LANE_SCROLL_DURATION_MS } from "./constant";
 
 import type { NoteSpan } from "./midi-parser";
 
@@ -34,7 +34,6 @@ export interface BuildSegmentGroupsOptions {
  *    This ensures a seamless, non-overlapping visual experience and provides natural
  *    lead-in/lead-out buffers for animations.
  */
-const CLUSTER_CONNECTION_GAP_MS = 10;
 
 export function buildSegmentGroups({
   spans,
