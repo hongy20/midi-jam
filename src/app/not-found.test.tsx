@@ -1,19 +1,13 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { useNavigation } from "@/hooks/use-navigation";
 import NotFound from "./not-found";
 
-vi.mock("@/hooks/use-navigation");
 vi.mock("next/image", () => ({
   default: (props: any) => <img alt="" {...props} />,
 }));
 
 describe("NotFound Page", () => {
   it("renders correctly with MIDI themed text", () => {
-    vi.mocked(useNavigation).mockReturnValue({
-      toHome: vi.fn(),
-    } as any);
-
     render(<NotFound />);
 
     expect(screen.getByText("404")).toBeInTheDocument();
@@ -26,17 +20,10 @@ describe("NotFound Page", () => {
     expect(screen.getByText("RETURN HOME")).toBeInTheDocument();
   });
 
-  it("calls toHome navigation when the button is clicked", () => {
-    const mockToHome = vi.fn();
-    vi.mocked(useNavigation).mockReturnValue({
-      toHome: mockToHome,
-    } as any);
-
+  it("links to the home page", () => {
     render(<NotFound />);
 
-    const button = screen.getByText("RETURN HOME");
-    fireEvent.click(button);
-
-    expect(mockToHome).toHaveBeenCalled();
+    const link = screen.getByRole("link", { name: /return home/i });
+    expect(link).toHaveAttribute("href", "/");
   });
 });
