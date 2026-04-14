@@ -24,6 +24,32 @@ export function useDemoPlayback({
 
     const activeCounts = new Map<number, number>();
     const observedElements = new Set<Element>();
+    const activeElements = new Set<Element>();
+
+    const handleNoteOn = (pitch: number, el: Element) => {
+      if (activeElements.has(el)) return;
+      activeElements.add(el);
+
+      const currentCount = activeCounts.get(pitch) || 0;
+      activeCounts.set(pitch, currentCount + 1);
+      if (currentCount === 0) {
+        onNoteOn(pitch, 0.7);
+      }
+    };
+
+    const handleNoteOff = (pitch: number, el: Element) => {
+      if (!activeElements.has(el)) return;
+      activeElements.delete(el);
+
+      const currentCount = activeCounts.get(pitch) || 0;
+      if (currentCount > 0) {
+        const nextCount = currentCount - 1;
+        activeCounts.set(pitch, nextCount);
+        if (nextCount === 0) {
+          onNoteOff(pitch);
+        }
+      }
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -33,35 +59,21 @@ export function useDemoPlayback({
           .filter(
             (e) =>
               // Only trigger Note Off if the element exits through the bottom
-              // (This prevents premature off events for elements entering from the top)
               e.rootBounds && e.boundingClientRect.top > e.rootBounds.bottom,
           );
         const entriesIn = entries.filter((e) => e.isIntersecting);
 
-        // Process exits (Off) first
         for (const entry of exits) {
           const pitch = Number(entry.target.getAttribute("data-pitch"));
-          if (Number.isNaN(pitch)) continue;
-
-          const currentCount = activeCounts.get(pitch) || 0;
-          if (currentCount > 0) {
-            const nextCount = currentCount - 1;
-            activeCounts.set(pitch, nextCount);
-            if (nextCount === 0) {
-              onNoteOff(pitch);
-            }
+          if (!Number.isNaN(pitch)) {
+            handleNoteOff(pitch, entry.target);
           }
         }
 
-        // Process entries (On) second
         for (const entry of entriesIn) {
           const pitch = Number(entry.target.getAttribute("data-pitch"));
-          if (Number.isNaN(pitch)) continue;
-
-          const currentCount = activeCounts.get(pitch) || 0;
-          activeCounts.set(pitch, currentCount + 1);
-          if (currentCount === 0) {
-            onNoteOn(pitch, 0.7);
+          if (!Number.isNaN(pitch)) {
+            handleNoteOn(pitch, entry.target);
           }
         }
       },
@@ -104,7 +116,19 @@ export function useDemoPlayback({
           // Cleanup removed nodes from tracker if necessary (observer handles GC, but tracker helps)
           mutation.removedNodes.forEach((node) => {
             if (node instanceof Element) {
-              observedElements.delete(node);
+              const processRemoval = (el: Element) => {
+                if (el.hasAttribute("data-pitch")) {
+                  const pitch = Number(el.getAttribute("data-pitch"));
+                  if (!Number.isNaN(pitch)) {
+                    handleNoteOff(pitch, el);
+                  }
+                  observedElements.delete(el);
+                }
+              };
+
+              // Check the node itself and its entire subtree
+              processRemoval(node);
+              node.querySelectorAll("[data-pitch]").forEach(processRemoval);
             }
           });
         }

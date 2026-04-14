@@ -76,4 +76,46 @@ describe("lane-segment-utils integration with real MIDI", () => {
       // if that note was the reason we *didn't* split earlier.
     }
   });
+
+  it("Golden Kpop Demon Hunters should not split connected notes across various thresholds", () => {
+    const { spans, totalDurationMs } = loadMidi(
+      "Golden Kpop Demon Hunters.mid",
+    );
+
+    // Test multiple common thresholds to ensure stability
+    for (const thresholdMs of [3000, 5000, 7000]) {
+      const groups = buildSegmentGroups({
+        spans,
+        totalDurationMs,
+        thresholdMs,
+      });
+
+      // Verify that sequential "touching" notes stay in the same group
+      for (let i = 0; i < spans.length - 1; i++) {
+        const current = spans[i];
+        const next = spans[i + 1];
+
+        const currentEndMs = current.startTimeMs + current.durationMs;
+        const nextStartMs = next.startTimeMs;
+        const gap = nextStartMs - currentEndMs;
+
+        // Gap < 1ms is considered 'connected'
+        if (gap < 1.0) {
+          const groupIdxA = groups.findIndex((g) =>
+            g.spans.some((s) => s.id === current.id),
+          );
+          const groupIdxB = groups.findIndex((g) =>
+            g.spans.some((s) => s.id === next.id),
+          );
+
+          if (groupIdxA !== groupIdxB && groupIdxA !== -1 && groupIdxB !== -1) {
+            const progress = (currentEndMs / totalDurationMs) * 100;
+            throw new Error(
+              `SPLIT DETECTED! Threshold: ${thresholdMs}ms. Progress: ${progress.toFixed(2)}%. Note A (${current.id}) -> Note B (${next.id}). Gap: ${gap.toFixed(6)}ms.`,
+            );
+          }
+        }
+      }
+    }
+  });
 });
