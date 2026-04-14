@@ -17,7 +17,6 @@ export default function NotFound() {
         description="The track you're looking for was never composed or has been deleted."
         cta="RETURN HOME"
         onAction={toHome}
-        imageSrc="/images/404.png"
         className="max-w-2xl border-8 border-foreground/10 shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)] bg-card"
       />
     </main>
