@@ -12,11 +12,9 @@ Identify and resolve the bug where note "F#4" (MIDI 66) becomes permanently stuc
 ### Core Logic
 
 #### [MODIFY] [use-demo-playback.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/hooks/use-demo-playback.ts)
-- Replace `activeCounts: Map<number, number>` (pitch -> count) with `activeElements: Map<number, Set<Element>>` (pitch -> Set of intersecting elements).
-- Update the `IntersectionObserver` callback to add/remove specific elements from these sets.
-- Trigger `onNoteOn` only when a pitch's set goes from empty to non-empty.
-- Trigger `onNoteOff` only when a pitch's set becomes empty.
-- This ensures that IO callback batching delays (which were causing counter inflation) do not result in stuck notes.
+- **Refine IO Exit Filter**: Modify the `IntersectionObserver` exit filter to always allow Note Off if the element is disconnected from the DOM (`!target.isConnected`). This prevents "stuck" notes when a long note element is unmounted while still crossing the hitline (where `boundingClientRect` becomes zeroed).
+- **Explicit MO Cleanup**: Add fallback cleanup in the `MutationObserver` removal loop. If a note element is removed from the DOM, explicitly check its `activeElements` status and trigger `onNoteOff` if it was still active.
+- **Set-Based Tracking**: Continue using the `Set` per pitch to prevent concurrent note inflation and ensure idempotent triggers.
 
 ## Verification Plan
 
