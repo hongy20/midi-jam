@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { useEffect, useState } from "react";
 import { LaneStage } from "./lane-stage";
 
 const meta: Meta<typeof LaneStage> = {
@@ -8,6 +9,24 @@ const meta: Meta<typeof LaneStage> = {
     layout: "fullscreen",
   },
   tags: ["autodocs"],
+  decorators: [
+    (Story) => (
+      <div
+        style={
+          {
+            width: "100%",
+            height: "400px",
+            background: "var(--background)",
+            position: "relative",
+            "--start-unit": "36",
+            "--end-unit": "192",
+          } as React.CSSProperties
+        }
+      >
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export default meta;
@@ -47,5 +66,27 @@ export const Playing: Story = {
     groups: mockGroups,
     scrollRef: { current: null },
     getCurrentTimeMs: () => 1500,
+  },
+};
+
+export const Animated: Story = {
+  render: (args) => {
+    // biome-ignore lint/correctness/useExhaustiveDependencies: Storybook specific logic
+    const [time, setTime] = useState(0);
+    // biome-ignore lint/correctness/useExhaustiveDependencies: Storybook specific logic
+    useEffect(() => {
+      const start = performance.now();
+      const interval = setInterval(() => {
+        setTime((performance.now() - start) % 10000); // Loop every 10s
+      }, 16);
+      return () => clearInterval(interval);
+    }, []);
+
+    return <LaneStage {...args} getCurrentTimeMs={() => time} />;
+  },
+  args: {
+    groups: mockGroups,
+    scrollRef: { current: null },
+    getCurrentTimeMs: () => 0, // Fallback
   },
 };
