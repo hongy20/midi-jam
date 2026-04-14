@@ -11,8 +11,8 @@ Identify and resolve the bug where note "F#4" (MIDI 66) becomes permanently stuc
 
 ### Core Logic
 
-#### [MODIFY] [use-demo-playback.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/hooks/use-demo-playback.ts)
 - **Refine IO Exit Filter**: Modify the `IntersectionObserver` exit filter to always allow Note Off if the element is disconnected from the DOM (`!target.isConnected`). This prevents "stuck" notes when a long note element is unmounted while still crossing the hitline (where `boundingClientRect` becomes zeroed).
+- **Increase Unmount Buffer**: Add a small temporal buffer (e.g., 500ms - 1000ms) to the segment unmounting logic in `getVisibleSegmentIndexes`. This ensures that note elements remain in the DOM long enough for the `IntersectionObserver` to fire a "clean" exit callback before the segment is destroyed.
 - **Explicit MO Cleanup**: Add fallback cleanup in the `MutationObserver` removal loop. If a note element is removed from the DOM, explicitly check its `activeElements` status and trigger `onNoteOff` if it was still active.
 - **Set-Based Tracking**: Continue using the `Set` per pitch to prevent concurrent note inflation and ensure idempotent triggers.
 
