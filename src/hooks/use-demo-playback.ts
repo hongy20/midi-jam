@@ -27,8 +27,6 @@ export function useDemoPlayback({
     if (!container || !demoMode || isLoading || groups.length === 0) return;
 
     // Track which elements are currently "active" for each pitch.
-    // Using a Set per pitch ensures that multiple elements of the same pitch
-    // (e.g., during segment transitions or IO batch delays) don't cause counter drift.
     const activeElements = new Map<number, Set<Element>>();
     const observedElements = new Set<Element>();
 
@@ -40,8 +38,11 @@ export function useDemoPlayback({
           .filter(
             (e) =>
               // Only trigger Note Off if the element exits through the bottom
-              // (This prevents premature off events for elements entering from the top)
-              e.rootBounds && e.boundingClientRect.top > e.rootBounds.bottom,
+              // OR if it was disconnected from the DOM (unmounted).
+              // Disconnected elements pass {0,0,0,0} for boundingClientRect,
+              // so we must skip the coordinate check for them.
+              !e.target.isConnected ||
+              (e.rootBounds && e.boundingClientRect.top > e.rootBounds.bottom),
           );
         const entriesIn = entries.filter((e) => e.isIntersecting);
 
@@ -96,6 +97,18 @@ export function useDemoPlayback({
       });
     };
 
+    // Helper to cleanup any active elements associated with a removed DOM tree
+    const cleanupActiveElements = (pitch: number, element: Element) => {
+      const elements = activeElements.get(pitch);
+      if (elements?.has(element)) {
+        elements.delete(element);
+        if (elements.size === 0) {
+          activeElements.delete(pitch);
+          onNoteOff(pitch);
+        }
+      }
+    };
+
     // Initial observation
     observeNotes(container);
 
@@ -120,9 +133,18 @@ export function useDemoPlayback({
             if (node instanceof Element) {
               observedElements.delete(node);
 
-              // If the removed node or any of its children were in activeElements,
-              // we should technically clean them up, though IO disconnection
-              // usually fires a final isIntersecting=false callback.
+              // REFINED FIX: Explicitly handle removed active notes.
+              // While IO fires a final callback on disconnection, it can be delayed.
+              // We check the removed tree for any nodes that are currently marked as active.
+              if (node.hasAttribute("data-pitch")) {
+                const pitch = Number(node.getAttribute("data-pitch"));
+                cleanupActiveElements(pitch, node);
+              }
+              const activeChildren = node.querySelectorAll("[data-pitch]");
+              activeChildren.forEach((child) => {
+                const pitch = Number(child.getAttribute("data-pitch"));
+                cleanupActiveElements(pitch, child);
+              });
             }
           });
         }
