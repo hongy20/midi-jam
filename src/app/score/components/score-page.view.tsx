@@ -38,7 +38,7 @@ export function ScorePageView({
       </div>
 
       {/* Stats Table Area */}
-      <div className="w-full max-w-md flex flex-col items-center py-4">
+      <div className="w-full max-w-md flex flex-col items-center">
         <Table className="w-full">
           <TableBody>
             <TableRow>
