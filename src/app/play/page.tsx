@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-import Loading from "@/app/loading";
 import { PlayPageClient } from "./components/play-page.client";
 
 export const metadata = {
@@ -13,9 +11,5 @@ export const metadata = {
  * Wraps the Client logic in a Suspense boundary to leverage the native Next.js loading state.
  */
 export default function PlayPage() {
-  return (
-    <Suspense fallback={<Loading />}>
-      <PlayPageClient />
-    </Suspense>
-  );
+  return <PlayPageClient />;
 }
