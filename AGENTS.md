@@ -15,6 +15,7 @@ Midi Jam is a high-performance web application for learning musical instruments 
 
 ## 0. UI Component Management (CRITICAL)
 - **8bitcn Registry**: ALWAYS use `npx shadcn@latest add @8bitcn/[name]` to install 8bitcn components or blocks. 
+- **SHADCN MCP**: When available, prefer using the **shadcn MCP** to explore, research, and preview 8bitcn components and blocks before installation.
 - **Prohibition**: DO NOT manually implement, "hallucinate", or copy-paste the code for these components/blocks unless the registry command fails and is explicitly approved by the user.
 
 ## 1. Unified Layout & State
