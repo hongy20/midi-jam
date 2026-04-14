@@ -129,10 +129,7 @@ export function OptionsPageView({
 
       <footer className="w-full max-w-2xl flex items-center justify-between border-muted py-2">
         <div className="flex items-center">
-          <RetroModeSwitcher
-            mode={mode}
-            onToggle={onModeToggle}
-          />
+          <RetroModeSwitcher mode={mode} onToggle={onModeToggle} />
         </div>
 
         <Button variant="secondary" onClick={onBack} size="sm" font="retro">
