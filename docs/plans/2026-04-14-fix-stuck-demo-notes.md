@@ -1,28 +1,26 @@
-# Fix: Floating-Point Robustness in Segment Grouping
+# Fix: Segment Connectivity & Clustering Bug
 
-This plan fixes a bug where connected notes (those starting exactly when previous notes end) were being split into separate segments due to sub-millisecond precision errors in MIDI-to-MS conversion.
+Despite the previous epsilon fix, some connected notes in the 'Golden Song' are still being split into multiple segments. This plan focuses on robustly reproducing and fixing this behavior.
+
+## Proposed Research & Reproduction
+
+-   **New Test Cases**: I will add a test case with a long chain of connected notes (10+ notes) where each note starts exactly when the previous one ends, exceeding the segment threshold multiple times.
+-   **Diagnostic Logs (Temporary)**: I will add `console.log` to track the exact state (`currentMaxEndMs`, `visualDuration`, etc.) when a split occurs in the app.
 
 ## Proposed Changes
 
 ### MIDI Utilities
 
 #### [MODIFY] [lane-segment-utils.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/lib/midi/lane-segment-utils.ts)
-
-- Update the `isConnected` check to use a **0.1ms epsilon**.
-- **Logic**: `const isConnected = span.startTimeMs <= currentMaxEndMs + 0.1;`
-- This ensures that notes which "touch" at the same MIDI tick (but differ by a trillionth of a second in float representation) are correctly kept in the same segment.
+-   Increase the `isConnected` epsilon from `0.1` to `1.0ms`. MIDI jitter can often exceed 0.1ms depending on the source.
+-   Ensure that the `isConnected` check is the highest priority for clustering.
 
 ### Test Suite
 
 #### [MODIFY] [lane-segment-utils.test.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/lib/midi/lane-segment-utils.test.ts)
-
-- Add a test case specifically for floating-point gaps.
-- Restore the accidentally removed "Tail Merge" test case.
+-   Add `it("does not split a chain of 10+ connected notes regardless of threshold")`
+-   Add `it("bridges gaps up to 1ms")`
 
 ## Verification Plan
-
-### Automated Tests
-- Run `npm test src/lib/midi/lane-segment-utils.test.ts`.
-
-### Manual Verification
-- Verify that the "Golden Song" no longer splits segments around the 33% mark.
+-   Run `npm test src/lib/midi/lane-segment-utils.test.ts`
+-   Verification in browser with the 'Golden Song' at the 33% mark.
