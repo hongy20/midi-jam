@@ -119,7 +119,7 @@ export function useDemoPlayback({
           mutation.removedNodes.forEach((node) => {
             if (node instanceof Element) {
               observedElements.delete(node);
-              
+
               // If the removed node or any of its children were in activeElements,
               // we should technically clean them up, though IO disconnection
               // usually fires a final isIntersecting=false callback.
