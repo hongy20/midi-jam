@@ -132,7 +132,6 @@ export function OptionsPageView({
           <RetroModeSwitcher
             mode={mode}
             onToggle={onModeToggle}
-            className="size-7"
           />
         </div>
 
