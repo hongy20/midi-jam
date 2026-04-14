@@ -1,11 +1,5 @@
-import { cva } from "class-variance-authority";
-import Image from "next/image";
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/8bit/alert";
 import { Card, CardContent } from "@/components/ui/8bit/card";
+import { cn } from "@/lib/utils";
 import {
   Item,
   ItemContent,
@@ -14,7 +8,13 @@ import {
   ItemSeparator,
   ItemTitle,
 } from "@/components/ui/8bit/item";
-import { cn } from "@/lib/utils";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/8bit/alert";
+import Image from "next/image";
+import { cva } from "class-variance-authority";
 
 const rarityVariants = cva("", {
   variants: {
@@ -50,7 +50,6 @@ export interface VictoryScreenStats {
 }
 export interface VictoryScreenProps
   extends React.ComponentPropsWithoutRef<"div"> {
-  title?: string;
   itemsObtained?: VictoryScreenItems[];
   battleReport?: VictoryScreenBattleReport[];
   stats?: VictoryScreenStats[];
@@ -59,7 +58,6 @@ export interface VictoryScreenProps
 }
 function VictoryScreen({
   className,
-  title = "VICTORY!",
   itemsObtained,
   stats,
   battleReport,
@@ -69,102 +67,92 @@ function VictoryScreen({
   return (
     <Card
       data-slot="victoryscreen"
-      className={cn(
-        "w-full h-full max-w-4xl max-h-[90dvh] flex flex-col overflow-hidden dark:bg-blue-950/10",
-        className,
-      )}
+      className={cn("w-full h-full dark:bg-blue-950/10", className)}
       {...props}
     >
-      <CardContent className="flex-1 overflow-y-auto p-6 md:p-8 space-y-8">
+      <CardContent>
         <div className="flex flex-col items-center justify-center">
-          <h1 className="retro text-3xl md:text-5xl font-black bg-foreground text-background px-6 py-4 border-8 border-foreground dark:border-ring uppercase leading-tight select-none text-center">
-            {title}
-          </h1>
+          <h1 className="text-2xl font-bold">VICTORY!</h1>
         </div>
 
-        <div className="relative flex flex-col md:flex-row items-center justify-around flex-wrap gap-4">
+        <div className="relative flex flex-col md:flex-row items-center justify-around flex-wrap mt-6 gap-y-6 ">
           {stats?.map((stat) => (
             <Alert
               key={stat.id}
-              className="w-full md:w-auto md:flex-1 p-4 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]"
+              className="max-w-full min-w-3/4 md:min-w-auto p-2"
             >
-              <AlertTitle className="text-center text-sm md:text-md uppercase opacity-70">
+              <AlertTitle className="text-center text-md md:text-lg font-bold">
                 {stat.title}
               </AlertTitle>
-              <AlertDescription className="text-2xl md:text-3xl font-black flex justify-center items-center mt-2 retro">
+              <AlertDescription className="text-xl md:text-2xl font-bold flex justify-center items-center mt-2">
                 {stat.stats}
               </AlertDescription>
             </Alert>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {itemsObtained && itemsObtained.length > 0 && (
-            <div className="flex flex-col gap-4">
-              <h2 className="text-xl font-bold uppercase tracking-wider">
-                Items Obtained
-              </h2>
-              <ItemGroup className="w-full">
-                {itemsObtained?.map((item, index) => (
-                  <div key={item.id}>
-                    <Item variant="outline" className="dark:bg-blue-950/50 p-2">
-                      <ItemContent className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                          {showItemIcon && item.icon && (
-                            <Image
-                              src={item.icon}
-                              alt={item.name}
-                              width={48}
-                              height={48}
-                              className="size-10 object-contain rounded-full"
-                            />
-                          )}
-                          <ItemTitle className="leading-tight retro text-sm">
-                            {item.name}
-                          </ItemTitle>
-                        </div>
-                        <ItemDescription
-                          className={cn(
-                            "text-xs font-bold uppercase",
-                            rarityVariants({ status: item.rarity }),
-                          )}
-                        >
-                          {item.rarity}
-                        </ItemDescription>
-                      </ItemContent>
-                    </Item>
-                    {index < itemsObtained.length - 1 && <ItemSeparator />}
-                  </div>
-                ))}
-              </ItemGroup>
-            </div>
-          )}
+        {itemsObtained && itemsObtained.length > 0 && (
+          <div className="flex flex-col items-center justify-center mt-6">
+            <h2 className="text-lg text-center font-bold">Items Obtained</h2>
 
-          {battleReport && battleReport.length > 0 && (
-            <div className="flex flex-col gap-4">
-              <h2 className="text-xl font-bold uppercase tracking-wider">
-                Performance
-              </h2>
-              <ItemGroup className="w-full">
-                {battleReport?.map((report, index) => (
-                  <div key={report.id}>
-                    <Item variant="outline" className="dark:bg-blue-950/50 p-2">
-                      <ItemContent className="flex items-center justify-between gap-4">
-                        <ItemTitle className="text-sm opacity-70">
+            <ItemGroup className="mt-2 w-[80%]">
+              {itemsObtained?.map((item, index) => (
+                <div key={item.id}>
+                  <Item variant="outline" className="dark:bg-blue-950/50 p-1">
+                    <ItemContent className="flex flex-col md:flex-row items-center justify-between gap-2  truncate">
+                      <div className="flex flex-row justify-center md:justify-start items-center gap-2 truncate w-full md:max-w-[65%]">
+                        {showItemIcon && item.icon && (
+                          <Image
+                            src={item.icon}
+                            alt={item.name}
+                            width={48}
+                            height={48}
+                            className="size-8 object-contain rounded-full"
+                          />
+                        )}
+                        <ItemTitle className="leading-normal retro">
+                          {item.name}{" "}
+                        </ItemTitle>
+                      </div>
+                      <ItemDescription
+                        className={cn(rarityVariants({ status: item.rarity }))}
+                      >
+                        {item.rarity}
+                      </ItemDescription>
+                    </ItemContent>
+                  </Item>
+                  {index < itemsObtained.length - 1 && <ItemSeparator />}
+                </div>
+              ))}
+            </ItemGroup>
+          </div>
+        )}
+        {battleReport && battleReport.length > 0 && (
+          <div className="flex flex-col items-center justify-center mt-6">
+            <h2 className="text-lg text-center font-bold">Battle Report</h2>
+
+            <ItemGroup className="mt-2 w-[80%]">
+              {battleReport?.map((report, index) => (
+                <div key={report.id}>
+                  <Item
+                    variant="outline"
+                    className="dark:bg-blue-950/50  p-1 truncate"
+                  >
+                    <ItemContent className="flex flex-col flex-wrap  md:flex-row items-center justify-between w-full gap-2">
+                      <div className="flex items-center justify-center md:justify-start w-full md:max-w-[65%] ">
+                        <ItemTitle className="leading-normal text-center">
                           {report.title}
                         </ItemTitle>
-                        <ItemDescription className="font-bold retro">
-                          {report.description}
-                        </ItemDescription>
-                      </ItemContent>
-                    </Item>
-                    {index < battleReport.length - 1 && <ItemSeparator />}
-                  </div>
-                ))}
-              </ItemGroup>
-            </div>
-          )}
-        </div>
+                      </div>
+                      <ItemDescription>{report.description}</ItemDescription>
+                    </ItemContent>
+                  </Item>
+                  {index < battleReport.length - 1 && <ItemSeparator />}
+                </div>
+              ))}
+            </ItemGroup>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

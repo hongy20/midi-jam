@@ -34,15 +34,14 @@ export function ScorePageView({
   onHome,
 }: ScorePageViewProps) {
   return (
-    <main className="w-screen h-[100dvh] flex flex-col items-center justify-center gap-8 p-4 bg-background overflow-hidden select-none">
+    <main className="w-screen h-[100dvh] flex flex-col items-center justify-center justify-evenly p-4 bg-background overflow-hidden select-none">
       <VictoryScreen
         title={title}
         stats={stats}
         battleReport={report}
-        className="max-h-[80dvh]"
       />
 
-      <div className="flex flex-wrap items-center justify-center gap-4">
+      <div className="flex flex-wrap items-center justify-center gap-8">
         <Button variant="secondary" onClick={onHome} size="sm" font="retro">
           Main Menu
         </Button>
