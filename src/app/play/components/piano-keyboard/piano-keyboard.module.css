@@ -95,6 +95,6 @@
   position: relative;
   font-size: 10px;
   font-weight: 900;
-  color: #94a3b8;
+  color: var(--piano-label-color);
   pointer-events: none;
 }

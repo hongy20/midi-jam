@@ -13,10 +13,11 @@
   --piano-key-radius-black: 4px;
   --piano-key-white: #ffffff;
   --piano-key-black: #18181b;
-  --piano-key-border: 1px solid #d4d4d8;
-  --piano-glow-live-bg: #ec4899;
-  --piano-glow-playback-bg: #3b82f6;
-  --piano-glow-both-bg: #6366f1;
+  --piano-key-border: 1px solid var(--border);
+  --piano-label-color: var(--muted-foreground);
+  --piano-glow-live-bg: var(--primary);
+  --piano-glow-playback-bg: var(--secondary);
+  --piano-glow-both-bg: var(--accent);
   --note-radius: 0.125rem;
   --ui-card-radius: 2rem;
 }
