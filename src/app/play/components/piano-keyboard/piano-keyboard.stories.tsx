@@ -14,7 +14,7 @@ const meta: Meta<typeof PianoKeyboard> = {
         style={
           {
             width: "100%",
-            height: "100dvh",
+            height: "400px",
             background: "var(--background)",
             display: "flex",
             flexDirection: "column",
