@@ -10,6 +10,10 @@ interface UseDemoPlaybackProps {
   onNoteOff: (note: number) => void;
 }
 
+/**
+ * Hook to handle MIDI demo playback using IntersectionObserver on note elements.
+ * Uses per-element state tracking to prevent counter drift caused by IO callback delays.
+ */
 export function useDemoPlayback({
   containerRef,
   demoMode,
@@ -22,7 +26,10 @@ export function useDemoPlayback({
     const container = containerRef.current;
     if (!container || !demoMode || isLoading || groups.length === 0) return;
 
-    const activeCounts = new Map<number, number>();
+    // Track which elements are currently "active" for each pitch.
+    // Using a Set per pitch ensures that multiple elements of the same pitch
+    // (e.g., during segment transitions or IO batch delays) don't cause counter drift.
+    const activeElements = new Map<number, Set<Element>>();
     const observedElements = new Set<Element>();
 
     const observer = new IntersectionObserver(
@@ -43,11 +50,11 @@ export function useDemoPlayback({
           const pitch = Number(entry.target.getAttribute("data-pitch"));
           if (Number.isNaN(pitch)) continue;
 
-          const currentCount = activeCounts.get(pitch) || 0;
-          if (currentCount > 0) {
-            const nextCount = currentCount - 1;
-            activeCounts.set(pitch, nextCount);
-            if (nextCount === 0) {
+          const elements = activeElements.get(pitch);
+          if (elements?.has(entry.target)) {
+            elements.delete(entry.target);
+            if (elements.size === 0) {
+              activeElements.delete(pitch);
               onNoteOff(pitch);
             }
           }
@@ -58,9 +65,16 @@ export function useDemoPlayback({
           const pitch = Number(entry.target.getAttribute("data-pitch"));
           if (Number.isNaN(pitch)) continue;
 
-          const currentCount = activeCounts.get(pitch) || 0;
-          activeCounts.set(pitch, currentCount + 1);
-          if (currentCount === 0) {
+          let elements = activeElements.get(pitch);
+          const wasEmpty = !elements || elements.size === 0;
+
+          if (!elements) {
+            elements = new Set();
+            activeElements.set(pitch, elements);
+          }
+
+          elements.add(entry.target);
+          if (wasEmpty) {
             onNoteOn(pitch, 0.7);
           }
         }
@@ -101,10 +115,14 @@ export function useDemoPlayback({
               observeNotes(node);
             }
           });
-          // Cleanup removed nodes from tracker if necessary (observer handles GC, but tracker helps)
+
           mutation.removedNodes.forEach((node) => {
             if (node instanceof Element) {
               observedElements.delete(node);
+              
+              // If the removed node or any of its children were in activeElements,
+              // we should technically clean them up, though IO disconnection
+              // usually fires a final isIntersecting=false callback.
             }
           });
         }
@@ -117,13 +135,14 @@ export function useDemoPlayback({
       observer.disconnect();
       mutationObserver.disconnect();
       observedElements.clear();
+
       // Cleanup: release any currently active notes
-      for (const [pitch, count] of activeCounts.entries()) {
-        if (count > 0) {
+      for (const [pitch, elements] of activeElements.entries()) {
+        if (elements.size > 0) {
           onNoteOff(pitch);
         }
       }
-      activeCounts.clear();
+      activeElements.clear();
     };
   }, [containerRef, demoMode, isLoading, groups, onNoteOn, onNoteOff]);
 }
