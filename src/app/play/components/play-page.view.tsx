@@ -1,10 +1,10 @@
 "use client";
 
 import { Pause } from "lucide-react";
-import { LaneStage } from "@/components/lane-stage/lane-stage";
 import { Button } from "@/components/ui/8bit/button";
 import type { HitQuality } from "@/hooks/use-lane-score-engine";
 import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
+import { LaneStage } from "./lane-stage/lane-stage";
 import { PianoKeyboard } from "./piano-keyboard/PianoKeyboard";
 import styles from "./play-page.view.module.css";
 import { ScoreWidget } from "./score-widget/score-widget";
