@@ -76,10 +76,10 @@ export function CollectionPageView({
         <Button
           onClick={onShuffle}
           variant="secondary"
-          className="btn-jam"
+          className="btn-jam [@media(height<350px)]:hidden"
           disabled={tracks.length <= 1}
         >
-          <Dices className="size-4" />
+          <Dices />
           SHUFFLE
         </Button>
         <Button
@@ -88,9 +88,10 @@ export function CollectionPageView({
           className="btn-jam"
           disabled={!selectedTrack}
         >
-          <Play className="size-4 fill-current" />
+          <Play className="fill-current" />
           PLAY
         </Button>
+
       </div>
     </main>
   );

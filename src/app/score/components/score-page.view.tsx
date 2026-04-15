@@ -67,33 +67,34 @@ export function ScorePageView({
             </TableRow>
           </TableBody>
         </Table>
-      </div>
-
       {/* Footer Actions */}
-      <footer className="jam-action-group">
+      <footer className="jam-action-group shrink-0 px-4 sm:px-0">
         <Button
           variant="secondary"
           onClick={onHome}
+          size="sm"
           font="retro"
           className="btn-jam"
         >
-          <Home className="size-4" />
+          <Home />
           Home
         </Button>
         <Button
           variant="secondary"
           onClick={onSongs}
+          size="sm"
           font="retro"
           className="btn-jam"
         >
-          <ChevronRight className="size-4" />
+          <ChevronRight />
           Songs
         </Button>
-        <Button onClick={onRetry} font="retro" className="btn-jam">
-          <RotateCcw className="size-4" />
+        <Button onClick={onRetry} size="sm" font="retro" className="btn-jam">
+          <RotateCcw />
           RETRY
         </Button>
       </footer>
+
     </main>
   );
 }

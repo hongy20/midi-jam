@@ -72,7 +72,7 @@ body {
     @apply w-full min-w-48 px-4 py-2 flex items-center justify-center transition-all;
 
     svg {
-      @apply block mr-2;
+      @apply size-4 block mr-2;
     }
 
     /* 2. Mobile Landscape / Small Tablet (Horizontal row) */
