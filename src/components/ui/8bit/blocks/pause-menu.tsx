@@ -68,8 +68,8 @@ export default function PauseMenu({
       <CardContent className="px-6 pb-8">
         <div
           className={cn(
-            "flex flex-col gap-4 w-full",
-            "[@media(max-height:450px)]:grid [@media(max-height:450px)]:grid-cols-2 [@media(max-height:450px)]:grid-rows-2 [@media(max-height:450px)]:gap-6 [@media(max-height:450px)]:p-2",
+            "grid grid-cols-1 gap-4 w-full",
+            "[@media(max-height:450px)]:grid-cols-2 [@media(max-height:450px)]:grid-rows-2 [@media(max-height:450px)]:gap-6 [@media(max-height:450px)]:p-2",
           )}
         >
           {menuItems.map((item) => (
