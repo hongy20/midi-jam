@@ -78,7 +78,7 @@ export function GearPageView({
         </>
       )}
 
-      <div className="w-full max-w-5xl flex flex-wrap justify-center gap-4 shrink-0">
+      <div className="jam-action-group shrink-0">
         <Button onClick={onBack} variant="secondary" className="btn-jam">
           MAIN MENU
         </Button>
