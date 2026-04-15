@@ -61,28 +61,24 @@ body {
   .btn-jam {
     /* 1. Mobile Default (Compact) */
     @apply w-28 px-2 py-1 flex items-center justify-center transition-all;
-  }
 
-  .btn-jam svg {
     /* Icons are hidden by default on small mobile */
-    @apply hidden;
-  }
+    & svg {
+      @apply hidden;
+    }
 
-  /* 2. Tablet / Small Desktop (Medium) */
-  @media (min-width: 768px) {
-    .btn-jam {
+    /* 2. Tablet / Small Desktop (Medium) */
+    @media (min-width: 768px) {
       @apply w-40 px-3 py-1.5;
-    }
 
-    .btn-jam svg {
       /* Show icons and add margin for text */
-      @apply block mr-2;
+      & svg {
+        @apply block mr-2;
+      }
     }
-  }
 
-  /* 3. Large Desktop (Standard) */
-  @media (min-width: 1024px) {
-    .btn-jam {
+    /* 3. Large Desktop (Standard) */
+    @media (min-width: 1024px) {
       @apply w-48 px-4 py-2;
     }
   }
