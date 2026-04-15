@@ -70,7 +70,7 @@ export function ScorePageView({
       </div>
 
       {/* Footer Actions */}
-      <footer className="w-full flex flex-wrap items-center justify-center gap-4 shrink-0 px-4 sm:px-0">
+      <footer className="jam-action-group shrink-0 px-4 sm:px-0">
         <Button
           variant="secondary"
           onClick={onHome}
