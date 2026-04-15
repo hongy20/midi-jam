@@ -56,3 +56,34 @@ body {
     linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
 }
+
+@layer components {
+  .btn-jam {
+    /* 1. Mobile Default (Compact) */
+    @apply w-28 px-2 py-1 flex items-center justify-center transition-all;
+  }
+
+  .btn-jam svg {
+    /* Icons are hidden by default on small mobile */
+    @apply hidden;
+  }
+
+  /* 2. Tablet / Small Desktop (Medium) */
+  @media (min-width: 768px) {
+    .btn-jam {
+      @apply w-40 px-3 py-1.5;
+    }
+
+    .btn-jam svg {
+      /* Show icons and add margin for text */
+      @apply block mr-2;
+    }
+  }
+
+  /* 3. Large Desktop (Standard) */
+  @media (min-width: 1024px) {
+    .btn-jam {
+      @apply w-48 px-4 py-2;
+    }
+  }
+}
