@@ -51,7 +51,7 @@ export function CollectionPageView({
               <CarouselContent>
                 {tracks.map((track) => (
                   <CarouselItem
-                    className="pl-4 basis-[100%] sm:basis-1/2 lg:basis-1/3"
+                    className="pl-4 jam-carousel-item"
                     key={track.id}
                   >
                     <SongCard

@@ -9,6 +9,13 @@ import {
   CardTitle,
 } from "@/components/ui/8bit/card";
 import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/8bit/carousel";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -55,76 +62,93 @@ export function OptionsPageView({
       </div>
 
       {/* Content Area */}
-      <div className="w-full max-w-2xl flex flex-col gap-6 overflow-y-auto no-scrollbar">
-        {/* Visual Theme Section */}
-        <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
-          <CardHeader className="pb-2">
-            <CardTitle font="retro" className="text-lg uppercase">
-              Visual Theme
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
-              Customize the look and feel
-            </p>
-            <SelectThemeDropdown
-              activeTheme={activeTheme}
-              onThemeChange={onThemeChange}
-            />
-          </CardContent>
-        </Card>
+      <div className="w-full px-12 md:px-16 overflow-visible">
+        <Carousel
+          className="mx-auto w-full max-w-4xl"
+          opts={{ align: "start", loop: false }}
+        >
+          <CarouselContent>
+            {/* Visual Theme Section */}
+            <CarouselItem className="pl-4 jam-carousel-item">
+              <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)] h-full">
+                <CardHeader className="pb-2">
+                  <CardTitle font="retro" className="text-lg uppercase">
+                    Visual Theme
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-2">
+                  <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
+                    Customize the look and feel
+                  </p>
+                  <SelectThemeDropdown
+                    activeTheme={activeTheme}
+                    onThemeChange={onThemeChange}
+                  />
+                </CardContent>
+              </Card>
+            </CarouselItem>
 
-        {/* Gameplay Section */}
-        <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
-          <CardHeader className="pb-2">
-            <CardTitle font="retro" className="text-lg uppercase">
-              Difficulty
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
-              Adjust the note fall speed
-            </p>
-            <Select
-              value={difficulty}
-              onValueChange={(val) => onDifficultyChange(val as Difficulty)}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select Difficulty" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="easy">EASY (0.5x)</SelectItem>
-                <SelectItem value="normal">NORMAL (1.0x)</SelectItem>
-                <SelectItem value="hard">HARD (2.0x)</SelectItem>
-              </SelectContent>
-            </Select>
-          </CardContent>
-        </Card>
+            {/* Gameplay Section */}
+            <CarouselItem className="pl-4 jam-carousel-item">
+              <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)] h-full">
+                <CardHeader className="pb-2">
+                  <CardTitle font="retro" className="text-lg uppercase">
+                    Difficulty
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-2">
+                  <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
+                    Adjust the note fall speed
+                  </p>
+                  <Select
+                    value={difficulty}
+                    onValueChange={(val) =>
+                      onDifficultyChange(val as Difficulty)
+                    }
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select Difficulty" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="easy">EASY (0.5x)</SelectItem>
+                      <SelectItem value="normal">NORMAL (1.0x)</SelectItem>
+                      <SelectItem value="hard">HARD (2.0x)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </CardContent>
+              </Card>
+            </CarouselItem>
 
-        {/* Autopilot Section */}
-        <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
-          <CardHeader className="pb-2">
-            <CardTitle font="retro" className="text-lg uppercase">
-              Autopilot
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            <div className="flex items-center justify-between">
-              <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
-                System plays automatically
-              </p>
-              <Toggle
-                pressed={demoMode}
-                onPressedChange={setDemoMode}
-                variant="outline"
-                size="sm"
-                className="shrink-0"
-              >
-                {demoMode ? "ON" : "OFF"}
-              </Toggle>
-            </div>
-          </CardContent>
-        </Card>
+            {/* Autopilot Section */}
+            <CarouselItem className="pl-4 jam-carousel-item">
+              <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)] h-full">
+                <CardHeader className="pb-2">
+                  <CardTitle font="retro" className="text-lg uppercase">
+                    Autopilot
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between">
+                    <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
+                      System plays automatically
+                    </p>
+                    <Toggle
+                      pressed={demoMode}
+                      onPressedChange={setDemoMode}
+                      variant="outline"
+                      size="sm"
+                      className="shrink-0"
+                    >
+                      {demoMode ? "ON" : "OFF"}
+                    </Toggle>
+                  </div>
+                </CardContent>
+              </Card>
+            </CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </div>
 
       <footer className="w-full max-w-2xl flex items-center justify-between border-muted py-2">
