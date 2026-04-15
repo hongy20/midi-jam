@@ -47,3 +47,11 @@
 - [x] Create and finalize Pull Request [#111](https://github.com/hongy20/midi-jam/pull/111)
 
 ---
+
+### Task 5: Toughen AGENTS.md Protocols (IN PROGRESS)
+- [/] Update SOP with "Zero Turn Rule" for initial actions
+- [ ] Update SOP with "Status Gate" for final summaries
+- [ ] Update Plan Monolith rule to prohibit multiple plan files
+- [ ] Run final quality check and push update
+
+---
