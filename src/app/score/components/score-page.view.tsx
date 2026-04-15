@@ -76,9 +76,9 @@ export function ScorePageView({
           onClick={onHome}
           size="sm"
           font="retro"
-          className="w-48"
+          className="btn-jam"
         >
-          <Home className="size-4 mr-2" />
+          <Home className="size-4" />
           Home
         </Button>
         <Button
@@ -86,14 +86,14 @@ export function ScorePageView({
           onClick={onSongs}
           size="sm"
           font="retro"
-          className="w-48"
+          className="btn-jam"
         >
+          <ChevronRight className="size-4" />
           Songs
-          <ChevronRight className="size-4 ml-2" />
         </Button>
-        <Button onClick={onRetry} size="sm" font="retro" className="w-48">
+        <Button onClick={onRetry} size="sm" font="retro" className="btn-jam">
+          <RotateCcw className="size-4" />
           RETRY
-          <RotateCcw className="size-4 ml-2" />
         </Button>
       </footer>
     </main>
