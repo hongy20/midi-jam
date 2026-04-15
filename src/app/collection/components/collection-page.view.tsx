@@ -91,7 +91,6 @@ export function CollectionPageView({
           <Play className="fill-current" />
           PLAY
         </Button>
-
       </div>
     </main>
   );

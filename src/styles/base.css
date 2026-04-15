@@ -61,7 +61,7 @@ body {
   /* Container to equalize button widths in a group */
   .jam-action-group {
     @apply grid grid-cols-1 gap-4 w-full max-w-fit mx-auto;
-    
+
     @media (min-width: 500px) {
       @apply grid-flow-col auto-cols-fr;
     }

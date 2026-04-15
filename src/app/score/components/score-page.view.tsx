@@ -94,7 +94,6 @@ export function ScorePageView({
           RETRY
         </Button>
       </footer>
-
     </main>
   );
 }
