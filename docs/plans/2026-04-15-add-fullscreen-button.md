@@ -32,6 +32,18 @@ Add a fullscreen toggle button next to the pause button in the `PlayPage` header
 - Render a new `Button` next to (left of) the existing Pause button.
 - Use `Maximize2` and `Minimize2` icons.
 
+---
+
+### Documentation Updates
+
+#### [MODIFY] [AGENTS.md](file:///Users/yanhong/Github/hongy20/midi-jam/AGENTS.md)
+- Update "Commands" table to include HTTPS protocol.
+- Clarify mandatory HTTPS usage in "Core Principles".
+
+#### [MODIFY] [README.md](file:///Users/yanhong/Github/hongy20/midi-jam/README.md)
+- Add `[!IMPORTANT]` alert for HTTPS requirement.
+- Ensure example URLs use `https`.
+
 ## Open Questions
 
 None at this time based on the brainstorming session.
