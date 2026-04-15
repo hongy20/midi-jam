@@ -120,7 +120,7 @@ export default function Hero3({
 
         {/* Actions */}
         {actions.length > 0 ? (
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="jam-action-group">
             {actions.map((action) =>
               action.href ? (
                 <Button
