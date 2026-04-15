@@ -63,22 +63,26 @@ body {
     @apply w-28 px-2 py-1 flex items-center justify-center transition-all;
 
     /* Icons are hidden by default on small mobile */
-    & svg {
+    svg {
       @apply hidden;
     }
+  }
 
-    /* 2. Tablet / Small Desktop (Medium) */
-    @media (min-width: 768px) {
+  /* 2. Tablet / Small Desktop (Medium) */
+  @media (min-width: 768px) {
+    .btn-jam {
       @apply w-40 px-3 py-1.5;
 
       /* Show icons and add margin for text */
-      & svg {
+      svg {
         @apply block mr-2;
       }
     }
+  }
 
-    /* 3. Large Desktop (Standard) */
-    @media (min-width: 1024px) {
+  /* 3. Large Desktop (Standard) */
+  @media (min-width: 1024px) {
+    .btn-jam {
       @apply w-48 px-4 py-2;
     }
   }
