@@ -16,7 +16,8 @@ This plan outlines the updates to `AGENTS.md` to reflect the latest project stan
 1.  **Section 0. UI Component Management**:
     - Add a "Purity" rule: Keep components in `src/components/ui/` as "vanilla" as possible. Avoid project-specific customizations in these files to simplify updates from the 8bitcn/shadcn registry.
 2.  **Section 3. Architecture & Styling Standards**:
-    - Add a "Mobile-First" rule: Codify the mobile-first CSS principle, using `@media` queries for larger viewports.
+    - Add a "Mobile-First" rule: Codify the mobile-first principle for all styling methods, including Tailwind CSS (using prefixes like `md:`, `lg:` for larger viewports) and CSS Modules/Vanilla CSS (using `@media (min-width: ...)`).
+
 3.  **Section 4. UI & Navigation Architecture**:
     - Remove Section 4.3 `Navigation Patterns` -> `Button Semantics`.
     - Add a new Section 4.3 `Unified Action Styling`: Reference the use of `.btn-jam` and `.jam-action-group` (defined in `base.css`) for consistent button layouts and responsive behavior.
