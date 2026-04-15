@@ -68,66 +68,61 @@ export function OptionsPageView({
           opts={{ align: "start", loop: false }}
         >
           <CarouselContent>
-            {/* Visual Theme Section */}
             <CarouselItem className="pl-4 jam-carousel-item">
               <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)] h-full">
-                <CardHeader className="p-4 pb-4 md:p-6 md:pb-4">
+                <CardContent className="h-full p-4 md:p-6 flex flex-col justify-between gap-4">
                   <CardTitle font="retro" className="text-lg uppercase">
                     Visual Theme
                   </CardTitle>
-                </CardHeader>
-                <CardContent className="p-4 pt-0 md:p-6 md:pt-0 flex flex-col gap-4">
                   <p className="retro text-[10px] opacity-60 uppercase text-wrap">
                     Customize the look and feel
                   </p>
-                  <SelectThemeDropdown
-                    activeTheme={activeTheme}
-                    onThemeChange={onThemeChange}
-                  />
+                  <div className="w-full">
+                    <SelectThemeDropdown
+                      activeTheme={activeTheme}
+                      onThemeChange={onThemeChange}
+                    />
+                  </div>
                 </CardContent>
               </Card>
             </CarouselItem>
 
-            {/* Gameplay Section */}
             <CarouselItem className="pl-4 jam-carousel-item">
               <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)] h-full">
-                <CardHeader className="p-4 pb-4 md:p-6 md:pb-4">
+                <CardContent className="h-full p-4 md:p-6 flex flex-col justify-between gap-4">
                   <CardTitle font="retro" className="text-lg uppercase">
                     Difficulty
                   </CardTitle>
-                </CardHeader>
-                <CardContent className="p-4 pt-0 md:p-6 md:pt-0 flex flex-col gap-4">
                   <p className="retro text-[10px] opacity-60 uppercase text-wrap">
                     Adjust the note fall speed
                   </p>
-                  <Select
-                    value={difficulty}
-                    onValueChange={(val) =>
-                      onDifficultyChange(val as Difficulty)
-                    }
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select Difficulty" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="easy">EASY (0.5x)</SelectItem>
-                      <SelectItem value="normal">NORMAL (1.0x)</SelectItem>
-                      <SelectItem value="hard">HARD (2.0x)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <div className="w-full">
+                    <Select
+                      value={difficulty}
+                      onValueChange={(val) =>
+                        onDifficultyChange(val as Difficulty)
+                      }
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Difficulty" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="easy">EASY (0.5x)</SelectItem>
+                        <SelectItem value="normal">NORMAL (1.0x)</SelectItem>
+                        <SelectItem value="hard">HARD (2.0x)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </CardContent>
               </Card>
             </CarouselItem>
 
-            {/* Autopilot Section */}
             <CarouselItem className="pl-4 jam-carousel-item">
               <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)] h-full">
-                <CardHeader className="p-4 pb-4 md:p-6 md:pb-4">
+                <CardContent className="h-full p-4 md:p-6 flex flex-col justify-between gap-4">
                   <CardTitle font="retro" className="text-lg uppercase">
                     Autopilot
                   </CardTitle>
-                </CardHeader>
-                <CardContent className="p-4 pt-0 md:p-6 md:pt-0 flex flex-col gap-4">
                   <div className="flex flex-col gap-4 min-[400px]:flex-row min-[400px]:items-center min-[400px]:justify-between">
                     <p className="retro text-[10px] opacity-60 uppercase min-[400px]:mb-0 text-wrap">
                       System plays automatically
