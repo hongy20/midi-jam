@@ -10,6 +10,7 @@ import { useTrack } from "@/context/track-context";
 import { useActiveNotes } from "@/hooks/use-active-notes";
 import { useAutoPause } from "@/hooks/use-auto-pause";
 import { useDemoPlayback } from "@/hooks/use-demo-playback";
+import { useFullscreen } from "@/hooks/use-fullscreen";
 import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
 import { useLaneTimeline } from "@/hooks/use-lane-timeline";
 import { useMidiAudio } from "@/hooks/use-midi-audio";
@@ -36,6 +37,7 @@ export function PlayPageClient() {
   const { gameSession, setGameSession } = useStage();
   const { speed, demoMode } = useOptions();
   const { setSessionResults } = useScore();
+  const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   // Extract data with fallbacks to ensure hooks are called unconditionally
   const events = trackStatus.isReady ? trackStatus.events : [];
@@ -182,6 +184,8 @@ export function PlayPageClient() {
       getLastHitQuality={getLastHitQuality}
       getProgress={getProgress}
       handlePause={handlePause}
+      isFullscreen={isFullscreen}
+      handleToggleFullscreen={toggleFullscreen}
       liveActiveNotes={liveActiveNotes}
       playbackNotes={playbackNotes}
       groups={groups}
