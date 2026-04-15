@@ -37,15 +37,15 @@ const themes = [
   { name: Theme.AncientRunes, color: "#009688" },
 ];
 
-export interface ThemeInventoryGridProps {
+export interface ThemePickerProps {
   activeTheme: Theme;
   onThemeChange: (theme: Theme) => void;
 }
 
-export function ThemeInventoryGrid({
+export function ThemePicker({
   activeTheme,
   onThemeChange,
-}: ThemeInventoryGridProps) {
+}: ThemePickerProps) {
   const [open, setOpen] = React.useState(false);
 
   // Capitalize theme names for display
