@@ -70,30 +70,28 @@ export function ScorePageView({
       </div>
 
       {/* Footer Actions */}
-      <footer className="w-full flex flex-wrap items-center justify-center gap-4 shrink-0 px-4 sm:px-0">
+      <footer className="jam-action-group">
         <Button
           variant="secondary"
           onClick={onHome}
-          size="sm"
           font="retro"
-          className="w-48"
+          className="btn-jam"
         >
-          <Home className="size-4 mr-2" />
+          <Home />
           Home
         </Button>
         <Button
           variant="secondary"
           onClick={onSongs}
-          size="sm"
           font="retro"
-          className="w-48"
+          className="btn-jam"
         >
+          <ChevronRight />
           Songs
-          <ChevronRight className="size-4 ml-2" />
         </Button>
-        <Button onClick={onRetry} size="sm" font="retro" className="w-48">
+        <Button onClick={onRetry} font="retro" className="btn-jam">
+          <RotateCcw />
           RETRY
-          <RotateCcw className="size-4 ml-2" />
         </Button>
       </footer>
     </main>
