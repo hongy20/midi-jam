@@ -62,7 +62,7 @@ export function OptionsPageView({
       </div>
 
       {/* Content Area */}
-      <div className="w-full px-12 md:px-16 overflow-visible">
+      <div className="w-full px-8 min-[400px]:px-12 md:px-16 overflow-visible">
         <Carousel
           className="mx-auto w-full max-w-4xl"
           opts={{ align: "start", loop: false }}
@@ -128,8 +128,8 @@ export function OptionsPageView({
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <p className="retro text-[10px] opacity-60 uppercase mb-2 text-wrap">
+                  <div className="flex flex-col gap-2 min-[400px]:flex-row min-[400px]:items-center min-[400px]:justify-between">
+                    <p className="retro text-[10px] opacity-60 uppercase mb-2 min-[400px]:mb-0 text-wrap">
                       System plays automatically
                     </p>
                     <Toggle
@@ -137,7 +137,7 @@ export function OptionsPageView({
                       onPressedChange={setDemoMode}
                       variant="outline"
                       size="sm"
-                      className="shrink-0"
+                      className="shrink-0 w-full min-[400px]:w-auto"
                     >
                       {demoMode ? "ON" : "OFF"}
                     </Toggle>
