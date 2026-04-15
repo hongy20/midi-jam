@@ -77,7 +77,7 @@ export default function PauseMenu({
               key={item.label}
               variant={item.variant}
               onClick={item.action}
-              className={cn("justify-start gap-4 h-14 px-6", item.className)}
+              className={cn("btn-jam", item.className)}
               font="retro"
             >
               <item.icon className="size-5" />
