@@ -1,5 +1,6 @@
 "use client";
 
+import { Check } from "lucide-react";
 import * as React from "react";
 import { Button } from "@/components/ui/8bit/button";
 import {
@@ -63,74 +64,69 @@ export function ThemeInventoryGrid({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-full relative justify-between px-3 h-9 font-retro tracking-tighter uppercase overflow-hidden"
-        >
-          <div className="flex items-center gap-2">
-            <span
-              className="inline-block h-3 w-3 border border-foreground"
-              style={{
-                backgroundColor: themes.find((t) => t.name === activeTheme)
-                  ?.color,
-              }}
-            />
-            <span className="truncate">{formatThemeName(activeTheme)}</span>
+        <div className="relative border-y-6 border-foreground dark:border-ring bg-input/40 font-retro tracking-tighter uppercase cursor-pointer group hover:bg-input/60 transition-all active:translate-y-1">
+          <div className="flex items-center justify-between px-4 h-9 w-full relative z-10">
+            <div className="flex items-center gap-3">
+              <span
+                className="inline-block h-4 w-4 border-2 border-foreground shrink-0"
+                style={{
+                  backgroundColor: themes.find((t) => t.name === activeTheme)
+                    ?.color,
+                }}
+              />
+              <span className="truncate text-xs md:text-sm">
+                {formatThemeName(activeTheme)}
+              </span>
+            </div>
+            <span className="opacity-50 text-[10px] ml-2">▼</span>
           </div>
-          <span className="opacity-50">▼</span>
-        </Button>
+
+          <div
+            className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none z-20"
+            aria-hidden="true"
+          />
+        </div>
       </DialogTrigger>
-      <DialogContent className="max-w-[90vw] md:max-w-md max-h-[90dvh] flex flex-col p-6">
-        <DialogHeader className="mb-4">
-          <DialogTitle className="text-xl md:text-2xl uppercase tracking-tighter text-center">
-            Select Theme
-          </DialogTitle>
+      <DialogContent className="max-w-[280px] p-2 bg-background border-4 border-foreground [&>button:last-child]:hidden">
+        <DialogHeader className="sr-only">
+          <DialogTitle>Select Theme</DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
-          <div className="grid grid-cols-2 min-[400px]:grid-cols-3 gap-3 md:gap-4 p-1">
-            {themes.map((theme) => {
-              const isActive = theme.name === activeTheme;
-              return (
-                <button
-                  key={theme.name}
-                  type="button"
-                  onClick={() => handleSelect(theme.name as Theme)}
-                  className={cn(
-                    "group relative flex flex-col border-4 transition-all active:translate-y-0.5",
-                    isActive
-                      ? "border-primary bg-primary/10"
-                      : "border-foreground/20 hover:border-foreground/50 bg-background",
-                  )}
-                >
-                  {/* Theme Preview Block */}
-                  <div
-                    className="aspect-square w-full border-b-4 border-inherit"
+        <div className="flex flex-col max-h-[60dvh] overflow-y-auto custom-scrollbar">
+          {themes.map((theme) => {
+            const isActive = theme.name === activeTheme;
+            return (
+              <button
+                key={theme.name}
+                type="button"
+                onClick={() => handleSelect(theme.name as Theme)}
+                className={cn(
+                  "flex items-center justify-between w-full px-4 h-12 shrink-0 text-left transition-colors",
+                  isActive ? "bg-foreground/20" : "hover:bg-foreground/5",
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  <span
+                    className="inline-block h-3 w-3 border border-foreground shrink-0"
                     style={{ backgroundColor: theme.color }}
                   />
-
-                  {/* Theme Name */}
-                  <div className="p-2 flex items-center justify-center min-h-[3rem]">
-                    <span
-                      className={cn(
-                        "retro text-[8px] md:text-[10px] uppercase text-center leading-tight",
-                        isActive ? "text-primary font-bold" : "opacity-80",
-                      )}
-                    >
-                      {formatThemeName(theme.name)}
-                    </span>
-                  </div>
-
-                  {/* Active Indicator overlay (optional, but adds to arcade feel) */}
-                  {isActive && (
-                    <div className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-[8px] px-1 font-retro">
-                      SET
-                    </div>
-                  )}
-                </button>
-              );
-            })}
-          </div>
+                  <span
+                    className={cn(
+                      "font-retro text-[11px] uppercase tracking-tight",
+                      isActive
+                        ? "text-foreground font-bold"
+                        : "text-foreground/80",
+                    )}
+                  >
+                    {formatThemeName(theme.name)}
+                  </span>
+                </div>
+                {isActive && (
+                  <Check className="h-3 w-3 text-foreground opacity-60" />
+                )}
+              </button>
+            );
+          })}
         </div>
       </DialogContent>
     </Dialog>

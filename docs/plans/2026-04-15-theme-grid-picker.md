@@ -8,41 +8,35 @@
 
 **Tech Stack:** Next.js (App Router), Tailwind CSS v4, shadcn/ui, 8bitcn components.
 
-**Design Details (from Brainstorming):**
-- **Grid Layout**: 3 columns on mobile, 4 on desktop.
-- **Tiles**: Square buttons with a large color block on top and the theme name below in retro font.
-- **Selection Logic**: Active theme highlighted with a primary-colored glowing border.
-- **UX**: Opens via a trigger that looks like the existing dropdown trigger.
+**Design Details (from Brainstorming v7):**
+- **Trigger Styling**: 
+    - Replicate the `SelectTrigger` design with thick composite borders.
+    - **Height Calibration**: Set inner height to `h-9` (36px) so that total height with `border-y-6` (+12px) equals exactly **48px**, matching the Difficulty selector.
+    - **Interaction**: `active:translate-y-1`.
+- **Items**: `h-12` rows with `shrink-0`.
+- **Selection Logic**: `bg-foreground/20` highlight.
+- **UX**: No close button, backdrop closes.
 
 ---
 
-### Task 1: Isolation & Preparation (IN PROGRESS)
+### Task 1: Isolation & Preparation (COMPLETED)
 
 **Step 1: Create feature branch**
 Run: `git checkout -b feature/theme-inventory-grid` (COMPLETED)
 
-**Step 2: Commit initial plan**
-Run: `git add docs/plans/2026-04-15-theme-grid-picker.md && git commit -m "docs: add theme inventory grid implementation plan"`
+**Step 2: Commit initial plan** (COMPLETED)
 
 ---
 
-### Task 2: Implement Theme Inventory Grid Component
+### Task 2: Refine Theme Inventory List Component
 
 **Files:**
-- Create: `src/app/options/components/theme-inventory-grid.tsx`
-- Ref: `src/components/ui/8bit/dialog.tsx`
+- Modify: `src/app/options/components/theme-inventory-grid.tsx`
 
-**Step 1: Write the minimal component structure**
-Implement `ThemeInventoryGrid` using `Dialog`, `DialogContent`, `DialogTrigger`, and `DialogTitle`.
-
-**Step 2: Define the responsive grid layout**
-Add a `div` with `grid grid-cols-3 md:grid-cols-4 gap-4` inside a scrollable container (standard `overflow-y-auto` with thin custom scrollbars).
-
-**Step 3: Implement Theme tiles**
-Map through the `themes` array. Each theme tile includes:
-- A `bg-[color]` div for preview.
-- `span` with `theme.name` (properly capitalized).
-- Dynamic border class for the active theme.
+**Step 1: Pixel-Perfect Height Adjustment**
+- Change inner `div` height from `h-10` to `h-9`.
+- Verify total height is 48px.
+- Ensure vertical centering of label and color square.
 
 ---
 
