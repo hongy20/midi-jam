@@ -69,7 +69,7 @@ export function CollectionPageView({
         </>
       )}
 
-      <div className="jam-action-group shrink-0">
+      <div className="jam-action-group">
         <Button onClick={onBack} variant="secondary" className="btn-jam">
           BACK TO GEAR
         </Button>

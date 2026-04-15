@@ -15,7 +15,7 @@ type Story = StoryObj<typeof ScorePageView>;
 export const Outstanding: Story = {
   args: {
     title: "Outstanding!",
-    score: "1,234,567",
+    score: "1,234",
     accuracy: "98%",
     combo: 450,
     onRetry: () => {},

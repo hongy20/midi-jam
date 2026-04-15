@@ -1,47 +1,58 @@
-# Unified Button Styling & Responsiveness Implementation Plan
+# Unified Button Styling (Approach B: Grid Equalizer) Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Create a consistent button experience across all Midi Jam themes and layouts using a mobile-first Tailwind utility class `.btn-jam`, without modifying the underlying 8bitcn/shadcn source code.
+**Goal:** Implement Approach B (Grid Equalizer) to ensure all buttons in an action group have the same width (matching the longest label) while scaling responsively and hiding icons on mobile.
 
-**Architecture:** A global Tailwind `@layer components` utility `.btn-jam` defined in `src/styles/base.css`. This utility handles fixed widths, responsive shrinking, and icon visibility (left-aligned) across all viewports.
+**Architecture:** 
+1.  **CSS:** A global `.jam-action-group` utility using `display: grid` and `grid-auto-columns: 1fr` to equalize widths.
+2.  **CSS:** Updated `.btn-jam` to be `w-full` within its grid cell, with mobile-first scaling.
+3.  **UI:** Update all button containers (footers/blocks) to use `.jam-action-group`.
 
-**Tech Stack:** Next.js 15, React 19, Tailwind CSS v4, Lucide Icons.
+**Tech Stack:** Next.js 15, React 19, Tailwind CSS v4.
 
 ---
 
-### Task 1: Define `.btn-jam` Utility
+### Task 1: Update CSS Utilities
 
 **Files:**
 - Modify: `src/styles/base.css`
 
-**Step 1: Add the `.btn-jam` rule to `src/styles/base.css`**
+**Step 1: Refactor `.btn-jam` and add `.jam-action-group`**
 
 ```css
 /* src/styles/base.css */
 @layer components {
+  /* Container to equalize button widths in a group */
+  .jam-action-group {
+    @apply grid grid-flow-col auto-cols-fr gap-3 w-full max-w-fit mx-auto;
+    @media (min-width: 768px) {
+      @apply gap-4;
+    }
+  }
+
   .btn-jam {
-    /* 1. Mobile Default (Compact) */
-    @apply w-28 px-2 py-1 flex items-center justify-center transition-all;
+    /* 1. Mobile Default (Flexible Width within Grid) */
+    @apply w-full min-w-24 px-2 py-1 flex items-center justify-center transition-all;
     
     /* Icons are hidden by default on small mobile */
-    & svg {
+    svg {
       @apply hidden;
     }
 
     /* 2. Tablet / Small Desktop (Medium) */
     @media (min-width: 768px) {
-      @apply w-40 px-3 py-1.5;
+      @apply min-w-32 px-3 py-1.5;
       
       /* Show icons and add margin for text */
-      & svg {
+      svg {
         @apply block mr-2;
       }
     }
 
     /* 3. Large Desktop (Standard) */
     @media (min-width: 1024px) {
-      @apply w-48 px-4 py-2;
+      @apply min-w-40 px-4 py-2;
     }
   }
 }
@@ -51,7 +62,7 @@
 
 ```bash
 git add src/styles/base.css
-git commit -m "feat: add unified .btn-jam Tailwind utility"
+git commit -m "feat: add .jam-action-group and refactor .btn-jam for width equalization"
 ```
 
 ---
@@ -59,33 +70,23 @@ git commit -m "feat: add unified .btn-jam Tailwind utility"
 ### Task 2: Update Home Page (Hero3)
 
 **Files:**
-- Modify: `src/app/home/components/home-page.view.tsx`
+- Modify: `src/components/ui/8bit/blocks/hero3.tsx`
 
-**Step 1: Update `actions` array to use `.btn-jam`**
+**Step 1: Update the actions container to use `.jam-action-group`**
 
 ```tsx
-/* src/app/home/components/home-page.view.tsx */
-  const actions = [
-    {
-      label: "START GAME",
-      onClick: onStart,
-      variant: "default" as const,
-      className: "btn-jam", // Changed from w-48
-    },
-    {
-      label: "Options",
-      onClick: onOptions,
-      variant: "secondary" as const,
-      className: "btn-jam", // Changed from w-48
-    },
-  ];
+/* src/components/ui/8bit/blocks/hero3.tsx */
+/* Find the actions container div and replace its classes */
+<div className="jam-action-group">
+  {/* ... actions.map ... */}
+</div>
 ```
 
 **Step 2: Commit**
 
 ```bash
-git add src/app/home/components/home-page.view.tsx
-git commit -m "refactor: use .btn-jam in Home page"
+git add src/components/ui/8bit/blocks/hero3.tsx
+git commit -m "refactor: use .jam-action-group in Hero3 block"
 ```
 
 ---
@@ -95,30 +96,21 @@ git commit -m "refactor: use .btn-jam in Home page"
 **Files:**
 - Modify: `src/app/gear/components/gear-page.view.tsx`
 
-**Step 1: Update buttons in the footer to use `.btn-jam`**
+**Step 1: Update the footer container**
 
 ```tsx
 /* src/app/gear/components/gear-page.view.tsx */
-      <div className="w-full max-w-5xl flex flex-wrap justify-center gap-4 shrink-0">
-        <Button onClick={onBack} variant="secondary" className="btn-jam">
-          MAIN MENU
-        </Button>
-        <Button
-          onClick={onContinue}
-          variant="default"
-          className="btn-jam"
-          disabled={!selectedMIDIInput}
-        >
-          CONTINUE
-        </Button>
-      </div>
+<div className="jam-action-group shrink-0">
+  <Button ... className="btn-jam">...</Button>
+  <Button ... className="btn-jam">...</Button>
+</div>
 ```
 
 **Step 2: Commit**
 
 ```bash
 git add src/app/gear/components/gear-page.view.tsx
-git commit -m "refactor: use .btn-jam in Gear page"
+git commit -m "refactor: use .jam-action-group in Gear page footer"
 ```
 
 ---
@@ -128,40 +120,22 @@ git commit -m "refactor: use .btn-jam in Gear page"
 **Files:**
 - Modify: `src/app/collection/components/collection-page.view.tsx`
 
-**Step 1: Update buttons in the footer to use `.btn-jam` and fix icon positions**
+**Step 1: Update the footer container**
 
 ```tsx
 /* src/app/collection/components/collection-page.view.tsx */
-      <div className="w-full max-w-5xl flex flex-wrap justify-center gap-4 shrink-0">
-        <Button onClick={onBack} variant="secondary" className="btn-jam">
-          BACK TO GEAR
-        </Button>
-        <Button
-          onClick={onShuffle}
-          variant="secondary"
-          className="btn-jam [@media(height<350px)]:hidden"
-          disabled={tracks.length <= 1}
-        >
-          <Dices className="size-4" /> {/* Removed mr-2 as .btn-jam handles it */}
-          SHUFFLE
-        </Button>
-        <Button
-          onClick={onContinue}
-          variant="default"
-          className="btn-jam"
-          disabled={!selectedTrack}
-        >
-          <Play className="size-4 fill-current" /> {/* Moved to left */}
-          PLAY
-        </Button>
-      </div>
+<div className="jam-action-group shrink-0">
+  <Button ... className="btn-jam">...</Button>
+  <Button ... className="btn-jam">...</Button>
+  <Button ... className="btn-jam">...</Button>
+</div>
 ```
 
 **Step 2: Commit**
 
 ```bash
 git add src/app/collection/components/collection-page.view.tsx
-git commit -m "refactor: use .btn-jam and left-aligned icons in Collection page"
+git commit -m "refactor: use .jam-action-group in Collection page footer"
 ```
 
 ---
@@ -171,43 +145,22 @@ git commit -m "refactor: use .btn-jam and left-aligned icons in Collection page"
 **Files:**
 - Modify: `src/app/score/components/score-page.view.tsx`
 
-**Step 1: Update buttons in the footer to use `.btn-jam` and fix icon positions**
+**Step 1: Update the footer container**
 
 ```tsx
 /* src/app/score/components/score-page.view.tsx */
-      <footer className="w-full flex flex-wrap items-center justify-center gap-4 shrink-0 px-4 sm:px-0">
-        <Button
-          variant="secondary"
-          onClick={onHome}
-          size="sm"
-          font="retro"
-          className="btn-jam"
-        >
-          <Home className="size-4" />
-          Home
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={onSongs}
-          size="sm"
-          font="retro"
-          className="btn-jam"
-        >
-          <ChevronRight className="size-4" /> {/* Moved to left */}
-          Songs
-        </Button>
-        <Button onClick={onRetry} size="sm" font="retro" className="btn-jam">
-          <RotateCcw className="size-4" /> {/* Moved to left */}
-          RETRY
-        </Button>
-      </footer>
+<footer className="jam-action-group shrink-0 px-4 sm:px-0">
+  <Button ... className="btn-jam">...</Button>
+  <Button ... className="btn-jam">...</Button>
+  <Button ... className="btn-jam">...</Button>
+</footer>
 ```
 
 **Step 2: Commit**
 
 ```bash
 git add src/app/score/components/score-page.view.tsx
-git commit -m "refactor: use .btn-jam and left-aligned icons in Score page"
+git commit -m "refactor: use .jam-action-group in Score page footer"
 ```
 
 ---
@@ -217,48 +170,40 @@ git commit -m "refactor: use .btn-jam and left-aligned icons in Score page"
 **Files:**
 - Modify: `src/components/ui/8bit/blocks/pause-menu.tsx`
 
-**Step 1: Update buttons in `PauseMenu` to use `.btn-jam`**
-Note: Since `PauseMenu` is a block, we'll override its fixed `h-14` and `justify-start` to match our new standard, or keep them if they are essential for the "Menu" look. Actually, the goal is to *unify* them, so we'll use `.btn-jam`.
+**Step 1: Update the menu items container to use `.jam-action-group` but keep vertical layout if preferred**
+Actually, `PauseMenu` buttons are stacked vertically. To keep them equal width while stacked, we can use `flex flex-col` (default) but the grid equalizer works best for *horizontal* rows. For a vertical list, `w-full` on buttons inside a fixed-width container already equalizes them.
+
+However, to stay consistent with Approach B, I'll update the `PauseMenu` to use a single-column grid.
 
 ```tsx
 /* src/components/ui/8bit/blocks/pause-menu.tsx */
-          {menuItems.map((item) => (
-            <Button
-              key={item.label}
-              variant={item.variant}
-              onClick={item.action}
-              className={cn("btn-jam", item.className)} // Replaced h-14 justify-start px-6 gap-4
-              font="retro"
-            >
-              <item.icon className="size-5" />
-              <span className="text-xs uppercase tracking-widest">
-                {item.label}
-              </span>
-            </Button>
-          ))}
+<div
+  className={cn(
+    "grid grid-cols-1 gap-4 w-full", // Equalizes width in vertical stack
+    "[@media(max-height:450px)]:grid-cols-2 [@media(max-height:450px)]:grid-rows-2 [@media(max-height:450px)]:gap-6 [@media(max-height:450px)]:p-2",
+  )}
+>
+  {/* ... items.map ... */}
+</div>
 ```
 
 **Step 2: Commit**
 
 ```bash
 git add src/components/ui/8bit/blocks/pause-menu.tsx
-git commit -m "refactor: use .btn-jam in Pause Menu block"
+git commit -m "refactor: ensure Pause Menu buttons have equal width"
 ```
 
 ---
 
-### Task 7: Final Validation & Cleanup
+### Task 7: Final Validation
 
 **Step 1: Run full suite**
-Run: `npm run lint && npm run type-check && npm test`
+Run: `npm run lint && npm run type-check && npm test && npm run build`
 
-**Step 2: Build project**
-Run: `npm run build`
-
-**Step 3: Commit any fixes**
+**Step 2: Final Commit & PR Update**
 ```bash
-git commit -m "chore: final validation and fixes"
+git add .
+git commit -m "chore: finalize unified button styling with Grid Equalizer"
+git push origin feature/unified-button-styling
 ```
-
-**Step 4: Create Pull Request**
-Run: `gh pr create --fill`
