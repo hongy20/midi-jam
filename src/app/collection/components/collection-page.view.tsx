@@ -76,7 +76,7 @@ export function CollectionPageView({
         <Button
           onClick={onShuffle}
           variant="secondary"
-          className="btn-jam [@media(height<350px)]:hidden"
+          className="btn-jam"
           disabled={tracks.length <= 1}
         >
           <Dices />
