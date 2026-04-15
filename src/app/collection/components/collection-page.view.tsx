@@ -70,26 +70,26 @@ export function CollectionPageView({
       )}
 
       <div className="w-full max-w-5xl flex flex-wrap justify-center gap-4 shrink-0">
-        <Button onClick={onBack} variant="secondary" className="w-48">
+        <Button onClick={onBack} variant="secondary" className="btn-jam">
           BACK TO GEAR
         </Button>
         <Button
           onClick={onShuffle}
           variant="secondary"
-          className="w-48 [@media(height<350px)]:hidden"
+          className="btn-jam [@media(height<350px)]:hidden"
           disabled={tracks.length <= 1}
         >
-          <Dices className="size-4 mr-2" />
+          <Dices className="size-4" />
           SHUFFLE
         </Button>
         <Button
           onClick={onContinue}
           variant="default"
-          className="w-48"
+          className="btn-jam"
           disabled={!selectedTrack}
         >
+          <Play className="size-4 fill-current" />
           PLAY
-          <Play className="size-4 ml-2 fill-current" />
         </Button>
       </div>
     </main>
