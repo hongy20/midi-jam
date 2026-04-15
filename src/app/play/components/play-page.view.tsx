@@ -1,6 +1,6 @@
 "use client";
 
-import { Pause } from "lucide-react";
+import { Maximize2, Minimize2, Pause } from "lucide-react";
 import { Button } from "@/components/ui/8bit/button";
 import type { HitQuality } from "@/hooks/use-lane-score-engine";
 import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
@@ -17,6 +17,8 @@ interface PlayPageViewProps {
   getLastHitQuality: () => HitQuality;
   getProgress: () => number;
   handlePause: () => void;
+  isFullscreen: boolean;
+  handleToggleFullscreen: () => void;
   liveActiveNotes: Set<number>;
   playbackNotes: Set<number>;
   groups: SegmentGroup[];
@@ -40,6 +42,8 @@ export function PlayPageView({
   getLastHitQuality,
   getProgress,
   handlePause,
+  isFullscreen,
+  handleToggleFullscreen,
   liveActiveNotes,
   playbackNotes,
   groups,
@@ -78,9 +82,23 @@ export function PlayPageView({
         <div className="flex items-center gap-4">
           <Button
             variant="secondary"
+            onClick={handleToggleFullscreen}
+            size="icon"
+            font="retro"
+            title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+          >
+            {isFullscreen ? (
+              <Minimize2 className="size-4" />
+            ) : (
+              <Maximize2 className="size-4" />
+            )}
+          </Button>
+          <Button
+            variant="secondary"
             onClick={handlePause}
             size="icon"
             font="retro"
+            title="Pause"
           >
             <Pause className="size-4" />
           </Button>

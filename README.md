@@ -36,9 +36,9 @@ npm install
 npm run dev
 ```
 
-> **Note**: The development server runs on HTTPS by default (`--experimental-https`). You may need to trust local certificates in your browser.
-
-Open [https://localhost:3000](https://localhost:3000) to start jamming!
+> [!IMPORTANT]
+> The development server MUST run on HTTPS (`--experimental-https`) to enable secure browser features like Web MIDI and Fullscreen.
+> Open [https://localhost:3000](https://localhost:3000) to start jamming! You may need to trust the temporary local certificate in your browser.
 
 ## Development
 

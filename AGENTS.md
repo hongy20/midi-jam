@@ -24,6 +24,7 @@ Midi Jam is a high-performance web application for learning musical instruments 
 - **Viewport Locking**: All pages must use a full-screen layout (`100dvh`, `100dvw`) managed by CSS Grid or Flexbox.
 - **8bitcn Blocks**: Prefer using 8bitcn blocks (e.g., `Hero3`, `Feature3`, `LoadingScreen`) for layout structure. Legacy `PageLayout` is deprecated.
 - **State Persistence**: Use React Context for cross-page state to ensure seamless transitions between setup (Gear/Collection) and the Stage (Play).
+- **Secure Context (HTTPS)**: The development server MUST use HTTPS (`https://localhost:3000`) to ensure browser features like Web MIDI, Screen Wake Lock, and Fullscreen API function correctly.
 
 ## 2. High-Performance Rendering (60fps Target)
 To maintain a stable framerate, offload all frequent updates to the browser's compositor:
@@ -135,12 +136,12 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
 
 # Commands
 
-| Task | Command |
-| :--- | :--- |
-| **Development** | `npm run dev` |
-| **Build** | `npm run build` |
-| **Fix Styles** | `npm run lint:fix` |
-| **Type Check** | `npm run type-check` |
-| **Unit Test** | `npm test` |
+| Task | Command | Protocol / Note |
+| :--- | :--- | :--- |
+| **Development** | `npm run dev` | **HTTPS** (https://localhost:3000) |
+| **Build** | `npm run build` | - |
+| **Fix Styles** | `npm run lint:fix` | - |
+| **Type Check** | `npm run type-check` | - |
+| **Unit Test** | `npm test` | - |
 
 <!-- NEXT-AGENTS-MD-START -->[Next.js Docs Index]|root: ./.next-docs|STOP. What you remember about Next.js is WRONG for this project. Always search docs and read before any task.<!-- NEXT-AGENTS-MD-END -->
