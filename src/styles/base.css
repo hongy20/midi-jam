@@ -68,17 +68,22 @@ body {
   }
 
   .btn-jam {
-    /* 1. Mobile Default (Flexible Width within Grid) */
-    @apply w-full min-w-24 px-2 py-1 flex items-center justify-center transition-all;
+    /* 1. Mobile Default (Vertical stack - One Column) */
+    @apply w-full min-w-48 px-4 py-2 flex items-center justify-center transition-all;
 
     svg {
       @apply block mr-2;
     }
 
-    /* Hide icons in horizontal row on small viewports to save space */
-    @media (min-width: 500px) and (max-width: 767px) {
-      svg {
-        @apply hidden;
+    /* 2. Mobile Landscape / Small Tablet (Horizontal row) */
+    @media (min-width: 500px) {
+      @apply min-w-24 px-2 py-1;
+
+      /* Hide icons in horizontal row on small viewports to save space */
+      @media (max-width: 767px) {
+        svg {
+          @apply hidden;
+        }
       }
     }
   }
