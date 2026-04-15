@@ -108,8 +108,8 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 
 **ONE PLAN PER TASK.** This is a non-negotiable hard constraint for technical integrity.
 
-- **Initial Action**: The first command of every task MUST be to create a descriptive feature branch: `git checkout -b feature/[name]` or `git checkout -b fix/[name]`.
-- **Plan Commitment**: Every task MUST have exactly ONE markdown file in `docs/plans/`. **The filename MUST follow the `YYYY-MM-DD-kebab-case-name.md` naming convention.** **Consolidate Design and Implementation into this single file.** A plan is not valid unless it is tracked in Git. **CRITICAL: NEVER split design and implementation into separate files, even if Skills suggest it.** Commit the plan immediately after creation. All subsequent implementation changes MUST be committed before finalizing.
+- **Initial Action**: The first turn of every conversation MUST NOT be purely informational. It MUST result in a descriptive feature branch: `git checkout -b feature/[name]` or `git checkout -b fix/[name]` AND the initialization of a plan file in `docs/plans/`.
+- **Plan Commitment**: Every task MUST have exactly ONE markdown file in `docs/plans/`. **The filename MUST follow the `YYYY-MM-DD-kebab-case-name.md` naming convention.** **Consolidate Design and Implementation into this single file.** A plan is not valid unless it is tracked in Git. **CRITICAL: NEVER split design and implementation into separate files. If requirements or logic change, you MUST update the existing plan. Generating multiple plans for the same branch is a violation of the SOP.** Commit the plan immediately after creation. All subsequent implementation changes MUST be committed before finalizing.
 - **Merge Strategy**: When finalizing a task, **ALWAYS use Squash and Merge** to maintain a clean project history. **NEVER merge a Pull Request without explicit confirmation from the USER.** Once the task is verified and a PR is created, wait for approval before combining segments.
 
 ## Tooling Authority
@@ -122,13 +122,13 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
    - **Red-Green-Refactor**: No production code without a failing test first (`@test-driven-development`).
    - **Root Cause Analysis**: Use `@systematic-debugging` for all bug reports before attempting a fix.
 4. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion. **DO NOT rely solely on implementation plans for verification; the global SOP takes precedence.**
-   - **Mandatory Completion Checklist**: Before finalizing, you MUST run and pass:
-     - [ ] `git status` (Must have ZERO uncommitted changes)
-     - [ ] `npm run lint` (Biome check)
-     - [ ] `npm run type-check` (TypeScript tsc)
-     - [ ] `npm test` (Vitest suite)
-     - [ ] `npm run build` (Next.js production build)
-   - *Failure to run these command-by-command is a violation of Technical Integrity.*
+    - **Mandatory Completion Checklist**: Before providing a final summary to the USER, you MUST run and pass:
+      - [ ] `git status` (Must have ZERO uncommitted changes; if files are pending, commit them first)
+      - [ ] `npm run lint` (Biome check)
+      - [ ] `npm run type-check` (TypeScript tsc)
+      - [ ] `npm test` (Vitest suite)
+      - [ ] `npm run build` (Next.js production build)
+    - *Failure to run these command-by-command and verify a clean git state is a violation of Technical Integrity.*
 5. **Finalization**: Use `@finishing-a-development-branch` to prepare the merge or PR. **Before providing the final summary to the USER, you MUST automatically create a Pull Request (PR) for the branch using `gh pr create --fill`.** **Wait for explicit USER confirmation before performing the final merge.** Once verified, follow the Merge Strategy (Squash and Merge).
 
 ---

@@ -2,12 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/8bit/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/8bit/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/8bit/card";
 import {
   Carousel,
   CarouselContent,
@@ -27,7 +22,7 @@ import { RetroModeSwitcher } from "@/components/ui/retro-mode-switcher";
 import type { Difficulty } from "@/context/options-context";
 import type { ThemeMode } from "@/context/theme-context";
 import type { Theme } from "@/lib/themes";
-import { SelectThemeDropdown } from "./select-theme-dropdown";
+import { ThemePicker } from "./theme-picker";
 
 interface OptionsPageViewProps {
   difficulty: Difficulty;
@@ -78,7 +73,7 @@ export function OptionsPageView({
                     Customize the look and feel
                   </p>
                   <div className="w-full">
-                    <SelectThemeDropdown
+                    <ThemePicker
                       activeTheme={activeTheme}
                       onThemeChange={onThemeChange}
                     />
