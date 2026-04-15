@@ -2,12 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/8bit/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/8bit/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/8bit/card";
 import {
   Carousel,
   CarouselContent,
