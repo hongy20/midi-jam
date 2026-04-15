@@ -42,10 +42,7 @@ export interface ThemePickerProps {
   onThemeChange: (theme: Theme) => void;
 }
 
-export function ThemePicker({
-  activeTheme,
-  onThemeChange,
-}: ThemePickerProps) {
+export function ThemePicker({ activeTheme, onThemeChange }: ThemePickerProps) {
   const [open, setOpen] = React.useState(false);
 
   // Capitalize theme names for display
