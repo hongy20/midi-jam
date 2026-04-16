@@ -2,8 +2,9 @@ import { useCallback, useEffect, useRef } from "react";
 import type { MidiEvent } from "@/lib/midi/midi-parser";
 import { useMIDINotes } from "./use-midi-notes";
 
-const PERFECT_THRESHOLD = 150; // ms (increased from 100 for better tolerance)
-const GOOD_THRESHOLD = 300; // ms (increased from 250)
+const PERFECT_THRESHOLD = 200; // ms (increased from 150 for better tolerance)
+const GOOD_THRESHOLD = 500; // ms (increased from 300)
+const DURATION_GRACE_MS = 150; // ms to account for scheduling jitter
 
 export type HitQuality = "perfect" | "good" | "miss" | null;
 
@@ -80,11 +81,21 @@ export function useLaneScoreEngine({
       const targetDuration = targetOff - targetOn;
       if (targetDuration <= 0) return 0;
 
-      const intersectionStart = Math.max(actualOn, targetOn);
-      const intersectionEnd = Math.min(actualOff, targetOff);
+      // Apply grace period to actual boundaries to account for jitter
+      const effectiveActualOn = Math.max(
+        actualOn - DURATION_GRACE_MS,
+        targetOn,
+      );
+      const effectiveActualOff = Math.min(
+        actualOff + DURATION_GRACE_MS,
+        targetOff,
+      );
+
+      const intersectionStart = Math.max(effectiveActualOn, targetOn);
+      const intersectionEnd = Math.min(effectiveActualOff, targetOff);
       const intersection = Math.max(0, intersectionEnd - intersectionStart);
 
-      return intersection / targetDuration;
+      return Math.min(1.0, intersection / targetDuration);
     },
     [],
   );

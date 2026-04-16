@@ -71,6 +71,7 @@ describe("useLaneScoreEngine hook", () => {
     });
 
     // Release halfway (500ms into 1000ms duration)
+    // with 150ms grace, effective duration is 650ms
     currentTime = 3500;
     act(() => {
       result.current.processNoteEvent({
@@ -80,8 +81,8 @@ describe("useLaneScoreEngine hook", () => {
       });
     });
 
-    // Score should be 100 (base) * 0.5 (overlap) = 50
-    expect(result.current.getScore()).toBe(50);
+    // Score should be 100 (base) * 0.65 (overlap) = 65
+    expect(result.current.getScore()).toBe(65);
   });
 
   it("resets combo on miss (wrong note)", () => {
@@ -133,8 +134,8 @@ describe("useLaneScoreEngine hook", () => {
       });
     });
 
-    // Advance time past targetOff (4000) + GOOD_THRESHOLD (300)
-    currentTime = 4500;
+    // Advance time past targetOff (4000) + GOOD_THRESHOLD (500)
+    currentTime = 4600;
     act(() => {
       vi.advanceTimersByTime(200);
     });
