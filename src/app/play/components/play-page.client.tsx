@@ -18,7 +18,7 @@ import { useGear } from "@/features/midi-hardware/context/gear-context";
 import { useNavigation } from "@/features/navigation/hooks/use-navigation";
 import { useScore } from "@/features/score/context/score-context";
 import { useLaneScoreEngine } from "@/features/score/hooks/use-lane-score-engine";
-import { useOptions } from "@/features/settings/context/options-context";
+import { useOptions } from "@/features/settings";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
 import { useWakeLock } from "@/shared/hooks/use-wake-lock";

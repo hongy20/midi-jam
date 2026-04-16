@@ -6,7 +6,7 @@ import { useNavigation } from "@/features/navigation/hooks/use-navigation";
 import {
   type Difficulty,
   useOptions,
-} from "@/features/settings/context/options-context";
+} from "@/features/settings";
 import { useTheme } from "@/features/theme";
 import { OptionsPageView } from "./options-page.view";
 
