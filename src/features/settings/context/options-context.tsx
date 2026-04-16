@@ -11,7 +11,7 @@ import {
 
 export type Difficulty = "easy" | "normal" | "hard";
 
-export interface OptionsContextType {
+interface OptionsContextType {
   speed: number;
   demoMode: boolean;
   setSpeed: (speed: number) => void;
