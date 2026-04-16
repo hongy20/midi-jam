@@ -11,7 +11,7 @@ import {
 import type { SegmentGroup } from "@/features/midi-assets/lib/lane-segment-utils";
 import type { NoteSpan } from "@/features/midi-assets/lib/midi-parser";
 
-export type TrackStatus =
+type TrackStatus =
   | { isLoading: true; isReady: false; error: null }
   | { isLoading: false; isReady: false; error: string | null }
   | {

@@ -2,15 +2,6 @@ import { CLUSTER_CONNECTION_GAP_MS, LANE_SCROLL_DURATION_MS } from "./constant";
 
 import type { NoteSpan } from "./midi-parser";
 
-/**
- * Returns the index of the segment that contains the given time.
- */
-export function getCurrentSegmentIndex(
-  currentTimeMs: number,
-  laneSegmentDurationMs: number,
-): number {
-  return Math.floor(currentTimeMs / laneSegmentDurationMs);
-}
 
 export interface SegmentGroup {
   index: number;
