@@ -3,7 +3,7 @@ import * as Tone from "tone";
 import {
   MIDI_COMMAND_NOTE_OFF,
   MIDI_COMMAND_NOTE_ON,
-} from "@/features/midi-assets/lib/constant";
+} from "@/shared/lib/midi";
 
 /**
  * Hook to handle MIDI audio synthesis using Tone.js or external MIDI output.

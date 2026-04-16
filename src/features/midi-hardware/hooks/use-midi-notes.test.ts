@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { MIDI_COMMAND_NOTE_ON } from "@/features/midi-assets/lib/constant";
+import { MIDI_COMMAND_NOTE_ON } from "@/shared/lib/midi";
 import { useMIDINotes } from "@/features/midi-hardware/hooks/use-midi-notes";
 
 describe("useMIDINotes", () => {

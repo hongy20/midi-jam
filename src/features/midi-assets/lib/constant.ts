@@ -7,11 +7,6 @@
  * These constants represent the command types for Channel 1 (0).
  */
 
-/** Note Off command (0x80) */
-export const MIDI_COMMAND_NOTE_OFF = 0x80;
-
-/** Note On command (0x90) */
-export const MIDI_COMMAND_NOTE_ON = 0x90;
 
 /** Theoretical minimum MIDI note value */
 export const MIDI_MIN_NOTE = 0;
