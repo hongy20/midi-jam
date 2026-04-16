@@ -48,12 +48,12 @@ export function PlayPageClient() {
 
   // Calculate dynamic piano range for consistent grid alignment
   const visibleMidiRange = useMemo(() => {
-    if (groups.length === 0) {
+    if (modelNotes.length === 0) {
       return { startNote: PIANO_88_KEY_MIN, endNote: PIANO_88_KEY_MAX };
     }
-    const notes = groups.flatMap((g) => g.spans.map((s) => s.note));
+    const notes = modelNotes.map((n) => n.note);
     return getVisibleMidiRange(notes);
-  }, [groups]);
+  }, [modelNotes]);
 
   const { startUnit, endUnit } = getNoteUnits(
     visibleMidiRange.startNote,
