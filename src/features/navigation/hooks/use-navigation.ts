@@ -45,4 +45,3 @@ export function useNavigation() {
 }
 
 // Keep the old name as alias for now
-export const useGameNavigation = useNavigation;
