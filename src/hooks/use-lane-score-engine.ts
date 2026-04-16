@@ -127,6 +127,12 @@ export function useLaneScoreEngine({
       velocity: number;
     }) => {
       const currentTimeMs = getCurrentTimeMs();
+      console.log(
+        "[ScoreEngine] Event received:",
+        event.type,
+        "note:",
+        event.note,
+      );
 
       // --- HANDLE NOTE OFF ---
       if (event.type === "note-off") {
@@ -225,6 +231,10 @@ export function useLaneScoreEngine({
 
   const finalizeScore = useCallback(() => {
     const currentTimeMs = getCurrentTimeMs();
+    console.log(
+      "[ScoreEngine] finalizeScore invoked. Active hits:",
+      activeHitsRef.current.size,
+    );
     for (const note of activeHitsRef.current.keys()) {
       console.log(
         "[ScoreEngine] finalizeScore caught a lingering hit for note:",
