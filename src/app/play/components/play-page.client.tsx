@@ -173,7 +173,7 @@ export function PlayPageClient() {
     isLoading ||
     !trackStatus.isReady ||
     !selectedTrack ||
-    (!selectedMIDIInput && !demoMode)
+    !selectedMIDIInput
   ) {
     return null;
   }
