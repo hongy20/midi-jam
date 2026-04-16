@@ -22,7 +22,7 @@ import {
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "@/lib/midi/constant";
-import { calculateMaxPossibleScore } from "@/lib/midi/score-utils";
+
 import { PlayPageView } from "./play-page.view";
 
 /**
@@ -41,7 +41,7 @@ export function PlayPageClient() {
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   // Extract data with fallbacks to ensure hooks are called unconditionally
-  const events = trackStatus.isReady ? trackStatus.events : [];
+  const modelNotes = trackStatus.isReady ? trackStatus.spans : [];
   const groups = trackStatus.isReady ? trackStatus.groups : [];
   const totalDurationMs = trackStatus.isReady ? trackStatus.totalDurationMs : 0;
   const isLoading = trackStatus.isLoading;
@@ -60,17 +60,7 @@ export function PlayPageClient() {
     visibleMidiRange.endNote,
   );
 
-  const totalNotes = useMemo(
-    () => groups.reduce((acc, g) => acc + g.spans.length, 0),
-    [groups],
-  );
-
-  const modelNotes = useMemo(() => groups.flatMap((g) => g.spans), [groups]);
-
-  const maxPossibleScore = useMemo(
-    () => calculateMaxPossibleScore(totalNotes),
-    [totalNotes],
-  );
+  const totalNotes = modelNotes.length;
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
@@ -158,18 +148,15 @@ export function PlayPageClient() {
       finalizeScore();
       const finalScore = getScore();
       const finalCombo = getCombo();
-      const normalizedScore =
-        maxPossibleScore > 0 ? (finalScore / maxPossibleScore) * 100 : 0;
 
       setSessionResults({
-        score: normalizedScore,
+        score: finalScore,
         combo: finalCombo,
       });
       setGameSession(null);
       toScore();
     };
   }, [
-    maxPossibleScore,
     setGameSession,
     setSessionResults,
     toScore,
@@ -212,7 +199,6 @@ export function PlayPageClient() {
       selectedMIDIInput={selectedMIDIInput}
       selectedTrack={selectedTrack}
       getScore={getScore}
-      maxPossibleScore={maxPossibleScore}
       getCombo={getCombo}
       getLastHitQuality={getLastHitQuality}
       getProgress={getProgress}

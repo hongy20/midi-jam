@@ -4,7 +4,7 @@
  * +10% per 10 combo (capped at some reasonable level if the engine caps it,
  * but here it follows the engine's Math.floor(combo / 10) * 0.1 logic).
  */
-export function calculateMaxPossibleScore(noteCount: number): number {
+export function calculateMaxRawPoints(noteCount: number): number {
   let totalScore = 0;
   for (let combo = 0; combo < noteCount; combo++) {
     const points = 100;

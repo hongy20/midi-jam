@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { NoteSpan } from "@/lib/midi/midi-parser";
+import { calculateMaxRawPoints } from "@/lib/midi/score-utils";
 import { useMIDINotes } from "./use-midi-notes";
 
 const PERFECT_THRESHOLD = 200; // ms (increased from 150 for better tolerance)
@@ -25,7 +26,15 @@ export function useLaneScoreEngine({
   initialCombo = 0,
   initialTimeMs = 0,
 }: UseLaneScoreEngineProps) {
-  const scoreRef = useRef(initialScore);
+  const maxRawPoints = useMemo(
+    () => calculateMaxRawPoints(modelNotes.length),
+    [modelNotes.length],
+  );
+  // `initialScore` is normalized (0-100). Convert it back to raw points for internal tracking.
+  const initialRawScore =
+    maxRawPoints > 0 ? (initialScore / 100) * maxRawPoints : 0;
+
+  const scoreRef = useRef(initialRawScore);
 
   const comboRef = useRef(initialCombo);
   const lastHitQualityRef = useRef<HitQuality>(null);
@@ -217,12 +226,19 @@ export function useLaneScoreEngine({
   const finalizeScore = useCallback(() => {
     const currentTimeMs = getCurrentTimeMs();
     for (const note of activeHitsRef.current.keys()) {
+      console.log(
+        "[ScoreEngine] finalizeScore caught a lingering hit for note:",
+        note,
+      );
       commitHitScore(note, currentTimeMs);
     }
   }, [getCurrentTimeMs, commitHitScore]);
 
   return {
-    getScore: useCallback(() => scoreRef.current, []),
+    getScore: useCallback(() => {
+      if (maxRawPoints === 0) return 0;
+      return (scoreRef.current / maxRawPoints) * 100;
+    }, [maxRawPoints]),
     getCombo: useCallback(() => comboRef.current, []),
     getLastHitQuality: useCallback(() => lastHitQualityRef.current, []),
     processNoteEvent,

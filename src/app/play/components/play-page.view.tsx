@@ -13,7 +13,6 @@ interface PlayPageViewProps {
   selectedMIDIInput: { name?: string } | null;
   selectedTrack: { name: string };
   getScore: () => number;
-  maxPossibleScore: number;
   getCombo: () => number;
   getLastHitQuality: () => HitQuality;
   getProgress: () => number;
@@ -39,7 +38,6 @@ export function PlayPageView({
   selectedMIDIInput,
   selectedTrack,
   getScore,
-  maxPossibleScore,
   getCombo,
   getLastHitQuality,
   getProgress,
@@ -75,7 +73,6 @@ export function PlayPageView({
           </span>
           <ScoreWidget
             getScore={getScore}
-            maxPossibleScore={maxPossibleScore}
             getCombo={getCombo}
             getLastHitQuality={getLastHitQuality}
             getProgress={getProgress}
