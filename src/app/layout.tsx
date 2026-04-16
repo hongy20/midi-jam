@@ -3,7 +3,12 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { NavigationGuard } from "@/features/navigation/components/navigation-guard";
 import { ThemeProvider } from "@/features/theme";
-import { CombinedProvider } from "@/shared/providers/CombinedProvider";
+import { GearProvider } from "@/features/midi-hardware/context/gear-context";
+import { OptionsProvider } from "@/features/settings/context/options-context";
+import { CollectionProvider } from "@/features/collection/context/collection-context";
+import { TrackProvider } from "@/features/midi-assets/context/track-context";
+import { StageProvider } from "@/app/play/context/stage-context";
+import { ScoreProvider } from "@/features/score/context/score-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,9 +36,19 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider>
-          <CombinedProvider>
-            <NavigationGuard>{children}</NavigationGuard>
-          </CombinedProvider>
+          <GearProvider>
+            <OptionsProvider>
+              <CollectionProvider>
+                <TrackProvider>
+                  <StageProvider>
+                    <ScoreProvider>
+                      <NavigationGuard>{children}</NavigationGuard>
+                    </ScoreProvider>
+                  </StageProvider>
+                </TrackProvider>
+              </CollectionProvider>
+            </OptionsProvider>
+          </GearProvider>
         </ThemeProvider>
       </body>
     </html>

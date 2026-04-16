@@ -8,6 +8,7 @@ import { useGear } from "@/features/midi-hardware/context/gear-context";
 import { useNavigation } from "@/features/navigation/hooks/use-navigation";
 import { ROUTES } from "@/features/navigation/lib/routes";
 import { useScore } from "@/features/score/context/score-context";
+import { useTrackSync } from "@/features/collection/hooks/use-track-sync";
 
 export function NavigationGuard({ children }: { children: React.ReactNode }) {
   const { toCollection, toHome, toGear } = useNavigation();
@@ -16,6 +17,9 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
   const { selectedMIDIInput } = useGear();
   const { sessionResults } = useScore();
   const { setGameSession } = useStage();
+
+  // Coordinate track assets with collection state
+  useTrackSync();
 
   useEffect(() => {
     switch (pathname) {
