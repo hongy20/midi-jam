@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { useStage } from "@/app/play/context/stage-context";
-import { useNavigation } from "@/features/navigation/hooks/use-navigation";
+import { useNavigation } from "@/features/navigation";
 import { useScore } from "@/features/score/context/score-context";
 import { ScorePageView } from "./score-page.view";
 

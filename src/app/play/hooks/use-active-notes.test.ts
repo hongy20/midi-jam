@@ -1,10 +1,10 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import type { MIDINoteEvent } from "@/features/midi-hardware/lib/midi-listener";
-import * as midiListener from "@/features/midi-hardware/lib/midi-listener";
+import type { MIDINoteEvent } from "@/features/midi-hardware";
+import * as midiListener from "@/features/midi-hardware";
 import { useActiveNotes } from "./use-active-notes";
 
-vi.mock("@/features/midi-hardware/lib/midi-listener");
+vi.mock("@/features/midi-hardware");
 
 describe("useActiveNotes", () => {
   it("should add notes on note-on events", () => {

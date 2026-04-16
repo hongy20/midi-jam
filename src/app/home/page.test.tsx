@@ -1,15 +1,15 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useAppReset } from "@/features/collection/hooks/use-track-sync";
-import { useNavigation } from "@/features/navigation/hooks/use-navigation";
+import { useAppReset } from "@/features/collection";
+import { useNavigation } from "@/features/navigation";
 import { HomePageClient } from "./components/home-page.client";
 
 // Mock the hooks
-vi.mock("@/features/navigation/hooks/use-navigation", () => ({
+vi.mock("@/features/navigation", () => ({
   useNavigation: vi.fn(),
 }));
 
-vi.mock("@/features/collection/hooks/use-track-sync", () => ({
+vi.mock("@/features/collection", () => ({
   useAppReset: vi.fn(),
 }));
 

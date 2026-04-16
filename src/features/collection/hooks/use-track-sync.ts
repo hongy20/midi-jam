@@ -4,17 +4,17 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import { useStage } from "@/app/play/context/stage-context";
 import { useCollection } from "@/features/collection/context/collection-context";
-import { useTrack } from "@/features/midi-assets/context/track-context";
+import { useTrack } from "@/features/midi-assets";
 import { LANE_SEGMENT_DURATION_MS } from "@/features/midi-assets/lib/constant";
-import { buildSegmentGroups } from "@/features/midi-assets/lib/lane-segment-utils";
-import { loadMidiFile } from "@/features/midi-assets/lib/midi-loader";
+import { buildSegmentGroups } from "@/features/midi-assets";
+import { loadMidiFile } from "@/features/midi-assets";
 import {
   getMidiEvents,
   getNoteSpans,
-} from "@/features/midi-assets/lib/midi-parser";
-import { useGear } from "@/features/midi-hardware/context/gear-context";
-import { ROUTES } from "@/features/navigation/lib/routes";
-import { useScore } from "@/features/score/context/score-context";
+} from "@/features/midi-assets";
+import { useGear } from "@/features/midi-hardware";
+import { ROUTES } from "@/features/navigation";
+import { useScore } from "@/features/score";
 
 /**
  * Coordinator hook to sync track selection with track loading logic.

@@ -6,17 +6,17 @@ import { useActiveNotes } from "@/app/play/hooks/use-active-notes";
 import { useDemoPlayback } from "@/app/play/hooks/use-demo-playback";
 import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";
 import { getNoteUnits, getVisibleMidiRange } from "@/app/play/lib/piano";
-import { useMidiAudio } from "@/features/audio/hooks/use-midi-audio";
-import { useCollection } from "@/features/collection/context/collection-context";
-import { useTrack } from "@/features/midi-assets/context/track-context";
+import { useMidiAudio } from "@/features/audio";
+import { useCollection } from "@/features/collection";
+import { useTrack } from "@/features/midi-assets";
 import {
   LANE_SCROLL_DURATION_MS,
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "@/features/midi-assets/lib/constant";
-import { useGear } from "@/features/midi-hardware/context/gear-context";
-import { useNavigation } from "@/features/navigation/hooks/use-navigation";
-import { useScore } from "@/features/score/context/score-context";
+import { useGear } from "@/features/midi-hardware";
+import { useNavigation } from "@/features/navigation";
+import { useScore } from "@/features/score";
 import { useLaneScoreEngine } from "@/features/score/hooks/use-lane-score-engine";
 import { useOptions } from "@/features/settings";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";

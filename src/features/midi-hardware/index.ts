@@ -1,9 +1,10 @@
-// MIDI Hardware Public API
-
-export * from "./context/gear-context";
-export * from "./hooks/use-midi-devices";
-export * from "./hooks/use-midi-notes";
-export * from "./hooks/use-midi-selection";
-export * from "./lib/midi-access";
-export * from "./lib/midi-devices";
-export * from "./lib/midi-listener";
+export { GearProvider, useGear } from "./context/gear-context";
+export type { GearContextType } from "./context/gear-context";
+export { requestMIDIAccess } from "./lib/midi-access";
+export { 
+  getMIDIInputDevices, 
+  getMIDIOutputDevices, 
+  onMIDIDevicesStateChange 
+} from "./lib/midi-devices";
+export { subscribeToNotes } from "./lib/midi-listener";
+export type { MIDINoteEvent } from "./lib/midi-listener";

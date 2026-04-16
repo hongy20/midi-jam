@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { useNavigation } from "@/features/navigation/hooks/use-navigation";
+import { useNavigation } from "@/features/navigation";
 import {
   type Difficulty,
   useOptions,

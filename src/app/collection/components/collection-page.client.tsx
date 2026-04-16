@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { useCollection } from "@/features/collection/context/collection-context";
-import { useNavigation } from "@/features/navigation/hooks/use-navigation";
+import { useNavigation } from "@/features/navigation";
 import { CollectionPageView } from "./collection-page.view";
 import type { SongCardTrack } from "./song-card";
 

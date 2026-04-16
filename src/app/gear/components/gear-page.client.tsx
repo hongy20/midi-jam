@@ -1,8 +1,8 @@
 "use client";
 
 import { use, useEffect } from "react";
-import { useGear } from "@/features/midi-hardware/context/gear-context";
-import { useNavigation } from "@/features/navigation/hooks/use-navigation";
+import { useGear } from "@/features/midi-hardware";
+import { useNavigation } from "@/features/navigation";
 import { GearPageView } from "./gear-page.view";
 
 export function GearPageClient() {

@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { buildSegmentGroups } from "@/features/midi-assets/lib/lane-segment-utils";
+import { buildSegmentGroups } from "@/features/midi-assets";
 import { useDemoPlayback } from "./use-demo-playback";
 
 describe("useDemoPlayback", () => {

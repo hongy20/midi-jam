@@ -1,3 +1,2 @@
-// Audio Public API
-export * from "./hooks/use-midi-audio";
-export * from "./lib/sound-track";
+export { useMidiAudio } from "./hooks/use-midi-audio";
+export { getSoundTracks } from "./lib/sound-track";

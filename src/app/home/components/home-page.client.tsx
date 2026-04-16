@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAppReset } from "@/features/collection/hooks/use-track-sync";
-import { useNavigation } from "@/features/navigation/hooks/use-navigation";
+import { useAppReset } from "@/features/collection";
+import { useNavigation } from "@/features/navigation";
 import { HomePageView } from "./home-page.view";
 
 interface HomePageClientProps {

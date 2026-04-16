@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { SegmentGroup } from "@/features/midi-assets/lib/lane-segment-utils";
+import type { SegmentGroup } from "@/features/midi-assets";
 
 interface UseDemoPlaybackProps {
   containerRef: React.RefObject<HTMLDivElement | null>;

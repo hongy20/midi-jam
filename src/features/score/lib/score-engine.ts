@@ -1,4 +1,4 @@
-import type { MidiEvent } from "@/features/midi-assets/lib/midi-parser";
+import type { MidiEvent } from "@/features/midi-assets";
 
 /**
  * Calculates weighted points for each note in a list of MIDI events.

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { NavigationGuard } from "@/features/navigation/components/navigation-guard";
+import { NavigationGuard } from "@/features/navigation";
 import { ThemeProvider } from "@/features/theme";
-import { GearProvider } from "@/features/midi-hardware/context/gear-context";
+import { GearProvider } from "@/features/midi-hardware";
 import { OptionsProvider } from "@/features/settings";
-import { CollectionProvider } from "@/features/collection/context/collection-context";
-import { TrackProvider } from "@/features/midi-assets/context/track-context";
+import { CollectionProvider } from "@/features/collection";
+import { TrackProvider } from "@/features/midi-assets";
 import { StageProvider } from "@/app/play/context/stage-context";
-import { ScoreProvider } from "@/features/score/context/score-context";
+import { ScoreProvider } from "@/features/score";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

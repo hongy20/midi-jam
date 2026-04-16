@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import type { NoteSpan } from "@/features/midi-assets/lib/midi-parser";
+import type { NoteSpan } from "@/features/midi-assets";
 import { useMIDINotes } from "@/features/midi-hardware/hooks/use-midi-notes";
 import { calculateMaxRawPoints } from "@/features/score/lib/score-utils";
 

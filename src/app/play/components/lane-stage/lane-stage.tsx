@@ -3,7 +3,7 @@ import { LANE_SCROLL_DURATION_MS } from "@/features/midi-assets/lib/constant";
 import {
   getVisibleSegmentIndexes,
   type SegmentGroup,
-} from "@/features/midi-assets/lib/lane-segment-utils";
+} from "@/features/midi-assets";
 import { BackgroundLane } from "./background-lane";
 import { LaneSegment } from "./lane-segment";
 

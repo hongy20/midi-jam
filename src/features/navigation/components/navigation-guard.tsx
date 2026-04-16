@@ -3,12 +3,12 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useStage } from "@/app/play/context/stage-context";
-import { useCollection } from "@/features/collection/context/collection-context";
-import { useGear } from "@/features/midi-hardware/context/gear-context";
+import { useCollection } from "@/features/collection";
+import { useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/features/navigation/hooks/use-navigation";
 import { ROUTES } from "@/features/navigation/lib/routes";
-import { useScore } from "@/features/score/context/score-context";
-import { useTrackSync } from "@/features/collection/hooks/use-track-sync";
+import { useScore } from "@/features/score";
+import { useTrackSync } from "@/features/collection";
 
 export function NavigationGuard({ children }: { children: React.ReactNode }) {
   const { toCollection, toHome, toGear } = useNavigation();

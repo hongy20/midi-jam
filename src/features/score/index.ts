@@ -1,5 +1,3 @@
-// Score Public API
-
-export * from "./context/score-context";
-export * from "./hooks/use-lane-score-engine";
-export * from "./lib/score-utils";
+export { ScoreProvider, useScore } from "./context/score-context";
+export type { ScoreContextType, SessionResults } from "./context/score-context";
+export { calculateNoteWeights } from "./lib/score-engine";
