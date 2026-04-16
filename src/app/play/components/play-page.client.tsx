@@ -80,20 +80,15 @@ export function PlayPageClient() {
     onFinish: onFinishProxy,
   });
 
-  const {
-    getScore,
-    getCombo,
-    getLastHitQuality,
-    processNoteEvent,
-    finalizeScore,
-  } = useLaneScoreEngine({
-    midiInput: selectedMIDIInput,
-    spans,
-    getCurrentTimeMs,
-    initialScore: gameSession?.score ?? 0,
-    initialCombo: gameSession?.combo ?? 0,
-    initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
-  });
+  const { getScore, getCombo, getLastHitQuality, processNoteEvent } =
+    useLaneScoreEngine({
+      midiInput: selectedMIDIInput,
+      spans,
+      getCurrentTimeMs,
+      initialScore: gameSession?.score ?? 0,
+      initialCombo: gameSession?.combo ?? 0,
+      initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
+    });
 
   const { playNote, stopNote } = useMidiAudio(selectedMIDIOutput);
 
@@ -142,7 +137,6 @@ export function PlayPageClient() {
   // Update finish callback ref in an effect to avoid render-phase side effects
   useEffect(() => {
     handleFinishRef.current = () => {
-      finalizeScore();
       const finalScore = getScore();
       const finalCombo = getCombo();
 
@@ -153,14 +147,7 @@ export function PlayPageClient() {
       setGameSession(null);
       toScore();
     };
-  }, [
-    setGameSession,
-    setSessionResults,
-    toScore,
-    getScore,
-    getCombo,
-    finalizeScore,
-  ]);
+  }, [setGameSession, setSessionResults, toScore, getScore, getCombo]);
 
   // Handle Pause
   const handlePause = useCallback(() => {
