@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { MidiEvent } from "@/lib/midi/midi-parser";
 import { useMIDINotes } from "./use-midi-notes";
 
@@ -26,6 +26,13 @@ export function useLaneScoreEngine({
   initialTimeMs = 0,
 }: UseLaneScoreEngineProps) {
   const scoreRef = useRef(initialScore);
+  // Only process noteOn events for scoring targets to ensure sequential indexing for multipliers.
+  // Note-off duration logic is handled via the durationMs property already present on NoteOn events.
+  const scoredEvents = useMemo(
+    () => modelEvents.filter((e) => e.type === "noteOn"),
+    [modelEvents],
+  );
+
   const comboRef = useRef(initialCombo);
   const lastHitQualityRef = useRef<HitQuality>(null);
 
@@ -112,7 +119,11 @@ export function useLaneScoreEngine({
       if (event.type === "note-off") {
         const hit = activeHitsRef.current.get(event.note);
         if (hit) {
-          const modelEvent = modelEvents[hit.modelIdx];
+          const modelEvent = scoredEvents[hit.modelIdx];
+          if (!modelEvent) {
+            activeHitsRef.current.delete(event.note);
+            return;
+          }
           const targetOn = modelEvent.timeMs;
           const targetOff = targetOn + (modelEvent.durationMs ?? 0);
 
@@ -123,7 +134,6 @@ export function useLaneScoreEngine({
             targetOff,
           );
 
-          console.log(`[ScoreEngine] ID=${hit.modelIdx} Note=${event.note} Precision=${precision.toFixed(4)} Multiplier=${hit.comboMultiplier.toFixed(1)} AddPoints=${(hit.basePoints * precision * hit.comboMultiplier).toFixed(1)}`);
           scoreRef.current += hit.basePoints * precision * hit.comboMultiplier;
           activeHitsRef.current.delete(event.note);
         }
@@ -135,8 +145,9 @@ export function useLaneScoreEngine({
       let bestMatchIdx = -1;
       let minDelta = Infinity;
 
-      for (let i = currentIndexRef.current; i < modelEvents.length; i++) {
-        const modelEvent = modelEvents[i];
+      for (let i = currentIndexRef.current; i < scoredEvents.length; i++) {
+        const modelEvent = scoredEvents[i];
+        // We already filtered to noteOn, but checking type is safe
         if (modelEvent.type !== "noteOn") continue;
 
         const targetTimeMs = modelEvent.timeMs;
@@ -168,8 +179,6 @@ export function useLaneScoreEngine({
 
         const multiplier = 1 + Math.floor(comboRef.current / 10) * 0.1;
 
-        console.log(`[ScoreEngine] NoteON ID=${bestMatchIdx} Note=${event.note} Quality=${quality} Multiplier=${multiplier}`);
-
         // Register active hit - points are added on release
         activeHitsRef.current.set(event.note, {
           actualOnTimeMs: currentTimeMs,
@@ -185,7 +194,7 @@ export function useLaneScoreEngine({
         comboRef.current = 0;
       }
     },
-    [modelEvents, getCurrentTimeMs, calculateOverlapRatio],
+    [scoredEvents, getCurrentTimeMs, calculateOverlapRatio],
   );
 
   useMIDINotes(midiInput, processNoteEvent);
@@ -196,15 +205,8 @@ export function useLaneScoreEngine({
       const currentTimeMs = getCurrentTimeMs();
 
       // 1. Check for missing noteOn (User never pressed)
-      for (let i = currentIndexRef.current; i < modelEvents.length; i++) {
-        const modelEvent = modelEvents[i];
-        if (modelEvent.type !== "noteOn") {
-          if (modelEvent.timeMs < currentTimeMs - GOOD_THRESHOLD) {
-            currentIndexRef.current = i + 1;
-          }
-          continue;
-        }
-
+      for (let i = currentIndexRef.current; i < scoredEvents.length; i++) {
+        const modelEvent = scoredEvents[i];
         const targetTimeMs = modelEvent.timeMs;
 
         if (currentTimeMs > targetTimeMs + GOOD_THRESHOLD) {
@@ -221,7 +223,11 @@ export function useLaneScoreEngine({
 
       // 2. Check for missing noteOff (User held forever or release missed)
       for (const [note, hit] of activeHitsRef.current.entries()) {
-        const modelEvent = modelEvents[hit.modelIdx];
+        const modelEvent = scoredEvents[hit.modelIdx];
+        if (!modelEvent) {
+          activeHitsRef.current.delete(note);
+          continue;
+        }
         const targetOff = modelEvent.timeMs + (modelEvent.durationMs ?? 0);
 
         // If we are significantly past the target release, finalize the score
@@ -239,7 +245,7 @@ export function useLaneScoreEngine({
     }, 100);
 
     return () => clearInterval(interval);
-  }, [modelEvents, getCurrentTimeMs, calculateOverlapRatio]);
+  }, [scoredEvents, getCurrentTimeMs, calculateOverlapRatio]);
 
   return {
     getScore: useCallback(() => scoreRef.current, []),
