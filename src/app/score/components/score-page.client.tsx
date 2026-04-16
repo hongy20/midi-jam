@@ -15,20 +15,19 @@ export function ScorePageClient() {
     () =>
       sessionResults ?? {
         score: 0,
-        accuracy: 0,
         combo: 0,
       },
     [sessionResults],
   );
 
-  const getAccuracyLabel = (accuracy: number) => {
-    if (accuracy >= 91) return "Outstanding!";
-    if (accuracy >= 71) return "Great Job!";
-    if (accuracy >= 41) return "Not Bad!";
+  const getAccuracyLabel = (score: number) => {
+    if (score >= 91) return "Outstanding!";
+    if (score >= 71) return "Great Job!";
+    if (score >= 41) return "Not Bad!";
     return "Keep Practicing!";
   };
 
-  const titleLabel = getAccuracyLabel(results.accuracy);
+  const titleLabel = getAccuracyLabel(results.score);
 
   const handleRetry = () => {
     setGameSession(null);

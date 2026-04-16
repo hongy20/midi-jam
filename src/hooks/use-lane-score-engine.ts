@@ -19,19 +19,13 @@ interface UseLaneScoreEngineProps {
 
 export function useLaneScoreEngine({
   midiInput,
-  modelEvents,
+  modelEvents: scoredEvents,
   getCurrentTimeMs,
   initialScore = 0,
   initialCombo = 0,
   initialTimeMs = 0,
 }: UseLaneScoreEngineProps) {
   const scoreRef = useRef(initialScore);
-  // Only process noteOn events for scoring targets to ensure sequential indexing for multipliers.
-  // Note-off duration logic is handled via the durationMs property already present on NoteOn events.
-  const scoredEvents = useMemo(
-    () => modelEvents.filter((e) => e.type === "noteOn"),
-    [modelEvents],
-  );
 
   const comboRef = useRef(initialCombo);
   const lastHitQualityRef = useRef<HitQuality>(null);
@@ -42,8 +36,9 @@ export function useLaneScoreEngine({
     Map<
       number,
       {
-        actualOnTimeMs: number;
-        modelIdx: number;
+        actualOn: number;
+        targetOn: number;
+        targetOff: number;
         basePoints: number;
         comboMultiplier: number;
       }
@@ -54,8 +49,8 @@ export function useLaneScoreEngine({
   useEffect(() => {
     if (initialTimeMs > 0) {
       let nextIndex = 0;
-      for (let i = 0; i < modelEvents.length; i++) {
-        const modelEvent = modelEvents[i];
+      for (let i = 0; i < scoredEvents.length; i++) {
+        const modelEvent = scoredEvents[i];
         const targetTimeMs = modelEvent.timeMs;
 
         if (targetTimeMs < initialTimeMs - GOOD_THRESHOLD) {
@@ -67,7 +62,7 @@ export function useLaneScoreEngine({
       }
       currentIndexRef.current = nextIndex;
     }
-  }, [initialTimeMs, modelEvents]);
+  }, [initialTimeMs, scoredEvents]);
 
   const resetScore = useCallback(() => {
     scoreRef.current = 0;
@@ -88,23 +83,32 @@ export function useLaneScoreEngine({
       const targetDuration = targetOff - targetOn;
       if (targetDuration <= 0) return 0;
 
-      // Apply grace period to actual boundaries to account for jitter
-      const effectiveActualOn = Math.max(
-        actualOn - DURATION_GRACE_MS,
-        targetOn,
-      );
-      const effectiveActualOff = Math.min(
-        actualOff + DURATION_GRACE_MS,
-        targetOff,
-      );
-
-      const intersectionStart = Math.max(effectiveActualOn, targetOn);
-      const intersectionEnd = Math.min(effectiveActualOff, targetOff);
-      const intersection = Math.max(0, intersectionEnd - intersectionStart);
+      // Intersection with grace periods applied to actual on/off
+      const start = Math.max(actualOn - DURATION_GRACE_MS, targetOn);
+      const end = Math.min(actualOff + DURATION_GRACE_MS, targetOff);
+      const intersection = Math.max(0, end - start);
 
       return Math.min(1.0, intersection / targetDuration);
     },
     [],
+  );
+
+  const commitHitScore = useCallback(
+    (note: number, currentTimeMs: number) => {
+      const hit = activeHitsRef.current.get(note);
+      if (!hit) return;
+
+      const precision = calculateOverlapRatio(
+        hit.actualOn,
+        currentTimeMs,
+        hit.targetOn,
+        hit.targetOff,
+      );
+
+      scoreRef.current += hit.basePoints * precision * hit.comboMultiplier;
+      activeHitsRef.current.delete(note);
+    },
+    [calculateOverlapRatio],
   );
 
   const processNoteEvent = useCallback(
@@ -117,26 +121,7 @@ export function useLaneScoreEngine({
 
       // --- HANDLE NOTE OFF ---
       if (event.type === "note-off") {
-        const hit = activeHitsRef.current.get(event.note);
-        if (hit) {
-          const modelEvent = scoredEvents[hit.modelIdx];
-          if (!modelEvent) {
-            activeHitsRef.current.delete(event.note);
-            return;
-          }
-          const targetOn = modelEvent.timeMs;
-          const targetOff = targetOn + (modelEvent.durationMs ?? 0);
-
-          const precision = calculateOverlapRatio(
-            hit.actualOnTimeMs,
-            currentTimeMs,
-            targetOn,
-            targetOff,
-          );
-
-          scoreRef.current += hit.basePoints * precision * hit.comboMultiplier;
-          activeHitsRef.current.delete(event.note);
-        }
+        commitHitScore(event.note, currentTimeMs);
         return;
       }
 
@@ -168,6 +153,7 @@ export function useLaneScoreEngine({
 
       if (bestMatchIdx !== -1 && minDelta < GOOD_THRESHOLD) {
         processedNotesRef.current.add(bestMatchIdx);
+        const modelEvent = scoredEvents[bestMatchIdx];
 
         let quality: HitQuality = "good";
         let points = 50;
@@ -181,8 +167,9 @@ export function useLaneScoreEngine({
 
         // Register active hit - points are added on release
         activeHitsRef.current.set(event.note, {
-          actualOnTimeMs: currentTimeMs,
-          modelIdx: bestMatchIdx,
+          actualOn: currentTimeMs,
+          targetOn: modelEvent.timeMs,
+          targetOff: modelEvent.timeMs + (modelEvent.durationMs ?? 0),
           basePoints: points,
           comboMultiplier: multiplier,
         });
@@ -194,7 +181,7 @@ export function useLaneScoreEngine({
         comboRef.current = 0;
       }
     },
-    [scoredEvents, getCurrentTimeMs, calculateOverlapRatio],
+    [scoredEvents, getCurrentTimeMs, commitHitScore],
   );
 
   useMIDINotes(midiInput, processNoteEvent);
@@ -223,47 +210,22 @@ export function useLaneScoreEngine({
 
       // 2. Check for missing noteOff (User held forever or release missed)
       for (const [note, hit] of activeHitsRef.current.entries()) {
-        const modelEvent = scoredEvents[hit.modelIdx];
-        if (!modelEvent) {
-          activeHitsRef.current.delete(note);
-          continue;
-        }
-        const targetOff = modelEvent.timeMs + (modelEvent.durationMs ?? 0);
-
         // If we are significantly past the target release, finalize the score
-        if (currentTimeMs > targetOff + GOOD_THRESHOLD) {
-          const precision = calculateOverlapRatio(
-            hit.actualOnTimeMs,
-            currentTimeMs,
-            modelEvent.timeMs,
-            targetOff,
-          );
-          scoreRef.current += hit.basePoints * precision * hit.comboMultiplier;
-          activeHitsRef.current.delete(note);
+        if (currentTimeMs > hit.targetOff + GOOD_THRESHOLD) {
+          commitHitScore(note, currentTimeMs);
         }
       }
     }, 100);
 
     return () => clearInterval(interval);
-  }, [scoredEvents, getCurrentTimeMs, calculateOverlapRatio]);
+  }, [scoredEvents, getCurrentTimeMs, commitHitScore]);
 
   const finalizeScore = useCallback(() => {
     const currentTimeMs = getCurrentTimeMs();
-    for (const [note, hit] of activeHitsRef.current.entries()) {
-      const modelEvent = scoredEvents[hit.modelIdx];
-      if (modelEvent) {
-        const targetOff = modelEvent.timeMs + (modelEvent.durationMs ?? 0);
-        const precision = calculateOverlapRatio(
-          hit.actualOnTimeMs,
-          currentTimeMs,
-          modelEvent.timeMs,
-          targetOff,
-        );
-        scoreRef.current += hit.basePoints * precision * hit.comboMultiplier;
-      }
-      activeHitsRef.current.delete(note);
+    for (const note of activeHitsRef.current.keys()) {
+      commitHitScore(note, currentTimeMs);
     }
-  }, [scoredEvents, getCurrentTimeMs, calculateOverlapRatio]);
+  }, [getCurrentTimeMs, commitHitScore]);
 
   return {
     getScore: useCallback(() => scoreRef.current, []),

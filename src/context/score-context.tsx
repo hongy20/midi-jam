@@ -11,7 +11,6 @@ import {
 
 export interface SessionResults {
   score: number;
-  accuracy: number;
   combo: number;
 }
 

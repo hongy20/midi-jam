@@ -37,11 +37,8 @@ export function PausePageClient() {
       onQuit={() => {
         if (gameSession && trackStatus.isReady) {
           const { score: currentScore, combo } = gameSession;
-          const totalEvents = trackStatus.events.length;
           setSessionResults({
             score: currentScore,
-            accuracy:
-              Math.floor((currentScore / (totalEvents * 100)) * 100) || 0,
             combo,
           });
         }
