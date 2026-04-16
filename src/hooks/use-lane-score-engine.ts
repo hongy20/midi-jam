@@ -247,11 +247,30 @@ export function useLaneScoreEngine({
     return () => clearInterval(interval);
   }, [scoredEvents, getCurrentTimeMs, calculateOverlapRatio]);
 
+  const finalizeScore = useCallback(() => {
+    const currentTimeMs = getCurrentTimeMs();
+    for (const [note, hit] of activeHitsRef.current.entries()) {
+      const modelEvent = scoredEvents[hit.modelIdx];
+      if (modelEvent) {
+        const targetOff = modelEvent.timeMs + (modelEvent.durationMs ?? 0);
+        const precision = calculateOverlapRatio(
+          hit.actualOnTimeMs,
+          currentTimeMs,
+          modelEvent.timeMs,
+          targetOff,
+        );
+        scoreRef.current += hit.basePoints * precision * hit.comboMultiplier;
+      }
+      activeHitsRef.current.delete(note);
+    }
+  }, [scoredEvents, getCurrentTimeMs, calculateOverlapRatio]);
+
   return {
     getScore: useCallback(() => scoreRef.current, []),
     getCombo: useCallback(() => comboRef.current, []),
     getLastHitQuality: useCallback(() => lastHitQualityRef.current, []),
     processNoteEvent,
     resetScore,
+    finalizeScore,
   };
 }
