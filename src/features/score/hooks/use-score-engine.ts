@@ -18,7 +18,7 @@ interface UseLaneScoreEngineProps {
   initialTimeMs?: number;
 }
 
-export function useLaneScoreEngine({
+export function useScoreEngine({
   midiInput,
   spans,
   getCurrentTimeMs,

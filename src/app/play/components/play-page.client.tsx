@@ -16,8 +16,7 @@ import {
 } from "@/features/midi-assets/lib/constant";
 import { useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/features/navigation";
-import { useScore } from "@/features/score";
-import { useLaneScoreEngine } from "@/features/score/hooks/use-lane-score-engine";
+import { useScore, useScoreEngine } from "@/features/score";
 import { useOptions } from "@/features/settings";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
@@ -81,7 +80,7 @@ export function PlayPageClient() {
   });
 
   const { getScore, getCombo, getLastHitQuality, processNoteEvent } =
-    useLaneScoreEngine({
+    useScoreEngine({
       midiInput: selectedMIDIInput,
       spans,
       getCurrentTimeMs,

@@ -3,13 +3,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { NoteSpan } from "@/features/midi-assets";
 import type { MIDINoteEvent } from "@/features/midi-hardware";
 import { useMIDINotes } from "@/features/midi-hardware/hooks/use-midi-notes";
-import { useLaneScoreEngine } from "./use-lane-score-engine";
+import { useScoreEngine } from "./use-score-engine";
 
 vi.mock("@/features/midi-hardware/hooks/use-midi-notes", () => ({
   useMIDINotes: vi.fn(),
 }));
 
-describe("useLaneScoreEngine hook", () => {
+describe("useScoreEngine hook", () => {
   const spans = [
     { id: "1", note: 60, startTimeMs: 3000, velocity: 0.7, durationMs: 1000 },
   ] as NoteSpan[];
@@ -26,7 +26,7 @@ describe("useLaneScoreEngine hook", () => {
 
     let currentTime = 3000;
     const { result } = renderHook(() =>
-      useLaneScoreEngine({
+      useScoreEngine({
         midiInput: {} as WebMidi.MIDIInput,
         spans,
         getCurrentTimeMs: () => currentTime,
@@ -55,7 +55,7 @@ describe("useLaneScoreEngine hook", () => {
   it("calculates overlap correctly for score (partial hold)", () => {
     let currentTime = 3000;
     const { result } = renderHook(() =>
-      useLaneScoreEngine({
+      useScoreEngine({
         midiInput: null,
         spans,
         getCurrentTimeMs: () => currentTime,
@@ -87,7 +87,7 @@ describe("useLaneScoreEngine hook", () => {
 
   it("resets combo on miss (wrong note)", () => {
     const { result } = renderHook(() =>
-      useLaneScoreEngine({
+      useScoreEngine({
         midiInput: null,
         spans,
         getCurrentTimeMs: () => 3000,
@@ -119,7 +119,7 @@ describe("useLaneScoreEngine hook", () => {
     vi.useFakeTimers();
     let currentTime = 3000;
     const { result } = renderHook(() =>
-      useLaneScoreEngine({
+      useScoreEngine({
         midiInput: null,
         spans,
         getCurrentTimeMs: () => currentTime,
