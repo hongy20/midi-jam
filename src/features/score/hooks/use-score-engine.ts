@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { NoteSpan } from "@/features/midi-assets";
 import { useMIDINotes } from "@/features/midi-hardware";
