@@ -8,4 +8,3 @@ export const ROUTES = {
   OPTIONS: "/options",
 } as const;
 
-export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];
