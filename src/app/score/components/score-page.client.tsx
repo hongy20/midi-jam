@@ -43,7 +43,7 @@ export function ScorePageClient() {
   return (
     <ScorePageView
       title={titleLabel}
-      score={results.score.toFixed(2)}
+      score={results.score.toFixed(1)}
       combo={results.combo}
       onRetry={handleRetry}
       onSongs={handleSongs}

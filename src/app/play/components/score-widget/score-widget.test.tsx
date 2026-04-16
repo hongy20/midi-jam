@@ -19,7 +19,7 @@ describe("ScoreWidget", () => {
       await new Promise((resolve) => requestAnimationFrame(resolve));
     });
 
-    expect(screen.getByText(/50.00/)).toBeInTheDocument();
+    expect(screen.getByText(/50.0/)).toBeInTheDocument();
     expect(screen.getByText(/15/)).toBeInTheDocument();
     expect(screen.getByText(/PERFECT!/)).toBeInTheDocument();
     expect(screen.getByText(/45%/)).toBeInTheDocument();

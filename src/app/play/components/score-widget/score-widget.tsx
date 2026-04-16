@@ -47,7 +47,7 @@ export const ScoreWidget = memo(function ScoreWidget({
       if (score !== state.score && scoreValueRef.current) {
         const normalized =
           maxPossibleScore > 0 ? (score / maxPossibleScore) * 100 : 0;
-        scoreValueRef.current.textContent = normalized.toFixed(2);
+        scoreValueRef.current.textContent = normalized.toFixed(1);
         state.score = score;
       }
 
