@@ -7,7 +7,7 @@ import {
   type Difficulty,
   useOptions,
 } from "@/features/settings/context/options-context";
-import { useTheme } from "@/features/theme/context/theme-context";
+import { useTheme } from "@/features/theme";
 import { OptionsPageView } from "./options-page.view";
 
 /**

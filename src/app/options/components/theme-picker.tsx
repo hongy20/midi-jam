@@ -2,7 +2,7 @@
 
 import { Check } from "lucide-react";
 import * as React from "react";
-import { Theme } from "@/features/theme/lib/themes";
+import { Theme } from "@/features/theme";
 import { Button } from "@/shared/components/ui/8bit/button";
 import {
   Dialog,
