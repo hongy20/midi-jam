@@ -1,4 +1,3 @@
-export type { GearContextType } from "./context/gear-context";
 export { GearProvider, useGear } from "./context/gear-context";
 export { requestMIDIAccess } from "./lib/midi-access";
 export {
