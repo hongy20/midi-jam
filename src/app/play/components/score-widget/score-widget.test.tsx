@@ -4,8 +4,7 @@ import { ScoreWidget } from "./score-widget";
 
 describe("ScoreWidget", () => {
   const defaultProps = {
-    getScore: () => 1250,
-    maxPossibleScore: 2500,
+    getScore: () => 50.0,
     getCombo: () => 15,
     getLastHitQuality: () => "perfect" as const,
     getProgress: () => 0.45,
