@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef } from "react";
 import type { MidiEvent } from "@/lib/midi/midi-parser";
 import { useMIDINotes } from "./use-midi-notes";
 
-const PERFECT_THRESHOLD = 100; // ms
-const GOOD_THRESHOLD = 250; // ms
+const PERFECT_THRESHOLD = 150; // ms (increased from 100 for better tolerance)
+const GOOD_THRESHOLD = 300; // ms (increased from 250)
 
 export type HitQuality = "perfect" | "good" | "miss" | null;
 
@@ -59,14 +59,11 @@ export function useLaneScoreEngine({
   }, []);
 
   const processNoteEvent = useCallback(
-    (
-      event: {
-        type: "note-on" | "note-off";
-        note: number;
-        velocity: number;
-      },
-      forcePerfect = false,
-    ) => {
+    (event: {
+      type: "note-on" | "note-off";
+      note: number;
+      velocity: number;
+    }) => {
       if (event.type === "note-off") return;
 
       const currentTimeMs = getCurrentTimeMs();
@@ -105,10 +102,7 @@ export function useLaneScoreEngine({
         let quality: HitQuality = "good";
         let points = 50;
 
-        if (forcePerfect) {
-          quality = "perfect";
-          points = 100;
-        } else if (minDelta < PERFECT_THRESHOLD) {
+        if (minDelta < PERFECT_THRESHOLD) {
           quality = "perfect";
           points = 100;
         }

@@ -101,9 +101,9 @@ export function PlayPageClient() {
       });
       playNote(note, velocity);
 
-      // If in demo mode, feed the note to the scoring engine as a forced perfect hit
+      // If in demo mode, feed the note to the scoring engine
       if (demoMode) {
-        processNoteEvent({ type: "note-on", note, velocity }, true);
+        processNoteEvent({ type: "note-on", note, velocity });
       }
     },
     [playNote, demoMode, processNoteEvent],

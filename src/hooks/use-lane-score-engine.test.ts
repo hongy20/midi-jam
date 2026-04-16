@@ -139,21 +139,21 @@ describe("useLaneScoreEngine hook", () => {
     expect(result.current.getLastHitQuality()).toBe("perfect");
   });
 
-  it("handles manual processNoteEvent with forcePerfect", () => {
+  it("handles manual processNoteEvent realistically with thresholds", () => {
     const { result } = renderHook(() =>
       useLaneScoreEngine({
         midiInput: null,
         modelEvents,
-        getCurrentTimeMs: () => 3100, // Within GOOD_THRESHOLD of 3000ms
+        getCurrentTimeMs: () => 3120, // 120ms late, should still be "perfect" given 150ms threshold
       }),
     );
 
     act(() => {
-      // Even though we are 2000ms late, forcePerfect should make it a perfect hit
-      result.current.processNoteEvent(
-        { type: "note-on", note: 60, velocity: 0.7 },
-        true,
-      );
+      result.current.processNoteEvent({
+        type: "note-on",
+        note: 60,
+        velocity: 0.7,
+      });
     });
 
     expect(result.current.getScore()).toBeGreaterThan(0);
