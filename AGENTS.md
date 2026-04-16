@@ -107,7 +107,7 @@ Inside a feature or colocated app folder, use the following sub-directories:
 ### 7.2 Theme & Context Integration
 - **Unified Decorator**: All stories must be wrapped in `ThemeProvider` within the Storybook environment to ensure context compatibility.
 - **Theme Switching**: Use `globalTypes` (not the default decorators) to manage the 20+ retro themes via `data-theme` and Light/Dark mode via the `.dark` class. This ensures independent control and avoids CSS selector clashes.
-- **CSS Selectors**: Always ensure `retro-globals.css` supports both `.theme-name` (for runtime) and `[data-theme="name"]` (for Storybook) selectors.
+- **CSS Selectors**: Always ensure `src/shared/components/ui/8bit/styles/retro-globals.css` supports both `.theme-name` (for runtime) and `[data-theme="name"]` (for Storybook) selectors.
 
 ---
 
