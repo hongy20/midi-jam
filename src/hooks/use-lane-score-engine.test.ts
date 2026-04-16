@@ -138,4 +138,26 @@ describe("useLaneScoreEngine hook", () => {
     expect(result.current.getCombo()).toBe(6);
     expect(result.current.getLastHitQuality()).toBe("perfect");
   });
+
+  it("handles manual processNoteEvent with forcePerfect", () => {
+    const { result } = renderHook(() =>
+      useLaneScoreEngine({
+        midiInput: null,
+        modelEvents,
+        getCurrentTimeMs: () => 3100, // Within GOOD_THRESHOLD of 3000ms
+      }),
+    );
+
+    act(() => {
+      // Even though we are 2000ms late, forcePerfect should make it a perfect hit
+      result.current.processNoteEvent(
+        { type: "note-on", note: 60, velocity: 0.7 },
+        true,
+      );
+    });
+
+    expect(result.current.getScore()).toBeGreaterThan(0);
+    expect(result.current.getCombo()).toBe(1);
+    expect(result.current.getLastHitQuality()).toBe("perfect");
+  });
 });

@@ -58,12 +58,15 @@ export function useLaneScoreEngine({
     currentIndexRef.current = 0;
   }, []);
 
-  const handleLiveNote = useCallback(
-    (event: {
-      type: "note-on" | "note-off";
-      note: number;
-      velocity: number;
-    }) => {
+  const processNoteEvent = useCallback(
+    (
+      event: {
+        type: "note-on" | "note-off";
+        note: number;
+        velocity: number;
+      },
+      forcePerfect = false,
+    ) => {
       if (event.type === "note-off") return;
 
       const currentTimeMs = getCurrentTimeMs();
@@ -102,7 +105,10 @@ export function useLaneScoreEngine({
         let quality: HitQuality = "good";
         let points = 50;
 
-        if (minDelta < PERFECT_THRESHOLD) {
+        if (forcePerfect) {
+          quality = "perfect";
+          points = 100;
+        } else if (minDelta < PERFECT_THRESHOLD) {
           quality = "perfect";
           points = 100;
         }
@@ -119,7 +125,7 @@ export function useLaneScoreEngine({
     [modelEvents, getCurrentTimeMs],
   );
 
-  useMIDINotes(midiInput, handleLiveNote);
+  useMIDINotes(midiInput, processNoteEvent);
 
   // Miss detection and window advancement
   useEffect(() => {
@@ -161,6 +167,7 @@ export function useLaneScoreEngine({
     getScore: useCallback(() => scoreRef.current, []),
     getCombo: useCallback(() => comboRef.current, []),
     getLastHitQuality: useCallback(() => lastHitQualityRef.current, []),
+    processNoteEvent,
     resetScore,
   };
 }

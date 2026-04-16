@@ -10,7 +10,7 @@ import styles from "./play-page.view.module.css";
 import { ScoreWidget } from "./score-widget/score-widget";
 
 interface PlayPageViewProps {
-  selectedMIDIInput: { name?: string };
+  selectedMIDIInput: { name?: string } | null;
   selectedTrack: { name: string };
   getScore: () => number;
   getCombo: () => number;
@@ -69,7 +69,7 @@ export function PlayPageView({
       <header className={styles.header}>
         <div className={styles.songInfo}>
           <span className={styles.badge}>
-            {selectedMIDIInput.name} • {selectedTrack.name}
+            {selectedMIDIInput?.name ?? "Auto Player"} • {selectedTrack.name}
           </span>
           <ScoreWidget
             getScore={getScore}

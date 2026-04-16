@@ -80,14 +80,15 @@ export function PlayPageClient() {
     onFinish: onFinishProxy,
   });
 
-  const { getScore, getCombo, getLastHitQuality } = useLaneScoreEngine({
-    midiInput: selectedMIDIInput,
-    modelEvents: events,
-    getCurrentTimeMs,
-    initialScore: gameSession?.score ?? 0,
-    initialCombo: gameSession?.combo ?? 0,
-    initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
-  });
+  const { getScore, getCombo, getLastHitQuality, processNoteEvent } =
+    useLaneScoreEngine({
+      midiInput: selectedMIDIInput,
+      modelEvents: events,
+      getCurrentTimeMs,
+      initialScore: gameSession?.score ?? 0,
+      initialCombo: gameSession?.combo ?? 0,
+      initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
+    });
 
   const { playNote, stopNote } = useMidiAudio(selectedMIDIOutput);
 
@@ -99,8 +100,13 @@ export function PlayPageClient() {
         return next;
       });
       playNote(note, velocity);
+
+      // If in demo mode, feed the note to the scoring engine as a forced perfect hit
+      if (demoMode) {
+        processNoteEvent({ type: "note-on", note, velocity }, true);
+      }
     },
-    [playNote],
+    [playNote, demoMode, processNoteEvent],
   );
 
   const onNoteOff = useCallback(
@@ -170,7 +176,7 @@ export function PlayPageClient() {
     isLoading ||
     !trackStatus.isReady ||
     !selectedTrack ||
-    !selectedMIDIInput
+    (!selectedMIDIInput && !demoMode)
   ) {
     return null;
   }
