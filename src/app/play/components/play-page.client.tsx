@@ -59,8 +59,6 @@ export function PlayPageClient() {
     visibleMidiRange.endNote,
   );
 
-  const totalNotes = spans.length;
-
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
 
