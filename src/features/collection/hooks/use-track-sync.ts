@@ -4,14 +4,14 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import { useStage } from "@/app/play/context/stage-context";
 import { useCollection } from "@/features/collection/context/collection-context";
-import { useTrack } from "@/features/midi-assets";
-import { LANE_SEGMENT_DURATION_MS } from "@/features/midi-assets/lib/constant";
-import { buildSegmentGroups } from "@/features/midi-assets";
-import { loadMidiFile } from "@/features/midi-assets";
 import {
+  buildSegmentGroups,
   getMidiEvents,
   getNoteSpans,
+  loadMidiFile,
+  useTrack,
 } from "@/features/midi-assets";
+import { LANE_SEGMENT_DURATION_MS } from "@/features/midi-assets/lib/constant";
 import { useGear } from "@/features/midi-hardware";
 import { ROUTES } from "@/features/navigation";
 import { useScore } from "@/features/score";

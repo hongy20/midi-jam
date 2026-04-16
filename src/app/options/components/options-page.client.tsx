@@ -3,10 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { useNavigation } from "@/features/navigation";
-import {
-  type Difficulty,
-  useOptions,
-} from "@/features/settings";
+import { type Difficulty, useOptions } from "@/features/settings";
 import { useTheme } from "@/features/theme";
 import { OptionsPageView } from "./options-page.view";
 
