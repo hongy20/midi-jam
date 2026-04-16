@@ -6,6 +6,7 @@ import styles from "./score-widget.module.css";
 
 interface ScoreWidgetProps {
   getScore: () => number;
+  maxPossibleScore: number;
   getCombo: () => number;
   getLastHitQuality: () => HitQuality;
   getProgress: () => number;
@@ -13,6 +14,7 @@ interface ScoreWidgetProps {
 
 export const ScoreWidget = memo(function ScoreWidget({
   getScore,
+  maxPossibleScore,
   getCombo,
   getLastHitQuality,
   getProgress,
@@ -41,9 +43,11 @@ export const ScoreWidget = memo(function ScoreWidget({
       const quality = getLastHitQuality();
       const state = lastStateRef.current;
 
-      // 1. Update Score
+      // 1. Update Score (Normalized)
       if (score !== state.score && scoreValueRef.current) {
-        scoreValueRef.current.textContent = score.toLocaleString();
+        const normalized =
+          maxPossibleScore > 0 ? (score / maxPossibleScore) * 100 : 0;
+        scoreValueRef.current.textContent = normalized.toFixed(2);
         state.score = score;
       }
 
@@ -94,7 +98,7 @@ export const ScoreWidget = memo(function ScoreWidget({
 
     rafId = requestAnimationFrame(update);
     return () => cancelAnimationFrame(rafId);
-  }, [getScore, getCombo, getLastHitQuality, getProgress]);
+  }, [getScore, getCombo, getLastHitQuality, getProgress, maxPossibleScore]);
 
   return (
     <div className={styles.container}>

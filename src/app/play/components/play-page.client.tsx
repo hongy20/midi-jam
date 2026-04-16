@@ -60,6 +60,15 @@ export function PlayPageClient() {
     visibleMidiRange.endNote,
   );
 
+  const totalNotes = useMemo(
+    () => events.filter((e) => e.type === "noteOn").length,
+    [events],
+  );
+  const maxPossibleScore = useMemo(
+    () => calculateMaxPossibleScore(totalNotes),
+    [totalNotes],
+  );
+
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
 
@@ -136,22 +145,19 @@ export function PlayPageClient() {
     handleFinishRef.current = () => {
       const finalScore = getScore();
       const finalCombo = getCombo();
-      const totalNotes = events.filter((e) => e.type === "noteOn").length;
-      const maxPossibleScore = calculateMaxPossibleScore(totalNotes);
+      const normalizedScore =
+        maxPossibleScore > 0 ? (finalScore / maxPossibleScore) * 100 : 0;
 
       setSessionResults({
-        score: finalScore,
-        accuracy:
-          maxPossibleScore > 0
-            ? Math.floor((finalScore / maxPossibleScore) * 100)
-            : 0,
+        score: normalizedScore,
+        accuracy: normalizedScore,
         combo: finalCombo,
       });
       setGameSession(null);
       toScore();
     };
   }, [
-    events.length,
+    maxPossibleScore,
     setGameSession,
     setSessionResults,
     toScore,
@@ -193,6 +199,7 @@ export function PlayPageClient() {
       selectedMIDIInput={selectedMIDIInput}
       selectedTrack={selectedTrack}
       getScore={getScore}
+      maxPossibleScore={maxPossibleScore}
       getCombo={getCombo}
       getLastHitQuality={getLastHitQuality}
       getProgress={getProgress}
