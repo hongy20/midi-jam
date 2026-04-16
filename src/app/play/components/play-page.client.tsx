@@ -51,8 +51,7 @@ export function PlayPageClient() {
     if (modelNotes.length === 0) {
       return { startNote: PIANO_88_KEY_MIN, endNote: PIANO_88_KEY_MAX };
     }
-    const notes = modelNotes.map((n) => n.note);
-    return getVisibleMidiRange(notes);
+    return getVisibleMidiRange(modelNotes.map((n) => n.note));
   }, [modelNotes]);
 
   const { startUnit, endUnit } = getNoteUnits(
