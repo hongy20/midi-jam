@@ -9,8 +9,7 @@ import {
   useState,
 } from "react";
 import { Theme } from "@/features/theme/lib/themes";
-
-export type ThemeMode = "light" | "dark";
+import type { ThemeMode } from "@/shared/types/theme";
 
 interface ThemeContextType {
   theme: Theme;

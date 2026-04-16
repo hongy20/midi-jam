@@ -2,7 +2,6 @@
 
 import { ArrowLeft } from "lucide-react";
 import type { Difficulty } from "@/features/settings/context/options-context";
-import type { ThemeMode } from "@/features/theme/context/theme-context";
 import type { Theme } from "@/features/theme/lib/themes";
 import { Button } from "@/shared/components/ui/8bit/button";
 import { Card, CardContent, CardTitle } from "@/shared/components/ui/8bit/card";
@@ -22,6 +21,7 @@ import {
 } from "@/shared/components/ui/8bit/select";
 import { Toggle } from "@/shared/components/ui/8bit/toggle";
 import { RetroModeSwitcher } from "@/shared/components/ui/retro-mode-switcher";
+import type { ThemeMode } from "@/shared/types/theme";
 import { ThemePicker } from "./theme-picker";
 
 interface OptionsPageViewProps {

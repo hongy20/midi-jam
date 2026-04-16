@@ -1,8 +1,8 @@
 "use client";
 
-import type { ThemeMode } from "@/features/theme/context/theme-context";
 import { Button } from "@/shared/components/ui/8bit/button";
 import { cn } from "@/shared/lib/utils";
+import type { ThemeMode } from "@/shared/types/theme";
 
 interface RetroModeSwitcherProps {
   className?: string;
