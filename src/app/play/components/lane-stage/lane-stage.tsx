@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import {
   getVisibleSegmentIndexes,
+  LANE_SCROLL_DURATION_MS,
   type SegmentGroup,
 } from "@/features/midi-assets";
-import { LANE_SCROLL_DURATION_MS } from "@/features/midi-assets/lib/constant";
 import { BackgroundLane } from "./background-lane";
 import { LaneSegment } from "./lane-segment";
 

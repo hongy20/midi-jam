@@ -2,7 +2,6 @@ import { CLUSTER_CONNECTION_GAP_MS, LANE_SCROLL_DURATION_MS } from "./constant";
 
 import type { NoteSpan } from "./midi-parser";
 
-
 export interface SegmentGroup {
   index: number;
   startMs: number;

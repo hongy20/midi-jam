@@ -8,10 +8,10 @@ import {
   buildSegmentGroups,
   getMidiEvents,
   getNoteSpans,
+  LANE_SEGMENT_DURATION_MS,
   loadMidiFile,
   useTrack,
 } from "@/features/midi-assets";
-import { LANE_SEGMENT_DURATION_MS } from "@/features/midi-assets/lib/constant";
 import { useGear } from "@/features/midi-hardware";
 import { ROUTES } from "@/features/navigation";
 import { useScore } from "@/features/score";

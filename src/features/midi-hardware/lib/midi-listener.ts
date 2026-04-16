@@ -1,7 +1,4 @@
-import {
-  MIDI_COMMAND_NOTE_OFF,
-  MIDI_COMMAND_NOTE_ON,
-} from "@/shared/lib/midi";
+import { MIDI_COMMAND_NOTE_OFF, MIDI_COMMAND_NOTE_ON } from "@/shared/lib/midi";
 
 export type MIDINoteEvent = {
   type: "note-on" | "note-off";

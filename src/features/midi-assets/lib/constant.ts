@@ -7,7 +7,6 @@
  * These constants represent the command types for Channel 1 (0).
  */
 
-
 /** Theoretical minimum MIDI note value */
 export const MIDI_MIN_NOTE = 0;
 

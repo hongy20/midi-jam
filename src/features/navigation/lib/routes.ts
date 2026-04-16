@@ -7,4 +7,3 @@ export const ROUTES = {
   SCORE: "/score",
   OPTIONS: "/options",
 } as const;
-

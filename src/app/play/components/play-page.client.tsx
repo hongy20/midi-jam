@@ -8,12 +8,12 @@ import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";
 import { getNoteUnits, getVisibleMidiRange } from "@/app/play/lib/piano";
 import { useMidiAudio } from "@/features/audio";
 import { useCollection } from "@/features/collection";
-import { useTrack } from "@/features/midi-assets";
 import {
   LANE_SCROLL_DURATION_MS,
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
-} from "@/features/midi-assets/lib/constant";
+  useTrack,
+} from "@/features/midi-assets";
 import { useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/features/navigation";
 import { useScore, useScoreEngine } from "@/features/score";

@@ -43,4 +43,3 @@ export function useNavigation() {
     navigate, // Keep generic navigate for special cases
   };
 }
-

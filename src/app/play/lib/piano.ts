@@ -2,7 +2,7 @@ import {
   MIDI_NOTE_C4,
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
-} from "@/features/midi-assets/lib/constant";
+} from "@/features/midi-assets";
 
 /**
  * Checks if a MIDI note corresponds to a black key on a piano.
