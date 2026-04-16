@@ -1,12 +1,12 @@
 "use client";
 
-import { useTrackSync } from "@/features/collection/hooks/use-track-sync";
-import { CollectionProvider } from "@/features/collection/context/collection-context";
-import { GearProvider } from "@/features/midi-hardware/context/gear-context";
-import { OptionsProvider } from "@/features/settings/context/options-context";
-import { ScoreProvider } from "@/features/score/context/score-context";
 import { StageProvider } from "@/app/play/context/stage-context";
+import { CollectionProvider } from "@/features/collection/context/collection-context";
+import { useTrackSync } from "@/features/collection/hooks/use-track-sync";
 import { TrackProvider } from "@/features/midi-assets/context/track-context";
+import { GearProvider } from "@/features/midi-hardware/context/gear-context";
+import { ScoreProvider } from "@/features/score/context/score-context";
+import { OptionsProvider } from "@/features/settings/context/options-context";
 
 /**
  * Child component that invokes coordinator hooks.

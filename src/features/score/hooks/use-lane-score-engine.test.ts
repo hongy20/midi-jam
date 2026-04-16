@@ -1,9 +1,9 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { NoteSpan } from "@/features/midi-assets/lib/midi-parser";
+import { useMIDINotes } from "@/features/midi-hardware/hooks/use-midi-notes";
 import type { MIDINoteEvent } from "@/features/midi-hardware/lib/midi-listener";
 import { useLaneScoreEngine } from "./use-lane-score-engine";
-import { useMIDINotes } from "@/features/midi-hardware/hooks/use-midi-notes";
 
 vi.mock("@/features/midi-hardware/hooks/use-midi-notes", () => ({
   useMIDINotes: vi.fn(),

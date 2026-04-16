@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { MIDI_COMMAND_NOTE_OFF, MIDI_COMMAND_NOTE_ON } from "@/features/midi-assets/lib/constant";
+import {
+  MIDI_COMMAND_NOTE_OFF,
+  MIDI_COMMAND_NOTE_ON,
+} from "@/features/midi-assets/lib/constant";
 import { subscribeToNotes } from "./midi-listener";
 
 describe("subscribeToNotes", () => {

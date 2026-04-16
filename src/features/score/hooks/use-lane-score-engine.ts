@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { NoteSpan } from "@/features/midi-assets/lib/midi-parser";
-import { calculateMaxRawPoints } from "@/features/score/lib/score-utils";
 import { useMIDINotes } from "@/features/midi-hardware/hooks/use-midi-notes";
+import { calculateMaxRawPoints } from "@/features/score/lib/score-utils";
 
 const PERFECT_THRESHOLD = 200; // ms (increased from 150 for better tolerance)
 const GOOD_THRESHOLD = 500; // ms (increased from 300)
