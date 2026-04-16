@@ -30,6 +30,17 @@ export function useLaneScoreEngine({
 
   const processedNotesRef = useRef<Set<number>>(new Set());
   const currentIndexRef = useRef(0);
+  const activeHitsRef = useRef<
+    Map<
+      number,
+      {
+        actualOnTimeMs: number;
+        modelIdx: number;
+        basePoints: number;
+        comboMultiplier: number;
+      }
+    >
+  >(new Map());
 
   // Restore state on mount if needed
   useEffect(() => {
@@ -56,7 +67,27 @@ export function useLaneScoreEngine({
     lastHitQualityRef.current = null;
     processedNotesRef.current.clear();
     currentIndexRef.current = 0;
+    activeHitsRef.current.clear();
   }, []);
+
+  const calculateOverlapRatio = useCallback(
+    (
+      actualOn: number,
+      actualOff: number,
+      targetOn: number,
+      targetOff: number,
+    ) => {
+      const targetDuration = targetOff - targetOn;
+      if (targetDuration <= 0) return 0;
+
+      const intersectionStart = Math.max(actualOn, targetOn);
+      const intersectionEnd = Math.min(actualOff, targetOff);
+      const intersection = Math.max(0, intersectionEnd - intersectionStart);
+
+      return intersection / targetDuration;
+    },
+    [],
+  );
 
   const processNoteEvent = useCallback(
     (event: {
@@ -64,16 +95,34 @@ export function useLaneScoreEngine({
       note: number;
       velocity: number;
     }) => {
-      if (event.type === "note-off") return;
-
       const currentTimeMs = getCurrentTimeMs();
 
+      // --- HANDLE NOTE OFF ---
+      if (event.type === "note-off") {
+        const hit = activeHitsRef.current.get(event.note);
+        if (hit) {
+          const modelEvent = modelEvents[hit.modelIdx];
+          const targetOn = modelEvent.timeMs;
+          const targetOff = targetOn + (modelEvent.durationMs ?? 0);
+
+          const precision = calculateOverlapRatio(
+            hit.actualOnTimeMs,
+            currentTimeMs,
+            targetOn,
+            targetOff,
+          );
+
+          scoreRef.current += hit.basePoints * precision * hit.comboMultiplier;
+          activeHitsRef.current.delete(event.note);
+        }
+        return;
+      }
+
+      // --- HANDLE NOTE ON ---
       // Find closest model noteOn event for this pitch within a window
       let bestMatchIdx = -1;
       let minDelta = Infinity;
 
-      // Only scan from currentIndexRef.current onwards
-      // Since modelEvents is sorted by time, we can stop if we go too far past currentTimeMs
       for (let i = currentIndexRef.current; i < modelEvents.length; i++) {
         const modelEvent = modelEvents[i];
         if (modelEvent.type !== "noteOn") continue;
@@ -81,10 +130,8 @@ export function useLaneScoreEngine({
         const targetTimeMs = modelEvent.timeMs;
         const delta = Math.abs(currentTimeMs - targetTimeMs);
 
-        // If this event is already too far in the future, we can stop searching
         if (targetTimeMs > currentTimeMs + GOOD_THRESHOLD) break;
 
-        // If it's the correct note and not processed, check if it's the best match
         if (
           modelEvent.note === event.note &&
           !processedNotesRef.current.has(i)
@@ -107,29 +154,37 @@ export function useLaneScoreEngine({
           points = 100;
         }
 
+        const multiplier = 1 + Math.floor(comboRef.current / 10) * 0.1;
+
+        // Register active hit - points are added on release
+        activeHitsRef.current.set(event.note, {
+          actualOnTimeMs: currentTimeMs,
+          modelIdx: bestMatchIdx,
+          basePoints: points,
+          comboMultiplier: multiplier,
+        });
+
         lastHitQualityRef.current = quality;
-        scoreRef.current +=
-          points * (1 + Math.floor(comboRef.current / 10) * 0.1);
         comboRef.current += 1;
       } else {
         lastHitQualityRef.current = "miss";
         comboRef.current = 0;
       }
     },
-    [modelEvents, getCurrentTimeMs],
+    [modelEvents, getCurrentTimeMs, calculateOverlapRatio],
   );
 
   useMIDINotes(midiInput, processNoteEvent);
 
-  // Miss detection and window advancement
+  // Miss detection, window advancement, and stale hit cleanup
   useEffect(() => {
     const interval = setInterval(() => {
       const currentTimeMs = getCurrentTimeMs();
 
+      // 1. Check for missing noteOn (User never pressed)
       for (let i = currentIndexRef.current; i < modelEvents.length; i++) {
         const modelEvent = modelEvents[i];
         if (modelEvent.type !== "noteOn") {
-          // Advance window for noteOff events too if we've passed them
           if (modelEvent.timeMs < currentTimeMs - GOOD_THRESHOLD) {
             currentIndexRef.current = i + 1;
           }
@@ -138,24 +193,39 @@ export function useLaneScoreEngine({
 
         const targetTimeMs = modelEvent.timeMs;
 
-        // If this note is more than GOOD_THRESHOLD past the target line, it's a miss
         if (currentTimeMs > targetTimeMs + GOOD_THRESHOLD) {
           if (!processedNotesRef.current.has(i)) {
             processedNotesRef.current.add(i);
             lastHitQualityRef.current = "miss";
             comboRef.current = 0;
           }
-          // Advance the window past this missed note
           currentIndexRef.current = i + 1;
         } else {
-          // Since events are sorted, once we hit a note that isn't a miss yet, we can stop
           break;
+        }
+      }
+
+      // 2. Check for missing noteOff (User held forever or release missed)
+      for (const [note, hit] of activeHitsRef.current.entries()) {
+        const modelEvent = modelEvents[hit.modelIdx];
+        const targetOff = modelEvent.timeMs + (modelEvent.durationMs ?? 0);
+
+        // If we are significantly past the target release, finalize the score
+        if (currentTimeMs > targetOff + GOOD_THRESHOLD) {
+          const precision = calculateOverlapRatio(
+            hit.actualOnTimeMs,
+            currentTimeMs,
+            modelEvent.timeMs,
+            targetOff,
+          );
+          scoreRef.current += hit.basePoints * precision * hit.comboMultiplier;
+          activeHitsRef.current.delete(note);
         }
       }
     }, 100);
 
     return () => clearInterval(interval);
-  }, [modelEvents, getCurrentTimeMs]);
+  }, [modelEvents, getCurrentTimeMs, calculateOverlapRatio]);
 
   return {
     getScore: useCallback(() => scoreRef.current, []),
