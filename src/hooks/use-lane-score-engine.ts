@@ -123,6 +123,7 @@ export function useLaneScoreEngine({
             targetOff,
           );
 
+          console.log(`[ScoreEngine] ID=${hit.modelIdx} Note=${event.note} Precision=${precision.toFixed(4)} Multiplier=${hit.comboMultiplier.toFixed(1)} AddPoints=${(hit.basePoints * precision * hit.comboMultiplier).toFixed(1)}`);
           scoreRef.current += hit.basePoints * precision * hit.comboMultiplier;
           activeHitsRef.current.delete(event.note);
         }
@@ -166,6 +167,8 @@ export function useLaneScoreEngine({
         }
 
         const multiplier = 1 + Math.floor(comboRef.current / 10) * 0.1;
+
+        console.log(`[ScoreEngine] NoteON ID=${bestMatchIdx} Note=${event.note} Quality=${quality} Multiplier=${multiplier}`);
 
         // Register active hit - points are added on release
         activeHitsRef.current.set(event.note, {
