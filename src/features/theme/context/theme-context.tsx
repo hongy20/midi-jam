@@ -9,13 +9,13 @@ import {
   useState,
 } from "react";
 import { Theme } from "@/features/theme/lib/themes";
-import type { ThemeMode } from "@/shared/types/theme";
+import type { Mode } from "@/shared/types/mode";
 
 interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
-  mode: ThemeMode;
-  setMode: (mode: ThemeMode) => void;
+  mode: Mode;
+  setMode: (mode: Mode) => void;
 }
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
@@ -26,10 +26,10 @@ export function ThemeProvider({
 }: {
   children: ReactNode;
   theme?: Theme;
-  mode?: ThemeMode;
+  mode?: Mode;
 }) {
   const [theme, setThemeState] = useState<Theme>(forcedTheme || "default");
-  const [mode, setModeState] = useState<ThemeMode>(forcedMode || "light");
+  const [mode, setModeState] = useState<Mode>(forcedMode || "light");
 
   useEffect(() => {
     if (forcedTheme) {
@@ -53,7 +53,7 @@ export function ThemeProvider({
     }
 
     if (forcedMode === undefined) {
-      const savedMode = localStorage.getItem("midi-jam-mode") as ThemeMode;
+      const savedMode = localStorage.getItem("midi-jam-mode") as Mode;
       if (savedMode) {
         setModeState(savedMode);
       } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
@@ -67,7 +67,7 @@ export function ThemeProvider({
     localStorage.setItem("midi-jam-theme", newTheme);
   }, []);
 
-  const setMode = useCallback((newMode: ThemeMode) => {
+  const setMode = useCallback((newMode: Mode) => {
     setModeState(newMode);
     localStorage.setItem("midi-jam-mode", newMode);
   }, []);

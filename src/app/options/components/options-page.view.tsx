@@ -21,7 +21,7 @@ import {
 } from "@/shared/components/ui/8bit/select";
 import { Toggle } from "@/shared/components/ui/8bit/toggle";
 import { RetroModeSwitcher } from "@/shared/components/ui/retro-mode-switcher";
-import type { ThemeMode } from "@/shared/types/theme";
+import type { Mode } from "@/shared/types/mode";
 import { ThemePicker } from "./theme-picker";
 
 interface OptionsPageViewProps {
@@ -31,7 +31,7 @@ interface OptionsPageViewProps {
   setDemoMode: (enabled: boolean) => void;
   activeTheme: Theme;
   onThemeChange: (theme: Theme) => void;
-  mode: ThemeMode;
+  mode: Mode;
   onModeToggle: () => void;
   onBack: () => void;
 }

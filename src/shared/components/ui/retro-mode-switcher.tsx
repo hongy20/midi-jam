@@ -2,11 +2,11 @@
 
 import { Button } from "@/shared/components/ui/8bit/button";
 import { cn } from "@/shared/lib/utils";
-import type { ThemeMode } from "@/shared/types/theme";
+import type { Mode } from "@/shared/types/mode";
 
 interface RetroModeSwitcherProps {
   className?: string;
-  mode: ThemeMode;
+  mode: Mode;
   onToggle: () => void;
 }
 

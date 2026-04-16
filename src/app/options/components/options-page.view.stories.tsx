@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import type { Theme } from "@/features/theme/lib/themes";
-import type { ThemeMode } from "@/shared/types/theme";
+import type { Mode } from "@/shared/types/mode";
 import { OptionsPageView } from "./options-page.view";
 
 const meta: Meta<typeof OptionsPageView> = {
@@ -13,7 +13,7 @@ const meta: Meta<typeof OptionsPageView> = {
     difficulty: "normal",
     demoMode: true,
     activeTheme: "default" as Theme,
-    mode: "light" as ThemeMode,
+    mode: "light" as Mode,
     onThemeChange: (theme: Theme) => console.log("Theme set to", theme),
     onModeToggle: () => console.log("Toggle mode"),
     onDifficultyChange: (val: string) => console.log("Difficulty set to", val),
