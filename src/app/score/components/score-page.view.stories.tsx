@@ -15,8 +15,7 @@ type Story = StoryObj<typeof ScorePageView>;
 export const Outstanding: Story = {
   args: {
     title: "Outstanding!",
-    score: "1,234",
-    accuracy: "98%",
+    score: "100.00",
     combo: 450,
     onRetry: () => {},
     onSongs: () => {},
@@ -28,7 +27,6 @@ export const Great: Story = {
   args: {
     ...Outstanding.args,
     title: "Great Job!",
-    accuracy: "75%",
     combo: 120,
   },
 };
@@ -37,7 +35,6 @@ export const KeepPracticing: Story = {
   args: {
     ...Outstanding.args,
     title: "Keep Practicing!",
-    accuracy: "32%",
     combo: 15,
   },
 };

@@ -44,7 +44,6 @@ export function ScorePageClient() {
     <ScorePageView
       title={titleLabel}
       score={results.score.toFixed(2)}
-      accuracy={`${results.accuracy.toFixed(2)}%`}
       combo={results.combo}
       onRetry={handleRetry}
       onSongs={handleSongs}
