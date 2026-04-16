@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "./retro-globals.css";
-import { NavigationGuard } from "@/components/navigation-guard/navigation-guard";
-import { CombinedProvider } from "@/context/combined-provider";
-import { ThemeProvider } from "@/context/theme-context";
+import { NavigationGuard } from "@/features/navigation/components/navigation-guard";
+import { ThemeProvider } from "@/features/theme/context/theme-context";
+import { CombinedProvider } from "@/shared/providers/CombinedProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

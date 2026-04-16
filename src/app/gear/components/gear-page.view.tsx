@@ -1,14 +1,14 @@
 "use client";
 
 import { Piano } from "lucide-react";
-import { Button } from "@/components/ui/8bit/button";
+import { Button } from "@/shared/components/ui/8bit/button";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/8bit/carousel";
+} from "@/shared/components/ui/8bit/carousel";
 import { GearCard } from "./gear-card";
 import { GearHeader } from "./gear-header";
 

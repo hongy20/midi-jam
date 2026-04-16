@@ -1,7 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 // Mock constant values if needed, though they are imported from constants
-import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
+import {
+  PIANO_88_KEY_MAX,
+  PIANO_88_KEY_MIN,
+} from "@/features/midi-assets/lib/constant";
 import { PianoKeyboard } from "./PianoKeyboard";
 
 describe("PianoKeyboard", () => {

@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
-import { useCollection } from "@/context/collection-context";
-import { useNavigation } from "@/hooks/use-navigation";
+import { useCollection } from "@/features/collection/context/collection-context";
+import { useNavigation } from "@/features/navigation/hooks/use-navigation";
 import { CollectionPageView } from "./collection-page.view";
 import type { SongCardTrack } from "./song-card";
 

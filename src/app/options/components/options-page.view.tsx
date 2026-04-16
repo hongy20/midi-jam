@@ -1,27 +1,27 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/8bit/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/8bit/card";
+import type { Difficulty } from "@/features/settings/context/options-context";
+import type { ThemeMode } from "@/features/theme/context/theme-context";
+import type { Theme } from "@/features/theme/lib/themes";
+import { Button } from "@/shared/components/ui/8bit/button";
+import { Card, CardContent, CardTitle } from "@/shared/components/ui/8bit/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/8bit/carousel";
+} from "@/shared/components/ui/8bit/carousel";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/8bit/select";
-import { Toggle } from "@/components/ui/8bit/toggle";
-import { RetroModeSwitcher } from "@/components/ui/retro-mode-switcher";
-import type { Difficulty } from "@/context/options-context";
-import type { ThemeMode } from "@/context/theme-context";
-import type { Theme } from "@/lib/themes";
+} from "@/shared/components/ui/8bit/select";
+import { Toggle } from "@/shared/components/ui/8bit/toggle";
+import { RetroModeSwitcher } from "@/shared/components/ui/retro-mode-switcher";
 import { ThemePicker } from "./theme-picker";
 
 interface OptionsPageViewProps {

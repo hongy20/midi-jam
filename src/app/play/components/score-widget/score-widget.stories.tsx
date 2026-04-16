@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import type { HitQuality } from "@/hooks/use-lane-score-engine";
+import type { HitQuality } from "@/features/score/hooks/use-lane-score-engine";
 import { ScoreWidget } from "./score-widget";
 
 const meta: Meta<typeof ScoreWidget> = {

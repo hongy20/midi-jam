@@ -1,27 +1,27 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useCollection } from "@/context/collection-context";
-import { useGear } from "@/context/gear-context";
-import { useOptions } from "@/context/options-context";
-import { useScore } from "@/context/score-context";
-import { useStage } from "@/context/stage-context";
-import { useTrack } from "@/context/track-context";
-import { useActiveNotes } from "@/hooks/use-active-notes";
-import { useAutoPause } from "@/hooks/use-auto-pause";
-import { useDemoPlayback } from "@/hooks/use-demo-playback";
-import { useFullscreen } from "@/hooks/use-fullscreen";
-import { useLaneScoreEngine } from "@/hooks/use-lane-score-engine";
-import { useLaneTimeline } from "@/hooks/use-lane-timeline";
-import { useMidiAudio } from "@/hooks/use-midi-audio";
-import { useNavigation } from "@/hooks/use-navigation";
-import { useWakeLock } from "@/hooks/use-wake-lock";
-import { getNoteUnits, getVisibleMidiRange } from "@/lib/device/piano";
+import { useStage } from "@/app/play/context/stage-context";
+import { useActiveNotes } from "@/app/play/hooks/use-active-notes";
+import { useDemoPlayback } from "@/app/play/hooks/use-demo-playback";
+import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";
+import { useMidiAudio } from "@/features/audio/hooks/use-midi-audio";
+import { useCollection } from "@/features/collection/context/collection-context";
+import { useTrack } from "@/features/midi-assets/context/track-context";
 import {
   LANE_SCROLL_DURATION_MS,
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
-} from "@/lib/midi/constant";
+} from "@/features/midi-assets/lib/constant";
+import { useGear } from "@/features/midi-hardware/context/gear-context";
+import { useNavigation } from "@/features/navigation/hooks/use-navigation";
+import { useScore } from "@/features/score/context/score-context";
+import { useLaneScoreEngine } from "@/features/score/hooks/use-lane-score-engine";
+import { useOptions } from "@/features/settings/context/options-context";
+import { getNoteUnits, getVisibleMidiRange } from "@/app/play/lib/piano";
+import { useAutoPause } from "@/shared/hooks/use-auto-pause";
+import { useFullscreen } from "@/shared/hooks/use-fullscreen";
+import { useWakeLock } from "@/shared/hooks/use-wake-lock";
 
 import { PlayPageView } from "./play-page.view";
 

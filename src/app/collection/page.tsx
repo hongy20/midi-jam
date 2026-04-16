@@ -1,4 +1,4 @@
-import { getSoundTracks } from "@/lib/action/sound-track";
+import { getSoundTracks } from "@/features/audio/lib/sound-track";
 import { CollectionPageClient } from "./components/collection-page.client";
 
 export const metadata = {

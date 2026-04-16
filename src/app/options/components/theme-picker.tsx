@@ -2,16 +2,16 @@
 
 import { Check } from "lucide-react";
 import * as React from "react";
-import { Button } from "@/components/ui/8bit/button";
+import { Theme } from "@/features/theme/lib/themes";
+import { Button } from "@/shared/components/ui/8bit/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/8bit/dialog";
-import { Theme } from "@/lib/themes";
-import { cn } from "@/lib/utils";
+} from "@/shared/components/ui/8bit/dialog";
+import { cn } from "@/shared/lib/utils";
 
 const themes = [
   { name: Theme.Default, color: "#000" },

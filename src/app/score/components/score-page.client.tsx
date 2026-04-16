@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import { useScore } from "@/context/score-context";
-import { useStage } from "@/context/stage-context";
-import { useNavigation } from "@/hooks/use-navigation";
+import { useStage } from "@/app/play/context/stage-context";
+import { useNavigation } from "@/features/navigation/hooks/use-navigation";
+import { useScore } from "@/features/score/context/score-context";
 import { ScorePageView } from "./score-page.view";
 
 export function ScorePageClient() {
