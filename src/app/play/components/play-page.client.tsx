@@ -41,25 +41,25 @@ export function PlayPageClient() {
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   // Extract data with fallbacks to ensure hooks are called unconditionally
-  const modelNotes = trackStatus.isReady ? trackStatus.spans : [];
+  const spans = trackStatus.isReady ? trackStatus.spans : [];
   const groups = trackStatus.isReady ? trackStatus.groups : [];
   const totalDurationMs = trackStatus.isReady ? trackStatus.totalDurationMs : 0;
   const isLoading = trackStatus.isLoading;
 
   // Calculate dynamic piano range for consistent grid alignment
   const visibleMidiRange = useMemo(() => {
-    if (modelNotes.length === 0) {
+    if (spans.length === 0) {
       return { startNote: PIANO_88_KEY_MIN, endNote: PIANO_88_KEY_MAX };
     }
-    return getVisibleMidiRange(modelNotes.map((n) => n.note));
-  }, [modelNotes]);
+    return getVisibleMidiRange(spans.map((n) => n.note));
+  }, [spans]);
 
   const { startUnit, endUnit } = getNoteUnits(
     visibleMidiRange.startNote,
     visibleMidiRange.endNote,
   );
 
-  const totalNotes = modelNotes.length;
+  const totalNotes = spans.length;
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
@@ -90,7 +90,7 @@ export function PlayPageClient() {
     finalizeScore,
   } = useLaneScoreEngine({
     midiInput: selectedMIDIInput,
-    modelNotes,
+    spans,
     getCurrentTimeMs,
     initialScore: gameSession?.score ?? 0,
     initialCombo: gameSession?.combo ?? 0,

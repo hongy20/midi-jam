@@ -11,7 +11,7 @@ export type HitQuality = "perfect" | "good" | "miss" | null;
 
 interface UseLaneScoreEngineProps {
   midiInput: WebMidi.MIDIInput | null;
-  modelNotes: NoteSpan[];
+  spans: NoteSpan[];
   getCurrentTimeMs: () => number;
   initialScore?: number;
   initialCombo?: number;
@@ -20,15 +20,15 @@ interface UseLaneScoreEngineProps {
 
 export function useLaneScoreEngine({
   midiInput,
-  modelNotes,
+  spans,
   getCurrentTimeMs,
   initialScore = 0,
   initialCombo = 0,
   initialTimeMs = 0,
 }: UseLaneScoreEngineProps) {
   const maxRawPoints = useMemo(
-    () => calculateMaxRawPoints(modelNotes.length),
-    [modelNotes.length],
+    () => calculateMaxRawPoints(spans.length),
+    [spans.length],
   );
   // `initialScore` is normalized (0-100). Convert it back to raw points for internal tracking.
   const initialRawScore =
@@ -58,8 +58,8 @@ export function useLaneScoreEngine({
   useEffect(() => {
     if (initialTimeMs > 0) {
       let nextIndex = 0;
-      for (let i = 0; i < modelNotes.length; i++) {
-        const note = modelNotes[i];
+      for (let i = 0; i < spans.length; i++) {
+        const note = spans[i];
         const targetTimeMs = note.startTimeMs;
 
         if (targetTimeMs < initialTimeMs - GOOD_THRESHOLD) {
@@ -71,7 +71,7 @@ export function useLaneScoreEngine({
       }
       currentIndexRef.current = nextIndex;
     }
-  }, [initialTimeMs, modelNotes]);
+  }, [initialTimeMs, spans]);
 
   const resetScore = useCallback(() => {
     scoreRef.current = 0;
@@ -139,8 +139,8 @@ export function useLaneScoreEngine({
       let bestMatchIdx = -1;
       let minDelta = Infinity;
 
-      for (let i = currentIndexRef.current; i < modelNotes.length; i++) {
-        const note = modelNotes[i];
+      for (let i = currentIndexRef.current; i < spans.length; i++) {
+        const note = spans[i];
         const targetTimeMs = note.startTimeMs;
         const delta = Math.abs(currentTimeMs - targetTimeMs);
 
@@ -156,7 +156,7 @@ export function useLaneScoreEngine({
 
       if (bestMatchIdx !== -1 && minDelta < GOOD_THRESHOLD) {
         processedNotesRef.current.add(bestMatchIdx);
-        const note = modelNotes[bestMatchIdx];
+        const note = spans[bestMatchIdx];
 
         let quality: HitQuality = "good";
         let points = 50;
@@ -184,7 +184,7 @@ export function useLaneScoreEngine({
         comboRef.current = 0;
       }
     },
-    [modelNotes, getCurrentTimeMs, commitHitScore],
+    [spans, getCurrentTimeMs, commitHitScore],
   );
 
   useMIDINotes(midiInput, processNoteEvent);
@@ -195,8 +195,8 @@ export function useLaneScoreEngine({
       const currentTimeMs = getCurrentTimeMs();
 
       // 1. Check for missing noteOn (User never pressed)
-      for (let i = currentIndexRef.current; i < modelNotes.length; i++) {
-        const note = modelNotes[i];
+      for (let i = currentIndexRef.current; i < spans.length; i++) {
+        const note = spans[i];
         const targetTimeMs = note.startTimeMs;
 
         if (currentTimeMs > targetTimeMs + GOOD_THRESHOLD) {
@@ -221,7 +221,7 @@ export function useLaneScoreEngine({
     }, 100);
 
     return () => clearInterval(interval);
-  }, [modelNotes, getCurrentTimeMs, commitHitScore]);
+  }, [spans, getCurrentTimeMs, commitHitScore]);
 
   const finalizeScore = useCallback(() => {
     const currentTimeMs = getCurrentTimeMs();

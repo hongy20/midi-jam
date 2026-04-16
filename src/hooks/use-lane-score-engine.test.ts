@@ -10,7 +10,7 @@ vi.mock("./use-midi-notes", () => ({
 }));
 
 describe("useLaneScoreEngine hook", () => {
-  const modelNotes = [
+  const spans = [
     { id: "1", note: 60, startTimeMs: 3000, velocity: 0.7, durationMs: 1000 },
   ] as NoteSpan[];
 
@@ -28,7 +28,7 @@ describe("useLaneScoreEngine hook", () => {
     const { result } = renderHook(() =>
       useLaneScoreEngine({
         midiInput: {} as WebMidi.MIDIInput,
-        modelNotes,
+        spans,
         getCurrentTimeMs: () => currentTime,
       }),
     );
@@ -57,7 +57,7 @@ describe("useLaneScoreEngine hook", () => {
     const { result } = renderHook(() =>
       useLaneScoreEngine({
         midiInput: null,
-        modelNotes,
+        spans,
         getCurrentTimeMs: () => currentTime,
       }),
     );
@@ -89,7 +89,7 @@ describe("useLaneScoreEngine hook", () => {
     const { result } = renderHook(() =>
       useLaneScoreEngine({
         midiInput: null,
-        modelNotes,
+        spans,
         getCurrentTimeMs: () => 3000,
       }),
     );
@@ -121,7 +121,7 @@ describe("useLaneScoreEngine hook", () => {
     const { result } = renderHook(() =>
       useLaneScoreEngine({
         midiInput: null,
-        modelNotes,
+        spans,
         getCurrentTimeMs: () => currentTime,
       }),
     );
