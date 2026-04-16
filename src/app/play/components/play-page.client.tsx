@@ -60,12 +60,13 @@ export function PlayPageClient() {
     visibleMidiRange.endNote,
   );
 
-  const noteOnEvents = useMemo(
-    () => events.filter((e) => e.type === "noteOn"),
-    [events],
+  const totalNotes = useMemo(
+    () => groups.reduce((acc, g) => acc + g.spans.length, 0),
+    [groups],
   );
 
-  const totalNotes = noteOnEvents.length;
+  const modelNotes = useMemo(() => groups.flatMap((g) => g.spans), [groups]);
+
   const maxPossibleScore = useMemo(
     () => calculateMaxPossibleScore(totalNotes),
     [totalNotes],
@@ -100,7 +101,7 @@ export function PlayPageClient() {
     finalizeScore,
   } = useLaneScoreEngine({
     midiInput: selectedMIDIInput,
-    modelEvents: noteOnEvents,
+    modelNotes,
     getCurrentTimeMs,
     initialScore: gameSession?.score ?? 0,
     initialCombo: gameSession?.combo ?? 0,

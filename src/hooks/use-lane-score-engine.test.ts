@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MIDINoteEvent } from "@/lib/midi/midi-listener";
-import type { MidiEvent } from "@/lib/midi/midi-parser";
+import type { NoteSpan } from "@/lib/midi/midi-parser";
 import { useLaneScoreEngine } from "./use-lane-score-engine";
 import { useMIDINotes } from "./use-midi-notes";
 
@@ -10,9 +10,9 @@ vi.mock("./use-midi-notes", () => ({
 }));
 
 describe("useLaneScoreEngine hook", () => {
-  const modelEvents = [
-    { type: "noteOn", note: 60, timeMs: 3000, velocity: 0.7, durationMs: 1000 },
-  ] as MidiEvent[];
+  const modelNotes = [
+    { id: "1", note: 60, startTimeMs: 3000, velocity: 0.7, durationMs: 1000 },
+  ] as NoteSpan[];
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -28,7 +28,7 @@ describe("useLaneScoreEngine hook", () => {
     const { result } = renderHook(() =>
       useLaneScoreEngine({
         midiInput: {} as WebMidi.MIDIInput,
-        modelEvents,
+        modelNotes,
         getCurrentTimeMs: () => currentTime,
       }),
     );
@@ -57,7 +57,7 @@ describe("useLaneScoreEngine hook", () => {
     const { result } = renderHook(() =>
       useLaneScoreEngine({
         midiInput: null,
-        modelEvents,
+        modelNotes,
         getCurrentTimeMs: () => currentTime,
       }),
     );
@@ -89,7 +89,7 @@ describe("useLaneScoreEngine hook", () => {
     const { result } = renderHook(() =>
       useLaneScoreEngine({
         midiInput: null,
-        modelEvents,
+        modelNotes,
         getCurrentTimeMs: () => 3000,
       }),
     );
@@ -121,7 +121,7 @@ describe("useLaneScoreEngine hook", () => {
     const { result } = renderHook(() =>
       useLaneScoreEngine({
         midiInput: null,
-        modelEvents,
+        modelNotes,
         getCurrentTimeMs: () => currentTime,
       }),
     );

@@ -12,7 +12,6 @@ export interface MidiEvent {
   type: "noteOn" | "noteOff";
   note: number;
   velocity: number;
-  durationMs?: number; // Only present for noteOn
 }
 
 export interface NoteSpan {
@@ -94,7 +93,6 @@ export function getMidiEvents(
         type: "noteOn",
         note: note.midi,
         velocity: note.velocity,
-        durationMs,
       });
       events.push({
         timeMs: eventTimeMs + durationMs,
