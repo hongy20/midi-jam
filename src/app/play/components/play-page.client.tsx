@@ -22,6 +22,7 @@ import {
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "@/lib/midi/constant";
+import { calculateMaxPossibleScore } from "@/lib/midi/score-utils";
 import { PlayPageView } from "./play-page.view";
 
 /**
@@ -135,9 +136,15 @@ export function PlayPageClient() {
     handleFinishRef.current = () => {
       const finalScore = getScore();
       const finalCombo = getCombo();
+      const totalNotes = events.filter((e) => e.type === "noteOn").length;
+      const maxPossibleScore = calculateMaxPossibleScore(totalNotes);
+
       setSessionResults({
         score: finalScore,
-        accuracy: Math.floor((finalScore / (events.length * 100)) * 100) || 0,
+        accuracy:
+          maxPossibleScore > 0
+            ? Math.floor((finalScore / maxPossibleScore) * 100)
+            : 0,
         combo: finalCombo,
       });
       setGameSession(null);
