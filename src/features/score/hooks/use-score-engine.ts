@@ -9,7 +9,7 @@ const DURATION_GRACE_MS = 150; // ms to account for scheduling jitter
 
 export type HitQuality = "perfect" | "good" | "miss" | null;
 
-interface UseLaneScoreEngineProps {
+interface UseScoreEngineProps {
   midiInput: WebMidi.MIDIInput | null;
   spans: NoteSpan[];
   getCurrentTimeMs: () => number;
@@ -25,7 +25,7 @@ export function useScoreEngine({
   initialScore = 0,
   initialCombo = 0,
   initialTimeMs = 0,
-}: UseLaneScoreEngineProps) {
+}: UseScoreEngineProps) {
   const maxRawPoints = useMemo(
     () => calculateMaxRawPoints(spans.length),
     [spans.length],
