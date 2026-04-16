@@ -11,7 +11,18 @@
     );
   grid-template-rows: 1fr;
   overflow: hidden;
-  opacity: 1;
+  /* Hardware accelerated fade-out mask */
+  mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.4) 40%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0) 100%
+  );
 }
 
 .lane {
@@ -19,10 +30,12 @@
   height: 100%;
   box-sizing: border-box;
   min-width: 0;
+  /* Subtle key colors mixed with transparency */
   background-color: color-mix(
     in srgb,
-    var(--lane-white),
-    var(--lane-black) calc(var(--is-black) * 100%)
+    var(--piano-key-white) calc((1 - var(--is-black)) * 8%),
+    var(--piano-key-black) calc(var(--is-black) * 35%)
   );
-  border-right-color: rgba(255, 255, 255, calc(0.05 * var(--is-black)));
+  /* Very subtle separator line for black keys to create visual separation */
+  border-right: 1px solid rgba(255, 255, 255, calc(0.04 * var(--is-black)));
 }
