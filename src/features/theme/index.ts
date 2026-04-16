@@ -1,3 +1,4 @@
-// Theme Public API
-export * from "./context/theme-context";
-export * from "./lib/themes";
+// Theme Feature Public API
+export { ThemeProvider, useTheme } from "./context/theme-context";
+export { Theme } from "./lib/themes";
+export type { Theme as ThemeType } from "./lib/themes";
