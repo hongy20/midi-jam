@@ -41,9 +41,9 @@ export const ScoreWidget = memo(function ScoreWidget({
       const quality = getLastHitQuality();
       const state = lastStateRef.current;
 
-      // 1. Update Score
+      // 1. Update Score (Normalized)
       if (score !== state.score && scoreValueRef.current) {
-        scoreValueRef.current.textContent = score.toLocaleString();
+        scoreValueRef.current.textContent = score.toFixed(1);
         state.score = score;
       }
 

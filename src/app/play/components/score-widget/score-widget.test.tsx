@@ -4,7 +4,7 @@ import { ScoreWidget } from "./score-widget";
 
 describe("ScoreWidget", () => {
   const defaultProps = {
-    getScore: () => 1250,
+    getScore: () => 50.0,
     getCombo: () => 15,
     getLastHitQuality: () => "perfect" as const,
     getProgress: () => 0.45,
@@ -18,7 +18,7 @@ describe("ScoreWidget", () => {
       await new Promise((resolve) => requestAnimationFrame(resolve));
     });
 
-    expect(screen.getByText(/1,250/)).toBeInTheDocument();
+    expect(screen.getByText(/50.0/)).toBeInTheDocument();
     expect(screen.getByText(/15/)).toBeInTheDocument();
     expect(screen.getByText(/PERFECT!/)).toBeInTheDocument();
     expect(screen.getByText(/45%/)).toBeInTheDocument();

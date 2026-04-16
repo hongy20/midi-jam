@@ -62,7 +62,7 @@ export function useTrackSync() {
           isLoading: false,
           isReady: true,
           totalDurationMs,
-          events,
+          spans,
           groups,
           error: null,
         });

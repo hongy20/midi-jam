@@ -12,7 +12,6 @@ import {
 interface ScorePageViewProps {
   title: string;
   score: string;
-  accuracy: string;
   combo: number;
   onRetry: () => void;
   onSongs: () => void;
@@ -22,7 +21,6 @@ interface ScorePageViewProps {
 export function ScorePageView({
   title,
   score,
-  accuracy,
   combo,
   onRetry,
   onSongs,
@@ -47,14 +45,6 @@ export function ScorePageView({
               </TableCell>
               <TableCell className="text-right text-2xl font-black text-primary">
                 {score}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="opacity-60 uppercase text-xs">
-                Accuracy
-              </TableCell>
-              <TableCell className="text-right text-2xl font-black">
-                {accuracy}
               </TableCell>
             </TableRow>
             <TableRow>

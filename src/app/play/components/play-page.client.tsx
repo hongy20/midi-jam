@@ -22,6 +22,7 @@ import {
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "@/lib/midi/constant";
+
 import { PlayPageView } from "./play-page.view";
 
 /**
@@ -40,19 +41,18 @@ export function PlayPageClient() {
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   // Extract data with fallbacks to ensure hooks are called unconditionally
-  const events = trackStatus.isReady ? trackStatus.events : [];
+  const spans = trackStatus.isReady ? trackStatus.spans : [];
   const groups = trackStatus.isReady ? trackStatus.groups : [];
   const totalDurationMs = trackStatus.isReady ? trackStatus.totalDurationMs : 0;
   const isLoading = trackStatus.isLoading;
 
   // Calculate dynamic piano range for consistent grid alignment
   const visibleMidiRange = useMemo(() => {
-    if (groups.length === 0) {
+    if (spans.length === 0) {
       return { startNote: PIANO_88_KEY_MIN, endNote: PIANO_88_KEY_MAX };
     }
-    const notes = groups.flatMap((g) => g.spans.map((s) => s.note));
-    return getVisibleMidiRange(notes);
-  }, [groups]);
+    return getVisibleMidiRange(spans.map((n) => n.note));
+  }, [spans]);
 
   const { startUnit, endUnit } = getNoteUnits(
     visibleMidiRange.startNote,
@@ -80,14 +80,15 @@ export function PlayPageClient() {
     onFinish: onFinishProxy,
   });
 
-  const { getScore, getCombo, getLastHitQuality } = useLaneScoreEngine({
-    midiInput: selectedMIDIInput,
-    modelEvents: events,
-    getCurrentTimeMs,
-    initialScore: gameSession?.score ?? 0,
-    initialCombo: gameSession?.combo ?? 0,
-    initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
-  });
+  const { getScore, getCombo, getLastHitQuality, processNoteEvent } =
+    useLaneScoreEngine({
+      midiInput: selectedMIDIInput,
+      spans,
+      getCurrentTimeMs,
+      initialScore: gameSession?.score ?? 0,
+      initialCombo: gameSession?.combo ?? 0,
+      initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
+    });
 
   const { playNote, stopNote } = useMidiAudio(selectedMIDIOutput);
 
@@ -99,8 +100,13 @@ export function PlayPageClient() {
         return next;
       });
       playNote(note, velocity);
+
+      // If in demo mode, feed the note to the scoring engine
+      if (demoMode) {
+        processNoteEvent({ type: "note-on", note, velocity });
+      }
     },
-    [playNote],
+    [playNote, demoMode, processNoteEvent],
   );
 
   const onNoteOff = useCallback(
@@ -111,8 +117,12 @@ export function PlayPageClient() {
         return next;
       });
       stopNote(note);
+
+      if (demoMode) {
+        processNoteEvent({ type: "note-off", note, velocity: 0 });
+      }
     },
-    [stopNote],
+    [stopNote, demoMode, processNoteEvent],
   );
 
   useDemoPlayback({
@@ -129,22 +139,15 @@ export function PlayPageClient() {
     handleFinishRef.current = () => {
       const finalScore = getScore();
       const finalCombo = getCombo();
+
       setSessionResults({
         score: finalScore,
-        accuracy: Math.floor((finalScore / (events.length * 100)) * 100) || 0,
         combo: finalCombo,
       });
       setGameSession(null);
       toScore();
     };
-  }, [
-    events.length,
-    setGameSession,
-    setSessionResults,
-    toScore,
-    getScore,
-    getCombo,
-  ]);
+  }, [setGameSession, setSessionResults, toScore, getScore, getCombo]);
 
   // Handle Pause
   const handlePause = useCallback(() => {
