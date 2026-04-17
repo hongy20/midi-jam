@@ -1,9 +1,9 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { buildSegmentGroups } from "@/features/midi-assets";
-import { useDemoPlayback } from "./use-demo-playback";
+import { useTrackPlayer } from "./use-track-player";
 
-describe("useDemoPlayback", () => {
+describe("useTrackPlayer", () => {
   let mockObserverCallback: IntersectionObserverCallback;
   const observe = vi.fn();
   const disconnect = vi.fn();
@@ -37,10 +37,9 @@ describe("useDemoPlayback", () => {
     container.querySelectorAll = vi.fn().mockReturnValue([note] as unknown as NodeListOf<Element>);
 
     renderHook(() =>
-      useDemoPlayback({
+      useTrackPlayer({
         containerRef,
-        demoMode: true,
-        isLoading: false,
+        enabled: true,
         groups: buildSegmentGroups({
           spans: [
             {
@@ -91,10 +90,9 @@ describe("useDemoPlayback", () => {
       .mockReturnValue([note1, note2] as unknown as NodeListOf<Element>);
 
     renderHook(() =>
-      useDemoPlayback({
+      useTrackPlayer({
         containerRef,
-        demoMode: true,
-        isLoading: false,
+        enabled: true,
         groups: buildSegmentGroups({
           spans: [
             {
