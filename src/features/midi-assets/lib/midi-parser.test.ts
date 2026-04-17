@@ -1,6 +1,6 @@
 import type { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
-import { getBarLines, getMidiEvents, getNoteSpans } from "./midi-parser";
+import { getBarLines, parseMidiNotes } from "./midi-parser";
 
 describe("midi-parser", () => {
   const mockMidi = {
@@ -25,25 +25,16 @@ describe("midi-parser", () => {
     ],
   } as unknown as Midi;
 
-  it("getMidiEvents filters by instrument and excludes zero-duration notes", () => {
-    const events = getMidiEvents(mockMidi, "piano");
-    expect(events).toHaveLength(4); // 2 notes * (on + off)
-    expect(events[0].type).toBe("noteOn");
-    expect(events[0].note).toBe(60);
-    expect(events[1].type).toBe("noteOff");
-    expect(events[1].note).toBe(60);
-  });
-
-  it("getNoteSpans correctly pairs noteOn and noteOff events", () => {
-    const events = getMidiEvents(mockMidi, "piano");
-    const spans = getNoteSpans(events);
+  it("parseMidiNotes filters by instrument and excludes zero-duration notes", () => {
+    const spans = parseMidiNotes(mockMidi, "piano");
     expect(spans).toHaveLength(2);
     expect(spans[0].note).toBe(60);
-    expect(spans[0].durationMs).toBe(1000);
+    expect(spans[0].startTimeMs).toBe(0);
     expect(spans[1].note).toBe(62);
+    expect(spans[1].startTimeMs).toBe(1000);
   });
 
-  it("getMidiEvents introduces a gap between sequential notes of the same pitch", () => {
+  it("parseMidiNotes introduces a gap between sequential notes of the same pitch", () => {
     const sequentialMidi = {
       tracks: [
         {
@@ -56,25 +47,17 @@ describe("midi-parser", () => {
       ],
     } as unknown as Midi;
 
-    const events = getMidiEvents(sequentialMidi, "piano");
-    // Events: 60-On(0), 60-Off(1000), 60-On(1010), 60-Off(2000)
-    expect(events).toHaveLength(4);
+    const spans = parseMidiNotes(sequentialMidi, "piano");
+    expect(spans).toHaveLength(2);
 
-    expect(events[0].type).toBe("noteOn");
-    expect(events[0].timeMs).toBe(0);
-
-    expect(events[1].type).toBe("noteOff");
-    expect(events[1].timeMs).toBe(1000);
+    expect(spans[0].startTimeMs).toBe(0);
+    expect(spans[0].durationMs).toBe(1000);
 
     // Second note should be shifted by MIN_NOTE_GAP_MS (10ms)
-    expect(events[2].type).toBe("noteOn");
-    expect(events[2].timeMs).toBe(1010);
-
-    expect(events[3].type).toBe("noteOff");
-    expect(events[3].timeMs).toBe(2000);
+    expect(spans[1].startTimeMs).toBe(1010);
   });
 
-  it("getMidiEvents shifts entire chords if one note has a collision", () => {
+  it("parseMidiNotes shifts entire chords if one note has a collision", () => {
     const chordMidi = {
       tracks: [
         {
@@ -89,17 +72,17 @@ describe("midi-parser", () => {
       ],
     } as unknown as Midi;
 
-    const events = getMidiEvents(chordMidi, "piano");
-    // Events: 60-On(0), 60-Off(1000), [60-On(1010), 64-On(1010)], [60-Off(2000), 64-Off(2000)]
-    expect(events).toHaveLength(6);
+    const spans = parseMidiNotes(chordMidi, "piano");
+    // Spans: 60(0-1000), [60(1010-2000), 64(1010-2000)]
+    expect(spans).toHaveLength(3);
 
-    const chordOnEvents = events.filter((e) => e.type === "noteOn" && e.timeMs > 0);
-    expect(chordOnEvents).toHaveLength(2);
-    expect(chordOnEvents[0].timeMs).toBe(1010);
-    expect(chordOnEvents[1].timeMs).toBe(1010);
+    const chordSpans = spans.filter((s) => s.startTimeMs > 500);
+    expect(chordSpans).toHaveLength(2);
+    expect(chordSpans[0].startTimeMs).toBe(1010);
+    expect(chordSpans[1].startTimeMs).toBe(1010);
   });
 
-  it("getMidiEvents detects sequential collisions across different tracks", () => {
+  it("parseMidiNotes detects sequential collisions across different tracks", () => {
     const crossTrackMidi = {
       tracks: [
         {
@@ -113,16 +96,15 @@ describe("midi-parser", () => {
       ],
     } as unknown as Midi;
 
-    const events = getMidiEvents(crossTrackMidi, "piano");
-    expect(events).toHaveLength(4);
+    const spans = parseMidiNotes(crossTrackMidi, "piano");
+    expect(spans).toHaveLength(2);
 
     // Second note (from second track) should be shifted
-    expect(events[2].note).toBe(60);
-    expect(events[2].type).toBe("noteOn");
-    expect(events[2].timeMs).toBe(1010);
+    expect(spans[1].note).toBe(60);
+    expect(spans[1].startTimeMs).toBe(1010);
   });
 
-  it("getMidiEvents detects and shifts overlapping notes of the same pitch", () => {
+  it("parseMidiNotes detects and shifts overlapping notes of the same pitch", () => {
     const overlappingMidi = {
       tracks: [
         {
@@ -135,9 +117,10 @@ describe("midi-parser", () => {
       ],
     } as unknown as Midi;
 
-    const events = getMidiEvents(overlappingMidi, "piano");
+    const spans = parseMidiNotes(overlappingMidi, "piano");
     // Should shift second note to start at 500 + gap
-    expect(events.filter((e) => e.note === 60 && e.type === "noteOn")[1].timeMs).toBe(510);
+    expect(spans[1].note).toBe(60);
+    expect(spans[1].startTimeMs).toBe(510);
   });
 
   it("getBarLines handles single time signature", () => {

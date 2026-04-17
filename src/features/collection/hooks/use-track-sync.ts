@@ -5,10 +5,9 @@ import { useCallback, useEffect, useRef } from "react";
 import { useStage } from "@/app/play/context/stage-context";
 import {
   buildSegmentGroups,
-  getMidiEvents,
-  getNoteSpans,
   LANE_SEGMENT_DURATION_MS,
   loadMidiFile,
+  parseMidiNotes,
   useTrack,
 } from "@/features/midi-assets";
 import { useGear } from "@/features/midi-hardware";
@@ -48,8 +47,7 @@ export function useTrackSync() {
     loadMidiFile(selectedTrack.url)
       .then((midi) => {
         if (!mounted) return;
-        const events = getMidiEvents(midi);
-        const spans = getNoteSpans(events);
+        const spans = parseMidiNotes(midi);
         const totalDurationMs = midi.duration * 1000;
         const thresholdMs = LANE_SEGMENT_DURATION_MS; // Alias for clarity
 

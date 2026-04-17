@@ -3,7 +3,7 @@ import path from "node:path";
 import { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
 import { buildSegmentGroups } from "./lane-segment-utils";
-import { getMidiEvents, getNoteSpans } from "./midi-parser";
+import { parseMidiNotes } from "./midi-parser";
 
 describe("lane-segment-utils integration with real MIDI", () => {
   // Helper to load and parse MIDI
@@ -11,8 +11,7 @@ describe("lane-segment-utils integration with real MIDI", () => {
     const filePath = path.join(process.cwd(), "public", "midi", filename);
     const data = fs.readFileSync(filePath);
     const midi = new Midi(data);
-    const events = getMidiEvents(midi);
-    const spans = getNoteSpans(events);
+    const spans = parseMidiNotes(midi);
     const totalDurationMs = midi.duration * 1000;
     return { spans, totalDurationMs };
   };

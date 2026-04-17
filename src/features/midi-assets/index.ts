@@ -14,4 +14,4 @@ export {
 } from "./lib/lane-segment-utils";
 export { loadMidiFile } from "./lib/midi-loader";
 export type { NoteSpan } from "./lib/midi-parser";
-export { getMidiEvents, getNoteSpans } from "./lib/midi-parser";
+export { getBarLines, parseMidiNotes } from "./lib/midi-parser";
