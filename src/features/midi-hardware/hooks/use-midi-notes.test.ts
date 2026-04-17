@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { useMIDINotes } from "./use-midi-notes";
-import { COMMAND_NOTE_ON } from "@/shared/lib/digital-instrument";
+import { COMMAND_NOTE_ON } from "@/shared/lib/command";
 
 describe("useMIDINotes", () => {
   it("should call the callback when a note event occurs", () => {

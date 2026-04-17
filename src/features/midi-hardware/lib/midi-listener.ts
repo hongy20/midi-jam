@@ -1,4 +1,4 @@
-import { COMMAND_NOTE_OFF, COMMAND_NOTE_ON } from "@/shared/lib/digital-instrument";
+import { COMMAND_NOTE_OFF, COMMAND_NOTE_ON } from "@/shared/lib/command";
 
 export type MIDINoteEvent = {
   type: "note-on" | "note-off";
