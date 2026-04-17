@@ -7,7 +7,7 @@ Midi Jam is a high-performance web application for learning musical instruments 
 - **UI**: React 19 (React Compiler enabled)
 - **Styling**: Tailwind CSS v4
 - **Audio/MIDI**: Tone.js & Web MIDI API
-- **Tooling**: Biome (Lint/Format), Vitest (Testing)
+- **Tooling**: ESLint & Prettier (Lint/Format), Vitest (Testing)
 
 ---
 
@@ -143,7 +143,7 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
 4. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion. **DO NOT rely solely on implementation plans for verification; the global SOP takes precedence.**
     - **Mandatory Completion Checklist**: Before providing a final summary to the USER, you MUST run and pass:
       - [ ] `git status` (Must have ZERO uncommitted changes; if files are pending, commit them first)
-      - [ ] `npm run lint` (Biome check)
+      - [ ] `npm run lint` (ESLint & Prettier check)
       - [ ] `npm run type-check` (TypeScript tsc)
       - [ ] `npm test` (Vitest suite)
       - [ ] `npm run build` (Next.js production build)

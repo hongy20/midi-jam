@@ -14,6 +14,7 @@ export function useLaneTimeline({
   onFinish,
 }: UseLaneTimelineProps) {
   const baseGameTimeRef = useRef(initialProgress * totalDurationMs);
+  // eslint-disable-next-line react-hooks/purity
   const syncRealTimeRef = useRef(performance.now());
   const timeoutIdRef = useRef<NodeJS.Timeout | null>(null);
 

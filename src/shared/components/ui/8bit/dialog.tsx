@@ -40,7 +40,7 @@ export interface BitDialogProps
 const DialogTitle = React.forwardRef<HTMLDivElement, BitDialogProps>(
   ({ className, font, ...props }, ref) => (
     <ShadcnDialogTitle
-      /* biome-ignore lint/suspicious/noExplicitAny: ref alignment with legacy shadcn components */
+      /* eslint-disable-next-line @typescript-eslint/no-explicit-any -- ref alignment with legacy shadcn components */
       ref={ref as any}
       className={cn(font !== "normal" && "retro", className)}
       {...props}
@@ -53,7 +53,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, BitDialogProps>(
   ({ className, children, font, ...props }, ref) => {
     return (
       <ShadcnDialogContent
-        /* biome-ignore lint/suspicious/noExplicitAny: ref alignment with legacy shadcn components */
+        /* eslint-disable-next-line @typescript-eslint/no-explicit-any -- ref alignment with legacy shadcn components */
         ref={ref as any}
         className={cn(
           "bg-card rounded-none border-none",

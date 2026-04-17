@@ -76,7 +76,7 @@ const Progress = React.forwardRef<
                 const filledSquares = Math.round(((value || 0) / 100) * 20);
                 return (
                   <div
-                    // biome-ignore lint/suspicious/noArrayIndexKey: segments are static and order never changes
+                     
                     key={i}
                     className={cn(
                       "flex-1 h-full mx-[1px]",
