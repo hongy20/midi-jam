@@ -1,7 +1,3 @@
-export type {
-  CollectionContextType,
-  Track,
-} from "./context/collection-context";
 export {
   CollectionProvider,
   useCollection,
