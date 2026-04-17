@@ -124,8 +124,6 @@ export function getVisibleSegmentIndexes(
   return visible;
 }
 
-
-
 /**
  * Computes the CSS `animation-delay` (always negative) that phase-locks a LaneSegment's
  * fall animation to the master playback clock at the moment the element is inserted into
