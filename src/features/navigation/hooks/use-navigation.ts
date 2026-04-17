@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
-import { ROUTES } from "../lib/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 /**
  * Custom hook to enforce "History Neutrality" in the game flow.

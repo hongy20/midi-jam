@@ -11,7 +11,7 @@ import {
   useTrack,
 } from "@/features/midi-assets";
 import { useGear } from "@/features/midi-hardware";
-import { ROUTES } from "@/features/navigation";
+import { ROUTES } from "@/shared/lib/routes";
 import { useScore } from "@/features/score";
 import { useCollection } from "../context/collection-context";
 
