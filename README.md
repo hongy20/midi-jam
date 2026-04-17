@@ -51,7 +51,7 @@ For detailed development principles, rendering patterns, and workflow instructio
 - `npm run dev`: Start development server (HTTPS).
 - `npm run storybook`: Launch Storybook for component development and preview.
 - `npm run build`: Create production build.
-- `npm run lint:fix`: Lint and format code with Biome.
+- `npm run lint:fix`: Lint and format code with ESLint & Prettier.
 - `npm run type-check`: Run TypeScript type checking.
 - `npm test`: Execute Vitest unit and component tests.
 
