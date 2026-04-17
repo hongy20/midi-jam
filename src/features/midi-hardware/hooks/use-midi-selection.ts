@@ -16,10 +16,8 @@ export function useMIDISelection(
   availableInputs: WebMidi.MIDIInput[] = [],
   availableOutputs: WebMidi.MIDIOutput[] = [],
 ): UseMIDISelectionResult {
-  const [selectedMIDIInput, setSelectedMIDIInput] =
-    useState<WebMidi.MIDIInput | null>(null);
-  const [selectedMIDIOutput, setSelectedMIDIOutput] =
-    useState<WebMidi.MIDIOutput | null>(null);
+  const [selectedMIDIInput, setSelectedMIDIInput] = useState<WebMidi.MIDIInput | null>(null);
+  const [selectedMIDIOutput, setSelectedMIDIOutput] = useState<WebMidi.MIDIOutput | null>(null);
 
   const selectMIDIInput = (input: WebMidi.MIDIInput | null) => {
     setSelectedMIDIInput(input);
@@ -34,17 +32,14 @@ export function useMIDISelection(
 
     // Try to find an output with the same name as the selected input
     const matchingOutput =
-      availableOutputs.find((out) => out.name === selectedMIDIInput.name) ||
-      null;
+      availableOutputs.find((out) => out.name === selectedMIDIInput.name) || null;
     setSelectedMIDIOutput(matchingOutput);
   }, [selectedMIDIInput, availableOutputs]);
 
   // Auto-deselect if the selected device is disconnected or no longer available
   useEffect(() => {
     if (selectedMIDIInput) {
-      const isAvailable = availableInputs.some(
-        (input) => input.id === selectedMIDIInput.id,
-      );
+      const isAvailable = availableInputs.some((input) => input.id === selectedMIDIInput.id);
       if (!isAvailable) {
         setSelectedMIDIInput(null);
       }

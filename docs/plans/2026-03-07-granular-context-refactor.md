@@ -3,6 +3,7 @@
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
 ## 1. Design Overview
+
 Midi Jam currently uses a monolithic `AppContext` ("God Context") that causes unnecessary re-renders across the entire application, particularly on the `Play` page. This refactor splits the context into independent, domain-specific slices and introduces a "Coordinator Hook" pattern to manage cross-slice dependencies without "Provider Hell."
 
 **Goal:** Split the monolithic `AppContext` into 7 granular, independent providers and introduce coordinator hooks to improve performance and maintainability.
@@ -12,23 +13,26 @@ Midi Jam currently uses a monolithic `AppContext` ("God Context") that causes un
 **Tech Stack:** React 19 (Context API), TypeScript, Vitest.
 
 ### 1.1. The Slices
-| Provider | Hook | Responsibility |
-| :--- | :--- | :--- |
-| `HomeProvider` | `useHome` | Global MIDI support, initial app loading state. |
-| `GearProvider` | `useGear` | MIDI device discovery, input/output selection. |
-| `OptionsProvider` | `useOptions` | Playback speed, demo mode toggle. |
-| `CollectionProvider` | `useCollection` | Metadata for the currently selected track. |
-| `TrackProvider` | `useTrack` | Raw MIDI data (events, spans) and loading status. |
-| `StageProvider` | `useStage` | Active gameplay state (score, combo, current time). |
-| `ScoreProvider` | `useScore` | Final results of the last completed session. |
+
+| Provider             | Hook            | Responsibility                                      |
+| :------------------- | :-------------- | :-------------------------------------------------- |
+| `HomeProvider`       | `useHome`       | Global MIDI support, initial app loading state.     |
+| `GearProvider`       | `useGear`       | MIDI device discovery, input/output selection.      |
+| `OptionsProvider`    | `useOptions`    | Playback speed, demo mode toggle.                   |
+| `CollectionProvider` | `useCollection` | Metadata for the currently selected track.          |
+| `TrackProvider`      | `useTrack`      | Raw MIDI data (events, spans) and loading status.   |
+| `StageProvider`      | `useStage`      | Active gameplay state (score, combo, current time). |
+| `ScoreProvider`      | `useScore`      | Final results of the last completed session.        |
 
 ### 1.2. Data Flow: Coordinator Hooks
+
 To avoid maintaining a strict nesting order, dependencies between slices are managed by "Coordinator Hooks" used at the top level of the application or within specific page layouts.
 
-*   **`useTrackSync()`**: Bridges `CollectionProvider` and `TrackProvider`. Watches `selectedTrack` and `pathname`. When a track is selected and the user navigates to a play-related path, it triggers the MIDI loader and updates `TrackProvider`.
-*   **`useAppReset()`**: Provides a unified `resetAll()` function by calling individual reset functions from all providers.
+- **`useTrackSync()`**: Bridges `CollectionProvider` and `TrackProvider`. Watches `selectedTrack` and `pathname`. When a track is selected and the user navigates to a play-related path, it triggers the MIDI loader and updates `TrackProvider`.
+- **`useAppReset()`**: Provides a unified `resetAll()` function by calling individual reset functions from all providers.
 
 ### 1.3. Performance Strategy
+
 - **Isolation**: Components using `useStage` (like the `ScoreWidget`) will no longer trigger re-renders in components using `useTrack` (like the `TrackLane`).
 - **Stable Context Values**: Each provider will use `useMemo` for its value object, ensuring that only relevant state changes trigger consumer updates.
 - **Pure Hooks**: Business logic hooks (e.g., `useMidiAudio`, `useLaneTimeline`) will remain pure and receive data via props from the modular consumer hooks.
@@ -38,7 +42,9 @@ To avoid maintaining a strict nesting order, dependencies between slices are man
 ## 2. Implementation Tasks
 
 ### Task 1: Create `HomeProvider` and `useHome`
+
 **Files:**
+
 - Create: `src/context/home-context.tsx`
 - Test: `src/context/home-context.test.tsx`
 
@@ -54,7 +60,9 @@ Extract `isHomeLoading`, `isSupported`, and `resetAll` (base) logic from `app-co
 ---
 
 ### Task 2: Create `GearProvider` and `useGear`
+
 **Files:**
+
 - Create: `src/context/gear-context.tsx`
 
 **Step 1: Implement `GearProvider`**
@@ -66,7 +74,9 @@ Extract MIDI device selection logic. Use `useMIDIDevices` and `useMIDISelection`
 ---
 
 ### Task 3: Create `OptionsProvider` and `useOptions`
+
 **Files:**
+
 - Create: `src/context/options-context.tsx`
 
 **Step 1: Implement `OptionsProvider`**
@@ -78,7 +88,9 @@ Extract `speed` and `demoMode` state and setters.
 ---
 
 ### Task 4: Create `CollectionProvider` and `useCollection`
+
 **Files:**
+
 - Create: `src/context/collection-context.tsx`
 
 **Step 1: Implement `CollectionProvider`**
@@ -90,7 +102,9 @@ Extract `selectedTrack` state and setter.
 ---
 
 ### Task 5: Create `TrackProvider` and `useTrack`
+
 **Files:**
+
 - Create: `src/context/track-context.tsx`
 
 **Step 1: Implement `TrackProvider`**
@@ -102,7 +116,9 @@ Provide `trackStatus` state and a `setTrackStatus` setter. This provider will be
 ---
 
 ### Task 6: Create `StageProvider` and `useStage`
+
 **Files:**
+
 - Create: `src/context/stage-context.tsx`
 
 **Step 1: Implement `StageProvider`**
@@ -114,7 +130,9 @@ Extract `gameSession` state and setter.
 ---
 
 ### Task 7: Create `ScoreProvider` and `useScore`
+
 **Files:**
+
 - Create: `src/context/score-context.tsx`
 
 **Step 1: Implement `ScoreProvider`**
@@ -126,7 +144,9 @@ Extract `sessionResults` state and setter.
 ---
 
 ### Task 8: Implement `useTrackSync` Coordinator
+
 **Files:**
+
 - Create: `src/hooks/use-track-sync.ts`
 
 **Step 1: Implement Logic**
@@ -138,7 +158,9 @@ Move the `useEffect` MIDI loading logic from `app-context.tsx` into this hook. I
 ---
 
 ### Task 9: Integrate Providers in `RootLayout`
+
 **Files:**
+
 - Modify: `src/app/layout.tsx`
 - Create: `src/context/combined-provider.tsx` (optional helper)
 
@@ -151,7 +173,9 @@ Replace `<AppProvider>` with the new stack of providers. Add the `useTrackSync` 
 ---
 
 ### Task 10: Update Page Consumers
+
 **Files:**
+
 - Modify: `src/app/play/page.tsx`
 - Modify: `src/app/gear/page.tsx`
 - Modify: `src/app/collection/page.tsx`
@@ -169,7 +193,9 @@ Run the app and check for re-render isolation in the `PlayPage`.
 ---
 
 ### Task 11: Cleanup
+
 **Files:**
+
 - Delete: `src/context/app-context.tsx`
 
 **Step 1: Remove old file**

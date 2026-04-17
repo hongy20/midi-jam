@@ -13,21 +13,26 @@
 ### Task 1: Update Carousel Components for Flexibility
 
 **Files:**
+
 - [MODIFY] `src/components/ui/8bit/carousel.tsx`
 
 **Step 1: Update `CarouselPrevious` and `CarouselNext` to allow overriding the positioning**
+
 - Add support for custom positioning classes by making the default `absolute` and offset classes conditional or easily overridable.
 - Ensure the `top-1/2` and `translate` logic only applies when in "side" mode.
 
 ### Task 2: Update GearPageView Layout
 
 **Files:**
+
 - [MODIFY] `src/app/gear/components/gear-page.view.tsx`
 
 **Step 1: Adjust Carousel padding**
+
 - Reduce mobile padding (e.g., `px-4` or `px-2`) to give more room to the cards.
 
 **Step 2: Re-position Navigation Buttons**
+
 - Wrap `CarouselPrevious` and `CarouselNext` in a container that displays them in a row below the content on mobile:
   ```tsx
   <div className="flex items-center justify-center gap-4 mt-6 md:block">

@@ -24,22 +24,17 @@ export function useNavigation() {
     toHome: useCallback(() => navigate(ROUTES.HOME), [navigate]),
     toCollection: useCallback(() => navigate(ROUTES.COLLECTION), [navigate]),
     toGear: useCallback(
-      (from?: string) =>
-        navigate(from ? `${ROUTES.GEAR}?from=${from}` : ROUTES.GEAR),
+      (from?: string) => navigate(from ? `${ROUTES.GEAR}?from=${from}` : ROUTES.GEAR),
       [navigate],
     ),
     toPlay: useCallback(() => navigate(ROUTES.PLAY), [navigate]),
     toPause: useCallback(() => navigate(ROUTES.PAUSE), [navigate]),
     toScore: useCallback(() => navigate(ROUTES.SCORE), [navigate]),
     toOptions: useCallback(
-      (from?: string) =>
-        navigate(from ? `${ROUTES.OPTIONS}?from=${from}` : ROUTES.OPTIONS),
+      (from?: string) => navigate(from ? `${ROUTES.OPTIONS}?from=${from}` : ROUTES.OPTIONS),
       [navigate],
     ),
-    goBack: useCallback(
-      (fallback: string = ROUTES.HOME) => navigate(fallback),
-      [navigate],
-    ),
+    goBack: useCallback((fallback: string = ROUTES.HOME) => navigate(fallback), [navigate]),
     navigate, // Keep generic navigate for special cases
   };
 }

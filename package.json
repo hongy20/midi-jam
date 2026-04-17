@@ -6,7 +6,7 @@
     "dev": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "eslint . && prettier --check .",
     "lint:fix": "eslint . --fix && prettier --write .",
     "format": "prettier --write .",
     "type-check": "next typegen && tsc --noEmit",

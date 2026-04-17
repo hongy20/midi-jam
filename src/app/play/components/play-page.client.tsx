@@ -40,8 +40,8 @@ export function PlayPageClient() {
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   // Extract data with fallbacks to ensure hooks are called unconditionally
-  const spans = trackStatus.isReady ? trackStatus.spans : [];
-  const groups = trackStatus.isReady ? trackStatus.groups : [];
+  const spans = useMemo(() => (trackStatus.isReady ? trackStatus.spans : []), [trackStatus]);
+  const groups = useMemo(() => (trackStatus.isReady ? trackStatus.groups : []), [trackStatus]);
   const totalDurationMs = trackStatus.isReady ? trackStatus.totalDurationMs : 0;
   const isLoading = trackStatus.isLoading;
 
@@ -53,10 +53,7 @@ export function PlayPageClient() {
     return getVisibleMidiRange(spans.map((n) => n.note));
   }, [spans]);
 
-  const { startUnit, endUnit } = getNoteUnits(
-    visibleMidiRange.startNote,
-    visibleMidiRange.endNote,
-  );
+  const { startUnit, endUnit } = getNoteUnits(visibleMidiRange.startNote, visibleMidiRange.endNote);
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
@@ -79,15 +76,14 @@ export function PlayPageClient() {
     onFinish: onFinishProxy,
   });
 
-  const { getScore, getCombo, getLastHitQuality, processNoteEvent } =
-    useScoreEngine({
-      midiInput: selectedMIDIInput,
-      spans,
-      getCurrentTimeMs,
-      initialScore: gameSession?.score ?? 0,
-      initialCombo: gameSession?.combo ?? 0,
-      initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
-    });
+  const { getScore, getCombo, getLastHitQuality, processNoteEvent } = useScoreEngine({
+    midiInput: selectedMIDIInput,
+    spans,
+    getCurrentTimeMs,
+    initialScore: gameSession?.score ?? 0,
+    initialCombo: gameSession?.combo ?? 0,
+    initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
+  });
 
   const { playNote, stopNote } = useMidiAudio(selectedMIDIOutput);
 
@@ -168,12 +164,7 @@ export function PlayPageClient() {
   }
 
   // If not ready, return null to allow parent Suspense/loading.tsx to handle fallback
-  if (
-    isLoading ||
-    !trackStatus.isReady ||
-    !selectedTrack ||
-    !selectedMIDIInput
-  ) {
+  if (isLoading || !trackStatus.isReady || !selectedTrack || !selectedMIDIInput) {
     return null;
   }
 

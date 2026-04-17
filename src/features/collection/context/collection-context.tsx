@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
 
 interface Track {
   id: string;
@@ -21,9 +14,7 @@ interface CollectionContextType {
   resetCollection: () => void;
 }
 
-const CollectionContext = createContext<CollectionContextType | undefined>(
-  undefined,
-);
+const CollectionContext = createContext<CollectionContextType | undefined>(undefined);
 
 export function CollectionProvider({ children }: { children: ReactNode }) {
   const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
@@ -41,11 +32,7 @@ export function CollectionProvider({ children }: { children: ReactNode }) {
     [selectedTrack, resetCollection],
   );
 
-  return (
-    <CollectionContext.Provider value={value}>
-      {children}
-    </CollectionContext.Provider>
-  );
+  return <CollectionContext.Provider value={value}>{children}</CollectionContext.Provider>;
 }
 
 export function useCollection() {

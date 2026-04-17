@@ -1,6 +1,7 @@
 # Refactor CollectionPage Architecture (Gear-Style & Cleanup)
 
 ## Goal
+
 Refactor the `CollectionPage` from a monolithic client component into a modular structure that matches the immersive, non-grid layout of the `GearPage`. This includes splitting logic from presentation and cleaning up legacy components.
 
 ## Proposed Changes
@@ -8,6 +9,7 @@ Refactor the `CollectionPage` from a monolithic client component into a modular 
 ### 1. New Components in `src/app/collection/components/`
 
 #### [NEW] `song-card.tsx`
+
 - **Purpose**: A new carousel item based on the `GearCard` from the Gear page.
 - **Features**:
   - Displays song title, artist name, and difficulty level (as a badge).
@@ -15,12 +17,14 @@ Refactor the `CollectionPage` from a monolithic client component into a modular 
   - Implements the same hover/selection effects as `GearCard`.
 
 #### [NEW] `collection-header.tsx`
+
 - **Purpose**: A local header component modeled after `GearHeader`.
 - **Features**:
   - Displays "CHOOSE SONG" and instructional text.
   - Uses the `retro` font and uppercase tracking for consistency.
 
 #### [NEW] `collection-page.client.tsx`
+
 - **Purpose**: The logic container for the collection page.
 - **Responsibilities**:
   - Fetches tracks from `getSoundTracks`.
@@ -29,26 +33,31 @@ Refactor the `CollectionPage` from a monolithic client component into a modular 
   - Orchestrates navigation via `useNavigation`.
 
 #### [NEW] `collection-page.view.tsx`
+
 - **Purpose**: The presentation-only view component.
-- **Layout**: 
+- **Layout**:
   - Abandons `PageLayout` grid.
   - Uses `<main className="flex flex-col h-dvh items-center justify-evenly p-4 overflow-x-hidden text-center">`.
   - Integrates the `8bitcn` Carousel with `SongCard` children.
   - Renders the primary action buttons (MAIN MENU / CONTINUE) in a bottom-centered group.
 
 #### [NEW] `collection-page.view.stories.tsx`
+
 - **Purpose**: Component documentation and preview.
-- **Features**: 
+- **Features**:
   - Standard Storybook configuration.
   - States: `Loading`, `Empty`, `With Tracks`, `With Selection`.
 
 ### 2. Implementation in `src/app/collection/page.tsx`
+
 - **Conversion**: Convert to a **Server Component**.
 - **Metadata**: Add standard Next.js metadata (title: "Collection | MIDI Jam").
 - **Root**: Directly renders `<CollectionPageClient />`.
 
 ### 3. Cleanup of Legacy Components
+
 The following files are verified to be unused after this refactor and will be deleted:
+
 - `src/components/carousel/carousel.tsx`
 - `src/components/carousel/carousel.module.css`
 - `src/components/track-card/track-card.tsx`
@@ -58,12 +67,14 @@ The following files are verified to be unused after this refactor and will be de
 ## Verification Plan
 
 ### Automated Verification
+
 - `npm run lint` (Biome check)
 - `npm run type-check` (TypeScript check)
 - `npm test` (Ensure no regressions in existing tests)
 - **Storybook**: Run `npm run storybook` to verify component rendering in all states.
 
 ### Manual Verification
+
 - Navigate to `/collection` and verify the layout matches the immersive style of `/gear`.
 - Verify the `8bitcn` Carousel supports smooth navigation and selection.
 - Verify "SHUFFLE" correctly randomizes the selected track.

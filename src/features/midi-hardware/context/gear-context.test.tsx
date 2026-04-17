@@ -22,9 +22,7 @@ vi.mock("../hooks/use-midi-selection", () => ({
 describe("GearProvider & useGear", () => {
   it("should throw an error if used outside of GearProvider", () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    expect(() => renderHook(() => useGear())).toThrow(
-      "useGear must be used within a GearProvider",
-    );
+    expect(() => renderHook(() => useGear())).toThrow("useGear must be used within a GearProvider");
     consoleSpy.mockRestore();
   });
 

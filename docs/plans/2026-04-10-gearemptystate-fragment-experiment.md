@@ -11,6 +11,7 @@
 ### Task 1: Refactor GearEmptyState to Fragment
 
 **Files:**
+
 - Modify: `src/app/gear/components/gear-empty-state.tsx`
 
 **Step 1: Remove `className` prop and `cn` import**
@@ -19,6 +20,7 @@
 ### Task 2: Adjust GearPageView
 
 **Files:**
+
 - Modify: `src/app/gear/components/gear-page.view.tsx`
 
 **Step 1: Remove `className` passed to `GearEmptyState`**

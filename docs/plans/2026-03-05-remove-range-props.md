@@ -12,8 +12,9 @@ Every note element composes `.noteBase` in `piano-grid.module.css`, which comput
 
 ```css
 opacity: min(
-  clamp(0, var(--relative-start), 1),               /* 0 when left of range  */
-  clamp(0, calc(var(--end-unit) - var(--note-start)), 1)  /* 0 when right of range */
+  clamp(0, var(--relative-start), 1),
+  /* 0 when left of range  */ clamp(0, calc(var(--end-unit) - var(--note-start)), 1)
+    /* 0 when right of range */
 );
 ```
 
@@ -41,10 +42,13 @@ interface BackgroundLaneProps {
   rangeStart?: number;
   rangeEnd?: number;
 }
-export function BackgroundLane({ rangeStart = PIANO_88_KEY_MIN, rangeEnd = PIANO_88_KEY_MAX }: BackgroundLaneProps)
+export function BackgroundLane({
+  rangeStart = PIANO_88_KEY_MIN,
+  rangeEnd = PIANO_88_KEY_MAX,
+}: BackgroundLaneProps);
 
 // After
-export function BackgroundLane()
+export function BackgroundLane();
 ```
 
 ---
@@ -69,7 +73,7 @@ export function BackgroundLane()
 
 ```tsx
 // KeyGlows before
-const active = [...liveNotes, ...playbackNotes].filter(n => n >= start && n <= end);
+const active = [...liveNotes, ...playbackNotes].filter((n) => n >= start && n <= end);
 
 // KeyGlows after
 const active = Array.from(new Set([...liveNotes, ...playbackNotes]));

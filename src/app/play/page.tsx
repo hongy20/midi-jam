@@ -2,8 +2,7 @@ import { PlayPageClient } from "./components/play-page.client";
 
 export const metadata = {
   title: "Stage | MIDI Jam",
-  description:
-    "Play your favorite MIDI songs in a high-performance visualizer.",
+  description: "Play your favorite MIDI songs in a high-performance visualizer.",
 };
 
 /**

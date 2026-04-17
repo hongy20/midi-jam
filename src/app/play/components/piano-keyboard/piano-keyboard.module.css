@@ -4,10 +4,7 @@
   height: 100%;
   position: relative;
   /* Columns = End Unit - Start Unit. Use minmax(0, 1fr) to prevent squishing by items that fall outside column 1. */
-  grid-template-columns: repeat(
-      calc(var(--end-unit) - var(--start-unit)),
-      minmax(0, 1fr)
-    );
+  grid-template-columns: repeat(calc(var(--end-unit) - var(--start-unit)), minmax(0, 1fr));
   /* Implicit tracks (from out-of-range-right notes) must take no space. */
   grid-auto-columns: 0;
   /* Rows: Key Top (2/3), Key Bottom (1/3) */
@@ -36,21 +33,19 @@
   z-index: var(--is-black);
   border-bottom-left-radius: calc(
     var(--piano-key-radius-white) -
-    (var(--piano-key-radius-white) - var(--piano-key-radius-black)) *
-    var(--is-black)
+      (var(--piano-key-radius-white) - var(--piano-key-radius-black)) * var(--is-black)
   );
   border-bottom-right-radius: calc(
     var(--piano-key-radius-white) -
-    (var(--piano-key-radius-white) - var(--piano-key-radius-black)) *
-    var(--is-black)
+      (var(--piano-key-radius-white) - var(--piano-key-radius-black)) * var(--is-black)
   );
   background-color: color-mix(
     in srgb,
     var(--piano-key-white),
     var(--piano-key-black) calc(var(--is-black) * 100%)
   );
-  box-shadow: 0 calc(var(--is-black) * 4px) calc(var(--is-black) * 6px)
-    calc(var(--is-black) * -1px) rgba(0, 0, 0, 0.5);
+  box-shadow: 0 calc(var(--is-black) * 4px) calc(var(--is-black) * 6px) calc(var(--is-black) * -1px)
+    rgba(0, 0, 0, 0.5);
 }
 
 /* 

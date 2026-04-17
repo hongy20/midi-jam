@@ -14,15 +14,15 @@
 
 ### 1. Route & Page Mapping
 
-| Old Route | New Route | New Name | Folder Path |
-| :--- | :--- | :--- | :--- |
-| `/` | `/` | Main Menu | `src/app/page.tsx` |
-| `/tracks` | `/collection` | Song Collection | `src/app/collection/` |
-| `/instruments` | `/gear` | Your Gear | `src/app/gear/` |
-| `/game` | `/play` | The Stage | `src/app/play/` |
-| `/game/pause` | `/pause` | Pause Menu | `src/app/pause/` |
-| `/results` | `/score` | Final Score | `src/app/score/` |
-| `/settings` | `/options` | Game Options | `src/app/options/` |
+| Old Route      | New Route     | New Name        | Folder Path           |
+| :------------- | :------------ | :-------------- | :-------------------- |
+| `/`            | `/`           | Main Menu       | `src/app/page.tsx`    |
+| `/tracks`      | `/collection` | Song Collection | `src/app/collection/` |
+| `/instruments` | `/gear`       | Your Gear       | `src/app/gear/`       |
+| `/game`        | `/play`       | The Stage       | `src/app/play/`       |
+| `/game/pause`  | `/pause`      | Pause Menu      | `src/app/pause/`      |
+| `/results`     | `/score`      | Final Score     | `src/app/score/`      |
+| `/settings`    | `/options`    | Game Options    | `src/app/options/`    |
 
 ---
 
@@ -31,10 +31,12 @@
 ### Task 1: Update Route Definitions
 
 **Files:**
+
 - Modify: `src/lib/navigation/routes.ts`
 
 **Step 1: Write the failing test**
 Check that `ROUTES` matches the new design.
+
 ```typescript
 import { ROUTES } from "./routes";
 import { expect, test } from "vitest";
@@ -55,6 +57,7 @@ Run: `npm test src/lib/navigation/routes.test.ts`
 Expected: FAIL (or compilation error due to missing keys)
 
 **Step 3: Update ROUTES constant**
+
 ```typescript
 export const ROUTES = {
   HOME: "/",
@@ -72,6 +75,7 @@ Run: `npm test src/lib/navigation/routes.test.ts`
 Expected: PASS
 
 **Step 5: Commit**
+
 ```bash
 git add src/lib/navigation/routes.ts
 git commit -m "refactor: update ROUTES constant for arcade terminology"
@@ -82,7 +86,8 @@ git commit -m "refactor: update ROUTES constant for arcade terminology"
 ### Task 2: Restructure App Directories
 
 **Files:**
-- Rename/Move: 
+
+- Rename/Move:
   - `src/app/tracks/` -> `src/app/collection/`
   - `src/app/instruments/` -> `src/app/gear/`
   - `src/app/game/` -> `src/app/play/` (move `pause` out first)
@@ -91,6 +96,7 @@ git commit -m "refactor: update ROUTES constant for arcade terminology"
   - `src/app/settings/` -> `src/app/options/`
 
 **Step 1: Execute directory moves**
+
 ```bash
 mv src/app/game/pause src/app/pause
 mv src/app/tracks src/app/collection
@@ -105,6 +111,7 @@ Run: `ls -R src/app/`
 Expected: All folders at top-level.
 
 **Step 3: Commit**
+
 ```bash
 git add src/app/
 git commit -m "refactor: flatten and rename app directories"
@@ -115,7 +122,8 @@ git commit -m "refactor: flatten and rename app directories"
 ### Task 3: Update Page Content & Layouts
 
 **Files:**
-- Modify: 
+
+- Modify:
   - `src/app/collection/page.tsx`
   - `src/app/gear/page.tsx`
   - `src/app/play/page.tsx`
@@ -131,6 +139,7 @@ Example: In `src/app/collection/page.tsx`, change `Select Track` or `Tracks` to 
 Search for stale `ROUTES.TRACKS` etc. across all files and replace with new keys.
 
 **Step 3: Commit**
+
 ```bash
 git add src/app/
 git commit -m "refactor: update page titles and navigation references"
@@ -141,6 +150,7 @@ git commit -m "refactor: update page titles and navigation references"
 ### Task 4: Global Documentation Alignment
 
 **Files:**
+
 - Modify: `AGENTS.md`, `README.md`, `docs/plans/*.md`
 
 **Step 1: Update AGENTS.md**
@@ -148,6 +158,7 @@ Update the "Commands" table and "Project Context" to use the new names.
 
 **Step 2: Update existing plans**
 Use `sed` or similar to replace terminology in `docs/plans/`.
+
 - `game/pause` -> `pause`
 - `/game` -> `/play`
 - `/tracks` -> `/collection`
@@ -156,6 +167,7 @@ Use `sed` or similar to replace terminology in `docs/plans/`.
 - `/settings` -> `/options`
 
 **Step 3: Commit**
+
 ```bash
 git add AGENTS.md README.md docs/plans/
 git commit -m "docs: align all documentation with arcade naming scheme"
@@ -170,6 +182,7 @@ Run: `npm run lint && npm run type-check && npm test && npm run build`
 Expected: All PASS.
 
 **Step 2: Final Commit**
+
 ```bash
 git commit --allow-empty -m "chore: final validation complete"
 ```

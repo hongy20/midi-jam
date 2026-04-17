@@ -46,11 +46,7 @@ describe("LaneStage", () => {
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };
     const { container } = render(
-      <LaneStage
-        groups={mockGroups}
-        scrollRef={scrollRef}
-        getCurrentTimeMs={() => 0}
-      />,
+      <LaneStage groups={mockGroups} scrollRef={scrollRef} getCurrentTimeMs={() => 0} />,
     );
     const note60 = queryByAttribute("data-pitch", container, "60");
     const note61 = queryByAttribute("data-pitch", container, "61");

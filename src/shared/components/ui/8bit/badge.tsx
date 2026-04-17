@@ -21,18 +21,11 @@ export const badgeVariants = cva("", {
 });
 
 export interface BitBadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {
   asChild?: boolean;
 }
 
-function Badge({
-  children,
-  className = "",
-  font,
-  variant,
-  ...props
-}: BitBadgeProps) {
+function Badge({ children, className = "", font, variant, ...props }: BitBadgeProps) {
   const color = badgeVariants({ variant, font });
 
   const classes = className.split(" ");
@@ -74,21 +67,9 @@ function Badge({
       </ShadcnBadge>
 
       {/* Left pixel bar */}
-      <div
-        className={cn(
-          "-left-1.5 absolute inset-y-[4px] w-1.5",
-          color,
-          visualClasses,
-        )}
-      />
+      <div className={cn("-left-1.5 absolute inset-y-[4px] w-1.5", color, visualClasses)} />
       {/* Right pixel bar */}
-      <div
-        className={cn(
-          "-right-1.5 absolute inset-y-[4px] w-1.5",
-          color,
-          visualClasses,
-        )}
-      />
+      <div className={cn("-right-1.5 absolute inset-y-[4px] w-1.5", color, visualClasses)} />
     </div>
   );
 }

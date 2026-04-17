@@ -18,9 +18,7 @@ describe("getSoundTracks", () => {
       "Regular Song.mid",
     ];
 
-    vi.mocked(
-      fs.readdir as unknown as () => Promise<string[]>,
-    ).mockResolvedValue(mockFiles);
+    vi.mocked(fs.readdir as unknown as () => Promise<string[]>).mockResolvedValue(mockFiles);
 
     const result = await getSoundTracks();
 

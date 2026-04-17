@@ -1,11 +1,6 @@
 import type { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
-import {
-  getBarLines,
-  getMidiEvents,
-  getNoteRange,
-  getNoteSpans,
-} from "./midi-parser";
+import { getBarLines, getMidiEvents, getNoteRange, getNoteSpans } from "./midi-parser";
 
 describe("midi-parser", () => {
   const mockMidi = {
@@ -98,9 +93,7 @@ describe("midi-parser", () => {
     // Events: 60-On(0), 60-Off(1000), [60-On(1010), 64-On(1010)], [60-Off(2000), 64-Off(2000)]
     expect(events).toHaveLength(6);
 
-    const chordOnEvents = events.filter(
-      (e) => e.type === "noteOn" && e.timeMs > 0,
-    );
+    const chordOnEvents = events.filter((e) => e.type === "noteOn" && e.timeMs > 0);
     expect(chordOnEvents).toHaveLength(2);
     expect(chordOnEvents[0].timeMs).toBe(1010);
     expect(chordOnEvents[1].timeMs).toBe(1010);
@@ -144,9 +137,7 @@ describe("midi-parser", () => {
 
     const events = getMidiEvents(overlappingMidi, "piano");
     // Should shift second note to start at 500 + gap
-    expect(
-      events.filter((e) => e.note === 60 && e.type === "noteOn")[1].timeMs,
-    ).toBe(510);
+    expect(events.filter((e) => e.note === 60 && e.type === "noteOn")[1].timeMs).toBe(510);
   });
   it("getNoteRange returns correct min/max", () => {
     const events = getMidiEvents(mockMidi, "piano");

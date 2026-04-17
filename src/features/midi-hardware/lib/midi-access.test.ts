@@ -28,9 +28,7 @@ describe("requestMIDIAccess", () => {
   });
 
   it("should throw an error if access is denied", async () => {
-    const requestMIDIAccessMock = vi
-      .fn()
-      .mockRejectedValue(new Error("Access denied"));
+    const requestMIDIAccessMock = vi.fn().mockRejectedValue(new Error("Access denied"));
 
     vi.stubGlobal("navigator", {
       requestMIDIAccess: requestMIDIAccessMock,

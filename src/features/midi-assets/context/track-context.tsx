@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
 import type { SegmentGroup } from "../lib/lane-segment-utils";
 import type { NoteSpan } from "../lib/midi-parser";
 
@@ -51,9 +44,7 @@ export function TrackProvider({ children }: { children: ReactNode }) {
     [trackStatus, resetTrack],
   );
 
-  return (
-    <TrackContext.Provider value={value}>{children}</TrackContext.Provider>
-  );
+  return <TrackContext.Provider value={value}>{children}</TrackContext.Provider>;
 }
 
 export function useTrack() {

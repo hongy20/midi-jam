@@ -25,8 +25,7 @@ export const cardVariants = cva("", {
 });
 
 export interface BitCardProps
-  extends React.ComponentProps<"div">,
-    VariantProps<typeof cardVariants> {
+  extends React.ComponentProps<"div">, VariantProps<typeof cardVariants> {
   asChild?: boolean;
 }
 
@@ -48,9 +47,7 @@ function Card({ className, font, ...props }: BitCardProps) {
       />
 
       <div
-        className={cn(
-          "absolute inset-0 border-x-6 -mx-1.5 border-inherit pointer-events-none",
-        )}
+        className={cn("absolute inset-0 border-x-6 -mx-1.5 border-inherit pointer-events-none")}
         aria-hidden="true"
       />
     </div>
@@ -60,45 +57,27 @@ function Card({ className, font, ...props }: BitCardProps) {
 function CardHeader({ ...props }: BitCardProps) {
   const { className, font } = props;
 
-  return (
-    <ShadcnCardHeader
-      className={cn(font !== "normal" && "retro", className)}
-      {...props}
-    />
-  );
+  return <ShadcnCardHeader className={cn(font !== "normal" && "retro", className)} {...props} />;
 }
 
 function CardTitle({ ...props }: BitCardProps) {
   const { className, font } = props;
 
-  return (
-    <ShadcnCardTitle
-      className={cn(font !== "normal" && "retro", className)}
-      {...props}
-    />
-  );
+  return <ShadcnCardTitle className={cn(font !== "normal" && "retro", className)} {...props} />;
 }
 
 function CardDescription({ ...props }: BitCardProps) {
   const { className, font } = props;
 
   return (
-    <ShadcnCardDescription
-      className={cn(font !== "normal" && "retro", className)}
-      {...props}
-    />
+    <ShadcnCardDescription className={cn(font !== "normal" && "retro", className)} {...props} />
   );
 }
 
 function CardAction({ ...props }: BitCardProps) {
   const { className, font } = props;
 
-  return (
-    <ShadcnCardAction
-      className={cn(font !== "normal" && "retro", className)}
-      {...props}
-    />
-  );
+  return <ShadcnCardAction className={cn(font !== "normal" && "retro", className)} {...props} />;
 }
 
 function CardContent({ ...props }: BitCardProps) {
@@ -124,12 +103,4 @@ function CardFooter({ ...props }: BitCardProps) {
   );
 }
 
-export {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardAction,
-  CardDescription,
-  CardContent,
-};
+export { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent };

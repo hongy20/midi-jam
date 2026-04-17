@@ -10,9 +10,10 @@
 
 ---
 
-### Task 1: Update AGENTS.md with the docs/plans/** Rule
+### Task 1: Update AGENTS.md with the docs/plans/\*\* Rule
 
 **Files:**
+
 - Modify: `AGENTS.md`
 
 **Step 1: Refine the Planning step in AGENTS.md**
@@ -20,7 +21,7 @@
 Update the "Planning" step under "Development Lifecycle" to explicitly reference the `docs/plans/**` path.
 
 ```markdown
-2. **Planning**: Use `@writing-plans` to draft comprehensive, bite-sized tasks for any multi-step feature or refactor. **All plan files (located in `docs/plans/**`) MUST be committed to the repository immediately after creation.**
+2. **Planning**: Use `@writing-plans` to draft comprehensive, bite-sized tasks for any multi-step feature or refactor. **All plan files (located in `docs/plans/**`) MUST be committed to the repository immediately after creation.\*\*
 ```
 
 **Step 2: Verify linting**
@@ -40,6 +41,7 @@ git commit -m "docs: mandate committing all plan files in docs/plans/**"
 ### Task 2: Commit All Plan Files
 
 **Files:**
+
 - Modify: `docs/plans/**`
 
 **Step 1: Identify and stage all plan files**

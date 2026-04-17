@@ -41,11 +41,7 @@ describe("useMidiAudio", () => {
     const { result } = renderHook(() => useMidiAudio(mockOutput));
 
     result.current.playNote(60, 0.8);
-    expect(mockOutput.send).toHaveBeenCalledWith([
-      0x90,
-      60,
-      Math.floor(0.8 * 127),
-    ]);
+    expect(mockOutput.send).toHaveBeenCalledWith([0x90, 60, Math.floor(0.8 * 127)]);
 
     result.current.stopNote(60);
     expect(mockOutput.send).toHaveBeenCalledWith([0x80, 60, 0]);

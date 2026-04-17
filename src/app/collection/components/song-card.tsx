@@ -28,12 +28,7 @@ interface SongCardProps {
   className?: string;
 }
 
-export function SongCard({
-  track,
-  isSelected,
-  onClick,
-  className,
-}: SongCardProps) {
+export function SongCard({ track, isSelected, onClick, className }: SongCardProps) {
   return (
     <div className={cn("h-full p-2", className)}>
       <button
@@ -53,12 +48,7 @@ export function SongCard({
           )}
         >
           <div className="absolute top-2 right-4 z-10">
-            <Badge
-              className={cn(
-                "text-[7px]",
-                isSelected && "bg-primary-foreground text-primary",
-              )}
-            >
+            <Badge className={cn("text-[7px]", isSelected && "bg-primary-foreground text-primary")}>
               {track.difficulty.toUpperCase()}
             </Badge>
           </div>
@@ -85,9 +75,7 @@ export function SongCard({
             <CardDescription
               className={cn(
                 "retro text-[9px] leading-relaxed truncate",
-                isSelected
-                  ? "text-primary-foreground/70"
-                  : "text-muted-foreground",
+                isSelected ? "text-primary-foreground/70" : "text-muted-foreground",
               )}
             >
               BY {track.artist.toUpperCase()}

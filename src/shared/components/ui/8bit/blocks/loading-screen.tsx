@@ -77,8 +77,7 @@ export default function LoadingScreen({
 
   const isFullscreen = variant === "fullscreen";
   const displayProgress = autoProgress ? internalProgress : progress;
-  const isIndeterminate =
-    displayProgress === null || displayProgress === undefined;
+  const isIndeterminate = displayProgress === null || displayProgress === undefined;
 
   const content = (
     <div className="flex flex-col items-center justify-center gap-6 p-8 animate-pulse">
@@ -94,12 +93,7 @@ export default function LoadingScreen({
             </span>
           </div>
         )}
-        <Progress
-          value={displayProgress}
-          variant="retro"
-          progressBg="bg-primary"
-          className="h-4"
-        />
+        <Progress value={displayProgress} variant="retro" progressBg="bg-primary" className="h-4" />
       </div>
 
       {/* Tips section */}

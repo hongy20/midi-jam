@@ -13,9 +13,11 @@
 ## Design Document
 
 ### 1. Overview
+
 The current `SelectionContext` has grown beyond its original scope, mixing MIDI device management, track selection, and game session state. This refactor will rename it to `AppContext`, group its properties by domain/page, and introduce a "State-Driven Router" via a `NavigationGuard` to enforce business rules globally.
 
 ### 2. Goals
+
 - **Domain Grouping**: Clear separation of state for `tracks`, `instruments`, `game`, `results`, and `settings`.
 - **Reactive Navigation**: Move navigation logic into a centralized `NavigationGuard` that reacts to state changes (e.g., device disconnection).
 - **Explicit Track Status**: Use a discriminated union to represent the loading state of MIDI tracks within the `game` group.
@@ -24,18 +26,19 @@ The current `SelectionContext` has grown beyond its original scope, mixing MIDI 
 ### 3. Architecture
 
 #### 3.1 AppContext Structure
+
 The context will use nested objects for grouping. Setters will be colocated with their properties.
 
 ```typescript
-type TrackLoadStatus = 
+type TrackLoadStatus =
   | { isLoading: true }
   | { isLoading: false; isReady: false; error: string | null }
-  | { 
-      isLoading: false; 
-      isReady: true; 
-      originalDurationMs: number; 
-      events: MidiEvent[]; 
-      spans: NoteSpan[]; 
+  | {
+      isLoading: false;
+      isReady: true;
+      originalDurationMs: number;
+      events: MidiEvent[];
+      spans: NoteSpan[];
     };
 
 interface AppContextType {
@@ -72,20 +75,22 @@ interface AppContextType {
 ```
 
 #### 3.2 Navigation Guard Table
+
 A centralized `NavigationGuard` component will monitor the `pathname` and `AppContext` state.
 
-| Path | Condition | Target Path | Reason |
-| :--- | :--- | :--- | :--- |
-| `/play` | `!tracks.selected` | `/collection` | No music chosen |
-| `/play` | `!instruments.input` | `/reconnect` | Device disconnected |
-| `/pause` | `!tracks.selected` | `/collection` | Lost track context |
-| `/pause` | `!instruments.input` | `/reconnect` | Device disconnected while paused |
-| `/reconnect` | `instruments.input !== null` | `/pause` | Device restored; return to pause |
-| `/gear` | `!tracks.selected` | `/collection` | Must pick music before instrument |
-| `/score` | `!results.last` | `/` | No results to display |
-| `/options` | *(None)* | *(None)* | Always accessible |
+| Path         | Condition                    | Target Path   | Reason                            |
+| :----------- | :--------------------------- | :------------ | :-------------------------------- |
+| `/play`      | `!tracks.selected`           | `/collection` | No music chosen                   |
+| `/play`      | `!instruments.input`         | `/reconnect`  | Device disconnected               |
+| `/pause`     | `!tracks.selected`           | `/collection` | Lost track context                |
+| `/pause`     | `!instruments.input`         | `/reconnect`  | Device disconnected while paused  |
+| `/reconnect` | `instruments.input !== null` | `/pause`      | Device restored; return to pause  |
+| `/gear`      | `!tracks.selected`           | `/collection` | Must pick music before instrument |
+| `/score`     | `!results.last`              | `/`           | No results to display             |
+| `/options`   | _(None)_                     | _(None)_      | Always accessible                 |
 
 #### 3.3 Data Flow: MIDI Parsing
+
 1. **Trigger**: When the user navigates to `/play` and `tracks.selected` exists.
 2. **Execution**: `AppContext` uses a `useEffect` to parse the selected track.
 3. **State Update**: `game.track` transitions from `{ isLoading: true }` to the final result.
@@ -98,20 +103,21 @@ A centralized `NavigationGuard` component will monitor the `pathname` and `AppCo
 ### Task 1: Define Route Constants
 
 **Files:**
+
 - Create: `src/lib/navigation/routes.ts`
 
 **Step 1: Create the routes constants file**
 
 ```typescript
 export const ROUTES = {
-  HOME: '/',
-  TRACKS: '/collection',
-  INSTRUMENTS: '/gear',
-  GAME: '/play',
-  PAUSE: '/pause',
-  RESULTS: '/score',
-  RECONNECT: '/reconnect',
-  SETTINGS: '/options',
+  HOME: "/",
+  TRACKS: "/collection",
+  INSTRUMENTS: "/gear",
+  GAME: "/play",
+  PAUSE: "/pause",
+  RESULTS: "/score",
+  RECONNECT: "/reconnect",
+  SETTINGS: "/options",
 } as const;
 
 export type AppRoute = (typeof ROUTES)[keyof typeof ROUTES];
@@ -129,6 +135,7 @@ git commit -m "feat: define centralized route constants"
 ### Task 2: Refactor Context Types & Initial State
 
 **Files:**
+
 - Modify: `src/context/selection-context.tsx` (Rename to `src/context/app-context.tsx` later)
 
 **Step 1: Define the new `AppContextType` and `TrackLoadStatus`**
@@ -136,15 +143,15 @@ git commit -m "feat: define centralized route constants"
 Update the interface to match the design document.
 
 ```typescript
-export type TrackLoadStatus = 
+export type TrackLoadStatus =
   | { isLoading: true; isReady: false; error: null }
   | { isLoading: false; isReady: false; error: string | null }
-  | { 
-      isLoading: false; 
-      isReady: true; 
-      originalDurationMs: number; 
-      events: MidiEvent[]; 
-      spans: NoteSpan[]; 
+  | {
+      isLoading: false;
+      isReady: true;
+      originalDurationMs: number;
+      events: MidiEvent[];
+      spans: NoteSpan[];
       error: null;
     };
 
@@ -162,6 +169,7 @@ git commit -m "refactor: define new AppContext types and structure"
 ### Task 3: Implement AppContext Logic & MIDI Parsing
 
 **Files:**
+
 - Modify: `src/context/app-context.tsx`
 - Remove: `src/hooks/use-midi-track.ts` (Logic moved to context)
 
@@ -189,6 +197,7 @@ git commit -m "feat: implement AppContext logic and internal MIDI parsing"
 ### Task 4: Refactor useNavigation Hook
 
 **Files:**
+
 - Modify: `src/hooks/use-game-navigation.ts` (Rename to `src/hooks/use-navigation.ts`)
 
 **Step 1: Implement semantic navigation methods**
@@ -223,6 +232,7 @@ git commit -m "refactor: create semantic useNavigation hook"
 ### Task 5: Implement Global Navigation Guard
 
 **Files:**
+
 - Modify: `src/components/navigation-guard.tsx`
 
 **Step 1: Implement the Guard Table logic**
@@ -241,6 +251,7 @@ git commit -m "feat: implement state-driven NavigationGuard"
 ### Task 6: Update Pages & Components to new Context
 
 **Files:**
+
 - Modify: `src/app/play/page.tsx`
 - Modify: `src/app/collection/page.tsx`
 - Modify: `src/app/gear/page.tsx`

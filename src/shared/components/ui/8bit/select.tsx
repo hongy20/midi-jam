@@ -29,8 +29,7 @@ export const inputVariants = cva("", {
 });
 
 export interface BitSelectProps
-  extends React.SelectHTMLAttributes<HTMLSelectElement>,
-    VariantProps<typeof inputVariants> {
+  extends React.SelectHTMLAttributes<HTMLSelectElement>, VariantProps<typeof inputVariants> {
   asChild?: boolean;
 }
 
@@ -38,32 +37,23 @@ function Select({ ...props }: React.ComponentProps<typeof ShadcnSelect>) {
   return <ShadcnSelect {...props} />;
 }
 
-function SelectGroup({
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.Group>) {
+function SelectGroup({ ...props }: React.ComponentProps<typeof SelectPrimitive.Group>) {
   return <ShadcnSelectGroup {...props} />;
 }
 
 interface BitSelectValueProps
-  extends React.ComponentProps<typeof SelectPrimitive.Value>,
-    VariantProps<typeof inputVariants> {
+  extends React.ComponentProps<typeof SelectPrimitive.Value>, VariantProps<typeof inputVariants> {
   asChild?: boolean;
 }
 
 function SelectValue({ ...props }: BitSelectValueProps) {
   const { font } = props;
 
-  return (
-    <ShadcnSelectValue
-      className={cn(font !== "normal" && "retro")}
-      {...props}
-    />
-  );
+  return <ShadcnSelectValue className={cn(font !== "normal" && "retro")} {...props} />;
 }
 
 interface BitSelectTriggerProps
-  extends React.ComponentProps<typeof SelectPrimitive.Trigger>,
-    VariantProps<typeof inputVariants> {
+  extends React.ComponentProps<typeof SelectPrimitive.Trigger>, VariantProps<typeof inputVariants> {
   asChild?: boolean;
 }
 
@@ -94,16 +84,11 @@ function SelectTrigger({ children, ...props }: BitSelectTriggerProps) {
 }
 
 export interface BitSelectContentProps
-  extends React.ComponentProps<typeof SelectPrimitive.Content>,
-    VariantProps<typeof inputVariants> {
+  extends React.ComponentProps<typeof SelectPrimitive.Content>, VariantProps<typeof inputVariants> {
   asChild?: boolean;
 }
 
-function SelectContent({
-  className,
-  children,
-  ...props
-}: BitSelectContentProps) {
+function SelectContent({ className, children, ...props }: BitSelectContentProps) {
   const { font } = props;
 
   return (
@@ -120,10 +105,7 @@ function SelectContent({
   );
 }
 
-function SelectLabel({
-  className,
-  ...props
-}: React.ComponentProps<typeof SelectPrimitive.Label>) {
+function SelectLabel({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Label>) {
   return <ShadcnSelectLabel className={cn(className)} {...props} />;
 }
 

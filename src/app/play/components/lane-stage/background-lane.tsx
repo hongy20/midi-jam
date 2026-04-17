@@ -15,10 +15,7 @@ export function BackgroundLane() {
   return (
     <div className={styles.container}>
       {notes.map((note) => (
-        <div
-          key={`lane-${note}`}
-          className={`${styles.lane} ${gridStyles[`note-${note}`]}`}
-        />
+        <div key={`lane-${note}`} className={`${styles.lane} ${gridStyles[`note-${note}`]}`} />
       ))}
     </div>
   );

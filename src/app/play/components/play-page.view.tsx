@@ -87,38 +87,21 @@ export function PlayPageView({
             font="retro"
             title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
           >
-            {isFullscreen ? (
-              <Minimize2 className="size-4" />
-            ) : (
-              <Maximize2 className="size-4" />
-            )}
+            {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
           </Button>
-          <Button
-            variant="secondary"
-            onClick={handlePause}
-            size="icon"
-            font="retro"
-            title="Pause"
-          >
+          <Button variant="secondary" onClick={handlePause} size="icon" font="retro" title="Pause">
             <Pause className="size-4" />
           </Button>
         </div>
       </header>
 
       <main className={styles.main}>
-        <LaneStage
-          groups={groups}
-          scrollRef={scrollRef}
-          getCurrentTimeMs={getCurrentTimeMs}
-        />
+        <LaneStage groups={groups} scrollRef={scrollRef} getCurrentTimeMs={getCurrentTimeMs} />
       </main>
 
       <footer className={styles.footer}>
         <div className={styles.keyboardWrapper} data-testid="piano-keyboard">
-          <PianoKeyboard
-            liveNotes={liveActiveNotes}
-            playbackNotes={playbackNotes}
-          />
+          <PianoKeyboard liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />
         </div>
       </footer>
     </div>

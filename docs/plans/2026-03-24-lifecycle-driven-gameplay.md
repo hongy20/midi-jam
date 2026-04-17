@@ -6,6 +6,7 @@
 
 **Architecture:** "Mounted is Running"
 The presence of the `/play` component in the DOM is the definitive signal that the game is active.
+
 - **Start/Resume**: The `/play` component mounts. Hooks initialize using persisted values from `StageContext` (`currentTimeMs`, `score`, `combo`).
 - **Pause**: The user navigates to `/pause`. The `/play` component unmounts. Standard React cleanup (clearing intervals, canceling animations, stopping audio) "pauses" the game state.
 - **Stop/Reset**: Disconnecting a MIDI device or explicitly ending the session redirects to `/` (Home), where `resetAll()` is called on mount to hard-reset the application.
@@ -15,12 +16,14 @@ The presence of the `/play` component in the DOM is the definitive signal that t
 ## Design Details
 
 ### Key Components & Hooks
+
 - **`PlayPage`**: Remove `isPaused` state. On MIDI device loss, redirect to home. `handlePause` saves the current session state and navigates to `/pause`.
 - **`useLaneTimeline`**: Remove `isPaused` prop. The Web Animation starts immediately on mount using `initialTimeMs`. The cleanup function handles canceling the animation on unmount.
 - **`useLaneScoreEngine`**: Remove `isPlaying` prop. Scoring and miss-detection intervals start on mount and clear on unmount.
 - **`LaneStage` & `ScoreWidget`**: Remove `isPaused` props. Polling intervals and `requestAnimationFrame` loops run for the duration of the component's mount cycle.
 
 ### Data Flow
+
 1. **Play -> Pause**:
    - `PlayPage` saves `currentTimeMs`, `score`, and `combo` to `StageContext`.
    - `toPause()` is called.
@@ -38,6 +41,7 @@ The presence of the `/play` component in the DOM is the definitive signal that t
 ### Task 1: Update `useLaneTimeline` Hook
 
 **Files:**
+
 - Modify: `src/hooks/use-lane-timeline.ts`
 - Test: `src/hooks/use-lane-timeline.test.ts`
 
@@ -52,6 +56,7 @@ Run: `npm test src/hooks/use-lane-timeline.test.ts`
 Expected: PASS
 
 **Step 4: Commit**
+
 ```bash
 git add src/hooks/use-lane-timeline.ts src/hooks/use-lane-timeline.test.ts
 git commit -m "refactor: remove isPaused from useLaneTimeline"
@@ -62,6 +67,7 @@ git commit -m "refactor: remove isPaused from useLaneTimeline"
 ### Task 2: Update `useLaneScoreEngine` Hook
 
 **Files:**
+
 - Modify: `src/hooks/use-lane-score-engine.ts`
 - Test: `src/hooks/use-lane-score-engine.test.ts`
 
@@ -76,6 +82,7 @@ Run: `npm test src/hooks/use-lane-score-engine.test.ts`
 Expected: PASS
 
 **Step 4: Commit**
+
 ```bash
 git add src/hooks/use-lane-score-engine.ts src/hooks/use-lane-score-engine.test.ts
 git commit -m "refactor: remove isPlaying from useLaneScoreEngine"
@@ -86,6 +93,7 @@ git commit -m "refactor: remove isPlaying from useLaneScoreEngine"
 ### Task 3: Update `ScoreWidget` & `LaneStage` Components
 
 **Files:**
+
 - Modify: `src/components/score-widget/score-widget.tsx`
 - Modify: `src/components/lane-stage/lane-stage.tsx`
 - Test: `src/components/score-widget/score-widget.test.tsx`
@@ -105,6 +113,7 @@ Run: `npm test src/components/score-widget/score-widget.test.tsx src/components/
 Expected: PASS
 
 **Step 5: Commit**
+
 ```bash
 git add src/components/score-widget/score-widget.tsx src/components/lane-stage/lane-stage.tsx src/components/score-widget/score-widget.test.tsx src/components/lane-stage/lane-stage.test.tsx
 git commit -m "refactor: remove isPaused from ScoreWidget and LaneStage"
@@ -115,10 +124,12 @@ git commit -m "refactor: remove isPaused from ScoreWidget and LaneStage"
 ### Task 4: Update `PlayPage` Component
 
 **Files:**
+
 - Modify: `src/app/play/page.tsx`
 - Test: `src/app/play/page.test.tsx`
 
 **Step 1: Remove `isPaused` state and update handlers**
+
 - Remove `const [isPaused, setIsPaused] = useState(false)`.
 - Update `handlePause` to only save session and navigate.
 - Update device-loss effect to navigate to home.
@@ -134,6 +145,7 @@ Run: `npm test src/app/play/page.test.tsx`
 Expected: PASS
 
 **Step 5: Commit**
+
 ```bash
 git add src/app/play/page.tsx src/app/play/page.test.tsx
 git commit -m "refactor: simplify PlayPage and remove isPaused state"
@@ -148,6 +160,7 @@ Run: `npm run lint && npm run type-check && npm test`
 Expected: ALL PASS
 
 **Step 2: Manual Check (Instructional)**
+
 - Start a game.
 - Press Pause -> Verify screen changes and music/animation stops.
 - Press Resume -> Verify game continues from same spot.

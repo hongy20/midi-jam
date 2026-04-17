@@ -31,25 +31,15 @@ export default function NotFound1({
         className,
       )}
     >
-      <div className="retro font-bold text-6xl tracking-tight sm:text-8xl">
-        404
-      </div>
+      <div className="retro font-bold text-6xl tracking-tight sm:text-8xl">404</div>
 
       {imageSrc && (
         <div className="flex justify-center -mt-10">
-          <Image
-            alt="404"
-            className="pixelated"
-            height={200}
-            src={imageSrc}
-            width={200}
-          />
+          <Image alt="404" className="pixelated" height={200} src={imageSrc} width={200} />
         </div>
       )}
 
-      <h1 className="retro font-bold text-2xl tracking-tight sm:text-4xl">
-        {title}
-      </h1>
+      <h1 className="retro font-bold text-2xl tracking-tight sm:text-4xl">{title}</h1>
 
       <p className="retro text-muted-foreground text-xs">{description}</p>
 

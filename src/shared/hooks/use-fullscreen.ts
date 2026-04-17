@@ -29,11 +29,7 @@ export function useFullscreen() {
 
         // Attempt to lock orientation to landscape if supported.
         // Screen orientation API is primarily a mobile feature.
-        if (
-          typeof screen !== "undefined" &&
-          screen.orientation &&
-          "lock" in screen.orientation
-        ) {
+        if (typeof screen !== "undefined" && screen.orientation && "lock" in screen.orientation) {
           try {
             // @ts-expect-error - orientation.lock is not always in standard DOM types but widely supported
             await screen.orientation.lock("landscape");

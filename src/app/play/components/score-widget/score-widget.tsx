@@ -117,11 +117,7 @@ export const ScoreWidget = memo(function ScoreWidget({
 
       {/* Hit Quality Feedback */}
       <div className={styles.feedback}>
-        <span
-          ref={feedbackRef}
-          className={styles.hitText}
-          style={{ opacity: 0 }}
-        />
+        <span ref={feedbackRef} className={styles.hitText} style={{ opacity: 0 }} />
       </div>
 
       {/* Progress Bar */}

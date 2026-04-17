@@ -26,10 +26,7 @@ function formatFilename(filename: string): string {
     .join(" ");
 }
 
-const METADATA: Record<
-  string,
-  { title: string; artist: string; difficulty: string }
-> = {
+const METADATA: Record<string, { title: string; artist: string; difficulty: string }> = {
   "Golden Kpop Demon Hunters.mid": {
     title: "Golden",
     artist: "Kpop Demon Hunters",

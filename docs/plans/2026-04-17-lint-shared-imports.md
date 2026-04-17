@@ -7,16 +7,18 @@ In accordance with the project's feature-based folder structure, modules in `src
 We will utilize the built-in ESLint `no-restricted-imports` rule within the Flat Config (`eslint.config.mjs`). This rule will be scoped specifically to files in `src/shared`.
 
 ### Patterns to Block:
+
 - **Aliases**: `@/features/*`, `@/app/*`
 - **Relative Paths**:
-    - `../features/*`, `../../features/*`, `../../../features/*`
-    - `../app/*`, `../../app/*`, `../../../app/*`
+  - `../features/*`, `../../features/*`, `../../../features/*`
+  - `../app/*`, `../../app/*`, `../../../app/*`
 
 Using `**/features/*` and `**/app/*` in the `group` pattern of `no-restricted-imports` can catch relative imports that resolve to these paths, but standard practice is to specify common relative depths or use the `@/` alias. Since the project uses aliases, we will prioritize blocking those, and also common relative patterns.
 
 ## Implementation Details
 
 ### 1. Update ESLint Configuration
+
 Modify `eslint.config.mjs` to add a new configuration block.
 
 ```javascript
@@ -54,5 +56,6 @@ Modify `eslint.config.mjs` to add a new configuration block.
 ## Verification Plan
 
 ### Automated
+
 - `npm run lint`: Verify the codebase is clean with the new rule.
 - Trigger test: Add `import { Gear } from "@/features/midi-hardware/context/GearContext"` to a file in `src/shared/hooks` and verify `npm run lint` fails.

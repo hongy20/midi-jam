@@ -10,14 +10,9 @@ interface HomePageViewProps {
   songsCount: number;
 }
 
-export function HomePageView({
-  onStart,
-  onOptions,
-  songsCount,
-}: HomePageViewProps) {
+export function HomePageView({ onStart, onOptions, songsCount }: HomePageViewProps) {
   useEffect(() => {
-    const isSupported =
-      typeof navigator !== "undefined" && "requestMIDIAccess" in navigator;
+    const isSupported = typeof navigator !== "undefined" && "requestMIDIAccess" in navigator;
     if (!isSupported) {
       throw new Error(MIDI_UNSUPPORTED);
     }

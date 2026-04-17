@@ -25,5 +25,6 @@ This plan outlines the updates to `AGENTS.md` to reflect the latest project stan
 ## Verification Plan
 
 ### Manual Verification
+
 - Verify that `AGENTS.md` accurately reflects the new rules and that no outdated rules remain.
 - Ensure the wording is clear and concise, following the existing project documentation style.

@@ -5,6 +5,7 @@
 **Goal:** Resolve audio/visual synchronization drift, adjust falldown speed, and ensure user settings persist across navigation.
 
 **Architecture:**
+
 - **Synchronization**: Update `useLaneTimeline` to animate the entire `scrollHeight` of the track lane, ensuring the visual playhead perfectly matches the audio duration.
 - **Falldown Speed**: Adjust the `TrackLane` height calculation to provide a consistent speed of 1 viewport height per 3000ms.
 - **State Persistence**: Refactor `useAppReset` to exclude user options from the global reset.
@@ -17,6 +18,7 @@
 ### Task 1: Fix Audio/Visual Synchronization Drift
 
 **Files:**
+
 - Modify: `src/hooks/use-lane-timeline.ts`
 
 **Step 1: Adjust animation keyframes**
@@ -46,6 +48,7 @@ git commit -m "fix: resolve audio/visual synchronization drift by using full scr
 ### Task 2: Adjust Falldown Speed & Height Calculation
 
 **Files:**
+
 - Modify: `src/components/lane-stage/track-lane.module.css`
 
 **Step 1: Update height formula and remove redundant viewport**
@@ -56,8 +59,7 @@ git commit -m "fix: resolve audio/visual synchronization drift by using full scr
   /* ... */
   /* Adjust speed to 3000ms per viewport height */
   height: calc(
-    calc(100dvh - var(--header-height) - var(--footer-height)) *
-    (var(--total-duration-ms) / 3000)
+    calc(100dvh - var(--header-height) - var(--footer-height)) * (var(--total-duration-ms) / 3000)
   );
 }
 ```
@@ -74,6 +76,7 @@ git commit -m "style: adjust falldown speed to 3000ms per viewport"
 ### Task 3: Persist User Options
 
 **Files:**
+
 - Modify: `src/hooks/use-track-sync.ts`
 
 **Step 1: Remove resetOptions from useAppReset**
@@ -97,6 +100,7 @@ git commit -m "fix: persist user options by removing resetOptions from useAppRes
 ### Task 4: Tweak Song Completion Window
 
 **Files:**
+
 - Modify: `src/lib/midi/constant.ts`
 
 **Step 1: Reduce lead-out time**

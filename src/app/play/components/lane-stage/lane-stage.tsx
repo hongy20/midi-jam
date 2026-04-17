@@ -13,28 +13,16 @@ interface LaneStageProps {
   getCurrentTimeMs: () => number;
 }
 
-export function LaneStage({
-  groups,
-  scrollRef,
-  getCurrentTimeMs,
-}: LaneStageProps) {
+export function LaneStage({ groups, scrollRef, getCurrentTimeMs }: LaneStageProps) {
   const [renderIndexes, setRenderIndexes] = useState<number[]>(() =>
-    getVisibleSegmentIndexes(
-      getCurrentTimeMs(),
-      groups,
-      LANE_SCROLL_DURATION_MS,
-    ),
+    getVisibleSegmentIndexes(getCurrentTimeMs(), groups, LANE_SCROLL_DURATION_MS),
   );
 
   // Poll current time to drive React-level mount/unmount decisions
   useEffect(() => {
     const interval = setInterval(() => {
       const timeMs = getCurrentTimeMs();
-      const indexes = getVisibleSegmentIndexes(
-        timeMs,
-        groups,
-        LANE_SCROLL_DURATION_MS,
-      );
+      const indexes = getVisibleSegmentIndexes(timeMs, groups, LANE_SCROLL_DURATION_MS);
       setRenderIndexes((prev) => {
         if (prev.join() === indexes.join()) {
           return prev;
@@ -51,11 +39,7 @@ export function LaneStage({
 
       <div ref={scrollRef} className="absolute inset-0 overflow-hidden">
         {renderIndexes.map((idx) => (
-          <LaneSegment
-            key={idx}
-            group={groups[idx]}
-            getCurrentTimeMs={getCurrentTimeMs}
-          />
+          <LaneSegment key={idx} group={groups[idx]} getCurrentTimeMs={getCurrentTimeMs} />
         ))}
       </div>
     </div>

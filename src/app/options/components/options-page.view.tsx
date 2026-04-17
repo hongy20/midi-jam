@@ -58,10 +58,7 @@ export function OptionsPageView({
 
       {/* Content Area */}
       <div className="w-full px-8 min-[400px]:px-12 md:px-16 overflow-visible">
-        <Carousel
-          className="mx-auto w-full max-w-4xl"
-          opts={{ align: "start", loop: false }}
-        >
+        <Carousel className="mx-auto w-full max-w-4xl" opts={{ align: "start", loop: false }}>
           <CarouselContent>
             <CarouselItem className="pl-4 jam-carousel-item">
               <Card className="border-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)] h-full">
@@ -73,10 +70,7 @@ export function OptionsPageView({
                     Customize the look and feel
                   </p>
                   <div className="w-full">
-                    <ThemePicker
-                      activeTheme={activeTheme}
-                      onThemeChange={onThemeChange}
-                    />
+                    <ThemePicker activeTheme={activeTheme} onThemeChange={onThemeChange} />
                   </div>
                 </CardContent>
               </Card>
@@ -94,9 +88,7 @@ export function OptionsPageView({
                   <div className="w-full">
                     <Select
                       value={difficulty}
-                      onValueChange={(val) =>
-                        onDifficultyChange(val as Difficulty)
-                      }
+                      onValueChange={(val) => onDifficultyChange(val as Difficulty)}
                     >
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select Difficulty" />

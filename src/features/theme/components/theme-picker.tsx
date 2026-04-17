@@ -66,13 +66,10 @@ export function ThemePicker({ activeTheme, onThemeChange }: ThemePickerProps) {
               <span
                 className="inline-block h-4 w-4 border-2 border-foreground shrink-0"
                 style={{
-                  backgroundColor: themes.find((t) => t.name === activeTheme)
-                    ?.color,
+                  backgroundColor: themes.find((t) => t.name === activeTheme)?.color,
                 }}
               />
-              <span className="truncate text-xs md:text-sm">
-                {formatThemeName(activeTheme)}
-              </span>
+              <span className="truncate text-xs md:text-sm">{formatThemeName(activeTheme)}</span>
             </div>
             <span className="opacity-50 text-[10px] ml-2">▼</span>
           </div>
@@ -109,17 +106,13 @@ export function ThemePicker({ activeTheme, onThemeChange }: ThemePickerProps) {
                   <span
                     className={cn(
                       "font-retro text-[11px] uppercase tracking-tight",
-                      isActive
-                        ? "text-foreground font-bold"
-                        : "text-foreground/80",
+                      isActive ? "text-foreground font-bold" : "text-foreground/80",
                     )}
                   >
                     {formatThemeName(theme.name)}
                   </span>
                 </div>
-                {isActive && (
-                  <Check className="h-3 w-3 text-foreground opacity-60" />
-                )}
+                {isActive && <Check className="h-3 w-3 text-foreground opacity-60" />}
               </button>
             );
           })}

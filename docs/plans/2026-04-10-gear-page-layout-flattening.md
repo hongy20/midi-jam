@@ -11,6 +11,7 @@
 ### Task 1: Update GearEmptyState
 
 **Files:**
+
 - Modify: `src/app/gear/components/gear-empty-state.tsx`
 
 **Step 1: Add `className` prop to `GearEmptyState`**
@@ -18,6 +19,7 @@
 ### Task 2: Flatten GearPageView Layout
 
 **Files:**
+
 - Modify: `src/app/gear/components/gear-page.view.tsx`
 
 **Step 1: Remove the wrapper div on lines 33-52**

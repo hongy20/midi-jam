@@ -25,9 +25,7 @@ export function CollectionPageClient({ tracks }: { tracks: SongCardTrack[] }) {
   const handleShuffle = useCallback(() => {
     const otherTracks = tracks.filter((t) => t.id !== selectedTrack?.id);
     if (otherTracks.length > 0) {
-      handleTrackSelection(
-        otherTracks[Math.floor(Math.random() * otherTracks.length)],
-      );
+      handleTrackSelection(otherTracks[Math.floor(Math.random() * otherTracks.length)]);
     }
   }, [tracks, selectedTrack, handleTrackSelection]);
 

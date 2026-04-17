@@ -2,12 +2,7 @@
 
 import { ChevronRight, Home, RotateCcw } from "lucide-react";
 import { Button } from "@/shared/components/ui/8bit/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/shared/components/ui/8bit/table";
+import { Table, TableBody, TableCell, TableRow } from "@/shared/components/ui/8bit/table";
 
 interface ScorePageViewProps {
   title: string;
@@ -40,20 +35,12 @@ export function ScorePageView({
         <Table className="w-full">
           <TableBody>
             <TableRow>
-              <TableCell className="opacity-60 uppercase text-xs">
-                Total Score
-              </TableCell>
-              <TableCell className="text-right text-2xl font-black text-primary">
-                {score}
-              </TableCell>
+              <TableCell className="opacity-60 uppercase text-xs">Total Score</TableCell>
+              <TableCell className="text-right text-2xl font-black text-primary">{score}</TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="opacity-60 uppercase text-xs border-b-0">
-                Max Combo
-              </TableCell>
-              <TableCell className="text-right text-2xl font-black border-b-0">
-                {combo}
-              </TableCell>
+              <TableCell className="opacity-60 uppercase text-xs border-b-0">Max Combo</TableCell>
+              <TableCell className="text-right text-2xl font-black border-b-0">{combo}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -61,21 +48,11 @@ export function ScorePageView({
 
       {/* Footer Actions */}
       <footer className="jam-action-group">
-        <Button
-          variant="secondary"
-          onClick={onHome}
-          font="retro"
-          className="btn-jam"
-        >
+        <Button variant="secondary" onClick={onHome} font="retro" className="btn-jam">
           <Home />
           Home
         </Button>
-        <Button
-          variant="secondary"
-          onClick={onSongs}
-          font="retro"
-          className="btn-jam"
-        >
+        <Button variant="secondary" onClick={onSongs} font="retro" className="btn-jam">
           <ChevronRight />
           Songs
         </Button>

@@ -5,6 +5,7 @@
 The current `PianoKeyboard` component suffers from performance degradation during high-frequency MIDI events. It dynamically mounts and unmounts `div` elements for "glow" effects, which triggers expensive browser layout and style recalculation phases for every note press/release.
 
 This plan refactors the keyboard to use a **Stable DOM Tree** with **Imperative Updates**. We will:
+
 1.  Flatten the nested layout containers.
 2.  Eliminate the `KeyGlows` component and dynamic mounting.
 3.  Use a `useRef` Map to track key elements.
@@ -29,15 +30,13 @@ export const PianoKeyboard = ({ liveNotes, playbackNotes }: PianoKeyboardProps) 
   // ... setup notes array and constants ...
 
   return (
-    <div 
-      className={styles.container} 
-      role="img" 
-      aria-label="Piano keyboard"
-    >
+    <div className={styles.container} role="img" aria-label="Piano keyboard">
       {notes.map((note) => (
         <button
           key={`key-${note}`}
-          ref={(el) => { if (el) keyRefs.current.set(note, el); }}
+          ref={(el) => {
+            if (el) keyRefs.current.set(note, el);
+          }}
           // ... rest of button props ...
         />
       ))}
@@ -96,6 +95,7 @@ export const PianoKeyboard = ({ liveNotes, playbackNotes }: PianoKeyboardProps) 
 **File:** `AGENTS.md`
 
 Update the **"High-Performance Rendering (60fps Target)"** section to include the **"Stable DOM"** principle:
+
 - **Rule**: Never mount/unmount elements for high-frequency (60fps) visual feedback.
 - **Solution**: Use stable elements and toggle attributes or classes via imperative Refs to bypass React reconciliation.
 - **Benefit**: Zero layout shifts, minimal style recalculation, and guaranteed 60fps performance for MIDI events.

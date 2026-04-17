@@ -10,12 +10,14 @@ Optimize the scoring engine and UI to reach a stable 60fps target and bypass Rea
 ## Proposed Changes
 
 ### [Core] use-lane-score-engine.ts
+
 - [MODIFY] [use-lane-score-engine.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/hooks/use-lane-score-engine.ts)
   - Replace `score`, `combo`, and `lastHitQuality` state with `useRef`.
   - Provide stable getter functions: `getScore()`, `getCombo()`, `getLastHitQuality()`.
   - Add logic to track "dirty" states if needed, but the UI rAF loop will handle polling.
 
 ### [UI] ScoreWidget
+
 - [MODIFY] [score-widget.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/components/score-widget/score-widget.tsx)
   - Wrap the entire component in `React.memo` to prevent parent-driven re-renders.
   - Update `ScoreWidgetProps` to take getters instead of raw values.
@@ -30,6 +32,7 @@ Optimize the scoring engine and UI to reach a stable 60fps target and bypass Rea
     - Fix potential layout shifts.
 
 ### [Page] PlayPage
+
 - [MODIFY] [play/page.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/play/page.tsx)
   - Consume stable getters from `useLaneScoreEngine`.
   - Update `ScoreWidget` props to pass these getters.
@@ -38,10 +41,12 @@ Optimize the scoring engine and UI to reach a stable 60fps target and bypass Rea
 ## Verification Plan
 
 ### Automated Tests
+
 - `npm run lint` & `npm run type-check` to ensure type safety with getters.
 - `npm run build` to verify production bundling.
 
 ### Manual Verification
+
 - Play a complex track and observe the `ScoreWidget` updates.
 - Verify no "scaleX(0)" flicker on the progress bar.
 - Verify that score and combo format correctly.

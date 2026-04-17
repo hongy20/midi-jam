@@ -14,9 +14,7 @@ describe("NotFound Page", () => {
     expect(screen.getByText("404")).toBeInTheDocument();
     expect(screen.getByText("LOST IN THE MIDI?")).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "The track you're looking for was never composed or has been deleted.",
-      ),
+      screen.getByText("The track you're looking for was never composed or has been deleted."),
     ).toBeInTheDocument();
     expect(screen.getByText("RETURN HOME")).toBeInTheDocument();
   });

@@ -16,8 +16,7 @@ const toggleVariants = cva("", {
     },
     variant: {
       default: "bg-transparent",
-      outline:
-        "bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
+      outline: "bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
     },
     size: {
       default: "h-9 px-2 min-w-9",
@@ -33,7 +32,8 @@ const toggleVariants = cva("", {
 });
 
 export interface BitToggleProps
-  extends React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root>,
+  extends
+    React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root>,
     VariantProps<typeof toggleVariants> {}
 
 function Toggle({ children, font, ...props }: BitToggleProps) {

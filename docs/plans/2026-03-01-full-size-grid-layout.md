@@ -13,12 +13,14 @@
 ### Task 1: Global Baseline Setup
 
 **Files:**
+
 - Modify: `src/app/globals.css`
 
 **Step 1: Update globals.css**
 
 ```css
-html, body {
+html,
+body {
   height: 100dvh;
   width: 100dvw;
   margin: 0;
@@ -38,6 +40,7 @@ git commit -m "style: set global 100dvh/100dvw baseline"
 ### Task 2: Refactor InstrumentsPage to Standalone Grid
 
 **Files:**
+
 - Modify: `src/app/gear/page.tsx`
 
 **Step 1: Replace NavigationLayout with standalone grid**
@@ -51,17 +54,17 @@ return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <div className="absolute top-[20%] right-[10%] w-[60%] h-[60%] rounded-full blur-[120px] bg-accent-primary/5" />
     </div>
-    
+
     <header className="relative z-10 w-full max-w-5xl mx-auto py-4 landscape:py-2 flex items-center justify-between">
-       {/* Stepper + Title logic from NavigationLayout */}
+      {/* Stepper + Title logic from NavigationLayout */}
     </header>
 
     <main className="relative z-10 w-full max-w-5xl mx-auto overflow-y-auto no-scrollbar py-4 px-8 -mx-8">
-       {/* Content */}
+      {/* Content */}
     </main>
 
     <footer className="relative z-10 w-full max-w-5xl mx-auto py-4 landscape:py-2 flex justify-end">
-       {/* Footer Button */}
+      {/* Footer Button */}
     </footer>
   </div>
 );
@@ -77,6 +80,7 @@ git commit -m "refactor: InstrumentsPage to standalone full-size grid"
 ### Task 3: Refactor TracksPage to Standalone Grid
 
 **Files:**
+
 - Modify: `src/app/collection/page.tsx`
 
 **Step 1: Replace NavigationLayout with standalone grid**
@@ -93,6 +97,7 @@ git commit -m "refactor: TracksPage to standalone full-size grid"
 ### Task 4: Refactor ResultsPage to Standalone Grid
 
 **Files:**
+
 - Modify: `src/app/score/page.tsx`
 
 **Step 1: Replace NavigationLayout with standalone grid**
@@ -109,6 +114,7 @@ git commit -m "refactor: ResultsPage to standalone full-size grid"
 ### Task 5: Refine WelcomePage Grid
 
 **Files:**
+
 - Modify: `src/app/page.tsx`
 
 **Step 1: Ensure it uses exact 100dvw/100dvh and standard grid pattern**
@@ -123,6 +129,7 @@ git commit -m "refactor: refine WelcomePage 100dvw/100dvh grid"
 ### Task 6: Refine SettingsPage Grid
 
 **Files:**
+
 - Modify: `src/app/options/page.tsx`
 
 **Step 1: Ensure it uses exact 100dvw/100dvh and standard grid pattern**
@@ -137,6 +144,7 @@ git commit -m "refactor: refine SettingsPage 100dvw/100dvh grid"
 ### Task 7: Refine GamePage Grid
 
 **Files:**
+
 - Modify: `src/app/play/page.module.css`
 - Modify: `src/app/play/page.tsx`
 
@@ -152,6 +160,7 @@ git commit -m "refactor: refine GamePage grid layout"
 ### Task 8: Decommission NavigationLayout
 
 **Files:**
+
 - Delete: `src/components/navigation-layout.tsx`
 - Delete: `src/components/navigation-layout.test.tsx`
 

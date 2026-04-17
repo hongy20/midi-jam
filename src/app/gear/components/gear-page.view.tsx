@@ -34,10 +34,7 @@ export function GearPageView({
   return (
     <main className="flex flex-col h-dvh items-center justify-evenly p-4 overflow-x-hidden text-center">
       {inputs.length === 0 ? (
-        <GearHeader
-          title="No gear found."
-          description="Please connect a keyboard to continue..."
-        />
+        <GearHeader title="No gear found." description="Please connect a keyboard to continue..." />
       ) : (
         <>
           <GearHeader
@@ -46,10 +43,7 @@ export function GearPageView({
           />
 
           <div className="w-full px-12 md:px-16 overflow-visible">
-            <Carousel
-              className="mx-auto w-full max-w-4xl"
-              opts={{ align: "start", loop: false }}
-            >
+            <Carousel className="mx-auto w-full max-w-4xl" opts={{ align: "start", loop: false }}>
               <CarouselContent>
                 {inputs.map((input, index) => (
                   <CarouselItem
@@ -62,11 +56,7 @@ export function GearPageView({
                       icon={<Piano className="size-8" />}
                       isSelected={selectedItemIndex === index}
                       onClick={() => onSelect(input)}
-                      badge={
-                        input.id === selectedMIDIInput?.id
-                          ? "SELECTED"
-                          : undefined
-                      }
+                      badge={input.id === selectedMIDIInput?.id ? "SELECTED" : undefined}
                     />
                   </CarouselItem>
                 ))}
