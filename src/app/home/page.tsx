@@ -1,4 +1,4 @@
-import { getSoundTracks } from "@/features/audio";
+import { getSoundTracks } from "@/features/collection";
 import { HomePageClient } from "./components/home-page.client";
 import { INITIAL_LOADING_TIMEOUT } from "./lib/constants";
 

@@ -6,7 +6,7 @@ import { useActiveNotes } from "@/app/play/hooks/use-active-notes";
 import { useDemoPlayback } from "@/app/play/hooks/use-demo-playback";
 import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";
 import { getNoteUnits, getVisibleMidiRange } from "@/app/play/lib/piano";
-import { useMidiAudio } from "@/features/audio";
+import { useMidiAudio } from "@/features/note-player";
 import { useCollection } from "@/features/collection";
 import {
   LANE_SCROLL_DURATION_MS,
