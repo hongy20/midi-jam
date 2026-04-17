@@ -71,9 +71,11 @@ export const Playing: Story = {
 
 export const Animated: Story = {
   render: (args) => {
-    // biome-ignore lint/correctness/useExhaustiveDependencies: Storybook specific logic
+     
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [time, setTime] = useState(0);
-    // biome-ignore lint/correctness/useExhaustiveDependencies: Storybook specific logic
+     
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const start = performance.now();
       const interval = setInterval(() => {

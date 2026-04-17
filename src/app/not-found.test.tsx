@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import NotFound from "./not-found";
 
 vi.mock("next/image", () => ({
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @next/next/no-img-element
   default: (props: any) => <img alt="" {...props} />,
 }));
 
