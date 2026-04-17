@@ -9,13 +9,13 @@ import {
   useState,
 } from "react";
 
-export interface Track {
+interface Track {
   id: string;
   name: string;
   url: string;
 }
 
-export interface CollectionContextType {
+interface CollectionContextType {
   selectedTrack: Track | null;
   setSelectedTrack: (track: Track | null) => void;
   resetCollection: () => void;
