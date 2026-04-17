@@ -1,5 +1,5 @@
 import type { Midi } from "@tonejs/midi";
-import { MIDI_DUMMY_NOTE_PITCH, MIDI_MAX_NOTE, MIDI_MIN_NOTE, MIN_NOTE_GAP_MS } from "./constant";
+import { MIDI_DUMMY_NOTE_PITCH, MIN_NOTE_GAP_MS } from "./constant";
 
 // FIXME: Can we merge MidiEvent and MIDINoteEvent?
 interface MidiEvent {

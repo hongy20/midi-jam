@@ -7,11 +7,6 @@
  * These constants represent the command types for Channel 1 (0).
  */
 
-/** Theoretical minimum MIDI note value */
-export const MIDI_MIN_NOTE = 0;
-
-/** Theoretical maximum MIDI note value */
-export const MIDI_MAX_NOTE = 127;
 
 /** MIDI pitch used for silent dummy notes (e.g., duration extension) */
 export const MIDI_DUMMY_NOTE_PITCH = 0;
