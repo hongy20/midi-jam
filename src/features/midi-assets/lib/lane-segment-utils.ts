@@ -1,14 +1,7 @@
 import { CLUSTER_CONNECTION_GAP_MS, LANE_SCROLL_DURATION_MS } from "./constant";
-import type { MidiNote } from "@/shared/types/midi";
+import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
 
-export interface SegmentGroup {
-  index: number;
-  startMs: number;
-  durationMs: number;
-  spans: MidiNote[];
-}
-
-interface BuildSegmentGroupsOptions {
+interface BuildMidiNoteGroupsOptions {
   spans: MidiNote[];
   totalDurationMs: number;
   thresholdMs: number;
@@ -24,14 +17,14 @@ interface BuildSegmentGroupsOptions {
  *    lead-in/lead-out buffers for animations.
  */
 
-export function buildSegmentGroups({
+export function buildMidiNoteGroups({
   spans,
   totalDurationMs,
   thresholdMs,
-}: BuildSegmentGroupsOptions): SegmentGroup[] {
+}: BuildMidiNoteGroupsOptions): MidiNoteGroup[] {
   if (spans.length === 0) return [];
 
-  const groups: SegmentGroup[] = [];
+  const groups: MidiNoteGroup[] = [];
   let currentGroupSpans: MidiNote[] = [];
   let currentStartMs = 0; // First segment starts at 0 (lead-in)
   let currentMaxEndMs = 0;
@@ -92,7 +85,7 @@ export function buildSegmentGroups({
  */
 export function getVisibleSegmentIndexes(
   currentTimeMs: number,
-  segmentGroups: SegmentGroup[],
+  segmentGroups: MidiNoteGroup[],
   scrollDurationMs: number,
 ): number[] {
   if (segmentGroups.length === 0) return [];
@@ -130,8 +123,6 @@ export function getVisibleSegmentIndexes(
 
   return visible;
 }
-
-// filterSpansForSegment was removed. buildSegmentGroups now pre-filters the notes into groups.
 
 /**
  * Computes the CSS `animation-delay` (always negative) that phase-locks a LaneSegment's

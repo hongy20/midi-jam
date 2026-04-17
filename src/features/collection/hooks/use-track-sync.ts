@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import { useStage } from "@/app/play/context/stage-context";
 import {
-  buildSegmentGroups,
+  buildMidiNoteGroups,
   LANE_SEGMENT_DURATION_MS,
   loadMidiFile,
   parseMidiNotes,
@@ -51,7 +51,7 @@ export function useTrackSync() {
         const totalDurationMs = midi.duration * 1000;
         const thresholdMs = LANE_SEGMENT_DURATION_MS; // Alias for clarity
 
-        const groups = buildSegmentGroups({
+        const groups = buildMidiNoteGroups({
           spans,
           totalDurationMs,
           thresholdMs,

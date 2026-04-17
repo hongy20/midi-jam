@@ -57,7 +57,7 @@ The project follows a layered, domain-driven architecture to ensure scalability 
 
 - **`src/app/` (Colocation Layer)**: Contains route-specific components, hooks, and context. If a logic piece is ONLY used by one route (e.g., Gameplay Engine for `/play`), it MUST be colocated here.
 - **`src/features/` (Domain Layer)**: Contains domain-specific logic managed as encapsulated modules.
-  - Features: `midi-hardware`, `midi-assets`, `note-player`, `score`, `navigation`, `collection`, `settings`, `theme`.
+  - Features: `midi-hardware`, `midi-assets`, `audio-player`, `score`, `navigation`, `collection`, `settings`, `theme`.
   - Each feature MUST expose a public API via `index.ts`.
   - **Isolation Rule**: Features must NOT import from each other's internal folders. They must use the public API (barrel export).
 - **`src/shared/` (Infrastructure Layer)**: Contains generic UI primitives, utility functions, and cross-cutting hooks that have zero knowledge of any feature or app domain.
@@ -138,6 +138,8 @@ Inside a feature or colocated app folder, use the following sub-directories:
 ## Isolation & Branching Protocol
 
 **NEVER work directly on `main`.** This is a non-negotiable hard constraint for technical integrity. This applies to ALL files in the repository without exception (Source, Docs, Config, etc.).
+
+**NEVER use Force Push.** This is a non-negotiable hard constraint. Once a branch is pushed, all subsequent updates MUST be new commits. Do NOT use `git commit --amend` or `git push --force` on shared or remote branches.
 
 **ONE PLAN PER TASK.** This is a non-negotiable hard constraint for technical integrity.
 

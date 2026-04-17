@@ -3,10 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useStage } from "@/app/play/context/stage-context";
 import { useActiveNotes } from "@/app/play/hooks/use-active-notes";
-import { useDemoPlayback } from "@/app/play/hooks/use-demo-playback";
 import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";
 import { getNoteUnits, getVisibleMidiRange } from "@/app/play/lib/piano";
-import { useNotePlayer } from "@/features/note-player";
+import { useNotePlayer, useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
 import {
   LANE_SCROLL_DURATION_MS,
@@ -120,10 +119,9 @@ export function PlayPageClient() {
     [stopNote, demoMode, processNoteEvent],
   );
 
-  useDemoPlayback({
+  useTrackPlayer({
     containerRef: scrollRef,
-    demoMode,
-    isLoading,
+    enabled: demoMode && !isLoading,
     groups,
     onNoteOn,
     onNoteOff,

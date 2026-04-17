@@ -1,7 +1,7 @@
 "use client";
 
 import { Maximize2, Minimize2, Pause } from "lucide-react";
-import type { SegmentGroup } from "@/features/midi-assets";
+import { type MidiNoteGroup } from "@/shared/types/midi";
 import type { HitQuality } from "@/features/score";
 import { Button } from "@/shared/components/ui/8bit/button";
 import { LaneStage } from "./lane-stage/lane-stage";
@@ -21,7 +21,7 @@ interface PlayPageViewProps {
   handleToggleFullscreen: () => void;
   liveActiveNotes: Set<number>;
   playbackNotes: Set<number>;
-  groups: SegmentGroup[];
+  groups: MidiNoteGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
   startUnit: number;

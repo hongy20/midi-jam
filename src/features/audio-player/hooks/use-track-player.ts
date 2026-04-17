@@ -1,26 +1,28 @@
 import { useEffect } from "react";
-import type { SegmentGroup } from "@/features/midi-assets";
+import { type MidiNoteGroup } from "@/shared/types/midi";
 
-interface UseDemoPlaybackProps {
+interface UseTrackPlayerProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
-  demoMode: boolean;
-  isLoading: boolean;
-  groups: SegmentGroup[];
+  enabled: boolean;
+  groups: MidiNoteGroup[];
   onNoteOn: (note: number, velocity: number) => void;
   onNoteOff: (note: number) => void;
 }
 
-export function useDemoPlayback({
+/**
+ * Hook to handle automated note playback by observing visual note elements
+ * as they cross the target line in the gameplay lane.
+ */
+export function useTrackPlayer({
   containerRef,
-  demoMode,
-  isLoading,
+  enabled,
   groups,
   onNoteOn,
   onNoteOff,
-}: UseDemoPlaybackProps) {
+}: UseTrackPlayerProps) {
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || !demoMode || isLoading || groups.length === 0) return;
+    if (!container || !enabled || groups.length === 0) return;
 
     const activeCounts = new Map<number, number>();
     const observedElements = new Set<Element>();
@@ -149,5 +151,5 @@ export function useDemoPlayback({
       }
       activeCounts.clear();
     };
-  }, [containerRef, demoMode, isLoading, groups, onNoteOn, onNoteOff]);
+  }, [containerRef, enabled, groups, onNoteOn, onNoteOff]);
 }

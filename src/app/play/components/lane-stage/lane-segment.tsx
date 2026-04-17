@@ -1,10 +1,11 @@
 import { useLayoutEffect, useRef } from "react";
-import { computeLaneSegmentAnimationDelay, type SegmentGroup } from "@/features/midi-assets";
+import { computeLaneSegmentAnimationDelay } from "@/features/midi-assets";
+import { type MidiNoteGroup } from "@/shared/types/midi";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./lane-segment.module.css";
 
 interface LaneSegmentProps {
-  group: SegmentGroup;
+  group: MidiNoteGroup;
   getCurrentTimeMs: () => number;
 }
 
