@@ -18,10 +18,6 @@ export function HomePageClient({ songsCount }: HomePageClientProps) {
   }, [resetAll]);
 
   return (
-    <HomePageView
-      onStart={() => toGear()}
-      onOptions={() => toOptions()}
-      songsCount={songsCount}
-    />
+    <HomePageView onStart={() => toGear()} onOptions={() => toOptions()} songsCount={songsCount} />
   );
 }

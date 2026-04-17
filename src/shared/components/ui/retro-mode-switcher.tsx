@@ -10,17 +10,9 @@ interface RetroModeSwitcherProps {
   onToggle: () => void;
 }
 
-export function RetroModeSwitcher({
-  className,
-  mode,
-  onToggle,
-}: RetroModeSwitcherProps) {
+export function RetroModeSwitcher({ className, mode, onToggle }: RetroModeSwitcherProps) {
   return (
-    <Button
-      variant="ghost"
-      className="group/toggle h-9 w-9 px-0"
-      onClick={onToggle}
-    >
+    <Button variant="ghost" className="group/toggle h-9 w-9 px-0" onClick={onToggle}>
       <svg
         width="28"
         height="28"
@@ -29,11 +21,7 @@ export function RetroModeSwitcher({
         xmlns="http://www.w3.org/2000/svg"
         stroke="currentColor"
         strokeWidth="0.25"
-        className={cn(
-          "!size-7",
-          mode === "light" ? "hidden" : "block",
-          className,
-        )}
+        className={cn("!size-7", mode === "light" ? "hidden" : "block", className)}
         role="img"
         aria-label="sun-dim"
       >
@@ -75,11 +63,7 @@ export function RetroModeSwitcher({
         xmlns="http://www.w3.org/2000/svg"
         stroke="currentColor"
         strokeWidth="0.25"
-        className={cn(
-          "!size-7",
-          mode === "dark" ? "hidden" : "block",
-          className,
-        )}
+        className={cn("!size-7", mode === "dark" ? "hidden" : "block", className)}
         role="img"
         aria-label="moon"
       >

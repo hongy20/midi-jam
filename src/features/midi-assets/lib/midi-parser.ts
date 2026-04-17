@@ -1,10 +1,5 @@
 import type { Midi } from "@tonejs/midi";
-import {
-  MIDI_DUMMY_NOTE_PITCH,
-  MIDI_MAX_NOTE,
-  MIDI_MIN_NOTE,
-  MIN_NOTE_GAP_MS,
-} from "./constant";
+import { MIDI_DUMMY_NOTE_PITCH, MIDI_MAX_NOTE, MIDI_MIN_NOTE, MIN_NOTE_GAP_MS } from "./constant";
 
 // FIXME: Can we merge MidiEvent and MIDINoteEvent?
 export interface MidiEvent {
@@ -27,10 +22,7 @@ export interface NoteSpan {
  * sorted by time.
  * Introduces a minimal gap between sequential notes of the same pitch to ensure MIDI triggering.
  */
-export function getMidiEvents(
-  midi: Midi,
-  instrument: "piano" | "drums" = "piano",
-): MidiEvent[] {
+export function getMidiEvents(midi: Midi, instrument: "piano" | "drums" = "piano"): MidiEvent[] {
   const events: MidiEvent[] = [];
 
   // 1. Merge all notes from all relevant tracks first to catch cross-track collisions
@@ -143,9 +135,7 @@ export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
 /**
  * Finds the minimum and maximum MIDI notes in a set of events.
  */
-export function getNoteRange(
-  events: MidiEvent[],
-): { min: number; max: number } | null {
+export function getNoteRange(events: MidiEvent[]): { min: number; max: number } | null {
   if (events.length === 0) return null;
 
   let min = MIDI_MAX_NOTE;

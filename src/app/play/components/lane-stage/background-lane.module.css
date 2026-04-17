@@ -5,10 +5,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  grid-template-columns: repeat(
-      calc(var(--end-unit) - var(--start-unit)),
-      minmax(0, 1fr)
-    );
+  grid-template-columns: repeat(calc(var(--end-unit) - var(--start-unit)), minmax(0, 1fr));
   grid-template-rows: 1fr;
   overflow: hidden;
   /* Hardware accelerated fade-out mask */
@@ -18,11 +15,7 @@
     rgba(0, 0, 0, 0.4) 40%,
     rgba(0, 0, 0, 0) 100%
   );
-  -webkit-mask-image: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0) 100%
-  );
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
 .lane {

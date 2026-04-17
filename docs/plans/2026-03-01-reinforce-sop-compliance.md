@@ -13,6 +13,7 @@
 ### Task 1: Update AGENTS.md
 
 **Files:**
+
 - Modify: `AGENTS.md`
 
 **Step 1: Add compliance section**

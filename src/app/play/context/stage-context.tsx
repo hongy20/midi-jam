@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
 
 export interface GameSession {
   score: number;
@@ -39,9 +32,7 @@ export function StageProvider({ children }: { children: ReactNode }) {
     [gameSession, resetStage],
   );
 
-  return (
-    <StageContext.Provider value={value}>{children}</StageContext.Provider>
-  );
+  return <StageContext.Provider value={value}>{children}</StageContext.Provider>;
 }
 
 export function useStage() {

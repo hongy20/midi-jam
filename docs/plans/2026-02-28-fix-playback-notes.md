@@ -13,6 +13,7 @@
 ### Task 1: Refactor LaneStage to remove internal playback logic
 
 **Files:**
+
 - Modify: `src/components/lane-stage/lane-stage.tsx`
 
 **Step 1: Remove hooks and internal calls**
@@ -30,6 +31,7 @@
 ```
 
 **Step 2: Commit**
+
 ```bash
 git add src/components/lane-stage/lane-stage.tsx
 git commit -m "refactor(lane-stage): remove internal playback hooks"
@@ -40,6 +42,7 @@ git commit -m "refactor(lane-stage): remove internal playback hooks"
 ### Task 2: Implement playback state in GamePage
 
 **Files:**
+
 - Modify: `src/app/play/page.tsx`
 
 **Step 1: Import hooks and add playback state**
@@ -58,23 +61,29 @@ const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
 const { playNote, stopNote } = useMidiAudio(demoMode, selectedMIDIInput);
 
 // Define callbacks that update state AND play audio
-const handleNoteOn = useCallback((note: number, velocity: number) => {
-  setPlaybackNotes((prev) => {
-    const next = new Set(prev);
-    next.add(note);
-    return next;
-  });
-  playNote(note, velocity);
-}, [playNote]);
+const handleNoteOn = useCallback(
+  (note: number, velocity: number) => {
+    setPlaybackNotes((prev) => {
+      const next = new Set(prev);
+      next.add(note);
+      return next;
+    });
+    playNote(note, velocity);
+  },
+  [playNote],
+);
 
-const handleNoteOff = useCallback((note: number) => {
-  setPlaybackNotes((prev) => {
-    const next = new Set(prev);
-    next.delete(note);
-    return next;
-  });
-  stopNote(note);
-}, [stopNote]);
+const handleNoteOff = useCallback(
+  (note: number) => {
+    setPlaybackNotes((prev) => {
+      const next = new Set(prev);
+      next.delete(note);
+      return next;
+    });
+    stopNote(note);
+  },
+  [stopNote],
+);
 
 // Trigger playback observer
 useDemoPlayback({
@@ -98,6 +107,7 @@ useDemoPlayback({
 ```
 
 **Step 3: Commit**
+
 ```bash
 git add src/app/play/page.tsx
 git commit -m "feat(game): lift playback state to display demo notes on keyboard"
@@ -111,6 +121,7 @@ git commit -m "feat(game): lift playback state to display demo notes on keyboard
 Run: `npm test`
 
 **Step 2: Manual verification**
+
 1. Enable Demo Mode in Settings.
 2. Start a Game.
 3. Observe the `VirtualInstrument` (Piano Keyboard) - it should now show the demo notes being "played" automatically.

@@ -13,7 +13,7 @@
 ## User Review Required
 
 > [!IMPORTANT]
-> This migration will replace the existing Biome linting/formatting with the Next.js 16 standard ESLint 9 + Prettier. 
+> This migration will replace the existing Biome linting/formatting with the Next.js 16 standard ESLint 9 + Prettier.
 > Linting will be slower but will follow the default Next.js ecosystem patterns more closely.
 
 ---
@@ -21,11 +21,13 @@
 ### Task 1: Dependency Transition
 
 **Files:**
+
 - Modify: `package.json`
 
 **Step 1: Remove Biome and install ESLint/Prettier**
 
 Run:
+
 ```bash
 source ~/.nvm/nvm.sh && nvm use default && \
 npm uninstall @biomejs/biome && \
@@ -44,6 +46,7 @@ git commit -m "chore: migrate dependencies from biome to eslint/prettier"
 ### Task 2: Configuration Setup
 
 **Files:**
+
 - Create: `eslint.config.mjs`
 - Create: `.prettierignore`
 - Create: `.prettierrc.json`
@@ -120,6 +123,7 @@ git commit -m "chore: add eslint and prettier configurations"
 ### Task 3: Script & CI Update
 
 **Files:**
+
 - Modify: `package.json`
 - Modify: `.github/workflows/ci.yml`
 
@@ -147,6 +151,7 @@ git commit -m "chore: update lint scripts and CI workflow"
 ### Task 4: Documentation Update
 
 **Files:**
+
 - Modify: `AGENTS.md`
 - Modify: `README.md`
 
@@ -166,6 +171,7 @@ git commit -m "docs: update tooling documentation"
 ### Task 5: Code Cleanup
 
 **Files:**
+
 - Modify: All files containing `// biome-ignore`
 
 **Step 1: Replace ignore comments**
@@ -175,6 +181,7 @@ Use `sed` or a subagent to search and replace `// biome-ignore` with `// eslint-
 **Step 2: Final Verification**
 
 Run:
+
 ```bash
 source ~/.nvm/nvm.sh && nvm use default && \
 npm run lint && \

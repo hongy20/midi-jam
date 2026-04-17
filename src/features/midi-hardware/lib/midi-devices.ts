@@ -3,9 +3,7 @@
  * @param access The MIDIAccess object obtained from the Web MIDI API.
  * @returns An array of MIDIInput objects.
  */
-export function getMIDIInputDevices(
-  access: WebMidi.MIDIAccess,
-): WebMidi.MIDIInput[] {
+export function getMIDIInputDevices(access: WebMidi.MIDIAccess): WebMidi.MIDIInput[] {
   return Array.from(access.inputs.values());
 }
 
@@ -14,9 +12,7 @@ export function getMIDIInputDevices(
  * @param access The MIDIAccess object obtained from the Web MIDI API.
  * @returns An array of MIDIOutput objects.
  */
-export function getMIDIOutputDevices(
-  access: WebMidi.MIDIAccess,
-): WebMidi.MIDIOutput[] {
+export function getMIDIOutputDevices(access: WebMidi.MIDIAccess): WebMidi.MIDIOutput[] {
   return Array.from(access.outputs.values());
 }
 

@@ -53,10 +53,7 @@ export function GearCard({
           {badge && (
             <div className="absolute top-2 right-4 z-10">
               <Badge
-                className={cn(
-                  "text-[7px]",
-                  isSelected && "bg-primary-foreground text-primary",
-                )}
+                className={cn("text-[7px]", isSelected && "bg-primary-foreground text-primary")}
               >
                 {badge}
               </Badge>
@@ -84,9 +81,7 @@ export function GearCard({
             <CardDescription
               className={cn(
                 "retro text-[9px] leading-relaxed",
-                isSelected
-                  ? "text-primary-foreground/70"
-                  : "text-muted-foreground",
+                isSelected ? "text-primary-foreground/70" : "text-muted-foreground",
               )}
             >
               {description}

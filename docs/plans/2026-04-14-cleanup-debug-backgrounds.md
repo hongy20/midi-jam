@@ -23,9 +23,11 @@ None.
 ## Verification Plan
 
 ### Automated Tests
+
 - `npm run lint`: Ensure no linting errors are introduced by removing variables.
 - `npm run type-check`: Ensure TypeScript is still happy.
 - `npm run build`: Verify production build stability.
 
 ### Manual Verification
+
 - Launch the `Play` page in `dev` mode and verify that the segments no longer have the colored backgrounds.

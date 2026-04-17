@@ -53,10 +53,7 @@ export function PlayPageClient() {
     return getVisibleMidiRange(spans.map((n) => n.note));
   }, [spans]);
 
-  const { startUnit, endUnit } = getNoteUnits(
-    visibleMidiRange.startNote,
-    visibleMidiRange.endNote,
-  );
+  const { startUnit, endUnit } = getNoteUnits(visibleMidiRange.startNote, visibleMidiRange.endNote);
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
@@ -79,15 +76,14 @@ export function PlayPageClient() {
     onFinish: onFinishProxy,
   });
 
-  const { getScore, getCombo, getLastHitQuality, processNoteEvent } =
-    useScoreEngine({
-      midiInput: selectedMIDIInput,
-      spans,
-      getCurrentTimeMs,
-      initialScore: gameSession?.score ?? 0,
-      initialCombo: gameSession?.combo ?? 0,
-      initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
-    });
+  const { getScore, getCombo, getLastHitQuality, processNoteEvent } = useScoreEngine({
+    midiInput: selectedMIDIInput,
+    spans,
+    getCurrentTimeMs,
+    initialScore: gameSession?.score ?? 0,
+    initialCombo: gameSession?.combo ?? 0,
+    initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
+  });
 
   const { playNote, stopNote } = useMidiAudio(selectedMIDIOutput);
 
@@ -168,12 +164,7 @@ export function PlayPageClient() {
   }
 
   // If not ready, return null to allow parent Suspense/loading.tsx to handle fallback
-  if (
-    isLoading ||
-    !trackStatus.isReady ||
-    !selectedTrack ||
-    !selectedMIDIInput
-  ) {
+  if (isLoading || !trackStatus.isReady || !selectedTrack || !selectedMIDIInput) {
     return null;
   }
 

@@ -13,18 +13,16 @@ describe("subscribeToNotes", () => {
     const callback = vi.fn();
     const unsubscribe = subscribeToNotes(mockInput, callback);
 
-    expect(mockInput.addEventListener).toHaveBeenCalledWith(
-      "midimessage",
-      expect.any(Function),
-    );
+    expect(mockInput.addEventListener).toHaveBeenCalledWith("midimessage", expect.any(Function));
 
     // Simulate a Note On event (Note 60, Velocity 100)
     const event = {
       data: new Uint8Array([MIDI_COMMAND_NOTE_ON, 60, 100]),
     } as WebMidi.MIDIMessageEvent;
 
-    const midiMessageHandler = vi.mocked(mockInput.addEventListener).mock
-      .calls[0][1] as (event: WebMidi.MIDIMessageEvent) => void;
+    const midiMessageHandler = vi.mocked(mockInput.addEventListener).mock.calls[0][1] as (
+      event: WebMidi.MIDIMessageEvent,
+    ) => void;
     midiMessageHandler(event);
 
     expect(callback).toHaveBeenCalledWith({
@@ -34,10 +32,7 @@ describe("subscribeToNotes", () => {
     });
 
     unsubscribe();
-    expect(mockInput.removeEventListener).toHaveBeenCalledWith(
-      "midimessage",
-      expect.any(Function),
-    );
+    expect(mockInput.removeEventListener).toHaveBeenCalledWith("midimessage", expect.any(Function));
   });
 
   it("should call the callback for Note Off messages", () => {
@@ -49,8 +44,9 @@ describe("subscribeToNotes", () => {
     const callback = vi.fn();
     subscribeToNotes(mockInput, callback);
 
-    const midiMessageHandler = vi.mocked(mockInput.addEventListener).mock
-      .calls[0][1] as (event: WebMidi.MIDIMessageEvent) => void;
+    const midiMessageHandler = vi.mocked(mockInput.addEventListener).mock.calls[0][1] as (
+      event: WebMidi.MIDIMessageEvent,
+    ) => void;
 
     // Simulate a Note Off event (Note 60, Velocity 0)
     midiMessageHandler({
@@ -73,8 +69,9 @@ describe("subscribeToNotes", () => {
     const callback = vi.fn();
     subscribeToNotes(mockInput, callback);
 
-    const midiMessageHandler = vi.mocked(mockInput.addEventListener).mock
-      .calls[0][1] as (event: WebMidi.MIDIMessageEvent) => void;
+    const midiMessageHandler = vi.mocked(mockInput.addEventListener).mock.calls[0][1] as (
+      event: WebMidi.MIDIMessageEvent,
+    ) => void;
 
     // Simulate a Note On event with 0 velocity
     midiMessageHandler({
@@ -97,8 +94,9 @@ describe("subscribeToNotes", () => {
     const callback = vi.fn();
     subscribeToNotes(mockInput, callback);
 
-    const midiMessageHandler = vi.mocked(mockInput.addEventListener).mock
-      .calls[0][1] as (event: WebMidi.MIDIMessageEvent) => void;
+    const midiMessageHandler = vi.mocked(mockInput.addEventListener).mock.calls[0][1] as (
+      event: WebMidi.MIDIMessageEvent,
+    ) => void;
 
     // Simulate a Clock message (0xF8)
     midiMessageHandler({

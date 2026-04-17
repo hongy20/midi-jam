@@ -4,7 +4,8 @@
 
 **Goal:** Refactor `getNoteUnits` to accept a range (start and end notes) and return the corresponding unit coordinates. Update components to use this more direct signature.
 
-**Architecture:** 
+**Architecture:**
+
 - **JS:** `getNoteUnits(startNote, endNote)` returns `{ startUnit, endUnit }`.
 - **Components:** Call `getNoteUnits` once per range instead of twice.
 
@@ -15,6 +16,7 @@
 ### Task 1: Update Piano Utilities
 
 **Files:**
+
 - Modify: `src/lib/device/piano.ts`
 
 **Step 1: Refactor `getNoteUnits` to accept range**
@@ -54,6 +56,7 @@ git commit -m "refactor: update getNoteUnits to accept start and end notes"
 ### Task 2: Update Components
 
 **Files:**
+
 - Modify: `src/components/piano-keyboard/PianoKeyboard.tsx`
 - Modify: `src/components/lane-stage/lane-stage.tsx`
 

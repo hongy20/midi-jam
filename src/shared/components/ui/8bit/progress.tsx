@@ -23,7 +23,8 @@ export const progressVariants = cva("", {
 });
 
 export interface BitProgressProps
-  extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>,
+  extends
+    React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>,
     VariantProps<typeof progressVariants> {
   className?: string;
   font?: VariantProps<typeof progressVariants>["font"];
@@ -56,12 +57,8 @@ const Progress = React.forwardRef<
           data-slot="progress-indicator"
           className={cn(
             "h-full transition-all",
-            variant === "retro" || isIndeterminate
-              ? "flex w-full"
-              : "w-full flex-1",
-            variant !== "retro" &&
-              !isIndeterminate &&
-              (progressBg || "bg-primary"),
+            variant === "retro" || isIndeterminate ? "flex w-full" : "w-full flex-1",
+            variant !== "retro" && !isIndeterminate && (progressBg || "bg-primary"),
             isIndeterminate && "animate-scan-wrap",
           )}
           style={
@@ -76,13 +73,10 @@ const Progress = React.forwardRef<
                 const filledSquares = Math.round(((value || 0) / 100) * 20);
                 return (
                   <div
-                     
                     key={i}
                     className={cn(
                       "flex-1 h-full mx-[1px]",
-                      i < filledSquares
-                        ? progressBg || "bg-primary"
-                        : "bg-transparent",
+                      i < filledSquares ? progressBg || "bg-primary" : "bg-transparent",
                     )}
                   />
                 );

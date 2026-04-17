@@ -28,13 +28,9 @@ export function useScoreEngine({
   initialCombo = 0,
   initialTimeMs = 0,
 }: UseScoreEngineProps) {
-  const maxRawPoints = useMemo(
-    () => calculateMaxRawPoints(spans.length),
-    [spans.length],
-  );
+  const maxRawPoints = useMemo(() => calculateMaxRawPoints(spans.length), [spans.length]);
   // `initialScore` is normalized (0-100). Convert it back to raw points for internal tracking.
-  const initialRawScore =
-    maxRawPoints > 0 ? (initialScore / 100) * maxRawPoints : 0;
+  const initialRawScore = maxRawPoints > 0 ? (initialScore / 100) * maxRawPoints : 0;
 
   const scoreRef = useRef(initialRawScore);
 
@@ -85,12 +81,7 @@ export function useScoreEngine({
   }, []);
 
   const calculateOverlapRatio = useCallback(
-    (
-      actualOn: number,
-      actualOff: number,
-      targetOn: number,
-      targetOff: number,
-    ) => {
+    (actualOn: number, actualOff: number, targetOn: number, targetOff: number) => {
       const targetDuration = targetOff - targetOn;
       if (targetDuration <= 0) return 0;
 
@@ -123,11 +114,7 @@ export function useScoreEngine({
   );
 
   const processNoteEvent = useCallback(
-    (event: {
-      type: "note-on" | "note-off";
-      note: number;
-      velocity: number;
-    }) => {
+    (event: { type: "note-on" | "note-off"; note: number; velocity: number }) => {
       const currentTimeMs = getCurrentTimeMs();
 
       // --- HANDLE NOTE OFF ---

@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import type { Mode } from "@/shared/types/mode";
 import { Theme } from "../lib/themes";
 
@@ -112,8 +105,7 @@ export function ThemeProvider({
 
       const target = event.target as HTMLElement;
       const isTyping =
-        target.isContentEditable ||
-        ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
+        target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
 
       if (isTyping) {
         return;

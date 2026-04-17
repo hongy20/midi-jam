@@ -42,9 +42,7 @@ function BlinkingText({ children }: { children: ReactNode }) {
     return () => clearInterval(interval);
   }, []);
 
-  return (
-    <span className={visible ? "opacity-100" : "opacity-0"}>{children}</span>
-  );
+  return <span className={visible ? "opacity-100" : "opacity-0"}>{children}</span>;
 }
 
 export default function Hero3({
@@ -66,12 +64,7 @@ export default function Hero3({
         ];
 
   return (
-    <section
-      className={cn(
-        "relative w-full overflow-hidden px-4 py-16 md:py-24",
-        className,
-      )}
-    >
+    <section className={cn("relative w-full overflow-hidden px-4 py-16 md:py-24", className)}>
       {/* Scanline overlay */}
       <div
         aria-hidden="true"
@@ -107,12 +100,8 @@ export default function Hero3({
           {defaultStats.map((stat) => (
             <Card key={stat.label}>
               <CardContent className="flex flex-col items-center px-6 py-4">
-                <span className="retro font-bold text-xl md:text-2xl">
-                  {stat.value}
-                </span>
-                <span className="retro mt-1 text-muted-foreground text-[10px]">
-                  {stat.label}
-                </span>
+                <span className="retro font-bold text-xl md:text-2xl">{stat.value}</span>
+                <span className="retro mt-1 text-muted-foreground text-[10px]">{stat.label}</span>
               </CardContent>
             </Card>
           ))}

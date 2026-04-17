@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
 
 export type Difficulty = "easy" | "normal" | "hard";
 
@@ -41,9 +34,7 @@ export function OptionsProvider({ children }: { children: ReactNode }) {
     [speed, demoMode, resetOptions],
   );
 
-  return (
-    <OptionsContext.Provider value={value}>{children}</OptionsContext.Provider>
-  );
+  return <OptionsContext.Provider value={value}>{children}</OptionsContext.Provider>;
 }
 
 export function useOptions() {

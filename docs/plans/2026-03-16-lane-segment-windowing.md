@@ -11,23 +11,25 @@ The fix splits the tall lane into time-windowed **`LaneSegment`** components. At
 ## Key Design Decisions
 
 ### Segment duration constant
+
 ```ts
 // src/lib/midi/constant.ts
 export const LANE_SEGMENT_DURATION_MS = 10 * 1000;
 ```
 
 ### Segment count
+
 ```ts
 const segmentCount = Math.ceil(totalDurationMs / LANE_SEGMENT_DURATION_MS);
 ```
 
 ### DOM windowing — three segments live in the DOM at any time
 
-| Index | Role |
-|-------|------|
-| `currentIndex - 1` | Previous (just passed) |
-| `currentIndex` | Active (hit-line crossing) |
-| `currentIndex + 1` | Next (pre-loaded) |
+| Index              | Role                       |
+| ------------------ | -------------------------- |
+| `currentIndex - 1` | Previous (just passed)     |
+| `currentIndex`     | Active (hit-line crossing) |
+| `currentIndex + 1` | Next (pre-loaded)          |
 
 `currentIndex = Math.floor(getCurrentTimeMs() / LANE_SEGMENT_DURATION_MS)`, clamped to `[0, segmentCount - 1]`. Segments outside this window are **unmounted**.
 
@@ -38,8 +40,7 @@ Each `LaneSegment` sets `--segment-duration-ms` as an inline CSS variable, and i
 ```css
 .container {
   height: calc(
-    calc(100dvh - var(--header-height) - var(--footer-height)) *
-    (var(--segment-duration-ms) / 3000)
+    calc(100dvh - var(--header-height) - var(--footer-height)) * (var(--segment-duration-ms) / 3000)
   );
 }
 ```
@@ -73,8 +74,11 @@ Because the keyframe math and timing are identical to the original, the visual r
 ## Proposed Changes
 
 ### `src/lib/midi/constant.ts`
+
 #### [MODIFY] [constant.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/lib/midi/constant.ts)
+
 Add:
+
 ```ts
 /** Duration in ms of each windowed LaneSegment */
 export const LANE_SEGMENT_DURATION_MS = 10 * 1000;
@@ -83,6 +87,7 @@ export const LANE_SEGMENT_DURATION_MS = 10 * 1000;
 ---
 
 ### Pure utility helpers
+
 #### [NEW] `src/lib/midi/lane-segment-utils.ts`
 
 Pure functions — no side effects, fully unit-testable:
@@ -92,39 +97,40 @@ Pure functions — no side effects, fully unit-testable:
 export function getCurrentSegmentIndex(
   currentTimeMs: number,
   laneSegmentDurationMs: number,
-): number
+): number;
 
 /** [prev, current, next] indexes, clamped to [0, segmentCount - 1]. */
 export function getVisibleSegmentIndexes(
   currentTimeMs: number,
   totalDurationMs: number,
   laneSegmentDurationMs: number,
-): [number, number, number]
+): [number, number, number];
 
 /** Spans whose startTime falls within the segment's time window. */
 export function filterSpansForSegment(
   spans: NoteSpan[],
   segmentIndex: number,
   laneSegmentDurationMs: number,
-): NoteSpan[]
+): NoteSpan[];
 
 /** currentTime to set on a segment's animation when it mounts. */
 export function segmentAnimationCurrentTime(
   masterCurrentTimeMs: number,
   segmentIndex: number,
   laneSegmentDurationMs: number,
-): number
+): number;
 ```
 
 ---
 
 ### New component: `LaneSegment`
+
 #### [NEW] `src/components/lane-stage/lane-segment.tsx`
 
 ```tsx
 interface LaneSegmentProps {
   segmentIndex: number;
-  spans: NoteSpan[];              // pre-filtered for this segment's window
+  spans: NoteSpan[]; // pre-filtered for this segment's window
   getMasterCurrentTimeMs: () => number;
   isPaused: boolean;
   speed: number;
@@ -132,6 +138,7 @@ interface LaneSegmentProps {
 ```
 
 Internal behaviour:
+
 - On mount: creates a Web Animation on its root `div` (same keyframe shape as the original lane), sets `animation.currentTime` via `segmentAnimationCurrentTime(...)`, then plays or pauses according to `isPaused`.
 - On `isPaused` / `speed` prop change: updates `animation.pause()` / `animation.play()` and `animation.playbackRate` — no re-render needed.
 - Height via `--segment-duration-ms` inline variable + CSS calc (see above).
@@ -144,15 +151,11 @@ Internal behaviour:
 .container {
   display: grid;
   width: 100%;
-  position: absolute;   /* stacks in the same coordinate space as the parent */
+  position: absolute; /* stacks in the same coordinate space as the parent */
   top: 0;
-  grid-template-columns: repeat(
-      calc(var(--end-unit) - var(--start-unit)),
-      minmax(0, 1fr)
-    );
+  grid-template-columns: repeat(calc(var(--end-unit) - var(--start-unit)), minmax(0, 1fr));
   height: calc(
-    calc(100dvh - var(--header-height) - var(--footer-height)) *
-    (var(--segment-duration-ms) / 3000)
+    calc(100dvh - var(--header-height) - var(--footer-height)) * (var(--segment-duration-ms) / 3000)
   );
 }
 ```
@@ -160,6 +163,7 @@ Internal behaviour:
 ---
 
 ### Modify `LaneStage`
+
 #### [MODIFY] [lane-stage.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/components/lane-stage/lane-stage.tsx)
 
 - Remove `<TrackLane>`.
@@ -170,6 +174,7 @@ Internal behaviour:
 ---
 
 ### Simplify `useLaneTimeline`
+
 #### [MODIFY] [use-lane-timeline.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/hooks/use-lane-timeline.ts)
 
 - Remove `querySelector("#track-lane")` and the `element.animate()` keyframe call — positioning is now delegated to each `LaneSegment`.
@@ -178,7 +183,9 @@ Internal behaviour:
 ---
 
 ### Delete `TrackLane`
+
 #### [DELETE] [track-lane.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/components/lane-stage/track-lane.tsx)
+
 #### [DELETE] [track-lane.module.css](file:///Users/yanhong/Github/hongy20/midi-jam/src/components/lane-stage/track-lane.module.css)
 
 Both replaced in full by `LaneSegment` + `lane-segment.module.css`.
@@ -196,15 +203,15 @@ npm run build
 
 ### New — `src/lib/midi/lane-segment-utils.test.ts`
 
-| Test | Assertion |
-|------|-----------|
-| `getCurrentSegmentIndex` | correct floor division |
-| `getVisibleSegmentIndexes` mid-track | `[current-1, current, current+1]` |
-| `getVisibleSegmentIndexes` at `t = 0` | prev clamped to `0` |
-| `getVisibleSegmentIndexes` near end | next clamped to `segmentCount - 1` |
-| `filterSpansForSegment` | only spans within segment window included |
-| `segmentAnimationCurrentTime` | equals `masterTimeMs - segmentIndex * LANE_SEGMENT_DURATION_MS` |
-| Segment count | `Math.ceil(totalDurationMs / LANE_SEGMENT_DURATION_MS)` for edge-case durations |
+| Test                                  | Assertion                                                                       |
+| ------------------------------------- | ------------------------------------------------------------------------------- |
+| `getCurrentSegmentIndex`              | correct floor division                                                          |
+| `getVisibleSegmentIndexes` mid-track  | `[current-1, current, current+1]`                                               |
+| `getVisibleSegmentIndexes` at `t = 0` | prev clamped to `0`                                                             |
+| `getVisibleSegmentIndexes` near end   | next clamped to `segmentCount - 1`                                              |
+| `filterSpansForSegment`               | only spans within segment window included                                       |
+| `segmentAnimationCurrentTime`         | equals `masterTimeMs - segmentIndex * LANE_SEGMENT_DURATION_MS`                 |
+| Segment count                         | `Math.ceil(totalDurationMs / LANE_SEGMENT_DURATION_MS)` for edge-case durations |
 
 ### Update — `lane-stage.test.tsx`
 

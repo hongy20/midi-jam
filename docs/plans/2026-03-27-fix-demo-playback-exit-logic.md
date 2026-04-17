@@ -5,6 +5,7 @@ Refine the intersection observer logic for demo playback to prevent premature no
 ## User Changes
 
 ### 1. Refine Demo Playback Exit Logic
+
 - **File**: `src/hooks/use-demo-playback.ts`
 - **Change**: In the `IntersectionObserver` callback, filter exits to only trigger when the element's top is greater than the root's bottom.
 
@@ -17,8 +18,10 @@ Refine the intersection observer logic for demo playback to prevent premature no
 ## Verification
 
 ### Automated Tests
+
 - Run `npm test` to ensure no regressions in playback logic.
 - Run `npm run lint` and `npm run type-check` for code quality.
 
 ### Manual Verification (Conceptual)
+
 - Elements entering from the top (during fast scroll/init) should not trigger `onNoteOff` immediately if they are momentarily considered "exiting" by the intersection observer before being fully tracked.

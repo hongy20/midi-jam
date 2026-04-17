@@ -34,9 +34,7 @@ describe("useDemoPlayback", () => {
     container.appendChild(note);
 
     // Mock querySelectorAll to find our note
-    container.querySelectorAll = vi
-      .fn()
-      .mockReturnValue([note] as unknown as NodeListOf<Element>);
+    container.querySelectorAll = vi.fn().mockReturnValue([note] as unknown as NodeListOf<Element>);
 
     renderHook(() =>
       useDemoPlayback({

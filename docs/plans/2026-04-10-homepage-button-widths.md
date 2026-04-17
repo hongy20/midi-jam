@@ -11,6 +11,7 @@
 ### Task 1: Update Hero3 Component
 
 **Files:**
+
 - Modify: `src/components/ui/8bit/blocks/hero3.tsx`
 
 **Step 1: Add `className` to `HeroAction` interface**
@@ -19,6 +20,7 @@
 ### Task 2: Update HomePageView
 
 **Files:**
+
 - Modify: `src/app/home/components/home-page.view.tsx`
 
 **Step 1: Add `w-40` class to both actions in `actions` array**

@@ -28,9 +28,7 @@ describe("lane-segment-utils integration with real MIDI", () => {
     });
 
     // The user says 3 segments. Let's see what we get.
-    console.log(
-      `Happy Birthday: totalDuration=${totalDurationMs}ms, groups=${groups.length}`,
-    );
+    console.log(`Happy Birthday: totalDuration=${totalDurationMs}ms, groups=${groups.length}`);
     groups.forEach((g, i) => {
       console.log(
         `  Group ${i}: start=${g.startMs.toFixed(0)}ms, duration=${g.durationMs.toFixed(0)}ms, notes=${g.spans.length}`,
@@ -78,9 +76,7 @@ describe("lane-segment-utils integration with real MIDI", () => {
   });
 
   it("Golden Kpop Demon Hunters should not split connected notes across various thresholds", () => {
-    const { spans, totalDurationMs } = loadMidi(
-      "Golden Kpop Demon Hunters.mid",
-    );
+    const { spans, totalDurationMs } = loadMidi("Golden Kpop Demon Hunters.mid");
 
     // Test multiple common thresholds to ensure stability
     for (const thresholdMs of [3000, 5000, 7000]) {
@@ -101,12 +97,8 @@ describe("lane-segment-utils integration with real MIDI", () => {
 
         // Gap < 1ms is considered 'connected'
         if (gap < 1.0) {
-          const groupIdxA = groups.findIndex((g) =>
-            g.spans.some((s) => s.id === current.id),
-          );
-          const groupIdxB = groups.findIndex((g) =>
-            g.spans.some((s) => s.id === next.id),
-          );
+          const groupIdxA = groups.findIndex((g) => g.spans.some((s) => s.id === current.id));
+          const groupIdxB = groups.findIndex((g) => g.spans.some((s) => s.id === next.id));
 
           if (groupIdxA !== groupIdxB && groupIdxA !== -1 && groupIdxB !== -1) {
             const progress = (currentEndMs / totalDurationMs) * 100;

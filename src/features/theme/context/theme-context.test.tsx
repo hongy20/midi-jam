@@ -85,13 +85,9 @@ describe("ThemeProvider", () => {
     );
     expect(screen.getByTestId("theme").textContent).toBe("nintendo");
     expect(screen.getByTestId("mode").textContent).toBe("dark");
-    expect(document.documentElement.getAttribute("data-theme")).toBe(
-      "nintendo",
-    );
+    expect(document.documentElement.getAttribute("data-theme")).toBe("nintendo");
     expect(document.documentElement.classList.contains("dark")).toBe(true);
-    expect(document.documentElement.classList.contains("theme-nintendo")).toBe(
-      true,
-    );
+    expect(document.documentElement.classList.contains("theme-nintendo")).toBe(true);
     expect(document.body.classList.contains("theme-nintendo")).toBe(true);
   });
 
@@ -110,11 +106,7 @@ describe("ThemeProvider", () => {
     );
     expect(screen.getByTestId("theme").textContent).toBe("atari");
     expect(document.documentElement.getAttribute("data-theme")).toBe("atari");
-    expect(document.documentElement.classList.contains("theme-atari")).toBe(
-      true,
-    );
-    expect(document.documentElement.classList.contains("theme-sega")).toBe(
-      false,
-    );
+    expect(document.documentElement.classList.contains("theme-atari")).toBe(true);
+    expect(document.documentElement.classList.contains("theme-sega")).toBe(false);
   });
 });

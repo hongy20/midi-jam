@@ -13,13 +13,11 @@ describe("useMIDINotes", () => {
     const onNote = vi.fn();
     renderHook(() => useMIDINotes(mockInput, onNote));
 
-    expect(mockInput.addEventListener).toHaveBeenCalledWith(
-      "midimessage",
-      expect.any(Function),
-    );
+    expect(mockInput.addEventListener).toHaveBeenCalledWith("midimessage", expect.any(Function));
 
-    const midiMessageHandler = vi.mocked(mockInput.addEventListener).mock
-      .calls[0][1] as (event: WebMidi.MIDIMessageEvent) => void;
+    const midiMessageHandler = vi.mocked(mockInput.addEventListener).mock.calls[0][1] as (
+      event: WebMidi.MIDIMessageEvent,
+    ) => void;
 
     // Simulate Note On
     midiMessageHandler({
@@ -39,12 +37,9 @@ describe("useMIDINotes", () => {
       removeEventListener: vi.fn(),
     } as unknown as WebMidi.MIDIInput;
 
-    const { rerender } = renderHook(
-      ({ onNote }) => useMIDINotes(mockInput, onNote),
-      {
-        initialProps: { onNote: vi.fn() },
-      },
-    );
+    const { rerender } = renderHook(({ onNote }) => useMIDINotes(mockInput, onNote), {
+      initialProps: { onNote: vi.fn() },
+    });
 
     expect(mockInput.addEventListener).toHaveBeenCalledTimes(1);
 

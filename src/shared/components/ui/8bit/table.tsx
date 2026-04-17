@@ -40,12 +40,7 @@ const Table = React.forwardRef<
     variant?: VariantProps<typeof tableVariants>["variant"];
   }
 >(({ className, font, variant, ...props }, ref) => (
-  <div
-    className={cn(
-      "relative flex justify-center w-fit",
-      tableVariants({ font, variant }),
-    )}
-  >
+  <div className={cn("relative flex justify-center w-fit", tableVariants({ font, variant }))}>
     <ShadcnTable ref={ref} className={className} {...props} />
 
     {variant !== "borderless" && (
@@ -86,19 +81,15 @@ const TableFooter = React.forwardRef<
 ));
 TableFooter.displayName = "TableFooter";
 
-const TableRow = React.forwardRef<
-  HTMLTableRowElement,
-  React.ComponentProps<typeof ShadcnTableRow>
->(({ className, ...props }, ref) => (
-  <ShadcnTableRow
-    ref={ref}
-    className={cn(
-      className,
-      "border-dashed border-b-4 border-foreground dark:border-ring",
-    )}
-    {...props}
-  />
-));
+const TableRow = React.forwardRef<HTMLTableRowElement, React.ComponentProps<typeof ShadcnTableRow>>(
+  ({ className, ...props }, ref) => (
+    <ShadcnTableRow
+      ref={ref}
+      className={cn(className, "border-dashed border-b-4 border-foreground dark:border-ring")}
+      {...props}
+    />
+  ),
+);
 TableRow.displayName = "TableRow";
 
 const TableHead = React.forwardRef<
@@ -125,13 +116,4 @@ const TableCaption = React.forwardRef<
 ));
 TableCaption.displayName = "TableCaption";
 
-export {
-  Table,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableCaption,
-};
+export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };

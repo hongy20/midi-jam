@@ -7,10 +7,7 @@ interface CollectionHeaderProps {
   description: string;
 }
 
-export function CollectionHeader({
-  title,
-  description,
-}: CollectionHeaderProps) {
+export function CollectionHeader({ title, description }: CollectionHeaderProps) {
   return (
     <div className="flex flex-col gap-2">
       <h2 className="retro font-bold text-lg sm:text-2xl md:text-3xl break-words uppercase">

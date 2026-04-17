@@ -13,6 +13,7 @@
 ### Task 1: Update `package.json` scripts
 
 **Files:**
+
 - Modify: `package.json`
 
 **Step 1: Update the `lint` and `lint:fix` scripts**
@@ -41,12 +42,13 @@ git commit -m "chore: unify lint and format scripts"
 ### Task 2: Verify Validation Behavior
 
 **Files:**
+
 - Create: `src/temp-test.ts` (temp file to test violation)
 
 **Step 1: Create a file with formatting and linting violations**
 
 ```typescript
-const unused = "test" ; // Extra space and unused variable
+const unused = "test"; // Extra space and unused variable
 ```
 
 **Step 2: Run `npm run lint`**
@@ -72,6 +74,7 @@ git commit -m "test: verify unified lint and format behavior"
 ### Task 3: Check CI Configuration
 
 **Files:**
+
 - Modify: `.github/workflows/ci.yml` (if needed)
 
 **Step 1: Verify CI uses `npm run lint`**

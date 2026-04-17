@@ -18,10 +18,12 @@ Synchronize CSS animations with the master clock using the Web Animations API. B
 ## Verification Plan
 
 ### Automated Tests
+
 - Run `npm test` to ensure no regressions in segment grouping or timing logic.
 - Run `npm run type-check` to ensure type safety.
 
 ### Manual Verification
+
 - Visual inspection of "Happy Birthday" and other tracks to confirm that the vertical gap between segments is gone.
 - Confirm that the initial idle pre-roll time (3 seconds) is still present.
 - Verify that pausing and resuming doesn't re-introduce or fix gaps (it should stay seamless).

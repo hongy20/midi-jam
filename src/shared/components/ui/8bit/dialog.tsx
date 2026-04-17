@@ -34,8 +34,7 @@ export const dialogContentVariants = cva("", {
 });
 
 export interface BitDialogProps
-  extends React.ComponentPropsWithoutRef<"div">,
-    VariantProps<typeof dialogContentVariants> {}
+  extends React.ComponentPropsWithoutRef<"div">, VariantProps<typeof dialogContentVariants> {}
 
 const DialogTitle = React.forwardRef<HTMLDivElement, BitDialogProps>(
   ({ className, font, ...props }, ref) => (
@@ -55,11 +54,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, BitDialogProps>(
       <ShadcnDialogContent
         /* eslint-disable-next-line @typescript-eslint/no-explicit-any -- ref alignment with legacy shadcn components */
         ref={ref as any}
-        className={cn(
-          "bg-card rounded-none border-none",
-          font !== "normal" && "retro",
-          className,
-        )}
+        className={cn("bg-card rounded-none border-none", font !== "normal" && "retro", className)}
         {...props}
       >
         {children}

@@ -4,7 +4,8 @@
 
 **Goal:** Fix the `useDemoPlayback` hook to prevent the initial burst of `onNoteOff` calls and ensure correct event ordering (Off then On) for contiguous or overlapping notes of the same pitch.
 
-**Architecture:** 
+**Architecture:**
+
 - **Reference Counting**: Use a `Map<number, number>` inside the `useEffect` to track how many spans are currently active for a given pitch.
 - **Event Partitioning**: In the `IntersectionObserver` callback, process all exits (not intersecting) before all entries (intersecting) to ensure that if a pitch "hands off" between two spans, the synthesizer receives `Off` then `On`.
 - **Initial Burst Prevention**: The reference counting naturally prevents `onNoteOff` from firing if the pitch wasn't already active (count > 0).
@@ -16,6 +17,7 @@
 ### Task 1: Create failing test for `useDemoPlayback`
 
 **Files:**
+
 - Create: `src/hooks/use-demo-playback.test.ts`
 
 **Step 1: Write the test suite**
@@ -29,7 +31,7 @@ describe("useDemoPlayback", () => {
   it("does not fire onNoteOff initially for non-intersecting notes", () => {
     const onNoteOn = vi.fn();
     const onNoteOff = vi.fn();
-    
+
     // We need to mock IntersectionObserver to simulate the initial callback
     // and subsequent events.
   });
@@ -50,6 +52,7 @@ Expected: FAIL
 ### Task 2: Implement reference counting and event ordering
 
 **Files:**
+
 - Modify: `src/hooks/use-demo-playback.ts`
 
 **Step 1: Update the hook logic**

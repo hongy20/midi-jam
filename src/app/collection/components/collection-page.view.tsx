@@ -44,16 +44,10 @@ export function CollectionPageView({
           />
 
           <div className="w-full px-12 md:px-16 overflow-visible">
-            <Carousel
-              className="mx-auto w-full max-w-4xl"
-              opts={{ align: "start", loop: false }}
-            >
+            <Carousel className="mx-auto w-full max-w-4xl" opts={{ align: "start", loop: false }}>
               <CarouselContent>
                 {tracks.map((track) => (
-                  <CarouselItem
-                    className="pl-4 jam-carousel-item"
-                    key={track.id}
-                  >
+                  <CarouselItem className="pl-4 jam-carousel-item" key={track.id}>
                     <SongCard
                       track={track}
                       isSelected={selectedTrack?.id === track.id}

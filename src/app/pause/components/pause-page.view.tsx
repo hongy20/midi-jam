@@ -9,12 +9,7 @@ interface PausePageViewProps {
   onQuit: () => void;
 }
 
-export function PausePageView({
-  onContinue,
-  onRestart,
-  onOptions,
-  onQuit,
-}: PausePageViewProps) {
+export function PausePageView({ onContinue, onRestart, onOptions, onQuit }: PausePageViewProps) {
   return (
     <main className="w-screen h-[100dvh] flex items-center justify-center p-4 bg-background overflow-hidden select-none">
       <PauseMenu

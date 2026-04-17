@@ -21,10 +21,7 @@ export function useLaneTimeline({
   const getCurrentTimeMs = useCallback(() => {
     if (totalDurationMs <= 0) return 0;
     const elapsedRealTime = performance.now() - syncRealTimeRef.current;
-    return Math.min(
-      totalDurationMs,
-      baseGameTimeRef.current + elapsedRealTime * speed,
-    );
+    return Math.min(totalDurationMs, baseGameTimeRef.current + elapsedRealTime * speed);
   }, [totalDurationMs, speed]);
 
   const getProgress = useCallback(() => {

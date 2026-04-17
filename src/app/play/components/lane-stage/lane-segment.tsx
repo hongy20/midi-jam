@@ -1,8 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import {
-  computeLaneSegmentAnimationDelay,
-  type SegmentGroup,
-} from "@/features/midi-assets";
+import { computeLaneSegmentAnimationDelay, type SegmentGroup } from "@/features/midi-assets";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./lane-segment.module.css";
 
@@ -27,10 +24,7 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
 
     // JS-computed delay calculates the exact master-timeline offset.
     // e.g., if we are exactly on time for groupStartMs, delayMs = -LANE_SCROLL_DURATION_MS
-    const delayMs = computeLaneSegmentAnimationDelay(
-      mountTimeMs,
-      group.startMs,
-    );
+    const delayMs = computeLaneSegmentAnimationDelay(mountTimeMs, group.startMs);
 
     // Apply the delay variable for the CSS engine. The CSS `animation` property maps this
     // directly to the local timeline `delay`.
@@ -70,10 +64,8 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
         const relEndMs = endTimeMs - group.startMs;
 
         // Proportional positioning within the segment
-        const topPercent =
-          ((group.durationMs - relEndMs) / group.durationMs) * 100;
-        const heightPercent =
-          ((relEndMs - relStartMs) / group.durationMs) * 100;
+        const topPercent = ((group.durationMs - relEndMs) / group.durationMs) * 100;
+        const heightPercent = ((relEndMs - relStartMs) / group.durationMs) * 100;
 
         const pitchClass = gridStyles[`note-${span.note}`];
 

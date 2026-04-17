@@ -4,7 +4,8 @@
 
 **Goal:** Transform the Collection page into a horizontal gallery with CSS scroll snap and auto-selection using IntersectionObserver.
 
-**Architecture:** 
+**Architecture:**
+
 - **Horizontal Gallery**: Songs are laid out in a single horizontal row with `snap-type: x mandatory`.
 - **Intersection Detection**: Use `IntersectionObserver` with a narrow center "hit box" (`rootMargin: "0px -45% 0px -45%"`) to detect the active track and call `setSelectedTrack`.
 - **Visual Feedback**: Apply scale transitions (`transform: scale(1.1)`) via CSS classes when a card is selected.
@@ -16,12 +17,14 @@
 ## Design Overview
 
 ### 1. User Experience (UX)
+
 - **Scroll Snap**: Native CSS scroll snapping ensures a card always rests perfectly in the center.
 - **Snap Center + Scale**: The centered (selected) card is 10-15% larger than the surrounding cards.
 - **Auto-Select on Scroll**: As a song snaps to the center, it becomes the active selection automatically.
 - **Fluid Transitions**: Smooth CSS transitions for scaling and visual highlights.
 
 ### 2. Technical Architecture
+
 - **Root Container**: Horizontal flex container with `overflow-x: auto` and `snap-type: x mandatory`.
 - **TrackCard**: Each card has `scroll-snap-align: center` and a scale transition.
 - **IntersectionObserver**: Monitored by the `CollectionPage` to update context state on intersection.
@@ -33,6 +36,7 @@
 ### Task 1: Update `TrackCard` Styles
 
 **Files:**
+
 - Modify: `src/components/track-card/track-card.module.css`
 
 **Step 1: Update card styles for horizontal gallery**
@@ -46,7 +50,11 @@ Update `.card` to have a stable width and add `.selected` class for scaling.
   padding: 1.25rem;
   border-radius: 1.5rem;
   border: 2px solid transparent;
-  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -86,6 +94,7 @@ git commit -m "feat(collection): update TrackCard styles for gallery"
 ### Task 2: Add Gallery Container Styles
 
 **Files:**
+
 - Modify: `src/app/collection/page.module.css`
 
 **Step 1: Define gallery layout in CSS module**
@@ -102,7 +111,7 @@ git commit -m "feat(collection): update TrackCard styles for gallery"
   padding-inline: calc(50% - 140px); /* (50% - cardWidth/2) */
   -ms-overflow-style: none;
   scrollbar-width: none;
-  height: 400px; 
+  height: 400px;
   min-height: 0;
 }
 
@@ -129,6 +138,7 @@ git commit -m "feat(collection): add gallery container styles"
 ### Task 3: Implement IntersectionObserver Logic
 
 **Files:**
+
 - Modify: `src/app/collection/page.tsx`
 
 **Step 1: Implement `IntersectionObserver` in the component**
@@ -143,36 +153,39 @@ import styles from "./page.module.css";
 const scrollContainerRef = useRef<HTMLDivElement>(null);
 const observerRef = useRef<IntersectionObserver | null>(null);
 
-const setupObserver = useCallback((node: HTMLDivElement | null) => {
-  if (observerRef.current) observerRef.current.disconnect();
+const setupObserver = useCallback(
+  (node: HTMLDivElement | null) => {
+    if (observerRef.current) observerRef.current.disconnect();
 
-  if (node) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const trackId = entry.target.getAttribute("data-track-id");
-            const track = tracks.find((t) => t.id === trackId);
-            if (track) {
-              setSelectedTrack({
-                id: track.id,
-                name: track.name,
-                url: track.url,
-              });
+    if (node) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const trackId = entry.target.getAttribute("data-track-id");
+              const track = tracks.find((t) => t.id === trackId);
+              if (track) {
+                setSelectedTrack({
+                  id: track.id,
+                  name: track.name,
+                  url: track.url,
+                });
+              }
             }
-          }
-        });
-      },
-      {
-        root: node,
-        rootMargin: "0px -45% 0px -45%",
-        threshold: 0.5,
-      }
-    );
+          });
+        },
+        {
+          root: node,
+          rootMargin: "0px -45% 0px -45%",
+          threshold: 0.5,
+        },
+      );
 
-    observerRef.current = observer;
-  }
-}, [tracks, setSelectedTrack]);
+      observerRef.current = observer;
+    }
+  },
+  [tracks, setSelectedTrack],
+);
 ```
 
 **Step 2: Update JSX structure**
@@ -180,7 +193,7 @@ Replace the current track list with the new gallery structure.
 
 ```tsx
 /* Update JSX in CollectionPage */
-<div 
+<div
   ref={(node) => {
     scrollContainerRef.current = node;
     setupObserver(node);
@@ -224,6 +237,7 @@ git commit -m "feat(collection): implement IntersectionObserver for gallery auto
 ### Task 4: Refine Loading State
 
 **Files:**
+
 - Modify: `src/app/collection/page.tsx`
 
 **Step 1: Adjust loading/empty state layout**
@@ -245,6 +259,7 @@ Run: `npm run lint && npm run type-check && npm test`
 Expected: All PASS.
 
 **Step 2: Final Commit**
+
 ```bash
 git commit -m "chore(collection): finalize gallery implementation"
 ```

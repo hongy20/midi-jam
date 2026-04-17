@@ -90,14 +90,12 @@ Canonical song time is **not** an independent audio clock. Instead:
 
 - A **scroll container** (`#lane-scroll`) wraps the lane and can scroll vertically.
 - A **JS `ScrollTimeline`** is bound to this container:
-
   - `source`: the lane scroll container
   - `orientation`: `"block"`
   - `scrollOffsets`: `[0%, 100%]`
   - `timeRange`: `totalDurationMs`
 
 - As the lane scrolls, the timeline exposes:
-
   - `currentTimeMs = laneTimeline.currentTime ?? 0`
   - `progress = currentTimeMs / totalDurationMs` (0–1)
 
@@ -122,18 +120,15 @@ This `currentTimeMs` is the **single source of truth** for:
 On **play**, we create (or restart) a motion animation that advances the lane from start to end:
 
 - Animate either `scrollTop` directly (where supported) or a surrogate property used to set `scrollTop`:
-
   - Start keyframe: `scrollTop = 0`
   - End keyframe: `scrollTop = scrollHeight - clientHeight`
 
 - Animation options:
-
   - `duration = totalDurationMs / speed`
   - `easing: "linear"` (for a constant scroll rate)
   - `fill: "forwards"` (lane ends at the bottom)
 
 - Control API:
-
   - `motion.play()` / `motion.pause()`
   - `motion.playbackRate = speed` (or recreate the animation with adjusted duration)
   - `motion.currentTime` for seeking to a specific position
@@ -145,7 +140,6 @@ The animation primarily updates `scrollTop`. The **ScrollTimeline observes that 
 - A JS-created `ScrollTimeline` is bound to `#lane-scroll`.
 - With `timeRange = totalDurationMs`, `laneTimeline.currentTime` is already in milliseconds.
 - We read:
-
   - `const currentTimeMs = laneTimeline.currentTime ?? 0;`
   - `const progress = currentTimeMs / totalDurationMs;`
 
@@ -164,13 +158,10 @@ All UI and scoring logic that depend on song time use this value instead of a se
 
 - An `IntersectionObserver` (rooted on the lane viewport / hit band) tracks note elements.
 - In **demo mode only**:
-
   - When a note’s rect **enters** the band:
-
     - Send `noteOn(pitch, velocity)` to the selected MIDI output.
 
   - When the note **leaves** the band:
-
     - Send `noteOff(pitch)` for that pitch.
 
 - Thus, **demo audio is driven by the visual lane** crossing the target band, not by separate MIDI playback.
@@ -193,12 +184,10 @@ All UI and scoring logic that depend on song time use this value instead of a se
 #### Mapping Live Events into Song Time
 
 - When a live note event arrives:
-
   - We read `currentTimeMs` from the ScrollTimeline (`laneTimeline.currentTime`).
   - We treat `currentTimeMs` as the **musical time** of the player’s event.
 
 - We match the player’s note against the **closest model note(s) of the same pitch**:
-
   - Compute the time delta between the live event’s `currentTimeMs` and the ideal hit time.
   - Classify result as **Perfect / Good / Miss** based on configurable thresholds.
   - Update **combo**, **score**, and **last hit quality** accordingly.
@@ -206,7 +195,6 @@ All UI and scoring logic that depend on song time use this value instead of a se
 #### Engine Output
 
 - A scoring hook (new or adapted from `useScoreEngine`) exposes:
-
   - `score: number`
   - `combo: number`
   - `lastHitQuality: "perfect" | "good" | "miss" | null`
@@ -222,27 +210,22 @@ All UI and scoring logic that depend on song time use this value instead of a se
 
 - From the settings/context, we read an **instrument id** (e.g. `"piano"`, `"drums"`).
 - A utility, e.g. `getVirtualInstrumentConfig(instrumentId)`, will:
-
   - Select the appropriate **visualizer component**:
-
     - `PianoKeyboard` (existing)
     - Future: `DrumSetVisualizer`, etc.
 
   - Provide a **pitch → visual element mapping**:
-
     - For piano: which key index each MIDI pitch maps to.
     - For drums: which pad / drum element a pitch triggers.
 
 #### `VirtualInstrument` Component
 
 - Props:
-
   - Instrument id or config
   - Set of **live active notes**
   - Set of **demo notes** (if demo mode is enabled)
 
 - Behavior:
-
   - For unknown instruments, **fallback to a keyboard** visualizer.
   - Highlights keys/pads based on the pitch mapping and active note sets.
 
@@ -258,14 +241,12 @@ This abstraction allows us to:
 #### `ScoreHudLite`
 
 - Minimal, performance-focused HUD that displays:
-
   - **Score**
   - **Combo**
   - **Last hit quality** (Perfect / Good / Miss)
   - **Progress** (bar + percentage) based on ScrollTimeline progress
 
 - Design:
-
   - Small overlay at top/right or top/center.
   - Constant DOM size; no per-note elements.
   - Styled with Tailwind; avoid heavy gradients/shadows that might hurt compositing.
@@ -286,6 +267,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
   - Displays the **full standard range** of the instrument (e.g., all 88 keys for piano); no dynamic range shifting or cropping based on song content.
 
 **Visual Constraints:**
+
 - **No 3D perspective**: The layout is strictly 2D for maximum performance and alignment.
 - **Performance**: High-performance rendering principles (CSS Grid, layer separation) are strictly followed.
 
@@ -294,21 +276,17 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### 9. Error Handling & Edge Cases
 
 - **No MIDI device / not supported**:
-
   - Show a friendly message or fallback UI on the gameplay page.
   - Allow demo mode to still animate the lane and (if an output is available) play demo notes.
 
 - **No track selected**:
-
   - Do not render the lane; show an instructional message instead.
 
 - **Very short or very long tracks**:
-
   - Clamp lane height and adjust mapping as needed to avoid absurdly tall DOM structures.
   - Consider limiting minimum duration for the lane animation to avoid overly fast scroll.
 
 - **Animation cancellation / restart**:
-
   - On track change or restart, explicitly cancel the existing motion animation and ScrollTimeline observers, then recreate them.
 
 ---
@@ -316,19 +294,16 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### 10. Testing Strategy
 
 - **Unit tests**:
-
   - Mapping between `timeMs` and Y-position.
   - Mapping between ScrollTimeline `currentTimeMs` and progress.
   - Scoring classification for Perfect/Good/Miss thresholds.
 
 - **Integration / E2E (where practical)**:
-
   - Verify that starting playback advances the lane and progress.
   - Verify that pausing stops lane motion and fixes progress.
   - Verify that speed changes (e.g. 0.5x, 1x, 2x) adjust animation duration correctly.
 
 - **Manual testing on Android Chrome**:
-
   - Performance and smoothness of lane animation.
   - Stability and lack of crashes over full-length tracks.
   - Responsiveness and fairness of scoring.
@@ -340,6 +315,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 1: Review existing gameplay page and hooks
 
 **Files:**
+
 - Read: `src/app/play/page.tsx`
 - Read: `src/hooks/use-active-notes.ts` (or similar)
 - Read: `src/hooks/use-midi-player.ts`, `src/hooks/use-score-engine.ts`, and related MIDI hooks
@@ -365,6 +341,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 2: Refactor `GamePage` structure
 
 **Files:**
+
 - Modify: `src/app/play/page.tsx`
 - Test: `src/app/play/page.test.tsx` (create if missing or update)
 
@@ -386,6 +363,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 3: Wire `GamePage` to global context and new logic
 
 **Files:**
+
 - Modify: `src/app/play/page.tsx`
 - Read/Use: existing settings/selection hooks
 
@@ -411,6 +389,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 4: Implement lane geometry utilities (time → Y mapping)
 
 **Files:**
+
 - Create: `src/lib/play/lane-geometry.ts`
 - Test: `src/lib/play/lane-geometry.test.ts`
 
@@ -436,6 +415,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 5: Implement static `LaneStage` layout (no animation yet)
 
 **Files:**
+
 - Create: `src/components/lane-stage.tsx`
 - Test: `src/components/lane-stage.test.tsx`
 
@@ -470,6 +450,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 6: Implement Web Animations + JS `ScrollTimeline` hook
 
 **Files:**
+
 - Create: `src/hooks/use-lane-timeline.ts`
 - Test: `src/hooks/use-lane-timeline.test.ts`
 - Modify: `src/components/lane-stage.tsx`
@@ -513,6 +494,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 7: Implement demo playback via IntersectionObserver
 
 **Files:**
+
 - Create: `src/hooks/use-demo-playback.ts`
 - Modify: `src/components/lane-stage.tsx`
 
@@ -544,6 +526,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 8: Implement gameplay scoring hook
 
 **Files:**
+
 - Create: `src/hooks/use-lane-score-engine.ts`
 - Test: `src/hooks/use-lane-score-engine.test.ts`
 
@@ -580,6 +563,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 9: Implement `VirtualInstrument` abstraction and default keyboard
 
 **Files:**
+
 - Create: `src/lib/instrument/visualizer-config.ts`
 - Create: `src/components/virtual-instrument.tsx`
 - Test: `src/components/virtual-instrument.test.tsx`
@@ -615,6 +599,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 10: Implement `ScoreHudLite`
 
 **Files:**
+
 - Create: `src/components/score-hud-lite.tsx`
 - Test: `src/components/score-hud-lite.test.tsx`
 
@@ -638,6 +623,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 11: Wire everything together and run full test suite
 
 **Files:**
+
 - Modify: `src/app/play/page.tsx`
 - Modify: any components/hooks as needed for integration
 
@@ -678,6 +664,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 12: Browser Support Check on Welcome Page
 
 **Files:**
+
 - Modify: `src/app/page.tsx`
 
 **Step 1: Implement browser support check**
@@ -692,6 +679,7 @@ The gameplay page uses a **3-row CSS Grid** layout to ensure strict positioning 
 ### Task 13: Clean up legacy files
 
 **Files:**
+
 - Delete: `src/hooks/use-midi-player.ts`
 - Delete: `src/hooks/use-playback-clock.ts`
 - Delete: `src/hooks/use-score-engine.ts` (if fully replaced by `use-lane-score-engine.ts`)

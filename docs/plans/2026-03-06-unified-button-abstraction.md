@@ -13,6 +13,7 @@
 ### Task 1: Update `Button` Component
 
 **Files:**
+
 - Modify: `src/components/button/button.tsx`
 - Modify: `src/components/button/button.module.css`
 - Modify: `src/components/button/button.test.tsx`
@@ -174,10 +175,7 @@ export function Button({
   `;
 
   return (
-    <button
-      className={`${styles.button} ${styles[variant]} ${styles[size]} group`}
-      {...props}
-    >
+    <button className={`${styles.button} ${styles[variant]} ${styles[size]} group`} {...props}>
       {Icon && iconPosition === "left" && <Icon className={iconClasses} />}
       {children}
       {Icon && iconPosition === "right" && <Icon className={iconClasses} />}
@@ -243,6 +241,7 @@ Run: `npm run lint && npm run type-check && npm test`
 Run: `npm run build`
 
 **Step 3: Commit any fixes**
+
 ```bash
 git commit -m "chore: final validation and fixes"
 ```

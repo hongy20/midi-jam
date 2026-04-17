@@ -1,8 +1,4 @@
-import {
-  MIDI_NOTE_C4,
-  PIANO_88_KEY_MAX,
-  PIANO_88_KEY_MIN,
-} from "@/features/midi-assets";
+import { MIDI_NOTE_C4, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/features/midi-assets";
 
 /**
  * Checks if a MIDI note corresponds to a black key on a piano.
@@ -63,8 +59,7 @@ function shiftWhiteKey(note: number, delta: number): number {
  */
 export function getVisibleMidiRange(notes: number[], buffer = 3) {
   // Always include C4 (60) in the range calculation base
-  const allNotes =
-    notes && notes.length > 0 ? [...notes, MIDI_NOTE_C4] : [MIDI_NOTE_C4];
+  const allNotes = notes && notes.length > 0 ? [...notes, MIDI_NOTE_C4] : [MIDI_NOTE_C4];
 
   let startNote = Math.min(...allNotes);
   let endNote = Math.max(...allNotes);

@@ -19,9 +19,7 @@ export function PausePageClient() {
   // If state is missing, either throw (client-side) or return null (SSR/prerender)
   if (!selectedTrack || !selectedMIDIInput) {
     if (typeof window !== "undefined") {
-      throw new Error(
-        "Cannot access Pause page without an active track and MIDI input.",
-      );
+      throw new Error("Cannot access Pause page without an active track and MIDI input.");
     }
     return null;
   }

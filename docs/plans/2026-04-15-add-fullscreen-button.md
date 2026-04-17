@@ -14,6 +14,7 @@ Add a fullscreen toggle button next to the pause button in the `PlayPage` header
 ### Core Logic
 
 #### [NEW] [use-fullscreen.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/hooks/use-fullscreen.ts)
+
 - Implement `useFullscreen` hook.
 - Handle `fullscreenchange` event to sync local state with browser state.
 - Implement `toggleFullscreen` with `requestFullscreen`, `exitFullscreen`, and `screen.orientation.lock('landscape')`.
@@ -23,11 +24,13 @@ Add a fullscreen toggle button next to the pause button in the `PlayPage` header
 ### PlayPage Integration
 
 #### [MODIFY] [play-page.client.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/play/components/play-page.client.tsx)
+
 - Consumes the `useFullscreen` hook.
 - Destructures `isFullscreen` and `toggleFullscreen`.
 - Passes these as props to `PlayPageView`.
 
 #### [MODIFY] [play-page.view.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/play/components/play-page.view.tsx)
+
 - Add `isFullscreen` and `handleToggleFullscreen` to `PlayPageViewProps`.
 - Render a new `Button` next to (left of) the existing Pause button.
 - Use `Maximize2` and `Minimize2` icons.
@@ -37,10 +40,12 @@ Add a fullscreen toggle button next to the pause button in the `PlayPage` header
 ### Documentation Updates
 
 #### [MODIFY] [AGENTS.md](file:///Users/yanhong/Github/hongy20/midi-jam/AGENTS.md)
+
 - Update "Commands" table to include HTTPS protocol.
 - Clarify mandatory HTTPS usage in "Core Principles".
 
 #### [MODIFY] [README.md](file:///Users/yanhong/Github/hongy20/midi-jam/README.md)
+
 - Add `[!IMPORTANT]` alert for HTTPS requirement.
 - Ensure example URLs use `https`.
 
@@ -51,9 +56,11 @@ None at this time based on the brainstorming session.
 ## Verification Plan
 
 ### Automated Tests
+
 - Run `npm run lint` and `npm run type-check` to ensure code quality.
 
 ### Manual Verification
+
 - Verify the button appearance in the `PlayPage` header.
 - Click the button to enter fullscreen and observe the icon change.
 - Verify that pressing `Esc` exits fullscreen and correctly updates the icon back to "enter".

@@ -124,10 +124,10 @@ CSS (compositor-owned from this point):
 
 ## Files Changed
 
-| File | Change |
-|---|---|
-| `src/lib/midi/lane-segment-utils.ts` | Delete `computeSegmentTranslateY`; add `computeLaneSegmentAnimationDelay` |
-| `src/lib/midi/lane-segment-utils.test.ts` | Swap tests accordingly |
-| `src/components/lane-stage/lane-segment.tsx` | Self-animating via `useLayoutEffect` |
-| `src/components/lane-stage/lane-segment.module.css` | Add `@keyframes fall` + `animation` rule |
-| `src/components/lane-stage/lane-stage.tsx` | Delete RAF loop, `segmentRefs`, `innerRef`; pass `getCurrentTimeMs` |
+| File                                                | Change                                                                    |
+| --------------------------------------------------- | ------------------------------------------------------------------------- |
+| `src/lib/midi/lane-segment-utils.ts`                | Delete `computeSegmentTranslateY`; add `computeLaneSegmentAnimationDelay` |
+| `src/lib/midi/lane-segment-utils.test.ts`           | Swap tests accordingly                                                    |
+| `src/components/lane-stage/lane-segment.tsx`        | Self-animating via `useLayoutEffect`                                      |
+| `src/components/lane-stage/lane-segment.module.css` | Add `@keyframes fall` + `animation` rule                                  |
+| `src/components/lane-stage/lane-stage.tsx`          | Delete RAF loop, `segmentRefs`, `innerRef`; pass `getCurrentTimeMs`       |

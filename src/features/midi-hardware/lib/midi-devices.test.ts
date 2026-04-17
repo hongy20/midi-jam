@@ -74,15 +74,9 @@ describe("onMIDIDevicesStateChange", () => {
     const callback = vi.fn();
     const unsubscribe = onMIDIDevicesStateChange(mockMIDIAccess, callback);
 
-    expect(mockMIDIAccess.addEventListener).toHaveBeenCalledWith(
-      "statechange",
-      callback,
-    );
+    expect(mockMIDIAccess.addEventListener).toHaveBeenCalledWith("statechange", callback);
 
     unsubscribe();
-    expect(mockMIDIAccess.removeEventListener).toHaveBeenCalledWith(
-      "statechange",
-      callback,
-    );
+    expect(mockMIDIAccess.removeEventListener).toHaveBeenCalledWith("statechange", callback);
   });
 });

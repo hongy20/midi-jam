@@ -13,96 +13,97 @@
 ### Task 1: Update Mock and Add Failing Test for Resize Handling
 
 **Files:**
+
 - Modify: `src/hooks/use-lane-timeline.test.ts`
 
 **Step 1: Update ResizeObserver mock to allow manual triggering**
 
 ```typescript
-    let roCallback: ResizeObserverCallback;
-    global.ResizeObserver = class ResizeObserver {
-      constructor(callback: ResizeObserverCallback) {
-        roCallback = callback;
-      }
-      observe(_target: Element) {
-        // Initial call
-        roCallback([], this as unknown as ResizeObserver);
-      }
-      unobserve() {}
-      disconnect() {}
-    } as unknown as typeof ResizeObserver;
+let roCallback: ResizeObserverCallback;
+global.ResizeObserver = class ResizeObserver {
+  constructor(callback: ResizeObserverCallback) {
+    roCallback = callback;
+  }
+  observe(_target: Element) {
+    // Initial call
+    roCallback([], this as unknown as ResizeObserver);
+  }
+  unobserve() {}
+  disconnect() {}
+} as unknown as typeof ResizeObserver;
 
-    const triggerResize = () => {
-      roCallback([], {} as ResizeObserver);
-    };
+const triggerResize = () => {
+  roCallback([], {} as ResizeObserver);
+};
 ```
 
 **Step 2: Write the failing test**
 
 ```typescript
-  it("restores progress and state on resize", () => {
-    let roCallback: ResizeObserverCallback = () => {};
-    global.ResizeObserver = class ResizeObserver {
-      constructor(callback: ResizeObserverCallback) {
-        roCallback = callback;
-      }
-      observe(_target: Element) {
-        roCallback([], this as unknown as ResizeObserver);
-      }
-      unobserve() {}
-      disconnect() {}
-    } as unknown as typeof ResizeObserver;
+it("restores progress and state on resize", () => {
+  let roCallback: ResizeObserverCallback = () => {};
+  global.ResizeObserver = class ResizeObserver {
+    constructor(callback: ResizeObserverCallback) {
+      roCallback = callback;
+    }
+    observe(_target: Element) {
+      roCallback([], this as unknown as ResizeObserver);
+    }
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver;
 
-    const mockAnimation = {
-      play: vi.fn(),
-      pause: vi.fn(),
-      cancel: vi.fn(),
-      playbackRate: 1.5,
-      playState: "running",
-      currentTime: 250,
-      effect: {
-        getComputedTiming: () => ({ progress: 0.25 }),
-      },
-      onfinish: null,
-    };
-    const animateMock = vi.fn().mockReturnValue(mockAnimation);
+  const mockAnimation = {
+    play: vi.fn(),
+    pause: vi.fn(),
+    cancel: vi.fn(),
+    playbackRate: 1.5,
+    playState: "running",
+    currentTime: 250,
+    effect: {
+      getComputedTiming: () => ({ progress: 0.25 }),
+    },
+    onfinish: null,
+  };
+  const animateMock = vi.fn().mockReturnValue(mockAnimation);
 
-    const container = {
-      scrollHeight: 1000,
-      clientHeight: 400,
-      querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
-    } as unknown as HTMLDivElement;
-    const containerRef = { current: container };
+  const container = {
+    scrollHeight: 1000,
+    clientHeight: 400,
+    querySelector: vi.fn().mockReturnValue({ animate: animateMock }),
+  } as unknown as HTMLDivElement;
+  const containerRef = { current: container };
 
-    renderHook(() =>
-      useLaneTimeline({
-        containerRef,
-        totalDurationMs: 1000,
-        speed: 1.5,
-        isPaused: false,
-      }),
-    );
+  renderHook(() =>
+    useLaneTimeline({
+      containerRef,
+      totalDurationMs: 1000,
+      speed: 1.5,
+      isPaused: false,
+    }),
+  );
 
-    expect(animateMock).toHaveBeenCalledTimes(1);
+  expect(animateMock).toHaveBeenCalledTimes(1);
 
-    // Simulate resize
-    act(() => {
-      // @ts-ignore
-      container.clientHeight = 500; // New clientHeight, maxScrollPx becomes 500
-      roCallback([], {} as ResizeObserver);
-    });
-
-    // Should re-create animation with new keyframes
-    expect(animateMock).toHaveBeenCalledTimes(2);
-    expect(animateMock).toHaveBeenLastCalledWith(
-      [{ transform: `translateY(-500px)` }, { transform: `translateY(0px)` }],
-      expect.any(Object),
-    );
-
-    // Should restore state
-    expect(mockAnimation.currentTime).toBe(250);
-    expect(mockAnimation.playbackRate).toBe(1.5);
-    expect(mockAnimation.play).toHaveBeenCalledTimes(2); // Initial + after resize
+  // Simulate resize
+  act(() => {
+    // @ts-ignore
+    container.clientHeight = 500; // New clientHeight, maxScrollPx becomes 500
+    roCallback([], {} as ResizeObserver);
   });
+
+  // Should re-create animation with new keyframes
+  expect(animateMock).toHaveBeenCalledTimes(2);
+  expect(animateMock).toHaveBeenLastCalledWith(
+    [{ transform: `translateY(-500px)` }, { transform: `translateY(0px)` }],
+    expect.any(Object),
+  );
+
+  // Should restore state
+  expect(mockAnimation.currentTime).toBe(250);
+  expect(mockAnimation.playbackRate).toBe(1.5);
+  expect(mockAnimation.play).toHaveBeenCalledTimes(2); // Initial + after resize
+});
 ```
 
 **Step 3: Run test to verify it fails**
@@ -122,54 +123,56 @@ git commit -m "test: add failing test for resize handling in useLaneTimeline"
 ### Task 2: Implement Resize Handling in useLaneTimeline
 
 **Files:**
+
 - Modify: `src/hooks/use-lane-timeline.ts`
 
 **Step 1: Update updateAnimation logic**
 
 ```typescript
-    const updateAnimation = () => {
-      const maxScrollPx = container.scrollHeight - container.clientHeight;
-      const targetElement = container.querySelector("#track-lane");
+const updateAnimation = () => {
+  const maxScrollPx = container.scrollHeight - container.clientHeight;
+  const targetElement = container.querySelector("#track-lane");
 
-      let prevTime = 0;
-      if (animationRef.current) {
-        // Save progress before cancelling
-        prevTime = typeof animationRef.current.currentTime === 'number' ? animationRef.current.currentTime : 0;
-        
-        // Always cleanup old animation on resize
-        animationRef.current.cancel();
-        animationRef.current = null;
-      }
+  let prevTime = 0;
+  if (animationRef.current) {
+    // Save progress before cancelling
+    prevTime =
+      typeof animationRef.current.currentTime === "number" ? animationRef.current.currentTime : 0;
 
-      if (maxScrollPx > 0 && targetElement) {
-        const keyframes = [
-          { transform: `translateY(-${maxScrollPx}px)` },
-          { transform: `translateY(0px)` },
-        ];
+    // Always cleanup old animation on resize
+    animationRef.current.cancel();
+    animationRef.current = null;
+  }
 
-        const animation = targetElement.animate(keyframes, {
-          duration: totalDurationMs,
-          fill: "both",
-          easing: "linear",
-        });
+  if (maxScrollPx > 0 && targetElement) {
+    const keyframes = [
+      { transform: `translateY(-${maxScrollPx}px)` },
+      { transform: `translateY(0px)` },
+    ];
 
-        // Restore state using props and saved progress
-        animation.playbackRate = speed;
-        animation.currentTime = prevTime;
-        
-        if (isPaused) {
-          animation.pause();
-        } else {
-          animation.play();
-        }
+    const animation = targetElement.animate(keyframes, {
+      duration: totalDurationMs,
+      fill: "both",
+      easing: "linear",
+    });
 
-        animation.onfinish = () => {
-          onFinish?.();
-        };
+    // Restore state using props and saved progress
+    animation.playbackRate = speed;
+    animation.currentTime = prevTime;
 
-        animationRef.current = animation;
-      }
+    if (isPaused) {
+      animation.pause();
+    } else {
+      animation.play();
+    }
+
+    animation.onfinish = () => {
+      onFinish?.();
     };
+
+    animationRef.current = animation;
+  }
+};
 ```
 
 **Step 2: Run tests to verify it passes**

@@ -5,6 +5,7 @@ This refactor will bring `OptionsPage` in line with `GearPage` and `PausePage` a
 ## User Review Required
 
 > [!IMPORTANT]
+>
 > - **8bitcn Components**: I will be installing `@8bitcn/theme-selector`, `@8bitcn/difficulty-select`, and `@8bitcn/toggle` using `npx shadcn@latest add`.
 > - **Difficulty Mapping**: "Difficulty" will map to the existing `speed` setting:
 >   - **Easy**: 0.5x speed
@@ -25,15 +26,18 @@ This refactor will bring `OptionsPage` in line with `GearPage` and `PausePage` a
 ### [App Structure] `src/app/options`
 
 #### [MODIFY] [page.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/options/page.tsx)
+
 - Change to a simple wrapper that renders `OptionsPageClient`.
 - Wrap in `Suspense` for hardware/URL state compatibility.
 
 #### [NEW] [options-page.client.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/options/components/options-page.client.tsx)
+
 - Consume `useOptions`, `useTheme`, `useNavigation`, and `useSearchParams`.
 - Map state and setters to props for `OptionsPageView`.
 - Implement mapping logic between `speed` (context) and `difficulty` (view).
 
 #### [NEW] [options-page.view.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/options/components/options-page.view.tsx)
+
 - Use `<main>` with full viewport classes (`h-dvh`, `w-screen`).
 - Group settings into sections using `Card`.
 - Implement `ThemeSelector` for themes.
@@ -42,22 +46,26 @@ This refactor will bring `OptionsPage` in line with `GearPage` and `PausePage` a
 - Add "Back" action; remove "Exit" button.
 
 #### [NEW] [options-page.view.stories.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/options/components/options-page.view.stories.tsx)
+
 - Create Storybook stories for the view component with various states.
 
 ### [Cleanup]
 
 #### [DELETE] [option-item.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/components/option-item/option-item.tsx)
+
 - Remove the old shared component since it's no longer used.
 
 ## Verification Plan
 
 ### Automated Tests
+
 - Run `npm run lint` (Biome)
 - Run `npm run type-check` (TypeScript)
 - Run `npm test` (Vitest)
 - Run `npm run build` (Next.js build)
 
 ### Manual Verification
+
 - Verify the new UI in the browser.
 - Verify Storybook rendering.
 - Test all settings (Theme, Mode, Difficulty, Autopilot) to ensure they persist and update the app correctly.

@@ -13,20 +13,24 @@
 ## Design Specifications
 
 ### 1. Architecture: Skeleton vs. Frames
+
 We separate the "Viewport Skeleton" from "Page Content."
 
 #### 1.1 `PageLayout` (The Skeleton)
+
 - **Role:** Enforces the `100dvw/h` viewport lock and the `3-row grid` structure.
 - **Centering Logic:** The `main` slot will use Flexbox (`items-center justify-center`) to ensure content is always centered by default.
 - **Grid Structure:** `grid-template-rows: auto 1fr auto`.
 
 #### 1.2 `PageHeader` & `PageFooter` (The Frames)
+
 - **Role:** Standardize spacing and alignment for page titles and action buttons.
 - **Design:** Simple Flex containers that handle `justify-between` and `gap` logic consistently.
 
 ### 2. Component APIs & Styling
 
 #### 2.1 `PageLayout`
+
 - **Location:** `src/components/page-layout/`
 - **Props:**
   ```tsx
@@ -41,6 +45,7 @@ We separate the "Viewport Skeleton" from "Page Content."
 - **Styling:** `page-layout.module.css` (using CSS Modules).
 
 #### 2.2 `PageHeader` & `PageFooter`
+
 - **`PageHeader`:** Standardizes `flex justify-between` layout for titles and back buttons.
 - **`PageFooter`:** Standardizes `flex items-center justify-end` layout for action buttons.
 
@@ -51,6 +56,7 @@ We separate the "Viewport Skeleton" from "Page Content."
 ### Task 1: Create `PageLayout` Component
 
 **Files:**
+
 - Create: `src/components/page-layout/page-layout.tsx`
 - Create: `src/components/page-layout/page-layout.module.css`
 - Create: `src/components/page-layout/page-layout.test.tsx`
@@ -70,7 +76,7 @@ describe("PageLayout", () => {
         footer={<div data-testid="footer">Footer</div>}
       >
         <div data-testid="content">Content</div>
-      </PageLayout>
+      </PageLayout>,
     );
     expect(screen.getByTestId("header")).toBeDefined();
     expect(screen.getByTestId("footer")).toBeDefined();
@@ -151,6 +157,7 @@ git commit -m "feat: add PageLayout component with CSS Modules"
 ### Task 2: Create `PageHeader` & `PageFooter` Components
 
 **Files:**
+
 - Create: `src/components/page-header.tsx`
 - Create: `src/components/page-footer.tsx`
 
@@ -167,7 +174,9 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, children, className = "" }: PageHeaderProps) {
   return (
-    <div className={`flex items-center justify-between py-[var(--header-py)] px-6 sm:px-8 w-full max-w-5xl mx-auto ${className}`}>
+    <div
+      className={`flex items-center justify-between py-[var(--header-py)] px-6 sm:px-8 w-full max-w-5xl mx-auto ${className}`}
+    >
       {typeof title === "string" ? (
         <h1 className="text-[var(--h1-size)] font-black text-foreground uppercase tracking-tighter">
           {title}
@@ -175,9 +184,7 @@ export function PageHeader({ title, children, className = "" }: PageHeaderProps)
       ) : (
         title
       )}
-      <div className="flex items-center gap-4">
-        {children}
-      </div>
+      <div className="flex items-center gap-4">{children}</div>
     </div>
   );
 }
@@ -195,7 +202,9 @@ interface PageFooterProps {
 
 export function PageFooter({ children, className = "" }: PageFooterProps) {
   return (
-    <div className={`flex flex-col sm:flex-row items-center justify-end gap-4 py-[var(--footer-py)] px-6 sm:px-8 w-full max-w-5xl mx-auto ${className}`}>
+    <div
+      className={`flex flex-col sm:flex-row items-center justify-end gap-4 py-[var(--footer-py)] px-6 sm:px-8 w-full max-w-5xl mx-auto ${className}`}
+    >
       {children}
     </div>
   );
@@ -214,6 +223,7 @@ git commit -m "feat: add PageHeader and PageFooter primitives"
 ### Task 3: Refactor Welcome Page
 
 **Files:**
+
 - Modify: `src/app/page.tsx`
 
 **Step 1: Refactor to use `PageLayout`**
@@ -234,6 +244,7 @@ git commit -m "refactor: use PageLayout in Welcome page"
 ### Task 4: Refactor Gear Page
 
 **Files:**
+
 - Modify: `src/app/gear/page.tsx`
 
 **Step 1: Refactor `GearContent` to use `PageLayout`, `PageHeader`, and `PageFooter`.**
@@ -250,6 +261,7 @@ git commit -m "refactor: use PageLayout in Gear page"
 ### Task 5: Refactor Collection Page
 
 **Files:**
+
 - Modify: `src/app/collection/page.tsx`
 
 **Step 1: Refactor to use `PageLayout`, `PageHeader`, and `PageFooter`.**
@@ -266,6 +278,7 @@ git commit -m "refactor: use PageLayout in Collection page"
 ### Task 6: Refactor Play Page
 
 **Files:**
+
 - Modify: `src/app/play/page.tsx`
 
 **Step 1: Refactor to use `PageLayout`.**
@@ -289,6 +302,7 @@ Run: `npm run lint && npm run type-check && npm test`
 Run: `npm run build`
 
 **Step 3: Commit any fixes**
+
 ```bash
 git commit -m "chore: final validation and fixes"
 ```

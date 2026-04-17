@@ -1,11 +1,7 @@
 "use client";
 
 import { memo, useEffect, useRef } from "react";
-import {
-  MIDI_NOTE_C4,
-  PIANO_88_KEY_MAX,
-  PIANO_88_KEY_MIN,
-} from "@/features/midi-assets";
+import { MIDI_NOTE_C4, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/features/midi-assets";
 import gridStyles from "./piano-grid.module.css";
 import styles from "./piano-keyboard.module.css";
 
@@ -14,30 +10,13 @@ interface PianoKeyboardProps {
   playbackNotes: Set<number>;
 }
 
-const NOTE_NAMES = [
-  "C",
-  "C#",
-  "D",
-  "D#",
-  "E",
-  "F",
-  "F#",
-  "G",
-  "G#",
-  "A",
-  "A#",
-  "B",
-];
+const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 /**
  * Static piano keys that register themselves to the parent's Ref Map.
  */
 const PianoKeys = memo(
-  ({
-    keyRefs,
-  }: {
-    keyRefs: React.RefObject<Map<number, HTMLButtonElement> | null>;
-  }) => {
+  ({ keyRefs }: { keyRefs: React.RefObject<Map<number, HTMLButtonElement> | null> }) => {
     const notes = Array.from(
       { length: PIANO_88_KEY_MAX - PIANO_88_KEY_MIN + 1 },
       (_, i) => PIANO_88_KEY_MIN + i,
@@ -66,9 +45,7 @@ const PianoKeys = memo(
               aria-label={noteName}
               tabIndex={-1}
             >
-              {note === MIDI_NOTE_C4 && (
-                <span className={styles.label}>C4</span>
-              )}
+              {note === MIDI_NOTE_C4 && <span className={styles.label}>C4</span>}
             </button>
           );
         })}
@@ -83,10 +60,7 @@ PianoKeys.displayName = "PianoKeys";
  * A high-performance responsive visual representation of a piano keyboard.
  * Uses a stable DOM tree and imperative Ref updates for 60fps glow effects.
  */
-export const PianoKeyboard = ({
-  liveNotes,
-  playbackNotes,
-}: PianoKeyboardProps) => {
+export const PianoKeyboard = ({ liveNotes, playbackNotes }: PianoKeyboardProps) => {
   const keyRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
 
   // Imperative sync: Update data attributes on key elements without re-rendering

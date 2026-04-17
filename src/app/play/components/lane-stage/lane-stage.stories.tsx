@@ -47,9 +47,7 @@ const mockGroups = [
     index: 1,
     startMs: 5000,
     durationMs: 5000,
-    spans: [
-      { id: "4", note: 72, startTimeMs: 6000, durationMs: 1000, velocity: 0.9 },
-    ],
+    spans: [{ id: "4", note: 72, startTimeMs: 6000, durationMs: 1000, velocity: 0.9 }],
   },
 ];
 
@@ -71,10 +69,9 @@ export const Playing: Story = {
 
 export const Animated: Story = {
   render: (args) => {
-     
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [time, setTime] = useState(0);
-     
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
       const start = performance.now();

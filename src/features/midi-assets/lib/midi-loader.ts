@@ -1,9 +1,5 @@
 import { Midi } from "@tonejs/midi";
-import {
-  LEAD_IN_DEFAULT_MS,
-  LEAD_OUT_DEFAULT_MS,
-  MIDI_DUMMY_NOTE_PITCH,
-} from "./constant";
+import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS, MIDI_DUMMY_NOTE_PITCH } from "./constant";
 
 /**
  * Patches a MIDI object to include lead-in and lead-out margins.
@@ -31,10 +27,7 @@ function patchMidi(midi: Midi): Midi {
     }
 
     // controlChanges is a proxy object with CC numbers as keys.
-    const controlChanges = track.controlChanges as unknown as Record<
-      string,
-      { ticks: number }[]
-    >;
+    const controlChanges = track.controlChanges as unknown as Record<string, { ticks: number }[]>;
     for (const ccNumber in controlChanges) {
       const ccList = controlChanges[ccNumber];
       if (Array.isArray(ccList)) {

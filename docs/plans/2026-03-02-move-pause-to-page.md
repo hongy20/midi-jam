@@ -4,7 +4,8 @@
 
 **Goal:** Transition the gameplay pause functionality from an overlay within the game page to a dedicated route (`/pause`), ensuring all gameplay state (progress, score, combo) is persisted via `SelectionContext`.
 
-**Architecture:** 
+**Architecture:**
+
 - Centralize gameplay state in `SelectionContext` within a `GameSession` object.
 - Update `useLaneTimeline` and `useLaneScoreEngine` hooks to initialize from provided state.
 - Create `/pause` page that modifies context state and handles navigation back to game or results.
@@ -16,6 +17,7 @@
 ### Task 1: Update SelectionContext to Store Full Gameplay State
 
 **Files:**
+
 - Modify: `src/context/selection-context.tsx`
 
 **Step 1: Update GameSession interface**
@@ -45,6 +47,7 @@ git commit -m "feat: expand GameSession state in SelectionContext"
 ### Task 2: Update useLaneTimeline to support initialTimeMs
 
 **Files:**
+
 - Modify: `src/hooks/use-lane-timeline.ts`
 - Modify: `src/hooks/use-lane-timeline.test.ts`
 
@@ -78,6 +81,7 @@ git commit -m "feat: support initialTimeMs in useLaneTimeline"
 ### Task 3: Update useLaneScoreEngine to support state restoration
 
 **Files:**
+
 - Modify: `src/hooks/use-lane-score-engine.ts`
 - Modify: `src/hooks/use-lane-score-engine.test.ts`
 
@@ -107,6 +111,7 @@ git commit -m "feat: support state restoration in useLaneScoreEngine"
 ### Task 4: Update GamePage to Sync State and Handle Pause Navigation
 
 **Files:**
+
 - Modify: `src/app/play/page.tsx`
 
 **Step 1: Initialize local state from gameSession**
@@ -139,12 +144,14 @@ git commit -m "refactor: sync gameplay state and navigate to /pause"
 ### Task 5: Create Dedicated Pause Page
 
 **Files:**
+
 - Create: `src/app/pause/page.tsx`
 - Create: `src/app/pause/page.module.css`
 
 **Step 1: Implement the Pause Page**
 
 It should render the `PauseOverlay` logic or its contents.
+
 - `onResume`: Set `isPaused: false` and navigate back to `/play`.
 - `onRestart`: Reset context and navigate back to `/play`.
 - `onQuit`: Navigate to `/score` with context results.

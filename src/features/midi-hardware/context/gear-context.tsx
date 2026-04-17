@@ -18,8 +18,10 @@ const GearContext = createContext<GearContextType | undefined>(undefined);
 
 export function GearProvider({ children }: { children: ReactNode }) {
   const { inputs, outputs, accessPromise } = useMIDIDevices();
-  const { selectedMIDIInput, selectedMIDIOutput, selectMIDIInput } =
-    useMIDISelection(inputs, outputs);
+  const { selectedMIDIInput, selectedMIDIOutput, selectMIDIInput } = useMIDISelection(
+    inputs,
+    outputs,
+  );
 
   const value: GearContextType = useMemo(
     () => ({
@@ -31,14 +33,7 @@ export function GearProvider({ children }: { children: ReactNode }) {
       selectMIDIOutput: () => {}, // TODO: Implement if needed
       accessPromise,
     }),
-    [
-      inputs,
-      outputs,
-      selectedMIDIInput,
-      selectedMIDIOutput,
-      selectMIDIInput,
-      accessPromise,
-    ],
+    [inputs, outputs, selectedMIDIInput, selectedMIDIOutput, selectMIDIInput, accessPromise],
   );
 
   return <GearContext.Provider value={value}>{children}</GearContext.Provider>;

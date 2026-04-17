@@ -13,6 +13,7 @@
 ### Task 1: Game Page Scaling
 
 **Files:**
+
 - Modify: `src/app/play/page.module.css`
 
 **Step 1: Reduce header/footer heights in landscape**
@@ -28,6 +29,7 @@
 ```
 
 **Step 2: Commit**
+
 ```bash
 git add src/app/play/page.module.css
 git commit -m "style(game): aggressively scale header and footer in landscape"
@@ -38,6 +40,7 @@ git commit -m "style(game): aggressively scale header and footer in landscape"
 ### Task 2: Settings Page Landscape Reflow
 
 **Files:**
+
 - Modify: `src/app/options/page.tsx`
 
 **Step 1: Shrink header and gaps in landscape**
@@ -70,6 +73,7 @@ Reduce padding and font sizes specifically for landscape.
 ```
 
 **Step 3: Commit**
+
 ```bash
 git add src/app/options/page.tsx
 git commit -m "style(settings): reflow layout to grid in landscape to avoid scrolling"
@@ -80,6 +84,7 @@ git commit -m "style(settings): reflow layout to grid in landscape to avoid scro
 ### Task 3: Navigation Layout Optimization
 
 **Files:**
+
 - Modify: `src/components/navigation-layout.tsx`
 
 **Step 1: Remove max-height restriction and optimize spacing**
@@ -100,6 +105,7 @@ Ensure the container always fills the screen but scales its contents.
 ```
 
 **Step 2: Commit**
+
 ```bash
 git add src/components/navigation-layout.tsx
 git commit -m "style(ui): optimize NavigationLayout for fixed viewport height"
@@ -110,6 +116,7 @@ git commit -m "style(ui): optimize NavigationLayout for fixed viewport height"
 ### Task 4: Tracks Page Grid Scaling
 
 **Files:**
+
 - Modify: `src/app/collection/page.tsx`
 
 **Step 1: Increase grid columns in landscape to reduce height**
@@ -132,6 +139,7 @@ git commit -m "style(ui): optimize NavigationLayout for fixed viewport height"
 ```
 
 **Step 3: Commit**
+
 ```bash
 git add src/app/collection/page.tsx
 git commit -m "style(tracks): scale grid and buttons for landscape"
@@ -142,6 +150,7 @@ git commit -m "style(tracks): scale grid and buttons for landscape"
 ### Task 5: Results Page Layout Reflow
 
 **Files:**
+
 - Modify: `src/app/score/page.tsx`
 
 **Step 1: Make Results cards more compact in landscape**
@@ -153,6 +162,7 @@ git commit -m "style(tracks): scale grid and buttons for landscape"
 ```
 
 **Step 2: Commit**
+
 ```bash
 git add src/app/score/page.tsx
 git commit -m "style(results): compact layout for landscape performance summary"
@@ -163,6 +173,7 @@ git commit -m "style(results): compact layout for landscape performance summary"
 ### Task 6: Welcome Page Scaling
 
 **Files:**
+
 - Modify: `src/app/page.tsx`
 
 **Step 1: Shrink title and spacers in landscape**
@@ -192,6 +203,7 @@ py-5 sm:py-6 landscape:py-3 ... text-xl sm:text-2xl landscape:text-lg ...
 ```
 
 **Step 2: Commit**
+
 ```bash
 git add src/app/page.tsx
 git commit -m "style(home): scale welcome page for landscape"

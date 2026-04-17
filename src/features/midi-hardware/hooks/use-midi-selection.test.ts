@@ -44,10 +44,9 @@ describe("useMIDISelection", () => {
 
   it("should auto-deselect if the selected device is no longer available", () => {
     // Start with the device available
-    const { result, rerender } = renderHook(
-      ({ inputs }) => useMIDISelection(inputs),
-      { initialProps: { inputs: [mockDevice1] } },
-    );
+    const { result, rerender } = renderHook(({ inputs }) => useMIDISelection(inputs), {
+      initialProps: { inputs: [mockDevice1] },
+    });
 
     // Select the device
     act(() => {
@@ -62,10 +61,9 @@ describe("useMIDISelection", () => {
   });
 
   it("should remain selected if the device is still available", () => {
-    const { result, rerender } = renderHook(
-      ({ inputs }) => useMIDISelection(inputs),
-      { initialProps: { inputs: [mockDevice1, mockDevice2] } },
-    );
+    const { result, rerender } = renderHook(({ inputs }) => useMIDISelection(inputs), {
+      initialProps: { inputs: [mockDevice1, mockDevice2] },
+    });
 
     act(() => {
       result.current.selectMIDIInput(mockDevice1);
