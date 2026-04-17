@@ -1,9 +1,9 @@
 "use client";
 
 import { Maximize2, Minimize2, Pause } from "lucide-react";
-import { Button } from "@/components/ui/8bit/button";
-import type { HitQuality } from "@/hooks/use-lane-score-engine";
-import type { SegmentGroup } from "@/lib/midi/lane-segment-utils";
+import type { SegmentGroup } from "@/features/midi-assets";
+import type { HitQuality } from "@/features/score";
+import { Button } from "@/shared/components/ui/8bit/button";
 import { LaneStage } from "./lane-stage/lane-stage";
 import { PianoKeyboard } from "./piano-keyboard/PianoKeyboard";
 import styles from "./play-page.view.module.css";

@@ -42,22 +42,40 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 - **Semantic Theme Mapping**: Extract all visual properties (colors, fonts, shadows, radii) into semantic CSS variables within `globals.css` (or imported variables). Components must consume these functional aliases (e.g., `--piano-key-white`, `--ui-card-bg`) instead of hardcoding raw values or using direct theme primitives.
 - **Iconography**: Use `lucide-react` exclusively. For custom icons, use standalone `.svg` files. No inline SVG strings or emojis.
 - **DOM Efficiency**:
-  - **Flatten Trees**: Avoid redundant wrapping `div`s. If an element has only one child, consolidate them.
   - **Purposeful Elements**: Avoid empty `div`s for spacing or decoration; use parent grid/flex spacing or pseudo-elements (`::before`/`::after`) instead.
 
-## 4. UI & Navigation Architecture
+## 4. Layered Architecture (Feature-Based)
+The project follows a layered, domain-driven architecture to ensure scalability and isolation.
 
-### Layout Hierarchy
+### 4.1 Structural Layers
+- **`src/app/` (Colocation Layer)**: Contains route-specific components, hooks, and context. If a logic piece is ONLY used by one route (e.g., Gameplay Engine for `/play`), it MUST be colocated here.
+- **`src/features/` (Domain Layer)**: Contains domain-specific logic managed as encapsulated modules.
+    - Features: `midi-hardware`, `midi-assets`, `audio`, `score`, `navigation`, `collection`, `settings`, `theme`.
+    - Each feature MUST expose a public API via `index.ts`.
+    - **Isolation Rule**: Features must NOT import from each other's internal folders. They must use the public API (barrel export).
+- **`src/shared/` (Infrastructure Layer)**: Contains generic UI primitives, utility functions, and cross-cutting hooks that have zero knowledge of any feature or app domain.
+
+### 4.2 Module Anatomy
+Inside a feature or colocated app folder, use the following sub-directories:
+- `components/`: Pure UI components.
+- `hooks/`: Domain-specific hooks.
+- `context/`: State providers.
+- `lib/`: Domain-specific utilities or core logic.
+
+## 5. UI & Navigation Architecture
+
+### 5.1 Layout Hierarchy
 - **Root**: Every page should follow the `PageClient` -> `PageView` architecture.
 - **Container**: Use `<main className="h-dvh">` as the primary container for all views.
-- **Deprecated**: `PageLayout`, `PageHeader`, and `PageFooter` components are deprecated in favor of page-specific components or 8bitcn blocks.
+- **Colocation**: Prefer colocating page-specific providers and hooks in `src/app/[route]/context/` and `src/app/[route]/hooks/`.
+- **Deprecated**: `PageLayout`, `PageHeader`, and `PageFooter` components are deprecated.
 
-### 4.3 Unified Action Styling
+### 5.2 Unified Action Styling
 - **Pattern**: Use the `.btn-jam` class for buttons and `.jam-action-group` for button containers (defined in `base.css`) to ensure consistent alignment, width, and responsive behavior (e.g., hiding icons on small screens).
 - **Flexibility**: Button labels and casing are at the developer's discretion; ensure they remain legible across all themes.
 
 
-## 5. React & State Patterns
+## 6. React & State Patterns
 
 ### Context & Hook Consumption
 - **Granular Hooks**: Prefer specialized hooks (`useGear`, `useTrackSync`, `useOptions`) over a monolithic context to prevent unnecessary re-renders.
@@ -89,7 +107,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 ### 7.2 Theme & Context Integration
 - **Unified Decorator**: All stories must be wrapped in `ThemeProvider` within the Storybook environment to ensure context compatibility.
 - **Theme Switching**: Use `globalTypes` (not the default decorators) to manage the 20+ retro themes via `data-theme` and Light/Dark mode via the `.dark` class. This ensures independent control and avoids CSS selector clashes.
-- **CSS Selectors**: Always ensure `retro-globals.css` supports both `.theme-name` (for runtime) and `[data-theme="name"]` (for Storybook) selectors.
+- **CSS Selectors**: Always ensure `src/features/theme/styles/retro-globals.css` supports both `.theme-name` (for runtime) and `[data-theme="name"]` (for Storybook) selectors.
 
 ---
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { memo, useEffect, useRef } from "react";
-import type { HitQuality } from "@/hooks/use-lane-score-engine";
+import type { HitQuality } from "@/features/score";
 import styles from "./score-widget.module.css";
 
 interface ScoreWidgetProps {

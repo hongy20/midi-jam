@@ -1,13 +1,13 @@
 "use client";
 
 import { ChevronRight, Home, RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/8bit/button";
+import { Button } from "@/shared/components/ui/8bit/button";
 import {
   Table,
   TableBody,
   TableCell,
   TableRow,
-} from "@/components/ui/8bit/table";
+} from "@/shared/components/ui/8bit/table";
 
 interface ScorePageViewProps {
   title: string;

@@ -1,6 +1,6 @@
 "use client";
 
-import PauseMenu from "@/components/ui/8bit/blocks/pause-menu";
+import PauseMenu from "@/shared/components/ui/8bit/blocks/pause-menu";
 
 interface PausePageViewProps {
   onContinue: () => void;

@@ -1,11 +1,11 @@
 "use client";
 
-import { useCollection } from "@/context/collection-context";
-import { useGear } from "@/context/gear-context";
-import { useScore } from "@/context/score-context";
-import { useStage } from "@/context/stage-context";
-import { useTrack } from "@/context/track-context";
-import { useNavigation } from "@/hooks/use-navigation";
+import { useStage } from "@/app/play/context/stage-context";
+import { useCollection } from "@/features/collection";
+import { useTrack } from "@/features/midi-assets";
+import { useGear } from "@/features/midi-hardware";
+import { useNavigation } from "@/features/navigation";
+import { useScore } from "@/features/score";
 import { PausePageView } from "./pause-page.view";
 
 export function PausePageClient() {

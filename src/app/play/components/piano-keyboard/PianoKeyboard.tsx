@@ -5,7 +5,7 @@ import {
   MIDI_NOTE_C4,
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
-} from "@/lib/midi/constant";
+} from "@/features/midi-assets";
 import gridStyles from "./piano-grid.module.css";
 import styles from "./piano-keyboard.module.css";
 

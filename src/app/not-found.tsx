@@ -1,4 +1,4 @@
-import NotFound1 from "@/components/ui/8bit/blocks/not-found1";
+import NotFound1 from "@/shared/components/ui/8bit/blocks/not-found1";
 
 /**
  * Custom 404 page for Midi Jam.

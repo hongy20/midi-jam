@@ -1,17 +1,17 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { Badge } from "@/components/ui/8bit/badge";
+import { Badge } from "@/shared/components/ui/8bit/badge";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/8bit/card";
-import { cn } from "@/lib/utils";
+} from "@/shared/components/ui/8bit/card";
+import { cn } from "@/shared/lib/utils";
 
-import "@/components/ui/8bit/styles/retro.css";
+import "@/shared/components/ui/8bit/styles/retro.css";
 
 interface GearCardProps {
   badge?: string;

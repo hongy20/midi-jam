@@ -5,7 +5,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "@/components/ui/8bit/card";
+} from "@/shared/components/ui/8bit/card";
 
 export default function GlobalError({
   error,

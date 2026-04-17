@@ -1,6 +1,6 @@
 "use client";
 
-import "@/components/ui/8bit/styles/retro.css";
+import "@/shared/components/ui/8bit/styles/retro.css";
 
 interface GearHeaderProps {
   title: string;

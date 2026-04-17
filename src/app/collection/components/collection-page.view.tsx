@@ -1,14 +1,14 @@
 "use client";
 
 import { Dices, Play } from "lucide-react";
-import { Button } from "@/components/ui/8bit/button";
+import { Button } from "@/shared/components/ui/8bit/button";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/8bit/carousel";
+} from "@/shared/components/ui/8bit/carousel";
 import { CollectionHeader } from "./collection-header";
 import { SongCard, type SongCardTrack } from "./song-card";
 

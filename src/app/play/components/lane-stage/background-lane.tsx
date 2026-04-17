@@ -1,4 +1,4 @@
-import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/lib/midi/constant";
+import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/features/midi-assets";
 import gridStyles from "../piano-keyboard/piano-grid.module.css";
 import styles from "./background-lane.module.css";
 

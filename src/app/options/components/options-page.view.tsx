@@ -1,28 +1,28 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/8bit/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/8bit/card";
+import type { Difficulty } from "@/features/settings";
+import type { Theme } from "@/features/theme";
+import { ThemePicker } from "@/features/theme";
+import { Button } from "@/shared/components/ui/8bit/button";
+import { Card, CardContent, CardTitle } from "@/shared/components/ui/8bit/card";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/8bit/carousel";
+} from "@/shared/components/ui/8bit/carousel";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/8bit/select";
-import { Toggle } from "@/components/ui/8bit/toggle";
-import { RetroModeSwitcher } from "@/components/ui/retro-mode-switcher";
-import type { Difficulty } from "@/context/options-context";
-import type { ThemeMode } from "@/context/theme-context";
-import type { Theme } from "@/lib/themes";
-import { ThemePicker } from "./theme-picker";
+} from "@/shared/components/ui/8bit/select";
+import { Toggle } from "@/shared/components/ui/8bit/toggle";
+import { RetroModeSwitcher } from "@/shared/components/ui/retro-mode-switcher";
+import type { Mode } from "@/shared/types/mode";
 
 interface OptionsPageViewProps {
   difficulty: Difficulty;
@@ -31,7 +31,7 @@ interface OptionsPageViewProps {
   setDemoMode: (enabled: boolean) => void;
   activeTheme: Theme;
   onThemeChange: (theme: Theme) => void;
-  mode: ThemeMode;
+  mode: Mode;
   onModeToggle: () => void;
   onBack: () => void;
 }

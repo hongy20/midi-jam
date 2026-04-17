@@ -1,6 +1,6 @@
 import { queryByAttribute, render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { buildSegmentGroups } from "@/lib/midi/lane-segment-utils";
+import { buildSegmentGroups } from "@/features/midi-assets";
 import { LaneStage } from "./lane-stage";
 
 // Mock ResizeObserver

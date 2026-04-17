@@ -2,10 +2,9 @@
 
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
-import { type Difficulty, useOptions } from "@/context/options-context";
-import { useTheme } from "@/context/theme-context";
-
-import { useNavigation } from "@/hooks/use-navigation";
+import { useNavigation } from "@/features/navigation";
+import { type Difficulty, useOptions } from "@/features/settings";
+import { useTheme } from "@/features/theme";
 import { OptionsPageView } from "./options-page.view";
 
 /**
