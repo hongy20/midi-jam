@@ -7,7 +7,6 @@
  * These constants represent the command types for Channel 1 (0).
  */
 
-
 /** MIDI pitch used for silent dummy notes (e.g., duration extension) */
 export const MIDI_DUMMY_NOTE_PITCH = 0;
 

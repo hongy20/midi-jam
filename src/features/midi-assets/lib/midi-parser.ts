@@ -132,7 +132,6 @@ export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
   return spans.sort((a, b) => a.startTimeMs - b.startTimeMs);
 }
 
-
 /**
  * Calculates timestamps for bar-lines based on time signature segments.
  * Supports songs with multiple time signature changes.

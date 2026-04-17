@@ -140,7 +140,6 @@ describe("midi-parser", () => {
     expect(events.filter((e) => e.note === 60 && e.type === "noteOn")[1].timeMs).toBe(510);
   });
 
-
   it("getBarLines handles single time signature", () => {
     const barLines = getBarLines(mockMidi);
     // 4/4 at 480 PPQ -> 4 * 480 = 1920 ticks per bar
