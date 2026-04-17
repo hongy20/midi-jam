@@ -1,6 +1,6 @@
 # 2026-04-17 Refactor Audio Feature Scope
 
-Refactor the `features/audio` module by moving track-listing logic to `features/collection` and renaming the remaining synthesis logic to better reflect its purpose.
+Refactor the `features/audio` module by moving track-listing logic to `features/collection` and renaming the remaining synthesis logic to `note-player`.
 
 ## Proposed Changes
 
@@ -14,27 +14,25 @@ Move `sound-track.ts` and its tests from the audio feature to the collection fea
 - [MODIFY] `src/features/collection/index.ts`: Export `getSoundTracks`.
 - [MODIFY] `src/features/audio/index.ts`: Remove `getSoundTracks` export.
 
-### 3. Rename Audio Feature to Audio Synthesis
-Rename `src/features/audio` to `src/features/audio-synthesis` to better describe its role (MIDI-to-audio synthesis using Tone.js).
+### 3. Rename Audio Feature to Note Player
+Rename `src/features/audio` to `src/features/note-player` to better describe its role (MIDI-to-audio synthesis using Tone.js).
 
-- [MODIFY] `src/features/audio/hooks/use-midi-audio.ts` -> move to `src/features/audio-synthesis/hooks/use-midi-audio.ts`
-- [MODIFY] `src/features/audio/hooks/use-midi-audio.test.ts` -> move to `src/features/audio-synthesis/hooks/use-midi-audio.test.ts`
-- [MODIFY] `src/features/audio/index.ts` -> move to `src/features/audio-synthesis/index.ts`
+- [MODIFY] `src/features/audio/hooks/use-midi-audio.ts` -> move to `src/features/note-player/hooks/use-midi-audio.ts`
+- [MODIFY] `src/features/audio/hooks/use-midi-audio.test.ts` -> move to `src/features/note-player/hooks/use-midi-audio.test.ts`
+- [MODIFY] `src/features/audio/index.ts` -> move to `src/features/note-player/index.ts`
 
 ### 4. Update Consumers
 Update all imports to point to the new locations.
 
 - [MODIFY] `src/app/collection/page.tsx`: Update `getSoundTracks` import.
 - [MODIFY] `src/app/home/page.tsx`: Update `getSoundTracks` import.
-- [MODIFY] `src/app/play/components/play-page.client.tsx`: Update `useMidiAudio` import to `@/features/audio-synthesis`.
+- [MODIFY] `src/app/play/components/play-page.client.tsx`: Update `useMidiAudio` import to `@/features/note-player`.
 
 ### 5. Documentation
-- [MODIFY] `AGENTS.md`: Update the features list to replace `audio` with `audio-synthesis`.
+- [MODIFY] `AGENTS.md`: Update the features list to replace `audio` with `note-player`.
 
 ## Open Questions
-
-- **Naming**: Do you prefer `audio-synthesis`, `audio-engine`, or `synth` for the renamed feature? I've used `audio-synthesis` in this plan as it is most descriptive.
-- **Shared vs Feature**: I believe it belongs in `features` due to its domain complexity. Does this align with your vision?
+None. (Naming resolved to `note-player`, feature residency confirmed).
 
 ## Verification Plan
 
