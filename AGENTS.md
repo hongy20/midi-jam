@@ -57,7 +57,7 @@ The project follows a layered, domain-driven architecture to ensure scalability 
 
 - **`src/app/` (Colocation Layer)**: Contains route-specific components, hooks, and context. If a logic piece is ONLY used by one route (e.g., Gameplay Engine for `/play`), it MUST be colocated here.
 - **`src/features/` (Domain Layer)**: Contains domain-specific logic managed as encapsulated modules.
-  - Features: `midi-hardware`, `midi-assets`, `audio`, `score`, `navigation`, `collection`, `settings`, `theme`.
+  - Features: `midi-hardware`, `midi-assets`, `note-player`, `score`, `navigation`, `collection`, `settings`, `theme`.
   - Each feature MUST expose a public API via `index.ts`.
   - **Isolation Rule**: Features must NOT import from each other's internal folders. They must use the public API (barrel export).
 - **`src/shared/` (Infrastructure Layer)**: Contains generic UI primitives, utility functions, and cross-cutting hooks that have zero knowledge of any feature or app domain.
