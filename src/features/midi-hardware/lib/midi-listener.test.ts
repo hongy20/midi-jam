@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { MIDI_COMMAND_NOTE_OFF, MIDI_COMMAND_NOTE_ON } from "@/shared/lib/midi";
+import { COMMAND_NOTE_OFF, COMMAND_NOTE_ON } from "@/shared/lib/command";
 import { subscribeToNotes } from "./midi-listener";
 
 describe("subscribeToNotes", () => {
@@ -17,7 +17,7 @@ describe("subscribeToNotes", () => {
 
     // Simulate a Note On event (Note 60, Velocity 100)
     const event = {
-      data: new Uint8Array([MIDI_COMMAND_NOTE_ON, 60, 100]),
+      data: new Uint8Array([COMMAND_NOTE_ON, 60, 100]),
     } as WebMidi.MIDIMessageEvent;
 
     const midiMessageHandler = vi.mocked(mockInput.addEventListener).mock.calls[0][1] as (
@@ -50,7 +50,7 @@ describe("subscribeToNotes", () => {
 
     // Simulate a Note Off event (Note 60, Velocity 0)
     midiMessageHandler({
-      data: new Uint8Array([MIDI_COMMAND_NOTE_OFF, 60, 0]),
+      data: new Uint8Array([COMMAND_NOTE_OFF, 60, 0]),
     } as WebMidi.MIDIMessageEvent);
 
     expect(callback).toHaveBeenCalledWith({
@@ -75,7 +75,7 @@ describe("subscribeToNotes", () => {
 
     // Simulate a Note On event with 0 velocity
     midiMessageHandler({
-      data: new Uint8Array([MIDI_COMMAND_NOTE_ON, 60, 0]),
+      data: new Uint8Array([COMMAND_NOTE_ON, 60, 0]),
     } as WebMidi.MIDIMessageEvent);
 
     expect(callback).toHaveBeenCalledWith({

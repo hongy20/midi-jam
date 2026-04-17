@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import * as Tone from "tone";
-import { MIDI_COMMAND_NOTE_OFF, MIDI_COMMAND_NOTE_ON } from "@/shared/lib/midi";
+import { COMMAND_NOTE_OFF, COMMAND_NOTE_ON } from "@/shared/lib/command";
 
 /**
  * Hook to handle MIDI audio synthesis using Tone.js or external MIDI output.
@@ -38,7 +38,7 @@ export function useMidiAudio(outputDevice: WebMidi.MIDIOutput | null = null) {
         // Send Note On to MIDI Output
         // Velocity is normalized 0-1, MIDI needs 0-127
         const midiVelocity = Math.floor(velocity * 127);
-        outputDevice.send([MIDI_COMMAND_NOTE_ON, midiNote, midiVelocity]);
+        outputDevice.send([COMMAND_NOTE_ON, midiNote, midiVelocity]);
         return;
       }
 
@@ -63,7 +63,7 @@ export function useMidiAudio(outputDevice: WebMidi.MIDIOutput | null = null) {
     (midiNote: number) => {
       if (outputDevice) {
         // Send Note Off to MIDI Output
-        outputDevice.send([MIDI_COMMAND_NOTE_OFF, midiNote, 0]);
+        outputDevice.send([COMMAND_NOTE_OFF, midiNote, 0]);
         return;
       }
       // Offload to next tick as triggerRelease might be slow and take a few ms to finish

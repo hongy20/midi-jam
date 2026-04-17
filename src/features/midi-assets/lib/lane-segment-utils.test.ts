@@ -5,14 +5,14 @@ import {
   computeLaneSegmentAnimationDelay,
   getVisibleSegmentIndexes,
 } from "./lane-segment-utils";
-import type { NoteSpan } from "./midi-parser";
+import type { MidiNote } from "@/shared/types/midi";
 
 describe("lane-segment-utils clustering", () => {
   const threshold = 10000; // 10s
 
   describe("buildSegmentGroups", () => {
     it("groups sequential notes and stitches at midpoints", () => {
-      const spans: NoteSpan[] = [
+      const spans: MidiNote[] = [
         { id: "1", note: 60, startTimeMs: 1000, durationMs: 1000, velocity: 1 },
         {
           id: "2",
@@ -41,7 +41,7 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("breaks groups exceeding the threshold", () => {
-      const spans: NoteSpan[] = [
+      const spans: MidiNote[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
         {
           id: "2",
@@ -65,7 +65,7 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("protects chords from being split across groups", () => {
-      const spans: NoteSpan[] = [
+      const spans: MidiNote[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
         {
           id: "2a",
@@ -94,7 +94,7 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("allows durationMs to be large for long notes", () => {
-      const spans: NoteSpan[] = [
+      const spans: MidiNote[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 30000, velocity: 1 },
       ];
       const groups = buildSegmentGroups({
@@ -108,7 +108,7 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("does not split a long note that overlaps a later short note", () => {
-      const spans: NoteSpan[] = [
+      const spans: MidiNote[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 15000, velocity: 1 }, // Ends at 15s
         { id: "2", note: 62, startTimeMs: 500, durationMs: 200, velocity: 1 },
         { id: "3", note: 64, startTimeMs: 11000, durationMs: 500, velocity: 1 }, // 11s - 15s is not a 10s gap
@@ -125,7 +125,7 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("does not merge the last segment if it is visually large enough", () => {
-      const spans: NoteSpan[] = [
+      const spans: MidiNote[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
         {
           id: "2",
@@ -152,7 +152,7 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("groups connected notes that start exactly when previous notes end", () => {
-      const spans: NoteSpan[] = [
+      const spans: MidiNote[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 6000, velocity: 1 }, // Exceeds 5s threshold
         { id: "2", note: 62, startTimeMs: 6000, durationMs: 6000, velocity: 1 }, // Starts exactly at 6000
       ];
@@ -167,7 +167,7 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("does not split chords even if they exceed the threshold", () => {
-      const spans: NoteSpan[] = [
+      const spans: MidiNote[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
         {
           id: "2a",
@@ -195,7 +195,7 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("groups connected notes with sub-millisecond gaps (floating point precision)", () => {
-      const spans: NoteSpan[] = [
+      const spans: MidiNote[] = [
         {
           id: "1",
           note: 60,
@@ -222,7 +222,7 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("applies tail merge logic to avoid tiny segments at the end", () => {
-      const spans: NoteSpan[] = [
+      const spans: MidiNote[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
         { id: "2", note: 62, startTimeMs: 6000, durationMs: 1000, velocity: 1 },
         {

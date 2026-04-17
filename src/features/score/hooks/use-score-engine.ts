@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import type { NoteSpan } from "@/features/midi-assets";
+import type { MidiNote } from "@/shared/types/midi";
 import { useMIDINotes } from "@/features/midi-hardware";
 import { calculateMaxRawPoints } from "../lib/score-utils";
 
@@ -13,7 +13,7 @@ export type HitQuality = "perfect" | "good" | "miss" | null;
 
 interface UseScoreEngineProps {
   midiInput: WebMidi.MIDIInput | null;
-  spans: NoteSpan[];
+  spans: MidiNote[];
   getCurrentTimeMs: () => number;
   initialScore?: number;
   initialCombo?: number;

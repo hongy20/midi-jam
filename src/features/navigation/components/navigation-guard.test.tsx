@@ -6,7 +6,7 @@ import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
 import { useScore } from "@/features/score";
 import { useNavigation } from "../hooks/use-navigation";
-import { ROUTES } from "../lib/routes";
+import { ROUTES } from "@/shared/lib/routes";
 import { NavigationGuard } from "./navigation-guard";
 
 vi.mock("@/features/collection");

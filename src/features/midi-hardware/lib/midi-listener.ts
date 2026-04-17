@@ -1,4 +1,4 @@
-import { MIDI_COMMAND_NOTE_OFF, MIDI_COMMAND_NOTE_ON } from "@/shared/lib/midi";
+import { COMMAND_NOTE_OFF, COMMAND_NOTE_ON } from "@/shared/lib/command";
 
 export type MIDINoteEvent = {
   type: "note-on" | "note-off";
@@ -22,7 +22,7 @@ export function subscribeToNotes(
     // Mask out the channel bits (lower 4 bits) to get the command type
     const command = status & 0xf0;
 
-    if (command === MIDI_COMMAND_NOTE_ON) {
+    if (command === COMMAND_NOTE_ON) {
       // Note On
       if (velocity === 0) {
         // Note On with velocity 0 is actually Note Off
@@ -30,7 +30,7 @@ export function subscribeToNotes(
       } else {
         callback({ type: "note-on", note, velocity });
       }
-    } else if (command === MIDI_COMMAND_NOTE_OFF) {
+    } else if (command === COMMAND_NOTE_OFF) {
       // Note Off
       callback({ type: "note-off", note, velocity: velocity || 0 });
     }

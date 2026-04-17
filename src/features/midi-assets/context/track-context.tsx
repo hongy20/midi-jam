@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
+import type { MidiNote } from "@/shared/types/midi";
 import type { SegmentGroup } from "../lib/lane-segment-utils";
-import type { NoteSpan } from "../lib/midi-parser";
 
 type TrackStatus =
   | { isLoading: true; isReady: false; error: null }
@@ -11,7 +11,7 @@ type TrackStatus =
       isLoading: false;
       isReady: true;
       totalDurationMs: number;
-      spans: NoteSpan[];
+      spans: MidiNote[];
       groups: SegmentGroup[];
       error: null;
     };

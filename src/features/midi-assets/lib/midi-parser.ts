@@ -1,29 +1,12 @@
 import type { Midi } from "@tonejs/midi";
-import { MIDI_DUMMY_NOTE_PITCH, MIDI_MAX_NOTE, MIDI_MIN_NOTE, MIN_NOTE_GAP_MS } from "./constant";
-
-// FIXME: Can we merge MidiEvent and MIDINoteEvent?
-export interface MidiEvent {
-  timeMs: number;
-  type: "noteOn" | "noteOff";
-  note: number;
-  velocity: number;
-}
-
-export interface NoteSpan {
-  id: string;
-  note: number;
-  startTimeMs: number;
-  durationMs: number;
-  velocity: number;
-}
+import { MIDI_DUMMY_NOTE_PITCH, MIN_NOTE_GAP_MS } from "./constant";
+import type { MidiNote } from "@/shared/types/midi";
 
 /**
- * Extracts all note on and note off events from a MIDI object,
- * sorted by time.
- * Introduces a minimal gap between sequential notes of the same pitch to ensure MIDI triggering.
+ * Parses a MIDI object into MidiNotes, applying collision handling and instrument filtering.
  */
-export function getMidiEvents(midi: Midi, instrument: "piano" | "drums" = "piano"): MidiEvent[] {
-  const events: MidiEvent[] = [];
+export function parseMidiNotes(midi: Midi, instrument: "piano" | "drums" = "piano"): MidiNote[] {
+  const spans: MidiNote[] = [];
 
   // 1. Merge all notes from all relevant tracks first to catch cross-track collisions
   const allNotes = midi.tracks
@@ -80,17 +63,12 @@ export function getMidiEvents(midi: Midi, instrument: "piano" | "drums" = "piano
         durationMs = Math.max(minDurationMs, originalEndMs - eventTimeMs);
       }
 
-      events.push({
-        timeMs: eventTimeMs,
-        type: "noteOn",
+      spans.push({
+        id: `${note.midi}-${eventTimeMs}`,
         note: note.midi,
+        startTimeMs: eventTimeMs,
+        durationMs: durationMs,
         velocity: note.velocity,
-      });
-      events.push({
-        timeMs: eventTimeMs + durationMs,
-        type: "noteOff",
-        note: note.midi,
-        velocity: 0,
       });
 
       // Update tracking with the final end time of this note to maintain chain gaps
@@ -98,55 +76,7 @@ export function getMidiEvents(midi: Midi, instrument: "piano" | "drums" = "piano
     }
   }
 
-  return events.sort((a, b) => a.timeMs - b.timeMs);
-}
-
-/**
- * Pre-processes MIDI events into duration-based NoteSpans for efficient rendering.
- */
-export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
-  const spans: NoteSpan[] = [];
-  const activeNotes = new Map<number, { timeMs: number; velocity: number }>();
-
-  for (const event of events) {
-    if (event.type === "noteOn") {
-      activeNotes.set(event.note, {
-        timeMs: event.timeMs,
-        velocity: event.velocity,
-      });
-    } else if (event.type === "noteOff") {
-      const start = activeNotes.get(event.note);
-      if (start !== undefined) {
-        spans.push({
-          id: `${event.note}-${start.timeMs}`,
-          note: event.note,
-          startTimeMs: start.timeMs,
-          durationMs: event.timeMs - start.timeMs,
-          velocity: start.velocity,
-        });
-        activeNotes.delete(event.note);
-      }
-    }
-  }
-
   return spans.sort((a, b) => a.startTimeMs - b.startTimeMs);
-}
-
-/**
- * Finds the minimum and maximum MIDI notes in a set of events.
- */
-export function getNoteRange(events: MidiEvent[]): { min: number; max: number } | null {
-  if (events.length === 0) return null;
-
-  let min = MIDI_MAX_NOTE;
-  let max = MIDI_MIN_NOTE;
-
-  for (const event of events) {
-    if (event.note < min) min = event.note;
-    if (event.note > max) max = event.note;
-  }
-
-  return { min, max };
 }
 
 /**

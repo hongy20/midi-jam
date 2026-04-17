@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { useMIDINotes } from "./use-midi-notes";
-import { MIDI_COMMAND_NOTE_ON } from "@/shared/lib/midi";
+import { COMMAND_NOTE_ON } from "@/shared/lib/command";
 
 describe("useMIDINotes", () => {
   it("should call the callback when a note event occurs", () => {
@@ -21,7 +21,7 @@ describe("useMIDINotes", () => {
 
     // Simulate Note On
     midiMessageHandler({
-      data: new Uint8Array([MIDI_COMMAND_NOTE_ON, 60, 100]),
+      data: new Uint8Array([COMMAND_NOTE_ON, 60, 100]),
     } as WebMidi.MIDIMessageEvent);
 
     expect(onNote).toHaveBeenCalledWith({

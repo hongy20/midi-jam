@@ -7,7 +7,7 @@ import { useCollection, useTrackSync } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
 import { useScore } from "@/features/score";
 import { useNavigation } from "../hooks/use-navigation";
-import { ROUTES } from "../lib/routes";
+import { ROUTES } from "@/shared/lib/routes";
 
 export function NavigationGuard({ children }: { children: React.ReactNode }) {
   const { toCollection, toHome, toGear } = useNavigation();
