@@ -40,8 +40,14 @@ export function PlayPageClient() {
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   // Extract data with fallbacks to ensure hooks are called unconditionally
-  const spans = trackStatus.isReady ? trackStatus.spans : [];
-  const groups = trackStatus.isReady ? trackStatus.groups : [];
+  const spans = useMemo(
+    () => (trackStatus.isReady ? trackStatus.spans : []),
+    [trackStatus.isReady, trackStatus.spans],
+  );
+  const groups = useMemo(
+    () => (trackStatus.isReady ? trackStatus.groups : []),
+    [trackStatus.isReady, trackStatus.groups],
+  );
   const totalDurationMs = trackStatus.isReady ? trackStatus.totalDurationMs : 0;
   const isLoading = trackStatus.isLoading;
 
