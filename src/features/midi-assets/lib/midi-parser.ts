@@ -1,19 +1,12 @@
 import type { Midi } from "@tonejs/midi";
 import { MIDI_DUMMY_NOTE_PITCH, MIN_NOTE_GAP_MS } from "./constant";
-
-export interface NoteSpan {
-  id: string;
-  note: number;
-  startTimeMs: number;
-  durationMs: number;
-  velocity: number;
-}
+import type { MidiNote } from "@/shared/types/midi";
 
 /**
- * Parses a MIDI object into NoteSpans, applying collision handling and instrument filtering.
+ * Parses a MIDI object into MidiNotes, applying collision handling and instrument filtering.
  */
-export function parseMidiNotes(midi: Midi, instrument: "piano" | "drums" = "piano"): NoteSpan[] {
-  const spans: NoteSpan[] = [];
+export function parseMidiNotes(midi: Midi, instrument: "piano" | "drums" = "piano"): MidiNote[] {
+  const spans: MidiNote[] = [];
 
   // 1. Merge all notes from all relevant tracks first to catch cross-track collisions
   const allNotes = midi.tracks

@@ -1,16 +1,15 @@
 import { CLUSTER_CONNECTION_GAP_MS, LANE_SCROLL_DURATION_MS } from "./constant";
-
-import type { NoteSpan } from "./midi-parser";
+import type { MidiNote } from "@/shared/types/midi";
 
 export interface SegmentGroup {
   index: number;
   startMs: number;
   durationMs: number;
-  spans: NoteSpan[];
+  spans: MidiNote[];
 }
 
 interface BuildSegmentGroupsOptions {
-  spans: NoteSpan[];
+  spans: MidiNote[];
   totalDurationMs: number;
   thresholdMs: number;
 }
@@ -33,7 +32,7 @@ export function buildSegmentGroups({
   if (spans.length === 0) return [];
 
   const groups: SegmentGroup[] = [];
-  let currentGroupSpans: NoteSpan[] = [];
+  let currentGroupSpans: MidiNote[] = [];
   let currentStartMs = 0; // First segment starts at 0 (lead-in)
   let currentMaxEndMs = 0;
 
