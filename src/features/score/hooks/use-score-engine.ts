@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import type { MidiNote } from "@/features/midi-assets";
+import type { MidiNote } from "@/shared/types/midi";
 import { useMIDINotes } from "@/features/midi-hardware";
 import { calculateMaxRawPoints } from "../lib/score-utils";
 

@@ -13,5 +13,4 @@ export {
   getVisibleSegmentIndexes,
 } from "./lib/lane-segment-utils";
 export { loadMidiFile } from "./lib/midi-loader";
-export type { MidiNote } from "@/shared/types/midi";
 export { getBarLines, parseMidiNotes } from "./lib/midi-parser";
