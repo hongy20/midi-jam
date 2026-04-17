@@ -7,7 +7,7 @@ import { COMMAND_NOTE_OFF, COMMAND_NOTE_ON } from "@/shared/lib/command";
 /**
  * Hook to handle MIDI audio synthesis using Tone.js or external MIDI output.
  */
-export function useMidiAudio(outputDevice: WebMidi.MIDIOutput | null = null) {
+export function useNotePlayer(outputDevice: WebMidi.MIDIOutput | null = null) {
   const polySynthRef = useRef<Tone.PolySynth | null>(null);
 
   useEffect(() => {

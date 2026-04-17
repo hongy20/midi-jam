@@ -6,7 +6,7 @@ import { useActiveNotes } from "@/app/play/hooks/use-active-notes";
 import { useDemoPlayback } from "@/app/play/hooks/use-demo-playback";
 import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";
 import { getNoteUnits, getVisibleMidiRange } from "@/app/play/lib/piano";
-import { useMidiAudio } from "@/features/note-player";
+import { useNotePlayer } from "@/features/note-player";
 import { useCollection } from "@/features/collection";
 import {
   LANE_SCROLL_DURATION_MS,
@@ -85,7 +85,7 @@ export function PlayPageClient() {
     initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
   });
 
-  const { playNote, stopNote } = useMidiAudio(selectedMIDIOutput);
+  const { playNote, stopNote } = useNotePlayer(selectedMIDIOutput);
 
   const onNoteOn = useCallback(
     (note: number, velocity: number) => {

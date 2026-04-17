@@ -1,1 +1,1 @@
-export { useMidiAudio } from "./hooks/use-midi-audio";
+export { useNotePlayer } from "./hooks/use-note-player";

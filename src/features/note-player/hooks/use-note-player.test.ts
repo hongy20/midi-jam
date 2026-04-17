@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { useMidiAudio } from "./use-midi-audio";
+import { useNotePlayer } from "./use-note-player";
 
 // Mock Tone.js
 vi.mock("tone", () => {
@@ -32,13 +32,13 @@ vi.mock("tone", () => {
   };
 });
 
-describe("useMidiAudio", () => {
+describe("useNotePlayer", () => {
   it("should send MIDI messages when outputDevice is provided", () => {
     const mockOutput = {
       send: vi.fn(),
     } as unknown as WebMidi.MIDIOutput;
 
-    const { result } = renderHook(() => useMidiAudio(mockOutput));
+    const { result } = renderHook(() => useNotePlayer(mockOutput));
 
     result.current.playNote(60, 0.8);
     expect(mockOutput.send).toHaveBeenCalledWith([0x90, 60, Math.floor(0.8 * 127)]);
@@ -48,7 +48,7 @@ describe("useMidiAudio", () => {
   });
 
   it("should play audio using Tone.js when no outputDevice is provided", () => {
-    const { result } = renderHook(() => useMidiAudio(null));
+    const { result } = renderHook(() => useNotePlayer(null));
 
     result.current.playNote(60, 0.8);
     // Since we can't easily check the internal polySynthRef.current calls in this setup
