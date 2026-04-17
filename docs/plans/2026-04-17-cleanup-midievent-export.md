@@ -5,6 +5,8 @@ Remove the `MidiEvent` type from the public API of `features/midi-assets` as it 
 ## Proposed Changes
 
 ### [Component] MIDI Assets
+#### [MODIFY] [midi-parser.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/midi-assets/lib/midi-parser.ts)
+- Removed `export` from `MidiEvent` interface definition.
 #### [MODIFY] [index.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/midi-assets/index.ts)
 - Remove `MidiEvent` from the `export type` list.
 
