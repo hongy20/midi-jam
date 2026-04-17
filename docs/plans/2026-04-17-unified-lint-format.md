@@ -1,28 +1,86 @@
-# Design: Unified Lint & Format Strategy
+# Design & Implementation Plan: Unified Lint & Format
 
-**Date:** 2026-04-17
-**Topic:** Unified Lint & Format Validation
-**Status:** Approved
+> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-## 1. Objective
-To ensure consistent code quality and formatting across the entire codebase (TS, JS, CSS, JSON, MD) by unifying ESLint and Prettier checks into a single validation command (`npm run lint`), while maintaining a distraction-free development environment (no formatting "red squiggles" in the editor).
+**Goal:** Unify ESLint and Prettier checks into a single `npm run lint` command for CI/CD validation.
 
-## 2. Architecture
-The project will use **Script-level Unification** (Approach 1). This keeps ESLint (logic) and Prettier (formatting) decoupled as tools but linked as a single stage in the CI/CD pipeline.
+**Architecture:** Use script-level orchestration in `package.json` to run logic checks and formatting checks sequentially.
 
-- **`npm run lint`**: Updated to `eslint . && prettier --check .`. This command will now perform a complete quality check. If either logic rules or formatting rules are violated, the command will exit with an error.
-- **`npm run lint:fix`**: Already configured as `eslint . --fix && prettier --write .`. This remains the "one-click fix" command for local development.
-- **Editor Experience**: No changes to `eslint.config.mjs` rules are required. By *not* using `eslint-plugin-prettier`, we avoid showing formatting violations as linting errors in the IDE, adhering to the "Option B" preference.
+**Tech Stack:** ESLint, Prettier.
 
-## 3. Data Flow & Validation
-1. **Developer workflow**:
-   - Write code.
-   - Run `npm run lint:fix` to auto-fix imports and format all files (including non-TS files like `.css` and `.json`).
-   - Run `npm run lint` to verify before pushing.
-2. **CI/CD pipeline**:
-   - Executes `npm run lint`.
-   - Fails if *any* file is unformatted or contains linting errors.
+---
 
-## 4. Testing & Success Criteria
-- **Verification**: Manually introduce a formatting error (e.g., extra spaces) and a linting error (e.g., unused variable).
-- **Success**: `npm run lint` must fail for both cases. `npm run lint:fix` must resolve the formatting error and (if possible) the linting error.
+### Task 1: Update `package.json` scripts
+
+**Files:**
+- Modify: `package.json`
+
+**Step 1: Update the `lint` and `lint:fix` scripts**
+
+Update `lint` to include `prettier --check .`.
+
+```json
+"lint": "eslint . && prettier --check .",
+"lint:fix": "eslint . --fix && prettier --write ."
+```
+
+**Step 2: Run verification**
+
+Run: `npm run lint`
+Expected: FAIL if unformatted, PASS otherwise.
+
+**Step 3: Commit**
+
+```bash
+git add package.json
+git commit -m "chore: unify lint and format scripts"
+```
+
+---
+
+### Task 2: Verify Validation Behavior
+
+**Files:**
+- Create: `src/temp-test.ts` (temp file to test violation)
+
+**Step 1: Create a file with formatting and linting violations**
+
+```typescript
+const unused = "test" ; // Extra space and unused variable
+```
+
+**Step 2: Run `npm run lint`**
+
+Run: `npm run lint`
+Expected: FAIL with both ESLint and Prettier errors.
+
+**Step 3: Run `npm run lint:fix`**
+
+Run: `npm run lint:fix`
+Expected: PASS (extra space removed by Prettier, unused variable may remain if not auto-fixable, but formatting should be fixed).
+
+**Step 4: Cleanup and Commit**
+
+```bash
+rm src/temp-test.ts
+git add .
+git commit -m "test: verify unified lint and format behavior"
+```
+
+---
+
+### Task 3: Check CI Configuration
+
+**Files:**
+- Modify: `.github/workflows/ci.yml` (if needed)
+
+**Step 1: Verify CI uses `npm run lint`**
+
+Run: `grep "npm run lint" .github/workflows/ci.yml`
+Expected: Matches the lint step.
+
+**Step 2: Commit**
+
+```bash
+git commit -m "chore: verify CI lint configuration"
+```
