@@ -9,7 +9,7 @@ export interface SegmentGroup {
   spans: NoteSpan[];
 }
 
-export interface BuildSegmentGroupsOptions {
+interface BuildSegmentGroupsOptions {
   spans: NoteSpan[];
   totalDurationMs: number;
   thresholdMs: number;
