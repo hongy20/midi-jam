@@ -62,7 +62,7 @@ Inside a feature or colocated app folder, use the following sub-directories:
 - `context/`: State providers.
 - `lib/`: Domain-specific utilities or core logic.
 
-## 4. UI & Navigation Architecture
+## 5. UI & Navigation Architecture
 
 ### 5.1 Layout Hierarchy
 - **Root**: Every page should follow the `PageClient` -> `PageView` architecture.
@@ -70,12 +70,12 @@ Inside a feature or colocated app folder, use the following sub-directories:
 - **Colocation**: Prefer colocating page-specific providers and hooks in `src/app/[route]/context/` and `src/app/[route]/hooks/`.
 - **Deprecated**: `PageLayout`, `PageHeader`, and `PageFooter` components are deprecated.
 
-### 4.3 Unified Action Styling
+### 5.2 Unified Action Styling
 - **Pattern**: Use the `.btn-jam` class for buttons and `.jam-action-group` for button containers (defined in `base.css`) to ensure consistent alignment, width, and responsive behavior (e.g., hiding icons on small screens).
 - **Flexibility**: Button labels and casing are at the developer's discretion; ensure they remain legible across all themes.
 
 
-## 5. React & State Patterns
+## 6. React & State Patterns
 
 ### Context & Hook Consumption
 - **Granular Hooks**: Prefer specialized hooks (`useGear`, `useTrackSync`, `useOptions`) over a monolithic context to prevent unnecessary re-renders.
