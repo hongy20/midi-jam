@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import type { SegmentGroup } from "@/features/midi-assets";
+import { type MidiNoteGroup } from "@/shared/types/midi";
 
 interface UseTrackPlayerProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   enabled: boolean;
-  groups: SegmentGroup[];
+  groups: MidiNoteGroup[];
   onNoteOn: (note: number, velocity: number) => void;
   onNoteOff: (note: number) => void;
 }

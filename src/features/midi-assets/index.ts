@@ -6,9 +6,8 @@ export {
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
 } from "./lib/constant";
-export type { SegmentGroup } from "./lib/lane-segment-utils";
 export {
-  buildSegmentGroups,
+  buildMidiNoteGroups,
   computeLaneSegmentAnimationDelay,
   getVisibleSegmentIndexes,
 } from "./lib/lane-segment-utils";

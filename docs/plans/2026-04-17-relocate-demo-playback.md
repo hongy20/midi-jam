@@ -1,34 +1,39 @@
-# 2026-04-17 Relocate and Refactor useDemoPlayback
+# 2026-04-17 Audio Player Refactor & Type Relocation
 
-Relocate `useDemoPlayback` from the Play page hooks to the `audio-player` feature and rename it to `useAutoPlay` to reflect its role in automated gameplay.
+Refactor the `audio-player` feature by relocating the automated playback logic and centralizing core MIDI types like `MidiNoteGroup` into the `shared` layer to eliminate cross-feature dependencies.
 
 ## Proposed Changes
 
 ### 1. Rename Feature to Audio Player
 Rename `src/features/note-player` to `src/features/audio-player`.
 
-### 2. Relocate and Rename Hook
-Move the hook to the `audio-player` feature.
+### 2. Relocate and Rename Playback Hook
+Move the hook to the `audio-player` feature and rename it for clarity.
 
-- [MODIFY] `src/app/play/hooks/use-demo-playback.ts` -> move to `src/features/audio-player/hooks/use-auto-play.ts`
-- [MODIFY] `src/app/play/hooks/use-demo-playback.test.ts` -> move to `src/features/audio-player/hooks/use-auto-play.test.ts`
+- [MODIFY] `src/app/play/hooks/use-demo-playback.ts` -> move to `src/features/audio-player/hooks/use-track-player.ts`
+- [MODIFY] `src/app/play/hooks/use-demo-playback.test.ts` -> move to `src/features/audio-player/hooks/use-track-player.test.ts`
 
 ### 3. Refactor Hook Logic
-- Rename the function to `useAutoPlay`.
+- Rename the function to `useTrackPlayer`.
 - Merge `demoMode` and `isLoading` into a single `enabled` prop.
-- Update internal guards to use `enabled`.
+- Update internal guards and tests to use `enabled`.
 
-### 4. Update Feature Exports
-- [MODIFY] `src/features/audio-player/index.ts`: Export `useAutoPlay` and `useNotePlayer`.
+### 4. Relocate MidiNoteGroup Type
+Move the `MidiNoteGroup` interface to `shared` to resolve cross-feature dependency issues.
 
-### 5. Update Consumers
-- [MODIFY] `src/app/play/components/play-page.client.tsx`: Update imports and usage. Pass `enabled={demoMode && !isLoading && groups.length > 0}` to the hook.
+- [MODIFY] `src/shared/types/midi.ts`: Add `MidiNoteGroup` definition.
+- [MODIFY] `src/features/midi-assets/lib/lane-segment-utils.ts`: Remove local definition.
+- [MODIFY] `src/features/midi-assets/index.ts`: Remove from barrel export.
+- [MODIFY] Update imports in `audio-player`, `midi-assets`, `collection`, and several UI components.
+
+### 5. Update Feature Exports
+- [MODIFY] `src/features/audio-player/index.ts`: Export `useTrackPlayer` and `useNotePlayer`.
 
 ### 6. Documentation
-- [MODIFY] `AGENTS.md`: Update the features list to replace `note-player` with `audio-player`.
+- [MODIFY] `AGENTS.md`: Update feature list to `audio-player`.
 
 ## Open Questions
-None. (Naming resolved to `audio-player` and `useAutoPlay`, prop merging approved).
+None. (Naming resolved to `audio-player` and `useTrackPlayer`, type movement to `shared` approved).
 
 ## Verification Plan
 

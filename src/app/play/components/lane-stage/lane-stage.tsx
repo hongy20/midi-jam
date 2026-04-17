@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import {
   getVisibleSegmentIndexes,
   LANE_SCROLL_DURATION_MS,
-  type SegmentGroup,
 } from "@/features/midi-assets";
+import { type MidiNoteGroup } from "@/shared/types/midi";
 import { BackgroundLane } from "./background-lane";
 import { LaneSegment } from "./lane-segment";
 
 interface LaneStageProps {
-  groups: SegmentGroup[];
+  groups: MidiNoteGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
 }

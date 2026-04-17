@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
-import { buildSegmentGroups } from "./lane-segment-utils";
+import { buildMidiNoteGroups } from "./lane-segment-utils";
 import { parseMidiNotes } from "./midi-parser";
 
 describe("lane-segment-utils integration with real MIDI", () => {
@@ -20,7 +20,7 @@ describe("lane-segment-utils integration with real MIDI", () => {
     const { spans, totalDurationMs } = loadMidi("Happy Birthday.mid");
 
     // Using the default threshold (currently 5s)
-    const groups = buildSegmentGroups({
+    const groups = buildMidiNoteGroups({
       spans,
       totalDurationMs,
       thresholdMs: 5000, // 5s to target ~3 segments for a ~15s song
@@ -43,7 +43,7 @@ describe("lane-segment-utils integration with real MIDI", () => {
     // Filter spans to the first 25s to focus on the start
     const firstSpans = spans.filter((s) => s.startTimeMs < 25000);
 
-    const groups = buildSegmentGroups({
+    const groups = buildMidiNoteGroups({
       spans: firstSpans,
       totalDurationMs: 25000,
       thresholdMs: 5000,
@@ -79,7 +79,7 @@ describe("lane-segment-utils integration with real MIDI", () => {
 
     // Test multiple common thresholds to ensure stability
     for (const thresholdMs of [3000, 5000, 7000]) {
-      const groups = buildSegmentGroups({
+      const groups = buildMidiNoteGroups({
         spans,
         totalDurationMs,
         thresholdMs,

@@ -121,7 +121,7 @@ export function PlayPageClient() {
 
   useTrackPlayer({
     containerRef: scrollRef,
-    enabled: demoMode && !isLoading && groups.length > 0,
+    enabled: demoMode && !isLoading,
     groups,
     onNoteOn,
     onNoteOff,

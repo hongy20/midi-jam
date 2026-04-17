@@ -9,3 +9,10 @@ export interface MidiNote {
   durationMs: number;
   velocity: number;
 }
+
+export interface MidiNoteGroup {
+  index: number;
+  startMs: number;
+  durationMs: number;
+  spans: MidiNote[];
+}

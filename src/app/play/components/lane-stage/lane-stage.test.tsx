@@ -1,6 +1,6 @@
 import { queryByAttribute, render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { buildSegmentGroups } from "@/features/midi-assets";
+import { buildMidiNoteGroups } from "@/features/midi-assets";
 import { LaneStage } from "./lane-stage";
 
 // Mock ResizeObserver
@@ -22,7 +22,7 @@ global.ResizeObserver = class ResizeObserver {
 };
 
 describe("LaneStage", () => {
-  const mockGroups = buildSegmentGroups({
+  const mockGroups = buildMidiNoteGroups({
     spans: [
       {
         id: "1",

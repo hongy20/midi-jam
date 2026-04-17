@@ -1,6 +1,5 @@
 import { renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { buildSegmentGroups } from "@/features/midi-assets";
 import { useTrackPlayer } from "./use-track-player";
 
 describe("useTrackPlayer", () => {
@@ -40,19 +39,22 @@ describe("useTrackPlayer", () => {
       useTrackPlayer({
         containerRef,
         enabled: true,
-        groups: buildSegmentGroups({
-          spans: [
-            {
-              note: 60,
-              startTimeMs: 0,
-              durationMs: 100,
-              id: "1",
-              velocity: 100,
-            },
-          ],
-          totalDurationMs: 1000,
-          thresholdMs: 10000,
-        }),
+        groups: [
+          {
+            index: 0,
+            startMs: 0,
+            durationMs: 1000,
+            spans: [
+              {
+                note: 60,
+                startTimeMs: 0,
+                durationMs: 100,
+                id: "1",
+                velocity: 100,
+              },
+            ],
+          },
+        ],
         onNoteOn,
         onNoteOff,
       }),
@@ -93,26 +95,29 @@ describe("useTrackPlayer", () => {
       useTrackPlayer({
         containerRef,
         enabled: true,
-        groups: buildSegmentGroups({
-          spans: [
-            {
-              note: 60,
-              startTimeMs: 0,
-              durationMs: 100,
-              id: "1",
-              velocity: 100,
-            },
-            {
-              note: 60,
-              startTimeMs: 200,
-              durationMs: 100,
-              id: "2",
-              velocity: 100,
-            },
-          ],
-          totalDurationMs: 1000,
-          thresholdMs: 10000,
-        }),
+        groups: [
+          {
+            index: 0,
+            startMs: 0,
+            durationMs: 1000,
+            spans: [
+              {
+                note: 60,
+                startTimeMs: 0,
+                durationMs: 100,
+                id: "1",
+                velocity: 100,
+              },
+              {
+                note: 60,
+                startTimeMs: 200,
+                durationMs: 100,
+                id: "2",
+                velocity: 100,
+              },
+            ],
+          },
+        ],
         onNoteOn,
         onNoteOff,
       }),

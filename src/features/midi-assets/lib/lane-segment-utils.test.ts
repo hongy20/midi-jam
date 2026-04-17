@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { LANE_SCROLL_DURATION_MS } from "./constant";
 import {
-  buildSegmentGroups,
+  buildMidiNoteGroups,
   computeLaneSegmentAnimationDelay,
   getVisibleSegmentIndexes,
 } from "./lane-segment-utils";
@@ -10,7 +10,7 @@ import type { MidiNote } from "@/shared/types/midi";
 describe("lane-segment-utils clustering", () => {
   const threshold = 10000; // 10s
 
-  describe("buildSegmentGroups", () => {
+  describe("buildMidiNoteGroups", () => {
     it("groups sequential notes and stitches at midpoints", () => {
       const spans: MidiNote[] = [
         { id: "1", note: 60, startTimeMs: 1000, durationMs: 1000, velocity: 1 },
@@ -23,7 +23,7 @@ describe("lane-segment-utils clustering", () => {
         },
       ];
       // Gap is from 2000ms to 12000ms. Midpoint is 7000ms.
-      const groups = buildSegmentGroups({
+      const groups = buildMidiNoteGroups({
         spans,
         totalDurationMs: 40000,
         thresholdMs: threshold,
@@ -51,7 +51,7 @@ describe("lane-segment-utils clustering", () => {
           velocity: 1,
         },
       ];
-      const groups = buildSegmentGroups({
+      const groups = buildMidiNoteGroups({
         spans,
         totalDurationMs: 40000,
         thresholdMs: threshold,
@@ -82,7 +82,7 @@ describe("lane-segment-utils clustering", () => {
           velocity: 1,
         },
       ];
-      const groups = buildSegmentGroups({
+      const groups = buildMidiNoteGroups({
         spans,
         totalDurationMs: 40000,
         thresholdMs: threshold,
@@ -97,7 +97,7 @@ describe("lane-segment-utils clustering", () => {
       const spans: MidiNote[] = [
         { id: "1", note: 60, startTimeMs: 0, durationMs: 30000, velocity: 1 },
       ];
-      const groups = buildSegmentGroups({
+      const groups = buildMidiNoteGroups({
         spans,
         totalDurationMs: 40000,
         thresholdMs: threshold,
@@ -113,7 +113,7 @@ describe("lane-segment-utils clustering", () => {
         { id: "2", note: 62, startTimeMs: 500, durationMs: 200, velocity: 1 },
         { id: "3", note: 64, startTimeMs: 11000, durationMs: 500, velocity: 1 }, // 11s - 15s is not a 10s gap
       ];
-      const groups = buildSegmentGroups({
+      const groups = buildMidiNoteGroups({
         spans,
         totalDurationMs: 20000,
         thresholdMs: threshold,
@@ -139,7 +139,7 @@ describe("lane-segment-utils clustering", () => {
       // Note 2 starts at 15000. Remaining time is 5000ms.
       // Since 5000ms >= 10000ms / 2, and the note is far from Note 1,
       // it should form its own visually distinct segment [7500, 20000].
-      const groups = buildSegmentGroups({
+      const groups = buildMidiNoteGroups({
         spans,
         totalDurationMs: 20000,
         thresholdMs: threshold,
@@ -156,7 +156,7 @@ describe("lane-segment-utils clustering", () => {
         { id: "1", note: 60, startTimeMs: 0, durationMs: 6000, velocity: 1 }, // Exceeds 5s threshold
         { id: "2", note: 62, startTimeMs: 6000, durationMs: 6000, velocity: 1 }, // Starts exactly at 6000
       ];
-      const groups = buildSegmentGroups({
+      const groups = buildMidiNoteGroups({
         spans,
         totalDurationMs: 20000,
         thresholdMs: 5000,
@@ -184,7 +184,7 @@ describe("lane-segment-utils clustering", () => {
           velocity: 1,
         },
       ];
-      const groups = buildSegmentGroups({
+      const groups = buildMidiNoteGroups({
         spans,
         totalDurationMs: 20000,
         thresholdMs: 5000,
@@ -211,7 +211,7 @@ describe("lane-segment-utils clustering", () => {
           velocity: 1,
         },
       ];
-      const groups = buildSegmentGroups({
+      const groups = buildMidiNoteGroups({
         spans,
         totalDurationMs: 20000,
         thresholdMs: 4000,
@@ -236,7 +236,7 @@ describe("lane-segment-utils clustering", () => {
       // totalDuration is 14000.
       // If we attempt to split at Note 3 (12000), the remaining time in the song is 2000ms.
       // 2000ms < 2500ms (thresholdMs / 2), so Note 3 should be merged into the current segment.
-      const groups = buildSegmentGroups({
+      const groups = buildMidiNoteGroups({
         spans,
         totalDurationMs: 14000,
         thresholdMs: 5000,
