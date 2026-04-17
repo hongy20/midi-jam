@@ -139,6 +139,8 @@ Inside a feature or colocated app folder, use the following sub-directories:
 
 **NEVER work directly on `main`.** This is a non-negotiable hard constraint for technical integrity. This applies to ALL files in the repository without exception (Source, Docs, Config, etc.).
 
+**NEVER use Force Push.** This is a non-negotiable hard constraint. Once a branch is pushed, all subsequent updates MUST be new commits. Do NOT use `git commit --amend` or `git push --force` on shared or remote branches.
+
 **ONE PLAN PER TASK.** This is a non-negotiable hard constraint for technical integrity.
 
 - **Initial Action**: The first turn of every conversation MUST NOT be purely informational. It MUST result in a descriptive feature branch: `git checkout -b feature/[name]` or `git checkout -b fix/[name]` AND the initialization of a plan file in `docs/plans/`.
