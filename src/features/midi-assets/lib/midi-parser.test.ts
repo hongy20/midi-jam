@@ -1,6 +1,6 @@
 import type { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
-import { getBarLines, getMidiEvents, getNoteRange, getNoteSpans } from "./midi-parser";
+import { getBarLines, getMidiEvents, getNoteSpans } from "./midi-parser";
 
 describe("midi-parser", () => {
   const mockMidi = {
@@ -139,15 +139,7 @@ describe("midi-parser", () => {
     // Should shift second note to start at 500 + gap
     expect(events.filter((e) => e.note === 60 && e.type === "noteOn")[1].timeMs).toBe(510);
   });
-  it("getNoteRange returns correct min/max", () => {
-    const events = getMidiEvents(mockMidi, "piano");
-    const range = getNoteRange(events);
-    expect(range).toEqual({ min: 60, max: 62 });
-  });
 
-  it("getNoteRange returns null for empty events", () => {
-    expect(getNoteRange([])).toBeNull();
-  });
 
   it("getBarLines handles single time signature", () => {
     const barLines = getBarLines(mockMidi);

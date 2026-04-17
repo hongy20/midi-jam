@@ -132,22 +132,6 @@ export function getNoteSpans(events: MidiEvent[]): NoteSpan[] {
   return spans.sort((a, b) => a.startTimeMs - b.startTimeMs);
 }
 
-/**
- * Finds the minimum and maximum MIDI notes in a set of events.
- */
-export function getNoteRange(events: MidiEvent[]): { min: number; max: number } | null {
-  if (events.length === 0) return null;
-
-  let min = MIDI_MAX_NOTE;
-  let max = MIDI_MIN_NOTE;
-
-  for (const event of events) {
-    if (event.note < min) min = event.note;
-    if (event.note > max) max = event.note;
-  }
-
-  return { min, max };
-}
 
 /**
  * Calculates timestamps for bar-lines based on time signature segments.
