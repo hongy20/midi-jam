@@ -25,6 +25,28 @@ const eslintConfig = [
       "react-hooks/set-state-in-effect": "warn",
     },
   },
+  {
+    files: ["src/shared/**/*"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@/features/*", "@/app/*", "@/proxy"],
+              message:
+                "Shared modules (src/shared) must not import from features, app, or proxy layers. Keep infrastructure layer pure.",
+            },
+            {
+              group: ["**/features/*", "**/app/*"],
+              message:
+                "Shared modules (src/shared) must not import from features or app layers via relative paths.",
+            },
+          ],
+        },
+      ],
+    },
+  },
 ];
 
 export default eslintConfig;
