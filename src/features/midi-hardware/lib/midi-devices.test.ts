@@ -3,7 +3,7 @@ import {
   getMIDIInputDevices,
   getMIDIOutputDevices,
   onMIDIDevicesStateChange,
-} from "@/features/midi-hardware/lib/midi-devices";
+} from "../lib/midi-devices";
 
 describe("getMIDIInputDevices", () => {
   // ... existing tests ...

@@ -8,8 +8,8 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Theme } from "@/features/theme/lib/themes";
 import type { Mode } from "@/shared/types/mode";
+import { Theme } from "../lib/themes";
 
 interface ThemeContextType {
   theme: Theme;

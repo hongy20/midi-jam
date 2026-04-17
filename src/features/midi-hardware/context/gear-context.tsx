@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, type ReactNode, useContext, useMemo } from "react";
-import { useMIDIDevices } from "@/features/midi-hardware/hooks/use-midi-devices";
-import { useMIDISelection } from "@/features/midi-hardware/hooks/use-midi-selection";
+import { useMIDIDevices } from "../hooks/use-midi-devices";
+import { useMIDISelection } from "../hooks/use-midi-selection";
 
 interface GearContextType {
   inputs: WebMidi.MIDIInput[];

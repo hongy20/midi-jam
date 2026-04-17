@@ -5,9 +5,9 @@ import { useEffect } from "react";
 import { useStage } from "@/app/play/context/stage-context";
 import { useCollection, useTrackSync } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
-import { useNavigation } from "@/features/navigation/hooks/use-navigation";
-import { ROUTES } from "@/features/navigation/lib/routes";
 import { useScore } from "@/features/score";
+import { useNavigation } from "../hooks/use-navigation";
+import { ROUTES } from "../lib/routes";
 
 export function NavigationGuard({ children }: { children: React.ReactNode }) {
   const { toCollection, toHome, toGear } = useNavigation();

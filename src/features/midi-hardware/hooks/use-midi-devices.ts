@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { requestMIDIAccess } from "@/features/midi-hardware/lib/midi-access";
+import { requestMIDIAccess } from "../lib/midi-access";
 import {
   getMIDIInputDevices,
   getMIDIOutputDevices,
   onMIDIDevicesStateChange,
-} from "@/features/midi-hardware/lib/midi-devices";
+} from "../lib/midi-devices";
 
 interface UseMIDIDevicesResult {
   inputs: WebMidi.MIDIInput[];

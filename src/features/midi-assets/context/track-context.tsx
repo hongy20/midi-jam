@@ -8,8 +8,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import type { SegmentGroup } from "@/features/midi-assets/lib/lane-segment-utils";
-import type { NoteSpan } from "@/features/midi-assets/lib/midi-parser";
+import type { SegmentGroup } from "../lib/lane-segment-utils";
+import type { NoteSpan } from "../lib/midi-parser";
 
 type TrackStatus =
   | { isLoading: true; isReady: false; error: null }

@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { requestMIDIAccess } from "@/features/midi-hardware/lib/midi-access";
+import { requestMIDIAccess } from "../lib/midi-access";
 
 describe("requestMIDIAccess", () => {
   beforeEach(() => {

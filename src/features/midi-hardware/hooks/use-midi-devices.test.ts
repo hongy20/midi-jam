@@ -1,9 +1,9 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import * as midiAccess from "@/features/midi-hardware/lib/midi-access";
+import * as midiAccess from "../lib/midi-access";
 import { useMIDIDevices } from "./use-midi-devices";
 
-vi.mock("@/features/midi-hardware/lib/midi-access");
+vi.mock("../lib/midi-access");
 
 describe("useMIDIDevices", () => {
   beforeEach(() => {

@@ -4,16 +4,16 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useStage } from "@/app/play/context/stage-context";
 import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
-import { useNavigation } from "@/features/navigation/hooks/use-navigation";
-import { ROUTES } from "@/features/navigation/lib/routes";
 import { useScore } from "@/features/score";
+import { useNavigation } from "../hooks/use-navigation";
+import { ROUTES } from "../lib/routes";
 import { NavigationGuard } from "./navigation-guard";
 
 vi.mock("@/features/collection");
 vi.mock("@/features/midi-hardware");
 vi.mock("@/features/score");
 vi.mock("@/app/play/context/stage-context");
-vi.mock("@/features/navigation/hooks/use-navigation");
+vi.mock("../hooks/use-navigation");
 vi.mock("next/navigation");
 
 describe("NavigationGuard", () => {

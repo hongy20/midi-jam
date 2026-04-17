@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { GearProvider, useGear } from "./gear-context";
 
 // Mock hooks used by GearProvider
-vi.mock("@/features/midi-hardware/hooks/use-midi-devices", () => ({
+vi.mock("../hooks/use-midi-devices", () => ({
   useMIDIDevices: vi.fn(() => ({
     inputs: [{ id: "input-1", name: "Mock Input" }],
     outputs: [{ id: "output-1", name: "Mock Output" }],
@@ -11,7 +11,7 @@ vi.mock("@/features/midi-hardware/hooks/use-midi-devices", () => ({
   })),
 }));
 
-vi.mock("@/features/midi-hardware/hooks/use-midi-selection", () => ({
+vi.mock("../hooks/use-midi-selection", () => ({
   useMIDISelection: vi.fn((inputs, outputs) => ({
     selectedMIDIInput: inputs[0] || null,
     selectedMIDIOutput: outputs[0] || null,

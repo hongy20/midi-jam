@@ -3,7 +3,6 @@
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useRef } from "react";
 import { useStage } from "@/app/play/context/stage-context";
-import { useCollection } from "@/features/collection/context/collection-context";
 import {
   buildSegmentGroups,
   getMidiEvents,
@@ -15,6 +14,7 @@ import {
 import { useGear } from "@/features/midi-hardware";
 import { ROUTES } from "@/features/navigation";
 import { useScore } from "@/features/score";
+import { useCollection } from "../context/collection-context";
 
 /**
  * Coordinator hook to sync track selection with track loading logic.
