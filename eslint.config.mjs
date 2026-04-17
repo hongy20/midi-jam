@@ -26,21 +26,68 @@ const eslintConfig = [
     },
   },
   {
-    files: ["src/shared/**/*"],
+    // 1. Enforce explicit exports in barrel files (no export *)
+    files: ["src/features/*/index.ts"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "ExportAllDeclaration",
+          message:
+            "Exporting all from a file (export *) is forbidden in feature barrel files. Please use explicit exports.",
+        },
+      ],
+    },
+  },
+  {
+    // 2. Enforce barrel file usage from outside
+    // Prevent importing from feature internals from anywhere except within the same feature
+    files: ["src/app/**/*", "src/features/*/**/*", "src/shared/**/*"],
     rules: {
       "no-restricted-imports": [
         "error",
         {
           patterns: [
             {
-              group: ["@/features/*", "@/app/*", "@/proxy"],
+              group: ["**/features/*/*", "!**/features/*/index"],
               message:
-                "Shared modules (src/shared) must not import from features, app, or proxy layers. Keep infrastructure layer pure.",
+                "Direct import from feature internals is forbidden. Please use the feature barrel file (src/features/[name]/index.ts).",
             },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // 3. Prevent features from importing from app layer
+    files: ["src/features/**/*"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
             {
-              group: ["**/features/*", "**/app/*"],
+              group: ["**/app/**", "@/app/**"],
+              message: "Feature layer must not import from the app layer.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // 4. Warn on cross-feature imports
+    // This will also catch aliased self-imports, encouraging relative paths for internal logic
+    files: ["src/features/**/*"],
+    rules: {
+      "no-restricted-imports": [
+        "warn",
+        {
+          patterns: [
+            {
+              group: ["@/features/*"],
               message:
-                "Shared modules (src/shared) must not import from features or app layers via relative paths.",
+                "Cross-feature imports should be minimized. If this is a self-import, use relative paths instead of aliases.",
             },
           ],
         },
