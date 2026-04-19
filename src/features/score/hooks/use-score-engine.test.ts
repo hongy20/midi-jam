@@ -1,12 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { MidiNote, MIDINoteEvent } from "@/shared/types/midi";
-import { useMIDINotes } from "@/features/midi-hardware";
+import type { MidiNote } from "@/shared/types/midi";
 import { useScoreEngine } from "./use-score-engine";
-
-vi.mock("@/features/midi-hardware", () => ({
-  useMIDINotes: vi.fn(),
-}));
 
 describe("useScoreEngine hook", () => {
   const spans = [
@@ -18,15 +13,9 @@ describe("useScoreEngine hook", () => {
   });
 
   it("increases combo on perfect hit note-on, and score on note-off", () => {
-    let onNoteCallback: (event: MIDINoteEvent) => void = () => {};
-    vi.mocked(useMIDINotes).mockImplementation((_input, cb) => {
-      onNoteCallback = cb as (event: MIDINoteEvent) => void;
-    });
-
     let currentTime = 3000;
     const { result } = renderHook(() =>
       useScoreEngine({
-        midiInput: {} as WebMidi.MIDIInput,
         spans,
         getCurrentTimeMs: () => currentTime,
       }),
@@ -34,7 +23,7 @@ describe("useScoreEngine hook", () => {
 
     // 1. Trigger Note On
     act(() => {
-      onNoteCallback({ type: "note-on", note: 60, velocity: 0.7 });
+      result.current.processNoteEvent({ type: "note-on", note: 60, velocity: 0.7 });
     });
 
     expect(result.current.getCombo()).toBe(1);
@@ -44,7 +33,7 @@ describe("useScoreEngine hook", () => {
     // 2. Trigger Note Off (100% overlap)
     currentTime = 4000;
     act(() => {
-      onNoteCallback({ type: "note-off", note: 60, velocity: 0 });
+      result.current.processNoteEvent({ type: "note-off", note: 60, velocity: 0 });
     });
 
     expect(result.current.getScore()).toBeGreaterThan(0);
@@ -55,7 +44,6 @@ describe("useScoreEngine hook", () => {
     let currentTime = 3000;
     const { result } = renderHook(() =>
       useScoreEngine({
-        midiInput: null,
         spans,
         getCurrentTimeMs: () => currentTime,
       }),
@@ -87,7 +75,6 @@ describe("useScoreEngine hook", () => {
   it("resets combo on miss (wrong note)", () => {
     const { result } = renderHook(() =>
       useScoreEngine({
-        midiInput: null,
         spans,
         getCurrentTimeMs: () => 3000,
       }),
@@ -119,7 +106,6 @@ describe("useScoreEngine hook", () => {
     let currentTime = 3000;
     const { result } = renderHook(() =>
       useScoreEngine({
-        midiInput: null,
         spans,
         getCurrentTimeMs: () => currentTime,
       }),
