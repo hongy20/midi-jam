@@ -85,8 +85,7 @@ export function PlayPageClient() {
 
   const { playbackNotes } = useTrackPlayer({
     containerRef: scrollRef,
-    enabled: demoMode && !isLoading,
-    groups,
+    enabled: demoMode && !isLoading && groups.length > 0,
     selectedMIDIOutput,
     processNoteEvent,
   });

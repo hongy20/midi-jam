@@ -66,7 +66,6 @@ describe("useTrackPlayer", () => {
       useTrackPlayer({
         containerRef,
         enabled: true,
-        groups,
         selectedMIDIOutput: null,
         processNoteEvent,
       }),
@@ -156,7 +155,6 @@ describe("useTrackPlayer", () => {
       useTrackPlayer({
         containerRef,
         enabled: true,
-        groups,
         selectedMIDIOutput: null,
         processNoteEvent,
       }),

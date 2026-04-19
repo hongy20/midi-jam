@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNotePlayer } from "./use-note-player";
-import { type MidiNoteGroup, type MIDINoteEvent } from "@/shared/types/midi";
+import { type MIDINoteEvent } from "@/shared/types/midi";
 
 interface UseTrackPlayerProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   enabled: boolean;
-  groups: MidiNoteGroup[];
   selectedMIDIOutput: WebMidi.MIDIOutput | null;
   processNoteEvent: (event: MIDINoteEvent) => void;
 }
@@ -17,7 +16,6 @@ interface UseTrackPlayerProps {
 export function useTrackPlayer({
   containerRef,
   enabled,
-  groups,
   selectedMIDIOutput,
   processNoteEvent,
 }: UseTrackPlayerProps) {
@@ -26,7 +24,7 @@ export function useTrackPlayer({
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || !enabled || groups.length === 0) return;
+    if (!container || !enabled) return;
 
     const activeCounts = new Map<number, number>();
     const observedElements = new Set<Element>();
@@ -173,7 +171,7 @@ export function useTrackPlayer({
       activeCounts.clear();
       setPlaybackNotes(new Set());
     };
-  }, [containerRef, enabled, groups, playNote, stopNote, processNoteEvent]);
+  }, [containerRef, enabled, playNote, stopNote, processNoteEvent]);
 
   return { playbackNotes };
 }
