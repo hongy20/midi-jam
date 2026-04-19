@@ -151,12 +151,14 @@ describe("useTrackPlayer", () => {
       },
     ];
 
+    const processNoteEvent = vi.fn();
     const { result } = renderHook(() =>
       useTrackPlayer({
         containerRef,
         enabled: true,
         groups,
         selectedMIDIOutput: null,
+        processNoteEvent,
       }),
     );
 

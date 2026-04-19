@@ -7,7 +7,7 @@ interface UseTrackPlayerProps {
   enabled: boolean;
   groups: MidiNoteGroup[];
   selectedMIDIOutput: WebMidi.MIDIOutput | null;
-  processNoteEvent?: (event: MIDINoteEvent) => void;
+  processNoteEvent: (event: MIDINoteEvent) => void;
 }
 
 /**
@@ -48,9 +48,7 @@ export function useTrackPlayer({
         const velocity = 0.7;
         playNote(pitch, velocity);
 
-        if (processNoteEvent) {
-          processNoteEvent({ type: "note-on", note: pitch, velocity });
-        }
+        processNoteEvent({ type: "note-on", note: pitch, velocity });
       }
     };
 
@@ -70,10 +68,7 @@ export function useTrackPlayer({
           });
 
           stopNote(pitch);
-
-          if (processNoteEvent) {
-            processNoteEvent({ type: "note-off", note: pitch, velocity: 0 });
-          }
+          processNoteEvent({ type: "note-off", note: pitch, velocity: 0 });
         }
       }
     };
@@ -172,9 +167,7 @@ export function useTrackPlayer({
       for (const [pitch, count] of activeCounts.entries()) {
         if (count > 0) {
           stopNote(pitch);
-          if (processNoteEvent) {
-            processNoteEvent({ type: "note-off", note: pitch, velocity: 0 });
-          }
+          processNoteEvent({ type: "note-off", note: pitch, velocity: 0 });
         }
       }
       activeCounts.clear();
