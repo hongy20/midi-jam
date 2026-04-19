@@ -205,6 +205,3 @@ describe("useTrackPlayer", () => {
     expect(result.current.playbackNotes.has(60)).toBe(true);
   });
 });
-
-
-
