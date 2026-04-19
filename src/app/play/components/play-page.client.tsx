@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useStage } from "@/app/play/context/stage-context";
 import { useActiveNotes } from "@/app/play/hooks/use-active-notes";
 import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";

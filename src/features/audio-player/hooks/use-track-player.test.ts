@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 import { useTrackPlayer } from "./use-track-player";
 import { useNotePlayer } from "./use-note-player";
 
@@ -17,7 +17,7 @@ describe("useTrackPlayer", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    (useNotePlayer as any).mockReturnValue({
+    (useNotePlayer as Mock).mockReturnValue({
       playNote,
       stopNote,
     });
