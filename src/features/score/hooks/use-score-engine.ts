@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import type { MidiNote } from "@/shared/types/midi";
-import { useMIDINotes } from "@/features/midi-hardware";
 import { calculateMaxRawPoints } from "../lib/score-utils";
 
 const PERFECT_THRESHOLD = 200; // ms (increased from 150 for better tolerance)
@@ -12,7 +11,6 @@ const DURATION_GRACE_MS = 150; // ms to account for scheduling jitter
 export type HitQuality = "perfect" | "good" | "miss" | null;
 
 interface UseScoreEngineProps {
-  midiInput: WebMidi.MIDIInput | null;
   spans: MidiNote[];
   getCurrentTimeMs: () => number;
   initialScore?: number;
@@ -21,7 +19,6 @@ interface UseScoreEngineProps {
 }
 
 export function useScoreEngine({
-  midiInput,
   spans,
   getCurrentTimeMs,
   initialScore = 0,
@@ -175,8 +172,6 @@ export function useScoreEngine({
     },
     [spans, getCurrentTimeMs, commitHitScore],
   );
-
-  useMIDINotes(midiInput, processNoteEvent);
 
   // Miss detection, window advancement, and stale hit cleanup
   useEffect(() => {

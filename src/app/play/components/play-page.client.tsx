@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useStage } from "@/app/play/context/stage-context";
-import { useActiveNotes } from "@/app/play/hooks/use-active-notes";
 import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";
 import { getNoteUnits, getVisibleMidiRange } from "@/app/play/lib/piano";
 import { useTrackPlayer } from "@/features/audio-player";
@@ -13,7 +12,7 @@ import {
   PIANO_88_KEY_MIN,
   useTrack,
 } from "@/features/midi-assets";
-import { useGear } from "@/features/midi-hardware";
+import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/features/navigation";
 import { useScore, useScoreEngine } from "@/features/score";
 import { useOptions } from "@/features/settings";
@@ -54,8 +53,6 @@ export function PlayPageClient() {
 
   const { startUnit, endUnit } = getNoteUnits(visibleMidiRange.startNote, visibleMidiRange.endNote);
 
-  const liveActiveNotes = useActiveNotes(selectedMIDIInput);
-
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleFinishRef = useRef<() => void>(() => {});
 
@@ -75,13 +72,14 @@ export function PlayPageClient() {
   });
 
   const { getScore, getCombo, getLastHitQuality, processNoteEvent } = useScoreEngine({
-    midiInput: selectedMIDIInput,
     spans,
     getCurrentTimeMs,
     initialScore: gameSession?.score ?? 0,
     initialCombo: gameSession?.combo ?? 0,
     initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
   });
+
+  const liveActiveNotes = useActiveNotes(selectedMIDIInput, processNoteEvent);
 
   const { playbackNotes } = useTrackPlayer({
     containerRef: scrollRef,
