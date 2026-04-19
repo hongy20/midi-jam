@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { type MIDINoteEvent, useMIDINotes } from "@/features/midi-hardware";
+import { type MIDINoteEvent } from "@/shared/types/midi";
+import { useMIDINotes } from "@/features/midi-hardware";
 
 /**
  * A React hook that tracks the currently active (pressed) MIDI notes.

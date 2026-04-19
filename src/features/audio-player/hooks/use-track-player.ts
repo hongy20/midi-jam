@@ -1,19 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNotePlayer } from "./use-note-player";
-import { type MidiNoteGroup } from "@/shared/types/midi";
-
-type TrackPlayerEvent = {
-  type: "note-on" | "note-off";
-  note: number;
-  velocity: number;
-};
+import { type MidiNoteGroup, type MIDINoteEvent } from "@/shared/types/midi";
 
 interface UseTrackPlayerProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   enabled: boolean;
   groups: MidiNoteGroup[];
   selectedMIDIOutput: WebMidi.MIDIOutput | null;
-  processNoteEvent?: (event: TrackPlayerEvent) => void;
+  processNoteEvent?: (event: MIDINoteEvent) => void;
 }
 
 /**

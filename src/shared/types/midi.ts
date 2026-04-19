@@ -16,3 +16,9 @@ export interface MidiNoteGroup {
   durationMs: number;
   spans: MidiNote[];
 }
+
+export interface MIDINoteEvent {
+  type: "note-on" | "note-off";
+  note: number;
+  velocity: number;
+}
