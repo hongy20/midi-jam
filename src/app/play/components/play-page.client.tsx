@@ -1,11 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useStage } from "@/app/play/context/stage-context";
 import { useActiveNotes } from "@/app/play/hooks/use-active-notes";
 import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";
 import { getNoteUnits, getVisibleMidiRange } from "@/app/play/lib/piano";
-import { useNotePlayer, useTrackPlayer } from "@/features/audio-player";
+import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
 import {
   LANE_SCROLL_DURATION_MS,
@@ -55,7 +55,6 @@ export function PlayPageClient() {
   const { startUnit, endUnit } = getNoteUnits(visibleMidiRange.startNote, visibleMidiRange.endNote);
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput);
-  const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleFinishRef = useRef<() => void>(() => {});
@@ -84,47 +83,11 @@ export function PlayPageClient() {
     initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
   });
 
-  const { playNote, stopNote } = useNotePlayer(selectedMIDIOutput);
-
-  const onNoteOn = useCallback(
-    (note: number, velocity: number) => {
-      setPlaybackNotes((prev) => {
-        const next = new Set(prev);
-        next.add(note);
-        return next;
-      });
-      playNote(note, velocity);
-
-      // If in demo mode, feed the note to the scoring engine
-      if (demoMode) {
-        processNoteEvent({ type: "note-on", note, velocity });
-      }
-    },
-    [playNote, demoMode, processNoteEvent],
-  );
-
-  const onNoteOff = useCallback(
-    (note: number) => {
-      setPlaybackNotes((prev) => {
-        const next = new Set(prev);
-        next.delete(note);
-        return next;
-      });
-      stopNote(note);
-
-      if (demoMode) {
-        processNoteEvent({ type: "note-off", note, velocity: 0 });
-      }
-    },
-    [stopNote, demoMode, processNoteEvent],
-  );
-
-  useTrackPlayer({
+  const { playbackNotes } = useTrackPlayer({
     containerRef: scrollRef,
-    enabled: demoMode && !isLoading,
-    groups,
-    onNoteOn,
-    onNoteOff,
+    enabled: demoMode && !isLoading && groups.length > 0,
+    selectedMIDIOutput,
+    processNoteEvent,
   });
 
   // Update finish callback ref in an effect to avoid render-phase side effects

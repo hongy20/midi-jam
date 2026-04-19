@@ -1,12 +1,12 @@
-import { useEffect } from "react";
-import { type MidiNoteGroup } from "@/shared/types/midi";
+import { useEffect, useState } from "react";
+import { useNotePlayer } from "./use-note-player";
+import { type MIDINoteEvent } from "@/shared/types/midi";
 
 interface UseTrackPlayerProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   enabled: boolean;
-  groups: MidiNoteGroup[];
-  onNoteOn: (note: number, velocity: number) => void;
-  onNoteOff: (note: number) => void;
+  selectedMIDIOutput: WebMidi.MIDIOutput | null;
+  processNoteEvent: (event: MIDINoteEvent) => void;
 }
 
 /**
@@ -16,13 +16,15 @@ interface UseTrackPlayerProps {
 export function useTrackPlayer({
   containerRef,
   enabled,
-  groups,
-  onNoteOn,
-  onNoteOff,
+  selectedMIDIOutput,
+  processNoteEvent,
 }: UseTrackPlayerProps) {
+  const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
+  const { playNote, stopNote } = useNotePlayer(selectedMIDIOutput);
+
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || !enabled || groups.length === 0) return;
+    if (!container || !enabled) return;
 
     const activeCounts = new Map<number, number>();
     const observedElements = new Set<Element>();
@@ -35,7 +37,16 @@ export function useTrackPlayer({
       const currentCount = activeCounts.get(pitch) || 0;
       activeCounts.set(pitch, currentCount + 1);
       if (currentCount === 0) {
-        onNoteOn(pitch, 0.7);
+        setPlaybackNotes((prev) => {
+          const next = new Set(prev);
+          next.add(pitch);
+          return next;
+        });
+
+        const velocity = 0.7;
+        playNote(pitch, velocity);
+
+        processNoteEvent({ type: "note-on", note: pitch, velocity });
       }
     };
 
@@ -48,7 +59,14 @@ export function useTrackPlayer({
         const nextCount = currentCount - 1;
         activeCounts.set(pitch, nextCount);
         if (nextCount === 0) {
-          onNoteOff(pitch);
+          setPlaybackNotes((prev) => {
+            const next = new Set(prev);
+            next.delete(pitch);
+            return next;
+          });
+
+          stopNote(pitch);
+          processNoteEvent({ type: "note-off", note: pitch, velocity: 0 });
         }
       }
     };
@@ -146,10 +164,14 @@ export function useTrackPlayer({
       // Cleanup: release any currently active notes
       for (const [pitch, count] of activeCounts.entries()) {
         if (count > 0) {
-          onNoteOff(pitch);
+          stopNote(pitch);
+          processNoteEvent({ type: "note-off", note: pitch, velocity: 0 });
         }
       }
       activeCounts.clear();
+      setPlaybackNotes(new Set());
     };
-  }, [containerRef, enabled, groups, onNoteOn, onNoteOff]);
+  }, [containerRef, enabled, playNote, stopNote, processNoteEvent]);
+
+  return { playbackNotes };
 }

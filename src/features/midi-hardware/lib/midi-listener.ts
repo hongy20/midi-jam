@@ -1,10 +1,5 @@
 import { COMMAND_NOTE_OFF, COMMAND_NOTE_ON } from "@/shared/lib/command";
-
-export type MIDINoteEvent = {
-  type: "note-on" | "note-off";
-  note: number;
-  velocity: number;
-};
+import { type MIDINoteEvent } from "@/shared/types/midi";
 
 /**
  * Subscribes to MIDI note messages from a MIDI input device.

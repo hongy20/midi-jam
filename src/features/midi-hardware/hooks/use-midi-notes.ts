@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef } from "react";
-import { type MIDINoteEvent, subscribeToNotes } from "../lib/midi-listener";
+import { type MIDINoteEvent } from "@/shared/types/midi";
+import { subscribeToNotes } from "../lib/midi-listener";
 
 /**
  * A React hook that subscribes to MIDI note events from a MIDI input device.
