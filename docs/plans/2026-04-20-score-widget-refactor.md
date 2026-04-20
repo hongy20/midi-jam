@@ -22,7 +22,7 @@ Move the `ScoreWidget` component from `src/app/play/components/` to `src/feature
 
 #### [NEW] [live-score.stories.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/score/components/live-score/live-score.stories.tsx)
 - Port and update story.
-- Title: `Features/Score/LiveScore` (Updated based on user preference and to distinguish feature components).
+- Title: `Features/Score/Components/LiveScore` (Explicit hierarchy reflecting filesystem).
 
 #### [NEW] [live-score.test.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/score/components/live-score/live-score.test.tsx)
 - Port and update tests.
@@ -36,10 +36,10 @@ Move the `ScoreWidget` component from `src/app/play/components/` to `src/feature
 ### [Storybook Internal Audit & Normalization]
 
 #### [MODIFY] [piano-keyboard.stories.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/piano/components/piano-keyboard/piano-keyboard.stories.tsx)
-- Update title: `"App/Play/Components/PianoKeyboard"` -> `"Features/Piano/PianoKeyboard"`
+- Update title: `"Features/Piano/PianoKeyboard"` -> `"Features/Piano/Components/PianoKeyboard"`
 
 #### [MODIFY] [lane-stage.stories.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/play/components/lane-stage/lane-stage.stories.tsx)
-- Update title: `"App/Play/Components/LaneStage"` -> `"App/Play/LaneStage"`
+- Update title: `"App/Play/LaneStage"` -> `"App/Play/Components/LaneStage"`
 
 ---
 
@@ -59,8 +59,8 @@ Move the `ScoreWidget` component from `src/app/play/components/` to `src/feature
 - `npm run build`: Ensure production build integrity.
 
 ### Manual Verification
-- Check Storybook (`npm run storybook`) to verify the new hierarchy:
-    - [x] `Features/Score/LiveScore`
-    - [x] `Features/Piano/PianoKeyboard`
-    - [x] `App/Play/LaneStage`
+- Check Storybook (`npm run storybook`) to verify the new explicit hierarchy:
+    - [x] `Features/Score/Components/LiveScore`
+    - [x] `Features/Piano/Components/PianoKeyboard`
+    - [x] `App/Play/Components/LaneStage`
 - Verify that no unnecessary private types are exposed in the final `index.ts`.
