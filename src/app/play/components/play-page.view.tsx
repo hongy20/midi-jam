@@ -5,7 +5,7 @@ import { type MidiNoteGroup } from "@/shared/types/midi";
 import type { HitQuality } from "@/features/score";
 import { Button } from "@/shared/components/ui/8bit/button";
 import { LaneStage } from "./lane-stage/lane-stage";
-import { PianoKeyboard } from "./piano-keyboard/PianoKeyboard";
+import { PianoKeyboard } from "@/features/piano";
 import styles from "./play-page.view.module.css";
 import { ScoreWidget } from "./score-widget/score-widget";
 

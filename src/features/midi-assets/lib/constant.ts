@@ -10,15 +10,6 @@
 /** MIDI pitch used for silent dummy notes (e.g., duration extension) */
 export const MIDI_DUMMY_NOTE_PITCH = 0;
 
-/** Standard 88-key piano minimum MIDI note (A0) */
-export const PIANO_88_KEY_MIN = 21;
-
-/** Standard 88-key piano maximum MIDI note (C8) */
-export const PIANO_88_KEY_MAX = 108;
-
-/** Middle C MIDI note */
-export const MIDI_NOTE_C4 = 60;
-
 /** Default lead-in time before notes hit the target line */
 export const LEAD_IN_DEFAULT_MS = 2000;
 

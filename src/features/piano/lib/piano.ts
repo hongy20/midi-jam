@@ -1,4 +1,5 @@
-import { MIDI_NOTE_C4, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/features/midi-assets";
+import { MidiNote } from "@/shared/types/midi";
+import { MIDI_NOTE_C4, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "./constants";
 
 /**
  * Checks if a MIDI note corresponds to a black key on a piano.
@@ -92,4 +93,16 @@ export function getVisibleMidiRange(notes: number[], buffer = 3) {
     startNote,
     endNote,
   };
+}
+
+/**
+ * Calculates the unit boundaries for a set of MIDI notes.
+ * Combines range calculation and unit conversion into a single call.
+ * @param notes Array of MIDI notes (objects with a note property).
+ * @returns Object with startUnit and endUnit values.
+ */
+export function getPianoLayoutUnits(notes: MidiNote[]) {
+  const noteNumbers = notes.map((n) => n.note);
+  const { startNote, endNote } = getVisibleMidiRange(noteNumbers);
+  return getNoteUnits(startNote, endNote);
 }

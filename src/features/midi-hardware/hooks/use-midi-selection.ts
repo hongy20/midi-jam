@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 interface UseMIDISelectionResult {
   selectedMIDIInput: WebMidi.MIDIInput | null;
@@ -17,34 +17,25 @@ export function useMIDISelection(
   availableOutputs: WebMidi.MIDIOutput[] = [],
 ): UseMIDISelectionResult {
   const [selectedMIDIInput, setSelectedMIDIInput] = useState<WebMidi.MIDIInput | null>(null);
-  const [selectedMIDIOutput, setSelectedMIDIOutput] = useState<WebMidi.MIDIOutput | null>(null);
 
   const selectMIDIInput = (input: WebMidi.MIDIInput | null) => {
     setSelectedMIDIInput(input);
   };
 
-  // Handle selectedMIDIOutput matching
-  useEffect(() => {
-    if (!selectedMIDIInput) {
-      setSelectedMIDIOutput(null);
-      return;
-    }
-
-    // Try to find an output with the same name as the selected input
-    const matchingOutput =
-      availableOutputs.find((out) => out.name === selectedMIDIInput.name) || null;
-    setSelectedMIDIOutput(matchingOutput);
+  // 1. Derivative state: selectedMIDIOutput is purely based on selectedMIDIInput and availableOutputs
+  const selectedMIDIOutput = useMemo(() => {
+    if (!selectedMIDIInput) return null;
+    return availableOutputs.find((out) => out.name === selectedMIDIInput.name) || null;
   }, [selectedMIDIInput, availableOutputs]);
 
-  // Auto-deselect if the selected device is disconnected or no longer available
-  useEffect(() => {
-    if (selectedMIDIInput) {
-      const isAvailable = availableInputs.some((input) => input.id === selectedMIDIInput.id);
-      if (!isAvailable) {
-        setSelectedMIDIInput(null);
-      }
+  // 2. Adjusting state during render: auto-deselect if the selected device is no longer available.
+  // This avoids the 'set-state-in-effect' warning and prevents a double-render when a device is disconnected.
+  if (selectedMIDIInput) {
+    const isAvailable = availableInputs.some((input) => input.id === selectedMIDIInput.id);
+    if (!isAvailable) {
+      setSelectedMIDIInput(null);
     }
-  }, [selectedMIDIInput, availableInputs]);
+  }
 
   return { selectedMIDIInput, selectedMIDIOutput, selectMIDIInput };
 }

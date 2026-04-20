@@ -1,5 +1,5 @@
 /* src/components/piano-keyboard/piano-grid.module.css */
-.noteBase {
+.piano-grid-item {
   --relative-start: calc(var(--note-start) - var(--start-unit) + 1);
   grid-column: var(--relative-start) / span calc(3 - var(--is-black));
   display: flex;
@@ -15,443 +15,355 @@
   );
 }
 
-.note-21 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="21"] {
   --note-start: 36;
   --is-black: 0;
 }
-.note-22 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="22"] {
   --note-start: 38;
   --is-black: 1;
 }
-.note-23 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="23"] {
   --note-start: 39;
   --is-black: 0;
 }
-.note-24 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="24"] {
   --note-start: 42;
   --is-black: 0;
 }
-.note-25 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="25"] {
   --note-start: 44;
   --is-black: 1;
 }
-.note-26 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="26"] {
   --note-start: 45;
   --is-black: 0;
 }
-.note-27 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="27"] {
   --note-start: 47;
   --is-black: 1;
 }
-.note-28 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="28"] {
   --note-start: 48;
   --is-black: 0;
 }
-.note-29 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="29"] {
   --note-start: 51;
   --is-black: 0;
 }
-.note-30 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="30"] {
   --note-start: 53;
   --is-black: 1;
 }
-.note-31 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="31"] {
   --note-start: 54;
   --is-black: 0;
 }
-.note-32 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="32"] {
   --note-start: 56;
   --is-black: 1;
 }
-.note-33 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="33"] {
   --note-start: 57;
   --is-black: 0;
 }
-.note-34 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="34"] {
   --note-start: 59;
   --is-black: 1;
 }
-.note-35 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="35"] {
   --note-start: 60;
   --is-black: 0;
 }
-.note-36 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="36"] {
   --note-start: 63;
   --is-black: 0;
 }
-.note-37 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="37"] {
   --note-start: 65;
   --is-black: 1;
 }
-.note-38 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="38"] {
   --note-start: 66;
   --is-black: 0;
 }
-.note-39 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="39"] {
   --note-start: 68;
   --is-black: 1;
 }
-.note-40 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="40"] {
   --note-start: 69;
   --is-black: 0;
 }
-.note-41 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="41"] {
   --note-start: 72;
   --is-black: 0;
 }
-.note-42 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="42"] {
   --note-start: 74;
   --is-black: 1;
 }
-.note-43 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="43"] {
   --note-start: 75;
   --is-black: 0;
 }
-.note-44 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="44"] {
   --note-start: 77;
   --is-black: 1;
 }
-.note-45 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="45"] {
   --note-start: 78;
   --is-black: 0;
 }
-.note-46 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="46"] {
   --note-start: 80;
   --is-black: 1;
 }
-.note-47 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="47"] {
   --note-start: 81;
   --is-black: 0;
 }
-.note-48 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="48"] {
   --note-start: 84;
   --is-black: 0;
 }
-.note-49 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="49"] {
   --note-start: 86;
   --is-black: 1;
 }
-.note-50 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="50"] {
   --note-start: 87;
   --is-black: 0;
 }
-.note-51 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="51"] {
   --note-start: 89;
   --is-black: 1;
 }
-.note-52 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="52"] {
   --note-start: 90;
   --is-black: 0;
 }
-.note-53 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="53"] {
   --note-start: 93;
   --is-black: 0;
 }
-.note-54 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="54"] {
   --note-start: 95;
   --is-black: 1;
 }
-.note-55 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="55"] {
   --note-start: 96;
   --is-black: 0;
 }
-.note-56 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="56"] {
   --note-start: 98;
   --is-black: 1;
 }
-.note-57 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="57"] {
   --note-start: 99;
   --is-black: 0;
 }
-.note-58 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="58"] {
   --note-start: 101;
   --is-black: 1;
 }
-.note-59 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="59"] {
   --note-start: 102;
   --is-black: 0;
 }
-.note-60 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="60"] {
   --note-start: 105;
   --is-black: 0;
 }
-.note-61 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="61"] {
   --note-start: 107;
   --is-black: 1;
 }
-.note-62 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="62"] {
   --note-start: 108;
   --is-black: 0;
 }
-.note-63 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="63"] {
   --note-start: 110;
   --is-black: 1;
 }
-.note-64 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="64"] {
   --note-start: 111;
   --is-black: 0;
 }
-.note-65 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="65"] {
   --note-start: 114;
   --is-black: 0;
 }
-.note-66 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="66"] {
   --note-start: 116;
   --is-black: 1;
 }
-.note-67 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="67"] {
   --note-start: 117;
   --is-black: 0;
 }
-.note-68 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="68"] {
   --note-start: 119;
   --is-black: 1;
 }
-.note-69 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="69"] {
   --note-start: 120;
   --is-black: 0;
 }
-.note-70 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="70"] {
   --note-start: 122;
   --is-black: 1;
 }
-.note-71 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="71"] {
   --note-start: 123;
   --is-black: 0;
 }
-.note-72 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="72"] {
   --note-start: 126;
   --is-black: 0;
 }
-.note-73 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="73"] {
   --note-start: 128;
   --is-black: 1;
 }
-.note-74 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="74"] {
   --note-start: 129;
   --is-black: 0;
 }
-.note-75 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="75"] {
   --note-start: 131;
   --is-black: 1;
 }
-.note-76 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="76"] {
   --note-start: 132;
   --is-black: 0;
 }
-.note-77 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="77"] {
   --note-start: 135;
   --is-black: 0;
 }
-.note-78 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="78"] {
   --note-start: 137;
   --is-black: 1;
 }
-.note-79 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="79"] {
   --note-start: 138;
   --is-black: 0;
 }
-.note-80 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="80"] {
   --note-start: 140;
   --is-black: 1;
 }
-.note-81 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="81"] {
   --note-start: 141;
   --is-black: 0;
 }
-.note-82 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="82"] {
   --note-start: 143;
   --is-black: 1;
 }
-.note-83 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="83"] {
   --note-start: 144;
   --is-black: 0;
 }
-.note-84 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="84"] {
   --note-start: 147;
   --is-black: 0;
 }
-.note-85 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="85"] {
   --note-start: 149;
   --is-black: 1;
 }
-.note-86 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="86"] {
   --note-start: 150;
   --is-black: 0;
 }
-.note-87 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="87"] {
   --note-start: 152;
   --is-black: 1;
 }
-.note-88 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="88"] {
   --note-start: 153;
   --is-black: 0;
 }
-.note-89 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="89"] {
   --note-start: 156;
   --is-black: 0;
 }
-.note-90 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="90"] {
   --note-start: 158;
   --is-black: 1;
 }
-.note-91 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="91"] {
   --note-start: 159;
   --is-black: 0;
 }
-.note-92 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="92"] {
   --note-start: 161;
   --is-black: 1;
 }
-.note-93 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="93"] {
   --note-start: 162;
   --is-black: 0;
 }
-.note-94 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="94"] {
   --note-start: 164;
   --is-black: 1;
 }
-.note-95 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="95"] {
   --note-start: 165;
   --is-black: 0;
 }
-.note-96 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="96"] {
   --note-start: 168;
   --is-black: 0;
 }
-.note-97 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="97"] {
   --note-start: 170;
   --is-black: 1;
 }
-.note-98 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="98"] {
   --note-start: 171;
   --is-black: 0;
 }
-.note-99 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="99"] {
   --note-start: 173;
   --is-black: 1;
 }
-.note-100 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="100"] {
   --note-start: 174;
   --is-black: 0;
 }
-.note-101 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="101"] {
   --note-start: 177;
   --is-black: 0;
 }
-.note-102 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="102"] {
   --note-start: 179;
   --is-black: 1;
 }
-.note-103 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="103"] {
   --note-start: 180;
   --is-black: 0;
 }
-.note-104 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="104"] {
   --note-start: 182;
   --is-black: 1;
 }
-.note-105 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="105"] {
   --note-start: 183;
   --is-black: 0;
 }
-.note-106 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="106"] {
   --note-start: 185;
   --is-black: 1;
 }
-.note-107 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="107"] {
   --note-start: 186;
   --is-black: 0;
 }
-.note-108 {
-  composes: noteBase;
+.piano-grid-item[data-pitch="108"] {
   --note-start: 189;
   --is-black: 0;
 }
