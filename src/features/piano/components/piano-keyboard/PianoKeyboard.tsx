@@ -2,7 +2,6 @@
 
 import { memo, useEffect, useRef } from "react";
 import { MIDI_NOTE_C4, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "../../lib/constants";
-import gridStyles from "../../styles/piano-grid.module.css";
 import styles from "../../styles/piano-keyboard.module.css";
 
 interface PianoKeyboardProps {
@@ -25,7 +24,6 @@ const PianoKeys = memo(
     return (
       <>
         {notes.map((note) => {
-          const noteClass = gridStyles[`note-${note}`];
           const noteName = `${NOTE_NAMES[note % 12]}${Math.floor(note / 12) - 1}`;
 
           return (
@@ -39,7 +37,8 @@ const PianoKeys = memo(
                 }
               }}
               type="button"
-              className={`${styles.key} ${noteClass}`}
+              className={`${styles.key} piano-grid-item`}
+              data-pitch={note}
               data-live="false"
               data-playback="false"
               aria-label={noteName}

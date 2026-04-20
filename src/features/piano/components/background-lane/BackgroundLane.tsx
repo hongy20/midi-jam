@@ -1,5 +1,4 @@
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "../../lib/constants";
-import { default as gridStyles } from "../../styles/piano-grid.module.css";
 import styles from "../../styles/background-lane.module.css";
 
 /**
@@ -7,15 +6,15 @@ import styles from "../../styles/background-lane.module.css";
  * Always renders the full 88-key range.
  */
 export function BackgroundLane() {
-  const notes = [];
-  for (let n = PIANO_88_KEY_MIN; n <= PIANO_88_KEY_MAX; n++) {
-    notes.push(n);
-  }
+  const notes = Array.from(
+    { length: PIANO_88_KEY_MAX - PIANO_88_KEY_MIN + 1 },
+    (_, i) => PIANO_88_KEY_MIN + i,
+  );
 
   return (
     <div className={styles.container}>
       {notes.map((note) => (
-        <div key={`lane-${note}`} className={`${styles.lane} ${gridStyles[`note-${note}`]}`} />
+        <div key={`lane-${note}`} className={`${styles.lane} piano-grid-item`} data-pitch={note} />
       ))}
     </div>
   );
