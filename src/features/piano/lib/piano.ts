@@ -1,3 +1,4 @@
+import { MidiNote } from "@/shared/types/midi";
 import { MIDI_NOTE_C4, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "./constants";
 
 /**
@@ -97,10 +98,11 @@ export function getVisibleMidiRange(notes: number[], buffer = 3) {
 /**
  * Calculates the unit boundaries for a set of MIDI notes.
  * Combines range calculation and unit conversion into a single call.
- * @param notes Array of MIDI note numbers.
+ * @param notes Array of MIDI notes (objects with a note property).
  * @returns Object with startUnit and endUnit values.
  */
-export function getPianoLayoutUnits(notes: number[]) {
-  const { startNote, endNote } = getVisibleMidiRange(notes);
+export function getPianoLayoutUnits(notes: MidiNote[]) {
+  const noteNumbers = notes.map((n) => n.note);
+  const { startNote, endNote } = getVisibleMidiRange(noteNumbers);
   return getNoteUnits(startNote, endNote);
 }

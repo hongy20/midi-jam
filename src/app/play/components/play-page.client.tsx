@@ -40,8 +40,7 @@ export function PlayPageClient() {
 
   // Calculate dynamic piano range for consistent grid alignment
   const { startUnit, endUnit } = useMemo(() => {
-    const notes = spans.map((s) => s.note);
-    return getPianoLayoutUnits(notes);
+    return getPianoLayoutUnits(spans);
   }, [spans]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
