@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import type { HitQuality } from "@/features/score";
-import { ScoreWidget } from "./score-widget";
+import type { HitQuality } from "../../hooks/use-score-engine";
+import { LiveScore } from "./live-score";
 
-const meta: Meta<typeof ScoreWidget> = {
-  title: "App/Play/Components/ScoreWidget",
-  component: ScoreWidget,
+const meta: Meta<typeof LiveScore> = {
+  title: "Features/Score/Components/LiveScore",
+  component: LiveScore,
   parameters: {
     layout: "centered",
   },
@@ -12,7 +12,7 @@ const meta: Meta<typeof ScoreWidget> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ScoreWidget>;
+type Story = StoryObj<typeof LiveScore>;
 
 const mockGetters = {
   getScore: () => 12500,
