@@ -93,3 +93,14 @@ export function getVisibleMidiRange(notes: number[], buffer = 3) {
     endNote,
   };
 }
+
+/**
+ * Calculates the unit boundaries for a set of MIDI notes.
+ * Combines range calculation and unit conversion into a single call.
+ * @param notes Array of MIDI note numbers.
+ * @returns Object with startUnit and endUnit values.
+ */
+export function getPianoLayoutUnits(notes: number[]) {
+  const { startNote, endNote } = getVisibleMidiRange(notes);
+  return getNoteUnits(startNote, endNote);
+}

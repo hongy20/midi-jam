@@ -3,11 +3,10 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useStage } from "@/app/play/context/stage-context";
 import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";
-import { getNoteUnits, getVisibleMidiRange } from "@/features/piano";
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
 import { LANE_SCROLL_DURATION_MS, useTrack } from "@/features/midi-assets";
-import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/features/piano";
+import { getPianoLayoutUnits, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/features/piano";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/features/navigation";
 import { useScore, useScoreEngine } from "@/features/score";
@@ -40,14 +39,10 @@ export function PlayPageClient() {
   const isLoading = trackStatus.isLoading;
 
   // Calculate dynamic piano range for consistent grid alignment
-  const visibleMidiRange = useMemo(() => {
-    if (spans.length === 0) {
-      return { startNote: PIANO_88_KEY_MIN, endNote: PIANO_88_KEY_MAX };
-    }
-    return getVisibleMidiRange(spans.map((n) => n.note));
+  const { startUnit, endUnit } = useMemo(() => {
+    const notes = spans.map((s) => s.note);
+    return getPianoLayoutUnits(notes);
   }, [spans]);
-
-  const { startUnit, endUnit } = getNoteUnits(visibleMidiRange.startNote, visibleMidiRange.endNote);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleFinishRef = useRef<() => void>(() => {});
