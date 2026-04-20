@@ -41,8 +41,12 @@ export default function LoadingScreen({
   );
 
   useEffect(() => {
-    if (!autoProgress) return;
+    if (!autoProgress) {
+      setInternalProgress(progress ?? 0);
+      return;
+    }
 
+    setInternalProgress(0);
     const step = 5;
     const steps = 100 / step;
     const intervalTime = autoProgressDuration / steps;
@@ -59,7 +63,7 @@ export default function LoadingScreen({
     }, intervalTime);
 
     return () => clearInterval(timer);
-  }, [autoProgress, autoProgressDuration]);
+  }, [autoProgress, autoProgressDuration, progress]);
 
   useEffect(() => {
     if (tips.length === 0) return;
