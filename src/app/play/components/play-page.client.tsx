@@ -39,9 +39,7 @@ export function PlayPageClient() {
   const isLoading = trackStatus.isLoading;
 
   // Calculate dynamic piano range for consistent grid alignment
-  const { startUnit, endUnit } = useMemo(() => {
-    return getPianoLayoutUnits(spans);
-  }, [spans]);
+  const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(spans), [spans]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleFinishRef = useRef<() => void>(() => {});
