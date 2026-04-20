@@ -1,4 +1,3 @@
-export { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "./lib/constants";
 export { getPianoLayoutUnits } from "./lib/piano";
 export { PianoKeyboard } from "./components/piano-keyboard/PianoKeyboard";
 export { BackgroundLane } from "./components/background-lane/BackgroundLane";
