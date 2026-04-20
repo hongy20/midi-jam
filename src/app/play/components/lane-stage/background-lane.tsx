@@ -1,5 +1,4 @@
-import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/features/midi-assets";
-import gridStyles from "../piano-keyboard/piano-grid.module.css";
+import { pianoGridStyles as gridStyles, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/features/piano";
 import styles from "./background-lane.module.css";
 
 /**

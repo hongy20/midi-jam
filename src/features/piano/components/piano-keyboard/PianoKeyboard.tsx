@@ -1,9 +1,9 @@
 "use client";
 
 import { memo, useEffect, useRef } from "react";
-import { MIDI_NOTE_C4, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/features/midi-assets";
-import gridStyles from "./piano-grid.module.css";
-import styles from "./piano-keyboard.module.css";
+import { MIDI_NOTE_C4, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "../../lib/constants";
+import gridStyles from "../../styles/piano-grid.module.css";
+import styles from "../../styles/piano-keyboard.module.css";
 
 interface PianoKeyboardProps {
   liveNotes: Set<number>;
