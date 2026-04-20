@@ -3,7 +3,7 @@ import type { HitQuality } from "../../hooks/use-score-engine";
 import { LiveScore } from "./live-score";
 
 const meta: Meta<typeof LiveScore> = {
-  title: "App/Global/LiveScore",
+  title: "Features/Score/LiveScore",
   component: LiveScore,
   parameters: {
     layout: "centered",

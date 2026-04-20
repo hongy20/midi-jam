@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { PianoKeyboard } from "./PianoKeyboard";
 
 const meta: Meta<typeof PianoKeyboard> = {
-  title: "App/Play/Components/PianoKeyboard",
+  title: "Features/Piano/PianoKeyboard",
   component: PianoKeyboard,
   parameters: {
     layout: "fullscreen",
