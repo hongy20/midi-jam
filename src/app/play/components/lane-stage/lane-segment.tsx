@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { computeLaneSegmentAnimationDelay } from "@/features/midi-assets";
 import { type MidiNoteGroup } from "@/shared/types/midi";
+import { PIANO_GRID_ITEM_CLASS } from "@/features/piano";
 import styles from "./lane-segment.module.css";
 
 interface LaneSegmentProps {
@@ -72,7 +73,7 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
             key={span.id}
             data-pitch={span.note}
             data-note-id={span.id}
-            className={`${styles.note} piano-grid-item`}
+            className={`${styles.note} ${PIANO_GRID_ITEM_CLASS}`}
             style={{
               top: `${topPercent}%`,
               height: `${heightPercent}%`,

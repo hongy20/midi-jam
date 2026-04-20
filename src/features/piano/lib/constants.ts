@@ -10,3 +10,6 @@ export const PIANO_88_KEY_MAX = 108;
 
 /** Middle C MIDI note */
 export const MIDI_NOTE_C4 = 60;
+
+/** Global CSS class for piano grid items used for alignment mapping */
+export const PIANO_GRID_ITEM_CLASS = "piano-grid-item";

@@ -1,4 +1,4 @@
-import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "../../lib/constants";
+import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN, PIANO_GRID_ITEM_CLASS } from "../../lib/constants";
 import styles from "../../styles/background-lane.module.css";
 
 /**
@@ -14,7 +14,11 @@ export function BackgroundLane() {
   return (
     <div className={styles.container}>
       {notes.map((note) => (
-        <div key={`lane-${note}`} className={`${styles.lane} piano-grid-item`} data-pitch={note} />
+        <div
+          key={`lane-${note}`}
+          className={`${styles.lane} ${PIANO_GRID_ITEM_CLASS}`}
+          data-pitch={note}
+        />
       ))}
     </div>
   );
