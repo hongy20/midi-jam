@@ -45,23 +45,6 @@ describe("useTrackPlayer", () => {
 
     container.querySelectorAll = vi.fn().mockReturnValue([note] as unknown as NodeListOf<Element>);
 
-    const groups = [
-      {
-        index: 0,
-        startMs: 0,
-        durationMs: 1000,
-        spans: [
-          {
-            note: 60,
-            startTimeMs: 0,
-            durationMs: 100,
-            id: "1",
-            velocity: 100,
-          },
-        ],
-      },
-    ];
-
     const { result } = renderHook(() =>
       useTrackPlayer({
         containerRef,
@@ -125,30 +108,6 @@ describe("useTrackPlayer", () => {
     container.querySelectorAll = vi
       .fn()
       .mockReturnValue([note1, note2] as unknown as NodeListOf<Element>);
-
-    const groups = [
-      {
-        index: 0,
-        startMs: 0,
-        durationMs: 1000,
-        spans: [
-          {
-            note: 60,
-            startTimeMs: 0,
-            durationMs: 100,
-            id: "1",
-            velocity: 100,
-          },
-          {
-            note: 60,
-            startTimeMs: 200,
-            durationMs: 100,
-            id: "2",
-            velocity: 100,
-          },
-        ],
-      },
-    ];
 
     const processNoteEvent = vi.fn();
     const { result } = renderHook(() =>

@@ -24,17 +24,18 @@ export function ThemeProvider({
   const [theme, setThemeState] = useState<Theme>(forcedTheme || "default");
   const [mode, setModeState] = useState<Mode>(forcedMode || "light");
 
-  useEffect(() => {
-    if (forcedTheme) {
-      setThemeState(forcedTheme);
-    }
-  }, [forcedTheme]);
+  // Synchronize state with props during render to avoid useEffect 'set-state-in-effect' warnings
+  const [prevForcedTheme, setPrevForcedTheme] = useState(forcedTheme);
+  if (forcedTheme !== prevForcedTheme) {
+    setPrevForcedTheme(forcedTheme);
+    if (forcedTheme) setThemeState(forcedTheme);
+  }
 
-  useEffect(() => {
-    if (forcedMode) {
-      setModeState(forcedMode);
-    }
-  }, [forcedMode]);
+  const [prevForcedMode, setPrevForcedMode] = useState(forcedMode);
+  if (forcedMode !== prevForcedMode) {
+    setPrevForcedMode(forcedMode);
+    if (forcedMode) setModeState(forcedMode);
+  }
 
   useEffect(() => {
     // Only load from localStorage if NOT forced

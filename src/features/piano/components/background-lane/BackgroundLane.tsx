@@ -1,5 +1,6 @@
-import { pianoGridStyles as gridStyles, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "@/features/piano";
-import styles from "./background-lane.module.css";
+import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "../../lib/constants";
+import { default as gridStyles } from "../../styles/piano-grid.module.css";
+import styles from "../../styles/background-lane.module.css";
 
 /**
  * Static lanes matching the piano keys.
