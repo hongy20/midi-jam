@@ -1,8 +1,8 @@
 import { act, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { ScoreWidget } from "./score-widget";
+import { LiveScore } from "./live-score";
 
-describe("ScoreWidget", () => {
+describe("LiveScore", () => {
   const defaultProps = {
     getScore: () => 50.0,
     getCombo: () => 15,
@@ -11,7 +11,7 @@ describe("ScoreWidget", () => {
   };
 
   it("renders score, combo and updates progress via rAF", async () => {
-    render(<ScoreWidget {...defaultProps} />);
+    render(<LiveScore {...defaultProps} />);
 
     // rAF loop takes a frame to update the DOM
     await act(async () => {
@@ -19,7 +19,7 @@ describe("ScoreWidget", () => {
     });
 
     expect(screen.getByText(/50.0/)).toBeInTheDocument();
-    expect(screen.getByText(/15/)).toBeInTheDocument();
+    expect(screen.getByText(/x15/)).toBeInTheDocument(); // Expecting x15 for combo
     expect(screen.getByText(/PERFECT!/)).toBeInTheDocument();
     expect(screen.getByText(/45%/)).toBeInTheDocument();
   });

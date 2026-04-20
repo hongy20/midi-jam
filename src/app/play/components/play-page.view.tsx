@@ -7,7 +7,7 @@ import { Button } from "@/shared/components/ui/8bit/button";
 import { LaneStage } from "./lane-stage/lane-stage";
 import { PianoKeyboard } from "@/features/piano";
 import styles from "./play-page.view.module.css";
-import { ScoreWidget } from "./score-widget/score-widget";
+import { LiveScore } from "@/features/score";
 
 interface PlayPageViewProps {
   selectedMIDIInput: { name?: string };
@@ -71,7 +71,7 @@ export function PlayPageView({
           <span className={styles.badge}>
             {selectedMIDIInput.name} • {selectedTrack.name}
           </span>
-          <ScoreWidget
+          <LiveScore
             getScore={getScore}
             getCombo={getCombo}
             getLastHitQuality={getLastHitQuality}
