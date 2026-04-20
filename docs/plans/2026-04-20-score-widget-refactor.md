@@ -27,6 +27,7 @@ Move the `ScoreWidget` component from `src/app/play/components/` to `src/feature
 
 #### [MODIFY] [index.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/score/index.ts)
 - Export `LiveScore` component.
+- Review and remove any exports that are no longer needed externally now that `LiveScore` is co-located.
 
 ---
 
@@ -41,10 +42,11 @@ Move the `ScoreWidget` component from `src/app/play/components/` to `src/feature
 ## Verification Plan
 
 ### Automated Tests
-- `npm run type-check`: Ensure no broken imports.
+- `npm run type-check`: Ensure no broken imports or missing types.
 - `npm test`: Verify `LiveScore` tests pass.
 - `npm run build`: Ensure production build integrity.
 
 ### Manual Verification
 - Check Storybook (`npm run storybook`) to verify the new `App/Global/LiveScore` entry.
 - Visual check in gameplay mode (if possible) or via Storybook.
+- Verify that no unnecessary private types are exposed in the final `index.ts`.
