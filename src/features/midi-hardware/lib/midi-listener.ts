@@ -12,7 +12,7 @@ export function subscribeToNotes(
   callback: (event: MIDINoteEvent) => void,
 ): () => void {
   const handleMIDIMessage = (event: WebMidi.MIDIMessageEvent) => {
-    const [status, note, velocity] = event.data;
+    const [status, pitch, velocity] = event.data;
 
     // Mask out the channel bits (lower 4 bits) to get the command type
     const command = status & 0xf0;
@@ -21,13 +21,13 @@ export function subscribeToNotes(
       // Note On
       if (velocity === 0) {
         // Note On with velocity 0 is actually Note Off
-        callback({ type: "note-off", pitch: note, velocity: 0 });
+        callback({ type: "note-off", pitch, velocity: 0 });
       } else {
-        callback({ type: "note-on", pitch: note, velocity });
+        callback({ type: "note-on", pitch, velocity });
       }
     } else if (command === COMMAND_NOTE_OFF) {
       // Note Off
-      callback({ type: "note-off", pitch: note, velocity: velocity || 0 });
+      callback({ type: "note-off", pitch, velocity: velocity || 0 });
     }
   };
 
