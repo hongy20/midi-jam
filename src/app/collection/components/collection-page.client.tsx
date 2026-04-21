@@ -2,22 +2,17 @@
 
 import { useCallback } from "react";
 import { useCollection } from "@/features/collection";
+import type { Track } from "@/shared/types/track";
 import { useNavigation } from "@/features/navigation";
 import { CollectionPageView } from "./collection-page.view";
-import type { SongCardTrack } from "./song-card";
 
-export function CollectionPageClient({ tracks }: { tracks: SongCardTrack[] }) {
+export function CollectionPageClient({ tracks }: { tracks: Track[] }) {
   const { toPlay, toGear } = useNavigation();
   const { setSelectedTrack, selectedTrack } = useCollection();
 
   const handleTrackSelection = useCallback(
-    (track?: SongCardTrack) => {
-      if (!track) return;
-      setSelectedTrack({
-        id: track.id,
-        name: track.name,
-        url: track.url,
-      });
+    (track: Track) => {
+      setSelectedTrack(track);
     },
     [setSelectedTrack],
   );
@@ -32,7 +27,7 @@ export function CollectionPageClient({ tracks }: { tracks: SongCardTrack[] }) {
   return (
     <CollectionPageView
       tracks={tracks}
-      selectedTrack={selectedTrack as SongCardTrack | null}
+      selectedTrack={selectedTrack}
       onSelect={handleTrackSelection}
       onShuffle={handleShuffle}
       onContinue={toPlay}

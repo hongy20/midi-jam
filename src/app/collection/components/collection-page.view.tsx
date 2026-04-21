@@ -10,12 +10,13 @@ import {
   CarouselPrevious,
 } from "@/shared/components/ui/8bit/carousel";
 import { CollectionHeader } from "./collection-header";
-import { SongCard, type SongCardTrack } from "./song-card";
+import { SongCard } from "@/features/collection";
+import type { Track } from "@/shared/types/track";
 
 interface CollectionPageViewProps {
-  tracks: SongCardTrack[];
-  selectedTrack: SongCardTrack | null;
-  onSelect: (track: SongCardTrack) => void;
+  tracks: Track[];
+  selectedTrack: Track | null;
+  onSelect: (track: Track) => void;
   onShuffle: () => void;
   onContinue: () => void;
   onBack: () => void;

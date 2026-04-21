@@ -10,24 +10,20 @@ import {
   CardTitle,
 } from "@/shared/components/ui/8bit/card";
 import { cn } from "@/shared/lib/utils";
+import type { Track } from "@/shared/types/track";
 
 import "@/shared/components/ui/8bit/styles/retro.css";
 
-export interface SongCardTrack {
-  id: string;
-  name: string;
-  artist: string;
-  difficulty: string;
-  url: string;
-}
-
 interface SongCardProps {
-  track: SongCardTrack;
+  track: Track;
   isSelected?: boolean;
   onClick?: () => void;
   className?: string;
 }
 
+/**
+ * A retro-styled card representing a music track in the library.
+ */
 export function SongCard({ track, isSelected, onClick, className }: SongCardProps) {
   return (
     <div className={cn("h-full p-2", className)}>

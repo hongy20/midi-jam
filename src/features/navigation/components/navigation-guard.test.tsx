@@ -66,7 +66,7 @@ describe("NavigationGuard", () => {
   it("redirects from Level 2 to Home if MIDI is missing", () => {
     vi.mocked(usePathname).mockReturnValue(ROUTES.PLAY);
     vi.mocked(useCollection).mockReturnValue({
-      selectedTrack: { id: "1", name: "Track", url: "url" },
+      selectedTrack: { id: "1", name: "Track", artist: "Artist", difficulty: "Easy", url: "url" },
       setSelectedTrack: vi.fn(),
       resetCollection: vi.fn(),
     });

@@ -2,11 +2,7 @@
 
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
 
-interface Track {
-  id: string;
-  name: string;
-  url: string;
-}
+import type { Track } from "@/shared/types/track";
 
 interface CollectionContextType {
   selectedTrack: Track | null;
