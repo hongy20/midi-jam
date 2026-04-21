@@ -2,7 +2,7 @@ import { CLUSTER_CONNECTION_GAP_MS, LANE_SCROLL_DURATION_MS } from "./constant";
 import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
 
 interface BuildMidiNoteGroupsOptions {
-  spans: MidiNote[];
+  notes: MidiNote[];
   totalDurationMs: number;
   thresholdMs: number;
 }
@@ -18,59 +18,59 @@ interface BuildMidiNoteGroupsOptions {
  */
 
 export function buildMidiNoteGroups({
-  spans,
+  notes,
   totalDurationMs,
   thresholdMs,
 }: BuildMidiNoteGroupsOptions): MidiNoteGroup[] {
-  if (spans.length === 0) return [];
+  if (notes.length === 0) return [];
 
   const groups: MidiNoteGroup[] = [];
-  let currentGroupSpans: MidiNote[] = [];
+  let currentGroupNotes: MidiNote[] = [];
   let currentStartMs = 0; // First segment starts at 0 (lead-in)
   let currentMaxEndMs = 0;
 
-  spans.forEach((span, index) => {
-    const spanEndMs = span.startTimeMs + span.durationMs;
-    const isFirstNote = currentGroupSpans.length === 0;
+  notes.forEach((note, index) => {
+    const noteEndMs = note.startTimeMs + note.durationMs;
+    const isFirstNote = currentGroupNotes.length === 0;
 
     // Inclusion Criteria:
     // 1. First note in a new segment.
     // 2. Or the segment's visual duration is still under the threshold.
     // 3. Or the note is connected to/overlapping with the current cluster extent.
     // 4. Or starting a new segment now would leave a tiny "tail" at the end of the song.
-    const visualDuration = span.startTimeMs - currentStartMs;
+    const visualDuration = note.startTimeMs - currentStartMs;
     const isUnderThreshold = visualDuration < thresholdMs;
-    const isConnected = span.startTimeMs <= currentMaxEndMs + CLUSTER_CONNECTION_GAP_MS;
-    const isTailTooSmall = totalDurationMs - span.startTimeMs < thresholdMs / 2;
+    const isConnected = note.startTimeMs <= currentMaxEndMs + CLUSTER_CONNECTION_GAP_MS;
+    const isTailTooSmall = totalDurationMs - note.startTimeMs < thresholdMs / 2;
 
     if (isFirstNote || isUnderThreshold || isConnected || isTailTooSmall) {
-      currentGroupSpans.push(span);
-      currentMaxEndMs = Math.max(currentMaxEndMs, spanEndMs);
+      currentGroupNotes.push(note);
+      currentMaxEndMs = Math.max(currentMaxEndMs, noteEndMs);
     } else {
       // Finalize current group and split
-      const nextNoteStartMs = span.startTimeMs;
+      const nextNoteStartMs = note.startTimeMs;
       const midpoint = (currentMaxEndMs + nextNoteStartMs) / 2;
 
       groups.push({
         index: groups.length,
         startMs: currentStartMs,
         durationMs: midpoint - currentStartMs,
-        spans: currentGroupSpans,
+        notes: currentGroupNotes,
       });
 
       // Start new group from the midpoint
       currentStartMs = midpoint;
-      currentGroupSpans = [span];
-      currentMaxEndMs = spanEndMs;
+      currentGroupNotes = [note];
+      currentMaxEndMs = noteEndMs;
     }
 
-    // Finalize the last group when we reach the end of the spans
-    if (index === spans.length - 1) {
+    // Finalize the last group when we reach the end of the notes
+    if (index === notes.length - 1) {
       groups.push({
         index: groups.length,
         startMs: currentStartMs,
         durationMs: totalDurationMs - currentStartMs,
-        spans: currentGroupSpans,
+        notes: currentGroupNotes,
       });
     }
   });

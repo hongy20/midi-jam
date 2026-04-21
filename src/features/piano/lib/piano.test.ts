@@ -23,7 +23,7 @@ describe("getVisibleMidiRange", () => {
     // ...
     // endNote = 71. % 12 = 11. Break.
     const range = getVisibleMidiRange([]);
-    expect(range).toEqual({ startNote: 53, endNote: 71 });
+    expect(range).toEqual({ startPitch: 53, endPitch: 71 });
   });
 
   it("should maintain natural grouping near edges of the 88-key piano", () => {
@@ -35,11 +35,11 @@ describe("getVisibleMidiRange", () => {
     // 21 -> 20 No... but bound is 21. Loop will break.
     // Align right (65): 65 -> 71 (B).
     const edgeRange = getVisibleMidiRange([22]);
-    expect(edgeRange).toEqual({ startNote: 21, endNote: 71 });
+    expect(edgeRange).toEqual({ startPitch: 21, endPitch: 71 });
   });
 
   it("should return full range if song covers most of the piano", () => {
     const range = getVisibleMidiRange([21, 108]);
-    expect(range).toEqual({ startNote: 21, endNote: 108 });
+    expect(range).toEqual({ startPitch: 21, endPitch: 108 });
   });
 });

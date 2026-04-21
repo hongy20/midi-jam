@@ -11,7 +11,7 @@ const DURATION_GRACE_MS = 150; // ms to account for scheduling jitter
 export type HitQuality = "perfect" | "good" | "miss" | null;
 
 interface UseScoreEngineProps {
-  spans: MidiNote[];
+  notes: MidiNote[];
   getCurrentTimeMs: () => number;
   initialScore?: number;
   initialCombo?: number;
@@ -19,13 +19,13 @@ interface UseScoreEngineProps {
 }
 
 export function useScoreEngine({
-  spans,
+  notes,
   getCurrentTimeMs,
   initialScore = 0,
   initialCombo = 0,
   initialTimeMs = 0,
 }: UseScoreEngineProps) {
-  const maxRawPoints = useMemo(() => calculateMaxRawPoints(spans.length), [spans.length]);
+  const maxRawPoints = useMemo(() => calculateMaxRawPoints(notes.length), [notes.length]);
   // `initialScore` is normalized (0-100). Convert it back to raw points for internal tracking.
   const initialRawScore = maxRawPoints > 0 ? (initialScore / 100) * maxRawPoints : 0;
 
@@ -53,8 +53,8 @@ export function useScoreEngine({
   useEffect(() => {
     if (initialTimeMs > 0) {
       let nextIndex = 0;
-      for (let i = 0; i < spans.length; i++) {
-        const note = spans[i];
+      for (let i = 0; i < notes.length; i++) {
+        const note = notes[i];
         const targetTimeMs = note.startTimeMs;
 
         if (targetTimeMs < initialTimeMs - GOOD_THRESHOLD) {
@@ -66,7 +66,7 @@ export function useScoreEngine({
       }
       currentIndexRef.current = nextIndex;
     }
-  }, [initialTimeMs, spans]);
+  }, [initialTimeMs, notes]);
 
   const resetScore = useCallback(() => {
     scoreRef.current = 0;
@@ -93,8 +93,8 @@ export function useScoreEngine({
   );
 
   const commitHitScore = useCallback(
-    (note: number, currentTimeMs: number) => {
-      const hit = activeHitsRef.current.get(note);
+    (pitch: number, currentTimeMs: number) => {
+      const hit = activeHitsRef.current.get(pitch);
       if (!hit) return;
 
       const precision = calculateOverlapRatio(
@@ -105,18 +105,18 @@ export function useScoreEngine({
       );
 
       scoreRef.current += hit.basePoints * precision * hit.comboMultiplier;
-      activeHitsRef.current.delete(note);
+      activeHitsRef.current.delete(pitch);
     },
     [calculateOverlapRatio],
   );
 
   const processNoteEvent = useCallback(
-    (event: { type: "note-on" | "note-off"; note: number; velocity: number }) => {
+    (event: { type: "note-on" | "note-off"; pitch: number; velocity: number }) => {
       const currentTimeMs = getCurrentTimeMs();
 
       // --- HANDLE NOTE OFF ---
       if (event.type === "note-off") {
-        commitHitScore(event.note, currentTimeMs);
+        commitHitScore(event.pitch, currentTimeMs);
         return;
       }
 
@@ -125,14 +125,14 @@ export function useScoreEngine({
       let bestMatchIdx = -1;
       let minDelta = Infinity;
 
-      for (let i = currentIndexRef.current; i < spans.length; i++) {
-        const note = spans[i];
+      for (let i = currentIndexRef.current; i < notes.length; i++) {
+        const note = notes[i];
         const targetTimeMs = note.startTimeMs;
         const delta = Math.abs(currentTimeMs - targetTimeMs);
 
         if (targetTimeMs > currentTimeMs + GOOD_THRESHOLD) break;
 
-        if (note.note === event.note && !processedNotesRef.current.has(i)) {
+        if (note.pitch === event.pitch && !processedNotesRef.current.has(i)) {
           if (delta < minDelta) {
             minDelta = delta;
             bestMatchIdx = i;
@@ -142,7 +142,7 @@ export function useScoreEngine({
 
       if (bestMatchIdx !== -1 && minDelta < GOOD_THRESHOLD) {
         processedNotesRef.current.add(bestMatchIdx);
-        const note = spans[bestMatchIdx];
+        const note = notes[bestMatchIdx];
 
         let quality: HitQuality = "good";
         let points = 50;
@@ -155,7 +155,7 @@ export function useScoreEngine({
         const multiplier = 1 + Math.floor(comboRef.current / 10) * 0.1;
 
         // Register active hit - points are added on release
-        activeHitsRef.current.set(event.note, {
+        activeHitsRef.current.set(event.pitch, {
           actualOn: currentTimeMs,
           targetOn: note.startTimeMs,
           targetOff: note.startTimeMs + note.durationMs,
@@ -170,7 +170,7 @@ export function useScoreEngine({
         comboRef.current = 0;
       }
     },
-    [spans, getCurrentTimeMs, commitHitScore],
+    [notes, getCurrentTimeMs, commitHitScore],
   );
 
   // Miss detection, window advancement, and stale hit cleanup
@@ -179,8 +179,8 @@ export function useScoreEngine({
       const currentTimeMs = getCurrentTimeMs();
 
       // 1. Check for missing noteOn (User never pressed)
-      for (let i = currentIndexRef.current; i < spans.length; i++) {
-        const note = spans[i];
+      for (let i = currentIndexRef.current; i < notes.length; i++) {
+        const note = notes[i];
         const targetTimeMs = note.startTimeMs;
 
         if (currentTimeMs > targetTimeMs + GOOD_THRESHOLD) {
@@ -196,16 +196,16 @@ export function useScoreEngine({
       }
 
       // 2. Check for missing noteOff (User held forever or release missed)
-      for (const [note, hit] of activeHitsRef.current.entries()) {
+      for (const [pitch, hit] of activeHitsRef.current.entries()) {
         // If we are significantly past the target release, finalize the score
         if (currentTimeMs > hit.targetOff + GOOD_THRESHOLD) {
-          commitHitScore(note, currentTimeMs);
+          commitHitScore(pitch, currentTimeMs);
         }
       }
     }, 100);
 
     return () => clearInterval(interval);
-  }, [spans, getCurrentTimeMs, commitHitScore]);
+  }, [notes, getCurrentTimeMs, commitHitScore]);
 
   return {
     getScore: useCallback(() => {

@@ -6,7 +6,7 @@ import type { MidiNote } from "@/shared/types/midi";
  * Parses a MIDI object into MidiNotes, applying collision handling and instrument filtering.
  */
 export function parseMidiNotes(midi: Midi, instrument: "piano" | "drums" = "piano"): MidiNote[] {
-  const spans: MidiNote[] = [];
+  const notes: MidiNote[] = [];
 
   // 1. Merge all notes from all relevant tracks first to catch cross-track collisions
   const allNotes = midi.tracks
@@ -63,9 +63,9 @@ export function parseMidiNotes(midi: Midi, instrument: "piano" | "drums" = "pian
         durationMs = Math.max(minDurationMs, originalEndMs - eventTimeMs);
       }
 
-      spans.push({
+      notes.push({
         id: `${note.midi}-${eventTimeMs}`,
-        note: note.midi,
+        pitch: note.midi,
         startTimeMs: eventTimeMs,
         durationMs: durationMs,
         velocity: note.velocity,
@@ -76,7 +76,7 @@ export function parseMidiNotes(midi: Midi, instrument: "piano" | "drums" = "pian
     }
   }
 
-  return spans.sort((a, b) => a.startTimeMs - b.startTimeMs);
+  return notes.sort((a, b) => a.startTimeMs - b.startTimeMs);
 }
 
 /**

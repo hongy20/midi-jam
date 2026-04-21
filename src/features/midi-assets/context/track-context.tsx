@@ -10,7 +10,7 @@ type TrackStatus =
       isLoading: false;
       isReady: true;
       totalDurationMs: number;
-      spans: MidiNote[];
+      notes: MidiNote[];
       groups: MidiNoteGroup[];
       error: null;
     };

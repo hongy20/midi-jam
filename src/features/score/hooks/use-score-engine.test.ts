@@ -4,8 +4,8 @@ import type { MidiNote } from "@/shared/types/midi";
 import { useScoreEngine } from "./use-score-engine";
 
 describe("useScoreEngine hook", () => {
-  const spans = [
-    { id: "1", note: 60, startTimeMs: 3000, velocity: 0.7, durationMs: 1000 },
+  const notes = [
+    { id: "1", pitch: 60, startTimeMs: 3000, velocity: 0.7, durationMs: 1000 },
   ] as MidiNote[];
 
   beforeEach(() => {
@@ -16,14 +16,14 @@ describe("useScoreEngine hook", () => {
     let currentTime = 3000;
     const { result } = renderHook(() =>
       useScoreEngine({
-        spans,
+        notes,
         getCurrentTimeMs: () => currentTime,
       }),
     );
 
     // 1. Trigger Note On
     act(() => {
-      result.current.processNoteEvent({ type: "note-on", note: 60, velocity: 0.7 });
+      result.current.processNoteEvent({ type: "note-on", pitch: 60, velocity: 0.7 });
     });
 
     expect(result.current.getCombo()).toBe(1);
@@ -33,7 +33,7 @@ describe("useScoreEngine hook", () => {
     // 2. Trigger Note Off (100% overlap)
     currentTime = 4000;
     act(() => {
-      result.current.processNoteEvent({ type: "note-off", note: 60, velocity: 0 });
+      result.current.processNoteEvent({ type: "note-off", pitch: 60, velocity: 0 });
     });
 
     expect(result.current.getScore()).toBeGreaterThan(0);
@@ -44,7 +44,7 @@ describe("useScoreEngine hook", () => {
     let currentTime = 3000;
     const { result } = renderHook(() =>
       useScoreEngine({
-        spans,
+        notes,
         getCurrentTimeMs: () => currentTime,
       }),
     );
@@ -52,7 +52,7 @@ describe("useScoreEngine hook", () => {
     act(() => {
       result.current.processNoteEvent({
         type: "note-on",
-        note: 60,
+        pitch: 60,
         velocity: 0.7,
       });
     });
@@ -63,7 +63,7 @@ describe("useScoreEngine hook", () => {
     act(() => {
       result.current.processNoteEvent({
         type: "note-off",
-        note: 60,
+        pitch: 60,
         velocity: 0,
       });
     });
@@ -75,7 +75,7 @@ describe("useScoreEngine hook", () => {
   it("resets combo on miss (wrong note)", () => {
     const { result } = renderHook(() =>
       useScoreEngine({
-        spans,
+        notes,
         getCurrentTimeMs: () => 3000,
       }),
     );
@@ -83,7 +83,7 @@ describe("useScoreEngine hook", () => {
     act(() => {
       result.current.processNoteEvent({
         type: "note-on",
-        note: 60,
+        pitch: 60,
         velocity: 0.7,
       });
     });
@@ -92,7 +92,7 @@ describe("useScoreEngine hook", () => {
     act(() => {
       result.current.processNoteEvent({
         type: "note-on",
-        note: 62,
+        pitch: 62,
         velocity: 0.7,
       });
     });
@@ -106,7 +106,7 @@ describe("useScoreEngine hook", () => {
     let currentTime = 3000;
     const { result } = renderHook(() =>
       useScoreEngine({
-        spans,
+        notes,
         getCurrentTimeMs: () => currentTime,
       }),
     );
@@ -114,7 +114,7 @@ describe("useScoreEngine hook", () => {
     act(() => {
       result.current.processNoteEvent({
         type: "note-on",
-        note: 60,
+        pitch: 60,
         velocity: 0.7,
       });
     });

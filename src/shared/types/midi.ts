@@ -4,7 +4,7 @@
  */
 export interface MidiNote {
   id: string;
-  note: number;
+  pitch: number;
   startTimeMs: number;
   durationMs: number;
   velocity: number;
@@ -14,11 +14,11 @@ export interface MidiNoteGroup {
   index: number;
   startMs: number;
   durationMs: number;
-  spans: MidiNote[];
+  notes: MidiNote[];
 }
 
 export interface MIDINoteEvent {
   type: "note-on" | "note-off";
-  note: number;
+  pitch: number;
   velocity: number;
 }

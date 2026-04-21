@@ -12,11 +12,11 @@ describe("lane-segment-utils clustering", () => {
 
   describe("buildMidiNoteGroups", () => {
     it("groups sequential notes and stitches at midpoints", () => {
-      const spans: MidiNote[] = [
-        { id: "1", note: 60, startTimeMs: 1000, durationMs: 1000, velocity: 1 },
+      const notes: MidiNote[] = [
+        { id: "1", pitch: 60, startTimeMs: 1000, durationMs: 1000, velocity: 1 },
         {
           id: "2",
-          note: 62,
+          pitch: 62,
           startTimeMs: 12000,
           durationMs: 15000, // Long enough to avoid tail merge with threshold 10k
           velocity: 1,
@@ -24,7 +24,7 @@ describe("lane-segment-utils clustering", () => {
       ];
       // Gap is from 2000ms to 12000ms. Midpoint is 7000ms.
       const groups = buildMidiNoteGroups({
-        spans,
+        notes,
         totalDurationMs: 40000,
         thresholdMs: threshold,
       });
@@ -41,64 +41,64 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("breaks groups exceeding the threshold", () => {
-      const spans: MidiNote[] = [
-        { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
+      const notes: MidiNote[] = [
+        { id: "1", pitch: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
         {
           id: "2",
-          note: 62,
+          pitch: 62,
           startTimeMs: 11000,
           durationMs: 15000, // Long enough to avoid tail merge
           velocity: 1,
         },
       ];
       const groups = buildMidiNoteGroups({
-        spans,
+        notes,
         totalDurationMs: 40000,
         thresholdMs: threshold,
       });
 
       expect(groups).toHaveLength(2);
-      expect(groups[0].spans[0].id).toBe("1");
-      expect(groups[1].spans[0].id).toBe("2");
+      expect(groups[0].notes[0].id).toBe("1");
+      expect(groups[1].notes[0].id).toBe("2");
       // Seamless stitching
       expect(groups[0].startMs + groups[0].durationMs).toBe(groups[1].startMs);
     });
 
     it("protects chords from being split across groups", () => {
-      const spans: MidiNote[] = [
-        { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
+      const notes: MidiNote[] = [
+        { id: "1", pitch: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
         {
           id: "2a",
-          note: 64,
+          pitch: 64,
           startTimeMs: 15000,
           durationMs: 15000, // Long enough
           velocity: 1,
         },
         {
           id: "2b",
-          note: 67,
+          pitch: 67,
           startTimeMs: 15000,
           durationMs: 15000,
           velocity: 1,
         },
       ];
       const groups = buildMidiNoteGroups({
-        spans,
+        notes,
         totalDurationMs: 40000,
         thresholdMs: threshold,
       });
 
       expect(groups).toHaveLength(2);
-      expect(groups[0].spans).toHaveLength(1);
-      expect(groups[1].spans).toHaveLength(2);
+      expect(groups[0].notes).toHaveLength(1);
+      expect(groups[1].notes).toHaveLength(2);
     });
 
     it("allows durationMs to be large for long notes", () => {
-      const spans: MidiNote[] = [
-        { id: "1", note: 60, startTimeMs: 0, durationMs: 30000, velocity: 1 },
+      const notes: MidiNote[] = [
+        { id: "1", pitch: 60, startTimeMs: 0, durationMs: 30000, velocity: 1 },
       ];
       const groups = buildMidiNoteGroups({
-        spans,
+        notes,
         totalDurationMs: 40000,
         thresholdMs: threshold,
       });
@@ -108,13 +108,13 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("does not split a long note that overlaps a later short note", () => {
-      const spans: MidiNote[] = [
-        { id: "1", note: 60, startTimeMs: 0, durationMs: 15000, velocity: 1 }, // Ends at 15s
-        { id: "2", note: 62, startTimeMs: 500, durationMs: 200, velocity: 1 },
-        { id: "3", note: 64, startTimeMs: 11000, durationMs: 500, velocity: 1 }, // 11s - 15s is not a 10s gap
+      const notes: MidiNote[] = [
+        { id: "1", pitch: 60, startTimeMs: 0, durationMs: 15000, velocity: 1 }, // Ends at 15s
+        { id: "2", pitch: 62, startTimeMs: 500, durationMs: 200, velocity: 1 },
+        { id: "3", pitch: 64, startTimeMs: 11000, durationMs: 500, velocity: 1 }, // 11s - 15s is not a 10s gap
       ];
       const groups = buildMidiNoteGroups({
-        spans,
+        notes,
         totalDurationMs: 20000,
         thresholdMs: threshold,
       });
@@ -125,11 +125,11 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("does not merge the last segment if it is visually large enough", () => {
-      const spans: MidiNote[] = [
-        { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
+      const notes: MidiNote[] = [
+        { id: "1", pitch: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
         {
           id: "2",
-          note: 62,
+          pitch: 62,
           startTimeMs: 15000,
           durationMs: 100,
           velocity: 1,
@@ -140,79 +140,79 @@ describe("lane-segment-utils clustering", () => {
       // Since 5000ms >= 10000ms / 2, and the note is far from Note 1,
       // it should form its own visually distinct segment [7500, 20000].
       const groups = buildMidiNoteGroups({
-        spans,
+        notes,
         totalDurationMs: 20000,
         thresholdMs: threshold,
       });
 
       expect(groups).toHaveLength(2);
-      expect(groups[1].spans).toHaveLength(1);
+      expect(groups[1].notes).toHaveLength(1);
       expect(groups[1].startMs).toBe(8000);
       expect(groups[1].durationMs).toBe(20000 - 8000);
     });
 
     it("groups connected notes that start exactly when previous notes end", () => {
-      const spans: MidiNote[] = [
-        { id: "1", note: 60, startTimeMs: 0, durationMs: 6000, velocity: 1 }, // Exceeds 5s threshold
-        { id: "2", note: 62, startTimeMs: 6000, durationMs: 6000, velocity: 1 }, // Starts exactly at 6000
+      const notes: MidiNote[] = [
+        { id: "1", pitch: 60, startTimeMs: 0, durationMs: 6000, velocity: 1 }, // Exceeds 5s threshold
+        { id: "2", pitch: 62, startTimeMs: 6000, durationMs: 6000, velocity: 1 }, // Starts exactly at 6000
       ];
       const groups = buildMidiNoteGroups({
-        spans,
+        notes,
         totalDurationMs: 20000,
         thresholdMs: 5000,
       });
 
-      // Should be 1 group because they are connected (span.startTimeMs <= currentMaxEndMs)
+      // Should be 1 group because they are connected (note.startTimeMs <= currentMaxEndMs)
       expect(groups).toHaveLength(1);
     });
 
     it("does not split chords even if they exceed the threshold", () => {
-      const spans: MidiNote[] = [
-        { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
+      const notes: MidiNote[] = [
+        { id: "1", pitch: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
         {
           id: "2a",
-          note: 64,
+          pitch: 64,
           startTimeMs: 6000,
           durationMs: 1000,
           velocity: 1,
         },
         {
           id: "2b",
-          note: 67,
+          pitch: 67,
           startTimeMs: 6000,
           durationMs: 1000,
           velocity: 1,
         },
       ];
       const groups = buildMidiNoteGroups({
-        spans,
+        notes,
         totalDurationMs: 20000,
         thresholdMs: 5000,
       });
 
       expect(groups).toHaveLength(2);
-      expect(groups[1].spans).toHaveLength(2); // Chord 2a, 2b together
+      expect(groups[1].notes).toHaveLength(2); // Chord 2a, 2b together
     });
 
     it("groups connected notes with sub-millisecond gaps (floating point precision)", () => {
-      const spans: MidiNote[] = [
+      const notes: MidiNote[] = [
         {
           id: "1",
-          note: 60,
+          pitch: 60,
           startTimeMs: 0,
           durationMs: 5000.00000000001,
           velocity: 1,
         },
         {
           id: "2",
-          note: 62,
+          pitch: 62,
           startTimeMs: 5000.00000000002,
           durationMs: 1000,
           velocity: 1,
         },
       ];
       const groups = buildMidiNoteGroups({
-        spans,
+        notes,
         totalDurationMs: 20000,
         thresholdMs: 4000,
       });
@@ -222,12 +222,12 @@ describe("lane-segment-utils clustering", () => {
     });
 
     it("applies tail merge logic to avoid tiny segments at the end", () => {
-      const spans: MidiNote[] = [
-        { id: "1", note: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
-        { id: "2", note: 62, startTimeMs: 6000, durationMs: 1000, velocity: 1 },
+      const notes: MidiNote[] = [
+        { id: "1", pitch: 60, startTimeMs: 0, durationMs: 1000, velocity: 1 },
+        { id: "2", pitch: 62, startTimeMs: 6000, durationMs: 1000, velocity: 1 },
         {
           id: "3",
-          note: 64,
+          pitch: 64,
           startTimeMs: 12000,
           durationMs: 1000,
           velocity: 1,
@@ -237,21 +237,21 @@ describe("lane-segment-utils clustering", () => {
       // If we attempt to split at Note 3 (12000), the remaining time in the song is 2000ms.
       // 2000ms < 2500ms (thresholdMs / 2), so Note 3 should be merged into the current segment.
       const groups = buildMidiNoteGroups({
-        spans,
+        notes,
         totalDurationMs: 14000,
         thresholdMs: 5000,
       });
 
       expect(groups).toHaveLength(2);
-      expect(groups[1].spans).toHaveLength(2); // Notes 2 and 3 merged
+      expect(groups[1].notes).toHaveLength(2); // Notes 2 and 3 merged
     });
   });
 
   describe("getVisibleSegmentIndexes", () => {
     const groups = [
-      { index: 0, startMs: 0, durationMs: 10000, spans: [] },
-      { index: 1, startMs: 10000, durationMs: 10000, spans: [] },
-      { index: 2, startMs: 20000, durationMs: 10000, spans: [] },
+      { index: 0, startMs: 0, durationMs: 10000, notes: [] },
+      { index: 1, startMs: 10000, durationMs: 10000, notes: [] },
+      { index: 2, startMs: 20000, durationMs: 10000, notes: [] },
     ];
 
     it("identifies active groups based on aggressive scrolling window", () => {

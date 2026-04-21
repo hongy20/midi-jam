@@ -26,7 +26,7 @@ describe("useMIDINotes", () => {
 
     expect(onNote).toHaveBeenCalledWith({
       type: "note-on",
-      note: 60,
+      pitch: 60,
       velocity: 100,
     });
   });
