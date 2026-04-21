@@ -46,7 +46,7 @@ export function useTrackPlayer({
         const velocity = 0.7;
         playNote(pitch, velocity);
 
-        processNoteEvent({ type: "note-on", note: pitch, velocity });
+        processNoteEvent({ type: "note-on", pitch, velocity });
       }
     };
 
@@ -66,7 +66,7 @@ export function useTrackPlayer({
           });
 
           stopNote(pitch);
-          processNoteEvent({ type: "note-off", note: pitch, velocity: 0 });
+          processNoteEvent({ type: "note-off", pitch, velocity: 0 });
         }
       }
     };
@@ -165,7 +165,7 @@ export function useTrackPlayer({
       for (const [pitch, count] of activeCounts.entries()) {
         if (count > 0) {
           stopNote(pitch);
-          processNoteEvent({ type: "note-off", note: pitch, velocity: 0 });
+          processNoteEvent({ type: "note-off", pitch, velocity: 0 });
         }
       }
       activeCounts.clear();

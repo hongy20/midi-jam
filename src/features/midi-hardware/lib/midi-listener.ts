@@ -21,13 +21,13 @@ export function subscribeToNotes(
       // Note On
       if (velocity === 0) {
         // Note On with velocity 0 is actually Note Off
-        callback({ type: "note-off", note, velocity: 0 });
+        callback({ type: "note-off", pitch: note, velocity: 0 });
       } else {
-        callback({ type: "note-on", note, velocity });
+        callback({ type: "note-on", pitch: note, velocity });
       }
     } else if (command === COMMAND_NOTE_OFF) {
       // Note Off
-      callback({ type: "note-off", note, velocity: velocity || 0 });
+      callback({ type: "note-off", pitch: note, velocity: velocity || 0 });
     }
   };
 

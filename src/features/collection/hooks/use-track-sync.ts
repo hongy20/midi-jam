@@ -47,12 +47,12 @@ export function useTrackSync() {
     loadMidiFile(selectedTrack.url)
       .then((midi) => {
         if (!mounted) return;
-        const spans = parseMidiNotes(midi);
+        const notes = parseMidiNotes(midi);
         const totalDurationMs = midi.duration * 1000;
         const thresholdMs = LANE_SEGMENT_DURATION_MS; // Alias for clarity
 
         const groups = buildMidiNoteGroups({
-          spans,
+          notes,
           totalDurationMs,
           thresholdMs,
         });
@@ -63,7 +63,7 @@ export function useTrackSync() {
           isLoading: false,
           isReady: true,
           totalDurationMs,
-          spans,
+          notes,
           groups,
           error: null,
         });

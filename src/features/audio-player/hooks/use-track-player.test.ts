@@ -71,7 +71,7 @@ describe("useTrackPlayer", () => {
     });
 
     expect(playNote).toHaveBeenCalledWith(60, 0.7);
-    expect(processNoteEvent).toHaveBeenCalledWith({ type: "note-on", note: 60, velocity: 0.7 });
+    expect(processNoteEvent).toHaveBeenCalledWith({ type: "note-on", pitch: 60, velocity: 0.7 });
     expect(result.current.playbackNotes.has(60)).toBe(true);
 
     // Simulate Note Off
@@ -90,7 +90,7 @@ describe("useTrackPlayer", () => {
     });
 
     expect(stopNote).toHaveBeenCalledWith(60);
-    expect(processNoteEvent).toHaveBeenCalledWith({ type: "note-off", note: 60, velocity: 0 });
+    expect(processNoteEvent).toHaveBeenCalledWith({ type: "note-off", pitch: 60, velocity: 0 });
     expect(result.current.playbackNotes.has(60)).toBe(false);
   });
 

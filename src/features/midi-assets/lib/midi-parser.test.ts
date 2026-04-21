@@ -26,12 +26,12 @@ describe("midi-parser", () => {
   } as unknown as Midi;
 
   it("parseMidiNotes filters by instrument and excludes zero-duration notes", () => {
-    const spans = parseMidiNotes(mockMidi, "piano");
-    expect(spans).toHaveLength(2);
-    expect(spans[0].note).toBe(60);
-    expect(spans[0].startTimeMs).toBe(0);
-    expect(spans[1].note).toBe(62);
-    expect(spans[1].startTimeMs).toBe(1000);
+    const notes = parseMidiNotes(mockMidi, "piano");
+    expect(notes).toHaveLength(2);
+    expect(notes[0].pitch).toBe(60);
+    expect(notes[0].startTimeMs).toBe(0);
+    expect(notes[1].pitch).toBe(62);
+    expect(notes[1].startTimeMs).toBe(1000);
   });
 
   it("parseMidiNotes introduces a gap between sequential notes of the same pitch", () => {
@@ -47,14 +47,14 @@ describe("midi-parser", () => {
       ],
     } as unknown as Midi;
 
-    const spans = parseMidiNotes(sequentialMidi, "piano");
-    expect(spans).toHaveLength(2);
+    const notes = parseMidiNotes(sequentialMidi, "piano");
+    expect(notes).toHaveLength(2);
 
-    expect(spans[0].startTimeMs).toBe(0);
-    expect(spans[0].durationMs).toBe(1000);
+    expect(notes[0].startTimeMs).toBe(0);
+    expect(notes[0].durationMs).toBe(1000);
 
     // Second note should be shifted by MIN_NOTE_GAP_MS (10ms)
-    expect(spans[1].startTimeMs).toBe(1010);
+    expect(notes[1].startTimeMs).toBe(1010);
   });
 
   it("parseMidiNotes shifts entire chords if one note has a collision", () => {
@@ -72,14 +72,14 @@ describe("midi-parser", () => {
       ],
     } as unknown as Midi;
 
-    const spans = parseMidiNotes(chordMidi, "piano");
-    // Spans: 60(0-1000), [60(1010-2000), 64(1010-2000)]
-    expect(spans).toHaveLength(3);
+    const notes = parseMidiNotes(chordMidi, "piano");
+    // Notes: 60(0-1000), [60(1010-2000), 64(1010-2000)]
+    expect(notes).toHaveLength(3);
 
-    const chordSpans = spans.filter((s) => s.startTimeMs > 500);
-    expect(chordSpans).toHaveLength(2);
-    expect(chordSpans[0].startTimeMs).toBe(1010);
-    expect(chordSpans[1].startTimeMs).toBe(1010);
+    const chordNotes = notes.filter((s) => s.startTimeMs > 500);
+    expect(chordNotes).toHaveLength(2);
+    expect(chordNotes[0].startTimeMs).toBe(1010);
+    expect(chordNotes[1].startTimeMs).toBe(1010);
   });
 
   it("parseMidiNotes detects sequential collisions across different tracks", () => {
@@ -96,12 +96,12 @@ describe("midi-parser", () => {
       ],
     } as unknown as Midi;
 
-    const spans = parseMidiNotes(crossTrackMidi, "piano");
-    expect(spans).toHaveLength(2);
+    const notes = parseMidiNotes(crossTrackMidi, "piano");
+    expect(notes).toHaveLength(2);
 
     // Second note (from second track) should be shifted
-    expect(spans[1].note).toBe(60);
-    expect(spans[1].startTimeMs).toBe(1010);
+    expect(notes[1].pitch).toBe(60);
+    expect(notes[1].startTimeMs).toBe(1010);
   });
 
   it("parseMidiNotes detects and shifts overlapping notes of the same pitch", () => {
@@ -117,10 +117,10 @@ describe("midi-parser", () => {
       ],
     } as unknown as Midi;
 
-    const spans = parseMidiNotes(overlappingMidi, "piano");
+    const notes = parseMidiNotes(overlappingMidi, "piano");
     // Should shift second note to start at 500 + gap
-    expect(spans[1].note).toBe(60);
-    expect(spans[1].startTimeMs).toBe(510);
+    expect(notes[1].pitch).toBe(60);
+    expect(notes[1].startTimeMs).toBe(510);
   });
 
   it("getBarLines handles single time signature", () => {

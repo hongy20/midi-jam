@@ -23,17 +23,17 @@ global.ResizeObserver = class ResizeObserver {
 
 describe("LaneStage", () => {
   const mockGroups = buildMidiNoteGroups({
-    spans: [
+    notes: [
       {
         id: "1",
-        note: 60,
+        pitch: 60,
         startTimeMs: 0,
         durationMs: 1000,
         velocity: 0.8,
       },
       {
         id: "2",
-        note: 61,
+        pitch: 61,
         startTimeMs: 1000,
         durationMs: 1000,
         velocity: 0.8,

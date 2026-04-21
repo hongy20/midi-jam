@@ -55,10 +55,10 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
         } as React.CSSProperties
       }
     >
-      {group.spans.map((span) => {
+      {group.notes.map((note) => {
         // Absolute time in master clock
-        const startTimeMs = span.startTimeMs;
-        const endTimeMs = span.startTimeMs + span.durationMs;
+        const startTimeMs = note.startTimeMs;
+        const endTimeMs = note.startTimeMs + note.durationMs;
 
         // Relative to group start
         const relStartMs = startTimeMs - group.startMs;
@@ -70,9 +70,9 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
 
         return (
           <div
-            key={span.id}
-            data-pitch={span.note}
-            data-note-id={span.id}
+            key={note.id}
+            data-pitch={note.pitch}
+            data-note-id={note.id}
             className={`${styles.note} ${PIANO_GRID_ITEM_CLASS}`}
             style={{
               top: `${topPercent}%`,

@@ -34,7 +34,7 @@ describe("TrackProvider & useTrack", () => {
         isLoading: false,
         isReady: true,
         totalDurationMs: 120000,
-        spans: [],
+        notes: [],
         groups: [],
         error: null,
       });

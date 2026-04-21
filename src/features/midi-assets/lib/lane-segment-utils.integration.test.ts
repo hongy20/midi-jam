@@ -11,17 +11,17 @@ describe("lane-segment-utils integration with real MIDI", () => {
     const filePath = path.join(process.cwd(), "public", "midi", filename);
     const data = fs.readFileSync(filePath);
     const midi = new Midi(data);
-    const spans = parseMidiNotes(midi);
+    const notes = parseMidiNotes(midi);
     const totalDurationMs = midi.duration * 1000;
-    return { spans, totalDurationMs };
+    return { notes, totalDurationMs };
   };
 
   it("Happy Birthday should be split into 3 segments", () => {
-    const { spans, totalDurationMs } = loadMidi("Happy Birthday.mid");
+    const { notes, totalDurationMs } = loadMidi("Happy Birthday.mid");
 
     // Using the default threshold (currently 5s)
     const groups = buildMidiNoteGroups({
-      spans,
+      notes,
       totalDurationMs,
       thresholdMs: 5000, // 5s to target ~3 segments for a ~15s song
     });
@@ -30,7 +30,7 @@ describe("lane-segment-utils integration with real MIDI", () => {
     console.log(`Happy Birthday: totalDuration=${totalDurationMs}ms, groups=${groups.length}`);
     groups.forEach((g, i) => {
       console.log(
-        `  Group ${i}: start=${g.startMs.toFixed(0)}ms, duration=${g.durationMs.toFixed(0)}ms, notes=${g.spans.length}`,
+        `  Group ${i}: start=${g.startMs.toFixed(0)}ms, duration=${g.durationMs.toFixed(0)}ms, notes=${g.notes.length}`,
       );
     });
 
@@ -38,13 +38,13 @@ describe("lane-segment-utils integration with real MIDI", () => {
   });
 
   it("Blue (yung kai) should not cut any long notes between group 0 and group 1 (first 20s)", () => {
-    const { spans } = loadMidi("yung kai - blue.mid");
+    const { notes } = loadMidi("yung kai - blue.mid");
 
-    // Filter spans to the first 25s to focus on the start
-    const firstSpans = spans.filter((s) => s.startTimeMs < 25000);
+    // Filter notes to the first 25s to focus on the start
+    const firstNotes = notes.filter((n) => n.startTimeMs < 25000);
 
     const groups = buildMidiNoteGroups({
-      spans: firstSpans,
+      notes: firstNotes,
       totalDurationMs: 25000,
       thresholdMs: 5000,
     });
@@ -52,7 +52,7 @@ describe("lane-segment-utils integration with real MIDI", () => {
     console.log(`Blue (first 25s): groups=${groups.length}`);
     groups.forEach((g, i) => {
       console.log(
-        `  Group ${i}: start=${g.startMs.toFixed(0)}ms, duration=${g.durationMs.toFixed(0)}ms, notes=${g.spans.length}`,
+        `  Group ${i}: start=${g.startMs.toFixed(0)}ms, duration=${g.durationMs.toFixed(0)}ms, notes=${g.notes.length}`,
       );
     });
 
@@ -75,20 +75,20 @@ describe("lane-segment-utils integration with real MIDI", () => {
   });
 
   it("Golden Kpop Demon Hunters should not split connected notes across various thresholds", () => {
-    const { spans, totalDurationMs } = loadMidi("Golden Kpop Demon Hunters.mid");
+    const { notes, totalDurationMs } = loadMidi("Golden Kpop Demon Hunters.mid");
 
     // Test multiple common thresholds to ensure stability
     for (const thresholdMs of [3000, 5000, 7000]) {
       const groups = buildMidiNoteGroups({
-        spans,
+        notes,
         totalDurationMs,
         thresholdMs,
       });
 
       // Verify that sequential "touching" notes stay in the same group
-      for (let i = 0; i < spans.length - 1; i++) {
-        const current = spans[i];
-        const next = spans[i + 1];
+      for (let i = 0; i < notes.length - 1; i++) {
+        const current = notes[i];
+        const next = notes[i + 1];
 
         const currentEndMs = current.startTimeMs + current.durationMs;
         const nextStartMs = next.startTimeMs;
@@ -96,8 +96,8 @@ describe("lane-segment-utils integration with real MIDI", () => {
 
         // Gap < 1ms is considered 'connected'
         if (gap < 1.0) {
-          const groupIdxA = groups.findIndex((g) => g.spans.some((s) => s.id === current.id));
-          const groupIdxB = groups.findIndex((g) => g.spans.some((s) => s.id === next.id));
+          const groupIdxA = groups.findIndex((g) => g.notes.some((n) => n.id === current.id));
+          const groupIdxB = groups.findIndex((g) => g.notes.some((n) => n.id === next.id));
 
           if (groupIdxA !== groupIdxB && groupIdxA !== -1 && groupIdxB !== -1) {
             const progress = (currentEndMs / totalDurationMs) * 100;

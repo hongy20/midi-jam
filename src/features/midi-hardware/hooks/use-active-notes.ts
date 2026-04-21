@@ -22,9 +22,9 @@ export function useActiveNotes(
       setActiveNotes((prev) => {
         const next = new Set(prev);
         if (event.type === "note-on") {
-          next.add(event.note);
+          next.add(event.pitch);
         } else {
-          next.delete(event.note);
+          next.delete(event.pitch);
         }
         return next;
       });

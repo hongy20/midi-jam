@@ -33,13 +33,13 @@ export function PlayPageClient() {
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   // Extract data with fallbacks to ensure hooks are called unconditionally
-  const spans = useMemo(() => (trackStatus.isReady ? trackStatus.spans : []), [trackStatus]);
+  const notes = useMemo(() => (trackStatus.isReady ? trackStatus.notes : []), [trackStatus]);
   const groups = useMemo(() => (trackStatus.isReady ? trackStatus.groups : []), [trackStatus]);
   const totalDurationMs = trackStatus.isReady ? trackStatus.totalDurationMs : 0;
   const isLoading = trackStatus.isLoading;
 
   // Calculate dynamic piano range for consistent grid alignment
-  const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(spans), [spans]);
+  const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(notes), [notes]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleFinishRef = useRef<() => void>(() => {});
@@ -60,7 +60,7 @@ export function PlayPageClient() {
   });
 
   const { getScore, getCombo, getLastHitQuality, processNoteEvent } = useScoreEngine({
-    spans,
+    notes,
     getCurrentTimeMs,
     initialScore: gameSession?.score ?? 0,
     initialCombo: gameSession?.combo ?? 0,

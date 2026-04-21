@@ -27,7 +27,7 @@ describe("subscribeToNotes", () => {
 
     expect(callback).toHaveBeenCalledWith({
       type: "note-on",
-      note: 60,
+      pitch: 60,
       velocity: 100,
     });
 
@@ -55,7 +55,7 @@ describe("subscribeToNotes", () => {
 
     expect(callback).toHaveBeenCalledWith({
       type: "note-off",
-      note: 60,
+      pitch: 60,
       velocity: 0,
     });
   });
@@ -80,7 +80,7 @@ describe("subscribeToNotes", () => {
 
     expect(callback).toHaveBeenCalledWith({
       type: "note-off",
-      note: 60,
+      pitch: 60,
       velocity: 0,
     });
   });
