@@ -9,7 +9,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/shared/components/ui/8bit/carousel";
-import { GearCard } from "./gear-card";
+import { GearCard } from "@/features/midi-hardware";
 import { GearHeader } from "./gear-header";
 
 interface GearPageViewProps {
