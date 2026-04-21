@@ -2,7 +2,7 @@
 
 import type { Meta, StoryObj } from "@storybook/react";
 import { CollectionPageView } from "./collection-page.view";
-import { type Track } from "@/features/collection";
+import type { Track } from "@/shared/types/track";
 
 const mockTracks: Track[] = [
   {

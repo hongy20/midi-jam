@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
-import { useCollection, type Track } from "@/features/collection";
+import { useCollection } from "@/features/collection";
+import type { Track } from "@/shared/types/track";
 import { useNavigation } from "@/features/navigation";
 import { CollectionPageView } from "./collection-page.view";
 

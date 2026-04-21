@@ -10,7 +10,8 @@ import {
   CarouselPrevious,
 } from "@/shared/components/ui/8bit/carousel";
 import { CollectionHeader } from "./collection-header";
-import { SongCard, type Track } from "@/features/collection";
+import { SongCard } from "@/features/collection";
+import type { Track } from "@/shared/types/track";
 
 interface CollectionPageViewProps {
   tracks: Track[];
