@@ -2,9 +2,9 @@
 
 import type { Meta, StoryObj } from "@storybook/react";
 import { CollectionPageView } from "./collection-page.view";
-import type { SongCardTrack } from "./song-card";
+import { type Track } from "@/features/collection";
 
-const mockTracks: SongCardTrack[] = [
+const mockTracks: Track[] = [
   {
     id: "1",
     name: "Golden",
