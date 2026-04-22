@@ -15,7 +15,7 @@ export function useAutoSelection(
 ): void {
   useEffect(() => {
     // Attach listener to all inputs to detect activity and auto-select
-    const handlers = new Map<string, (e: Event) => void>();
+    const handlers = new Map<string, () => void>();
 
     inputs.forEach((input) => {
       const handler = () => {
