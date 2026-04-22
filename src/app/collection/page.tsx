@@ -7,7 +7,8 @@ export const metadata = {
   description: "Select a song from your collection to play",
 };
 
-export default async function CollectionPage() {
-  const tracks = await getSoundTracks(800);
-  return <CollectionPageClient tracks={tracks} />;
+export default function CollectionPage() {
+  const tracksPromise = getSoundTracks(800);
+
+  return <CollectionPageClient tracksPromise={tracksPromise} />;
 }
