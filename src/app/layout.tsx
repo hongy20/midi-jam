@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CollectionProvider } from "@/features/collection";
 import { GearProvider } from "@/features/midi-hardware";
-import { NavigationGuard } from "@/features/navigation";
 import { PlayProvider } from "@/features/play-session";
 import { ScoreProvider } from "@/features/score";
 import { OptionsProvider } from "@/features/settings";
@@ -37,9 +36,7 @@ export default function RootLayout({
             <OptionsProvider>
               <CollectionProvider>
                 <ScoreProvider>
-                  <PlayProvider>
-                    <NavigationGuard>{children}</NavigationGuard>
-                  </PlayProvider>
+                  <PlayProvider>{children}</PlayProvider>
                 </ScoreProvider>
               </CollectionProvider>
             </OptionsProvider>

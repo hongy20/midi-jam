@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useAppReset } from "./hooks/use-app-reset";
-import { useNavigation } from "@/features/navigation";
+import { useNavigation } from "@/shared/hooks/use-navigation";
 import { HomePageClient } from "./components/home-page.client";
 
 // Mock the hooks
-vi.mock("@/features/navigation", () => ({
+vi.mock("@/shared/hooks/use-navigation", () => ({
   useNavigation: vi.fn(),
 }));
 

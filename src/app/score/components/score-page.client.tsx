@@ -1,13 +1,19 @@
 "use client";
 
-import { useMemo } from "react";
-import { useNavigation } from "@/features/navigation";
+import { useEffect, useMemo } from "react";
+import { useNavigation } from "@/shared/hooks/use-navigation";
 import { useScore } from "@/features/score";
 import { ScorePageView } from "./score-page.view";
 
 export function ScorePageClient() {
   const { toPlay, toCollection, toHome } = useNavigation();
   const { sessionResults } = useScore();
+
+  useEffect(() => {
+    if (!sessionResults) {
+      toHome();
+    }
+  }, [sessionResults, toHome]);
 
   const results = useMemo(
     () =>
