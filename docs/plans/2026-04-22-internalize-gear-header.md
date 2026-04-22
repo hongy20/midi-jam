@@ -12,20 +12,24 @@ The user wants to refactor the `GearHeader` component, currently defined in its 
 ### [gear] (src/app/gear)
 
 #### [MODIFY] [gear-page.view.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/gear/components/gear-page.view.tsx)
+
 - Remove `import { GearHeader } from "./gear-header";`.
 - Add `import "@/shared/components/ui/8bit/styles/retro.css";`.
 - Define `GearHeader` as a constant within the `GearPageView` function.
 - Replace `basis-[100%]` with `basis-full` in the `CarouselItem` component.
 
 #### [DELETE] [gear-header.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/gear/components/gear-header.tsx)
+
 - This file is no longer needed as the component is internalized.
 
 ## Verification Plan
 
 ### Automated Tests
+
 - Run `npm run lint` to ensure no linting errors.
 - Run `npm run type-check` to ensure type safety.
 - Run `npm run build` to verify the production build.
 
 ### Manual Verification
+
 - N/A (UI change is structural/refactoring).
