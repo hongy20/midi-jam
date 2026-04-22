@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { Suspense } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { getSoundTracks, useCollection } from "@/features/collection";
@@ -69,32 +70,74 @@ describe("HomePageClient", () => {
   });
 
   it("renders the title, start button, and song count", async () => {
-    render(<HomePageClient />);
-    expect(screen.getByText(/Midi Jam/i)).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /START/i })).toBeInTheDocument();
-
-    // Wait for songs to load
-    await waitFor(() => {
-      expect(screen.getByText(/2/i)).toBeInTheDocument();
+    const tracksPromise = Promise.resolve(mockTracks);
+    await act(async () => {
+      render(
+        <Suspense fallback={<div data-testid="loading">Loading...</div>}>
+          <HomePageClient tracksPromise={tracksPromise} />
+        </Suspense>,
+      );
     });
+
+    await waitFor(
+      () => {
+        expect(screen.getByText(/Midi Jam/i)).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
+
+    expect(screen.getByRole("button", { name: /START/i })).toBeInTheDocument();
+    expect(screen.getByText(/2/i)).toBeInTheDocument();
     expect(screen.getByText(/SONGS/i)).toBeInTheDocument();
   });
 
-  it("calls reset functions on mount", () => {
-    render(<HomePageClient />);
-    expect(mockCollection.resetCollection).toHaveBeenCalled();
+  it("calls reset functions on mount", async () => {
+    const tracksPromise = Promise.resolve(mockTracks);
+    await act(async () => {
+      render(
+        <Suspense fallback={null}>
+          <HomePageClient tracksPromise={tracksPromise} />
+        </Suspense>,
+      );
+    });
+
+    await waitFor(() => {
+      expect(mockCollection.resetCollection).toHaveBeenCalled();
+    });
     expect(mockScore.resetScore).toHaveBeenCalled();
     expect(mockGear.selectMIDIInput).toHaveBeenCalledWith(null);
   });
 
-  it("navigates to gear on start click", () => {
-    render(<HomePageClient />);
+  it("navigates to gear on start click", async () => {
+    const tracksPromise = Promise.resolve(mockTracks);
+    await act(async () => {
+      render(
+        <Suspense fallback={null}>
+          <HomePageClient tracksPromise={tracksPromise} />
+        </Suspense>,
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: /START/i })).toBeInTheDocument();
+    });
     fireEvent.click(screen.getByRole("button", { name: /START/i }));
     expect(mockNavigation.toGear).toHaveBeenCalled();
   });
 
-  it("navigates to options on options click", () => {
-    render(<HomePageClient />);
+  it("navigates to options on options click", async () => {
+    const tracksPromise = Promise.resolve(mockTracks);
+    await act(async () => {
+      render(
+        <Suspense fallback={null}>
+          <HomePageClient tracksPromise={tracksPromise} />
+        </Suspense>,
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: /Options/i })).toBeInTheDocument();
+    });
     fireEvent.click(screen.getByRole("button", { name: /Options/i }));
     expect(mockNavigation.toOptions).toHaveBeenCalled();
   });

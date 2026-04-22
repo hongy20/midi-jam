@@ -1,98 +1,90 @@
-# Home Page Cleanup and Refactoring Implementation Plan
+# HomePage Suspense Refactor Implementation Plan
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Refactor the Home page to reduce unnecessary abstractions by inlining constants and hook logic, then deleting the obsolete files.
+**Goal:** Refactor the Home page to use React 19 `Suspense` and the `use` hook for cleaner data fetching and loading states.
 
 **Architecture:** 
-- In-line `INITIAL_LOADING_TIMEOUT` and `MIDI_UNSUPPORTED` values into their respective usage locations.
-- Move the logic from `useAppReset` directly into `HomePageClient` using standard feature hooks.
-- Delete `src/app/home/lib/constants.ts` and `src/app/home/hooks/use-app-reset.ts`.
+- Pass a promise of tracks from the `HomePage` server component to `HomePageClient`.
+- Wrap `HomePageClient` in a `Suspense` boundary in `page.tsx`.
+- Use the `use` hook in `HomePageClient` to resolve the promise.
+- Use `LoadingScreen` as the Suspense fallback.
 
-**Tech Stack:** Next.js (App Router), React, Lucide Icons.
+**Tech Stack:** Next.js (App Router), React 19 (`use`, `Suspense`).
 
 ---
 
-### Task 1: Inline Constants and Delete `constants.ts`
+### Task 1: Refactor `page.tsx` with Suspense
 
 **Files:**
 - Modify: `src/app/home/page.tsx`
-- Modify: `src/app/home/components/home-page.view.tsx`
-- Delete: `src/app/home/lib/constants.ts`
 
-**Step 1: Inline `INITIAL_LOADING_TIMEOUT` in `src/app/home/page.tsx`**
+**Step 1: Update `HomePage` implementation**
 
 ```typescript
 // src/app/home/page.tsx
-// Remove: import { INITIAL_LOADING_TIMEOUT } from "./lib/constants";
-// Replace: const tracks = await getSoundTracks(INITIAL_LOADING_TIMEOUT);
-// With: const tracks = await getSoundTracks(1000);
+import { Suspense } from "react";
+import { getSoundTracks } from "@/features/collection";
+import LoadingScreen from "@/shared/components/ui/8bit/blocks/loading-screen";
+import { HomePageClient } from "./components/home-page.client";
+
+export default function HomePage() {
+  const tracksPromise = getSoundTracks(1000);
+
+  return (
+    <Suspense fallback={<LoadingScreen />}>
+      <HomePageClient tracksPromise={tracksPromise} />
+    </Suspense>
+  );
+}
 ```
 
-**Step 2: Inline `MIDI_UNSUPPORTED` in `src/app/home/components/home-page.view.tsx`**
-
-```typescript
-// src/app/home/components/home-page.view.tsx
-// Remove: import { MIDI_UNSUPPORTED } from "../lib/constants";
-// Replace: throw new Error(MIDI_UNSUPPORTED);
-// With: throw new Error("This app requires Web MIDI API. Please use Android Chrome or a modern Chromium browser.");
-```
-
-**Step 3: Delete `src/app/home/lib/constants.ts`**
-
-Run: `rm src/app/home/lib/constants.ts`
-
-**Step 4: Verify Lint**
-
-Run: `npm run lint`
-Expected: PASS
-
-**Step 5: Commit**
+**Step 2: Commit**
 
 ```bash
-git add src/app/home/page.tsx src/app/home/components/home-page.view.tsx
-git rm src/app/home/lib/constants.ts
-git commit -m "refactor(home): inline constants and delete constants.ts"
+git add src/app/home/page.tsx
+git commit -m "refactor(home): use Suspense and pass tracksPromise to HomePageClient"
 ```
 
 ---
 
-### Task 2: Inline `useAppReset` logic and Delete Hook
+### Task 2: Refactor `HomePageClient` with `use` hook
 
 **Files:**
 - Modify: `src/app/home/components/home-page.client.tsx`
-- Delete: `src/app/home/hooks/use-app-reset.ts`
 
-**Step 1: Update `HomePageClient` with reset logic**
+**Step 1: Update `HomePageClient` implementation**
 
 ```typescript
 // src/app/home/components/home-page.client.tsx
-import { useCallback, useEffect } from "react";
+"use client";
+
+import { use, useEffect } from "react";
 import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
 import { useScore } from "@/features/score";
 import { useNavigation } from "@/shared/hooks/use-navigation";
+import type { Track } from "@/shared/types/track";
 import { HomePageView } from "./home-page.view";
 
 interface HomePageClientProps {
-  songsCount: number;
+  tracksPromise: Promise<Track[]>;
 }
 
-export function HomePageClient({ songsCount }: HomePageClientProps) {
+export function HomePageClient({ tracksPromise }: HomePageClientProps) {
+  const tracks = use(tracksPromise);
+  const songsCount = tracks.length;
+
   const { toGear, toOptions } = useNavigation();
   const { resetCollection } = useCollection();
   const { selectMIDIInput } = useGear();
   const { resetScore } = useScore();
 
-  const resetAll = useCallback(() => {
+  useEffect(() => {
     resetCollection();
     resetScore();
     selectMIDIInput(null);
   }, [resetCollection, resetScore, selectMIDIInput]);
-
-  useEffect(() => {
-    resetAll();
-  }, [resetAll]);
 
   return (
     <HomePageView onStart={() => toGear()} onOptions={() => toOptions()} songsCount={songsCount} />
@@ -100,33 +92,35 @@ export function HomePageClient({ songsCount }: HomePageClientProps) {
 }
 ```
 
-**Step 2: Delete `src/app/home/hooks/use-app-reset.ts`**
-
-Run: `rm src/app/home/hooks/use-app-reset.ts`
-
-**Step 3: Verify Lint and Type Check**
-
-Run: `npm run lint && npm run type-check`
-Expected: PASS
-
-**Step 4: Commit**
+**Step 2: Commit**
 
 ```bash
 git add src/app/home/components/home-page.client.tsx
-git rm src/app/home/hooks/use-app-reset.ts
-git commit -m "refactor(home): inline useAppReset logic and delete hook"
+git commit -m "refactor(home): use React.use hook to resolve tracksPromise"
 ```
 
 ---
 
-### Task 3: Final Verification and PR
+### Task 3: Update Tests and Verification
 
-**Step 1: Run full verification suite**
+**Files:**
+- Modify: `src/app/home/page.test.tsx`
+
+**Step 1: Update tests to pass `tracksPromise`**
+
+```typescript
+// src/app/home/page.test.tsx
+// Update render(<HomePageClient tracksPromise={Promise.resolve(mockTracks)} />)
+```
+
+**Step 2: Run verification**
 
 Run: `npm run lint && npm run type-check && npm test && npm run build`
 Expected: PASS
 
-**Step 2: Create PR**
+**Step 3: Commit and PR**
 
-Run: `gh pr create --fill`
-Expected: PR link
+```bash
+git add src/app/home/page.test.tsx
+git commit -m "test(home): update tests for Suspense refactor"
+```
