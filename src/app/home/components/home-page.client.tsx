@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
@@ -19,15 +19,11 @@ export function HomePageClient({ songsCount }: HomePageClientProps) {
   const { selectMIDIInput } = useGear();
   const { resetScore } = useScore();
 
-  const resetAll = useCallback(() => {
+  useEffect(() => {
     resetCollection();
     resetScore();
     selectMIDIInput(null);
   }, [resetCollection, resetScore, selectMIDIInput]);
-
-  useEffect(() => {
-    resetAll();
-  }, [resetAll]);
 
   return (
     <HomePageView onStart={() => toGear()} onOptions={() => toOptions()} songsCount={songsCount} />
