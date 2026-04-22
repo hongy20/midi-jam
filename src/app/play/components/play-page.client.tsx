@@ -37,49 +37,6 @@ export function PlayPageClient() {
   const { setSessionResults } = useScore();
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
-  // Track parsing state for Suspense
-  const [loadPromise, setLoadPromise] = useState<Promise<void> | null>(null);
-
-  // Trigger track loading if not ready and we have a selected track
-  if (!playStatus.isReady && !playStatus.isLoading && selectedTrack && !loadPromise) {
-    const promise = (async () => {
-      try {
-        setPlayStatus({ isLoading: true, isReady: false, error: null });
-        const midi = await loadMidiFile(selectedTrack.url);
-        const notes = parseMidiNotes(midi);
-        const totalDurationMs = midi.duration * 1000;
-        const groups = buildMidiNoteGroups({
-          notes,
-          totalDurationMs,
-          thresholdMs: LANE_SEGMENT_DURATION_MS,
-        });
-
-        setPlayStatus({
-          isLoading: false,
-          isReady: true,
-          totalDurationMs,
-          notes,
-          groups,
-          error: null,
-        });
-      } catch (err) {
-        setPlayStatus({
-          isLoading: false,
-          isReady: false,
-          error: err instanceof Error ? err.message : String(err),
-        });
-      } finally {
-        setLoadPromise(null);
-      }
-    })();
-    setLoadPromise(promise);
-  }
-
-  // Suspend if loading
-  if (loadPromise) {
-    throw loadPromise;
-  }
-
   // Extract data with fallbacks
   const notes = useMemo(() => (playStatus.isReady ? playStatus.notes : []), [playStatus]);
   const groups = useMemo(() => (playStatus.isReady ? playStatus.groups : []), [playStatus]);

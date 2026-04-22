@@ -1,4 +1,5 @@
 import { PlayPageClient } from "./components/play-page.client";
+import { PlayPageLoader } from "./components/play-page.loader";
 import { PlayProvider } from "./context/play-context";
 
 export const metadata = {
@@ -8,12 +9,14 @@ export const metadata = {
 
 /**
  * PlayPage Entry (Server Component)
- * Wraps the Client logic in a PlayProvider and leverages native Next.js loading.tsx.
+ * Wraps the Client logic in a PlayProvider and leverages PlayPageLoader for suspense.
  */
 export default function PlayPage() {
   return (
     <PlayProvider>
-      <PlayPageClient />
+      <PlayPageLoader>
+        <PlayPageClient />
+      </PlayPageLoader>
     </PlayProvider>
   );
 }

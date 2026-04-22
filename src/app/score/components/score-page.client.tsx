@@ -1,14 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
-import { useStage } from "@/app/play/context/stage-context";
 import { useNavigation } from "@/features/navigation";
 import { useScore } from "@/features/score";
 import { ScorePageView } from "./score-page.view";
 
 export function ScorePageClient() {
   const { toPlay, toCollection, toHome } = useNavigation();
-  const { setGameSession } = useStage();
   const { sessionResults } = useScore();
 
   const results = useMemo(
@@ -30,12 +28,10 @@ export function ScorePageClient() {
   const titleLabel = getAccuracyLabel(results.score);
 
   const handleRetry = () => {
-    setGameSession(null);
     toPlay();
   };
 
   const handleSongs = () => {
-    setGameSession(null);
     toCollection();
   };
 
