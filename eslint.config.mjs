@@ -40,9 +40,8 @@ const eslintConfig = [
     },
   },
   {
-    // 2. Enforce barrel file usage from outside
-    // Prevent importing from feature internals from anywhere except within the same feature
-    files: ["src/app/**/*", "src/features/*/**/*", "src/shared/**/*"],
+    // 2. App Layer Boundaries
+    files: ["src/app/**/*"],
     rules: {
       "no-restricted-imports": [
         "error",
@@ -59,13 +58,18 @@ const eslintConfig = [
     },
   },
   {
-    // 3. Prevent features from importing from app layer
+    // 3. Features Layer Boundaries
     files: ["src/features/**/*"],
     rules: {
       "no-restricted-imports": [
         "error",
         {
           patterns: [
+            {
+              group: ["**/features/*/*", "!**/features/*/index"],
+              message:
+                "Direct import from feature internals is forbidden. Please use the feature barrel file (src/features/[name]/index.ts).",
+            },
             {
               group: ["**/app/**", "@/app/**"],
               message: "Feature layer must not import from the app layer.",
@@ -76,18 +80,20 @@ const eslintConfig = [
     },
   },
   {
-    // 4. Warn on cross-feature imports
-    // This will also catch aliased self-imports, encouraging relative paths for internal logic
-    files: ["src/features/**/*"],
+    // 4. Shared Layer Boundaries
+    files: ["src/shared/**/*"],
     rules: {
       "no-restricted-imports": [
-        "warn",
+        "error",
         {
           patterns: [
             {
-              group: ["@/features/*"],
-              message:
-                "Cross-feature imports should be minimized. If this is a self-import, use relative paths instead of aliases.",
+              group: ["**/features/**", "@/features/**"],
+              message: "Shared layer must not import from the feature layer.",
+            },
+            {
+              group: ["**/app/**", "@/app/**"],
+              message: "Shared layer must not import from the app layer.",
             },
           ],
         },
