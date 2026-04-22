@@ -3,6 +3,7 @@
   "entry": ["src/app/**/page.tsx", "src/features/*/index.ts"],
   "project": ["src/**/*.{ts,tsx}"],
   "ignore": ["src/shared/components/ui/**"],
+  "ignoreDependencies": ["@types/webmidi"],
   "rules": {
     "files": "error",
     "dependencies": "error",
