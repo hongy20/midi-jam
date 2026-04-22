@@ -1,9 +1,9 @@
 import { renderHook } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { useMIDIAutoSelect } from "./use-midi-auto-select";
+import { useAutoSelection } from "./use-auto-selection";
 
-describe("useMIDIAutoSelect", () => {
+describe("useAutoSelection", () => {
   it("should attach and detach midimessage listeners", () => {
     const addEventListenerMock = vi.fn();
     const removeEventListenerMock = vi.fn();
@@ -16,7 +16,7 @@ describe("useMIDIAutoSelect", () => {
 
     const selectMIDIInputMock = vi.fn();
 
-    const { unmount } = renderHook(() => useMIDIAutoSelect([mockInput], selectMIDIInputMock));
+    const { unmount } = renderHook(() => useAutoSelection([mockInput], selectMIDIInputMock));
 
     expect(addEventListenerMock).toHaveBeenCalledWith("midimessage", expect.any(Function));
 
@@ -42,7 +42,7 @@ describe("useMIDIAutoSelect", () => {
 
     const selectMIDIInputMock = vi.fn();
 
-    renderHook(() => useMIDIAutoSelect([mockInput], selectMIDIInputMock));
+    renderHook(() => useAutoSelection([mockInput], selectMIDIInputMock));
 
     expect(handler).not.toBeNull();
 

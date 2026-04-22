@@ -2,7 +2,7 @@
 
 import { use } from "react";
 
-import { useGear, useMIDIAutoSelect } from "@/features/midi-hardware";
+import { useAutoSelection, useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 
 import { GearPageView } from "./gear-page.view";
@@ -14,7 +14,7 @@ export function GearPageClient() {
   // Suspends here until MIDI access is granted or errors out to error.tsx
   use(accessPromise);
 
-  useMIDIAutoSelect(inputs, selectMIDIInput);
+  useAutoSelection(inputs, selectMIDIInput);
 
   return (
     <GearPageView

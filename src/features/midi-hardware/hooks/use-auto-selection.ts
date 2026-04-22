@@ -9,7 +9,7 @@ import { useEffect } from "react";
  * @param inputs - The list of currently available MIDI input devices.
  * @param selectMIDIInput - Callback invoked when a MIDI message is received on an input.
  */
-export function useMIDIAutoSelect(
+export function useAutoSelection(
   inputs: WebMidi.MIDIInput[],
   selectMIDIInput: (input: WebMidi.MIDIInput) => void,
 ): void {
