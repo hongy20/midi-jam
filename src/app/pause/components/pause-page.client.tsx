@@ -1,8 +1,7 @@
 "use client";
 
-import { useStage } from "@/app/play/context/stage-context";
+import { usePlay } from "@/features/play-session";
 import { useCollection } from "@/features/collection";
-import { useTrack } from "@/features/midi-assets";
 import { useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/features/navigation";
 import { useScore } from "@/features/score";
@@ -10,8 +9,7 @@ import { PausePageView } from "./pause-page.view";
 
 export function PausePageClient() {
   const { toPlay, toOptions, toScore } = useNavigation();
-  const { gameSession, setGameSession } = useStage();
-  const { trackStatus } = useTrack();
+  const { playStatus, gameSession, setGameSession } = usePlay();
   const { selectedMIDIInput } = useGear();
   const { selectedTrack } = useCollection();
   const { setSessionResults } = useScore();
@@ -33,7 +31,7 @@ export function PausePageClient() {
       }}
       onOptions={() => toOptions("pause")}
       onQuit={() => {
-        if (gameSession && trackStatus.isReady) {
+        if (gameSession && playStatus.isReady) {
           const { score: currentScore, combo } = gameSession;
           setSessionResults({
             score: currentScore,

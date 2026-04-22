@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { StageProvider } from "@/app/play/context/stage-context";
 import { CollectionProvider } from "@/features/collection";
-import { TrackProvider } from "@/features/midi-assets";
 import { GearProvider } from "@/features/midi-hardware";
 import { NavigationGuard } from "@/features/navigation";
+import { PlayProvider } from "@/features/play-session";
 import { ScoreProvider } from "@/features/score";
 import { OptionsProvider } from "@/features/settings";
 import { ThemeProvider } from "@/features/theme";
@@ -37,13 +36,11 @@ export default function RootLayout({
           <GearProvider>
             <OptionsProvider>
               <CollectionProvider>
-                <TrackProvider>
-                  <StageProvider>
-                    <ScoreProvider>
-                      <NavigationGuard>{children}</NavigationGuard>
-                    </ScoreProvider>
-                  </StageProvider>
-                </TrackProvider>
+                <ScoreProvider>
+                  <PlayProvider>
+                    <NavigationGuard>{children}</NavigationGuard>
+                  </PlayProvider>
+                </ScoreProvider>
               </CollectionProvider>
             </OptionsProvider>
           </GearProvider>

@@ -40,9 +40,8 @@ const eslintConfig = [
     },
   },
   {
-    // 2. Enforce barrel file usage from outside
-    // Prevent importing from feature internals from anywhere except within the same feature
-    files: ["src/app/**/*", "src/features/*/**/*", "src/shared/**/*"],
+    // 2. App Layer Boundaries
+    files: ["src/app/**/*"],
     rules: {
       "no-restricted-imports": [
         "error",
@@ -53,22 +52,16 @@ const eslintConfig = [
               message:
                 "Direct import from feature internals is forbidden. Please use the feature barrel file (src/features/[name]/index.ts).",
             },
-          ],
-        },
-      ],
-    },
-  },
-  {
-    // 3. Prevent features from importing from app layer
-    files: ["src/features/**/*"],
-    rules: {
-      "no-restricted-imports": [
-        "error",
-        {
-          patterns: [
             {
-              group: ["**/app/**", "@/app/**"],
-              message: "Feature layer must not import from the app layer.",
+              group: [
+                "@/app/*/**",
+                "!@/app/layout",
+                "!@/app/loading",
+                "!@/app/error",
+                "!@/app/not-found",
+              ],
+              message:
+                "App routes must not import from other app routes. Use features or shared instead. For internal route logic, use relative imports.",
             },
           ],
         },
@@ -76,8 +69,7 @@ const eslintConfig = [
     },
   },
   {
-    // 4. Warn on cross-feature imports
-    // This will also catch aliased self-imports, encouraging relative paths for internal logic
+    // 3. Features Layer Boundaries
     files: ["src/features/**/*"],
     rules: {
       "no-restricted-imports": [
@@ -85,9 +77,39 @@ const eslintConfig = [
         {
           patterns: [
             {
+              group: ["**/features/*/*", "!**/features/*/index"],
+              message:
+                "Direct import from feature internals is forbidden. Please use the feature barrel file (src/features/[name]/index.ts).",
+            },
+            {
+              group: ["**/app/**", "@/app/**"],
+              message: "Feature layer must not import from the app layer.",
+            },
+            {
               group: ["@/features/*"],
               message:
-                "Cross-feature imports should be minimized. If this is a self-import, use relative paths instead of aliases.",
+                "Cross-feature imports are discouraged to ensure high isolation. Consider moving orchestration logic to the app layer or a dedicated orchestration feature.",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // 4. Shared Layer Boundaries
+    files: ["src/shared/**/*"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["**/features/**", "@/features/**"],
+              message: "Shared layer must not import from the feature layer.",
+            },
+            {
+              group: ["**/app/**", "@/app/**"],
+              message: "Shared layer must not import from the app layer.",
             },
           ],
         },
