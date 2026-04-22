@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useEffect, useState } from "react";
+
 import { LaneStage } from "./lane-stage";
 
 const meta: Meta<typeof LaneStage> = {

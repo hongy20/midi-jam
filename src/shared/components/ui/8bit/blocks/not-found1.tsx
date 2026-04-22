@@ -1,9 +1,10 @@
+import "@/shared/components/ui/8bit/styles/retro.css";
+
 import Image from "next/image";
 import Link from "next/link";
+
 import { Button } from "@/shared/components/ui/8bit/button";
 import { cn } from "@/shared/lib/utils";
-
-import "@/shared/components/ui/8bit/styles/retro.css";
 
 interface NotFound1Props {
   className?: string;

@@ -2,6 +2,7 @@
 
 import { Check } from "lucide-react";
 import * as React from "react";
+
 import {
   Dialog,
   DialogContent,
@@ -10,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/shared/components/ui/8bit/dialog";
 import { cn } from "@/shared/lib/utils";
+
 import { Theme } from "../lib/themes";
 
 const themes = [

@@ -1,5 +1,6 @@
-import { CLUSTER_CONNECTION_GAP_MS, LANE_SCROLL_DURATION_MS } from "./constant";
 import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
+
+import { CLUSTER_CONNECTION_GAP_MS, LANE_SCROLL_DURATION_MS } from "./constant";
 
 interface BuildMidiNoteGroupsOptions {
   notes: MidiNote[];

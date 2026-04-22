@@ -1,6 +1,7 @@
 "use client";
 
 import { memo, useEffect, useRef } from "react";
+
 import {
   MIDI_NOTE_C4,
   PIANO_88_KEY_MAX,

@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePlay } from "@/features/play-session";
+
 import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
-import { useNavigation } from "@/shared/hooks/use-navigation";
+import { usePlay } from "@/features/play-session";
 import { useScore } from "@/features/score";
+import { useNavigation } from "@/shared/hooks/use-navigation";
+
 import { PausePageView } from "./pause-page.view";
 
 export function PausePageClient() {

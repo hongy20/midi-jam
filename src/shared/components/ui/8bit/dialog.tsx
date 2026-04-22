@@ -1,5 +1,8 @@
+import "@/shared/components/ui/8bit/styles/retro.css";
+
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
+
 import {
   Dialog as ShadcnDialog,
   DialogClose as ShadcnDialogClose,
@@ -11,8 +14,6 @@ import {
   DialogTrigger as ShadcnDialogTrigger,
 } from "@/shared/components/ui/dialog";
 import { cn } from "@/shared/lib/utils";
-
-import "@/shared/components/ui/8bit/styles/retro.css";
 
 const Dialog = ShadcnDialog;
 const DialogTrigger = ShadcnDialogTrigger;
@@ -75,11 +76,11 @@ DialogContent.displayName = "BitDialogContent";
 
 export {
   Dialog,
-  DialogTrigger,
-  DialogHeader,
-  DialogFooter,
-  DialogDescription,
-  DialogTitle,
-  DialogContent,
   DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 };

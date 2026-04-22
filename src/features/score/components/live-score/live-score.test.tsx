@@ -1,5 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+
 import { LiveScore } from "./live-score";
 
 describe("LiveScore", () => {

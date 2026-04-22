@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+
 import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "./constant";
 import { loadMidiFile } from "./midi-loader";
 

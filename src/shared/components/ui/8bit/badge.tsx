@@ -1,4 +1,5 @@
 import { cva, type VariantProps } from "class-variance-authority";
+
 import { Badge as ShadcnBadge } from "@/shared/components/ui/badge";
 import { cn } from "@/shared/lib/utils";
 

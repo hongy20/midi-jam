@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { useNotePlayer } from "./use-note-player";
+
 import { type MIDINoteEvent } from "@/shared/types/midi";
+
+import { useNotePlayer } from "./use-note-player";
 
 interface UseTrackPlayerProps {
   containerRef: React.RefObject<HTMLDivElement | null>;

@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAppReset } from "../hooks/use-app-reset";
+
 import { useNavigation } from "@/shared/hooks/use-navigation";
+
+import { useAppReset } from "../hooks/use-app-reset";
 import { HomePageView } from "./home-page.view";
 
 interface HomePageClientProps {

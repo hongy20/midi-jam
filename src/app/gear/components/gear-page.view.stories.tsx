@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+
 import { GearPageView } from "./gear-page.view";
 
 const mockInputs = [

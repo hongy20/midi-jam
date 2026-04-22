@@ -1,6 +1,9 @@
 "use client";
 
+import "@/shared/components/ui/8bit/styles/retro.css";
+
 import type { ReactNode } from "react";
+
 import { Badge } from "@/shared/components/ui/8bit/badge";
 import {
   Card,
@@ -10,8 +13,6 @@ import {
   CardTitle,
 } from "@/shared/components/ui/8bit/card";
 import { cn } from "@/shared/lib/utils";
-
-import "@/shared/components/ui/8bit/styles/retro.css";
 
 interface GearCardProps {
   badge?: string;

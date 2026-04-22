@@ -1,12 +1,13 @@
 "use client";
 
+import "@/shared/components/ui/8bit/styles/retro.css";
+
 import type * as TogglePrimitive from "@radix-ui/react-toggle";
 import { cva, type VariantProps } from "class-variance-authority";
 import type * as React from "react";
+
 import { Toggle as ShadcnToggle } from "@/shared/components/ui/toggle";
 import { cn } from "@/shared/lib/utils";
-
-import "@/shared/components/ui/8bit/styles/retro.css";
 
 const toggleVariants = cva("", {
   variants: {

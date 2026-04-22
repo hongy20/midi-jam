@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { Progress } from "@/shared/components/ui/8bit/progress";
 import { cn } from "@/shared/lib/utils";
 

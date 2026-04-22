@@ -1,6 +1,8 @@
 "use client";
 
 import { Piano } from "lucide-react";
+
+import { GearCard } from "@/features/midi-hardware";
 import { Button } from "@/shared/components/ui/8bit/button";
 import {
   Carousel,
@@ -9,7 +11,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/shared/components/ui/8bit/carousel";
-import { GearCard } from "@/features/midi-hardware";
+
 import { GearHeader } from "./gear-header";
 
 interface GearPageViewProps {

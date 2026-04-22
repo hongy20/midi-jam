@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useState } from "react";
+
 import { type MIDINoteEvent } from "@/shared/types/midi";
+
 import { useMIDINotes } from "./use-midi-notes";
 
 /**

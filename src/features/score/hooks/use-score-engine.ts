@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
+
 import type { MidiNote } from "@/shared/types/midi";
+
 import { calculateMaxRawPoints } from "../lib/score-utils";
 
 const PERFECT_THRESHOLD = 200; // ms (increased from 150 for better tolerance)

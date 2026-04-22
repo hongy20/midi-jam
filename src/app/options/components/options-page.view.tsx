@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
+
 import type { Difficulty } from "@/features/settings";
 import type { Theme } from "@/features/theme";
 import { ThemePicker } from "@/features/theme";

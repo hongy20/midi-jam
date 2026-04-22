@@ -1,7 +1,9 @@
 "use client";
 
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from "react";
+
 import type { Mode } from "@/shared/types/mode";
+
 import { Theme } from "../lib/themes";
 
 interface ThemeContextType {

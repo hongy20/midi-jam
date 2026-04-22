@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+
 import { getVisibleMidiRange } from "./piano";
 
 describe("getVisibleMidiRange", () => {

@@ -1,7 +1,9 @@
+import "../src/app/globals.css";
+
 import type { Preview } from "@storybook/nextjs-vite";
 import * as React from "react";
+
 import { Theme, ThemeProvider } from "../src/features/theme";
-import "../src/app/globals.css";
 
 const preview: Preview = {
   parameters: {

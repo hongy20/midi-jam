@@ -1,5 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { useWakeLock } from "./use-wake-lock";
 
 describe("useWakeLock", () => {

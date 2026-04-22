@@ -1,20 +1,21 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { usePlay } from "@/features/play-session";
-import { useLaneTimeline } from "../hooks/use-lane-timeline";
+
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
 import { LANE_SCROLL_DURATION_MS } from "@/features/midi-assets";
-import { getPianoLayoutUnits } from "@/features/piano";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
-import { useNavigation } from "@/shared/hooks/use-navigation";
+import { getPianoLayoutUnits } from "@/features/piano";
+import { usePlay } from "@/features/play-session";
 import { useScore, useScoreEngine } from "@/features/score";
 import { useOptions } from "@/features/settings";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
+import { useNavigation } from "@/shared/hooks/use-navigation";
 import { useWakeLock } from "@/shared/hooks/use-wake-lock";
 
+import { useLaneTimeline } from "../hooks/use-lane-timeline";
 import { PlayPageView } from "./play-page.view";
 
 /**

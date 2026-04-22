@@ -1,6 +1,9 @@
 "use client";
 
+import "@/shared/components/ui/8bit/styles/retro.css";
+
 import { Music } from "lucide-react";
+
 import { Badge } from "@/shared/components/ui/8bit/badge";
 import {
   Card,
@@ -11,8 +14,6 @@ import {
 } from "@/shared/components/ui/8bit/card";
 import { cn } from "@/shared/lib/utils";
 import type { Track } from "@/shared/types/track";
-
-import "@/shared/components/ui/8bit/styles/retro.css";
 
 interface SongCardProps {
   track: Track;

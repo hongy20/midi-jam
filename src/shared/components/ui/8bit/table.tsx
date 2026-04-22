@@ -1,7 +1,10 @@
 "use client";
 
+import "@/shared/components/ui/8bit/styles/retro.css";
+
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
+
 import {
   Table as ShadcnTable,
   TableBody as ShadcnTableBody,
@@ -13,8 +16,6 @@ import {
   TableRow as ShadcnTableRow,
 } from "@/shared/components/ui/table";
 import { cn } from "@/shared/lib/utils";
-
-import "@/shared/components/ui/8bit/styles/retro.css";
 
 export const tableVariants = cva("", {
   variants: {
@@ -116,4 +117,4 @@ const TableCaption = React.forwardRef<
 ));
 TableCaption.displayName = "TableCaption";
 
-export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
+export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };

@@ -1,8 +1,9 @@
+import "@/shared/components/ui/8bit/styles/retro.css";
+
 import { cva, type VariantProps } from "class-variance-authority";
+
 import { Button as ShadcnButton } from "@/shared/components/ui/button";
 import { cn } from "@/shared/lib/utils";
-
-import "@/shared/components/ui/8bit/styles/retro.css";
 
 export const buttonVariants = cva("", {
   variants: {

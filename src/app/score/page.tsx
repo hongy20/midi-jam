@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+
 import { ScorePageClient } from "./components/score-page.client";
 
 export const metadata: Metadata = {
