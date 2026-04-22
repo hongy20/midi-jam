@@ -1,8 +1,8 @@
 "use client";
 
-import { use, useEffect } from "react";
+import { use } from "react";
 
-import { useGear } from "@/features/midi-hardware";
+import { useGear, useMIDIAutoSelect } from "@/features/midi-hardware";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 
 import { GearPageView } from "./gear-page.view";
@@ -14,27 +14,7 @@ export function GearPageClient() {
   // Suspends here until MIDI access is granted or errors out to error.tsx
   use(accessPromise);
 
-  useEffect(() => {
-    // Attach listener to all inputs to detect activity and auto-select
-    const handlers = new Map<string, (e: Event) => void>();
-
-    inputs.forEach((input) => {
-      const handler = () => {
-        selectMIDIInput(input);
-      };
-      input.addEventListener("midimessage", handler);
-      handlers.set(input.id, handler);
-    });
-
-    return () => {
-      inputs.forEach((input) => {
-        const handler = handlers.get(input.id);
-        if (handler) {
-          input.removeEventListener("midimessage", handler);
-        }
-      });
-    };
-  }, [inputs, selectMIDIInput]);
+  useMIDIAutoSelect(inputs, selectMIDIInput);
 
   return (
     <GearPageView
