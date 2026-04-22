@@ -1,3 +1,5 @@
+/// <reference types="webmidi" />
+
 /**
  * Represents a parsed MIDI note with duration, timing, and velocity info.
  * This is the primary data structure for notes on a timeline.
