@@ -25,11 +25,6 @@ export function PausePageClient() {
     }
   }, [selectedMIDIInput, selectedTrack, toHome, toCollection]);
 
-  // If state is missing, return null while redirecting
-  if (!selectedTrack || !selectedMIDIInput) {
-    return null;
-  }
-
   return (
     <PausePageView
       onContinue={() => toPlay()}
