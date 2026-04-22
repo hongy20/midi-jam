@@ -19,7 +19,7 @@ const NOTE_OFFSETS = [0, 2, 3, 5, 6, 9, 11, 12, 14, 15, 17, 18];
  * Returns the horizontal unit range (start coordinate of startNote and end coordinate of endNote)
  * for a MIDI note range in a 21-unit-per-octave grid.
  */
-export function getNoteUnits(startPitch: number, endPitch: number) {
+function getNoteUnits(startPitch: number, endPitch: number) {
   const startOctave = Math.floor(startPitch / 12);
   const startSemitone = startPitch % 12;
   const startUnit = startOctave * 21 + NOTE_OFFSETS[startSemitone];
