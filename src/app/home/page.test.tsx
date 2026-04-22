@@ -9,7 +9,7 @@ vi.mock("@/features/navigation", () => ({
   useNavigation: vi.fn(),
 }));
 
-vi.mock("@/features/collection", () => ({
+vi.mock("@/shared/hooks/use-app-reset", () => ({
   useAppReset: vi.fn(),
 }));
 

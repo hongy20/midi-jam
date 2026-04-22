@@ -1,7 +1,6 @@
 import { render } from "@testing-library/react";
 import { usePathname } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useStage } from "@/app/play/context/stage-context";
 import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
 import { useScore } from "@/features/score";
@@ -12,7 +11,6 @@ import { NavigationGuard } from "./navigation-guard";
 vi.mock("@/features/collection");
 vi.mock("@/features/midi-hardware");
 vi.mock("@/features/score");
-vi.mock("@/app/play/context/stage-context");
 vi.mock("../hooks/use-navigation");
 vi.mock("next/navigation");
 
@@ -20,7 +18,6 @@ describe("NavigationGuard", () => {
   const mockToGear = vi.fn();
   const mockToCollection = vi.fn();
   const mockToHome = vi.fn();
-  const mockSetGameSession = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -56,11 +53,6 @@ describe("NavigationGuard", () => {
       setSessionResults: vi.fn(),
       resetScore: vi.fn(),
     });
-    vi.mocked(useStage).mockReturnValue({
-      gameSession: null,
-      setGameSession: mockSetGameSession,
-      resetStage: vi.fn(),
-    });
   });
 
   it("redirects from Level 2 to Home if MIDI is missing", () => {
@@ -90,7 +82,6 @@ describe("NavigationGuard", () => {
 
     render(<NavigationGuard>Test</NavigationGuard>);
 
-    expect(mockSetGameSession).toHaveBeenCalledWith(null);
     expect(mockToCollection).toHaveBeenCalled();
   });
 
