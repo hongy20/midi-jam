@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 
 interface UseMIDISelectionResult {
   selectedMIDIInput: WebMidi.MIDIInput | null;
