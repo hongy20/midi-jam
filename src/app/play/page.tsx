@@ -1,5 +1,5 @@
 import { PlayPageClient } from "./components/play-page.client";
-import { PlayPageLoader, PlayProvider } from "@/features/play-session";
+import { PlayPageLoader } from "./components/play-page.loader";
 
 export const metadata = {
   title: "Stage | MIDI Jam",
@@ -8,14 +8,12 @@ export const metadata = {
 
 /**
  * PlayPage Entry (Server Component)
- * Wraps the Client logic in a PlayProvider and leverages PlayPageLoader for suspense.
+ * Leverages PlayPageLoader for suspense.
  */
 export default function PlayPage() {
   return (
-    <PlayProvider>
-      <PlayPageLoader>
-        <PlayPageClient />
-      </PlayPageLoader>
-    </PlayProvider>
+    <PlayPageLoader>
+      <PlayPageClient />
+    </PlayPageLoader>
   );
 }

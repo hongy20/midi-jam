@@ -4,6 +4,7 @@ import "./globals.css";
 import { CollectionProvider } from "@/features/collection";
 import { GearProvider } from "@/features/midi-hardware";
 import { NavigationGuard } from "@/features/navigation";
+import { PlayProvider } from "@/features/play-session";
 import { ScoreProvider } from "@/features/score";
 import { OptionsProvider } from "@/features/settings";
 import { ThemeProvider } from "@/features/theme";
@@ -36,7 +37,9 @@ export default function RootLayout({
             <OptionsProvider>
               <CollectionProvider>
                 <ScoreProvider>
-                  <NavigationGuard>{children}</NavigationGuard>
+                  <PlayProvider>
+                    <NavigationGuard>{children}</NavigationGuard>
+                  </PlayProvider>
                 </ScoreProvider>
               </CollectionProvider>
             </OptionsProvider>

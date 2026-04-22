@@ -7,7 +7,7 @@ import {
   loadMidiFile,
   parseMidiNotes,
 } from "@/features/midi-assets";
-import { usePlay } from "../context/play-context";
+import { usePlay } from "@/features/play-session";
 
 // Stable promise cache to prevent redundant fetches during suspension cycles
 const promiseCache = new Map<string, Promise<void>>();
