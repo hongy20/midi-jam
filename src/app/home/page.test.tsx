@@ -4,15 +4,25 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 
 import { HomePageClient } from "./components/home-page.client";
-import { useAppReset } from "./hooks/use-app-reset";
+import { useCollection } from "@/features/collection";
+import { useGear } from "@/features/midi-hardware";
+import { useScore } from "@/features/score";
 
 // Mock the hooks
 vi.mock("@/shared/hooks/use-navigation", () => ({
   useNavigation: vi.fn(),
 }));
 
-vi.mock("./hooks/use-app-reset", () => ({
-  useAppReset: vi.fn(),
+vi.mock("@/features/collection", () => ({
+  useCollection: vi.fn(),
+}));
+
+vi.mock("@/features/midi-hardware", () => ({
+  useGear: vi.fn(),
+}));
+
+vi.mock("@/features/score", () => ({
+  useScore: vi.fn(),
 }));
 
 describe("HomePageClient", () => {
@@ -21,8 +31,16 @@ describe("HomePageClient", () => {
     toOptions: vi.fn(),
   };
 
-  const mockAppReset = {
-    resetAll: vi.fn(),
+  const mockCollection = {
+    resetCollection: vi.fn(),
+  };
+
+  const mockGear = {
+    selectMIDIInput: vi.fn(),
+  };
+
+  const mockScore = {
+    resetScore: vi.fn(),
   };
 
   const defaultProps = {
@@ -32,11 +50,13 @@ describe("HomePageClient", () => {
   beforeEach(() => {
     vi.resetAllMocks();
     vi.mocked(useNavigation).mockReturnValue(
-      mockNavigation as unknown as ReturnType<typeof useNavigation>,
+      mockNavigation as unknown as ReturnType<typeof useNavigation>
     );
-    vi.mocked(useAppReset).mockReturnValue(
-      mockAppReset as unknown as ReturnType<typeof useAppReset>,
+    vi.mocked(useCollection).mockReturnValue(
+      mockCollection as unknown as ReturnType<typeof useCollection>
     );
+    vi.mocked(useGear).mockReturnValue(mockGear as unknown as ReturnType<typeof useGear>);
+    vi.mocked(useScore).mockReturnValue(mockScore as unknown as ReturnType<typeof useScore>);
 
     // Mock MIDI support
     Object.defineProperty(global.navigator, "requestMIDIAccess", {
@@ -53,9 +73,11 @@ describe("HomePageClient", () => {
     expect(screen.getByText(/SONGS/i)).toBeInTheDocument();
   });
 
-  it("calls resetAll on mount", () => {
+  it("calls reset functions on mount", () => {
     render(<HomePageClient {...defaultProps} />);
-    expect(mockAppReset.resetAll).toHaveBeenCalled();
+    expect(mockCollection.resetCollection).toHaveBeenCalled();
+    expect(mockScore.resetScore).toHaveBeenCalled();
+    expect(mockGear.selectMIDIInput).toHaveBeenCalledWith(null);
   });
 
   it("navigates to gear on start click", () => {
