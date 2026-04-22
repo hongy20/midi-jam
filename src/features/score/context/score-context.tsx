@@ -2,12 +2,12 @@
 
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
 
-interface SessionResults {
+export interface SessionResults {
   score: number;
   combo: number;
 }
 
-interface ScoreContextType {
+export interface ScoreContextType {
   sessionResults: SessionResults | null;
   setSessionResults: (results: SessionResults | null) => void;
   resetScore: () => void;

@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["webmidi"]
   },
   "include": [
     "next-env.d.ts",
