@@ -1,0 +1,97 @@
+
+> midi-jam@0.1.0 lint
+> eslint . && prettier --check .
+
+
+/Users/yanhong/Github/hongy20/midi-jam/src/app/play/components/lane-stage/lane-stage.test.tsx
+  1:10  warning  'queryByAttribute' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/yanhong/Github/hongy20/midi-jam/src/app/play/components/play-page.client.tsx
+   3:51  warning  'useState' is defined but never used                  @typescript-eslint/no-unused-vars
+   9:3   warning  'buildMidiNoteGroups' is defined but never used       @typescript-eslint/no-unused-vars
+  11:3   warning  'LANE_SEGMENT_DURATION_MS' is defined but never used  @typescript-eslint/no-unused-vars
+  12:3   warning  'loadMidiFile' is defined but never used              @typescript-eslint/no-unused-vars
+  13:3   warning  'parseMidiNotes' is defined but never used            @typescript-eslint/no-unused-vars
+  35:23  warning  'setPlayStatus' is assigned a value but never used    @typescript-eslint/no-unused-vars
+
+/Users/yanhong/Github/hongy20/midi-jam/src/features/midi-hardware/hooks/use-midi-selection.ts
+  1:10  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/yanhong/Github/hongy20/midi-jam/src/features/theme/context/theme-context.tsx
+  45:9  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/yanhong/Github/hongy20/midi-jam/src/features/theme/context/theme-context.tsx:45:9
+  43 |       const savedTheme = localStorage.getItem("midi-jam-theme") as Theme;
+  44 |       if (savedTheme && Object.values(Theme).includes(savedTheme)) {
+> 45 |         setThemeState(savedTheme);
+     |         ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  46 |       }
+  47 |     }
+  48 |  react-hooks/set-state-in-effect
+
+/Users/yanhong/Github/hongy20/midi-jam/src/shared/components/ui/8bit/blocks/loading-screen.tsx
+  45:7  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/yanhong/Github/hongy20/midi-jam/src/shared/components/ui/8bit/blocks/loading-screen.tsx:45:7
+  43 |   useEffect(() => {
+  44 |     if (!autoProgress) {
+> 45 |       setInternalProgress(progress ?? 0);
+     |       ^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  46 |       return;
+  47 |     }
+  48 |  react-hooks/set-state-in-effect
+
+/Users/yanhong/Github/hongy20/midi-jam/src/shared/components/ui/8bit/carousel.tsx
+  98:7  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/yanhong/Github/hongy20/midi-jam/src/shared/components/ui/8bit/carousel.tsx:98:7
+   96 |       }
+   97 |
+>  98 |       onSelect(api);
+      |       ^^^^^^^^ Avoid calling setState() directly within an effect
+   99 |       api.on("reInit", onSelect);
+  100 |       api.on("select", onSelect);
+  101 |  react-hooks/set-state-in-effect
+
+/Users/yanhong/Github/hongy20/midi-jam/src/shared/components/ui/carousel.tsx
+  97:7  warning  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/yanhong/Github/hongy20/midi-jam/src/shared/components/ui/carousel.tsx:97:7
+   95 |       }
+   96 |
+>  97 |       onSelect(api);
+      |       ^^^^^^^^ Avoid calling setState() directly within an effect
+   98 |       api.on("reInit", onSelect);
+   99 |       api.on("select", onSelect);
+  100 |  react-hooks/set-state-in-effect
+
+✖ 12 problems (0 errors, 12 warnings)
+
+Checking formatting...
+[warn] docs/plans/2026-04-22-move-navigation-to-shared.md
+[warn] src/app/layout.tsx
+[warn] Code style issues found in 2 files. Run Prettier with --write to fix.

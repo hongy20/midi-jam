@@ -1,51 +1,61 @@
-# Move Navigation to Shared Infrastructure
+# Decentralize Navigation Guards & Move to Shared
 
-Investigate the feasibility and architectural impact of moving the `useNavigation` hook and related navigation logic from `src/features/navigation` to `src/shared`.
+Refactor the navigation logic by moving the core hook to infrastructure and decentralizing route guarding into feature-specific pages. This removes the tight coupling in `src/features/navigation` and allows for stricter cross-feature import rules.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> This is a structural change. Moving core hooks to `shared` implies they are considered infrastructure rather than feature logic. We need to decide if the navigation logic (including History Neutrality) is generic enough for `shared`.
-
-## Open Questions
-
-1. Should the `NavigationGuard` component also move to `shared`, or should it remain as a feature?
-2. If `useNavigation` moves, should the `navigation` feature be deleted entirely?
-
-## Proposed Approaches
-
-### Approach 1: Move Only `useNavigation` to `shared/hooks`
-- **Pros**: `useNavigation` is used everywhere; moving it to `shared` makes it easily accessible as an infrastructure hook.
-- **Cons**: Splits the navigation logic between `shared` and `features/navigation` (if `NavigationGuard` stays).
-
-### Approach 2: Move Entire `navigation` Logic to `shared`
-- **Pros**: Keeps all navigation-related logic (hook and guard) together in the infrastructure layer.
-- **Cons**: `shared` starts to grow with app-specific logic (routes).
-
-### Approach 3: Keep as a Feature (Status Quo)
-- **Pros**: Follows "Feature-Based Architecture" strictly. Navigation is a domain, even if cross-cutting.
-- **Cons**: Every feature that needs to navigate must import from another feature, which can lead to complex dependency graphs if not handled via public APIs.
+> This refactor will move logic from a centralized `NavigationGuard` to individual page components. While this improves feature isolation, it requires each page to be diligent about its own prerequisites.
 
 ## Proposed Changes
 
 ### [Infrastructure Layer]
 
 #### [NEW] [use-navigation.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/shared/hooks/use-navigation.ts)
-Move the content of `src/features/navigation/hooks/use-navigation.ts` here.
 
-#### [NEW] [navigation-guard.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/shared/components/navigation/navigation-guard.tsx) (Optional)
-If we decide to move the guard as well.
+Move the `useNavigation` hook here. It will remain the unified API for "History Neutrality."
 
-### [Domain Layer]
+#### [MODIFY] [layout.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/layout.tsx)
+
+Remove the `NavigationGuard` wrapper from the root layout.
+
+### [App Layer (Decentralized Guards)]
+
+#### [MODIFY] [play-page.client.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/play/components/play-page.client.tsx)
+
+Add prerequisite check for `selectedMIDIInput` and `selectedTrack`.
+
+#### [MODIFY] [pause-page.client.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/pause/components/pause-page.client.tsx)
+
+Add prerequisite check for `selectedMIDIInput` and `selectedTrack`.
+
+#### [MODIFY] [collection-page.client.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/collection/components/collection-page.client.tsx)
+
+Add prerequisite check for `selectedMIDIInput`.
+
+#### [MODIFY] [score-page.client.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/app/score/components/score-page.client.tsx)
+
+Add prerequisite check for `sessionResults`.
+
+### [Cleanup]
 
 #### [DELETE] [navigation](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/navigation)
-If we move everything.
+
+Remove the entire navigation feature folder.
+
+#### [MODIFY] [.eslintrc.json](file:///Users/yanhong/Github/hongy20/midi-jam/.eslintrc.json)
+
+Tighten cross-feature import rules from `warn` to `error`.
 
 ## Verification Plan
 
 ### Automated Tests
-- Run existing tests for `NavigationGuard` and `useNavigation` (if any) after moving.
-- Check for broken imports across the codebase using `npm run type-check`.
+
+- Run `npm run type-check` to ensure all imports are updated correctly.
+- Run `npm run lint` to verify that the new stricter rules are passing.
 
 ### Manual Verification
-- Verify navigation still works correctly in the browser (History Neutrality).
+
+- Navigate directly to `/play` without a track or MIDI input selected and verify redirect to `/home`.
+- Navigate directly to `/score` without session results and verify redirect to `/home`.
+- Navigate to `/collection` without MIDI input and verify redirect to `/gear`.

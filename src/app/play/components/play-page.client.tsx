@@ -1,20 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { usePlay } from "@/features/play-session";
 import { useLaneTimeline } from "../hooks/use-lane-timeline";
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
-import {
-  buildMidiNoteGroups,
-  LANE_SCROLL_DURATION_MS,
-  LANE_SEGMENT_DURATION_MS,
-  loadMidiFile,
-  parseMidiNotes,
-} from "@/features/midi-assets";
+import { LANE_SCROLL_DURATION_MS } from "@/features/midi-assets";
 import { getPianoLayoutUnits } from "@/features/piano";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
-import { useNavigation } from "@/features/navigation";
+import { useNavigation } from "@/shared/hooks/use-navigation";
 import { useScore, useScoreEngine } from "@/features/score";
 import { useOptions } from "@/features/settings";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
@@ -29,10 +23,10 @@ import { PlayPageView } from "./play-page.view";
  * states to root boundaries.
  */
 export function PlayPageClient() {
-  const { toScore, toPause } = useNavigation();
+  const { toScore, toPause, toHome, toCollection } = useNavigation();
   const { selectedTrack } = useCollection();
   const { selectedMIDIInput, selectedMIDIOutput } = useGear();
-  const { playStatus, setPlayStatus, gameSession, setGameSession } = usePlay();
+  const { playStatus, gameSession, setGameSession } = usePlay();
   const { speed, demoMode } = useOptions();
   const { setSessionResults } = useScore();
   const { isFullscreen, toggleFullscreen } = useFullscreen();
@@ -107,6 +101,15 @@ export function PlayPageClient() {
 
   // Auto-pause when losing focus or switching tabs
   useAutoPause(handlePause);
+
+  // --- Navigation Guards ---
+  useEffect(() => {
+    if (!selectedMIDIInput) {
+      toHome();
+    } else if (!selectedTrack) {
+      toCollection();
+    }
+  }, [selectedMIDIInput, selectedTrack, toHome, toCollection]);
 
   // --- Native Next.js Boundaries & Guards ---
 

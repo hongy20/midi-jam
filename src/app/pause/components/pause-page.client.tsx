@@ -1,24 +1,30 @@
 "use client";
 
+import { useEffect } from "react";
 import { usePlay } from "@/features/play-session";
 import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
-import { useNavigation } from "@/features/navigation";
+import { useNavigation } from "@/shared/hooks/use-navigation";
 import { useScore } from "@/features/score";
 import { PausePageView } from "./pause-page.view";
 
 export function PausePageClient() {
-  const { toPlay, toOptions, toScore } = useNavigation();
+  const { toPlay, toOptions, toScore, toHome, toCollection } = useNavigation();
   const { playStatus, gameSession, setGameSession } = usePlay();
   const { selectedMIDIInput } = useGear();
   const { selectedTrack } = useCollection();
   const { setSessionResults } = useScore();
 
-  // If state is missing, either throw (client-side) or return null (SSR/prerender)
-  if (!selectedTrack || !selectedMIDIInput) {
-    if (typeof window !== "undefined") {
-      throw new Error("Cannot access Pause page without an active track and MIDI input.");
+  useEffect(() => {
+    if (!selectedMIDIInput) {
+      toHome();
+    } else if (!selectedTrack) {
+      toCollection();
     }
+  }, [selectedMIDIInput, selectedTrack, toHome, toCollection]);
+
+  // If state is missing, return null while redirecting
+  if (!selectedTrack || !selectedMIDIInput) {
     return null;
   }
 
