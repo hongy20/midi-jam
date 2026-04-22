@@ -36,7 +36,7 @@ const themes = [
   { name: Theme.AncientRunes, color: "#009688" },
 ];
 
-export interface ThemePickerProps {
+interface ThemePickerProps {
   activeTheme: Theme;
   onThemeChange: (theme: Theme) => void;
 }

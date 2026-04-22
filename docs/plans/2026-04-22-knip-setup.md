@@ -3,6 +3,7 @@
 **Goal:** Set up [Knip](https://knip.dev/) to identify and prevent unused files, dependencies, and exports in the codebase, integrated into the CI pipeline.
 
 **Scope:**
+
 - Fail CI on unused files and dependencies.
 - Warn on unused exports.
 - Perform an initial cleanup of existing unused items.
@@ -22,11 +23,11 @@ Configure Knip with plugins for Next.js, Storybook, and Vitest.
   "entry": [
     "src/app/**/page.tsx",
     "src/app/layout.tsx",
-    "src/features/*/index.ts" // Public APIs for features
+    "src/features/*/index.ts", // Public APIs for features
   ],
   "project": ["src/**/*.{ts,tsx}"],
   "ignore": [
-    "src/shared/components/ui/**" // shadcn components can have unused exports by design
+    "src/shared/components/ui/**", // shadcn components can have unused exports by design
   ],
   "rules": {
     "files": "error",
@@ -38,7 +39,7 @@ Configure Knip with plugins for Next.js, Storybook, and Vitest.
     "exports": "warn",
     "types": "warn",
     "enumMembers": "warn",
-    "classMembers": "warn"
+    "classMembers": "warn",
   },
   "next": {
     "entry": [
@@ -49,15 +50,15 @@ Configure Knip with plugins for Next.js, Storybook, and Vitest.
       "src/app/**/error.tsx",
       "src/app/**/not-found.tsx",
       "src/app/**/route.ts",
-      "src/middleware.ts"
-    ]
+      "src/middleware.ts",
+    ],
   },
   "vitest": {
-    "entry": ["src/**/*.test.{ts,tsx}", "vitest.config.ts"]
+    "entry": ["src/**/*.test.{ts,tsx}", "vitest.config.ts"],
   },
   "storybook": {
-    "entry": ["src/**/*.stories.{ts,tsx}", ".storybook/main.ts", ".storybook/preview.tsx"]
-  }
+    "entry": ["src/**/*.stories.{ts,tsx}", ".storybook/main.ts", ".storybook/preview.tsx"],
+  },
 }
 ```
 
@@ -79,18 +80,21 @@ Add `knip` scripts and update `lint`.
 ## Tasks
 
 ### 1. Installation & Configuration
+
 - [ ] Install `knip` as a dev dependency.
 - [ ] Create `knip.jsonc` with the proposed configuration.
 - [ ] Update `package.json` scripts.
 - [ ] Verify setup with `npm run knip`.
 
 ### 2. Initial Cleanup
+
 - [ ] Run `npm run knip` and analyze results.
 - [ ] Remove unused files identified by Knip.
 - [ ] Remove unused dependencies identified by Knip.
 - [ ] (Optional) Address unused exports if simple to do so.
 
 ### 3. CI Verification
+
 - [ ] Verify that `npm run lint` now includes Knip and fails correctly on unused files/deps.
 - [ ] Verify CI workflow passes with the new command.
 
@@ -99,9 +103,11 @@ Add `knip` scripts and update `lint`.
 ## Verification Plan
 
 ### Automated Tests
+
 - `npm run knip`: Should exit with code 0 after cleanup.
 - `npm run lint`: Should pass all checks.
 
 ### Manual Verification
+
 - Temporarily create an unused file and verify `npm run knip` fails.
 - Temporarily add an unused dependency and verify `npm run knip` fails.
