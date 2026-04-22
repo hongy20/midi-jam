@@ -1,5 +1,7 @@
 "use client";
 
+import "@/shared/components/ui/8bit/styles/retro.css";
+
 import { Piano } from "lucide-react";
 
 import { GearCard } from "@/features/midi-hardware";
@@ -12,8 +14,6 @@ import {
   CarouselPrevious,
 } from "@/shared/components/ui/8bit/carousel";
 
-import { GearHeader } from "./gear-header";
-
 interface GearPageViewProps {
   inputs: WebMidi.MIDIInput[];
   selectedMIDIInput: WebMidi.MIDIInput | null;
@@ -21,6 +21,17 @@ interface GearPageViewProps {
   onContinue: () => void;
   onBack: () => void;
 }
+
+const GearHeader = ({ title, description }: { title: string; description: string }) => (
+  <div className="flex flex-col gap-2">
+    <h2 className="retro font-bold text-lg sm:text-2xl md:text-3xl wrap-break-word uppercase">
+      {title}
+    </h2>
+    <span className="mx-auto block max-w-xl retro text-muted-foreground text-[9px] uppercase tracking-wider">
+      {description}
+    </span>
+  </div>
+);
 
 export function GearPageView({
   inputs,
@@ -49,7 +60,7 @@ export function GearPageView({
               <CarouselContent>
                 {inputs.map((input, index) => (
                   <CarouselItem
-                    className="pl-4 basis-[100%] sm:basis-1/2 lg:basis-1/3"
+                    className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
                     key={input.id}
                   >
                     <GearCard
