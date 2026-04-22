@@ -18,12 +18,7 @@ interface UseMIDIDevicesResult {
  * @returns An object containing the list of available inputs, outputs, and the MIDI access promise.
  */
 export function useMIDIDevices(): UseMIDIDevicesResult {
-  const [accessPromise] = useState(() => {
-    if (typeof navigator === "undefined") {
-      return Promise.resolve(null as unknown as WebMidi.MIDIAccess);
-    }
-    return requestMIDIAccess();
-  });
+  const [accessPromise] = useState(() => requestMIDIAccess());
   const [inputs, setInputs] = useState<WebMidi.MIDIInput[]>([]);
   const [outputs, setOutputs] = useState<WebMidi.MIDIOutput[]>([]);
 

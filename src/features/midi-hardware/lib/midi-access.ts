@@ -4,6 +4,10 @@
  * @throws An error if Web MIDI API is not supported or if access is denied.
  */
 export async function requestMIDIAccess(): Promise<WebMidi.MIDIAccess> {
+  if (typeof window === "undefined") {
+    return null as unknown as WebMidi.MIDIAccess;
+  }
+
   if (typeof navigator === "undefined" || !navigator.requestMIDIAccess) {
     throw new Error("Web MIDI API is not supported in this browser.");
   }

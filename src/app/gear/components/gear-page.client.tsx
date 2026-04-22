@@ -11,10 +11,9 @@ export function GearPageClient() {
   const { toCollection, toHome } = useNavigation();
   const { selectMIDIInput, selectedMIDIInput, inputs, accessPromise } = useGear();
 
-  // Only suspend on the client. On the server, we render the shell.
-  if (typeof window !== "undefined") {
-    use(accessPromise);
-  }
+  // Suspends here until MIDI access is granted or errors out to error.tsx
+  // On the server, this resolves to null and does not suspend.
+  use(accessPromise);
 
   useAutoSelection(inputs, selectMIDIInput);
 
