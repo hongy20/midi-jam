@@ -1,4 +1,3 @@
-export { TrackProvider, useTrack } from "./context/track-context";
 export { LANE_SCROLL_DURATION_MS, LANE_SEGMENT_DURATION_MS } from "./lib/constant";
 export {
   buildMidiNoteGroups,
