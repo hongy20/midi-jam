@@ -26,7 +26,7 @@ describe("useAutoSelection", () => {
   });
 
   it("should call selectMIDIInput when a midimessage is received", () => {
-    let handler: any = null;
+    let handler: (() => void) | null = null;
     const addEventListenerMock = vi.fn((event, cb) => {
       if (event === "midimessage") {
         handler = cb;
@@ -48,7 +48,7 @@ describe("useAutoSelection", () => {
 
     // Simulate midimessage
     if (handler) {
-      handler(new Event("midimessage"));
+      (handler as () => void)();
     }
 
     expect(selectMIDIInputMock).toHaveBeenCalledWith(mockInput);
