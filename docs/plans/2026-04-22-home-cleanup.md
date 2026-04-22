@@ -4,7 +4,8 @@
 
 **Goal:** Refactor the Home page to use React 19 `Suspense` and the `use` hook for cleaner data fetching and loading states.
 
-**Architecture:** 
+**Architecture:**
+
 - Pass a promise of tracks from the `HomePage` server component to `HomePageClient`.
 - Wrap `HomePageClient` in a `Suspense` boundary in `page.tsx`.
 - Use the `use` hook in `HomePageClient` to resolve the promise.
@@ -17,6 +18,7 @@
 ### Task 1: Refactor `page.tsx` with Suspense
 
 **Files:**
+
 - Modify: `src/app/home/page.tsx`
 
 **Step 1: Update `HomePage` implementation**
@@ -51,6 +53,7 @@ git commit -m "refactor(home): use Suspense and pass tracksPromise to HomePageCl
 ### Task 2: Refactor `HomePageClient` with `use` hook
 
 **Files:**
+
 - Modify: `src/app/home/components/home-page.client.tsx`
 
 **Step 1: Update `HomePageClient` implementation**
@@ -104,6 +107,7 @@ git commit -m "refactor(home): use React.use hook to resolve tracksPromise"
 ### Task 3: Update Tests and Verification
 
 **Files:**
+
 - Modify: `src/app/home/page.test.tsx`
 
 **Step 1: Update tests to pass `tracksPromise`**
