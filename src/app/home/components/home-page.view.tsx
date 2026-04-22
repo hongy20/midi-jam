@@ -4,8 +4,6 @@ import { useEffect } from "react";
 
 import Hero3 from "@/shared/components/ui/8bit/blocks/hero3";
 
-import { MIDI_UNSUPPORTED } from "../lib/constants";
-
 interface HomePageViewProps {
   onStart: () => void;
   onOptions: () => void;
@@ -16,7 +14,9 @@ export function HomePageView({ onStart, onOptions, songsCount }: HomePageViewPro
   useEffect(() => {
     const isSupported = typeof navigator !== "undefined" && "requestMIDIAccess" in navigator;
     if (!isSupported) {
-      throw new Error(MIDI_UNSUPPORTED);
+      throw new Error(
+        "This app requires Web MIDI API. Please use Android Chrome or a modern Chromium browser.",
+      );
     }
   }, []);
 

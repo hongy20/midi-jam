@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { requestMIDIAccess } from "../lib/midi-access";
 
@@ -9,10 +9,20 @@ describe("requestMIDIAccess", () => {
     });
   });
 
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("should throw an error if Web MIDI API is not supported", async () => {
     await expect(requestMIDIAccess()).rejects.toThrow(
       "Web MIDI API is not supported in this browser.",
     );
+  });
+
+  it("should return null if window is undefined (server-side)", async () => {
+    vi.stubGlobal("window", undefined);
+    const access = await requestMIDIAccess();
+    expect(access).toBeNull();
   });
 
   it("should return MIDI access if supported and granted", async () => {

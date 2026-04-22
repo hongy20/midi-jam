@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
+import { use, useCallback, useEffect } from "react";
 
 import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
@@ -9,7 +9,8 @@ import type { Track } from "@/shared/types/track";
 
 import { CollectionPageView } from "./collection-page.view";
 
-export function CollectionPageClient({ tracks }: { tracks: Track[] }) {
+export function CollectionPageClient({ tracksPromise }: { tracksPromise: Promise<Track[]> }) {
+  const tracks = use(tracksPromise);
   const { toPlay, toGear } = useNavigation();
   const { setSelectedTrack, selectedTrack } = useCollection();
   const { selectedMIDIInput } = useGear();
