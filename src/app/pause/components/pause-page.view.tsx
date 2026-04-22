@@ -11,7 +11,7 @@ interface PausePageViewProps {
 
 export function PausePageView({ onContinue, onRestart, onOptions, onQuit }: PausePageViewProps) {
   return (
-    <main className="w-screen h-[100dvh] flex items-center justify-center p-4 bg-background overflow-hidden select-none">
+    <main className="w-screen h-dvh flex items-center justify-center p-4 bg-background overflow-hidden select-none">
       <PauseMenu
         onContinue={onContinue}
         onRestart={onRestart}
