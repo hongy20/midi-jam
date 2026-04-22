@@ -23,10 +23,22 @@ export function ThemeProvider({
   theme?: Theme;
   mode?: Mode;
 }) {
-  const [theme, setThemeState] = useState<Theme>(forcedTheme || "default");
-  const [mode, setModeState] = useState<Mode>(forcedMode || "light");
+  const [theme, setThemeState] = useState<Theme>(() => {
+    if (forcedTheme) return forcedTheme;
+    if (typeof window === "undefined") return "default";
+    const saved = localStorage.getItem("midi-jam-theme") as Theme;
+    return saved && Object.values(Theme).includes(saved) ? saved : "default";
+  });
 
-  // Synchronize state with props during render to avoid useEffect 'set-state-in-effect' warnings
+  const [mode, setModeState] = useState<Mode>(() => {
+    if (forcedMode) return forcedMode;
+    if (typeof window === "undefined") return "light";
+    const saved = localStorage.getItem("midi-jam-mode") as Mode;
+    if (saved) return saved;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  });
+
+  // Synchronize state with forced props when they change (e.g. Storybook controls)
   const [prevForcedTheme, setPrevForcedTheme] = useState(forcedTheme);
   if (forcedTheme !== prevForcedTheme) {
     setPrevForcedTheme(forcedTheme);
@@ -38,25 +50,6 @@ export function ThemeProvider({
     setPrevForcedMode(forcedMode);
     if (forcedMode) setModeState(forcedMode);
   }
-
-  useEffect(() => {
-    // Only load from localStorage if NOT forced
-    if (forcedTheme === undefined) {
-      const savedTheme = localStorage.getItem("midi-jam-theme") as Theme;
-      if (savedTheme && Object.values(Theme).includes(savedTheme)) {
-        setThemeState(savedTheme);
-      }
-    }
-
-    if (forcedMode === undefined) {
-      const savedMode = localStorage.getItem("midi-jam-mode") as Mode;
-      if (savedMode) {
-        setModeState(savedMode);
-      } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        setModeState("dark");
-      }
-    }
-  }, [forcedTheme, forcedMode]);
 
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
