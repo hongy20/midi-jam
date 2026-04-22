@@ -3,13 +3,13 @@
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
 import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
 
-export interface GameSession {
+interface GameSession {
   score: number;
   combo: number;
   currentProgress: number;
 }
 
-export type PlayTrackStatus =
+type PlayTrackStatus =
   | { isLoading: true; isReady: false; error: null }
   | { isLoading: false; isReady: false; error: string | null }
   | {
@@ -21,7 +21,7 @@ export type PlayTrackStatus =
       error: null;
     };
 
-export interface PlayContextType {
+interface PlayContextType {
   // Track State
   playStatus: PlayTrackStatus;
   setPlayStatus: (status: PlayTrackStatus) => void;

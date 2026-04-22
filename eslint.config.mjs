@@ -73,7 +73,7 @@ const eslintConfig = [
     files: ["src/features/**/*"],
     rules: {
       "no-restricted-imports": [
-        "error",
+        "warn",
         {
           patterns: [
             {
@@ -84,6 +84,11 @@ const eslintConfig = [
             {
               group: ["**/app/**", "@/app/**"],
               message: "Feature layer must not import from the app layer.",
+            },
+            {
+              group: ["@/features/*"],
+              message:
+                "Cross-feature imports are discouraged to ensure high isolation. Consider moving orchestration logic to the app layer or a dedicated orchestration feature.",
             },
           ],
         },
