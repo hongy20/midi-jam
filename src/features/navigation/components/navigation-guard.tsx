@@ -2,8 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { useStage } from "@/app/play/context/stage-context";
-import { useCollection, useTrackSync } from "@/features/collection";
+import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
 import { useScore } from "@/features/score";
 import { useNavigation } from "../hooks/use-navigation";
@@ -15,10 +14,6 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
   const { selectedTrack } = useCollection();
   const { selectedMIDIInput } = useGear();
   const { sessionResults } = useScore();
-  const { setGameSession } = useStage();
-
-  // Coordinate track assets with collection state
-  useTrackSync();
 
   useEffect(() => {
     switch (pathname) {
@@ -27,7 +22,6 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
         if (!selectedMIDIInput) {
           toHome();
         } else if (!selectedTrack) {
-          setGameSession(null);
           toCollection();
         }
         break;
@@ -52,7 +46,6 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
     selectedTrack,
     selectedMIDIInput,
     sessionResults,
-    setGameSession,
     toCollection,
     toHome,
     toGear,
