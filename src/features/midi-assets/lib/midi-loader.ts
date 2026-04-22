@@ -1,4 +1,5 @@
 import { Midi } from "@tonejs/midi";
+
 import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS, MIDI_DUMMY_NOTE_PITCH } from "./constant";
 
 /**

@@ -1,4 +1,5 @@
 import { MidiNote } from "@/shared/types/midi";
+
 import { MIDI_NOTE_C4, PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "./constants";
 
 /**

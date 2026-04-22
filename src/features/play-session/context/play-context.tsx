@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
+
 import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
 
 interface GameSession {

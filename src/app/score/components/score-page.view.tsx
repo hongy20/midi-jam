@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronRight, Home, RotateCcw } from "lucide-react";
+
 import { Button } from "@/shared/components/ui/8bit/button";
 import { Table, TableBody, TableCell, TableRow } from "@/shared/components/ui/8bit/table";
 

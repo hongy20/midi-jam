@@ -1,7 +1,9 @@
+import "@/shared/components/ui/8bit/styles/retro.css";
+
 import { cva } from "class-variance-authority";
 import React from "react";
+
 import { cn } from "@/shared/lib/utils";
-import "@/shared/components/ui/8bit/styles/retro.css";
 
 const switchVariants = cva(
   "inline-flex h-10 w-20 shrink-0 cursor-pointer items-center border-8 border-foreground dark:border-ring transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-foreground disabled:cursor-not-allowed disabled:opacity-50",

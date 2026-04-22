@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, type ReactNode, useContext, useMemo } from "react";
+
 import { useMIDIDevices } from "../hooks/use-midi-devices";
 import { useMIDISelection } from "../hooks/use-midi-selection";
 

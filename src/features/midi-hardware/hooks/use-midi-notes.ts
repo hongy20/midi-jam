@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef } from "react";
+
 import { type MIDINoteEvent } from "@/shared/types/midi";
+
 import { subscribeToNotes } from "../lib/midi-listener";
 
 /**

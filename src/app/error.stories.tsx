@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+
 import GlobalError from "./error";
 
 const meta: Meta<typeof GlobalError> = {

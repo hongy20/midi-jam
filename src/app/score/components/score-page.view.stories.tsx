@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+
 import { ScorePageView } from "./score-page.view";
 
 const meta: Meta<typeof ScorePageView> = {

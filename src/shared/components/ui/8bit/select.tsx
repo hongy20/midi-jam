@@ -1,5 +1,8 @@
+import "@/shared/components/ui/8bit/styles/retro.css";
+
 import type * as SelectPrimitive from "@radix-ui/react-select";
 import { cva, type VariantProps } from "class-variance-authority";
+
 import {
   Select as ShadcnSelect,
   SelectContent as ShadcnSelectContent,
@@ -13,8 +16,6 @@ import {
   SelectValue as ShadcnSelectValue,
 } from "@/shared/components/ui/select";
 import { cn } from "@/shared/lib/utils";
-
-import "@/shared/components/ui/8bit/styles/retro.css";
 
 export const inputVariants = cva("", {
   variants: {

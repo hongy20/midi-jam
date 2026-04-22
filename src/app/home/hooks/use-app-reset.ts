@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
+
 import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
 import { useScore } from "@/features/score";

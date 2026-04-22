@@ -1,7 +1,9 @@
 import { useLayoutEffect, useRef } from "react";
+
 import { computeLaneSegmentAnimationDelay } from "@/features/midi-assets";
-import { type MidiNoteGroup } from "@/shared/types/midi";
 import { PIANO_GRID_ITEM_CLASS } from "@/features/piano";
+import { type MidiNoteGroup } from "@/shared/types/midi";
+
 import styles from "./lane-segment.module.css";
 
 interface LaneSegmentProps {

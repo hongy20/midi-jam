@@ -1,6 +1,8 @@
 "use client";
 
 import { Dices, Play } from "lucide-react";
+
+import { SongCard } from "@/features/collection";
 import { Button } from "@/shared/components/ui/8bit/button";
 import {
   Carousel,
@@ -9,9 +11,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/shared/components/ui/8bit/carousel";
-import { CollectionHeader } from "./collection-header";
-import { SongCard } from "@/features/collection";
 import type { Track } from "@/shared/types/track";
+
+import { CollectionHeader } from "./collection-header";
 
 interface CollectionPageViewProps {
   tracks: Track[];

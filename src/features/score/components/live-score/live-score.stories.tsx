@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+
 import type { HitQuality } from "../../hooks/use-score-engine";
 import { LiveScore } from "./live-score";
 

@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
+
 import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
-import type { Track } from "@/shared/types/track";
 import { useNavigation } from "@/shared/hooks/use-navigation";
+import type { Track } from "@/shared/types/track";
+
 import { CollectionPageView } from "./collection-page.view";
 
 export function CollectionPageClient({ tracks }: { tracks: Track[] }) {

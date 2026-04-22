@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+
 import { PianoKeyboard } from "./PianoKeyboard";
 
 const meta: Meta<typeof PianoKeyboard> = {

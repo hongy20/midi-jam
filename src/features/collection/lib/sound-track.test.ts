@@ -1,5 +1,7 @@
 import fs from "node:fs/promises";
+
 import { describe, expect, it, vi } from "vitest";
+
 import { getSoundTracks } from "./sound-track";
 
 vi.mock("node:fs/promises", () => ({

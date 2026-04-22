@@ -1,15 +1,15 @@
 "use client";
 
-import Link from "next/link";
+import "@/shared/components/ui/8bit/styles/retro.css";
 
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
+
 import { Badge } from "@/shared/components/ui/8bit/badge";
 import { Button } from "@/shared/components/ui/8bit/button";
 import { Card, CardContent } from "@/shared/components/ui/8bit/card";
 import { cn } from "@/shared/lib/utils";
-
-import "@/shared/components/ui/8bit/styles/retro.css";
 
 interface HeroStat {
   label: string;

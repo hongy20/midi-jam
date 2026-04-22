@@ -1,6 +1,8 @@
 import type { Midi } from "@tonejs/midi";
-import { MIDI_DUMMY_NOTE_PITCH, MIN_NOTE_GAP_MS } from "./constant";
+
 import type { MidiNote } from "@/shared/types/midi";
+
+import { MIDI_DUMMY_NOTE_PITCH, MIN_NOTE_GAP_MS } from "./constant";
 
 /**
  * Parses a MIDI object into MidiNotes, applying collision handling and instrument filtering.

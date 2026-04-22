@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useMemo } from "react";
-import { useNavigation } from "@/shared/hooks/use-navigation";
+
 import { useScore } from "@/features/score";
+import { useNavigation } from "@/shared/hooks/use-navigation";
+
 import { ScorePageView } from "./score-page.view";
 
 export function ScorePageClient() {

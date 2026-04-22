@@ -1,7 +1,8 @@
-import { renderHook, act } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
-import { useTrackPlayer } from "./use-track-player";
+import { act, renderHook } from "@testing-library/react";
+import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
+
 import { useNotePlayer } from "./use-note-player";
+import { useTrackPlayer } from "./use-track-player";
 
 vi.mock("./use-note-player", () => ({
   useNotePlayer: vi.fn(),

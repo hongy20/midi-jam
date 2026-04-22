@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
+
+import type { MidiNote } from "@/shared/types/midi";
+
 import { LANE_SCROLL_DURATION_MS } from "./constant";
 import {
   buildMidiNoteGroups,
   computeLaneSegmentAnimationDelay,
   getVisibleSegmentIndexes,
 } from "./lane-segment-utils";
-import type { MidiNote } from "@/shared/types/midi";
 
 describe("lane-segment-utils clustering", () => {
   const threshold = 10000; // 10s

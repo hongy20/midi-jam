@@ -1,6 +1,8 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+
 import { buildMidiNoteGroups } from "@/features/midi-assets";
+
 import { LaneStage } from "./lane-stage";
 
 // Mock ResizeObserver

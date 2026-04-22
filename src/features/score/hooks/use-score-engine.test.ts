@@ -1,6 +1,8 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import type { MidiNote } from "@/shared/types/midi";
+
 import { useScoreEngine } from "./use-score-engine";
 
 describe("useScoreEngine hook", () => {

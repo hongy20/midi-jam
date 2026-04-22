@@ -1,4 +1,7 @@
+import "@/shared/components/ui/8bit/styles/retro.css";
+
 import { cva, type VariantProps } from "class-variance-authority";
+
 import {
   Card as ShadcnCard,
   CardAction as ShadcnCardAction,
@@ -9,8 +12,6 @@ import {
   CardTitle as ShadcnCardTitle,
 } from "@/shared/components/ui/card";
 import { cn } from "@/shared/lib/utils";
-
-import "@/shared/components/ui/8bit/styles/retro.css";
 
 export const cardVariants = cva("", {
   variants: {
@@ -103,4 +104,4 @@ function CardFooter({ ...props }: BitCardProps) {
   );
 }
 
-export { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent };
+export { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle };

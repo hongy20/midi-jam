@@ -1,5 +1,6 @@
 import type { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
+
 import { getBarLines, parseMidiNotes } from "./midi-parser";
 
 describe("midi-parser", () => {

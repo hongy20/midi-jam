@@ -1,13 +1,15 @@
 "use client";
 
 import { Maximize2, Minimize2, Pause } from "lucide-react";
-import { type MidiNoteGroup } from "@/shared/types/midi";
-import type { HitQuality } from "@/features/score";
-import { Button } from "@/shared/components/ui/8bit/button";
-import { LaneStage } from "./lane-stage/lane-stage";
+
 import { PianoKeyboard } from "@/features/piano";
-import styles from "./play-page.view.module.css";
+import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
+import { Button } from "@/shared/components/ui/8bit/button";
+import { type MidiNoteGroup } from "@/shared/types/midi";
+
+import { LaneStage } from "./lane-stage/lane-stage";
+import styles from "./play-page.view.module.css";
 
 interface PlayPageViewProps {
   selectedMIDIInput: { name?: string };

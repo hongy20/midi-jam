@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { requestMIDIAccess } from "../lib/midi-access";
 
 describe("requestMIDIAccess", () => {

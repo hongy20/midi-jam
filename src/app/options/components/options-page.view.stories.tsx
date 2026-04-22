@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
+
 import type { Theme } from "@/features/theme";
 import type { Mode } from "@/shared/types/mode";
+
 import { OptionsPageView } from "./options-page.view";
 
 const meta: Meta<typeof OptionsPageView> = {

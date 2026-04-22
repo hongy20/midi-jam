@@ -1,8 +1,10 @@
 "use client";
 
 import type { Meta, StoryObj } from "@storybook/react";
-import { CollectionPageView } from "./collection-page.view";
+
 import type { Track } from "@/shared/types/track";
+
+import { CollectionPageView } from "./collection-page.view";
 
 const mockTracks: Track[] = [
   {

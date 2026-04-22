@@ -1,7 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
+
 import { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
+
 import { buildMidiNoteGroups } from "./lane-segment-utils";
 import { parseMidiNotes } from "./midi-parser";
 
