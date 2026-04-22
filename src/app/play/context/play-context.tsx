@@ -25,11 +25,11 @@ export interface PlayContextType {
   // Track State
   playStatus: PlayTrackStatus;
   setPlayStatus: (status: PlayTrackStatus) => void;
-  
+
   // Session State
   gameSession: GameSession | null;
   setGameSession: (session: GameSession | null) => void;
-  
+
   // Actions
   resetPlay: () => void;
 }

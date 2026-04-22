@@ -1,11 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
-import { useStage } from "@/app/play/context/stage-context";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { usePlay } from "@/app/play/context/play-context";
 import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
-import { LANE_SCROLL_DURATION_MS, useTrack } from "@/features/midi-assets";
+import {
+  buildMidiNoteGroups,
+  LANE_SCROLL_DURATION_MS,
+  LANE_SEGMENT_DURATION_MS,
+  loadMidiFile,
+  parseMidiNotes,
+} from "@/features/midi-assets";
 import { getPianoLayoutUnits } from "@/features/piano";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/features/navigation";
@@ -26,17 +32,58 @@ export function PlayPageClient() {
   const { toScore, toPause } = useNavigation();
   const { selectedTrack } = useCollection();
   const { selectedMIDIInput, selectedMIDIOutput } = useGear();
-  const { trackStatus } = useTrack();
-  const { gameSession, setGameSession } = useStage();
+  const { playStatus, setPlayStatus, gameSession, setGameSession } = usePlay();
   const { speed, demoMode } = useOptions();
   const { setSessionResults } = useScore();
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
-  // Extract data with fallbacks to ensure hooks are called unconditionally
-  const notes = useMemo(() => (trackStatus.isReady ? trackStatus.notes : []), [trackStatus]);
-  const groups = useMemo(() => (trackStatus.isReady ? trackStatus.groups : []), [trackStatus]);
-  const totalDurationMs = trackStatus.isReady ? trackStatus.totalDurationMs : 0;
-  const isLoading = trackStatus.isLoading;
+  // Track parsing state for Suspense
+  const [loadPromise, setLoadPromise] = useState<Promise<void> | null>(null);
+
+  // Trigger track loading if not ready and we have a selected track
+  if (!playStatus.isReady && !playStatus.isLoading && selectedTrack && !loadPromise) {
+    const promise = (async () => {
+      try {
+        setPlayStatus({ isLoading: true, isReady: false, error: null });
+        const midi = await loadMidiFile(selectedTrack.url);
+        const notes = parseMidiNotes(midi);
+        const totalDurationMs = midi.duration * 1000;
+        const groups = buildMidiNoteGroups({
+          notes,
+          totalDurationMs,
+          thresholdMs: LANE_SEGMENT_DURATION_MS,
+        });
+
+        setPlayStatus({
+          isLoading: false,
+          isReady: true,
+          totalDurationMs,
+          notes,
+          groups,
+          error: null,
+        });
+      } catch (err) {
+        setPlayStatus({
+          isLoading: false,
+          isReady: false,
+          error: err instanceof Error ? err.message : String(err),
+        });
+      } finally {
+        setLoadPromise(null);
+      }
+    })();
+    setLoadPromise(promise);
+  }
+
+  // Suspend if loading
+  if (loadPromise) {
+    throw loadPromise;
+  }
+
+  // Extract data with fallbacks
+  const notes = useMemo(() => (playStatus.isReady ? playStatus.notes : []), [playStatus]);
+  const groups = useMemo(() => (playStatus.isReady ? playStatus.groups : []), [playStatus]);
+  const totalDurationMs = playStatus.isReady ? playStatus.totalDurationMs : 0;
 
   // Calculate dynamic piano range for consistent grid alignment
   const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(notes), [notes]);
@@ -44,7 +91,7 @@ export function PlayPageClient() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleFinishRef = useRef<() => void>(() => {});
 
-  const isPlaying = totalDurationMs > 0 && !isLoading && trackStatus.isReady;
+  const isPlaying = totalDurationMs > 0 && playStatus.isReady;
 
   useWakeLock(isPlaying);
 
@@ -71,7 +118,7 @@ export function PlayPageClient() {
 
   const { playbackNotes } = useTrackPlayer({
     containerRef: scrollRef,
-    enabled: demoMode && !isLoading && groups.length > 0,
+    enabled: demoMode && playStatus.isReady && groups.length > 0,
     selectedMIDIOutput,
     processNoteEvent,
   });
@@ -104,14 +151,14 @@ export function PlayPageClient() {
   // Auto-pause when losing focus or switching tabs
   useAutoPause(handlePause);
 
-  // --- Native Next.js Boundaries & Guards (Controlled return after all hooks) ---
+  // --- Native Next.js Boundaries & Guards ---
 
-  if (trackStatus.error) {
-    throw new Error(`MIDI TRACK ERROR: ${trackStatus.error}`);
+  if (playStatus.error) {
+    throw new Error(`MIDI TRACK ERROR: ${playStatus.error}`);
   }
 
-  // If not ready, return null to allow parent Suspense/loading.tsx to handle fallback
-  if (isLoading || !trackStatus.isReady || !selectedTrack || !selectedMIDIInput) {
+  // If not ready or missing essentials, we should ideally have redirected or suspended already
+  if (!playStatus.isReady || !selectedTrack || !selectedMIDIInput) {
     return null;
   }
 

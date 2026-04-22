@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useAppReset } from "@/features/collection";
+import { useAppReset } from "@/shared/hooks/use-app-reset";
 import { useNavigation } from "@/features/navigation";
 import { HomePageClient } from "./components/home-page.client";
 

@@ -41,15 +41,7 @@ export function NavigationGuard({ children }: { children: React.ReactNode }) {
       default:
         break;
     }
-  }, [
-    pathname,
-    selectedTrack,
-    selectedMIDIInput,
-    sessionResults,
-    toCollection,
-    toHome,
-    toGear,
-  ]);
+  }, [pathname, selectedTrack, selectedMIDIInput, sessionResults, toCollection, toHome, toGear]);
 
   return <>{children}</>;
 }

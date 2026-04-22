@@ -1,4 +1,5 @@
 import { PlayPageClient } from "./components/play-page.client";
+import { PlayProvider } from "./context/play-context";
 
 export const metadata = {
   title: "Stage | MIDI Jam",
@@ -7,8 +8,12 @@ export const metadata = {
 
 /**
  * PlayPage Entry (Server Component)
- * Wraps the Client logic in a Suspense boundary to leverage the native Next.js loading state.
+ * Wraps the Client logic in a PlayProvider and leverages native Next.js loading.tsx.
  */
 export default function PlayPage() {
-  return <PlayPageClient />;
+  return (
+    <PlayProvider>
+      <PlayPageClient />
+    </PlayProvider>
+  );
 }

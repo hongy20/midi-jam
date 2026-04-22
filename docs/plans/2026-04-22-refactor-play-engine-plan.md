@@ -13,12 +13,14 @@
 ### Task 1: Create PlayContext
 
 **Files:**
+
 - Create: `src/app/play/context/play-context.tsx`
 
 **Step 1: Write the combined PlayContext implementation**
-Implement `PlayContext` merging `GameSession` state and `TrackStatus` state. It should expose `playStatus`, `setPlayStatus`, `gameSession`, `setGameSession`, `resetPlay` (resets both). 
+Implement `PlayContext` merging `GameSession` state and `TrackStatus` state. It should expose `playStatus`, `setPlayStatus`, `gameSession`, `setGameSession`, `resetPlay` (resets both).
 
 **Step 2: Commit**
+
 ```bash
 git add src/app/play/context/play-context.tsx
 git commit -m "feat: create combined play engine context"
@@ -27,6 +29,7 @@ git commit -m "feat: create combined play engine context"
 ### Task 2: Migrate layout and navigation guard
 
 **Files:**
+
 - Modify: `src/app/layout.tsx`
 - Modify: `src/features/navigation/components/navigation-guard.tsx`
 
@@ -37,6 +40,7 @@ Remove `TrackProvider` from `src/app/layout.tsx` imports and JSX tree.
 In `src/features/navigation/components/navigation-guard.tsx`, remove `useTrackSync` and `useStage`. The Navigation Guard should not read `gameSession` to redirect; instead it should only check `sessionResults` for the Score route. If `ROUTES.PLAY`, check `selectedTrack` and redirect if missing. Do not call `setGameSession(null)` here; the `/play` page or Score engine should manage its own state lifecycle.
 
 **Step 3: Commit**
+
 ```bash
 git add src/app/layout.tsx src/features/navigation/components/navigation-guard.tsx
 git commit -m "refactor: remove TrackProvider from layout and clean up NavigationGuard"
@@ -45,6 +49,7 @@ git commit -m "refactor: remove TrackProvider from layout and clean up Navigatio
 ### Task 3: Strip Context from MIDI Assets
 
 **Files:**
+
 - Delete: `src/features/midi-assets/context/track-context.tsx`
 - Delete: `src/features/midi-assets/context/track-context.test.tsx`
 - Modify: `src/features/midi-assets/index.ts`
@@ -57,6 +62,7 @@ Run: `npm run type-check`
 Expected: FAIL (play-page.client.tsx and use-track-sync.ts will complain about missing useTrack).
 
 **Step 3: Commit**
+
 ```bash
 git rm src/features/midi-assets/context/track-context.tsx src/features/midi-assets/context/track-context.test.tsx
 git add src/features/midi-assets/index.ts
@@ -66,6 +72,7 @@ git commit -m "refactor: remove context from midi-assets domain"
 ### Task 4: Remove Track Sync orchestration hook
 
 **Files:**
+
 - Delete: `src/features/collection/hooks/use-track-sync.ts`
 - Modify: `src/features/collection/index.ts`
 
@@ -73,6 +80,7 @@ git commit -m "refactor: remove context from midi-assets domain"
 Delete the file and remove its export from `src/features/collection/index.ts`.
 
 **Step 2: Commit**
+
 ```bash
 git rm src/features/collection/hooks/use-track-sync.ts
 git add src/features/collection/index.ts
@@ -82,6 +90,7 @@ git commit -m "refactor: delete useTrackSync hook"
 ### Task 5: Integrate PlayContext into Play Page Client
 
 **Files:**
+
 - Modify: `src/app/play/components/play-page.client.tsx`
 - Modify: `src/app/play/page.tsx`
 
@@ -97,6 +106,7 @@ Run: `npm run type-check && npm run lint`
 Expected: PASS
 
 **Step 4: Commit**
+
 ```bash
 git add src/app/play/components/play-page.client.tsx src/app/play/page.tsx
 git commit -m "refactor: integrate PlayContext and native Suspense loading"

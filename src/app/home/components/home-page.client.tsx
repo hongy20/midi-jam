@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAppReset } from "@/features/collection";
+import { useAppReset } from "@/shared/hooks/use-app-reset";
 import { useNavigation } from "@/features/navigation";
 import { HomePageView } from "./home-page.view";
 
