@@ -1,6 +1,5 @@
 import { PlayPageClient } from "./components/play-page.client";
-import { PlayPageLoader } from "./components/play-page.loader";
-import { PlayProvider } from "./context/play-context";
+import { PlayPageLoader, PlayProvider } from "@/features/play-session";
 
 export const metadata = {
   title: "Stage | MIDI Jam",

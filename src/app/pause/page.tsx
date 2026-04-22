@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { PausePageClient } from "./components/pause-page.client";
-import { PlayProvider } from "@/app/play/context/play-context";
+import { PlayProvider } from "@/features/play-session";
 
 export const metadata: Metadata = {
   title: "Game Paused | Midi Jam",

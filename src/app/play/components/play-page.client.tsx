@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { usePlay } from "@/app/play/context/play-context";
-import { useLaneTimeline } from "@/app/play/hooks/use-lane-timeline";
+import { usePlay } from "@/features/play-session";
+import { useLaneTimeline } from "../hooks/use-lane-timeline";
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
 import {

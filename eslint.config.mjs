@@ -52,6 +52,17 @@ const eslintConfig = [
               message:
                 "Direct import from feature internals is forbidden. Please use the feature barrel file (src/features/[name]/index.ts).",
             },
+            {
+              group: [
+                "@/app/*/**",
+                "!@/app/layout",
+                "!@/app/loading",
+                "!@/app/error",
+                "!@/app/not-found",
+              ],
+              message:
+                "App routes must not import from other app routes. Use features or shared instead. For internal route logic, use relative imports.",
+            },
           ],
         },
       ],

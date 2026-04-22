@@ -1,6 +1,6 @@
 "use client";
 
-import { usePlay } from "@/app/play/context/play-context";
+import { usePlay } from "@/features/play-session";
 import { useCollection } from "@/features/collection";
 import { useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/features/navigation";
