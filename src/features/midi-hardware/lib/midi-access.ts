@@ -5,7 +5,7 @@
  */
 export async function requestMIDIAccess(): Promise<WebMidi.MIDIAccess> {
   if (typeof window === "undefined") {
-    return null as unknown as WebMidi.MIDIAccess;
+    return Promise.resolve(null as unknown as WebMidi.MIDIAccess);
   }
 
   if (typeof navigator === "undefined" || !navigator.requestMIDIAccess) {
