@@ -1,6 +1,8 @@
 "use client";
 import { memo, useEffect, useRef } from "react";
 
+import { cn } from "@/shared/lib/utils";
+
 import type { HitQuality } from "../../hooks/use-score-engine";
 import styles from "./live-score.module.css";
 
@@ -97,42 +99,60 @@ export const LiveScore = memo(function LiveScore({
   }, [getScore, getCombo, getLastHitQuality, getProgress]);
 
   return (
-    <div className={styles.container}>
+    <div className="flex items-center gap-8 w-full">
       {/* Score & Combo */}
-      <div className={styles.stats}>
-        <div className={styles.statGroup}>
-          <span className={styles.label}>Score</span>
-          <span ref={scoreValueRef} className={styles.value}>
+      <div className="flex items-center gap-6">
+        <div className="flex flex-col">
+          <span className="text-[8px] text-foreground opacity-60 font-normal uppercase tracking-widest retro">
+            Score
+          </span>
+          <span
+            ref={scoreValueRef}
+            className="text-base font-normal tabular-nums leading-relaxed retro"
+          >
             0
           </span>
         </div>
 
-        <div className={styles.statGroup}>
-          <span className={styles.label}>Combo</span>
-          <span ref={comboValueRef} className={styles.value}>
+        <div className="flex flex-col">
+          <span className="text-[8px] text-foreground opacity-60 font-normal uppercase tracking-widest retro">
+            Combo
+          </span>
+          <span
+            ref={comboValueRef}
+            className="text-base font-normal tabular-nums leading-relaxed retro"
+          >
             x0
           </span>
         </div>
       </div>
 
       {/* Hit Quality Feedback */}
-      <div className={styles.feedback}>
-        <span ref={feedbackRef} className={styles.hitText} style={{ opacity: 0 }} />
+      <div className="min-w-[120px] flex items-center justify-center">
+        <span
+          ref={feedbackRef}
+          className={cn(
+            "text-[0.875rem] font-normal uppercase tracking-tight will-change-transform transition-colors duration-100 retro",
+            styles.hitText,
+          )}
+          style={{ opacity: 0 }}
+        />
       </div>
 
       {/* Progress Bar */}
-      <div className={styles.progressSection}>
-        <div className={styles.progressHeader}>
-          <span className={styles.progressLabel}>Progress</span>
-          <span ref={progressValueRef} className={styles.progressValue}>
+      <div className="flex-1 max-w-[150px] hidden sm:flex flex-col gap-2">
+        <div className="flex justify-between items-end gap-1">
+          <span className="text-[8px] text-foreground opacity-60 font-normal uppercase retro">
+            Progress
+          </span>
+          <span ref={progressValueRef} className="text-[8px] font-normal tabular-nums retro">
             0%
           </span>
         </div>
-        <div className={styles.progressBarBg}>
+        <div className="h-3 w-full bg-foreground/10 border-4 border-foreground overflow-hidden [image-rendering:pixelated]">
           <div
             ref={progressBarFillRef}
-            className={styles.progressBarFill}
-            // Note: Transform is managed exclusively by the rAF loop via ref
+            className="h-full w-full bg-primary origin-left [transform:scaleX(0)]"
           />
         </div>
       </div>
