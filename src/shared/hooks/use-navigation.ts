@@ -3,7 +3,15 @@
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 
-import { ROUTES } from "@/shared/lib/routes";
+const ROUTES = {
+  HOME: "/home",
+  COLLECTION: "/collection",
+  GEAR: "/gear",
+  PLAY: "/play",
+  PAUSE: "/pause",
+  SCORE: "/score",
+  OPTIONS: "/options",
+} as const;
 
 /**
  * Custom hook to enforce "History Neutrality" in the game flow.
