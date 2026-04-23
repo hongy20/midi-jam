@@ -1,6 +1,12 @@
 import { Midi } from "@tonejs/midi";
 
-import type { MidiTrackData } from "@/shared/types/midi";
+import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
+
+interface MidiTrackData {
+  notes: MidiNote[];
+  groups: MidiNoteGroup[];
+  totalDurationMs: number;
+}
 
 import {
   LANE_SEGMENT_DURATION_MS,
