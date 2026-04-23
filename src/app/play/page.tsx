@@ -1,5 +1,3 @@
-import { Suspense } from "react";
-
 import { PlayPageClient } from "./components/play-page.client";
 
 export const metadata = {
@@ -9,12 +7,8 @@ export const metadata = {
 
 /**
  * PlayPage Entry (Server Component)
- * Uses standard Suspense boundary for client-side loading.
+ * Uses standard Next.js loading.tsx boundary for client-side loading.
  */
 export default function PlayPage() {
-  return (
-    <Suspense>
-      <PlayPageClient />
-    </Suspense>
-  );
+  return <PlayPageClient />;
 }
