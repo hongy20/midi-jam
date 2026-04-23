@@ -23,7 +23,7 @@ import {
 } from "@/shared/components/ui/8bit/select";
 import { Toggle } from "@/shared/components/ui/8bit/toggle";
 import { RetroModeSwitcher } from "@/shared/components/ui/retro-mode-switcher";
-import type { Mode } from "@/shared/types/mode";
+import type { Mode } from "@/shared/lib/mode";
 
 interface OptionsPageViewProps {
   difficulty: Difficulty;

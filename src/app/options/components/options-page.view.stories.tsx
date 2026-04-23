@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import type { Theme } from "@/features/theme";
-import type { Mode } from "@/shared/types/mode";
+import type { Mode } from "@/shared/lib/mode";
 
 import { OptionsPageView } from "./options-page.view";
 

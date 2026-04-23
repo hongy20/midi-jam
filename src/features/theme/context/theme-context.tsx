@@ -2,9 +2,12 @@
 
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from "react";
 
-import type { Mode } from "@/shared/types/mode";
+import { DARK, LIGHT, type Mode } from "@/shared/lib/mode";
 
 import { Theme } from "../lib/themes";
+
+const STORAGE_KEY_THEME = "midi-jam-theme";
+const STORAGE_KEY_MODE = "midi-jam-mode";
 
 interface ThemeContextType {
   theme: Theme;
@@ -26,16 +29,16 @@ export function ThemeProvider({
   const [theme, setThemeState] = useState<Theme>(() => {
     if (forcedTheme) return forcedTheme;
     if (typeof window === "undefined") return "default";
-    const saved = localStorage.getItem("midi-jam-theme") as Theme;
+    const saved = localStorage.getItem(STORAGE_KEY_THEME) as Theme;
     return saved && Object.values(Theme).includes(saved) ? saved : "default";
   });
 
   const [mode, setModeState] = useState<Mode>(() => {
     if (forcedMode) return forcedMode;
-    if (typeof window === "undefined") return "light";
-    const saved = localStorage.getItem("midi-jam-mode") as Mode;
+    if (typeof window === "undefined") return LIGHT;
+    const saved = localStorage.getItem(STORAGE_KEY_MODE) as Mode;
     if (saved) return saved;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
   });
 
   // Synchronize state with forced props when they change (e.g. Storybook controls)
@@ -53,12 +56,12 @@ export function ThemeProvider({
 
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
-    localStorage.setItem("midi-jam-theme", newTheme);
+    localStorage.setItem(STORAGE_KEY_THEME, newTheme);
   }, []);
 
   const setMode = useCallback((newMode: Mode) => {
     setModeState(newMode);
-    localStorage.setItem("midi-jam-mode", newMode);
+    localStorage.setItem(STORAGE_KEY_MODE, newMode);
   }, []);
 
   useEffect(() => {
@@ -78,41 +81,12 @@ export function ThemeProvider({
   }, [theme]);
 
   useEffect(() => {
-    if (mode === "dark") {
+    if (mode === DARK) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
     }
   }, [mode]);
-
-  // Support 'D' key hotkey for toggling theme mode
-  useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (
-        event.defaultPrevented ||
-        event.repeat ||
-        event.metaKey ||
-        event.ctrlKey ||
-        event.altKey ||
-        event.key.toLowerCase() !== "d"
-      ) {
-        return;
-      }
-
-      const target = event.target as HTMLElement;
-      const isTyping =
-        target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName);
-
-      if (isTyping) {
-        return;
-      }
-
-      setMode(mode === "dark" ? "light" : "dark");
-    }
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [mode, setMode]);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, mode, setMode }}>

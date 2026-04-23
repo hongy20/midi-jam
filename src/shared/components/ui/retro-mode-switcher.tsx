@@ -2,7 +2,7 @@
 
 import { Button } from "@/shared/components/ui/8bit/button";
 import { cn } from "@/shared/lib/utils";
-import type { Mode } from "@/shared/types/mode";
+import type { Mode } from "@/shared/lib/mode";
 
 interface RetroModeSwitcherProps {
   className?: string;
