@@ -3,8 +3,8 @@
 export type { Difficulty } from "./context/options-context";
 export { OptionsProvider, useOptions } from "./context/options-context";
 export {
+  DIFFICULTY_SPEEDS,
   difficultyToSpeed,
   getDifficultyLabel,
   speedToDifficulty,
-  DIFFICULTY_SPEEDS,
 } from "./lib/difficulty";

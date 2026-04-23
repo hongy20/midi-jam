@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@/shared/components/ui/8bit/button";
-import { cn } from "@/shared/lib/utils";
 import type { Mode } from "@/shared/lib/mode";
+import { cn } from "@/shared/lib/utils";
 
 interface RetroModeSwitcherProps {
   className?: string;

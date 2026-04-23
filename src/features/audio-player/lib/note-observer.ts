@@ -41,9 +41,7 @@ export function createNoteObserver(
     (entries) => {
       const exits = entries
         .filter((e) => !e.isIntersecting)
-        .filter(
-          (e) => e.rootBounds && e.boundingClientRect.top > e.rootBounds.bottom,
-        );
+        .filter((e) => e.rootBounds && e.boundingClientRect.top > e.rootBounds.bottom);
       const entriesIn = entries.filter((e) => e.isIntersecting);
 
       for (const entry of exits) {

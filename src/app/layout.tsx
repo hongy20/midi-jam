@@ -5,9 +5,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 import { CollectionProvider } from "@/features/collection";
 import { GearProvider } from "@/features/midi-hardware";
+import { OptionsProvider } from "@/features/options";
 import { PlayProvider } from "@/features/play-session";
 import { ScoreProvider } from "@/features/score";
-import { OptionsProvider } from "@/features/options";
 import { ThemeProvider } from "@/features/theme";
 
 const geistSans = Geist({

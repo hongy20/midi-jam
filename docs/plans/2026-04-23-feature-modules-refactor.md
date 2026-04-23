@@ -13,6 +13,7 @@
 ### Task 1: `audio-player` Observer Extraction
 
 **Files:**
+
 - Create: `src/features/audio-player/lib/note-observer.ts`
 - Modify: `src/features/audio-player/hooks/use-track-player.ts`
 - Test: `src/features/audio-player/hooks/use-track-player.test.ts` (Existing)
@@ -28,6 +29,7 @@ Run: `npm test src/features/audio-player/hooks/use-track-player.test.ts`
 Expected: PASS
 
 **Step 4: Commit**
+
 ```bash
 git add src/features/audio-player/
 git commit -m "refactor(audio-player): extract observer logic to lib"
@@ -38,6 +40,7 @@ git commit -m "refactor(audio-player): extract observer logic to lib"
 ### Task 2: `collection` Rename
 
 **Files:**
+
 - Rename: `src/features/collection/lib/sound-track.ts` -> `src/features/collection/lib/song-track.ts`
 - Rename: `src/features/collection/lib/sound-track.test.ts` -> `src/features/collection/lib/song-track.test.ts`
 - Modify: `src/features/collection/index.ts`
@@ -54,6 +57,7 @@ Run: `npm test src/features/collection/lib/song-track.test.ts`
 Expected: PASS
 
 **Step 4: Commit**
+
 ```bash
 git add src/features/collection/
 git commit -m "refactor(collection): rename sound-track to song-track"
@@ -64,6 +68,7 @@ git commit -m "refactor(collection): rename sound-track to song-track"
 ### Task 3: `settings` to `options` Full Rename
 
 **Files:**
+
 - Rename: `src/features/settings/` -> `src/features/options/`
 - Create: `src/features/options/lib/difficulty.ts`
 - Modify: `src/features/options/index.ts`
@@ -84,6 +89,7 @@ Run: `npm run type-check && npm run build`
 Expected: PASS
 
 **Step 5: Commit**
+
 ```bash
 git add src/
 git commit -m "refactor(settings): rename to options and extract difficulty logic"
@@ -94,6 +100,7 @@ git commit -m "refactor(settings): rename to options and extract difficulty logi
 ### Task 4: `shared/lib/mode.ts` and Theme Cleanup
 
 **Files:**
+
 - Create: `src/shared/lib/mode.ts`
 - Delete: `src/shared/types/mode.ts`
 - Modify: `src/features/theme/context/theme-context.tsx`
@@ -111,6 +118,7 @@ Manual test in browser: press 'D' on options page.
 Expected: No theme toggle.
 
 **Step 4: Commit**
+
 ```bash
 git add src/
 git commit -m "refactor(theme): move mode to lib and cleanup hotkeys"
@@ -121,6 +129,7 @@ git commit -m "refactor(theme): move mode to lib and cleanup hotkeys"
 ### Task 5: `score` Tailwind Migration
 
 **Files:**
+
 - Modify: `src/features/score/components/live-score/live-score.tsx`
 - Modify: `src/features/score/components/live-score/live-score.module.css`
 
@@ -135,6 +144,7 @@ Check Storybook or run dev server.
 Expected: No visual change.
 
 **Step 4: Commit**
+
 ```bash
 git add src/features/score/
 git commit -m "refactor(score): migrate live-score to tailwind"

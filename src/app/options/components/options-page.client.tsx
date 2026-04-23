@@ -4,10 +4,10 @@ import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
 import {
+  type Difficulty,
   difficultyToSpeed,
   speedToDifficulty,
   useOptions,
-  type Difficulty,
 } from "@/features/options";
 import { useTheme } from "@/features/theme";
 import { useNavigation } from "@/shared/hooks/use-navigation";

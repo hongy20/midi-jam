@@ -2,7 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 
-import { getDifficultyLabel, type Difficulty } from "@/features/options";
+import { type Difficulty, getDifficultyLabel } from "@/features/options";
 import type { Theme } from "@/features/theme";
 import { ThemePicker } from "@/features/theme";
 import { Button } from "@/shared/components/ui/8bit/button";
