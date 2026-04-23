@@ -4,5 +4,5 @@ export {
   computeLaneSegmentAnimationDelay,
   getVisibleSegmentIndexes,
 } from "./lib/lane-segment-utils";
-export { loadMidiFile } from "./lib/midi-loader";
+export { getTrackData, loadMidiFile } from "./lib/midi-loader";
 export { getBarLines, parseMidiNotes } from "./lib/midi-parser";

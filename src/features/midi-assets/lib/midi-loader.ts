@@ -1,6 +1,13 @@
 import { Midi } from "@tonejs/midi";
 
-import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS, MIDI_DUMMY_NOTE_PITCH } from "./constant";
+import {
+  LANE_SEGMENT_DURATION_MS,
+  LEAD_IN_DEFAULT_MS,
+  LEAD_OUT_DEFAULT_MS,
+  MIDI_DUMMY_NOTE_PITCH,
+} from "./constant";
+import { buildMidiNoteGroups } from "./lane-segment-utils";
+import { parseMidiNotes } from "./midi-parser";
 
 /**
  * Patches a MIDI object to include lead-in and lead-out margins.
@@ -105,4 +112,21 @@ export async function loadMidiFile(url: string): Promise<Midi> {
   const arrayBuffer = await response.arrayBuffer();
   const midi = new Midi(arrayBuffer);
   return patchMidi(midi);
+}
+
+/**
+ * High-level utility to load, parse, and group MIDI data in one call.
+ * This is the primary entry point for the play route's data pipeline.
+ */
+export async function getTrackData(url: string) {
+  const midi = await loadMidiFile(url);
+  const notes = parseMidiNotes(midi);
+  const totalDurationMs = midi.duration * 1000;
+  const groups = buildMidiNoteGroups({
+    notes,
+    totalDurationMs,
+    thresholdMs: LANE_SEGMENT_DURATION_MS,
+  });
+
+  return { notes, groups, totalDurationMs };
 }
