@@ -10,23 +10,7 @@ interface GameSession {
   currentProgress: number;
 }
 
-type PlayTrackStatus =
-  | { isLoading: true; isReady: false; error: null }
-  | { isLoading: false; isReady: false; error: string | null }
-  | {
-      isLoading: false;
-      isReady: true;
-      totalDurationMs: number;
-      notes: MidiNote[];
-      groups: MidiNoteGroup[];
-      error: null;
-    };
-
 interface PlayContextType {
-  // Track State
-  playStatus: PlayTrackStatus;
-  setPlayStatus: (status: PlayTrackStatus) => void;
-
   // Session State
   gameSession: GameSession | null;
   setGameSession: (session: GameSession | null) => void;
@@ -38,28 +22,19 @@ interface PlayContextType {
 const PlayContext = createContext<PlayContextType | undefined>(undefined);
 
 export function PlayProvider({ children }: { children: ReactNode }) {
-  const [playStatus, setPlayStatus] = useState<PlayTrackStatus>({
-    isLoading: false,
-    isReady: false,
-    error: null,
-  });
-
   const [gameSession, setGameSession] = useState<GameSession | null>(null);
 
   const resetPlay = useCallback(() => {
-    setPlayStatus({ isLoading: false, isReady: false, error: null });
     setGameSession(null);
   }, []);
 
   const value: PlayContextType = useMemo(
     () => ({
-      playStatus,
-      setPlayStatus,
       gameSession,
       setGameSession,
       resetPlay,
     }),
-    [playStatus, gameSession, resetPlay],
+    [gameSession, resetPlay],
   );
 
   return <PlayContext.Provider value={value}>{children}</PlayContext.Provider>;
