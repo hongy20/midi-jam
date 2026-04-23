@@ -1,7 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 
 import { computeLaneSegmentAnimationDelay } from "@/features/midi-assets";
-import { PIANO_GRID_ITEM_CLASS } from "@/features/piano";
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
 import styles from "./lane-segment.module.css";
@@ -9,9 +8,10 @@ import styles from "./lane-segment.module.css";
 interface LaneSegmentProps {
   group: MidiNoteGroup;
   getCurrentTimeMs: () => number;
+  noteClassName?: string;
 }
 
-export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
+export function LaneSegment({ group, getCurrentTimeMs, noteClassName }: LaneSegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Phase-lock the CSS animation to the master clock at the exact moment this
@@ -75,7 +75,7 @@ export function LaneSegment({ group, getCurrentTimeMs }: LaneSegmentProps) {
             key={note.id}
             data-pitch={note.pitch}
             data-note-id={note.id}
-            className={`${styles.note} ${PIANO_GRID_ITEM_CLASS}`}
+            className={`${styles.note} ${noteClassName || ""}`}
             style={{
               top: `${topPercent}%`,
               height: `${heightPercent}%`,
