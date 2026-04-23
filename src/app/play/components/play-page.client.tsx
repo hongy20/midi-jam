@@ -9,7 +9,7 @@ import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { getPianoLayoutUnits } from "@/features/piano";
 import { useLaneTimeline, usePlay } from "@/features/play-session";
 import { useScore, useScoreEngine } from "@/features/score";
-import { useOptions } from "@/features/settings";
+import { useOptions } from "@/features/options";
 import { LANE_SCROLL_DURATION_MS } from "@/features/visualizer";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";

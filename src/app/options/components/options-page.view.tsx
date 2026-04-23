@@ -2,7 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 
-import type { Difficulty } from "@/features/settings";
+import { getDifficultyLabel, type Difficulty } from "@/features/options";
 import type { Theme } from "@/features/theme";
 import { ThemePicker } from "@/features/theme";
 import { Button } from "@/shared/components/ui/8bit/button";
@@ -53,7 +53,7 @@ export function OptionsPageView({
       {/* Header */}
       <div className="w-full max-w-2xl flex items-center justify-center shrink-0">
         <h1 className="retro text-2xl md:text-3xl tracking-tighter uppercase text-center">
-          Settings
+          Options
         </h1>
       </div>
 
@@ -95,9 +95,11 @@ export function OptionsPageView({
                         <SelectValue placeholder="Select Difficulty" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="easy">EASY (0.5x)</SelectItem>
-                        <SelectItem value="normal">NORMAL (1.0x)</SelectItem>
-                        <SelectItem value="hard">HARD (2.0x)</SelectItem>
+                        {(["easy", "normal", "hard"] as const).map((d) => (
+                          <SelectItem key={d} value={d}>
+                            {getDifficultyLabel(d)}
+                          </SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
