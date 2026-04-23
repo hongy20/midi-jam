@@ -4,7 +4,6 @@ import { use, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
-import { getTrackData } from "@/features/midi-assets";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { getPianoLayoutUnits } from "@/features/piano";
 import { useLaneTimeline, usePlay } from "@/features/play-session";
@@ -25,7 +24,7 @@ import { PlayPageView } from "./play-page.view";
  */
 export function PlayPageClient() {
   const { toScore, toPause, toHome, toCollection } = useNavigation();
-  const { selectedTrack } = useCollection();
+  const { selectedTrack, trackDataPromise } = useCollection();
   const { selectedMIDIInput, selectedMIDIOutput } = useGear();
   const { gameSession, setGameSession } = usePlay();
   const { speed, demoMode } = useOptions();
@@ -40,12 +39,6 @@ export function PlayPageClient() {
       toCollection();
     }
   }, [selectedMIDIInput, selectedTrack, toHome, toCollection]);
-
-  // Create the data promise (stable across re-renders for same track)
-  const trackDataPromise = useMemo(() => {
-    if (!selectedTrack) return null;
-    return getTrackData(selectedTrack.url);
-  }, [selectedTrack]);
 
   // Resolve data via Suspense (use hook)
   const trackData = trackDataPromise ? use(trackDataPromise) : null;

@@ -3,6 +3,10 @@ import { describe, expect, it, vi } from "vitest";
 
 import { CollectionProvider, useCollection } from "./collection-context";
 
+vi.mock("../../midi-assets/lib/midi-loader", () => ({
+  getTrackData: vi.fn().mockResolvedValue({ notes: [], groups: [], totalDurationMs: 0 }),
+}));
+
 const mockTrack = {
   id: "track-1",
   name: "Test Track",
