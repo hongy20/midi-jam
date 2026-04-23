@@ -15,6 +15,7 @@ import { useFullscreen } from "@/shared/hooks/use-fullscreen";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 import { useWakeLock } from "@/shared/hooks/use-wake-lock";
 
+import { usePlayOrchestrator } from "../../providers/play-orchestrator";
 import { PlayPageView } from "./play-page.view";
 
 /**
@@ -24,7 +25,8 @@ import { PlayPageView } from "./play-page.view";
  */
 export function PlayPageClient() {
   const { toScore, toPause, toHome, toCollection } = useNavigation();
-  const { selectedTrack, trackDataPromise } = useCollection();
+  const { selectedTrack } = useCollection();
+  const { trackDataPromise } = usePlayOrchestrator();
   const { selectedMIDIInput, selectedMIDIOutput } = useGear();
   const { gameSession, setGameSession } = usePlay();
   const { speed, demoMode } = useOptions();
