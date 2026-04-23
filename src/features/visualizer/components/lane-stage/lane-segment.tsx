@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef } from "react";
 
-import { computeLaneSegmentAnimationDelay } from "@/features/midi-assets";
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
+import { computeLaneSegmentAnimationDelay } from "../../lib/utils";
 import styles from "./lane-segment.module.css";
 
 interface LaneSegmentProps {

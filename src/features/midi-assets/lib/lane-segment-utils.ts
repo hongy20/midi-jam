@@ -1,6 +1,6 @@
 import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
 
-import { CLUSTER_CONNECTION_GAP_MS, LANE_SCROLL_DURATION_MS } from "./constant";
+import { CLUSTER_CONNECTION_GAP_MS } from "./constant";
 
 interface BuildMidiNoteGroupsOptions {
   notes: MidiNote[];
@@ -10,14 +10,7 @@ interface BuildMidiNoteGroupsOptions {
 
 /**
  * Groups notes into discrete clusters for rendering.
- *
- * Algorithm:
- * 1. Pass 1: Identify note clusters (Raw Groups) based on thresholdMs.
- * 2. Pass 2: 'Stitch' adjacent segments together at the midpoint of their temporal gaps.
- *    This ensures a seamless, non-overlapping visual experience and provides natural
- *    lead-in/lead-out buffers for animations.
  */
-
 export function buildMidiNoteGroups({
   notes,
   totalDurationMs,
@@ -27,18 +20,13 @@ export function buildMidiNoteGroups({
 
   const groups: MidiNoteGroup[] = [];
   let currentGroupNotes: MidiNote[] = [];
-  let currentStartMs = 0; // First segment starts at 0 (lead-in)
+  let currentStartMs = 0;
   let currentMaxEndMs = 0;
 
   notes.forEach((note, index) => {
     const noteEndMs = note.startTimeMs + note.durationMs;
     const isFirstNote = currentGroupNotes.length === 0;
 
-    // Inclusion Criteria:
-    // 1. First note in a new segment.
-    // 2. Or the segment's visual duration is still under the threshold.
-    // 3. Or the note is connected to/overlapping with the current cluster extent.
-    // 4. Or starting a new segment now would leave a tiny "tail" at the end of the song.
     const visualDuration = note.startTimeMs - currentStartMs;
     const isUnderThreshold = visualDuration < thresholdMs;
     const isConnected = note.startTimeMs <= currentMaxEndMs + CLUSTER_CONNECTION_GAP_MS;
@@ -48,7 +36,6 @@ export function buildMidiNoteGroups({
       currentGroupNotes.push(note);
       currentMaxEndMs = Math.max(currentMaxEndMs, noteEndMs);
     } else {
-      // Finalize current group and split
       const nextNoteStartMs = note.startTimeMs;
       const midpoint = (currentMaxEndMs + nextNoteStartMs) / 2;
 
@@ -59,13 +46,11 @@ export function buildMidiNoteGroups({
         notes: currentGroupNotes,
       });
 
-      // Start new group from the midpoint
       currentStartMs = midpoint;
       currentGroupNotes = [note];
       currentMaxEndMs = noteEndMs;
     }
 
-    // Finalize the last group when we reach the end of the notes
     if (index === notes.length - 1) {
       groups.push({
         index: groups.length,
@@ -77,68 +62,4 @@ export function buildMidiNoteGroups({
   });
 
   return groups;
-}
-
-/**
- * Returns an array of segment indexes that should be visibly mounted in the DOM.
- * We follow an aggressive strategy: a segment is only mounted if it is within
- * the scrolling window [T - scrollDurationMs, T + scrollDurationMs].
- */
-export function getVisibleSegmentIndexes(
-  currentTimeMs: number,
-  segmentGroups: MidiNoteGroup[],
-  scrollDurationMs: number,
-): number[] {
-  if (segmentGroups.length === 0) return [];
-
-  // Find the 'current' group (the one we are in or just passed)
-  let currentIndex = 0;
-  for (let i = 0; i < segmentGroups.length; i++) {
-    if (currentTimeMs >= segmentGroups[i].startMs) {
-      currentIndex = i;
-    } else {
-      break;
-    }
-  }
-
-  const visible: number[] = [];
-  // Check the sliding window [currentIndex - 1, currentIndex, currentIndex + 1]
-  // against the actual visibility bounds.
-  for (let i = currentIndex - 1; i <= currentIndex + 1; i++) {
-    if (i >= 0 && i < segmentGroups.length) {
-      const group = segmentGroups[i];
-      const groupEndMs = group.startMs + group.durationMs;
-
-      // A segment is visible if it hasn't completely scrolled past the bottom
-      // AND it is within the pre-mount window above the viewport.
-      // The lower bound is exactly on visual entry.
-      const isVisible =
-        currentTimeMs >= group.startMs - scrollDurationMs &&
-        currentTimeMs <= groupEndMs + scrollDurationMs;
-
-      if (isVisible) {
-        visible.push(i);
-      }
-    }
-  }
-
-  return visible;
-}
-
-/**
- * Computes the CSS `animation-delay` (always negative) that phase-locks a LaneSegment's
- * fall animation to the master playback clock at the moment the element is inserted into
- * the DOM.
- *
- * A negative delay tells the browser to start the animation as if it began |delay| ms ago,
- * which is exactly equivalent to the linear-interpolation logic of the old sync-loop.
- *
- * @param mountTimeMs  - Snapshot of getCurrentTimeMs() taken inside useLayoutEffect.
- * @param groupStartMs - The group's startMs (master clock time when the group begins).
- */
-export function computeLaneSegmentAnimationDelay(
-  mountTimeMs: number,
-  groupStartMs: number,
-): number {
-  return -(mountTimeMs - groupStartMs + LANE_SCROLL_DURATION_MS);
 }

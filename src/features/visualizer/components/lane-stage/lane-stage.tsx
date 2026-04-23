@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { getVisibleSegmentIndexes, LANE_SCROLL_DURATION_MS } from "@/features/midi-assets";
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
+import { LANE_SCROLL_DURATION_MS } from "../../lib/constants";
+import { getVisibleSegmentIndexes } from "../../lib/utils";
 import { LaneSegment } from "./lane-segment";
 
 interface LaneStageProps {

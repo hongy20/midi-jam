@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { buildMidiNoteGroups } from "@/features/midi-assets";
+import type { MidiNoteGroup } from "@/shared/types/midi";
 
 import { LaneStage } from "./lane-stage";
 
@@ -24,26 +24,29 @@ global.ResizeObserver = class ResizeObserver {
 };
 
 describe("LaneStage", () => {
-  const mockGroups = buildMidiNoteGroups({
-    notes: [
-      {
-        id: "1",
-        pitch: 60,
-        startTimeMs: 0,
-        durationMs: 1000,
-        velocity: 0.8,
-      },
-      {
-        id: "2",
-        pitch: 61,
-        startTimeMs: 1000,
-        durationMs: 1000,
-        velocity: 0.8,
-      },
-    ],
-    totalDurationMs: 3000,
-    thresholdMs: 10000,
-  });
+  const mockGroups: MidiNoteGroup[] = [
+    {
+      index: 0,
+      startMs: 0,
+      durationMs: 3000,
+      notes: [
+        {
+          id: "1",
+          pitch: 60,
+          startTimeMs: 0,
+          durationMs: 1000,
+          velocity: 0.8,
+        },
+        {
+          id: "2",
+          pitch: 61,
+          startTimeMs: 1000,
+          durationMs: 1000,
+          velocity: 0.8,
+        },
+      ],
+    },
+  ];
 
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };

@@ -12,7 +12,7 @@ import { PausePageView } from "./pause-page.view";
 
 export function PausePageClient() {
   const { toPlay, toOptions, toScore, toHome, toCollection } = useNavigation();
-  const { playStatus, gameSession, setGameSession } = usePlay();
+  const { gameSession, setGameSession } = usePlay();
   const { selectedMIDIInput } = useGear();
   const { selectedTrack } = useCollection();
   const { setSessionResults } = useScore();
@@ -34,7 +34,7 @@ export function PausePageClient() {
       }}
       onOptions={() => toOptions("pause")}
       onQuit={() => {
-        if (gameSession && playStatus.isReady) {
+        if (gameSession) {
           const { score: currentScore, combo } = gameSession;
           setSessionResults({
             score: currentScore,

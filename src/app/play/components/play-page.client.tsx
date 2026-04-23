@@ -4,13 +4,13 @@ import { use, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
-import { getTrackData, LANE_SCROLL_DURATION_MS } from "@/features/midi-assets";
+import { getTrackData } from "@/features/midi-assets";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
-import { BackgroundLane, getPianoLayoutUnits } from "@/features/piano";
+import { getPianoLayoutUnits } from "@/features/piano";
 import { useLaneTimeline, usePlay } from "@/features/play-session";
-import { LaneStage } from "@/features/visualizer";
 import { useScore, useScoreEngine } from "@/features/score";
 import { useOptions } from "@/features/settings";
+import { LANE_SCROLL_DURATION_MS } from "@/features/visualizer";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
 import { useNavigation } from "@/shared/hooks/use-navigation";
@@ -50,9 +50,9 @@ export function PlayPageClient() {
   // Resolve data via Suspense (use hook)
   const trackData = trackDataPromise ? use(trackDataPromise) : null;
 
-  // Extract data with fallbacks
-  const notes = trackData?.notes ?? [];
-  const groups = trackData?.groups ?? [];
+  // Extract data with stable references for hook dependencies
+  const notes = useMemo(() => trackData?.notes ?? [], [trackData]);
+  const groups = useMemo(() => trackData?.groups ?? [], [trackData]);
   const totalDurationMs = trackData?.totalDurationMs ?? 0;
 
   // Calculate dynamic piano range for consistent grid alignment
@@ -61,7 +61,7 @@ export function PlayPageClient() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleFinishRef = useRef<() => void>(() => {});
 
-  const isPlaying = totalDurationMs > 0 && playStatus.isReady;
+  const isPlaying = totalDurationMs > 0;
 
   useWakeLock(isPlaying);
 

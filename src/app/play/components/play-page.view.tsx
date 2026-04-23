@@ -1,17 +1,13 @@
 "use client";
 
-import { useMemo } from "react";
 import { Maximize2, Minimize2, Pause } from "lucide-react";
 
-import { PianoKeyboard, PIANO_GRID_ITEM_CLASS, BackgroundLane } from "@/features/piano";
-import { LaneStage } from "@/features/visualizer";
-import { useOptions } from "@/features/settings";
-import { useTheme } from "@/features/theme";
+import { BackgroundLane, PIANO_GRID_ITEM_CLASS, PianoKeyboard } from "@/features/piano";
 import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
+import { LaneStage } from "@/features/visualizer";
 import { Button } from "@/shared/components/ui/8bit/button";
-import { type MidiNote, type MidiNoteGroup } from "@/shared/types/midi";
-import type { Track } from "@/shared/types/track";
+import { type MidiNoteGroup } from "@/shared/types/midi";
 
 import styles from "./play-page.view.module.css";
 
