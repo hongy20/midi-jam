@@ -1,13 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { use, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
-import { LANE_SCROLL_DURATION_MS } from "@/features/midi-assets";
+import { getTrackData, LANE_SCROLL_DURATION_MS } from "@/features/midi-assets";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
-import { getPianoLayoutUnits } from "@/features/piano";
-import { usePlay } from "@/features/play-session";
+import { BackgroundLane, getPianoLayoutUnits } from "@/features/piano";
+import { useLaneTimeline, usePlay } from "@/features/play-session";
+import { LaneStage } from "@/features/visualizer";
 import { useScore, useScoreEngine } from "@/features/score";
 import { useOptions } from "@/features/settings";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
@@ -15,7 +16,6 @@ import { useFullscreen } from "@/shared/hooks/use-fullscreen";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 import { useWakeLock } from "@/shared/hooks/use-wake-lock";
 
-import { useLaneTimeline } from "../hooks/use-lane-timeline";
 import { PlayPageView } from "./play-page.view";
 
 /**
@@ -27,15 +27,33 @@ export function PlayPageClient() {
   const { toScore, toPause, toHome, toCollection } = useNavigation();
   const { selectedTrack } = useCollection();
   const { selectedMIDIInput, selectedMIDIOutput } = useGear();
-  const { playStatus, gameSession, setGameSession } = usePlay();
+  const { gameSession, setGameSession } = usePlay();
   const { speed, demoMode } = useOptions();
   const { setSessionResults } = useScore();
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
+  // Navigation Guard: Redirect if essentials are missing
+  useEffect(() => {
+    if (!selectedMIDIInput) {
+      toHome();
+    } else if (!selectedTrack) {
+      toCollection();
+    }
+  }, [selectedMIDIInput, selectedTrack, toHome, toCollection]);
+
+  // Create the data promise (stable across re-renders for same track)
+  const trackDataPromise = useMemo(() => {
+    if (!selectedTrack) return null;
+    return getTrackData(selectedTrack.url);
+  }, [selectedTrack]);
+
+  // Resolve data via Suspense (use hook)
+  const trackData = trackDataPromise ? use(trackDataPromise) : null;
+
   // Extract data with fallbacks
-  const notes = useMemo(() => (playStatus.isReady ? playStatus.notes : []), [playStatus]);
-  const groups = useMemo(() => (playStatus.isReady ? playStatus.groups : []), [playStatus]);
-  const totalDurationMs = playStatus.isReady ? playStatus.totalDurationMs : 0;
+  const notes = trackData?.notes ?? [];
+  const groups = trackData?.groups ?? [];
+  const totalDurationMs = trackData?.totalDurationMs ?? 0;
 
   // Calculate dynamic piano range for consistent grid alignment
   const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(notes), [notes]);
@@ -70,7 +88,7 @@ export function PlayPageClient() {
 
   const { playbackNotes } = useTrackPlayer({
     containerRef: scrollRef,
-    enabled: demoMode && playStatus.isReady && groups.length > 0,
+    enabled: demoMode && !!trackData && groups.length > 0,
     selectedMIDIOutput,
     processNoteEvent,
   });
@@ -103,23 +121,10 @@ export function PlayPageClient() {
   // Auto-pause when losing focus or switching tabs
   useAutoPause(handlePause);
 
-  // --- Navigation Guards ---
-  useEffect(() => {
-    if (!selectedMIDIInput) {
-      toHome();
-    } else if (!selectedTrack) {
-      toCollection();
-    }
-  }, [selectedMIDIInput, selectedTrack, toHome, toCollection]);
-
   // --- Native Next.js Boundaries & Guards ---
 
-  if (playStatus.error) {
-    throw new Error(`MIDI TRACK ERROR: ${playStatus.error}`);
-  }
-
-  // If not ready or missing essentials, we should ideally have redirected or suspended already
-  if (!playStatus.isReady || !selectedTrack || !selectedMIDIInput) {
+  // If missing essentials, we should ideally have redirected or suspended already
+  if (!trackData || !selectedTrack || !selectedMIDIInput) {
     return null;
   }
 
