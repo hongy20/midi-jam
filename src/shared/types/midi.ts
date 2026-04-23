@@ -22,3 +22,9 @@ export interface MIDINoteEvent {
   pitch: number;
   velocity: number;
 }
+
+export interface MidiTrackData {
+  notes: MidiNote[];
+  groups: MidiNoteGroup[];
+  totalDurationMs: number;
+}

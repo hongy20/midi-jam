@@ -25,8 +25,6 @@ export const metadata: Metadata = {
   description: "The ultimate immersive piano experience",
 };
 
-import { PlayOrchestrator } from "./providers/play-orchestrator";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -39,11 +37,9 @@ export default function RootLayout({
           <GearProvider>
             <OptionsProvider>
               <CollectionProvider>
-                <PlayOrchestrator>
-                  <ScoreProvider>
-                    <PlayProvider>{children}</PlayProvider>
-                  </ScoreProvider>
-                </PlayOrchestrator>
+                <ScoreProvider>
+                  <PlayProvider>{children}</PlayProvider>
+                </ScoreProvider>
               </CollectionProvider>
             </OptionsProvider>
           </GearProvider>
