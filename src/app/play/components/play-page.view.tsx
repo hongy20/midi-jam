@@ -2,13 +2,13 @@
 
 import { Maximize2, Minimize2, Pause } from "lucide-react";
 
-import { PianoKeyboard } from "@/features/piano";
+import { BackgroundLane, PIANO_GRID_ITEM_CLASS, PianoKeyboard } from "@/features/piano";
 import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
+import { LaneStage } from "@/features/visualizer";
 import { Button } from "@/shared/components/ui/8bit/button";
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
-import { LaneStage } from "./lane-stage/lane-stage";
 import styles from "./play-page.view.module.css";
 
 interface PlayPageViewProps {
@@ -98,7 +98,14 @@ export function PlayPageView({
       </header>
 
       <main className={styles.main}>
-        <LaneStage groups={groups} scrollRef={scrollRef} getCurrentTimeMs={getCurrentTimeMs} />
+        <LaneStage
+          groups={groups}
+          scrollRef={scrollRef}
+          getCurrentTimeMs={getCurrentTimeMs}
+          noteClassName={PIANO_GRID_ITEM_CLASS}
+        >
+          <BackgroundLane />
+        </LaneStage>
       </main>
 
       <footer className={styles.footer}>

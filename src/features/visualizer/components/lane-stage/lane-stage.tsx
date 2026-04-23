@@ -1,18 +1,26 @@
 import { useEffect, useState } from "react";
 
-import { getVisibleSegmentIndexes, LANE_SCROLL_DURATION_MS } from "@/features/midi-assets";
-import { BackgroundLane } from "@/features/piano";
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
+import { LANE_SCROLL_DURATION_MS } from "../../lib/constants";
+import { getVisibleSegmentIndexes } from "../../lib/utils";
 import { LaneSegment } from "./lane-segment";
 
 interface LaneStageProps {
   groups: MidiNoteGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
+  noteClassName?: string;
+  children?: React.ReactNode;
 }
 
-export function LaneStage({ groups, scrollRef, getCurrentTimeMs }: LaneStageProps) {
+export function LaneStage({
+  groups,
+  scrollRef,
+  getCurrentTimeMs,
+  noteClassName,
+  children,
+}: LaneStageProps) {
   const [renderIndexes, setRenderIndexes] = useState<number[]>(() =>
     getVisibleSegmentIndexes(getCurrentTimeMs(), groups, LANE_SCROLL_DURATION_MS),
   );
@@ -34,11 +42,16 @@ export function LaneStage({ groups, scrollRef, getCurrentTimeMs }: LaneStageProp
 
   return (
     <div className="relative w-full h-full overflow-hidden bg-background/5">
-      <BackgroundLane />
+      {children}
 
       <div ref={scrollRef} className="absolute inset-0 overflow-hidden">
         {renderIndexes.map((idx) => (
-          <LaneSegment key={idx} group={groups[idx]} getCurrentTimeMs={getCurrentTimeMs} />
+          <LaneSegment
+            key={idx}
+            group={groups[idx]}
+            getCurrentTimeMs={getCurrentTimeMs}
+            noteClassName={noteClassName}
+          />
         ))}
       </div>
     </div>
