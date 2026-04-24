@@ -24,7 +24,7 @@
       "src/app/**/error.tsx",
       "src/app/**/not-found.tsx",
       "src/app/**/route.ts",
-      "src/middleware.ts",
+      "src/proxy.ts",
     ],
   },
   "vitest": {
