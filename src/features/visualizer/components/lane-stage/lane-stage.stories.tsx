@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { LaneStage } from "./lane-stage";
 
 const meta: Meta<typeof LaneStage> = {
-  title: "Feature/Visualizer/LaneStage",
+  title: "Features/Visualizer/LaneStage",
   component: LaneStage,
   parameters: {
     layout: "fullscreen",

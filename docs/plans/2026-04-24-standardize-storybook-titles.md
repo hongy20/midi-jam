@@ -1,6 +1,6 @@
 # Plan: Standardize Storybook Titles
 
-Standardize Storybook titles across the project to follow a cleaner hierarchy: `App/Name`, `Feature/Name`, and `Shared/Name`.
+Standardize Storybook titles across the project to follow a cleaner hierarchy: `App/Name`, `Features/Name`, and `Shared/Name`.
 
 ## Proposed Changes
 
