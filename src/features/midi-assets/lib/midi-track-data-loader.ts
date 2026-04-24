@@ -6,7 +6,7 @@ import { loadMidiFile } from "./midi-loader";
 import { buildMidiNoteGroups } from "./midi-note-group-parser";
 import { parseMidiNotes } from "./midi-note-parser";
 
-export interface MidiTrackData {
+interface MidiTrackData {
   notes: MidiNote[];
   groups: MidiNoteGroup[];
   totalDurationMs: number;
