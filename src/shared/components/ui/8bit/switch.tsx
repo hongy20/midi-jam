@@ -6,7 +6,7 @@ import React from "react";
 import { cn } from "@/shared/lib/utils";
 
 const switchVariants = cva(
-  "inline-flex h-10 w-20 shrink-0 cursor-pointer items-center border-8 border-foreground dark:border-ring transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-foreground disabled:cursor-not-allowed disabled:opacity-50",
+  "border-foreground dark:border-ring focus-visible:ring-foreground inline-flex h-10 w-20 shrink-0 cursor-pointer items-center border-8 transition-colors focus-visible:ring-4 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       checked: {

@@ -62,32 +62,32 @@ export function ThemePicker({ activeTheme, onThemeChange }: ThemePickerProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div className="relative border-y-6 border-foreground dark:border-ring bg-input/40 font-retro tracking-tighter uppercase cursor-pointer group hover:bg-input/60 transition-all active:translate-y-1">
-          <div className="flex items-center justify-between px-4 h-9 w-full relative z-10">
+        <div className="border-foreground dark:border-ring bg-input/40 font-retro group hover:bg-input/60 relative cursor-pointer border-y-6 tracking-tighter uppercase transition-all active:translate-y-1">
+          <div className="relative z-10 flex h-9 w-full items-center justify-between px-4">
             <div className="flex items-center gap-3">
               <span
-                className="inline-block h-4 w-4 border-2 border-foreground shrink-0"
+                className="border-foreground inline-block h-4 w-4 shrink-0 border-2"
                 style={{
                   backgroundColor: themes.find((t) => t.name === activeTheme)?.color,
                 }}
               />
               <span className="truncate text-xs md:text-sm">{formatThemeName(activeTheme)}</span>
             </div>
-            <span className="opacity-50 text-[10px] ml-2">▼</span>
+            <span className="ml-2 text-[10px] opacity-50">▼</span>
           </div>
 
           <div
-            className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none z-20"
+            className="border-foreground dark:border-ring pointer-events-none absolute inset-0 z-20 -mx-1.5 border-x-6"
             aria-hidden="true"
           />
         </div>
       </DialogTrigger>
-      <DialogContent className="max-w-[280px] p-2 bg-background border-4 border-foreground [&>button:last-child]:hidden">
+      <DialogContent className="bg-background border-foreground max-w-[280px] border-4 p-2 [&>button:last-child]:hidden">
         <DialogHeader className="sr-only">
           <DialogTitle>Select Theme</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col max-h-[60dvh] overflow-y-auto custom-scrollbar">
+        <div className="custom-scrollbar flex max-h-[60dvh] flex-col overflow-y-auto">
           {themes.map((theme) => {
             const isActive = theme.name === activeTheme;
             return (
@@ -102,7 +102,7 @@ export function ThemePicker({ activeTheme, onThemeChange }: ThemePickerProps) {
               >
                 <div className="flex items-center gap-3">
                   <span
-                    className="inline-block h-3 w-3 border border-foreground shrink-0"
+                    className="border-foreground inline-block h-3 w-3 shrink-0 border"
                     style={{ backgroundColor: theme.color }}
                   />
                   <span
@@ -114,7 +114,7 @@ export function ThemePicker({ activeTheme, onThemeChange }: ThemePickerProps) {
                     {formatThemeName(theme.name)}
                   </span>
                 </div>
-                {isActive && <Check className="h-3 w-3 text-foreground opacity-60" />}
+                {isActive && <Check className="text-foreground h-3 w-3 opacity-60" />}
               </button>
             );
           })}

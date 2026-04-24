@@ -99,28 +99,28 @@ export const LiveScore = memo(function LiveScore({
   }, [getScore, getCombo, getLastHitQuality, getProgress]);
 
   return (
-    <div className="flex items-center gap-8 w-full">
+    <div className="flex w-full items-center gap-8">
       {/* Score & Combo */}
       <div className="flex items-center gap-6">
         <div className="flex flex-col">
-          <span className="text-[8px] text-foreground opacity-60 font-normal uppercase tracking-widest retro">
+          <span className="text-foreground retro text-[8px] font-normal tracking-widest uppercase opacity-60">
             Score
           </span>
           <span
             ref={scoreValueRef}
-            className="text-base font-normal tabular-nums leading-relaxed retro"
+            className="retro text-base leading-relaxed font-normal tabular-nums"
           >
             0
           </span>
         </div>
 
         <div className="flex flex-col">
-          <span className="text-[8px] text-foreground opacity-60 font-normal uppercase tracking-widest retro">
+          <span className="text-foreground retro text-[8px] font-normal tracking-widest uppercase opacity-60">
             Combo
           </span>
           <span
             ref={comboValueRef}
-            className="text-base font-normal tabular-nums leading-relaxed retro"
+            className="retro text-base leading-relaxed font-normal tabular-nums"
           >
             x0
           </span>
@@ -128,7 +128,7 @@ export const LiveScore = memo(function LiveScore({
       </div>
 
       {/* Hit Quality Feedback */}
-      <div className="min-w-[120px] flex items-center justify-center">
+      <div className="flex min-w-[120px] items-center justify-center">
         <span
           ref={feedbackRef}
           className={cn(
@@ -140,19 +140,19 @@ export const LiveScore = memo(function LiveScore({
       </div>
 
       {/* Progress Bar */}
-      <div className="flex-1 max-w-[150px] hidden sm:flex flex-col gap-2">
-        <div className="flex justify-between items-end gap-1">
-          <span className="text-[8px] text-foreground opacity-60 font-normal uppercase retro">
+      <div className="hidden max-w-[150px] flex-1 flex-col gap-2 sm:flex">
+        <div className="flex items-end justify-between gap-1">
+          <span className="text-foreground retro text-[8px] font-normal uppercase opacity-60">
             Progress
           </span>
-          <span ref={progressValueRef} className="text-[8px] font-normal tabular-nums retro">
+          <span ref={progressValueRef} className="retro text-[8px] font-normal tabular-nums">
             0%
           </span>
         </div>
-        <div className="h-3 w-full bg-foreground/10 border-4 border-foreground overflow-hidden [image-rendering:pixelated]">
+        <div className="bg-foreground/10 border-foreground h-3 w-full overflow-hidden border-4 [image-rendering:pixelated]">
           <div
             ref={progressBarFillRef}
-            className="h-full w-full bg-primary origin-left [transform:scaleX(0)]"
+            className="bg-primary h-full w-full origin-left [transform:scaleX(0)]"
           />
         </div>
       </div>

@@ -2,11 +2,13 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTypescript from "eslint-config-next/typescript";
 import prettier from "eslint-config-prettier";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
+import tailwindcss from "eslint-plugin-tailwindcss";
 
 /** @type {import('eslint').Linter.Config[]} */
 const eslintConfig = [
   ...nextVitals,
   ...nextTypescript,
+  ...tailwindcss.configs["flat/recommended"],
   prettier,
   {
     plugins: {
@@ -15,6 +17,14 @@ const eslintConfig = [
     rules: {
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
+    },
+  },
+  {
+    settings: {
+      tailwindcss: {
+        callees: ["classnames", "clsx", "ctl", "cva", "twMerge"],
+        config: {},
+      },
     },
   },
   {

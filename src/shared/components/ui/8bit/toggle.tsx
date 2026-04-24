@@ -17,12 +17,12 @@ const toggleVariants = cva("", {
     },
     variant: {
       default: "bg-transparent",
-      outline: "bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
+      outline: "hover:bg-accent hover:text-accent-foreground bg-transparent shadow-sm",
     },
     size: {
-      default: "h-9 px-2 min-w-9",
-      sm: "h-8 px-1.5 min-w-8",
-      lg: "h-10 px-2.5 min-w-10",
+      default: "h-9 min-w-9 px-2",
+      sm: "h-8 min-w-8 px-1.5",
+      lg: "h-10 min-w-10 px-2.5",
     },
   },
   defaultVariants: {
@@ -55,12 +55,12 @@ function Toggle({ children, font, ...props }: BitToggleProps) {
       {variant === "outline" && (
         <>
           <div
-            className="absolute inset-0 border-y-6 -my-1.5 border-foreground dark:border-ring pointer-events-none"
+            className="border-foreground dark:border-ring pointer-events-none absolute inset-0 -my-1.5 border-y-6"
             aria-hidden="true"
           />
 
           <div
-            className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none"
+            className="border-foreground dark:border-ring pointer-events-none absolute inset-0 -mx-1.5 border-x-6"
             aria-hidden="true"
           />
         </>

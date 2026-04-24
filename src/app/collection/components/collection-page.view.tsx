@@ -16,10 +16,10 @@ import type { Track } from "@/shared/types/track";
 const CollectionHeader = ({ title, description }: { title: string; description: string }) => {
   return (
     <div className="flex flex-col gap-2">
-      <h2 className="retro font-bold text-lg sm:text-2xl md:text-3xl wrap-break-word uppercase">
+      <h2 className="retro text-lg font-bold wrap-break-word uppercase sm:text-2xl md:text-3xl">
         {title}
       </h2>
-      <span className="mx-auto block max-w-xl retro text-muted-foreground text-[9px] uppercase tracking-wider">
+      <span className="retro text-muted-foreground mx-auto block max-w-xl text-[9px] tracking-wider uppercase">
         {description}
       </span>
     </div>
@@ -44,7 +44,7 @@ export function CollectionPageView({
   onBack,
 }: CollectionPageViewProps) {
   return (
-    <main className="flex flex-col h-dvh items-center justify-evenly p-4 overflow-x-hidden text-center">
+    <main className="flex h-dvh flex-col items-center justify-evenly overflow-x-hidden p-4 text-center">
       {tracks.length === 0 ? (
         <CollectionHeader
           title="No tracks found."
@@ -57,11 +57,11 @@ export function CollectionPageView({
             description="Select a song to play, or shuffle for a surprise."
           />
 
-          <div className="w-full px-12 md:px-16 overflow-visible">
+          <div className="w-full overflow-visible px-12 md:px-16">
             <Carousel className="mx-auto w-full max-w-4xl" opts={{ align: "start", loop: false }}>
               <CarouselContent>
                 {tracks.map((track) => (
-                  <CarouselItem className="pl-4 jam-carousel-item" key={track.id}>
+                  <CarouselItem className="jam-carousel-item pl-4" key={track.id}>
                     <SongCard
                       track={track}
                       isSelected={selectedTrack?.id === track.id}
