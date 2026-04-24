@@ -9,7 +9,7 @@ const mockInputs = [
 ] as WebMidi.MIDIInput[];
 
 const meta: Meta<typeof GearPageView> = {
-  title: "App/Gear/View",
+  title: "App/Gear",
   component: GearPageView,
   parameters: {
     layout: "fullscreen",

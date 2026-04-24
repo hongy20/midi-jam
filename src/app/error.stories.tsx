@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import GlobalError from "./error";
 
 const meta: Meta<typeof GlobalError> = {
-  title: "App/Global/Error",
+  title: "App/Error",
   component: GlobalError,
   parameters: {
     layout: "fullscreen",

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import Loading from "./loading";
 
 const meta: Meta<typeof Loading> = {
-  title: "App/Global/Loading",
+  title: "App/Loading",
   component: Loading,
   parameters: {
     layout: "fullscreen",

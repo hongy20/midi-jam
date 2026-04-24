@@ -6,7 +6,7 @@ import type { Mode } from "@/shared/types/mode";
 import { OptionsPageView } from "./options-page.view";
 
 const meta: Meta<typeof OptionsPageView> = {
-  title: "App/Options/View",
+  title: "App/Options",
   component: OptionsPageView,
   parameters: {
     layout: "fullscreen",

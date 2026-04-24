@@ -31,7 +31,7 @@ const mockTracks: Track[] = [
 ];
 
 const meta: Meta<typeof CollectionPageView> = {
-  title: "App/Collection/View",
+  title: "App/Collection",
   component: CollectionPageView,
   parameters: {
     layout: "fullscreen",
