@@ -1,8 +1,8 @@
 // Options Feature Public API
 
-export type { Difficulty } from "./context/options-context";
 export { OptionsProvider, useOptions } from "./context/options-context";
 export {
+  type Difficulty,
   DIFFICULTY_SPEEDS,
   difficultyToSpeed,
   getDifficultyLabel,

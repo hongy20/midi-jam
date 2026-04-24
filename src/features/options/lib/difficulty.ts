@@ -1,4 +1,4 @@
-import { type Difficulty } from "../context/options-context";
+export type Difficulty = "easy" | "normal" | "hard";
 
 export const DIFFICULTY_SPEEDS: Record<Difficulty, number> = {
   easy: 0.5,
