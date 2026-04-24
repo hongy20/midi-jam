@@ -29,9 +29,9 @@ export function useTrackPlayer({
     const container = containerRef.current;
     if (!container || !enabled) return;
 
-    const { disconnect } = createNoteObserver(
+    const { disconnect } = createNoteObserver({
       container,
-      (pitch) => {
+      onPitchStart: (pitch) => {
         setPlaybackNotes((prev) => {
           const next = new Set(prev);
           next.add(pitch);
@@ -42,7 +42,7 @@ export function useTrackPlayer({
         playNote(pitch, velocity);
         processNoteEvent({ type: "note-on", pitch, velocity });
       },
-      (pitch) => {
+      onPitchEnd: (pitch) => {
         setPlaybackNotes((prev) => {
           const next = new Set(prev);
           next.delete(pitch);
@@ -52,7 +52,7 @@ export function useTrackPlayer({
         stopNote(pitch);
         processNoteEvent({ type: "note-off", pitch, velocity: 0 });
       },
-    );
+    });
 
     return () => {
       disconnect();

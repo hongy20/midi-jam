@@ -3,11 +3,13 @@
  * Handles both IntersectionObserver (for crossing the target line)
  * and MutationObserver (for dynamic DOM updates).
  */
-export function createNoteObserver(
-  container: HTMLElement,
-  onPitchStart: (pitch: number, el: Element) => void,
-  onPitchEnd: (pitch: number, el: Element) => void,
-) {
+interface NoteObserverOptions {
+  container: HTMLElement;
+  onPitchStart: (pitch: number, el: Element) => void;
+  onPitchEnd: (pitch: number, el: Element) => void;
+}
+
+export function createNoteObserver({ container, onPitchStart, onPitchEnd }: NoteObserverOptions) {
   const activeCounts = new Map<number, number>();
   const observedElements = new Set<Element>();
   const activeElements = new Set<Element>();
