@@ -4,8 +4,8 @@ import path from "node:path";
 import { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
 
-import { buildMidiNoteGroups } from "./lane-segment-utils";
-import { parseMidiNotes } from "./midi-parser";
+import { buildMidiNoteGroups } from "./midi-note-group-parser";
+import { parseMidiNotes } from "./midi-note-parser";
 
 describe("lane-segment-utils integration with real MIDI", () => {
   // Helper to load and parse MIDI
@@ -13,7 +13,7 @@ describe("lane-segment-utils integration with real MIDI", () => {
     const filePath = path.join(process.cwd(), "public", "midi", filename);
     const data = fs.readFileSync(filePath);
     const midi = new Midi(data);
-    const notes = parseMidiNotes(midi);
+    const notes = parseMidiNotes(midi, "piano");
     const totalDurationMs = midi.duration * 1000;
     return { notes, totalDurationMs };
   };

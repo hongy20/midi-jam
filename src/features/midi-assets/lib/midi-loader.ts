@@ -1,21 +1,6 @@
 import { Midi } from "@tonejs/midi";
 
-import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
-
-interface MidiTrackData {
-  notes: MidiNote[];
-  groups: MidiNoteGroup[];
-  totalDurationMs: number;
-}
-
-import {
-  LANE_SEGMENT_DURATION_MS,
-  LEAD_IN_DEFAULT_MS,
-  LEAD_OUT_DEFAULT_MS,
-  MIDI_DUMMY_NOTE_PITCH,
-} from "./constant";
-import { buildMidiNoteGroups } from "./lane-segment-utils";
-import { parseMidiNotes } from "./midi-parser";
+import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS, MIDI_DUMMY_NOTE_PITCH } from "./constant";
 
 /**
  * Patches a MIDI object to include lead-in and lead-out margins.
@@ -120,32 +105,4 @@ export async function loadMidiFile(url: string): Promise<Midi> {
   const arrayBuffer = await response.arrayBuffer();
   const midi = new Midi(arrayBuffer);
   return patchMidi(midi);
-}
-const trackDataCache = new Map<string, Promise<MidiTrackData>>();
-
-/**
- * High-level utility to load, parse, and group MIDI data in one call.
- * This is the primary entry point for the play route's data pipeline.
- * It uses an internal cache to ensure promise stability, which is critical
- * for React 19's use() hook to avoid infinite suspension loops.
- */
-export function getTrackData(url: string): Promise<MidiTrackData> {
-  const cached = trackDataCache.get(url);
-  if (cached) return cached;
-
-  const promise = (async () => {
-    const midi = await loadMidiFile(url);
-    const notes = parseMidiNotes(midi);
-    const totalDurationMs = midi.duration * 1000;
-    const groups = buildMidiNoteGroups({
-      notes,
-      totalDurationMs,
-      thresholdMs: LANE_SEGMENT_DURATION_MS,
-    });
-
-    return { notes, groups, totalDurationMs };
-  })();
-
-  trackDataCache.set(url, promise);
-  return promise;
 }

@@ -31,8 +31,8 @@ export function PlayPageClient() {
 
   const trackDataPromise = useMemo(() => {
     if (!selectedTrack) return null;
-    return getTrackData(selectedTrack.url);
-  }, [selectedTrack]);
+    return getTrackData(selectedTrack.url, selectedMIDIInput);
+  }, [selectedTrack, selectedMIDIInput]);
   const { speed, demoMode } = useOptions();
   const { setSessionResults } = useScore();
   const { isFullscreen, toggleFullscreen } = useFullscreen();
