@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { PausePageView } from "./pause-page.view";
 
 const meta: Meta<typeof PausePageView> = {
-  title: "App/Pause/View",
+  title: "App/Pause",
   component: PausePageView,
   parameters: {
     layout: "fullscreen",

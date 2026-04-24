@@ -57,14 +57,25 @@ Standardize feature components by removing intermediate directories from the tit
 - `Features/Score/Components/LiveScore` -> `Feature/Score/LiveScore`
 
 #### [MODIFY] [lane-stage.stories.tsx](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/visualizer/components/lane-stage/lane-stage.stories.tsx)
+
 - `App/Play/Components/LaneStage` -> `Feature/Visualizer/LaneStage`
 
 ### Storybook Configuration
+
 Disable the "Docs" addon and remove MDX support.
 
 #### [MODIFY] [main.ts](file:///Users/yanhong/Github/hongy20/midi-jam/.storybook/main.ts)
+
 - Remove `../src/**/*.mdx` from `stories`.
 - Remove `@storybook/addon-docs` from `addons`.
+
+### Documentation Standards
+
+Update project-wide standards to ensure future stories follow these conventions.
+
+#### [MODIFY] [AGENTS.md](file:///Users/yanhong/Github/hongy20/midi-jam/AGENTS.md)
+
+- Update Storybook naming conventions and Docs policy.
 
 ## Verification Plan
 

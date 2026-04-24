@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ScorePageView } from "./score-page.view";
 
 const meta: Meta<typeof ScorePageView> = {
-  title: "App/Score/View",
+  title: "App/Score",
   component: ScorePageView,
   parameters: {
     layout: "fullscreen",
