@@ -2,42 +2,41 @@
 
 > **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Upgrade Knip configuration and schema to version 6 and verify compatibility.
+**Goal:** Upgrade Knip configuration and schema to version 6, update middleware entry, and verify compatibility.
 
-**Architecture:** Update the `$schema` URL in `knip.jsonc` and verify the installation in `package.json`. Run validation to ensure no new issues are introduced.
+**Architecture:** Update the `$schema` URL and entry points in `knip.jsonc`. Run validation to ensure no issues.
 
 **Tech Stack:** Knip v6, Next.js, TypeScript
 
 ---
 
-### Task 1: Update Knip Schema and Verify Version
+### Task 1: Update Knip Schema and Entry Points
 
 **Files:**
-- Modify: `knip.jsonc:2`
-- Verify: `package.json:63`
 
-**Step 1: Update the schema URL in knip.jsonc**
+- Modify: `knip.jsonc:2,27`
+
+**Step 1: Update the schema URL and replace src/middleware.ts with src/proxy.ts**
 
 ```jsonc
 // knip.jsonc
 -  "$schema": "https://unpkg.com/knip@5/schema.json",
 +  "$schema": "https://unpkg.com/knip@6/schema.json",
+...
+-      "src/middleware.ts",
++      "src/proxy.ts",
 ```
 
-**Step 2: Verify knip version in package.json**
-
-Ensure `"knip": "^6.6.1"` (or higher) is present. (Already confirmed).
-
-**Step 3: Run knip to verify compatibility**
+**Step 2: Run knip to verify compatibility**
 
 Run: `source ~/.nvm/nvm.sh && nvm use default && npm run knip`
-Expected: Output showing found issues (if any) or clean run.
+Expected: Output showing no issues.
 
-**Step 4: Commit**
+**Step 3: Commit**
 
 ```bash
 git add knip.jsonc
-git commit -m "chore: upgrade knip schema to v6"
+git commit -m "chore: upgrade knip schema to v6 and update proxy entry"
 ```
 
 ### Task 2: Final Verification and Pull Request
@@ -45,7 +44,7 @@ git commit -m "chore: upgrade knip schema to v6"
 **Step 1: Run full linting suite**
 
 Run: `source ~/.nvm/nvm.sh && nvm use default && npm run lint`
-Expected: All checks pass (ESLint, Prettier, Knip).
+Expected: All checks pass.
 
 **Step 2: Create Pull Request**
 
