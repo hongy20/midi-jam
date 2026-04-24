@@ -13,9 +13,11 @@
 ### Task 1: Create Unit Tests for Difficulty Logic
 
 **Files:**
+
 - Create: `src/features/options/lib/difficulty.test.ts`
 
 **Step 1: Write initial tests**
+
 ```typescript
 import { describe, it, expect } from "vitest";
 import { speedToDifficulty, difficultyToSpeed, getDifficultyLabel } from "./difficulty";
@@ -46,6 +48,7 @@ Run: `source ~/.nvm/nvm.sh && nvm use default && npm test src/features/options/l
 Expected: PASS
 
 **Step 3: Commit**
+
 ```bash
 git add src/features/options/lib/difficulty.test.ts
 git commit -m "test: add baseline tests for difficulty lib"
@@ -56,9 +59,11 @@ git commit -m "test: add baseline tests for difficulty lib"
 ### Task 2: Define and Use Speed Constants
 
 **Files:**
+
 - Modify: `src/features/options/lib/difficulty.ts`
 
 **Step 1: Implement constants and update logic**
+
 ```typescript
 export const SPEED_EASY = 0.5;
 export const SPEED_NORMAL = 1.0;
@@ -93,6 +98,7 @@ Run: `source ~/.nvm/nvm.sh && nvm use default && npm test src/features/options/l
 Expected: PASS
 
 **Step 4: Commit**
+
 ```bash
 git add src/features/options/lib/difficulty.ts src/features/options/lib/difficulty.test.ts
 git commit -m "refactor: use named constants for difficulty speeds"
@@ -103,9 +109,11 @@ git commit -m "refactor: use named constants for difficulty speeds"
 ### Task 3: Export Constants from Public API
 
 **Files:**
+
 - Modify: `src/features/options/index.ts`
 
 **Step 1: Add exports**
+
 ```typescript
 export {
   type Difficulty,
@@ -119,6 +127,7 @@ export {
 ```
 
 **Step 2: Commit**
+
 ```bash
 git add src/features/options/index.ts
 git commit -m "feat: export speed constants from options feature"

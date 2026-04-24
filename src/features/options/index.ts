@@ -5,8 +5,8 @@ export {
   type Difficulty,
   difficultyToSpeed,
   getDifficultyLabel,
-  speedToDifficulty,
   SPEED_EASY,
-  SPEED_NORMAL,
   SPEED_HARD,
+  SPEED_NORMAL,
+  speedToDifficulty,
 } from "./lib/difficulty";

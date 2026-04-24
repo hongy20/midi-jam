@@ -1,11 +1,12 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
+
 import {
-  speedToDifficulty,
   difficultyToSpeed,
   getDifficultyLabel,
   SPEED_EASY,
-  SPEED_NORMAL,
   SPEED_HARD,
+  SPEED_NORMAL,
+  speedToDifficulty,
 } from "./difficulty";
 
 describe("difficulty lib", () => {
