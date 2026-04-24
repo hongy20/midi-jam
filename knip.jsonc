@@ -25,12 +25,12 @@
       "src/app/**/not-found.tsx",
       "src/app/**/route.ts",
       "src/proxy.ts"
-    ],
+    ]
   },
   "vitest": {
-    "entry": ["src/**/*.test.{ts,tsx}", "vitest.config.ts"],
+    "entry": ["src/**/*.test.{ts,tsx}", "vitest.config.ts"]
   },
   "storybook": {
-    "entry": ["src/**/*.stories.{ts,tsx}", ".storybook/main.ts", ".storybook/preview.tsx"],
-  },
+    "entry": ["src/**/*.stories.{ts,tsx}", ".storybook/main.ts", ".storybook/preview.tsx"]
+  }
 }
