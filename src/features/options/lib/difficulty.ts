@@ -1,6 +1,6 @@
 export type Difficulty = "easy" | "normal" | "hard";
 
-export const DIFFICULTY_SPEEDS: Record<Difficulty, number> = {
+const DIFFICULTY_SPEEDS: Record<Difficulty, number> = {
   easy: 0.5,
   normal: 1.0,
   hard: 2.0,
