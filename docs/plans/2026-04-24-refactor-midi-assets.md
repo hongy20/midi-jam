@@ -8,6 +8,7 @@ Refactor the `features/midi-assets` directory to improve modularity and naming c
 
 #### [NEW] [midi-note-parser.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/midi-assets/lib/midi-note-parser.ts)
 - Contains `parseMidiNotes` function.
+- Will use the new instrument detection utility instead of a hardcoded default.
 
 #### [NEW] [midi-barline-parser.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/midi-assets/lib/midi-barline-parser.ts)
 - Contains `getBarLines` function.
@@ -19,6 +20,11 @@ Refactor the `features/midi-assets` directory to improve modularity and naming c
 #### [NEW] [midi-track-data-loader.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/midi-assets/lib/midi-track-data-loader.ts)
 - Extracted from `midi-loader.ts`.
 - Contains `MidiTrackData` interface, `trackDataCache`, and `getTrackData` function.
+
+### [shared]
+
+#### [NEW] [midi-instrument-utils.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/shared/lib/midi-instrument-utils.ts)
+- Contains a utility to detect instrument type (`piano` | `drums`) from `WebMidi.MIDIInput`.
 
 #### [MODIFY] [midi-loader.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/midi-assets/lib/midi-loader.ts)
 - Remove `getTrackData` and its related cache/interface.
