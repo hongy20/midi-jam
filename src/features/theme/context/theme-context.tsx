@@ -2,7 +2,7 @@
 
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from "react";
 
-import { DARK, LIGHT, type Mode } from "@/shared/types/mode";
+import { type Mode } from "@/shared/types/mode";
 
 import { Theme } from "../lib/themes";
 
@@ -35,10 +35,10 @@ export function ThemeProvider({
 
   const [mode, setModeState] = useState<Mode>(() => {
     if (forcedMode) return forcedMode;
-    if (typeof window === "undefined") return LIGHT;
+    if (typeof window === "undefined") return "light";
     const saved = localStorage.getItem(STORAGE_KEY_MODE) as Mode;
     if (saved) return saved;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? DARK : LIGHT;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   });
 
   // Synchronize state with forced props when they change (e.g. Storybook controls)
@@ -81,7 +81,7 @@ export function ThemeProvider({
   }, [theme]);
 
   useEffect(() => {
-    if (mode === DARK) {
+    if (mode === "dark") {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
