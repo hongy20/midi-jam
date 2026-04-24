@@ -6,10 +6,10 @@ import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
 import { getTrackData } from "@/features/midi-assets";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
+import { useOptions } from "@/features/options";
 import { getPianoLayoutUnits } from "@/features/piano";
 import { useLaneTimeline, usePlay } from "@/features/play-session";
 import { useScore, useScoreEngine } from "@/features/score";
-import { useOptions } from "@/features/settings";
 import { LANE_SCROLL_DURATION_MS } from "@/features/visualizer";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
@@ -32,7 +32,7 @@ export function PlayPageClient() {
   const trackDataPromise = useMemo(() => {
     if (!selectedTrack) return null;
     return getTrackData(selectedTrack.url);
-  }, [selectedTrack?.url]);
+  }, [selectedTrack]);
   const { speed, demoMode } = useOptions();
   const { setSessionResults } = useScore();
   const { isFullscreen, toggleFullscreen } = useFullscreen();

@@ -3,7 +3,12 @@
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 
-import { type Difficulty, useOptions } from "@/features/settings";
+import {
+  type Difficulty,
+  difficultyToSpeed,
+  speedToDifficulty,
+  useOptions,
+} from "@/features/options";
 import { useTheme } from "@/features/theme";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 
@@ -29,20 +34,11 @@ export function OptionsPageClient() {
   }, [mode, setMode]);
 
   // Difficulty Mapping
-  const difficulty = useMemo((): Difficulty => {
-    if (speed <= 0.5) return "easy";
-    if (speed >= 2.0) return "hard";
-    return "normal";
-  }, [speed]);
+  const difficulty = useMemo(() => speedToDifficulty(speed), [speed]);
 
   const onDifficultyChange = useCallback(
     (val: Difficulty) => {
-      const speedMap: Record<Difficulty, number> = {
-        easy: 0.5,
-        normal: 1.0,
-        hard: 2.0,
-      };
-      setSpeed(speedMap[val]);
+      setSpeed(difficultyToSpeed(val));
     },
     [setSpeed],
   );

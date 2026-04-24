@@ -2,8 +2,6 @@
 
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
 
-export type Difficulty = "easy" | "normal" | "hard";
-
 interface OptionsContextType {
   speed: number;
   demoMode: boolean;

@@ -1,4 +1,4 @@
-import { getSoundTracks } from "@/features/collection";
+import { getSongTracks } from "@/features/collection";
 
 import { CollectionPageClient } from "./components/collection-page.client";
 
@@ -8,7 +8,7 @@ export const metadata = {
 };
 
 export default function CollectionPage() {
-  const tracksPromise = getSoundTracks(800);
+  const tracksPromise = getSongTracks(800);
 
   return <CollectionPageClient tracksPromise={tracksPromise} />;
 }
