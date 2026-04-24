@@ -1,4 +1,4 @@
-import { getInstrumentFromInput } from "@/shared/lib/midi-instrument-utils";
+import { getInstrumentFromInput } from "@/shared/lib/instrument";
 import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
 
 import { LANE_SEGMENT_DURATION_MS } from "./constant";

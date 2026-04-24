@@ -11,9 +11,9 @@
     "unlisted": "error",
     "binaries": "error",
     "unresolved": "error",
-    "exports": "warn",
-    "types": "warn",
-    "enumMembers": "warn"
+    "exports": "error",
+    "types": "error",
+    "enumMembers": "error"
   },
   "next": {
     "entry": [

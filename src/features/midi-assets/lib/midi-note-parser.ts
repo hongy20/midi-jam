@@ -1,5 +1,6 @@
 import type { Midi } from "@tonejs/midi";
 
+import type { Instrument } from "@/shared/lib/instrument";
 import type { MidiNote } from "@/shared/types/midi";
 
 import { MIDI_DUMMY_NOTE_PITCH, MIN_NOTE_GAP_MS } from "./constant";
@@ -7,7 +8,7 @@ import { MIDI_DUMMY_NOTE_PITCH, MIN_NOTE_GAP_MS } from "./constant";
 /**
  * Parses a MIDI object into MidiNotes, applying collision handling and instrument filtering.
  */
-export function parseMidiNotes(midi: Midi, instrument: "piano" | "drums"): MidiNote[] {
+export function parseMidiNotes(midi: Midi, instrument: Instrument): MidiNote[] {
   const notes: MidiNote[] = [];
 
   // 1. Merge all notes from all relevant tracks first to catch cross-track collisions

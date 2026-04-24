@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { getInstrumentFromInput } from "./midi-instrument-utils";
+import { getInstrumentFromInput } from "./instrument";
 
 describe("midi-instrument-utils", () => {
   it("detects piano by default", () => {

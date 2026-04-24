@@ -1,8 +1,10 @@
+export type Instrument = "piano" | "drums";
+
 /**
  * Detects the instrument type (piano or drums) from a MIDI input device.
  * It uses simple keyword matching against the device name and manufacturer.
  */
-export function getInstrumentFromInput(input: WebMidi.MIDIInput | null): "piano" | "drums" {
+export function getInstrumentFromInput(input: WebMidi.MIDIInput | null): Instrument {
   if (!input) return "piano";
 
   const name = (input.name || "").toLowerCase();

@@ -7,12 +7,14 @@ import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
 import { LaneStage } from "@/features/visualizer";
 import { Button } from "@/shared/components/ui/8bit/button";
+import { type Instrument } from "@/shared/lib/instrument";
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
 import styles from "./play-page.view.module.css";
 
 interface PlayPageViewProps {
   selectedMIDIInput: { name?: string };
+  instrument: Instrument;
   selectedTrack: { name: string };
   getScore: () => number;
   getCombo: () => number;
@@ -38,6 +40,7 @@ interface PlayPageViewProps {
  */
 export function PlayPageView({
   selectedMIDIInput,
+  instrument,
   selectedTrack,
   getScore,
   getCombo,
@@ -109,7 +112,7 @@ export function PlayPageView({
       </main>
 
       <footer className={styles.footer}>
-        <div className={styles.keyboardWrapper} data-testid="piano-keyboard">
+        <div className={styles.keyboardWrapper} data-testid={`${instrument}-keyboard`}>
           <PianoKeyboard liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />
         </div>
       </footer>
