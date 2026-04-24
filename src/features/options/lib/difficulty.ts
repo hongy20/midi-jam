@@ -1,6 +1,6 @@
-export const SPEED_EASY = 0.5;
-export const SPEED_NORMAL = 1.0;
-export const SPEED_HARD = 2.0;
+const SPEED_EASY = 0.5;
+const SPEED_NORMAL = 1.0;
+const SPEED_HARD = 2.0;
 
 export type Difficulty = "easy" | "normal" | "hard";
 
