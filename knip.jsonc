@@ -1,6 +1,6 @@
 {
-  "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": ["src/app/**/page.tsx", "src/features/*/index.ts"],
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["src/app/**/page.tsx", "src/app/**/layout.tsx"],
   "project": ["src/**/*.{ts,tsx}"],
   "ignore": ["src/shared/components/ui/**"],
   "ignoreDependencies": ["@types/webmidi"],
@@ -13,7 +13,7 @@
     "unresolved": "error",
     "exports": "warn",
     "types": "warn",
-    "enumMembers": "warn",
+    "enumMembers": "warn"
   },
   "next": {
     "entry": [
@@ -23,14 +23,13 @@
       "src/app/**/loading.tsx",
       "src/app/**/error.tsx",
       "src/app/**/not-found.tsx",
-      "src/app/**/route.ts",
-      "src/middleware.ts",
-    ],
+      "src/app/**/route.ts"
+    ]
   },
   "vitest": {
-    "entry": ["src/**/*.test.{ts,tsx}", "vitest.config.ts"],
+    "entry": ["src/**/*.test.{ts,tsx}", "vitest.config.ts"]
   },
   "storybook": {
-    "entry": ["src/**/*.stories.{ts,tsx}", ".storybook/main.ts", ".storybook/preview.tsx"],
-  },
+    "entry": ["src/**/*.stories.{ts,tsx}", ".storybook/main.ts", ".storybook/preview.tsx"]
+  }
 }
