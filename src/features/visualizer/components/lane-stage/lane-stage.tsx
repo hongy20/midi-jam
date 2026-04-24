@@ -41,7 +41,7 @@ export function LaneStage({
   }, [getCurrentTimeMs, groups]);
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-background/5">
+    <div className="bg-background/5 relative h-full w-full overflow-hidden">
       {children}
 
       <div ref={scrollRef} className="absolute inset-0 overflow-hidden">

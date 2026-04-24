@@ -70,7 +70,7 @@ const Progress = React.forwardRef<
           }
         >
           {variant === "retro" && !isIndeterminate && (
-            <div className="flex w-full h-full">
+            <div className="flex h-full w-full">
               {Array.from({ length: 20 }).map((_, i) => {
                 const filledSquares = Math.round(((value || 0) / 100) * 20);
                 return (
@@ -89,12 +89,12 @@ const Progress = React.forwardRef<
       </ProgressPrimitive.Root>
 
       <div
-        className="absolute inset-0 border-y-4 -my-1 border-foreground dark:border-ring pointer-events-none"
+        className="border-foreground dark:border-ring pointer-events-none absolute inset-0 -my-1 border-y-4"
         aria-hidden="true"
       />
 
       <div
-        className="absolute inset-0 border-x-4 -mx-1 border-foreground dark:border-ring pointer-events-none"
+        className="border-foreground dark:border-ring pointer-events-none absolute inset-0 -mx-1 border-x-4"
         aria-hidden="true"
       />
     </div>

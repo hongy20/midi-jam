@@ -73,7 +73,7 @@ export default function PauseMenu({
               font="retro"
             >
               <item.icon className="size-5" />
-              <span className="text-xs uppercase tracking-widest">{item.label}</span>
+              <span className="text-xs tracking-widest uppercase">{item.label}</span>
             </Button>
           ))}
         </div>

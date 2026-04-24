@@ -20,7 +20,7 @@ import { cn } from "@/shared/lib/utils";
 export const tableVariants = cva("", {
   variants: {
     variant: {
-      default: "p-4 py-2.5 border-y-6 border-foreground dark:border-ring",
+      default: "border-foreground dark:border-ring border-y-6 p-4 py-2.5",
       borderless: "",
     },
     font: {
@@ -46,7 +46,7 @@ const Table = React.forwardRef<
 
     {variant !== "borderless" && (
       <div
-        className="absolute inset-0 border-x-6 -mx-1.5 border-foreground dark:border-ring pointer-events-none"
+        className="border-foreground dark:border-ring pointer-events-none absolute inset-0 -mx-1.5 border-x-6"
         aria-hidden="true"
       />
     )}

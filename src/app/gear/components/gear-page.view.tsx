@@ -24,10 +24,10 @@ interface GearPageViewProps {
 
 const GearHeader = ({ title, description }: { title: string; description: string }) => (
   <div className="flex flex-col gap-2">
-    <h2 className="retro font-bold text-lg sm:text-2xl md:text-3xl wrap-break-word uppercase">
+    <h2 className="retro text-lg font-bold wrap-break-word uppercase sm:text-2xl md:text-3xl">
       {title}
     </h2>
-    <span className="mx-auto block max-w-xl retro text-muted-foreground text-[9px] uppercase tracking-wider">
+    <span className="retro text-muted-foreground mx-auto block max-w-xl text-[9px] tracking-wider uppercase">
       {description}
     </span>
   </div>
@@ -45,7 +45,7 @@ export function GearPageView({
     : undefined;
 
   return (
-    <main className="flex flex-col h-dvh items-center justify-evenly p-4 overflow-x-hidden text-center">
+    <main className="flex h-dvh flex-col items-center justify-evenly overflow-x-hidden p-4 text-center">
       {inputs.length === 0 ? (
         <GearHeader title="No gear found." description="Please connect a keyboard to continue..." />
       ) : (
@@ -55,12 +55,12 @@ export function GearPageView({
             description="Play a note on your gear to select it, or tap a card below."
           />
 
-          <div className="w-full px-12 md:px-16 overflow-visible">
+          <div className="w-full overflow-visible px-12 md:px-16">
             <Carousel className="mx-auto w-full max-w-4xl" opts={{ align: "start", loop: false }}>
               <CarouselContent>
                 {inputs.map((input, index) => (
                   <CarouselItem
-                    className="pl-4 basis-full sm:basis-1/2 lg:basis-1/3"
+                    className="basis-full pl-4 sm:basis-1/2 lg:basis-1/3"
                     key={input.id}
                   >
                     <GearCard

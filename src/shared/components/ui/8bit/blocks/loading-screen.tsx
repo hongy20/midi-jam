@@ -77,15 +77,15 @@ export default function LoadingScreen({
   const isIndeterminate = displayProgress === null || displayProgress === undefined;
 
   const content = (
-    <div className="flex flex-col items-center justify-center gap-6 p-8 animate-pulse">
+    <div className="flex animate-pulse flex-col items-center justify-center gap-6 p-8">
       {/* Title */}
-      <h2 className="retro text-xl md:text-2xl text-center">{title}</h2>
+      <h2 className="retro text-center text-xl md:text-2xl">{title}</h2>
 
       {/* Progress section */}
       <div className="w-full max-w-md space-y-2">
         {!isIndeterminate && showPercentage && (
           <div className="flex justify-end">
-            <span className="retro text-xs text-muted-foreground">
+            <span className="retro text-muted-foreground text-xs">
               {Math.round(displayProgress)}%
             </span>
           </div>
@@ -95,8 +95,8 @@ export default function LoadingScreen({
 
       {/* Tips section */}
       {tips.length > 0 && (
-        <div className="w-full max-w-md min-h-16 flex items-center justify-center">
-          <p className="retro text-[0.625rem] md:text-xs text-center text-muted-foreground leading-relaxed animate-pulse">
+        <div className="flex min-h-16 w-full max-w-md items-center justify-center">
+          <p className="retro text-muted-foreground animate-pulse text-center text-[0.625rem] leading-relaxed md:text-xs">
             {tips[currentTipIndex]}
           </p>
         </div>

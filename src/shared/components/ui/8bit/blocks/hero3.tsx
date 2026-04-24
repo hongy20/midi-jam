@@ -84,13 +84,13 @@ export default function Hero3({
         )}
 
         {/* Title — large game-style */}
-        <h1 className="retro mb-6 font-bold text-4xl tracking-tight md:text-6xl lg:text-7xl">
+        <h1 className="retro mb-6 text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
           {title}
         </h1>
 
         {/* Description */}
         {description && (
-          <p className="mx-auto mb-8 max-w-xl text-muted-foreground retro text-[9px] leading-relaxed">
+          <p className="text-muted-foreground retro mx-auto mb-8 max-w-xl text-[9px] leading-relaxed">
             {description}
           </p>
         )}
@@ -100,8 +100,8 @@ export default function Hero3({
           {defaultStats.map((stat) => (
             <Card key={stat.label}>
               <CardContent className="flex flex-col items-center px-6 py-4">
-                <span className="retro font-bold text-xl md:text-2xl">{stat.value}</span>
-                <span className="retro mt-1 text-muted-foreground text-[10px]">{stat.label}</span>
+                <span className="retro text-xl font-bold md:text-2xl">{stat.value}</span>
+                <span className="retro text-muted-foreground mt-1 text-[10px]">{stat.label}</span>
               </CardContent>
             </Card>
           ))}
