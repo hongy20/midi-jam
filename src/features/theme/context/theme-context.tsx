@@ -2,7 +2,7 @@
 
 import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from "react";
 
-import { DARK, LIGHT, type Mode } from "@/shared/lib/mode";
+import { DARK, LIGHT, type Mode } from "@/shared/types/mode";
 
 import { Theme } from "../lib/themes";
 
