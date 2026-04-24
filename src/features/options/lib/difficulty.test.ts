@@ -1,22 +1,29 @@
 import { describe, it, expect } from "vitest";
-import { speedToDifficulty, difficultyToSpeed, getDifficultyLabel } from "./difficulty";
+import {
+  speedToDifficulty,
+  difficultyToSpeed,
+  getDifficultyLabel,
+  SPEED_EASY,
+  SPEED_NORMAL,
+  SPEED_HARD,
+} from "./difficulty";
 
 describe("difficulty lib", () => {
   it("maps speed to difficulty correctly", () => {
-    expect(speedToDifficulty(0.5)).toBe("easy");
-    expect(speedToDifficulty(1.0)).toBe("normal");
-    expect(speedToDifficulty(2.0)).toBe("hard");
+    expect(speedToDifficulty(SPEED_EASY)).toBe("easy");
+    expect(speedToDifficulty(SPEED_NORMAL)).toBe("normal");
+    expect(speedToDifficulty(SPEED_HARD)).toBe("hard");
   });
 
   it("maps difficulty to speed correctly", () => {
-    expect(difficultyToSpeed("easy")).toBe(0.5);
-    expect(difficultyToSpeed("normal")).toBe(1.0);
-    expect(difficultyToSpeed("hard")).toBe(2.0);
+    expect(difficultyToSpeed("easy")).toBe(SPEED_EASY);
+    expect(difficultyToSpeed("normal")).toBe(SPEED_NORMAL);
+    expect(difficultyToSpeed("hard")).toBe(SPEED_HARD);
   });
 
   it("returns correct labels", () => {
-    expect(getDifficultyLabel("easy")).toContain("0.5x");
-    expect(getDifficultyLabel("normal")).toContain("1.0x");
-    expect(getDifficultyLabel("hard")).toContain("2.0x");
+    expect(getDifficultyLabel("easy")).toContain(`${SPEED_EASY}x`);
+    expect(getDifficultyLabel("normal")).toContain(`${SPEED_NORMAL}x`);
+    expect(getDifficultyLabel("hard")).toContain(`${SPEED_HARD}x`);
   });
 });
