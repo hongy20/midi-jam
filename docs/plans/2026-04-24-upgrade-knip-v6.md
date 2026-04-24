@@ -27,7 +27,22 @@
 +      "src/proxy.ts",
 ```
 
-**Step 2: Run knip to verify compatibility**
+**Step 2: Remove trailing commas in knip.jsonc**
+
+```jsonc
+// knip.jsonc
+-    "unresolved": "error",
+-    "exports": "warn",
+-    "types": "warn",
+-    "enumMembers": "warn",
++    "unresolved": "error"
++    "exports": "warn"
++    "types": "warn"
++    "enumMembers": "warn"
+... and others
+```
+
+**Step 3: Run knip to verify compatibility**
 
 Run: `source ~/.nvm/nvm.sh && nvm use default && npm run knip`
 Expected: Output showing no issues.
