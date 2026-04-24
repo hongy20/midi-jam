@@ -23,10 +23,7 @@ const trackDataCache = new Map<string, Promise<MidiTrackData>>();
  * @param url The URL of the MIDI file.
  * @param input Optional MIDI input to determine the instrument type.
  */
-export function getTrackData(
-  url: string,
-  input: WebMidi.MIDIInput | null = null,
-): Promise<MidiTrackData> {
+export function getTrackData(url: string, input: WebMidi.MIDIInput | null): Promise<MidiTrackData> {
   const cacheKey = `${url}:${input?.id || "default"}`;
   const cached = trackDataCache.get(cacheKey);
   if (cached) return cached;
