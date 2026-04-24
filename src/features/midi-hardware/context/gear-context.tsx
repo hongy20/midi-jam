@@ -31,7 +31,7 @@ export function GearProvider({ children }: { children: ReactNode }) {
       selectedMIDIInput,
       selectedMIDIOutput,
       selectMIDIInput,
-      selectMIDIOutput: () => {}, // TODO: Implement if needed
+      selectMIDIOutput: () => {}, // Manual output selection is currently disabled as outputs are auto-matched by name.
       accessPromise,
     }),
     [inputs, outputs, selectedMIDIInput, selectedMIDIOutput, selectMIDIInput, accessPromise],

@@ -1,8 +1,7 @@
 /**
  * Calculates the maximum possible score for a perfect run of a song.
- * This takes into account the combo multiplier:
- * +10% per 10 combo (capped at some reasonable level if the engine caps it,
- * but here it follows the engine's Math.floor(combo / 10) * 0.1 logic).
+ * This follows the engine's multiplier logic: +10% per 10 combo
+ * (calculated as 1 + Math.floor(combo / 10) * 0.1).
  */
 export function calculateMaxRawPoints(noteCount: number): number {
   let totalScore = 0;
