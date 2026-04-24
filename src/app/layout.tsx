@@ -22,7 +22,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Midi Jam",
-  description: "The ultimate immersive piano experience",
+  description: "The ultimate immersive MIDI instrument experience",
 };
 
 export default function RootLayout({

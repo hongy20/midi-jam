@@ -44,8 +44,8 @@ const TestComponent = () => {
   const { theme, mode } = useTheme();
   return (
     <div>
-      <span data-testid="theme">{theme}</span>
-      <span data-testid="mode">{mode}</span>
+      <span>Theme: {theme}</span>
+      <span>Mode: {mode}</span>
     </div>
   );
 };
@@ -64,8 +64,8 @@ describe("ThemeProvider", () => {
         <TestComponent />
       </ThemeProvider>,
     );
-    expect(screen.getByTestId("theme").textContent).toBe("default");
-    expect(screen.getByTestId("mode").textContent).toBe("light");
+    expect(screen.getByText(/Theme: default/)).toBeDefined();
+    expect(screen.getByText(/Mode: light/)).toBeDefined();
   });
 
   it("loads theme from localStorage", () => {
@@ -75,7 +75,7 @@ describe("ThemeProvider", () => {
         <TestComponent />
       </ThemeProvider>,
     );
-    expect(screen.getByTestId("theme").textContent).toBe("sega");
+    expect(screen.getByText(/Theme: sega/)).toBeDefined();
   });
 
   it("overrides theme with forced props", () => {
@@ -84,8 +84,8 @@ describe("ThemeProvider", () => {
         <TestComponent />
       </ThemeProvider>,
     );
-    expect(screen.getByTestId("theme").textContent).toBe("nintendo");
-    expect(screen.getByTestId("mode").textContent).toBe("dark");
+    expect(screen.getByText(/Theme: nintendo/)).toBeDefined();
+    expect(screen.getByText(/Mode: dark/)).toBeDefined();
     expect(document.documentElement.getAttribute("data-theme")).toBe("nintendo");
     expect(document.documentElement.classList.contains("dark")).toBe(true);
     expect(document.documentElement.classList.contains("theme-nintendo")).toBe(true);
@@ -98,14 +98,14 @@ describe("ThemeProvider", () => {
         <TestComponent />
       </ThemeProvider>,
     );
-    expect(screen.getByTestId("theme").textContent).toBe("sega");
+    expect(screen.getByText(/Theme: sega/)).toBeDefined();
 
     rerender(
       <ThemeProvider theme="atari">
         <TestComponent />
       </ThemeProvider>,
     );
-    expect(screen.getByTestId("theme").textContent).toBe("atari");
+    expect(screen.getByText(/Theme: atari/)).toBeDefined();
     expect(document.documentElement.getAttribute("data-theme")).toBe("atari");
     expect(document.documentElement.classList.contains("theme-atari")).toBe(true);
     expect(document.documentElement.classList.contains("theme-sega")).toBe(false);
