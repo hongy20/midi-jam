@@ -1,20 +1,20 @@
 "use client";
 
 import { Maximize2, Minimize2, Pause } from "lucide-react";
+import { useMemo } from "react";
 
 import { BackgroundLane, PIANO_GRID_ITEM_CLASS, PianoKeyboard } from "@/features/piano";
 import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
 import { LaneStage } from "@/features/visualizer";
 import { Button } from "@/shared/components/ui/8bit/button";
-import { type Instrument } from "@/shared/lib/instrument";
+import { getInstrumentType } from "@/shared/lib/instrument";
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
 import styles from "./play-page.view.module.css";
 
 interface PlayPageViewProps {
-  selectedMIDIInput: { name?: string };
-  instrument: Instrument;
+  selectedMIDIInput: WebMidi.MIDIInput;
   selectedTrack: { name: string };
   getScore: () => number;
   getCombo: () => number;
@@ -40,7 +40,6 @@ interface PlayPageViewProps {
  */
 export function PlayPageView({
   selectedMIDIInput,
-  instrument,
   selectedTrack,
   getScore,
   getCombo,
@@ -59,6 +58,8 @@ export function PlayPageView({
   speed,
   laneScrollDurationMs,
 }: PlayPageViewProps) {
+  const instrument = useMemo(() => getInstrumentType(selectedMIDIInput), [selectedMIDIInput]);
+
   return (
     <div
       className={styles.container}
@@ -112,8 +113,14 @@ export function PlayPageView({
       </main>
 
       <footer className={styles.footer}>
-        <div className={styles.keyboardWrapper} data-testid={`${instrument}-keyboard`}>
-          <PianoKeyboard liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />
+        <div className={styles.keyboardWrapper}>
+          {instrument === "piano" ? (
+            <PianoKeyboard liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />
+          ) : (
+            <div className="font-retro text-muted-foreground/50 flex h-full items-center justify-center text-xl tracking-wider">
+              DRUM PADS (NOT IMPLEMENTED)
+            </div>
+          )}
         </div>
       </footer>
     </div>

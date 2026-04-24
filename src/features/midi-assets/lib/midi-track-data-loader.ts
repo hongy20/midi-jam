@@ -1,4 +1,4 @@
-import { getInstrumentFromInput } from "@/shared/lib/instrument";
+import { getInstrumentType } from "@/shared/lib/instrument";
 import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
 
 import { LANE_SEGMENT_DURATION_MS } from "./constant";
@@ -33,7 +33,7 @@ export function getTrackData(
 
   const promise = (async () => {
     const midi = await loadMidiFile(url);
-    const instrument = getInstrumentFromInput(input);
+    const instrument = getInstrumentType(input);
     const notes = parseMidiNotes(midi, instrument);
     const totalDurationMs = midi.duration * 1000;
     const groups = buildMidiNoteGroups({

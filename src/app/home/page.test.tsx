@@ -73,7 +73,7 @@ describe("HomePageClient", () => {
     const tracksPromise = Promise.resolve(mockTracks);
     await act(async () => {
       render(
-        <Suspense fallback={<div data-testid="loading">Loading...</div>}>
+        <Suspense fallback={<div>Loading...</div>}>
           <HomePageClient tracksPromise={tracksPromise} />
         </Suspense>,
       );

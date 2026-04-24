@@ -15,7 +15,6 @@ import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 import { useWakeLock } from "@/shared/hooks/use-wake-lock";
-import { getInstrumentFromInput } from "@/shared/lib/instrument";
 
 import { PlayPageView } from "./play-page.view";
 
@@ -54,8 +53,6 @@ export function PlayPageClient() {
   const notes = useMemo(() => trackData?.notes ?? [], [trackData]);
   const groups = useMemo(() => trackData?.groups ?? [], [trackData]);
   const totalDurationMs = trackData?.totalDurationMs ?? 0;
-
-  const instrument = useMemo(() => getInstrumentFromInput(selectedMIDIInput), [selectedMIDIInput]);
 
   // Calculate dynamic layout range for consistent grid alignment
   const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(notes), [notes]);
@@ -133,7 +130,6 @@ export function PlayPageClient() {
   return (
     <PlayPageView
       selectedMIDIInput={selectedMIDIInput}
-      instrument={instrument}
       selectedTrack={selectedTrack}
       getScore={getScore}
       getCombo={getCombo}
