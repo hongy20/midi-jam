@@ -32,7 +32,7 @@ export function PlayPageClient() {
   const trackDataPromise = useMemo(() => {
     if (!selectedTrack) return null;
     return getTrackData(selectedTrack.url);
-  }, [selectedTrack?.url]);
+  }, [selectedTrack]);
   const { speed, demoMode } = useOptions();
   const { setSessionResults } = useScore();
   const { isFullscreen, toggleFullscreen } = useFullscreen();

@@ -6,7 +6,7 @@ export const DIFFICULTY_SPEEDS: Record<Difficulty, number> = {
   hard: 2.0,
 };
 
-export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
+const DIFFICULTY_LABELS: Record<Difficulty, string> = {
   easy: "EASY (0.5x)",
   normal: "NORMAL (1.0x)",
   hard: "HARD (2.0x)",
