@@ -20,11 +20,9 @@
   /* Target position: The top of the segment reaches the bottom of the container. */
   --translate-y-to: var(--container-height);
 
-  display: grid;
   width: 100%;
   position: absolute;
   top: 0;
-  grid-template-columns: repeat(calc(var(--end-unit) - var(--start-unit)), minmax(0, 1fr));
   /* Segment height corresponds to LANE_SEGMENT_DURATION_MS.
      Speed is 1 container height per --lane-scroll-duration-ms. */
   height: calc(
@@ -47,9 +45,8 @@
 .note {
   position: absolute;
   width: 100%;
-  border-radius: var(--note-radius);
-  border: 1px solid
-    color-mix(in srgb, currentColor calc(var(--note-border-opacity) * 100%), transparent);
+  border-radius: 0.125rem;
+  border: 1px solid currentColor;
   min-width: 0;
 
   background-color: color-mix(in srgb, currentColor calc(20% + 20% * var(--is-black)), transparent);

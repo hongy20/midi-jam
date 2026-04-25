@@ -13,6 +13,7 @@ export interface HighwayProps {
   noteClassName?: string;
   children?: React.ReactNode;
   speed: number;
+  containerClassName?: string;
 }
 
 export function Highway({
@@ -22,6 +23,7 @@ export function Highway({
   noteClassName,
   children,
   speed,
+  containerClassName,
 }: HighwayProps) {
   const [renderIndexes, setRenderIndexes] = useState<number[]>(() =>
     getVisibleSegmentIndexes(getCurrentTimeMs(), groups, LANE_SCROLL_DURATION_MS),
@@ -61,6 +63,7 @@ export function Highway({
             group={groups[idx]}
             getCurrentTimeMs={getCurrentTimeMs}
             noteClassName={noteClassName}
+            containerClassName={containerClassName}
           />
         ))}
       </div>

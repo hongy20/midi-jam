@@ -1,9 +1,11 @@
+import "./piano-layout.css";
+
 import React, { useMemo } from "react";
 
 import { StageProps } from "@/shared/types/stage";
 
-import { PIANO_GRID_ITEM_CLASS } from "../../lib/constants";
-import { getPianoLayoutUnits } from "../../lib/piano";
+import { PIANO_GRID_CLASS, PIANO_GRID_ITEM_CLASS } from "../../lib/constants";
+import { getPianoLayoutUnits } from "../../lib/utils";
 import { BackgroundLane } from "../background-lane/BackgroundLane";
 import { PianoKeyboard } from "../piano-keyboard/PianoKeyboard";
 import styles from "./piano-stage.module.css";
@@ -30,6 +32,7 @@ export function PianoStage({ notes, liveActiveNotes, playbackNotes, highway }: S
         {React.cloneElement(highway, {
           children: <BackgroundLane />,
           noteClassName: PIANO_GRID_ITEM_CLASS,
+          containerClassName: PIANO_GRID_CLASS,
         } as React.HTMLAttributes<HTMLDivElement>)}
       </main>
 

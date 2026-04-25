@@ -2,13 +2,16 @@
 
 import { memo, useEffect, useRef } from "react";
 
+import { cn } from "@/shared/lib/utils";
+
 import {
   MIDI_NOTE_C4,
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
+  PIANO_GRID_CLASS,
   PIANO_GRID_ITEM_CLASS,
 } from "../../lib/constants";
-import styles from "../../styles/piano-keyboard.module.css";
+import styles from "./piano-keyboard.module.css";
 
 interface PianoKeyboardProps {
   liveNotes: Set<number>;
@@ -43,7 +46,7 @@ const PianoKeys = memo(
                 }
               }}
               type="button"
-              className={`${styles.key} ${PIANO_GRID_ITEM_CLASS}`}
+              className={cn(styles.key, PIANO_GRID_ITEM_CLASS)}
               data-pitch={note}
               data-live="false"
               data-playback="false"
@@ -85,7 +88,7 @@ export const PianoKeyboard = ({ liveNotes, playbackNotes }: PianoKeyboardProps) 
   }, [liveNotes, playbackNotes]);
 
   return (
-    <div className={styles.container} role="img" aria-label="Piano keyboard">
+    <div className={cn(styles.container, PIANO_GRID_CLASS)} role="img" aria-label="Piano keyboard">
       <PianoKeys keyRefs={keyRefs} />
     </div>
   );
