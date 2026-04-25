@@ -2,20 +2,20 @@ import { useLayoutEffect, useRef } from "react";
 
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
-import { computeLaneSegmentAnimationDelay } from "../../lib/utils";
-import styles from "./note-highway-segment.module.css";
+import { computeLaneSegmentAnimationDelay } from "../lib/utils";
+import styles from "./highway-segment.module.css";
 
-interface NoteHighwaySegmentProps {
+interface HighwaySegmentProps {
   group: MidiNoteGroup;
   getCurrentTimeMs: () => number;
   noteClassName?: string;
 }
 
-export function NoteHighwaySegment({
+export function HighwaySegment({
   group,
   getCurrentTimeMs,
   noteClassName,
-}: NoteHighwaySegmentProps) {
+}: HighwaySegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Phase-lock the CSS animation to the master clock at the exact moment this
