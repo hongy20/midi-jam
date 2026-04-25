@@ -11,7 +11,7 @@ import {
   PIANO_GRID_CLASS,
   PIANO_GRID_ITEM_CLASS,
 } from "../../lib/constants";
-import styles from "../../styles/piano-keyboard.module.css";
+import styles from "./piano-keyboard.module.css";
 
 interface PianoKeyboardProps {
   liveNotes: Set<number>;
