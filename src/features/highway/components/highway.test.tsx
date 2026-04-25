@@ -51,12 +51,7 @@ describe("Highway", () => {
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };
     const { container } = render(
-      <Highway
-        groups={mockGroups}
-        scrollRef={scrollRef}
-        getCurrentTimeMs={() => 0}
-        speed={1}
-      />,
+      <Highway groups={mockGroups} scrollRef={scrollRef} getCurrentTimeMs={() => 0} speed={1} />,
     );
     const notes60 = container.querySelectorAll('[data-pitch="60"]');
     const notes61 = container.querySelectorAll('[data-pitch="61"]');

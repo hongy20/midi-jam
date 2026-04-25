@@ -11,11 +11,7 @@ interface HighwaySegmentProps {
   noteClassName?: string;
 }
 
-export function HighwaySegment({
-  group,
-  getCurrentTimeMs,
-  noteClassName,
-}: HighwaySegmentProps) {
+export function HighwaySegment({ group, getCurrentTimeMs, noteClassName }: HighwaySegmentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Phase-lock the CSS animation to the master clock at the exact moment this
