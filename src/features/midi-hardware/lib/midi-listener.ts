@@ -1,39 +1,16 @@
-import { COMMAND_NOTE_OFF, COMMAND_NOTE_ON } from "@/shared/lib/command";
-import { type MIDINoteEvent } from "@/shared/types/midi";
-
 /**
- * Subscribes to MIDI note messages from a MIDI input device.
+ * Subscribes to all MIDI messages from a MIDI input device.
  * @param input The MIDIInput device to listen to.
- * @param callback The function to be called when a note message is received.
+ * @param callback The function to be called when a MIDI message is received.
  * @returns An unsubscribe function to remove the listener.
  */
-export function subscribeToNotes(
+export function subscribeToMessages(
   input: WebMidi.MIDIInput,
-  callback: (event: MIDINoteEvent) => void,
+  callback: (event: WebMidi.MIDIMessageEvent) => void,
 ): () => void {
-  const handleMIDIMessage = (event: WebMidi.MIDIMessageEvent) => {
-    const [status, pitch, velocity] = event.data;
-
-    // Mask out the channel bits (lower 4 bits) to get the command type
-    const command = status & 0xf0;
-
-    if (command === COMMAND_NOTE_ON) {
-      // Note On
-      if (velocity === 0) {
-        // Note On with velocity 0 is actually Note Off
-        callback({ type: "note-off", pitch, velocity: 0 });
-      } else {
-        callback({ type: "note-on", pitch, velocity });
-      }
-    } else if (command === COMMAND_NOTE_OFF) {
-      // Note Off
-      callback({ type: "note-off", pitch, velocity: velocity || 0 });
-    }
-  };
-
-  input.addEventListener("midimessage", handleMIDIMessage);
+  input.addEventListener("midimessage", callback);
 
   return () => {
-    input.removeEventListener("midimessage", handleMIDIMessage);
+    input.removeEventListener("midimessage", callback);
   };
 }

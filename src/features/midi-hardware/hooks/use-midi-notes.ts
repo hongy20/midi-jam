@@ -2,9 +2,10 @@
 
 import { useEffect, useLayoutEffect, useRef } from "react";
 
+import { COMMAND_NOTE_OFF, COMMAND_NOTE_ON } from "@/shared/lib/command";
 import { type MIDINoteEvent } from "@/shared/types/midi";
 
-import { subscribeToNotes } from "../lib/midi-listener";
+import { subscribeToMessages } from "../lib/midi-listener";
 
 /**
  * A React hook that subscribes to MIDI note events from a MIDI input device.
@@ -27,8 +28,24 @@ export function useMIDINotes(
   useEffect(() => {
     if (!input) return;
 
-    const unsubscribe = subscribeToNotes(input, (event) => {
-      onNoteRef.current(event);
+    const unsubscribe = subscribeToMessages(input, (event) => {
+      const [status, pitch, velocity] = event.data;
+
+      // Mask out the channel bits (lower 4 bits) to get the command type
+      const command = status & 0xf0;
+
+      if (command === COMMAND_NOTE_ON) {
+        // Note On
+        if (velocity === 0) {
+          // Note On with velocity 0 is actually Note Off
+          onNoteRef.current({ type: "note-off", pitch, velocity: 0 });
+        } else {
+          onNoteRef.current({ type: "note-on", pitch, velocity });
+        }
+      } else if (command === COMMAND_NOTE_OFF) {
+        // Note Off
+        onNoteRef.current({ type: "note-off", pitch, velocity: velocity || 0 });
+      }
     });
 
     return unsubscribe;
