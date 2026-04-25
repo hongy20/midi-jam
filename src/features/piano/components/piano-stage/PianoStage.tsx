@@ -4,7 +4,9 @@ import { useMemo } from "react";
 
 import { InstrumentStageProps } from "@/shared/types/instrument";
 
+import { PIANO_GRID_ITEM_CLASS } from "../../lib/constants";
 import { getPianoLayoutUnits } from "../../lib/piano";
+import { BackgroundLane } from "../background-lane/BackgroundLane";
 import { PianoKeyboard } from "../piano-keyboard/PianoKeyboard";
 import styles from "./piano-stage.module.css";
 
@@ -14,9 +16,12 @@ import styles from "./piano-stage.module.css";
  */
 export function PianoStage({
   notes,
+  groups,
+  scrollRef,
+  getCurrentTimeMs,
   liveActiveNotes,
   playbackNotes,
-  children,
+  visualizer: Visualizer,
 }: InstrumentStageProps) {
   // Calculate dynamic layout range for consistent grid alignment
   const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(notes), [notes]);
@@ -32,7 +37,14 @@ export function PianoStage({
           } as React.CSSProperties
         }
       >
-        {children}
+        <Visualizer
+          groups={groups}
+          scrollRef={scrollRef}
+          getCurrentTimeMs={getCurrentTimeMs}
+          noteClassName={PIANO_GRID_ITEM_CLASS}
+        >
+          <BackgroundLane />
+        </Visualizer>
       </main>
 
       <footer className={styles.footer}>
