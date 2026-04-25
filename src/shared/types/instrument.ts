@@ -6,6 +6,7 @@ export interface TimelineProps {
   getCurrentTimeMs: () => number;
   noteClassName?: string;
   children?: React.ReactNode;
+  speed: number;
 }
 
 export interface InstrumentStageProps {

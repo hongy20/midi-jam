@@ -57,6 +57,7 @@ export const Default: Story = {
     groups: mockGroups,
     scrollRef: { current: null },
     getCurrentTimeMs: () => 0,
+    speed: 1,
   },
 };
 

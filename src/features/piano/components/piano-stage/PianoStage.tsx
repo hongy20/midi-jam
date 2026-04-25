@@ -21,6 +21,7 @@ export function PianoStage({
   getCurrentTimeMs,
   liveActiveNotes,
   playbackNotes,
+  speed,
   Timeline,
 }: InstrumentStageProps) {
   // Calculate dynamic layout range for consistent grid alignment
@@ -42,6 +43,7 @@ export function PianoStage({
           scrollRef={scrollRef}
           getCurrentTimeMs={getCurrentTimeMs}
           noteClassName={PIANO_GRID_ITEM_CLASS}
+          speed={speed}
         >
           <BackgroundLane />
         </Timeline>

@@ -51,7 +51,12 @@ describe("Timeline", () => {
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };
     const { container } = render(
-      <Timeline groups={mockGroups} scrollRef={scrollRef} getCurrentTimeMs={() => 0} />,
+      <Timeline
+        groups={mockGroups}
+        scrollRef={scrollRef}
+        getCurrentTimeMs={() => 0}
+        speed={1}
+      />,
     );
     const notes60 = container.querySelectorAll('[data-pitch="60"]');
     const notes61 = container.querySelectorAll('[data-pitch="61"]');

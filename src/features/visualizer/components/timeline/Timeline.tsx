@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
 
-import { type MidiNoteGroup } from "@/shared/types/midi";
+export { type TimelineProps } from "@/shared/types/instrument";
+import { type TimelineProps } from "@/shared/types/instrument";
 
 import { LANE_SCROLL_DURATION_MS } from "../../lib/constants";
 import { getVisibleSegmentIndexes } from "../../lib/utils";
 import { TimelineSegment } from "./TimelineSegment";
-
-export interface TimelineProps {
-  groups: MidiNoteGroup[];
-  scrollRef: React.RefObject<HTMLDivElement | null>;
-  getCurrentTimeMs: () => number;
-  noteClassName?: string;
-  children?: React.ReactNode;
-}
 
 export function Timeline({
   groups,
@@ -20,6 +13,7 @@ export function Timeline({
   getCurrentTimeMs,
   noteClassName,
   children,
+  speed,
 }: TimelineProps) {
   const [renderIndexes, setRenderIndexes] = useState<number[]>(() =>
     getVisibleSegmentIndexes(getCurrentTimeMs(), groups, LANE_SCROLL_DURATION_MS),
@@ -41,7 +35,15 @@ export function Timeline({
   }, [getCurrentTimeMs, groups]);
 
   return (
-    <div className="bg-background/5 relative h-full w-full overflow-hidden">
+    <div
+      className="bg-background/5 relative h-full w-full overflow-hidden"
+      style={
+        {
+          "--lane-scroll-duration-ms": LANE_SCROLL_DURATION_MS,
+          "--speed": speed,
+        } as React.CSSProperties
+      }
+    >
       {children}
 
       <div ref={scrollRef} className="absolute inset-0 overflow-hidden">

@@ -30,7 +30,6 @@ interface PlayPageViewProps {
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
   speed: number;
-  laneScrollDurationMs: number;
 }
 
 /**
@@ -54,21 +53,12 @@ export function PlayPageView({
   scrollRef,
   getCurrentTimeMs,
   speed,
-  laneScrollDurationMs,
 }: PlayPageViewProps) {
   const instrumentType = getInstrumentType(selectedMIDIInput);
   const Stage = instrumentType === "piano" ? PianoStage : DrumStage;
 
   return (
-    <div
-      className={styles.container}
-      style={
-        {
-          "--lane-scroll-duration-ms": laneScrollDurationMs,
-          "--speed": speed,
-        } as React.CSSProperties
-      }
-    >
+    <div className={styles.container}>
       <header className={styles.header}>
         <div className={styles.songInfo}>
           <span className={styles.badge}>
