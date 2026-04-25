@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import { InstrumentStageProps } from "@/shared/types/instrument";
+import { StageProps } from "@/shared/types/stage";
 
 import { PIANO_GRID_ITEM_CLASS } from "../../lib/constants";
 import { getPianoLayoutUnits } from "../../lib/piano";
@@ -12,12 +12,7 @@ import styles from "./piano-stage.module.css";
  * PianoStage encapsulates the full piano gameplay visualization.
  * It manages its own layout units and grid alignment.
  */
-export function PianoStage({
-  notes,
-  liveActiveNotes,
-  playbackNotes,
-  Timeline,
-}: InstrumentStageProps) {
+export function PianoStage({ notes, liveActiveNotes, playbackNotes, noteHighway }: StageProps) {
   // Calculate dynamic layout range for consistent grid alignment
   const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(notes), [notes]);
 
@@ -32,7 +27,7 @@ export function PianoStage({
           } as React.CSSProperties
         }
       >
-        {React.cloneElement(Timeline, {
+        {React.cloneElement(noteHighway, {
           children: <BackgroundLane />,
           noteClassName: PIANO_GRID_ITEM_CLASS,
         } as React.HTMLAttributes<HTMLDivElement>)}

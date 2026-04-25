@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import type { MidiNoteGroup } from "@/shared/types/midi";
 
-import { Timeline } from "./Timeline";
+import { NoteHighway } from "./NoteHighway";
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -23,7 +23,7 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
 };
 
-describe("Timeline", () => {
+describe("NoteHighway", () => {
   const mockGroups: MidiNoteGroup[] = [
     {
       index: 0,
@@ -51,7 +51,12 @@ describe("Timeline", () => {
   it("renders notes", () => {
     const scrollRef = { current: document.createElement("div") };
     const { container } = render(
-      <Timeline groups={mockGroups} scrollRef={scrollRef} getCurrentTimeMs={() => 0} speed={1} />,
+      <NoteHighway
+        groups={mockGroups}
+        scrollRef={scrollRef}
+        getCurrentTimeMs={() => 0}
+        speed={1}
+      />,
     );
     const notes60 = container.querySelectorAll('[data-pitch="60"]');
     const notes61 = container.querySelectorAll('[data-pitch="61"]');

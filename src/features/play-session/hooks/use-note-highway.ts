@@ -1,19 +1,19 @@
 "use client";
 import { useCallback, useEffect, useRef } from "react";
 
-interface UseLaneTimelineProps {
+interface UseNoteHighwayProps {
   totalDurationMs: number;
   speed: number;
   initialProgress?: number;
   onFinish: () => void;
 }
 
-export function useLaneTimeline({
+export function useNoteHighway({
   totalDurationMs,
   speed,
   initialProgress = 0,
   onFinish,
-}: UseLaneTimelineProps) {
+}: UseNoteHighwayProps) {
   const baseGameTimeRef = useRef(initialProgress * totalDurationMs);
   // eslint-disable-next-line react-hooks/purity
   const syncRealTimeRef = useRef(performance.now());
@@ -67,6 +67,6 @@ export function useLaneTimeline({
   return {
     getCurrentTimeMs,
     getProgress,
-    resetTimeline,
+    resetNoteHighway: resetTimeline,
   };
 }

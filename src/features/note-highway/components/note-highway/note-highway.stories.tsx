@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useEffect, useState } from "react";
 
-import { Timeline, TimelineProps } from "./Timeline";
+import { NoteHighway, NoteHighwayProps } from "./NoteHighway";
 
-const meta: Meta<typeof Timeline> = {
-  title: "Features/Visualizer/Timeline",
-  component: Timeline,
+const meta: Meta<typeof NoteHighway> = {
+  title: "Features/NoteHighway/NoteHighway",
+  component: NoteHighway,
   parameters: {
     layout: "fullscreen",
   },
@@ -31,7 +31,7 @@ const meta: Meta<typeof Timeline> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Timeline>;
+type Story = StoryObj<typeof NoteHighway>;
 
 const mockGroups = [
   {
@@ -70,7 +70,7 @@ export const Playing: Story = {
 };
 
 export const Animated: Story = {
-  render: (args: TimelineProps) => {
+  render: (args: NoteHighwayProps) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [time, setTime] = useState(0);
 
@@ -83,7 +83,7 @@ export const Animated: Story = {
       return () => clearInterval(interval);
     }, []);
 
-    return <Timeline {...args} getCurrentTimeMs={() => time} />;
+    return <NoteHighway {...args} getCurrentTimeMs={() => time} />;
   },
   args: {
     groups: mockGroups,

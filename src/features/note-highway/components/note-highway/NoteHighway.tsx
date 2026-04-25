@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
-export interface TimelineProps {
+export interface NoteHighwayProps {
   groups: MidiNoteGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
@@ -13,16 +13,16 @@ export interface TimelineProps {
 
 import { LANE_SCROLL_DURATION_MS } from "../../lib/constants";
 import { getVisibleSegmentIndexes } from "../../lib/utils";
-import { TimelineSegment } from "./TimelineSegment";
+import { NoteHighwaySegment } from "./NoteHighwaySegment";
 
-export function Timeline({
+export function NoteHighway({
   groups,
   scrollRef,
   getCurrentTimeMs,
   noteClassName,
   children,
   speed,
-}: TimelineProps) {
+}: NoteHighwayProps) {
   const [renderIndexes, setRenderIndexes] = useState<number[]>(() =>
     getVisibleSegmentIndexes(getCurrentTimeMs(), groups, LANE_SCROLL_DURATION_MS),
   );
@@ -56,7 +56,7 @@ export function Timeline({
 
       <div ref={scrollRef} className="absolute inset-0 overflow-hidden">
         {renderIndexes.map((idx) => (
-          <TimelineSegment
+          <NoteHighwaySegment
             key={idx}
             group={groups[idx]}
             getCurrentTimeMs={getCurrentTimeMs}
