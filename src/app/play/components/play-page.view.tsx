@@ -92,7 +92,7 @@ export function PlayPageView({
         notes={notes}
         liveActiveNotes={liveActiveNotes}
         playbackNotes={playbackNotes}
-        noteHighway={
+        highway={
           <NoteHighway
             groups={groups}
             scrollRef={scrollRef}

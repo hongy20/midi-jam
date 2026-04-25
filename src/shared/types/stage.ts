@@ -4,5 +4,5 @@ export interface StageProps {
   notes: MidiNote[];
   liveActiveNotes: Set<number>;
   playbackNotes: Set<number>;
-  noteHighway: React.ReactElement;
+  highway: React.ReactElement;
 }

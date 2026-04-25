@@ -12,7 +12,7 @@ import styles from "./piano-stage.module.css";
  * PianoStage encapsulates the full piano gameplay visualization.
  * It manages its own layout units and grid alignment.
  */
-export function PianoStage({ notes, liveActiveNotes, playbackNotes, noteHighway }: StageProps) {
+export function PianoStage({ notes, liveActiveNotes, playbackNotes, highway }: StageProps) {
   // Calculate dynamic layout range for consistent grid alignment
   const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(notes), [notes]);
 
@@ -27,7 +27,7 @@ export function PianoStage({ notes, liveActiveNotes, playbackNotes, noteHighway 
           } as React.CSSProperties
         }
       >
-        {React.cloneElement(noteHighway, {
+        {React.cloneElement(highway, {
           children: <BackgroundLane />,
           noteClassName: PIANO_GRID_ITEM_CLASS,
         } as React.HTMLAttributes<HTMLDivElement>)}

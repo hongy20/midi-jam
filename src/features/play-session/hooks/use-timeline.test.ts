@@ -1,9 +1,9 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useNoteHighway } from "./use-note-highway";
+import { useTimeline } from "./use-timeline";
 
-describe("useNoteHighway hook", () => {
+describe("useTimeline hook", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.spyOn(performance, "now").mockReturnValue(0);
@@ -18,7 +18,7 @@ describe("useNoteHighway hook", () => {
 
   it("calculates progress and time correctly", () => {
     const { result } = renderHook(() =>
-      useNoteHighway({
+      useTimeline({
         totalDurationMs: 10000,
         speed: 1,
         onFinish: mockOnFinish,
@@ -38,7 +38,7 @@ describe("useNoteHighway hook", () => {
 
   it("handles speed correctly", () => {
     const { result } = renderHook(() =>
-      useNoteHighway({
+      useTimeline({
         totalDurationMs: 10000,
         speed: 2,
         onFinish: mockOnFinish,
@@ -53,7 +53,7 @@ describe("useNoteHighway hook", () => {
 
   it("calls onFinish at the correct time", () => {
     renderHook(() =>
-      useNoteHighway({
+      useTimeline({
         totalDurationMs: 10000,
         speed: 1,
         onFinish: mockOnFinish,
@@ -73,7 +73,7 @@ describe("useNoteHighway hook", () => {
 
   it("resets timeline correctly", () => {
     const { result } = renderHook(() =>
-      useNoteHighway({
+      useTimeline({
         totalDurationMs: 10000,
         speed: 1,
         onFinish: mockOnFinish,
@@ -88,7 +88,7 @@ describe("useNoteHighway hook", () => {
     act(() => {
       // We must mock performance.now() again at the time of reset
       vi.spyOn(performance, "now").mockReturnValue(3000);
-      result.current.resetNoteHighway();
+      result.current.resetTimeline();
     });
 
     // After another 2 seconds real time (5s total), game time should only be 2s

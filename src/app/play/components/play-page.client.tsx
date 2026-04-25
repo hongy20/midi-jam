@@ -7,7 +7,7 @@ import { useCollection } from "@/features/collection";
 import { getTrackData } from "@/features/midi-assets";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { useOptions } from "@/features/options";
-import { useNoteHighway, usePlay } from "@/features/play-session";
+import { usePlay, useTimeline } from "@/features/play-session";
 import { useScore, useScoreEngine } from "@/features/score";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
@@ -63,7 +63,7 @@ export function PlayPageClient() {
     handleFinishRef.current();
   }, []);
 
-  const { getCurrentTimeMs, getProgress } = useNoteHighway({
+  const { getCurrentTimeMs, getProgress } = useTimeline({
     totalDurationMs,
     speed,
     initialProgress: gameSession?.currentProgress ?? 0,
