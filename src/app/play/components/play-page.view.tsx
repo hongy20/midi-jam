@@ -11,8 +11,6 @@ import { Button } from "@/shared/components/ui/8bit/button";
 import { getInstrumentType } from "@/shared/lib/instrument";
 import { type MidiNote, type MidiNoteGroup } from "@/shared/types/midi";
 
-import styles from "./play-page.view.module.css";
-
 interface PlayPageViewProps {
   selectedMIDIInput: WebMidi.MIDIInput;
   selectedTrack: { name: string };
@@ -58,10 +56,10 @@ export function PlayPageView({
   const Stage = instrumentType === "piano" ? PianoStage : DrumStage;
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <div className={styles.songInfo}>
-          <span className={styles.badge}>
+    <div className="bg-background text-foreground grid h-dvh w-screen grid-rows-[5rem_1fr] overflow-hidden">
+      <header className="bg-background/80 border-foreground dark:border-ring flex w-full items-center justify-between border-b-4 px-6 py-4 backdrop-blur-sm">
+        <div className="flex flex-1 flex-col">
+          <span className="text-foreground/60 font-retro mb-1 text-[10px] font-black tracking-[0.2em] uppercase">
             {selectedMIDIInput.name} • {selectedTrack.name}
           </span>
           <LiveScore
