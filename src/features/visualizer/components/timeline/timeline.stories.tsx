@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useEffect, useState } from "react";
 
-import { LaneStage } from "./lane-stage";
+import { Timeline, TimelineProps } from "./Timeline";
 
-const meta: Meta<typeof LaneStage> = {
-  title: "Features/Visualizer/LaneStage",
-  component: LaneStage,
+const meta: Meta<typeof Timeline> = {
+  title: "Features/Visualizer/Timeline",
+  component: Timeline,
   parameters: {
     layout: "fullscreen",
   },
@@ -31,7 +31,7 @@ const meta: Meta<typeof LaneStage> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof LaneStage>;
+type Story = StoryObj<typeof Timeline>;
 
 const mockGroups = [
   {
@@ -69,7 +69,7 @@ export const Playing: Story = {
 };
 
 export const Animated: Story = {
-  render: (args) => {
+  render: (args: TimelineProps) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [time, setTime] = useState(0);
 
@@ -82,7 +82,7 @@ export const Animated: Story = {
       return () => clearInterval(interval);
     }, []);
 
-    return <LaneStage {...args} getCurrentTimeMs={() => time} />;
+    return <Timeline {...args} getCurrentTimeMs={() => time} />;
   },
   args: {
     groups: mockGroups,

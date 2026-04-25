@@ -21,7 +21,7 @@ export function PianoStage({
   getCurrentTimeMs,
   liveActiveNotes,
   playbackNotes,
-  visualizer: Visualizer,
+  Timeline,
 }: InstrumentStageProps) {
   // Calculate dynamic layout range for consistent grid alignment
   const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(notes), [notes]);
@@ -37,14 +37,14 @@ export function PianoStage({
           } as React.CSSProperties
         }
       >
-        <Visualizer
+        <Timeline
           groups={groups}
           scrollRef={scrollRef}
           getCurrentTimeMs={getCurrentTimeMs}
           noteClassName={PIANO_GRID_ITEM_CLASS}
         >
           <BackgroundLane />
-        </Visualizer>
+        </Timeline>
       </main>
 
       <footer className={styles.footer}>

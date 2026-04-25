@@ -1,2 +1,3 @@
-export { LaneStage } from "./components/lane-stage/lane-stage";
+export { Timeline } from "./components/timeline/Timeline";
+export type { TimelineProps } from "./components/timeline/Timeline";
 export { LANE_SCROLL_DURATION_MS } from "./lib/constants";

@@ -6,7 +6,7 @@ import { DrumStage } from "@/features/drum";
 import { PianoStage } from "@/features/piano";
 import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
-import { LaneStage } from "@/features/visualizer";
+import { Timeline } from "@/features/visualizer";
 import { Button } from "@/shared/components/ui/8bit/button";
 import { getInstrumentType } from "@/shared/lib/instrument";
 import { type MidiNote, type MidiNoteGroup } from "@/shared/types/midi";
@@ -106,7 +106,7 @@ export function PlayPageView({
         liveActiveNotes={liveActiveNotes}
         playbackNotes={playbackNotes}
         speed={speed}
-        visualizer={LaneStage}
+        Timeline={Timeline}
       />
     </div>
   );

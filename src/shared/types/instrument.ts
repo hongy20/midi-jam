@@ -1,6 +1,6 @@
 import type { MidiNote, MidiNoteGroup } from "./midi";
 
-export interface VisualizerProps {
+export interface TimelineProps {
   groups: MidiNoteGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
@@ -16,5 +16,5 @@ export interface InstrumentStageProps {
   liveActiveNotes: Set<number>;
   playbackNotes: Set<number>;
   speed: number;
-  visualizer: React.ComponentType<VisualizerProps>;
+  Timeline: React.ComponentType<TimelineProps>;
 }
