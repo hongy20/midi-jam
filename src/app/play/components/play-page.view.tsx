@@ -3,6 +3,7 @@
 import { Maximize2, Minimize2, Pause } from "lucide-react";
 
 import { PianoStage } from "@/features/piano";
+import { DrumStage } from "@/features/drum";
 import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
 import { Button } from "@/shared/components/ui/8bit/button";
@@ -55,7 +56,7 @@ export function PlayPageView({
   laneScrollDurationMs,
 }: PlayPageViewProps) {
   const instrumentType = getInstrumentType(selectedMIDIInput);
-  const Stage = instrumentType === "piano" ? PianoStage : null;
+  const Stage = instrumentType === "piano" ? PianoStage : DrumStage;
 
   return (
     <div
@@ -96,23 +97,15 @@ export function PlayPageView({
         </div>
       </header>
 
-      {Stage ? (
-        <Stage
-          notes={notes}
-          groups={groups}
-          scrollRef={scrollRef}
-          getCurrentTimeMs={getCurrentTimeMs}
-          liveActiveNotes={liveActiveNotes}
-          playbackNotes={playbackNotes}
-          speed={speed}
-        />
-      ) : (
-        <main className="flex h-full items-center justify-center">
-          <div className="font-retro text-muted-foreground/50 text-xl tracking-wider">
-            {instrumentType.toUpperCase()} STAGE (NOT IMPLEMENTED)
-          </div>
-        </main>
-      )}
+      <Stage
+        notes={notes}
+        groups={groups}
+        scrollRef={scrollRef}
+        getCurrentTimeMs={getCurrentTimeMs}
+        liveActiveNotes={liveActiveNotes}
+        playbackNotes={playbackNotes}
+        speed={speed}
+      />
     </div>
   );
 }
