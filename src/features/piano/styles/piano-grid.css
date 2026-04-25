@@ -1,4 +1,9 @@
 /* src/components/piano-keyboard/piano-grid.module.css */
+.piano-grid {
+  display: grid;
+  grid-template-columns: repeat(calc(var(--end-unit) - var(--start-unit)), minmax(0, 1fr));
+}
+
 .piano-grid-item {
   --relative-start: calc(var(--note-start) - var(--start-unit) + 1);
   grid-column: var(--relative-start) / span calc(3 - var(--is-black));
