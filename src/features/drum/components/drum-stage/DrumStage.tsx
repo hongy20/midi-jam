@@ -16,7 +16,7 @@ export function DrumStage({ children }: InstrumentStageProps) {
           </div>
         )}
       </main>
-      <footer className="h-[var(--footer-height,151px)] border-t border-foreground/5" />
+      <footer className="border-foreground/5 h-[var(--footer-height,151px)] border-t" />
     </>
   );
 }

@@ -4,9 +4,7 @@ import { useMemo } from "react";
 
 import { InstrumentStageProps } from "@/shared/types/instrument";
 
-import { PIANO_GRID_ITEM_CLASS } from "../../lib/constants";
 import { getPianoLayoutUnits } from "../../lib/piano";
-import { BackgroundLane } from "../background-lane/BackgroundLane";
 import { PianoKeyboard } from "../piano-keyboard/PianoKeyboard";
 import styles from "./piano-stage.module.css";
 

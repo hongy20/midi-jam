@@ -2,11 +2,11 @@
 
 import { Maximize2, Minimize2, Pause } from "lucide-react";
 
-import { BackgroundLane, PIANO_GRID_ITEM_CLASS, PianoStage } from "@/features/piano";
 import { DrumStage } from "@/features/drum";
-import { LaneStage } from "@/features/visualizer";
+import { BackgroundLane, PIANO_GRID_ITEM_CLASS, PianoStage } from "@/features/piano";
 import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
+import { LaneStage } from "@/features/visualizer";
 import { Button } from "@/shared/components/ui/8bit/button";
 import { getInstrumentType } from "@/shared/lib/instrument";
 import { type MidiNote, type MidiNoteGroup } from "@/shared/types/midi";
