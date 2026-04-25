@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from "react";
 
-import { type MidiNoteGroup } from "@/shared/types/midi";
 import { cn } from "@/shared/lib/utils";
+import { type MidiNoteGroup } from "@/shared/types/midi";
 
 import { computeLaneSegmentAnimationDelay } from "../lib/utils";
 import styles from "./highway-segment.module.css";

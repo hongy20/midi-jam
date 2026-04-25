@@ -1,5 +1,10 @@
-import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN, PIANO_GRID_ITEM_CLASS } from "../../lib/constants";
-import styles from "../../styles/background-lane.module.css";
+import {
+  PIANO_88_KEY_MAX,
+  PIANO_88_KEY_MIN,
+  PIANO_GRID_CLASS,
+  PIANO_GRID_ITEM_CLASS,
+} from "../../lib/constants";
+import styles from "./background-lane.module.css";
 
 /**
  * Static lanes matching the piano keys.
@@ -12,7 +17,7 @@ export function BackgroundLane() {
   );
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${PIANO_GRID_CLASS}`}>
       {notes.map((note) => (
         <div
           key={`lane-${note}`}

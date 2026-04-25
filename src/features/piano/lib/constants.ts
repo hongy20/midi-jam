@@ -13,3 +13,6 @@ export const MIDI_NOTE_C4 = 60;
 
 /** Global CSS class for piano grid items used for alignment mapping */
 export const PIANO_GRID_ITEM_CLASS = "piano-grid-item";
+
+/** Global CSS class for the piano grid container */
+export const PIANO_GRID_CLASS = "piano-grid";

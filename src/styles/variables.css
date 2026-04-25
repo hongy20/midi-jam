@@ -18,7 +18,6 @@
   --piano-glow-live-bg: var(--primary);
   --piano-glow-playback-bg: var(--secondary);
   --piano-glow-both-bg: var(--accent);
-  --note-radius: 0.125rem;
   --ui-card-radius: 2rem;
 }
 

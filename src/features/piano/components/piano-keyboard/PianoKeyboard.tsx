@@ -6,6 +6,7 @@ import {
   MIDI_NOTE_C4,
   PIANO_88_KEY_MAX,
   PIANO_88_KEY_MIN,
+  PIANO_GRID_CLASS,
   PIANO_GRID_ITEM_CLASS,
 } from "../../lib/constants";
 import styles from "../../styles/piano-keyboard.module.css";
@@ -85,7 +86,11 @@ export const PianoKeyboard = ({ liveNotes, playbackNotes }: PianoKeyboardProps) 
   }, [liveNotes, playbackNotes]);
 
   return (
-    <div className={styles.container} role="img" aria-label="Piano keyboard">
+    <div
+      className={`${styles.container} ${PIANO_GRID_CLASS}`}
+      role="img"
+      aria-label="Piano keyboard"
+    >
       <PianoKeys keyRefs={keyRefs} />
     </div>
   );
