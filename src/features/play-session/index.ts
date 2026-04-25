@@ -1,2 +1,2 @@
 export { PlayProvider, usePlay } from "./context/play-context";
-export { useLaneTimeline } from "./hooks/use-lane-timeline";
+export { useTimeline } from "./hooks/use-timeline";

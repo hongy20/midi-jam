@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { LANE_SCROLL_DURATION_MS } from "./constants";
 import { computeLaneSegmentAnimationDelay, getVisibleSegmentIndexes } from "./utils";
 
-describe("visualizer utilities", () => {
+describe("note highway utilities", () => {
   describe("getVisibleSegmentIndexes", () => {
     const groups = [
       { index: 0, startMs: 0, durationMs: 10000, notes: [] },

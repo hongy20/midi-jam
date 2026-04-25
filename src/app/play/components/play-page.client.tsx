@@ -7,10 +7,8 @@ import { useCollection } from "@/features/collection";
 import { getTrackData } from "@/features/midi-assets";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { useOptions } from "@/features/options";
-import { getPianoLayoutUnits } from "@/features/piano";
-import { useLaneTimeline, usePlay } from "@/features/play-session";
+import { usePlay, useTimeline } from "@/features/play-session";
 import { useScore, useScoreEngine } from "@/features/score";
-import { LANE_SCROLL_DURATION_MS } from "@/features/visualizer";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
 import { useNavigation } from "@/shared/hooks/use-navigation";
@@ -54,9 +52,6 @@ export function PlayPageClient() {
   const groups = useMemo(() => trackData?.groups ?? [], [trackData]);
   const totalDurationMs = trackData?.totalDurationMs ?? 0;
 
-  // Calculate dynamic layout range for consistent grid alignment
-  const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(notes), [notes]);
-
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleFinishRef = useRef<() => void>(() => {});
 
@@ -68,7 +63,7 @@ export function PlayPageClient() {
     handleFinishRef.current();
   }, []);
 
-  const { getCurrentTimeMs, getProgress } = useLaneTimeline({
+  const { getCurrentTimeMs, getProgress } = useTimeline({
     totalDurationMs,
     speed,
     initialProgress: gameSession?.currentProgress ?? 0,
@@ -140,13 +135,11 @@ export function PlayPageClient() {
       handleToggleFullscreen={toggleFullscreen}
       liveActiveNotes={liveActiveNotes}
       playbackNotes={playbackNotes}
+      notes={notes}
       groups={groups}
       scrollRef={scrollRef}
       getCurrentTimeMs={getCurrentTimeMs}
-      startUnit={startUnit}
-      endUnit={endUnit}
       speed={speed}
-      laneScrollDurationMs={LANE_SCROLL_DURATION_MS}
     />
   );
 }

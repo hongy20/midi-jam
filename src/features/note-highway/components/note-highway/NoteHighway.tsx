@@ -2,25 +2,27 @@ import { useEffect, useState } from "react";
 
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
-import { LANE_SCROLL_DURATION_MS } from "../../lib/constants";
-import { getVisibleSegmentIndexes } from "../../lib/utils";
-import { LaneSegment } from "./lane-segment";
-
-interface LaneStageProps {
+export interface NoteHighwayProps {
   groups: MidiNoteGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
   noteClassName?: string;
   children?: React.ReactNode;
+  speed: number;
 }
 
-export function LaneStage({
+import { LANE_SCROLL_DURATION_MS } from "../../lib/constants";
+import { getVisibleSegmentIndexes } from "../../lib/utils";
+import { NoteHighwaySegment } from "./NoteHighwaySegment";
+
+export function NoteHighway({
   groups,
   scrollRef,
   getCurrentTimeMs,
   noteClassName,
   children,
-}: LaneStageProps) {
+  speed,
+}: NoteHighwayProps) {
   const [renderIndexes, setRenderIndexes] = useState<number[]>(() =>
     getVisibleSegmentIndexes(getCurrentTimeMs(), groups, LANE_SCROLL_DURATION_MS),
   );
@@ -41,12 +43,20 @@ export function LaneStage({
   }, [getCurrentTimeMs, groups]);
 
   return (
-    <div className="bg-background/5 relative h-full w-full overflow-hidden">
+    <div
+      className="bg-background/5 relative h-full w-full overflow-hidden"
+      style={
+        {
+          "--lane-scroll-duration-ms": LANE_SCROLL_DURATION_MS,
+          "--speed": speed,
+        } as React.CSSProperties
+      }
+    >
       {children}
 
       <div ref={scrollRef} className="absolute inset-0 overflow-hidden">
         {renderIndexes.map((idx) => (
-          <LaneSegment
+          <NoteHighwaySegment
             key={idx}
             group={groups[idx]}
             getCurrentTimeMs={getCurrentTimeMs}

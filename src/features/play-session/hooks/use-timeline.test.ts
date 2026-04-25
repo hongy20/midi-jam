@@ -1,9 +1,9 @@
 import { act, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useLaneTimeline } from "./use-lane-timeline";
+import { useTimeline } from "./use-timeline";
 
-describe("useLaneTimeline hook", () => {
+describe("useTimeline hook", () => {
   beforeEach(() => {
     vi.useFakeTimers();
     vi.spyOn(performance, "now").mockReturnValue(0);
@@ -18,7 +18,7 @@ describe("useLaneTimeline hook", () => {
 
   it("calculates progress and time correctly", () => {
     const { result } = renderHook(() =>
-      useLaneTimeline({
+      useTimeline({
         totalDurationMs: 10000,
         speed: 1,
         onFinish: mockOnFinish,
@@ -38,7 +38,7 @@ describe("useLaneTimeline hook", () => {
 
   it("handles speed correctly", () => {
     const { result } = renderHook(() =>
-      useLaneTimeline({
+      useTimeline({
         totalDurationMs: 10000,
         speed: 2,
         onFinish: mockOnFinish,
@@ -53,7 +53,7 @@ describe("useLaneTimeline hook", () => {
 
   it("calls onFinish at the correct time", () => {
     renderHook(() =>
-      useLaneTimeline({
+      useTimeline({
         totalDurationMs: 10000,
         speed: 1,
         onFinish: mockOnFinish,
@@ -73,7 +73,7 @@ describe("useLaneTimeline hook", () => {
 
   it("resets timeline correctly", () => {
     const { result } = renderHook(() =>
-      useLaneTimeline({
+      useTimeline({
         totalDurationMs: 10000,
         speed: 1,
         onFinish: mockOnFinish,
