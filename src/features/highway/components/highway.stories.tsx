@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useEffect, useState } from "react";
 
-import { NoteHighway, NoteHighwayProps } from "./NoteHighway";
+import { Highway, HighwayProps } from "./Highway";
 
-const meta: Meta<typeof NoteHighway> = {
-  title: "Features/NoteHighway/NoteHighway",
-  component: NoteHighway,
+const meta: Meta<typeof Highway> = {
+  title: "Features/Highway/Highway",
+  component: Highway,
   parameters: {
     layout: "fullscreen",
   },
@@ -31,7 +31,7 @@ const meta: Meta<typeof NoteHighway> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof NoteHighway>;
+type Story = StoryObj<typeof Highway>;
 
 const mockGroups = [
   {
@@ -70,7 +70,7 @@ export const Playing: Story = {
 };
 
 export const Animated: Story = {
-  render: (args: NoteHighwayProps) => {
+  render: (args: HighwayProps) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [time, setTime] = useState(0);
 
@@ -83,7 +83,7 @@ export const Animated: Story = {
       return () => clearInterval(interval);
     }, []);
 
-    return <NoteHighway {...args} getCurrentTimeMs={() => time} />;
+    return <Highway {...args} getCurrentTimeMs={() => time} />;
   },
   args: {
     groups: mockGroups,

@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
-import { LANE_SCROLL_DURATION_MS } from "../../lib/constants";
-import { getVisibleSegmentIndexes } from "../../lib/utils";
-import { NoteHighwaySegment } from "./NoteHighwaySegment";
+import { LANE_SCROLL_DURATION_MS } from "../lib/constants";
+import { getVisibleSegmentIndexes } from "../lib/utils";
+import { HighwaySegment } from "./HighwaySegment";
 
-export interface NoteHighwayProps {
+export interface HighwayProps {
   groups: MidiNoteGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
@@ -15,14 +15,14 @@ export interface NoteHighwayProps {
   speed: number;
 }
 
-export function NoteHighway({
+export function Highway({
   groups,
   scrollRef,
   getCurrentTimeMs,
   noteClassName,
   children,
   speed,
-}: NoteHighwayProps) {
+}: HighwayProps) {
   const [renderIndexes, setRenderIndexes] = useState<number[]>(() =>
     getVisibleSegmentIndexes(getCurrentTimeMs(), groups, LANE_SCROLL_DURATION_MS),
   );
@@ -56,7 +56,7 @@ export function NoteHighway({
 
       <div ref={scrollRef} className="absolute inset-0 overflow-hidden">
         {renderIndexes.map((idx) => (
-          <NoteHighwaySegment
+          <HighwaySegment
             key={idx}
             group={groups[idx]}
             getCurrentTimeMs={getCurrentTimeMs}

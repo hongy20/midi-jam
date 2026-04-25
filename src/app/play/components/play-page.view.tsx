@@ -3,7 +3,7 @@
 import { Maximize2, Minimize2, Pause } from "lucide-react";
 
 import { DrumStage } from "@/features/drum";
-import { NoteHighway } from "@/features/note-highway";
+import { Highway } from "@/features/highway";
 import { PianoStage } from "@/features/piano";
 import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
@@ -91,7 +91,7 @@ export function PlayPageView({
         liveActiveNotes={liveActiveNotes}
         playbackNotes={playbackNotes}
         highway={
-          <NoteHighway
+          <Highway
             groups={groups}
             scrollRef={scrollRef}
             getCurrentTimeMs={getCurrentTimeMs}
