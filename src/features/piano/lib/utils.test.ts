@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { getVisibleMidiRange } from "./piano";
+import { getVisibleMidiRange } from "./utils";
 
 describe("getVisibleMidiRange", () => {
   it("should return range around C4 with natural group expansion", () => {

@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { StageProps } from "@/shared/types/stage";
 
 import { PIANO_GRID_CLASS, PIANO_GRID_ITEM_CLASS } from "../../lib/constants";
-import { getPianoLayoutUnits } from "../../lib/piano";
+import { getPianoLayoutUnits } from "../../lib/utils";
 import { BackgroundLane } from "../background-lane/BackgroundLane";
 import { PianoKeyboard } from "../piano-keyboard/PianoKeyboard";
 import styles from "./piano-stage.module.css";
