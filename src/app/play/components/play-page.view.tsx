@@ -1,15 +1,12 @@
 "use client";
 
 import { Maximize2, Minimize2, Pause } from "lucide-react";
-import { useMemo } from "react";
 
-import { BackgroundLane, PIANO_GRID_ITEM_CLASS, PianoKeyboard } from "@/features/piano";
+import { PianoStage } from "@/features/piano";
 import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
-import { LaneStage } from "@/features/visualizer";
 import { Button } from "@/shared/components/ui/8bit/button";
-import { getInstrumentType } from "@/shared/lib/instrument";
-import { type MidiNoteGroup } from "@/shared/types/midi";
+import { type MidiNote, type MidiNoteGroup } from "@/shared/types/midi";
 
 import styles from "./play-page.view.module.css";
 
@@ -25,13 +22,13 @@ interface PlayPageViewProps {
   handleToggleFullscreen: () => void;
   liveActiveNotes: Set<number>;
   playbackNotes: Set<number>;
+  notes: MidiNote[];
   groups: MidiNoteGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
   getCurrentTimeMs: () => number;
-  startUnit: number;
-  endUnit: number;
   speed: number;
   laneScrollDurationMs: number;
+  instrumentType: "piano" | "drums";
 }
 
 /**
@@ -50,23 +47,21 @@ export function PlayPageView({
   handleToggleFullscreen,
   liveActiveNotes,
   playbackNotes,
+  notes,
   groups,
   scrollRef,
   getCurrentTimeMs,
-  startUnit,
-  endUnit,
   speed,
   laneScrollDurationMs,
+  instrumentType,
 }: PlayPageViewProps) {
-  const instrument = useMemo(() => getInstrumentType(selectedMIDIInput), [selectedMIDIInput]);
+  const Stage = instrumentType === "piano" ? PianoStage : null;
 
   return (
     <div
       className={styles.container}
       style={
         {
-          "--start-unit": startUnit,
-          "--end-unit": endUnit,
           "--lane-scroll-duration-ms": laneScrollDurationMs,
           "--speed": speed,
         } as React.CSSProperties
@@ -101,28 +96,23 @@ export function PlayPageView({
         </div>
       </header>
 
-      <main className={styles.main}>
-        <LaneStage
+      {Stage ? (
+        <Stage
+          notes={notes}
           groups={groups}
           scrollRef={scrollRef}
           getCurrentTimeMs={getCurrentTimeMs}
-          noteClassName={PIANO_GRID_ITEM_CLASS}
-        >
-          <BackgroundLane />
-        </LaneStage>
-      </main>
-
-      <footer className={styles.footer}>
-        <div className={styles.keyboardWrapper}>
-          {instrument === "piano" ? (
-            <PianoKeyboard liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />
-          ) : (
-            <div className="font-retro text-muted-foreground/50 flex h-full items-center justify-center text-xl tracking-wider">
-              DRUM PADS (NOT IMPLEMENTED)
-            </div>
-          )}
-        </div>
-      </footer>
+          liveActiveNotes={liveActiveNotes}
+          playbackNotes={playbackNotes}
+          speed={speed}
+        />
+      ) : (
+        <main className="flex h-full items-center justify-center">
+          <div className="font-retro text-muted-foreground/50 text-xl tracking-wider">
+            {instrumentType.toUpperCase()} STAGE (NOT IMPLEMENTED)
+          </div>
+        </main>
+      )}
     </div>
   );
 }

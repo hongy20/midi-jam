@@ -1,0 +1,20 @@
+.main {
+  position: relative;
+  overflow: hidden;
+  grid-row: 2;
+}
+
+.footer {
+  width: 100%;
+  height: var(--footer-height);
+  background-color: color-mix(in srgb, var(--background), transparent 50%);
+  border-top: 1px solid color-mix(in srgb, var(--foreground), transparent 95%);
+  grid-row: 3;
+}
+
+.inputWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
