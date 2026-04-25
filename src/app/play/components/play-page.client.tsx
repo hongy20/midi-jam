@@ -14,7 +14,6 @@ import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 import { useWakeLock } from "@/shared/hooks/use-wake-lock";
-import { getInstrumentType } from "@/shared/lib/instrument";
 
 import { PlayPageView } from "./play-page.view";
 
@@ -53,8 +52,6 @@ export function PlayPageClient() {
   const notes = useMemo(() => trackData?.notes ?? [], [trackData]);
   const groups = useMemo(() => trackData?.groups ?? [], [trackData]);
   const totalDurationMs = trackData?.totalDurationMs ?? 0;
-
-  const instrumentType = useMemo(() => getInstrumentType(selectedMIDIInput), [selectedMIDIInput]);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const handleFinishRef = useRef<() => void>(() => {});
@@ -145,7 +142,6 @@ export function PlayPageClient() {
       getCurrentTimeMs={getCurrentTimeMs}
       speed={speed}
       laneScrollDurationMs={LANE_SCROLL_DURATION_MS}
-      instrumentType={instrumentType}
     />
   );
 }

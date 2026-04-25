@@ -6,6 +6,7 @@ import { PianoStage } from "@/features/piano";
 import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
 import { Button } from "@/shared/components/ui/8bit/button";
+import { getInstrumentType } from "@/shared/lib/instrument";
 import { type MidiNote, type MidiNoteGroup } from "@/shared/types/midi";
 
 import styles from "./play-page.view.module.css";
@@ -28,7 +29,6 @@ interface PlayPageViewProps {
   getCurrentTimeMs: () => number;
   speed: number;
   laneScrollDurationMs: number;
-  instrumentType: "piano" | "drums";
 }
 
 /**
@@ -53,8 +53,8 @@ export function PlayPageView({
   getCurrentTimeMs,
   speed,
   laneScrollDurationMs,
-  instrumentType,
 }: PlayPageViewProps) {
+  const instrumentType = getInstrumentType(selectedMIDIInput);
   const Stage = instrumentType === "piano" ? PianoStage : null;
 
   return (
