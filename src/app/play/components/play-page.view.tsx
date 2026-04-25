@@ -2,8 +2,9 @@
 
 import { Maximize2, Minimize2, Pause } from "lucide-react";
 
-import { PianoStage } from "@/features/piano";
+import { BackgroundLane, PIANO_GRID_ITEM_CLASS, PianoStage } from "@/features/piano";
 import { DrumStage } from "@/features/drum";
+import { LaneStage } from "@/features/visualizer";
 import type { HitQuality } from "@/features/score";
 import { LiveScore } from "@/features/score";
 import { Button } from "@/shared/components/ui/8bit/button";
@@ -105,7 +106,18 @@ export function PlayPageView({
         liveActiveNotes={liveActiveNotes}
         playbackNotes={playbackNotes}
         speed={speed}
-      />
+      >
+        {instrumentType === "piano" && (
+          <LaneStage
+            groups={groups}
+            scrollRef={scrollRef}
+            getCurrentTimeMs={getCurrentTimeMs}
+            noteClassName={PIANO_GRID_ITEM_CLASS}
+          >
+            <BackgroundLane />
+          </LaneStage>
+        )}
+      </Stage>
     </div>
   );
 }

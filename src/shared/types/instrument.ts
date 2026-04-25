@@ -8,4 +8,5 @@ export interface InstrumentStageProps {
   liveActiveNotes: Set<number>;
   playbackNotes: Set<number>;
   speed: number;
+  children?: React.ReactNode;
 }
