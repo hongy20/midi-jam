@@ -30,6 +30,7 @@ export function PianoStage({ notes, liveActiveNotes, playbackNotes, highway }: S
         {React.cloneElement(highway, {
           children: <BackgroundLane />,
           noteClassName: PIANO_GRID_ITEM_CLASS,
+          containerClassName: "piano-grid",
         } as React.HTMLAttributes<HTMLDivElement>)}
       </main>
 
