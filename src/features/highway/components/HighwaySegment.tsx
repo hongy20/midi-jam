@@ -82,7 +82,7 @@ export function HighwaySegment({
             key={note.id}
             data-pitch={note.pitch}
             data-note-id={note.id}
-            className={`${styles.note} ${noteClassName || ""}`}
+            className={cn(styles.note, noteClassName)}
             style={{
               top: `${topPercent}%`,
               height: `${heightPercent}%`,
