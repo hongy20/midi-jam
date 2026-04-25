@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 
+import { subscribeToMessages } from "../lib/midi-listener";
+
 /**
  * A React hook that attaches listeners to all provided MIDI inputs and
  * automatically selects an input when it detects a "midimessage" event.
@@ -15,23 +17,14 @@ export function useAutoSelection(
 ): void {
   useEffect(() => {
     // Attach listener to all inputs to detect activity and auto-select
-    const handlers = new Map<string, () => void>();
-
-    inputs.forEach((input) => {
-      const handler = () => {
+    const unsubscribes = inputs.map((input) =>
+      subscribeToMessages(input, () => {
         selectMIDIInput(input);
-      };
-      input.addEventListener("midimessage", handler);
-      handlers.set(input.id, handler);
-    });
+      }),
+    );
 
     return () => {
-      inputs.forEach((input) => {
-        const handler = handlers.get(input.id);
-        if (handler) {
-          input.removeEventListener("midimessage", handler);
-        }
-      });
+      unsubscribes.forEach((unsubscribe) => unsubscribe());
     };
   }, [inputs, selectMIDIInput]);
 }
