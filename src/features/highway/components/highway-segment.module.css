@@ -47,9 +47,8 @@
 .note {
   position: absolute;
   width: 100%;
-  border-radius: var(--note-radius);
-  border: 1px solid
-    color-mix(in srgb, currentColor calc(var(--note-border-opacity) * 100%), transparent);
+  border-radius: 0.125rem;
+  border: 1px solid currentColor;
   min-width: 0;
 
   background-color: color-mix(in srgb, currentColor calc(20% + 20% * var(--is-black)), transparent);
