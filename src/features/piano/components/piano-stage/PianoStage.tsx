@@ -1,6 +1,4 @@
-"use client";
-
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 
 import { InstrumentStageProps } from "@/shared/types/instrument";
 
@@ -16,12 +14,8 @@ import styles from "./piano-stage.module.css";
  */
 export function PianoStage({
   notes,
-  groups,
-  scrollRef,
-  getCurrentTimeMs,
   liveActiveNotes,
   playbackNotes,
-  speed,
   Timeline,
 }: InstrumentStageProps) {
   // Calculate dynamic layout range for consistent grid alignment
@@ -38,15 +32,10 @@ export function PianoStage({
           } as React.CSSProperties
         }
       >
-        <Timeline
-          groups={groups}
-          scrollRef={scrollRef}
-          getCurrentTimeMs={getCurrentTimeMs}
-          noteClassName={PIANO_GRID_ITEM_CLASS}
-          speed={speed}
-        >
-          <BackgroundLane />
-        </Timeline>
+        {React.cloneElement(Timeline, {
+          children: <BackgroundLane />,
+          noteClassName: PIANO_GRID_ITEM_CLASS,
+        } as React.HTMLAttributes<HTMLDivElement>)}
       </main>
 
       <footer className={styles.footer}>

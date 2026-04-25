@@ -1,7 +1,15 @@
 import { useEffect, useState } from "react";
 
-export { type TimelineProps } from "@/shared/types/instrument";
-import { type TimelineProps } from "@/shared/types/instrument";
+import { type MidiNoteGroup } from "@/shared/types/midi";
+
+export interface TimelineProps {
+  groups: MidiNoteGroup[];
+  scrollRef: React.RefObject<HTMLDivElement | null>;
+  getCurrentTimeMs: () => number;
+  noteClassName?: string;
+  children?: React.ReactNode;
+  speed: number;
+}
 
 import { LANE_SCROLL_DURATION_MS } from "../../lib/constants";
 import { getVisibleSegmentIndexes } from "../../lib/utils";

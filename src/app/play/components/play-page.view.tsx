@@ -90,13 +90,16 @@ export function PlayPageView({
 
       <Stage
         notes={notes}
-        groups={groups}
-        scrollRef={scrollRef}
-        getCurrentTimeMs={getCurrentTimeMs}
         liveActiveNotes={liveActiveNotes}
         playbackNotes={playbackNotes}
-        speed={speed}
-        Timeline={Timeline}
+        Timeline={
+          <Timeline
+            groups={groups}
+            scrollRef={scrollRef}
+            getCurrentTimeMs={getCurrentTimeMs}
+            speed={speed}
+          />
+        }
       />
     </div>
   );
