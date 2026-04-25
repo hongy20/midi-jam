@@ -1,3 +1,5 @@
+import "./piano-layout.css";
+
 import React, { useMemo } from "react";
 
 import { StageProps } from "@/shared/types/stage";
