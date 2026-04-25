@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 
 import { type MidiNoteGroup } from "@/shared/types/midi";
 
+import { LANE_SCROLL_DURATION_MS } from "../../lib/constants";
+import { getVisibleSegmentIndexes } from "../../lib/utils";
+import { NoteHighwaySegment } from "./NoteHighwaySegment";
+
 export interface NoteHighwayProps {
   groups: MidiNoteGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
@@ -10,10 +14,6 @@ export interface NoteHighwayProps {
   children?: React.ReactNode;
   speed: number;
 }
-
-import { LANE_SCROLL_DURATION_MS } from "../../lib/constants";
-import { getVisibleSegmentIndexes } from "../../lib/utils";
-import { NoteHighwaySegment } from "./NoteHighwaySegment";
 
 export function NoteHighway({
   groups,

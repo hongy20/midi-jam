@@ -3,6 +3,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
+import type { Track } from "@/shared/types/track";
+
 /**
  * Formats a filename into a human-readable string.
  * Handles snake_case, kebab-case, CamelCase, and lowerCamelCase.
@@ -43,8 +45,6 @@ const METADATA: Record<string, { title: string; artist: string; difficulty: stri
     difficulty: "Easy",
   },
 };
-
-import type { Track } from "@/shared/types/track";
 
 export async function getSongTracks(minDelayMs = 0): Promise<Track[]> {
   const startTime = Date.now();
