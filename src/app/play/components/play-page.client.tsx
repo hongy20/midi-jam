@@ -4,7 +4,13 @@ import { use, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
-import { useGameplay, useScoreEngine, useTimeline } from "@/features/gameplay";
+import {
+  type GameplayState,
+  type ResultsData,
+  useGameplay,
+  useScoreEngine,
+  useTimeline,
+} from "@/features/gameplay";
 import { getTrackData } from "@/features/midi-assets";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { useOptions } from "@/features/options";
@@ -24,7 +30,17 @@ export function PlayPageClient() {
   const { toScore, toPause, toHome, toCollection } = useNavigation();
   const { selectedTrack } = useCollection();
   const { selectedMIDIInput, selectedMIDIOutput } = useGear();
-  const { gameState, startGame, pauseGame, finishGame } = useGameplay();
+  const {
+    gameState,
+    startGame,
+    pauseGame,
+    finishGame,
+  }: {
+    gameState: GameplayState;
+    startGame: () => void;
+    pauseGame: (data: ResultsData & { currentProgress: number }) => void;
+    finishGame: (data: ResultsData) => void;
+  } = useGameplay();
 
   const trackDataPromise = useMemo(() => {
     if (!selectedTrack) return null;
@@ -51,7 +67,6 @@ export function PlayPageClient() {
       startGame();
     }
   }, [gameState.status, startGame, trackData]);
-
 
   // Extract data with stable references for hook dependencies
   const notes = useMemo(() => trackData?.notes ?? [], [trackData]);

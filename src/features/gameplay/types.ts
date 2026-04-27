@@ -1,6 +1,6 @@
-export type GameplayStatus = "idle" | "playing" | "paused" | "finished";
+type GameplayStatus = "idle" | "playing" | "paused" | "finished";
 
-export interface SessionData {
+interface SessionData {
   score: number;
   combo: number;
   currentProgress: number;
