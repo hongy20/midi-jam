@@ -6,8 +6,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { CollectionProvider } from "@/features/collection";
 import { GearProvider } from "@/features/midi-hardware";
 import { OptionsProvider } from "@/features/options";
-import { PlayProvider } from "@/features/play-session";
-import { ScoreProvider } from "@/features/score";
+import { GameplayProvider } from "@/features/gameplay";
 import { ThemeProvider } from "@/features/theme";
 
 const geistSans = Geist({
@@ -17,7 +16,6 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -37,9 +35,7 @@ export default function RootLayout({
           <GearProvider>
             <OptionsProvider>
               <CollectionProvider>
-                <ScoreProvider>
-                  <PlayProvider>{children}</PlayProvider>
-                </ScoreProvider>
+                <GameplayProvider>{children}</GameplayProvider>
               </CollectionProvider>
             </OptionsProvider>
           </GearProvider>
@@ -48,3 +44,4 @@ export default function RootLayout({
     </html>
   );
 }
+
