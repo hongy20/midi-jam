@@ -34,6 +34,7 @@ export const LiveScore = memo(function LiveScore({
     progress: -1,
     quality: null as HitQuality,
     version: -1,
+    lastHitTime: 0,
   });
 
   useEffect(() => {
@@ -46,8 +47,10 @@ export const LiveScore = memo(function LiveScore({
       const quality = getLastHitQuality();
       const version = getHitVersion();
       const state = lastStateRef.current;
+      const now = performance.now();
 
       // 1. Update Score (Normalized)
+
       if (score !== state.score && scoreValueRef.current) {
         scoreValueRef.current.textContent = score.toFixed(1);
         state.score = score;
@@ -75,12 +78,14 @@ export const LiveScore = memo(function LiveScore({
       }
 
       // 4. Update Hit Quality Feedback
-      if ((quality !== state.quality || version !== state.version) && feedbackRef.current) {
+      if (feedbackRef.current) {
         const el = feedbackRef.current;
-        // Clean up previous classes
-        if (state.quality) el.classList.remove(styles[state.quality]);
+        const isNewHit = quality !== state.quality || version !== state.version;
 
-        if (quality) {
+        if (isNewHit && quality) {
+          // Clean up previous classes
+          if (state.quality) el.classList.remove(styles[state.quality]);
+
           el.textContent = `${quality.toUpperCase()}!`;
           el.classList.add(styles[quality]);
           el.style.opacity = "1";
@@ -89,11 +94,15 @@ export const LiveScore = memo(function LiveScore({
           el.style.animation = "none";
           void el.offsetWidth; // Force reflow
           el.style.animation = "";
-        } else {
+
+          state.quality = quality;
+          state.version = version;
+          state.lastHitTime = now;
+        } else if (state.lastHitTime > 0 && now - state.lastHitTime > 1000) {
+          // Auto-fade after 1 second
           el.style.opacity = "0";
+          state.lastHitTime = 0;
         }
-        state.quality = quality;
-        state.version = version;
       }
 
       rafId = requestAnimationFrame(update);

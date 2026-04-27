@@ -35,13 +35,11 @@ export function PlayPageClient() {
     startGame,
     pauseGame,
     finishGame,
-    resetGame,
   }: {
     gameState: GameplayState;
     startGame: () => void;
     pauseGame: (data: ResultsData & { currentProgress: number }) => void;
     finishGame: (data: ResultsData) => void;
-    resetGame: () => void;
   } = useGameplay();
 
   const trackDataPromise = useMemo(() => {
@@ -63,16 +61,9 @@ export function PlayPageClient() {
   // Resolve data via Suspense (use hook)
   const trackData = trackDataPromise ? use(trackDataPromise) : null;
 
-  // Handle cleanup if coming from a finished state
+  // Initialize session if idle or finished, and track data is ready
   useEffect(() => {
-    if (gameState.status === "finished") {
-      resetGame();
-    }
-  }, [gameState.status, resetGame]);
-
-  // Initialize session if idle and track data is ready
-  useEffect(() => {
-    if (gameState.status === "idle" && trackData) {
+    if ((gameState.status === "idle" || gameState.status === "finished") && trackData) {
       startGame();
     }
   }, [gameState.status, startGame, trackData]);
