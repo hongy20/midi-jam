@@ -3,10 +3,9 @@
 import { Maximize2, Minimize2, Pause } from "lucide-react";
 
 import { DrumStage } from "@/features/drum";
+import { type HitQuality,LiveScore } from "@/features/gameplay";
 import { Highway } from "@/features/highway";
 import { PianoStage } from "@/features/piano";
-import { LiveScore, type HitQuality } from "@/features/gameplay";
-
 import { Button } from "@/shared/components/ui/8bit/button";
 import { getInstrumentType } from "@/shared/lib/instrument";
 import { type MidiNote, type MidiNoteGroup } from "@/shared/types/midi";

@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { getSongTracks, useCollection } from "@/features/collection";
-import { useGear } from "@/features/midi-hardware";
 import { useGameplay } from "@/features/gameplay";
+import { useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 
 import { HomePageClient } from "./components/home-page.client";
