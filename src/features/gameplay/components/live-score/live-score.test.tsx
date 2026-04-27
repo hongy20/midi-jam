@@ -8,6 +8,7 @@ describe("LiveScore", () => {
     getScore: () => 50.0,
     getCombo: () => 15,
     getLastHitQuality: () => "perfect" as const,
+    getHitVersion: () => 1,
     getProgress: () => 0.45,
   };
 

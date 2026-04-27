@@ -35,11 +35,13 @@ export function PlayPageClient() {
     startGame,
     pauseGame,
     finishGame,
+    resetGame,
   }: {
     gameState: GameplayState;
     startGame: () => void;
     pauseGame: (data: ResultsData & { currentProgress: number }) => void;
     finishGame: (data: ResultsData) => void;
+    resetGame: () => void;
   } = useGameplay();
 
   const trackDataPromise = useMemo(() => {
@@ -60,6 +62,13 @@ export function PlayPageClient() {
 
   // Resolve data via Suspense (use hook)
   const trackData = trackDataPromise ? use(trackDataPromise) : null;
+
+  // Handle cleanup if coming from a finished state
+  useEffect(() => {
+    if (gameState.status === "finished") {
+      resetGame();
+    }
+  }, [gameState.status, resetGame]);
 
   // Initialize session if idle and track data is ready
   useEffect(() => {
@@ -94,18 +103,20 @@ export function PlayPageClient() {
     onFinish: onFinishProxy,
   });
 
-  const { getScore, getCombo, getLastHitQuality, processNoteEvent } = useScoreEngine({
-    notes,
-    getCurrentTimeMs,
-    initialScore:
-      gameState.status === "playing" || gameState.status === "paused" ? gameState.score : 0,
-    initialCombo:
-      gameState.status === "playing" || gameState.status === "paused" ? gameState.combo : 0,
-    initialTimeMs:
-      (gameState.status === "playing" || gameState.status === "paused"
-        ? gameState.currentProgress
-        : 0) * totalDurationMs,
-  });
+  const { getScore, getCombo, getHitVersion, getLastHitQuality, processNoteEvent } = useScoreEngine(
+    {
+      notes,
+      getCurrentTimeMs,
+      initialScore:
+        gameState.status === "playing" || gameState.status === "paused" ? gameState.score : 0,
+      initialCombo:
+        gameState.status === "playing" || gameState.status === "paused" ? gameState.combo : 0,
+      initialTimeMs:
+        (gameState.status === "playing" || gameState.status === "paused"
+          ? gameState.currentProgress
+          : 0) * totalDurationMs,
+    },
+  );
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput, processNoteEvent);
 
@@ -154,6 +165,7 @@ export function PlayPageClient() {
       getScore={getScore}
       getCombo={getCombo}
       getLastHitQuality={getLastHitQuality}
+      getHitVersion={getHitVersion}
       getProgress={getProgress}
       handlePause={handlePause}
       isFullscreen={isFullscreen}

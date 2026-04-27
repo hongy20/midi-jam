@@ -9,7 +9,7 @@ import { ScorePageView } from "./score-page.view";
 
 export function ScorePageClient() {
   const { toPlay, toCollection, toHome } = useNavigation();
-  const { gameState, resetGame } = useGameplay();
+  const { gameState } = useGameplay();
 
   const results = useMemo(() => {
     if (gameState.status === "finished") {
@@ -37,12 +37,10 @@ export function ScorePageClient() {
   const titleLabel = getAccuracyLabel(results.score);
 
   const handleRetry = () => {
-    resetGame();
     toPlay();
   };
 
   const handleSongs = () => {
-    resetGame();
     toCollection();
   };
 

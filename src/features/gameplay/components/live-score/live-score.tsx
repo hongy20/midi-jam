@@ -10,6 +10,7 @@ interface LiveScoreProps {
   getScore: () => number;
   getCombo: () => number;
   getLastHitQuality: () => HitQuality;
+  getHitVersion: () => number;
   getProgress: () => number;
 }
 
@@ -17,6 +18,7 @@ export const LiveScore = memo(function LiveScore({
   getScore,
   getCombo,
   getLastHitQuality,
+  getHitVersion,
   getProgress,
 }: LiveScoreProps) {
   const progressBarFillRef = useRef<HTMLDivElement>(null);
@@ -31,6 +33,7 @@ export const LiveScore = memo(function LiveScore({
     combo: -1,
     progress: -1,
     quality: null as HitQuality,
+    version: -1,
   });
 
   useEffect(() => {
@@ -41,6 +44,7 @@ export const LiveScore = memo(function LiveScore({
       const combo = getCombo();
       const progress = getProgress();
       const quality = getLastHitQuality();
+      const version = getHitVersion();
       const state = lastStateRef.current;
 
       // 1. Update Score (Normalized)
@@ -71,7 +75,7 @@ export const LiveScore = memo(function LiveScore({
       }
 
       // 4. Update Hit Quality Feedback
-      if (quality !== state.quality && feedbackRef.current) {
+      if ((quality !== state.quality || version !== state.version) && feedbackRef.current) {
         const el = feedbackRef.current;
         // Clean up previous classes
         if (state.quality) el.classList.remove(styles[state.quality]);
@@ -89,6 +93,7 @@ export const LiveScore = memo(function LiveScore({
           el.style.opacity = "0";
         }
         state.quality = quality;
+        state.version = version;
       }
 
       rafId = requestAnimationFrame(update);

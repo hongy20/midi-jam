@@ -1,5 +1,3 @@
-type GameplayStatus = "idle" | "playing" | "paused" | "finished";
-
 interface SessionData {
   score: number;
   combo: number;

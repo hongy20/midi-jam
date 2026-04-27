@@ -16,6 +16,7 @@ interface PlayPageViewProps {
   getScore: () => number;
   getCombo: () => number;
   getLastHitQuality: () => HitQuality;
+  getHitVersion: () => number;
   getProgress: () => number;
   handlePause: () => void;
   isFullscreen: boolean;
@@ -39,6 +40,7 @@ export function PlayPageView({
   getScore,
   getCombo,
   getLastHitQuality,
+  getHitVersion,
   getProgress,
   handlePause,
   isFullscreen,
@@ -65,6 +67,7 @@ export function PlayPageView({
             getScore={getScore}
             getCombo={getCombo}
             getLastHitQuality={getLastHitQuality}
+            getHitVersion={getHitVersion}
             getProgress={getProgress}
           />
         </div>

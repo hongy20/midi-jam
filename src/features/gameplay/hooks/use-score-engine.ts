@@ -38,6 +38,8 @@ export function useScoreEngine({
 
   const processedNotesRef = useRef<Set<number>>(new Set());
   const currentIndexRef = useRef(0);
+  const hitVersionRef = useRef(0);
+
   const activeHitsRef = useRef<
     Map<
       number,
@@ -167,9 +169,11 @@ export function useScoreEngine({
 
         lastHitQualityRef.current = quality;
         comboRef.current += 1;
+        hitVersionRef.current += 1;
       } else {
         lastHitQualityRef.current = "miss";
         comboRef.current = 0;
+        hitVersionRef.current += 1;
       }
     },
     [notes, getCurrentTimeMs, commitHitScore],
@@ -190,6 +194,7 @@ export function useScoreEngine({
             processedNotesRef.current.add(i);
             lastHitQualityRef.current = "miss";
             comboRef.current = 0;
+            hitVersionRef.current += 1;
           }
           currentIndexRef.current = i + 1;
         } else {
@@ -216,7 +221,11 @@ export function useScoreEngine({
     }, [maxRawPoints]),
     getCombo: useCallback(() => comboRef.current, []),
     getLastHitQuality: useCallback(() => lastHitQualityRef.current, []),
+    getHitVersion: useCallback(() => hitVersionRef.current, []),
     processNoteEvent,
-    resetScore,
+    resetScore: useCallback(() => {
+      resetScore();
+      hitVersionRef.current = 0;
+    }, [resetScore]),
   };
 }
