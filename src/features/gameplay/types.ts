@@ -1,4 +1,4 @@
-interface SessionData {
+export interface SessionData {
   score: number;
   combo: number;
   currentProgress: number;
