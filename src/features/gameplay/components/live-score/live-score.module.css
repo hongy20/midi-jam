@@ -1,0 +1,24 @@
+.hitText {
+  animation: bounce 0.5s ease infinite alternate;
+}
+
+.perfect {
+  color: var(--chart-2, #00ff00);
+}
+
+.good {
+  color: var(--chart-4, #ffff00);
+}
+
+.miss {
+  color: var(--destructive, #ff0000);
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-2px);
+  }
+}
