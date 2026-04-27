@@ -1,2 +1,3 @@
 export * from "./types";
-// context, hooks, and components will be exported here as they are created
+export { GameplayProvider, useGameplay } from "./context/gameplay-context";
+
