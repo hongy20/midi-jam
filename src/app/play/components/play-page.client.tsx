@@ -42,15 +42,16 @@ export function PlayPageClient() {
     }
   }, [selectedMIDIInput, selectedTrack, toHome, toCollection]);
 
-  // Initialize session if idle
-  useEffect(() => {
-    if (gameState.status === "idle") {
-      startGame();
-    }
-  }, [gameState.status, startGame]);
-
   // Resolve data via Suspense (use hook)
   const trackData = trackDataPromise ? use(trackDataPromise) : null;
+
+  // Initialize session if idle and track data is ready
+  useEffect(() => {
+    if (gameState.status === "idle" && trackData) {
+      startGame();
+    }
+  }, [gameState.status, startGame, trackData]);
+
 
   // Extract data with stable references for hook dependencies
   const notes = useMemo(() => trackData?.notes ?? [], [trackData]);
