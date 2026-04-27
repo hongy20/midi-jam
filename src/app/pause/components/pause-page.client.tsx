@@ -3,8 +3,8 @@
 import { useEffect } from "react";
 
 import { useCollection } from "@/features/collection";
-import { useGear } from "@/features/midi-hardware";
 import { useGameplay } from "@/features/gameplay";
+import { useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 
 import { PausePageView } from "./pause-page.view";
@@ -43,4 +43,3 @@ export function PausePageClient() {
     />
   );
 }
-

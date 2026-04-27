@@ -27,7 +27,6 @@ export function ScorePageClient() {
     }
   }, [gameState.status, toHome]);
 
-
   const getAccuracyLabel = (score: number) => {
     if (score >= 91) return "Outstanding!";
     if (score >= 71) return "Great Job!";
@@ -46,7 +45,6 @@ export function ScorePageClient() {
     resetGame();
     toCollection();
   };
-
 
   return (
     <ScorePageView

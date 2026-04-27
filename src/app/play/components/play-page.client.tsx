@@ -4,10 +4,10 @@ import { use, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
+import { useGameplay, useScoreEngine, useTimeline } from "@/features/gameplay";
 import { getTrackData } from "@/features/midi-assets";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { useOptions } from "@/features/options";
-import { useGameplay, useScoreEngine, useTimeline } from "@/features/gameplay";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
 import { useNavigation } from "@/shared/hooks/use-navigation";
@@ -71,17 +71,26 @@ export function PlayPageClient() {
   const { getCurrentTimeMs, getProgress } = useTimeline({
     totalDurationMs,
     speed,
-    initialProgress: gameState.status !== "idle" ? gameState.currentProgress : 0,
+    initialProgress:
+      gameState.status === "playing" || gameState.status === "paused"
+        ? gameState.currentProgress
+        : 0,
     onFinish: onFinishProxy,
   });
 
   const { getScore, getCombo, getLastHitQuality, processNoteEvent } = useScoreEngine({
     notes,
     getCurrentTimeMs,
-    initialScore: gameState.status !== "idle" ? gameState.score : 0,
-    initialCombo: gameState.status !== "idle" ? gameState.combo : 0,
-    initialTimeMs: (gameState.status !== "idle" ? gameState.currentProgress : 0) * totalDurationMs,
+    initialScore:
+      gameState.status === "playing" || gameState.status === "paused" ? gameState.score : 0,
+    initialCombo:
+      gameState.status === "playing" || gameState.status === "paused" ? gameState.combo : 0,
+    initialTimeMs:
+      (gameState.status === "playing" || gameState.status === "paused"
+        ? gameState.currentProgress
+        : 0) * totalDurationMs,
   });
+
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput, processNoteEvent);
 
@@ -115,7 +124,6 @@ export function PlayPageClient() {
 
   // Auto-pause when losing focus or switching tabs
   useAutoPause(handlePause);
-
 
   // --- Native Next.js Boundaries & Guards ---
 

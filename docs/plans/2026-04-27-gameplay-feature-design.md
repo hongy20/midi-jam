@@ -15,10 +15,11 @@ Consolidate `features/play-session` and `features/score` into a single `features
 ## Design Specifications
 
 ### 1. State Machine (Discriminated Union)
+
 We will use a single state object to manage the gameplay lifecycle:
 
 ```typescript
-type GameplayStatus = 'idle' | 'playing' | 'paused' | 'finished';
+type GameplayStatus = "idle" | "playing" | "paused" | "finished";
 
 interface SessionData {
   score: number;
@@ -31,14 +32,15 @@ interface ResultsData {
   combo: number;
 }
 
-type GameplayState = 
-  | { status: 'idle' }
-  | { status: 'playing' } & SessionData
-  | { status: 'paused' } & SessionData
-  | { status: 'finished'; results: ResultsData };
+type GameplayState =
+  | { status: "idle" }
+  | ({ status: "playing" } & SessionData)
+  | ({ status: "paused" } & SessionData)
+  | { status: "finished"; results: ResultsData };
 ```
 
 ### 2. Feature Structure
+
 - `src/features/gameplay/`
   - `components/`: `LiveScore`
   - `hooks/`: `useTimeline`, `useScoreEngine`
@@ -53,6 +55,7 @@ type GameplayState =
 ### Task 1: Initialize Feature Structure
 
 **Files:**
+
 - [NEW] `src/features/gameplay/index.ts`
 - [NEW] `src/features/gameplay/types.ts`
 
@@ -70,6 +73,7 @@ Create `src/features/gameplay/index.ts` exporting types.
 ### Task 2: Implement GameplayProvider
 
 **Files:**
+
 - [NEW] `src/features/gameplay/context/gameplay-context.tsx`
 - [NEW] `src/features/gameplay/context/gameplay-context.test.tsx`
 
@@ -88,6 +92,7 @@ Implement the context with `gameState` and actions (`startGame`, `pauseGame`, `f
 ### Task 3: Migrate Hooks (Timeline & Score Engine)
 
 **Files:**
+
 - [NEW] `src/features/gameplay/hooks/use-timeline.ts`
 - [NEW] `src/features/gameplay/hooks/use-score-engine.ts`
 
@@ -105,6 +110,7 @@ Migrate from `score` to `gameplay/hooks`.
 ### Task 4: Migrate UI Components
 
 **Files:**
+
 - [NEW] `src/features/gameplay/components/live-score.tsx`
 
 **Step 1: Migrate LiveScore**
@@ -118,6 +124,7 @@ Move from `features/score/components/live-score/` to `features/gameplay/componen
 ### Task 5: Integrate with Root Layout
 
 **Files:**
+
 - [MODIFY] `src/app/layout.tsx`
 
 **Step 1: Replace providers**
@@ -131,6 +138,7 @@ Remove `PlayProvider` and `ScoreProvider`, add `GameplayProvider`.
 ### Task 6: Update Pages
 
 **Files:**
+
 - [MODIFY] `src/app/play/components/play-page.client.tsx`
 - [MODIFY] `src/app/pause/components/pause-page.client.tsx`
 - [MODIFY] `src/app/score/components/score-page.client.tsx`
@@ -150,6 +158,7 @@ Update hook imports and logic.
 ### Task 7: Cleanup Legacy Features
 
 **Files:**
+
 - [DELETE] `src/features/play-session/`
 - [DELETE] `src/features/score/`
 

@@ -4,9 +4,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { CollectionProvider } from "@/features/collection";
+import { GameplayProvider } from "@/features/gameplay";
 import { GearProvider } from "@/features/midi-hardware";
 import { OptionsProvider } from "@/features/options";
-import { GameplayProvider } from "@/features/gameplay";
 import { ThemeProvider } from "@/features/theme";
 
 const geistSans = Geist({
@@ -44,4 +44,3 @@ export default function RootLayout({
     </html>
   );
 }
-

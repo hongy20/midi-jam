@@ -3,8 +3,8 @@
 import { use, useEffect } from "react";
 
 import { useCollection } from "@/features/collection";
-import { useGear } from "@/features/midi-hardware";
 import { useGameplay } from "@/features/gameplay";
+import { useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 import type { Track } from "@/shared/types/track";
 
@@ -27,7 +27,6 @@ export function HomePageClient({ tracksPromise }: HomePageClientProps) {
     resetGame();
     selectMIDIInput(null);
   }, [resetCollection, resetGame, selectMIDIInput]);
-
 
   return (
     <HomePageView
