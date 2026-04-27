@@ -2,29 +2,31 @@
 
 import { useEffect, useMemo } from "react";
 
-import { useScore } from "@/features/score";
+import { useGameplay } from "@/features/gameplay";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 
 import { ScorePageView } from "./score-page.view";
 
 export function ScorePageClient() {
   const { toPlay, toCollection, toHome } = useNavigation();
-  const { sessionResults } = useScore();
+  const { gameState, resetGame } = useGameplay();
+
+  const results = useMemo(() => {
+    if (gameState.status === "finished") {
+      return gameState.results;
+    }
+    return {
+      score: 0,
+      combo: 0,
+    };
+  }, [gameState]);
 
   useEffect(() => {
-    if (!sessionResults) {
+    if (gameState.status !== "finished") {
       toHome();
     }
-  }, [sessionResults, toHome]);
+  }, [gameState.status, toHome]);
 
-  const results = useMemo(
-    () =>
-      sessionResults ?? {
-        score: 0,
-        combo: 0,
-      },
-    [sessionResults],
-  );
 
   const getAccuracyLabel = (score: number) => {
     if (score >= 91) return "Outstanding!";
@@ -36,12 +38,15 @@ export function ScorePageClient() {
   const titleLabel = getAccuracyLabel(results.score);
 
   const handleRetry = () => {
+    resetGame();
     toPlay();
   };
 
   const handleSongs = () => {
+    resetGame();
     toCollection();
   };
+
 
   return (
     <ScorePageView
