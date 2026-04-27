@@ -109,7 +109,6 @@ describe("HomePageClient", () => {
     });
     expect(mockGameplay.resetGame).toHaveBeenCalled();
     expect(mockGear.selectMIDIInput).toHaveBeenCalledWith(null);
-
   });
 
   it("navigates to gear on start click", async () => {

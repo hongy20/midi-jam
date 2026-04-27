@@ -91,7 +91,6 @@ export function PlayPageClient() {
         : 0) * totalDurationMs,
   });
 
-
   const liveActiveNotes = useActiveNotes(selectedMIDIInput, processNoteEvent);
 
   const { playbackNotes } = useTrackPlayer({
