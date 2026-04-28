@@ -1,5 +1,7 @@
 "use client";
 
+import "../../styles/piano-layout.css";
+
 import { memo, useEffect, useRef } from "react";
 
 import { cn } from "@/shared/lib/utils";

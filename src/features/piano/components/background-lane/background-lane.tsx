@@ -1,3 +1,5 @@
+import "../../styles/piano-layout.css";
+
 import { cn } from "@/shared/lib/utils";
 
 import {

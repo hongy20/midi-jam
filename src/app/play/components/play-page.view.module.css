@@ -1,0 +1,13 @@
+:root {
+  /* Global Layout Constants - Theme Independent */
+  --header-height: 3rem;
+  --footer-height: 3rem;
+}
+
+/* Mobile Portrait, Tablets, and Desktop screens */
+@media (min-height: 601px) {
+  :root {
+    --header-height: 4rem;
+    --footer-height: 4.5rem;
+  }
+}

@@ -167,12 +167,12 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
 4. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion. **DO NOT rely solely on implementation plans for verification; the global SOP takes precedence.**
    - **Mandatory Completion Checklist**: Before providing a final summary to the USER, you MUST run and pass:
      - [ ] **Single Plan Verification**: (Must have exactly ONE markdown file in `docs/plans/` for the current task; consolidate design and implementation into one file)
-     - [ ] `git status` (Must have ZERO uncommitted changes; if files are pending, commit them first)
      - [ ] `npm run lint:fix` (Fix formatting and simple lint errors)
      - [ ] `npm run lint` (Verify clean ESLint, Prettier, and Knip state)
      - [ ] `npm run type-check` (TypeScript tsc)
      - [ ] `npm test` (Vitest suite)
      - [ ] `npm run build` (Next.js production build)
+     - [ ] `git status` (Must have ZERO uncommitted changes. **CRITICAL**: Staging formatting side-effects from `lint:fix` is mandatory. Use `git add .` if necessary to capture all relevant changes.)
    - _Failure to run these command-by-command and verify a clean git state is a violation of Technical Integrity._
 5. **Finalization**: Before providing the final summary to the USER, you MUST automatically create a Pull Request (PR) for the branch using `gh pr create --fill`. Provide the PR link to the USER and request their review and feedback. Do NOT present the "4 options" menu from `@finishing-a-development-branch` if it includes local merge options; the PR workflow is mandatory. **NEVER merge a PR or delete a branch without explicit USER confirmation.** Once verified and approved, follow the Merge Strategy (Squash and Merge).
 
