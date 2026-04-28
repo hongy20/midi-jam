@@ -2,9 +2,9 @@
 
 import { use, useCallback, useEffect, useMemo, useRef } from "react";
 
-import { useTrackPlayer } from "@/features/audio-player";
+import { useNotePlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
-import { useGameplay, useScoreEngine, useTimeline } from "@/features/gameplay";
+import { useAutoPlay, useGameplay, useScoreEngine, useTimeline } from "@/features/gameplay";
 import { getTrackData } from "@/features/midi-assets";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { useOptions } from "@/features/options";
@@ -93,10 +93,13 @@ export function PlayPageClient() {
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput, processNoteEvent);
 
-  const { playbackNotes } = useTrackPlayer({
+  const { playNote, stopNote } = useNotePlayer(selectedMIDIOutput);
+
+  const { playbackNotes } = useAutoPlay({
     containerRef: scrollRef,
     enabled: demoMode && !!trackData && groups.length > 0,
-    selectedMIDIOutput,
+    onNoteOn: (pitch) => playNote(pitch, 0.7),
+    onNoteOff: (pitch) => stopNote(pitch),
     processNoteEvent,
   });
 
