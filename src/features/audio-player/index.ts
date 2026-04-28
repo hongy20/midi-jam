@@ -1,1 +1,1 @@
-export { useTrackPlayer } from "./hooks/use-track-player";
+export { useNotePlayer } from "./hooks/use-note-player";
