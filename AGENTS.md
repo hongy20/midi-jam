@@ -43,6 +43,8 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 
 - **CSS Isolation**: `globals.css` is reserved for theme variables and generic resets. Use **CSS Modules** (`[name].module.css`) for all page and component-specific styles.
 - **Mobile-First Design**: Always write CSS/Tailwind starting with mobile styles. Use `@media (min-width: ...)` in CSS or Tailwind prefixes (`md:`, `lg:`) for larger viewports.
+- **File Naming (CRITICAL)**: All React component files MUST use lower-case kebab-case (e.g., `drum-stage.tsx`, `piano-keyboard.tsx`). This applies to `.tsx`, `.module.css`, `.test.tsx`, and `.stories.tsx` files.
+- **Component Colocation**: Define components directly under their respective `components/` directory (e.g., `src/features/[name]/components/[component-name].tsx`). Avoid redundant subfolders (e.g., `.../components/[name]/[name].tsx`) unless the component requires a complex set of internal sub-components or assets.
 
 - **Semantic Theme Mapping**: Extract all visual properties (colors, fonts, shadows, radii) into semantic CSS variables within `globals.css` (or imported variables). Components must consume these functional aliases (e.g., `--piano-key-white`, `--ui-card-bg`) instead of hardcoding raw values or using direct theme primitives.
 - **Iconography**: Use `lucide-react` exclusively. For custom icons, use standalone `.svg` files. No inline SVG strings or emojis.
