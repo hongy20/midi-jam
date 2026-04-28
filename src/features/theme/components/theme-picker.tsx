@@ -96,7 +96,7 @@ export function ThemePicker({ activeTheme, onThemeChange }: ThemePickerProps) {
                 type="button"
                 onClick={() => handleSelect(theme.name as Theme)}
                 className={cn(
-                  "flex items-center justify-between w-full px-4 h-12 shrink-0 text-left transition-colors",
+                  "flex h-12 w-full shrink-0 items-center justify-between px-4 text-left transition-colors",
                   isActive ? "bg-foreground/20" : "hover:bg-foreground/5",
                 )}
               >
@@ -107,7 +107,7 @@ export function ThemePicker({ activeTheme, onThemeChange }: ThemePickerProps) {
                   />
                   <span
                     className={cn(
-                      "font-retro text-[11px] uppercase tracking-tight",
+                      "font-retro text-[11px] tracking-tight uppercase",
                       isActive ? "text-foreground font-bold" : "text-foreground/80",
                     )}
                   >

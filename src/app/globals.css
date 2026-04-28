@@ -18,19 +18,19 @@ body {
 
   /* Container to equalize button widths in a group */
   .jam-action-group {
-    @apply grid grid-cols-1 gap-4 w-full max-w-fit mx-auto;
+    @apply mx-auto grid w-full max-w-fit grid-cols-1 gap-4;
 
     @media (min-width: 500px) {
-      @apply grid-flow-col auto-cols-fr;
+      @apply auto-cols-fr grid-flow-col;
     }
   }
 
   .btn-jam {
     /* 1. Mobile Default (Vertical stack - One Column) */
-    @apply w-full min-w-48 px-4 py-2 flex items-center justify-center transition-all;
+    @apply flex w-full min-w-48 items-center justify-center px-4 py-2 transition-all;
 
     svg {
-      @apply size-4 block mr-2;
+      @apply mr-2 block size-4;
     }
 
     /* 2. Mobile Landscape / Small Tablet (Horizontal row) */

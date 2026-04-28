@@ -50,20 +50,20 @@ Integrate the header, stepper, and background glow directly into the page. Use `
 ```tsx
 // Example structure in page.tsx
 return (
-  <div className="w-[100dvw] h-[100dvh] bg-background grid grid-rows-[auto_1fr_auto] p-6 landscape:p-4 overflow-hidden animate-fade-in transition-colors duration-500">
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      <div className="absolute top-[20%] right-[10%] w-[60%] h-[60%] rounded-full blur-[120px] bg-accent-primary/5" />
+  <div className="bg-background animate-fade-in grid h-[100dvh] w-[100dvw] grid-rows-[auto_1fr_auto] overflow-hidden p-6 transition-colors duration-500 landscape:p-4">
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="bg-accent-primary/5 absolute top-[20%] right-[10%] h-[60%] w-[60%] rounded-full blur-[120px]" />
     </div>
 
-    <header className="relative z-10 w-full max-w-5xl mx-auto py-4 landscape:py-2 flex items-center justify-between">
+    <header className="relative z-10 mx-auto flex w-full max-w-5xl items-center justify-between py-4 landscape:py-2">
       {/* Stepper + Title logic from NavigationLayout */}
     </header>
 
-    <main className="relative z-10 w-full max-w-5xl mx-auto overflow-y-auto no-scrollbar py-4 px-8 -mx-8">
+    <main className="no-scrollbar relative z-10 -mx-8 mx-auto w-full max-w-5xl overflow-y-auto px-8 py-4">
       {/* Content */}
     </main>
 
-    <footer className="relative z-10 w-full max-w-5xl mx-auto py-4 landscape:py-2 flex justify-end">
+    <footer className="relative z-10 mx-auto flex w-full max-w-5xl justify-end py-4 landscape:py-2">
       {/* Footer Button */}
     </footer>
   </div>

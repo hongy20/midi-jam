@@ -28,7 +28,7 @@ export default function NotFound1({
   return (
     <div
       className={cn(
-        "retro grid w-full place-content-center gap-5 bg-background px-4 py-4 text-center",
+        "retro bg-background grid w-full place-content-center gap-5 px-4 py-4 text-center",
         className,
       )}
     >

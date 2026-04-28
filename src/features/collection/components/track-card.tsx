@@ -32,13 +32,13 @@ export function TrackCard({ track, isSelected, onClick, className }: TrackCardPr
         type="button"
         onClick={onClick}
         className={cn(
-          "group relative h-full w-full text-left outline-none focus-visible:ring-4 focus-visible:ring-foreground transition-all active:scale-95",
+          "group focus-visible:ring-foreground relative h-full w-full text-left transition-all outline-none focus-visible:ring-4 active:scale-95",
           !onClick && "cursor-default active:scale-100",
         )}
       >
         <Card
           className={cn(
-            "relative h-full transition-colors border-8",
+            "relative h-full border-8 transition-colors",
             isSelected
               ? "border-primary bg-primary text-primary-foreground shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]"
               : "border-foreground/10 hover:border-foreground/40",
@@ -61,7 +61,7 @@ export function TrackCard({ track, isSelected, onClick, className }: TrackCardPr
             </div>
             <CardTitle
               className={cn(
-                "retro text-sm truncate",
+                "retro truncate text-sm",
                 isSelected ? "text-primary-foreground" : "text-foreground",
               )}
             >
@@ -71,7 +71,7 @@ export function TrackCard({ track, isSelected, onClick, className }: TrackCardPr
           <CardContent>
             <CardDescription
               className={cn(
-                "retro text-[9px] leading-relaxed truncate",
+                "retro truncate text-[9px] leading-relaxed",
                 isSelected ? "text-primary-foreground/70" : "text-muted-foreground",
               )}
             >

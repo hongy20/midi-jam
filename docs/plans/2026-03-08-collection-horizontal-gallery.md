@@ -207,7 +207,7 @@ Replace the current track list with the new gallery structure.
       ref={(el) => {
         if (el && observerRef.current) observerRef.current.observe(el);
       }}
-      className="shrink-0 h-[80%] flex items-center"
+      className="flex h-[80%] shrink-0 items-center"
     >
       <TrackCard
         track={track}

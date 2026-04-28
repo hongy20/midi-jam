@@ -77,7 +77,7 @@ const Progress = React.forwardRef<
                   <div
                     key={i}
                     className={cn(
-                      "flex-1 h-full mx-[1px]",
+                      "mx-[1px] h-full flex-1",
                       i < filledSquares ? progressBg || "bg-primary" : "bg-transparent",
                     )}
                   />

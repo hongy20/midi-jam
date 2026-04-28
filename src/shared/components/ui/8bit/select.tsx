@@ -64,14 +64,14 @@ function SelectTrigger({ children, ...props }: BitSelectTriggerProps) {
   return (
     <div
       className={cn(
-        "relative border-y-6 border-foreground dark:border-ring bg-input/30",
+        "border-foreground dark:border-ring bg-input/30 relative border-y-6",
         className,
         font !== "normal" && "retro",
       )}
     >
       <ShadcnSelectTrigger
         {...props}
-        className={cn("rounded-none ring-0 w-full border-0", className)}
+        className={cn("w-full rounded-none border-0 ring-0", className)}
       >
         {children}
       </ShadcnSelectTrigger>
@@ -97,7 +97,7 @@ function SelectContent({ className, children, ...props }: BitSelectContentProps)
       className={cn(
         font !== "normal" && "retro",
         className,
-        "relative rounded-none border-4 border-foreground dark:border-ring bg-background shadow-2xl -ml-1 mt-1",
+        "border-foreground dark:border-ring bg-background relative mt-1 -ml-1 rounded-none border-4 shadow-2xl",
       )}
       {...props}
     >
@@ -119,7 +119,7 @@ function SelectItem({
     <ShadcnSelectItem
       className={cn(
         className,
-        "rounded-none border-y-3 border-dashed border-ring/0 hover:border-foreground dark:hover:border-ring",
+        "border-ring/0 hover:border-foreground dark:hover:border-ring rounded-none border-y-3 border-dashed",
       )}
       {...props}
     >

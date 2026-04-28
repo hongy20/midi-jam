@@ -35,7 +35,7 @@
 
 - Wrap `CarouselPrevious` and `CarouselNext` in a container that displays them in a row below the content on mobile:
   ```tsx
-  <div className="flex items-center justify-center gap-4 mt-6 md:block">
+  <div className="mt-6 flex items-center justify-center gap-4 md:block">
     <CarouselPrevious className="relative md:absolute md:-left-12 ..." />
     <CarouselNext className="relative md:absolute md:-right-12 ..." />
   </div>

@@ -145,7 +145,7 @@ export const LiveScore = memo(function LiveScore({
         <span
           ref={feedbackRef}
           className={cn(
-            "text-[0.875rem] font-normal uppercase tracking-tight will-change-transform transition-colors duration-100 retro",
+            "retro text-[0.875rem] font-normal tracking-tight uppercase transition-colors duration-100 will-change-transform",
             styles.hitText,
           )}
           style={{ opacity: 0 }}

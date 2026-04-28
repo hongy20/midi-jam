@@ -18,9 +18,9 @@ A container utility that equalizes button widths within a group using CSS Grid.
 
 ```css
 .jam-action-group {
-  @apply grid grid-cols-1 gap-4 w-full max-w-fit mx-auto;
+  @apply mx-auto grid w-full max-w-fit grid-cols-1 gap-4;
   @media (min-width: 500px) {
-    @apply grid-flow-col auto-cols-fr;
+    @apply auto-cols-fr grid-flow-col;
   }
 }
 ```
