@@ -47,7 +47,7 @@ export function PlayPageClient() {
 
   // Initialize session if idle or finished, and track data is ready
   useEffect(() => {
-    if ((gameState.status === "idle" || gameState.status === "finished") && trackData) {
+    if (gameState.status === "idle" && trackData) {
       startGame();
     }
   }, [gameState.status, startGame, trackData]);
