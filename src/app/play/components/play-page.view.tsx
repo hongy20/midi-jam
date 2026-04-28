@@ -15,8 +15,7 @@ interface PlayPageViewProps {
   selectedTrack: { name: string };
   getScore: () => number;
   getCombo: () => number;
-  getLastHitQuality: () => HitQuality;
-  getHitVersion: () => number;
+  lastHit: { quality: Exclude<HitQuality, null>; id: number } | null;
   getProgress: () => number;
   handlePause: () => void;
   isFullscreen: boolean;
@@ -34,25 +33,26 @@ interface PlayPageViewProps {
  * PlayPageView handles only the "happy path" of data-ready gameplay.
  * Separation of concerns: Presentation layer using semantic HTML and localized components.
  */
-export function PlayPageView({
-  selectedMIDIInput,
-  selectedTrack,
-  getScore,
-  getCombo,
-  getLastHitQuality,
-  getHitVersion,
-  getProgress,
-  handlePause,
-  isFullscreen,
-  handleToggleFullscreen,
-  liveActiveNotes,
-  playbackNotes,
-  notes,
-  groups,
-  scrollRef,
-  getCurrentTimeMs,
-  speed,
-}: PlayPageViewProps) {
+export function PlayPageView(props: PlayPageViewProps) {
+  const {
+    selectedMIDIInput,
+    selectedTrack,
+    getScore,
+    getCombo,
+    lastHit,
+    getProgress,
+    handlePause,
+    isFullscreen,
+    handleToggleFullscreen,
+    liveActiveNotes,
+    playbackNotes,
+    notes,
+    groups,
+    scrollRef,
+    getCurrentTimeMs,
+    speed,
+  } = props;
+
   const instrumentType = getInstrumentType(selectedMIDIInput);
   const Stage = instrumentType === "piano" ? PianoStage : DrumStage;
 
@@ -66,8 +66,7 @@ export function PlayPageView({
           <LiveScore
             getScore={getScore}
             getCombo={getCombo}
-            getLastHitQuality={getLastHitQuality}
-            getHitVersion={getHitVersion}
+            lastHit={lastHit}
             getProgress={getProgress}
           />
         </div>

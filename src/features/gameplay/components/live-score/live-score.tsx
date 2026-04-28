@@ -9,33 +9,61 @@ import styles from "./live-score.module.css";
 interface LiveScoreProps {
   getScore: () => number;
   getCombo: () => number;
-  getLastHitQuality: () => HitQuality;
-  getHitVersion: () => number;
+  lastHit: { quality: Exclude<HitQuality, null>; id: number } | null;
   getProgress: () => number;
 }
 
 export const LiveScore = memo(function LiveScore({
   getScore,
   getCombo,
-  getLastHitQuality,
-  getHitVersion,
+  lastHit,
   getProgress,
 }: LiveScoreProps) {
-  const progressBarFillRef = useRef<HTMLDivElement>(null);
-  const progressValueRef = useRef<HTMLSpanElement>(null);
   const scoreValueRef = useRef<HTMLSpanElement>(null);
   const comboValueRef = useRef<HTMLSpanElement>(null);
+  const progressBarFillRef = useRef<HTMLDivElement>(null);
+  const progressValueRef = useRef<HTMLSpanElement>(null);
   const feedbackRef = useRef<HTMLSpanElement>(null);
 
-  // Keep track of previous values to avoid redundant DOM updates
   const lastStateRef = useRef({
     score: -1,
     combo: -1,
     progress: -1,
-    quality: null as HitQuality,
-    version: -1,
-    lastHitTime: 0,
+    lastHitId: -1,
   });
+
+  // Handle hit quality feedback via discrete event state
+  useEffect(() => {
+    if (!lastHit || !feedbackRef.current) return;
+    if (lastHit.id === lastStateRef.current.lastHitId) return;
+
+    const el = feedbackRef.current;
+    const { quality } = lastHit;
+
+    // Remove previous quality classes
+    const previousQuality = el.getAttribute("data-quality") as HitQuality;
+    if (previousQuality) el.classList.remove(styles[previousQuality]);
+
+    // Set new quality
+    el.textContent = `${quality.toUpperCase()}!`;
+    el.classList.add(styles[quality]);
+    el.setAttribute("data-quality", quality);
+    el.style.opacity = "1";
+
+    // Restart animation
+    el.style.animation = "none";
+    void el.offsetWidth; // Force reflow
+    el.style.animation = "";
+
+    lastStateRef.current.lastHitId = lastHit.id;
+
+    // Auto-fade after 1 second
+    const timeoutId = setTimeout(() => {
+      if (feedbackRef.current) feedbackRef.current.style.opacity = "0";
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [lastHit]);
 
   useEffect(() => {
     let rafId: number;
@@ -44,13 +72,9 @@ export const LiveScore = memo(function LiveScore({
       const score = getScore();
       const combo = getCombo();
       const progress = getProgress();
-      const quality = getLastHitQuality();
-      const version = getHitVersion();
       const state = lastStateRef.current;
-      const now = performance.now();
 
       // 1. Update Score (Normalized)
-
       if (score !== state.score && scoreValueRef.current) {
         scoreValueRef.current.textContent = score.toFixed(1);
         state.score = score;
@@ -58,7 +82,7 @@ export const LiveScore = memo(function LiveScore({
 
       // 2. Update Combo
       if (combo !== state.combo && comboValueRef.current) {
-        comboValueRef.current.textContent = `x${combo}`;
+        comboValueRef.current.textContent = combo > 0 ? `x${combo}` : "";
         state.combo = combo;
       }
 
@@ -69,7 +93,6 @@ export const LiveScore = memo(function LiveScore({
         }
         if (progressValueRef.current) {
           const percentage = Math.floor(progress * 100);
-          // Only update text if the rounded percentage actually changed
           if (Math.floor(state.progress * 100) !== percentage) {
             progressValueRef.current.textContent = `${percentage}%`;
           }
@@ -77,40 +100,12 @@ export const LiveScore = memo(function LiveScore({
         state.progress = progress;
       }
 
-      // 4. Update Hit Quality Feedback
-      if (feedbackRef.current) {
-        const el = feedbackRef.current;
-        const isNewHit = quality !== state.quality || version !== state.version;
-
-        if (isNewHit && quality) {
-          // Clean up previous classes
-          if (state.quality) el.classList.remove(styles[state.quality]);
-
-          el.textContent = `${quality.toUpperCase()}!`;
-          el.classList.add(styles[quality]);
-          el.style.opacity = "1";
-
-          // Trigger animation restart
-          el.style.animation = "none";
-          void el.offsetWidth; // Force reflow
-          el.style.animation = "";
-
-          state.quality = quality;
-          state.version = version;
-          state.lastHitTime = now;
-        } else if (state.lastHitTime > 0 && now - state.lastHitTime > 1000) {
-          // Auto-fade after 1 second
-          el.style.opacity = "0";
-          state.lastHitTime = 0;
-        }
-      }
-
       rafId = requestAnimationFrame(update);
     };
 
     rafId = requestAnimationFrame(update);
     return () => cancelAnimationFrame(rafId);
-  }, [getScore, getCombo, getLastHitQuality, getProgress]);
+  }, [getScore, getCombo, getProgress]);
 
   return (
     <div className="flex w-full items-center gap-8">

@@ -18,6 +18,7 @@ interface UseScoreEngineProps {
   initialScore?: number;
   initialCombo?: number;
   initialTimeMs?: number;
+  onHit?: (quality: Exclude<HitQuality, null>) => void;
 }
 
 export function useScoreEngine({
@@ -26,6 +27,7 @@ export function useScoreEngine({
   initialScore = 0,
   initialCombo = 0,
   initialTimeMs = 0,
+  onHit,
 }: UseScoreEngineProps) {
   const maxRawPoints = useMemo(() => calculateMaxRawPoints(notes.length), [notes.length]);
   // `initialScore` is normalized (0-100). Convert it back to raw points for internal tracking.
@@ -38,7 +40,6 @@ export function useScoreEngine({
 
   const processedNotesRef = useRef<Set<number>>(new Set());
   const currentIndexRef = useRef(0);
-  const hitVersionRef = useRef(0);
 
   const activeHitsRef = useRef<
     Map<
@@ -169,11 +170,11 @@ export function useScoreEngine({
 
         lastHitQualityRef.current = quality;
         comboRef.current += 1;
-        hitVersionRef.current += 1;
+        onHit?.(quality);
       } else {
         lastHitQualityRef.current = "miss";
         comboRef.current = 0;
-        hitVersionRef.current += 1;
+        onHit?.("miss");
       }
     },
     [notes, getCurrentTimeMs, commitHitScore],
@@ -221,11 +222,7 @@ export function useScoreEngine({
     }, [maxRawPoints]),
     getCombo: useCallback(() => comboRef.current, []),
     getLastHitQuality: useCallback(() => lastHitQualityRef.current, []),
-    getHitVersion: useCallback(() => hitVersionRef.current, []),
     processNoteEvent,
-    resetScore: useCallback(() => {
-      resetScore();
-      hitVersionRef.current = 0;
-    }, [resetScore]),
+    resetScore,
   };
 }

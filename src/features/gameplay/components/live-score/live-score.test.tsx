@@ -7,8 +7,7 @@ describe("LiveScore", () => {
   const defaultProps = {
     getScore: () => 50.0,
     getCombo: () => 15,
-    getLastHitQuality: () => "perfect" as const,
-    getHitVersion: () => 1,
+    lastHit: { quality: "perfect" as const, id: 1 },
     getProgress: () => 0.45,
   };
 
