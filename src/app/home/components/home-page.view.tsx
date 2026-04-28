@@ -7,10 +7,10 @@ import Hero3 from "@/shared/components/ui/8bit/blocks/hero3";
 interface HomePageViewProps {
   onStart: () => void;
   onOptions: () => void;
-  songsCount: number;
+  tracksCount: number;
 }
 
-export function HomePageView({ onStart, onOptions, songsCount }: HomePageViewProps) {
+export function HomePageView({ onStart, onOptions, tracksCount }: HomePageViewProps) {
   useEffect(() => {
     const isSupported = typeof navigator !== "undefined" && "requestMIDIAccess" in navigator;
     if (!isSupported) {
@@ -35,7 +35,7 @@ export function HomePageView({ onStart, onOptions, songsCount }: HomePageViewPro
     },
   ];
 
-  const stats = [{ label: "SONGS", value: String(songsCount) }];
+  const stats = [{ label: "SONGS", value: String(tracksCount) }];
 
   return (
     <main className="flex h-dvh items-center justify-center">

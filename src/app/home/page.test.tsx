@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { Suspense } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { getSongTracks, useCollection } from "@/features/collection";
+import { getTracks, useCollection } from "@/features/collection";
 import { useGameplay } from "@/features/gameplay";
 import { useGear } from "@/features/midi-hardware";
 import { useNavigation } from "@/shared/hooks/use-navigation";
@@ -16,7 +16,7 @@ vi.mock("@/shared/hooks/use-navigation", () => ({
 
 vi.mock("@/features/collection", () => ({
   useCollection: vi.fn(),
-  getSongTracks: vi.fn(),
+  getTracks: vi.fn(),
 }));
 
 vi.mock("@/features/midi-hardware", () => ({
@@ -63,7 +63,7 @@ describe("HomePageClient", () => {
       mockGameplay as unknown as ReturnType<typeof useGameplay>,
     );
 
-    vi.mocked(getSongTracks).mockResolvedValue(mockTracks);
+    vi.mocked(getTracks).mockResolvedValue(mockTracks);
 
     // Mock MIDI support
     Object.defineProperty(global.navigator, "requestMIDIAccess", {

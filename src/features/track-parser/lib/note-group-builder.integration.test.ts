@@ -4,10 +4,10 @@ import path from "node:path";
 import { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
 
-import { buildMidiNoteGroups } from "./midi-note-group-parser";
-import { parseMidiNotes } from "./midi-note-parser";
+import { buildMidiNoteGroups } from "./note-group-builder";
+import { parseMidiNotes } from "./note-parser";
 
-describe("lane-segment-utils integration with real MIDI", () => {
+describe("note-group-builder integration with real MIDI", () => {
   // Helper to load and parse MIDI
   const loadMidi = (filename: string) => {
     const filePath = path.join(process.cwd(), "public", "midi", filename);

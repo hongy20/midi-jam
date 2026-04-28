@@ -7,7 +7,7 @@ describe("HomePageView", () => {
   const defaultProps = {
     onStart: vi.fn(),
     onOptions: vi.fn(),
-    songsCount: 0,
+    tracksCount: 0,
   };
 
   beforeEach(() => {

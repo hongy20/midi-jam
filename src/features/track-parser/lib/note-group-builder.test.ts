@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import type { MidiNote } from "@/shared/types/midi";
 
-import { buildMidiNoteGroups } from "./midi-note-group-parser";
+import { buildMidiNoteGroups } from "./note-group-builder";
 
-describe("lane-segment-utils clustering", () => {
+describe("note-group-builder clustering", () => {
   const threshold = 10000; // 10s
 
   describe("buildMidiNoteGroups", () => {

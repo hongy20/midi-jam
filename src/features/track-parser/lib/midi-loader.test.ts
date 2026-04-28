@@ -93,7 +93,7 @@ vi.mock("@tonejs/midi", () => {
   };
 });
 
-describe("midi-loader loadMidiFile", () => {
+describe("midi-loader", () => {
   const leadInS = LEAD_IN_DEFAULT_MS / 1000;
   const leadOutS = LEAD_OUT_DEFAULT_MS / 1000;
 

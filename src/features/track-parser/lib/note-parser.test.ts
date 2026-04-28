@@ -1,9 +1,9 @@
 import type { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
 
-import { parseMidiNotes } from "./midi-note-parser";
+import { parseMidiNotes } from "./note-parser";
 
-describe("midi-note-parser", () => {
+describe("note-parser", () => {
   const mockMidi = {
     duration: 10,
     header: {
