@@ -2,10 +2,6 @@
   /* Global Layout Constants - Theme Independent */
   --header-height: 3rem;
   --footer-height: 3rem;
-  --h1-size: 1.875rem;
-  --btn-py: 0.5rem;
-  --btn-px: 2rem;
-  --btn-text: 0.875rem;
   --layout-gap: 1rem;
 
   /* Global Visual Constants */
@@ -18,7 +14,6 @@
   --piano-glow-live-bg: var(--primary);
   --piano-glow-playback-bg: var(--secondary);
   --piano-glow-both-bg: var(--accent);
-  --ui-card-radius: 2rem;
 }
 
 /* Mobile Portrait, Tablets, and Desktop screens */
@@ -26,10 +21,6 @@
   :root {
     --header-height: 4rem;
     --footer-height: 4.5rem;
-    --h1-size: 2.25rem;
-    --btn-py: 0.75rem;
-    --btn-px: 3rem;
-    --btn-text: 1.25rem;
     --layout-gap: 1.5rem;
   }
 }
