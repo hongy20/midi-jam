@@ -46,6 +46,7 @@ const eslintConfig = [
       "@typescript-eslint/no-unused-vars": "error",
       "react-hooks/exhaustive-deps": "warn",
       "react-hooks/set-state-in-effect": "warn",
+      "tailwindcss/no-custom-classname": "off",
     },
   },
   {
