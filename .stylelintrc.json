@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "media-feature-name-disallowed-list": [
+      ["max-width", "max-height"],
+      {
+        "message": "Use mobile-first (min-width/min-height) media queries instead."
+      }
+    ]
+  }
+}

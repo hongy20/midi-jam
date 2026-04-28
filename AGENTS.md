@@ -42,7 +42,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 ## 3. Architecture & Styling Standards
 
 - **CSS Isolation**: `globals.css` is reserved for theme variables and generic resets. Use **CSS Modules** (`[name].module.css`) for all page and component-specific styles.
-- **Mobile-First Design**: Always write CSS/Tailwind starting with mobile styles. Use `@media (min-width: ...)` in CSS or Tailwind prefixes (`md:`, `lg:`) for larger viewports.
+- **Mobile-First Design**: Always write CSS/Tailwind starting with mobile styles. Use `@media (min-width: ...)` in CSS or Tailwind prefixes (`md:`, `lg:`) for larger viewports. **Strictly avoid `max-width` and `max-height` media queries.**
 - **File Naming (CRITICAL)**: All React component files MUST use lower-case kebab-case (e.g., `drum-stage.tsx`, `piano-keyboard.tsx`). This applies to `.tsx`, `.module.css`, `.test.tsx`, and `.stories.tsx` files.
 - **Component Colocation**: Define components directly under their respective `components/` directory (e.g., `src/features/[name]/components/[component-name].tsx`). Avoid redundant subfolders (e.g., `.../components/[name]/[name].tsx`) unless the component requires a complex set of internal sub-components or assets.
 

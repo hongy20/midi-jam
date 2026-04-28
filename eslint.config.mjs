@@ -47,6 +47,14 @@ const eslintConfig = [
       "react-hooks/exhaustive-deps": "warn",
       "react-hooks/set-state-in-effect": "warn",
       "tailwindcss/no-custom-classname": "off",
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "JSXAttribute[name.name='className'] > Literal[value=/(?:^|\\s)(?:max-sm|max-md|max-lg|max-xl|max-2xl):/]",
+          message: "Use mobile-first (min-width) variants instead of max-* width variants.",
+        },
+      ],
     },
   },
   {
