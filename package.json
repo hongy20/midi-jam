@@ -10,7 +10,6 @@
     "lint:fix": "eslint . --fix && stylelint '**/*.css' --fix && prettier --write .",
     "stylelint": "stylelint '**/*.css'",
     "knip": "knip",
-    "format": "prettier --write .",
     "type-check": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
