@@ -9,14 +9,14 @@ import styles from "./live-score.module.css";
 interface LiveScoreProps {
   getScore: () => number;
   getCombo: () => number;
-  lastHit: { quality: Exclude<HitQuality, null>; id: number } | null;
+  getLastHitQuality: () => HitQuality;
   getProgress: () => number;
 }
 
 export const LiveScore = memo(function LiveScore({
   getScore,
   getCombo,
-  lastHit,
+  getLastHitQuality,
   getProgress,
 }: LiveScoreProps) {
   const scoreValueRef = useRef<HTMLSpanElement>(null);
@@ -29,41 +29,9 @@ export const LiveScore = memo(function LiveScore({
     score: -1,
     combo: -1,
     progress: -1,
-    lastHitId: -1,
+    quality: null as HitQuality,
+    lastHitTime: 0,
   });
-
-  // Handle hit quality feedback via discrete event state
-  useEffect(() => {
-    if (!lastHit || !feedbackRef.current) return;
-    if (lastHit.id === lastStateRef.current.lastHitId) return;
-
-    const el = feedbackRef.current;
-    const { quality } = lastHit;
-
-    // Remove previous quality classes
-    const previousQuality = el.getAttribute("data-quality") as HitQuality;
-    if (previousQuality) el.classList.remove(styles[previousQuality]);
-
-    // Set new quality
-    el.textContent = `${quality.toUpperCase()}!`;
-    el.classList.add(styles[quality]);
-    el.setAttribute("data-quality", quality);
-    el.style.opacity = "1";
-
-    // Restart animation
-    el.style.animation = "none";
-    void el.offsetWidth; // Force reflow
-    el.style.animation = "";
-
-    lastStateRef.current.lastHitId = lastHit.id;
-
-    // Auto-fade after 1 second
-    const timeoutId = setTimeout(() => {
-      if (feedbackRef.current) feedbackRef.current.style.opacity = "0";
-    }, 1000);
-
-    return () => clearTimeout(timeoutId);
-  }, [lastHit]);
 
   useEffect(() => {
     let rafId: number;
@@ -72,7 +40,9 @@ export const LiveScore = memo(function LiveScore({
       const score = getScore();
       const combo = getCombo();
       const progress = getProgress();
+      const quality = getLastHitQuality();
       const state = lastStateRef.current;
+      const now = performance.now();
 
       // 1. Update Score (Normalized)
       if (score !== state.score && scoreValueRef.current) {
@@ -100,12 +70,44 @@ export const LiveScore = memo(function LiveScore({
         state.progress = progress;
       }
 
+      // 4. Update Hit Quality Feedback
+      if (feedbackRef.current) {
+        const el = feedbackRef.current;
+        
+        // DETECTION LOGIC: 
+        // Trigger if quality changes OR if quality is non-null and score/combo changed (new hit of same quality)
+        const isNewHit = quality !== state.quality || (quality && (score !== state.score || (combo !== state.combo && combo === 0)));
+
+        if (isNewHit && quality) {
+          // Clean up previous classes
+          const prevQuality = el.getAttribute("data-quality") as HitQuality;
+          if (prevQuality) el.classList.remove(styles[prevQuality]);
+
+          el.textContent = `${quality.toUpperCase()}!`;
+          el.classList.add(styles[quality]);
+          el.setAttribute("data-quality", quality);
+          el.style.opacity = "1";
+
+          // Trigger animation restart
+          el.style.animation = "none";
+          void el.offsetWidth; // Force reflow
+          el.style.animation = "";
+
+          state.quality = quality;
+          state.lastHitTime = now;
+        } else if (state.lastHitTime > 0 && now - state.lastHitTime > 1000) {
+          // Auto-fade after 1 second
+          el.style.opacity = "0";
+          state.lastHitTime = 0;
+        }
+      }
+
       rafId = requestAnimationFrame(update);
     };
 
     rafId = requestAnimationFrame(update);
     return () => cancelAnimationFrame(rafId);
-  }, [getScore, getCombo, getProgress]);
+  }, [getScore, getCombo, getProgress, getLastHitQuality]);
 
   return (
     <div className="flex w-full items-center gap-8">

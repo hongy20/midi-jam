@@ -1,10 +1,10 @@
 "use client";
 
-import { use, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { use, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
-import { type HitQuality, useGameplay, useScoreEngine, useTimeline } from "@/features/gameplay";
+import { useGameplay, useScoreEngine, useTimeline } from "@/features/gameplay";
 import { getTrackData } from "@/features/midi-assets";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { useOptions } from "@/features/options";
@@ -68,13 +68,6 @@ export function PlayPageClient() {
     handleFinishRef.current();
   }, []);
 
-  const [lastHit, setLastHit] = useState<{ quality: Exclude<HitQuality, null>; id: number } | null>(
-    null,
-  );
-
-  const onHit = useCallback((quality: Exclude<HitQuality, null>) => {
-    setLastHit({ quality, id: Math.random() });
-  }, []);
 
   const { getCurrentTimeMs, getProgress } = useTimeline({
     totalDurationMs,
@@ -86,10 +79,9 @@ export function PlayPageClient() {
     onFinish: onFinishProxy,
   });
 
-  const { getScore, getCombo, processNoteEvent } = useScoreEngine({
+  const { getScore, getCombo, processNoteEvent, getLastHitQuality } = useScoreEngine({
     notes,
     getCurrentTimeMs,
-    onHit,
     initialScore:
       gameState.status === "playing" || gameState.status === "paused" ? gameState.score : 0,
     initialCombo:
@@ -146,7 +138,7 @@ export function PlayPageClient() {
       selectedTrack={selectedTrack}
       getScore={getScore}
       getCombo={getCombo}
-      lastHit={lastHit}
+      getLastHitQuality={getLastHitQuality}
       getProgress={getProgress}
       handlePause={handlePause}
       isFullscreen={isFullscreen}
@@ -161,3 +153,4 @@ export function PlayPageClient() {
     />
   );
 }
+

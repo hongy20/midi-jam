@@ -15,7 +15,7 @@ interface PlayPageViewProps {
   selectedTrack: { name: string };
   getScore: () => number;
   getCombo: () => number;
-  lastHit: { quality: Exclude<HitQuality, null>; id: number } | null;
+  getLastHitQuality: () => HitQuality;
   getProgress: () => number;
   handlePause: () => void;
   isFullscreen: boolean;
@@ -39,7 +39,7 @@ export function PlayPageView(props: PlayPageViewProps) {
     selectedTrack,
     getScore,
     getCombo,
-    lastHit,
+    getLastHitQuality,
     getProgress,
     handlePause,
     isFullscreen,
@@ -66,7 +66,7 @@ export function PlayPageView(props: PlayPageViewProps) {
           <LiveScore
             getScore={getScore}
             getCombo={getCombo}
-            lastHit={lastHit}
+            getLastHitQuality={getLastHitQuality}
             getProgress={getProgress}
           />
         </div>
