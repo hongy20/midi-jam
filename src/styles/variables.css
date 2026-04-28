@@ -2,17 +2,6 @@
   /* Global Layout Constants - Theme Independent */
   --header-height: 3rem;
   --footer-height: 3rem;
-
-  /* Global Visual Constants */
-  --piano-key-radius-white: 8px;
-  --piano-key-radius-black: 4px;
-  --piano-key-white: #ffffff;
-  --piano-key-black: #18181b;
-  --piano-key-border: 1px solid var(--border);
-  --piano-label-color: var(--muted-foreground);
-  --piano-glow-live-bg: var(--primary);
-  --piano-glow-playback-bg: var(--secondary);
-  --piano-glow-both-bg: var(--accent);
 }
 
 /* Mobile Portrait, Tablets, and Desktop screens */
