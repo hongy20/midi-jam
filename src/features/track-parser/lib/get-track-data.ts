@@ -3,7 +3,7 @@ import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
 
 import { LANE_SEGMENT_DURATION_MS } from "./constant";
 import { loadMidiFile } from "./loader";
-import { buildMidiNoteGroups } from "./note-group-parser";
+import { buildMidiNoteGroups } from "./note-group-builder";
 import { parseMidiNotes } from "./note-parser";
 
 interface MidiTrackData {

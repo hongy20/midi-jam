@@ -1,1 +1,1 @@
-export { getTrackData } from "./lib/track-data-loader";
+export { getTrackData } from "./lib/get-track-data";
