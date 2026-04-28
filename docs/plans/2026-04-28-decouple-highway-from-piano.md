@@ -1,36 +1,28 @@
 # Refactor: Decouple Highway from Piano `--is-black`
 
-The `features/highway` component currently relies on a custom CSS property `--is-black`, which is defined and managed by the `features/piano` module. This creates a tight coupling between a generic visualization component (`HighwaySegment`) and instrument-specific logic (Piano key types).
+The `features/highway` component currently relies on a custom CSS property `--is-black`, which is defined and managed by the `features/piano` module. This creates a tight coupling.
+
+The user has requested to decouple this by hardcoding the background opacity in the highway feature, even if it means losing the visual distinction between black and white key notes in the highway visualization.
 
 ## Proposed Changes
 
-We will introduce a generic interface variable `--note-bg-alpha` in `features/highway` to control the background opacity of notes. The `features/piano` module will then map its internal `--is-black` state to this generic variable.
+We will remove the dependency on `--is-black` by hardcoding the `background-color` opacity in `features/highway`.
 
 ### [features/highway]
 
 #### [MODIFY] [highway-segment.module.css](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/highway/components/highway-segment.module.css)
-- Replace the direct usage of `--is-black` with a new generic variable `--note-bg-alpha`.
-- Set a default value for `--note-bg-alpha` (20%) to ensure notes remain visible even when no specialized layout is provided.
+- Replace the direct usage of `--is-black` with a hardcoded opacity value (20%).
 
 ```css
 .note {
   /* ... */
-  --note-bg-alpha: 20%;
-  background-color: color-mix(in srgb, currentColor var(--note-bg-alpha), transparent);
+  background-color: color-mix(in srgb, currentColor 20%, transparent);
 }
 ```
 
 ### [features/piano]
 
-#### [MODIFY] [piano-layout.css](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/piano/styles/piano-layout.css)
-- Map `--is-black` to `--note-bg-alpha` within the `.piano-grid-item` class.
-
-```css
-.piano-grid-item {
-  /* ... */
-  --note-bg-alpha: calc(20% + 20% * var(--is-black));
-}
-```
+No changes are required in `features/piano` since we are no longer trying to map `--is-black` to any highway property. The `--is-black` property will remain internal to the piano feature for its own layout and styling needs.
 
 ## Verification Plan
 
@@ -40,5 +32,4 @@ We will introduce a generic interface variable `--note-bg-alpha` in `features/hi
 
 ### Manual Verification
 - Verify the piano highway rendering in Storybook.
-- Ensure black key notes still appear slightly darker/more opaque than white key notes.
-- Verify that generic highway still has visible notes with 20% alpha.
+- Ensure all notes have the same background opacity (20%).
