@@ -1,29 +1,30 @@
 import { useEffect, useState } from "react";
-
 import { type MIDINoteEvent } from "@/shared/types/midi";
-
 import { createNoteObserver } from "../lib/note-observer";
-import { useNotePlayer } from "./use-note-player";
 
-interface UseTrackPlayerProps {
+interface UseAutoPlayProps {
   containerRef: React.RefObject<HTMLDivElement | null>;
   enabled: boolean;
-  selectedMIDIOutput: WebMidi.MIDIOutput | null;
+  onNoteOn: (pitch: number) => void;
+  onNoteOff: (pitch: number) => void;
   processNoteEvent: (event: MIDINoteEvent) => void;
 }
 
 /**
  * Hook to handle automated note playback by observing visual note elements
  * as they cross the target line in the gameplay lane.
+ * 
+ * Strict Isolation: This hook does NOT import from the audio feature.
+ * It relies on callbacks for audio triggering.
  */
-export function useTrackPlayer({
+export function useAutoPlay({
   containerRef,
   enabled,
-  selectedMIDIOutput,
+  onNoteOn,
+  onNoteOff,
   processNoteEvent,
-}: UseTrackPlayerProps) {
+}: UseAutoPlayProps) {
   const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
-  const { playNote, stopNote } = useNotePlayer(selectedMIDIOutput);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -37,10 +38,9 @@ export function useTrackPlayer({
           next.add(pitch);
           return next;
         });
-
-        const velocity = 0.7;
-        playNote(pitch, velocity);
-        processNoteEvent({ type: "note-on", pitch, velocity });
+        
+        onNoteOn(pitch);
+        processNoteEvent({ type: "note-on", pitch, velocity: 0.7 });
       },
       onPitchEnd: (pitch) => {
         setPlaybackNotes((prev) => {
@@ -49,7 +49,7 @@ export function useTrackPlayer({
           return next;
         });
 
-        stopNote(pitch);
+        onNoteOff(pitch);
         processNoteEvent({ type: "note-off", pitch, velocity: 0 });
       },
     });
@@ -58,7 +58,7 @@ export function useTrackPlayer({
       disconnect();
       setPlaybackNotes(new Set());
     };
-  }, [containerRef, enabled, playNote, stopNote, processNoteEvent]);
+  }, [containerRef, enabled, onNoteOn, onNoteOff, processNoteEvent]);
 
   return { playbackNotes };
 }
