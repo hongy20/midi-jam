@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import type { HitQuality } from "../../hooks/use-score-engine";
+import type { HitQuality } from "../hooks/use-score-engine";
 import { LiveScore } from "./live-score";
 
 const meta: Meta<typeof LiveScore> = {
-  title: "Features/Score/LiveScore",
+  title: "Features/Gameplay/LiveScore",
   component: LiveScore,
   parameters: {
     layout: "centered",

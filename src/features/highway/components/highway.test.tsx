@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 import type { MidiNoteGroup } from "@/shared/types/midi";
 
-import { Highway } from "./Highway";
+import { Highway } from "./highway";
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {

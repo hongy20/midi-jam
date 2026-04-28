@@ -1,1 +1,1 @@
-export { DrumStage } from "./components/drum-stage/DrumStage";
+export { DrumStage } from "./components/drum-stage";

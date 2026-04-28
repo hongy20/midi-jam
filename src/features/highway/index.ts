@@ -1,1 +1,1 @@
-export { Highway } from "./components/Highway";
+export { Highway } from "./components/highway";
