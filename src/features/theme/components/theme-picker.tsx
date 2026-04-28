@@ -82,7 +82,7 @@ export function ThemePicker({ activeTheme, onThemeChange }: ThemePickerProps) {
           />
         </div>
       </DialogTrigger>
-      <DialogContent className="bg-background border-foreground max-w-[280px] border-4 p-2 [&>button:last-child]:hidden">
+      <DialogContent className="bg-background border-foreground max-w-70 border-4 p-2 [&>button:last-child]:hidden">
         <DialogHeader className="sr-only">
           <DialogTitle>Select Theme</DialogTitle>
         </DialogHeader>

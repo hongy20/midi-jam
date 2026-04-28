@@ -5,35 +5,27 @@ The goal is to configure Prettier to automatically fix Tailwind CSS canonical cl
 ## User Review Required
 
 > [!IMPORTANT]
-> This plan introduces two new Prettier plugins:
+> This plan ensures that the `prettier-plugin-tailwindcss-canonical-classes` plugin is correctly configured for Tailwind CSS v4.
 >
-> 1. `prettier-plugin-tailwindcss`: The official plugin for sorting Tailwind classes.
-> 2. `prettier-plugin-tailwindcss-canonical-classes`: A community plugin that handles canonicalization (fixing `suggestCanonicalClasses` warnings).
->
-> These will run automatically during `npm run format` or whenever Prettier is triggered by your IDE on save.
+> 1. **Plugin Order**: The canonicalization plugin MUST be listed **after** the sorting plugin (`prettier-plugin-tailwindcss`) in the `plugins` array to ensure correct parser chaining.
+> 2. **Stylesheet Path**: The `tailwindcssCanonicalStylesheet` option must be set to point to the project's CSS entry point (`./src/app/globals.css`) for accurate design system resolution.
 
 ## Proposed Changes
-
-### Dependencies
-
-#### [MODIFY] [package.json](file:///Users/yanhong/Github/hongy20/midi-jam/package.json)
-
-- Add `prettier-plugin-tailwindcss` and `prettier-plugin-tailwindcss-canonical-classes` to `devDependencies`.
 
 ### Configuration
 
 #### [MODIFY] [.prettierrc.json](file:///Users/yanhong/Github/hongy20/midi-jam/.prettierrc.json)
 
-- Add the `plugins` array to include the new plugins.
-- Note: `prettier-plugin-tailwindcss` should usually be last in the array to ensure it sorts the final output.
+- Update the `plugins` array to move `prettier-plugin-tailwindcss-canonical-classes` to the end.
+- Add `"tailwindcssCanonicalStylesheet": "./src/app/globals.css"`.
 
 ## Verification Plan
 
 ### Automated Tests
 
-- Run `npm run format` to apply the changes and verify that non-canonical classes are updated and sorted.
-- Run `npm run lint` to ensure no regressions and that the new formatting is consistent with the linting rules.
+- Run `npm run format` to apply the changes and verify that non-canonical classes (e.g., `!basis-[100%]`) are updated to their canonical forms (e.g., `basis-full!`).
+- Run `npm run lint` to ensure no regressions.
 
 ### Manual Verification
 
-- Check a file with known non-canonical classes (if any) or manually add one (e.g., `className="mt-[16px] flex"`) and verify it changes to `className="flex mt-4"` (canonicalized and sorted) upon formatting.
+- Check `src/app/globals.css` and verify that arbitrary value classes in `@apply` directives have been replaced with canonical equivalents.

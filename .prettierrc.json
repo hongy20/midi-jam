@@ -4,7 +4,8 @@
   "tabWidth": 2,
   "trailingComma": "all",
   "printWidth": 100,
-  "plugins": ["prettier-plugin-tailwindcss-canonical-classes", "prettier-plugin-tailwindcss"],
+  "plugins": ["prettier-plugin-tailwindcss", "prettier-plugin-tailwindcss-canonical-classes"],
+  "tailwindcssCanonicalStylesheet": "./src/app/globals.css",
   "overrides": [
     {
       "files": ["*.jsonc"],

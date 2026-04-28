@@ -87,12 +87,12 @@ function Button({ children, asChild, ...props }: BitButtonProps) {
 
           {size === "icon" && (
             <>
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-0 left-0 h-[5px] w-full md:h-1.5" />
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute bottom-0 h-[5px] w-full md:h-1.5" />
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-1 -left-1 h-1/2 w-[5px] md:w-1.5" />
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute bottom-1 -left-1 h-1/2 w-[5px] md:w-1.5" />
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-1 -right-1 h-1/2 w-[5px] md:w-1.5" />
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute -right-1 bottom-1 h-1/2 w-[5px] md:w-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-0 left-0 h-1.25 w-full md:h-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute bottom-0 h-1.25 w-full md:h-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-1 -left-1 h-1/2 w-1.25 md:w-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute bottom-1 -left-1 h-1/2 w-1.25 md:w-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-1 -right-1 h-1/2 w-1.25 md:w-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute -right-1 bottom-1 h-1/2 w-1.25 md:w-1.5" />
             </>
           )}
         </span>
@@ -129,12 +129,12 @@ function Button({ children, asChild, ...props }: BitButtonProps) {
 
           {size === "icon" && (
             <>
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-0 left-0 h-[5px] w-full md:h-1.5" />
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute bottom-0 h-[5px] w-full md:h-1.5" />
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-1 -left-1 h-1/2 w-[5px] md:w-1.5" />
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute bottom-1 -left-1 h-1/2 w-[5px] md:w-1.5" />
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-1 -right-1 h-1/2 w-[5px] md:w-1.5" />
-              <div className="bg-foreground dark:bg-ring pointer-events-none absolute -right-1 bottom-1 h-1/2 w-[5px] md:w-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-0 left-0 h-1.25 w-full md:h-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute bottom-0 h-1.25 w-full md:h-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-1 -left-1 h-1/2 w-1.25 md:w-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute bottom-1 -left-1 h-1/2 w-1.25 md:w-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute top-1 -right-1 h-1/2 w-1.25 md:w-1.5" />
+              <div className="bg-foreground dark:bg-ring pointer-events-none absolute -right-1 bottom-1 h-1/2 w-1.25 md:w-1.5" />
             </>
           )}
         </>

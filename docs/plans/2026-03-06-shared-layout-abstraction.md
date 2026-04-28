@@ -175,10 +175,10 @@ interface PageHeaderProps {
 export function PageHeader({ title, children, className = "" }: PageHeaderProps) {
   return (
     <div
-      className={`mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-[var(--header-py)] sm:px-8 ${className}`}
+      className={`mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-(--header-py) sm:px-8 ${className}`}
     >
       {typeof title === "string" ? (
-        <h1 className="text-foreground font-black tracking-tighter text-[var(--h1-size)] uppercase">
+        <h1 className="text-foreground font-black tracking-tighter text-(--h1-size) uppercase">
           {title}
         </h1>
       ) : (
@@ -203,7 +203,7 @@ interface PageFooterProps {
 export function PageFooter({ children, className = "" }: PageFooterProps) {
   return (
     <div
-      className={`mx-auto flex w-full max-w-5xl flex-col items-center justify-end gap-4 px-6 py-[var(--footer-py)] sm:flex-row sm:px-8 ${className}`}
+      className={`mx-auto flex w-full max-w-5xl flex-col items-center justify-end gap-4 px-6 py-(--footer-py) sm:flex-row sm:px-8 ${className}`}
     >
       {children}
     </div>
