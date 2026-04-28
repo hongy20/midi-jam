@@ -2,7 +2,6 @@
   /* Global Layout Constants - Theme Independent */
   --header-height: 3rem;
   --footer-height: 3rem;
-  --layout-gap: 1rem;
 
   /* Global Visual Constants */
   --piano-key-radius-white: 8px;
@@ -21,6 +20,5 @@
   :root {
     --header-height: 4rem;
     --footer-height: 4.5rem;
-    --layout-gap: 1.5rem;
   }
 }
