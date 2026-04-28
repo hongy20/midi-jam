@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 
 import { type MIDINoteEvent } from "@/shared/types/midi";
