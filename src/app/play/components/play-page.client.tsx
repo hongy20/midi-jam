@@ -4,11 +4,10 @@ import { use, useCallback, useEffect, useMemo, useRef } from "react";
 
 import { useTrackPlayer } from "@/features/audio-player";
 import { useCollection } from "@/features/collection";
+import { useGameplay, useScoreEngine, useTimeline } from "@/features/gameplay";
 import { getTrackData } from "@/features/midi-assets";
 import { useActiveNotes, useGear } from "@/features/midi-hardware";
 import { useOptions } from "@/features/options";
-import { usePlay, useTimeline } from "@/features/play-session";
-import { useScore, useScoreEngine } from "@/features/score";
 import { useAutoPause } from "@/shared/hooks/use-auto-pause";
 import { useFullscreen } from "@/shared/hooks/use-fullscreen";
 import { useNavigation } from "@/shared/hooks/use-navigation";
@@ -25,14 +24,13 @@ export function PlayPageClient() {
   const { toScore, toPause, toHome, toCollection } = useNavigation();
   const { selectedTrack } = useCollection();
   const { selectedMIDIInput, selectedMIDIOutput } = useGear();
-  const { gameSession, setGameSession } = usePlay();
+  const { gameState, startGame, pauseGame, finishGame } = useGameplay();
 
   const trackDataPromise = useMemo(() => {
     if (!selectedTrack) return null;
     return getTrackData(selectedTrack.url, selectedMIDIInput);
   }, [selectedTrack, selectedMIDIInput]);
   const { speed, demoMode } = useOptions();
-  const { setSessionResults } = useScore();
   const { isFullscreen, toggleFullscreen } = useFullscreen();
 
   // Navigation Guard: Redirect if essentials are missing
@@ -46,6 +44,13 @@ export function PlayPageClient() {
 
   // Resolve data via Suspense (use hook)
   const trackData = trackDataPromise ? use(trackDataPromise) : null;
+
+  // Initialize session if idle or finished, and track data is ready
+  useEffect(() => {
+    if (gameState.status === "idle" && trackData) {
+      startGame();
+    }
+  }, [gameState.status, startGame, trackData]);
 
   // Extract data with stable references for hook dependencies
   const notes = useMemo(() => trackData?.notes ?? [], [trackData]);
@@ -66,16 +71,24 @@ export function PlayPageClient() {
   const { getCurrentTimeMs, getProgress } = useTimeline({
     totalDurationMs,
     speed,
-    initialProgress: gameSession?.currentProgress ?? 0,
+    initialProgress:
+      gameState.status === "playing" || gameState.status === "paused"
+        ? gameState.currentProgress
+        : 0,
     onFinish: onFinishProxy,
   });
 
-  const { getScore, getCombo, getLastHitQuality, processNoteEvent } = useScoreEngine({
+  const { getScore, getCombo, processNoteEvent, getLastHitQuality } = useScoreEngine({
     notes,
     getCurrentTimeMs,
-    initialScore: gameSession?.score ?? 0,
-    initialCombo: gameSession?.combo ?? 0,
-    initialTimeMs: (gameSession?.currentProgress ?? 0) * totalDurationMs,
+    initialScore:
+      gameState.status === "playing" || gameState.status === "paused" ? gameState.score : 0,
+    initialCombo:
+      gameState.status === "playing" || gameState.status === "paused" ? gameState.combo : 0,
+    initialTimeMs:
+      (gameState.status === "playing" || gameState.status === "paused"
+        ? gameState.currentProgress
+        : 0) * totalDurationMs,
   });
 
   const liveActiveNotes = useActiveNotes(selectedMIDIInput, processNoteEvent);
@@ -90,27 +103,23 @@ export function PlayPageClient() {
   // Update finish callback ref in an effect to avoid render-phase side effects
   useEffect(() => {
     handleFinishRef.current = () => {
-      const finalScore = getScore();
-      const finalCombo = getCombo();
-
-      setSessionResults({
-        score: finalScore,
-        combo: finalCombo,
+      finishGame({
+        score: getScore(),
+        combo: getCombo(),
       });
-      setGameSession(null);
       toScore();
     };
-  }, [setGameSession, setSessionResults, toScore, getScore, getCombo]);
+  }, [finishGame, toScore, getScore, getCombo]);
 
   // Handle Pause
   const handlePause = useCallback(() => {
-    setGameSession({
+    pauseGame({
       score: getScore(),
       combo: getCombo(),
       currentProgress: getProgress(),
     });
     toPause();
-  }, [getScore, getCombo, getProgress, toPause, setGameSession]);
+  }, [getScore, getCombo, getProgress, toPause, pauseGame]);
 
   // Auto-pause when losing focus or switching tabs
   useAutoPause(handlePause);

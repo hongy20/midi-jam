@@ -19,18 +19,18 @@ export const LiveScore = memo(function LiveScore({
   getLastHitQuality,
   getProgress,
 }: LiveScoreProps) {
-  const progressBarFillRef = useRef<HTMLDivElement>(null);
-  const progressValueRef = useRef<HTMLSpanElement>(null);
   const scoreValueRef = useRef<HTMLSpanElement>(null);
   const comboValueRef = useRef<HTMLSpanElement>(null);
+  const progressBarFillRef = useRef<HTMLDivElement>(null);
+  const progressValueRef = useRef<HTMLSpanElement>(null);
   const feedbackRef = useRef<HTMLSpanElement>(null);
 
-  // Keep track of previous values to avoid redundant DOM updates
   const lastStateRef = useRef({
     score: -1,
     combo: -1,
     progress: -1,
     quality: null as HitQuality,
+    lastHitTime: 0,
   });
 
   useEffect(() => {
@@ -42,6 +42,7 @@ export const LiveScore = memo(function LiveScore({
       const progress = getProgress();
       const quality = getLastHitQuality();
       const state = lastStateRef.current;
+      const now = performance.now();
 
       // 1. Update Score (Normalized)
       if (score !== state.score && scoreValueRef.current) {
@@ -51,7 +52,7 @@ export const LiveScore = memo(function LiveScore({
 
       // 2. Update Combo
       if (combo !== state.combo && comboValueRef.current) {
-        comboValueRef.current.textContent = `x${combo}`;
+        comboValueRef.current.textContent = combo > 0 ? `x${combo}` : "";
         state.combo = combo;
       }
 
@@ -62,7 +63,6 @@ export const LiveScore = memo(function LiveScore({
         }
         if (progressValueRef.current) {
           const percentage = Math.floor(progress * 100);
-          // Only update text if the rounded percentage actually changed
           if (Math.floor(state.progress * 100) !== percentage) {
             progressValueRef.current.textContent = `${percentage}%`;
           }
@@ -71,24 +71,37 @@ export const LiveScore = memo(function LiveScore({
       }
 
       // 4. Update Hit Quality Feedback
-      if (quality !== state.quality && feedbackRef.current) {
+      if (feedbackRef.current) {
         const el = feedbackRef.current;
-        // Clean up previous classes
-        if (state.quality) el.classList.remove(styles[state.quality]);
 
-        if (quality) {
+        // DETECTION LOGIC:
+        // Trigger if quality changes OR if quality is non-null and score/combo changed (new hit of same quality)
+        const isNewHit =
+          quality !== state.quality ||
+          (quality && (score !== state.score || (combo !== state.combo && combo === 0)));
+
+        if (isNewHit && quality) {
+          // Clean up previous classes
+          const prevQuality = el.getAttribute("data-quality") as HitQuality;
+          if (prevQuality) el.classList.remove(styles[prevQuality]);
+
           el.textContent = `${quality.toUpperCase()}!`;
           el.classList.add(styles[quality]);
+          el.setAttribute("data-quality", quality);
           el.style.opacity = "1";
 
           // Trigger animation restart
           el.style.animation = "none";
           void el.offsetWidth; // Force reflow
           el.style.animation = "";
-        } else {
+
+          state.quality = quality;
+          state.lastHitTime = now;
+        } else if (state.lastHitTime > 0 && now - state.lastHitTime > 1000) {
+          // Auto-fade after 1 second
           el.style.opacity = "0";
+          state.lastHitTime = 0;
         }
-        state.quality = quality;
       }
 
       rafId = requestAnimationFrame(update);
@@ -96,7 +109,7 @@ export const LiveScore = memo(function LiveScore({
 
     rafId = requestAnimationFrame(update);
     return () => cancelAnimationFrame(rafId);
-  }, [getScore, getCombo, getLastHitQuality, getProgress]);
+  }, [getScore, getCombo, getProgress, getLastHitQuality]);
 
   return (
     <div className="flex w-full items-center gap-8">

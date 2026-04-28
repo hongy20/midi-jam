@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { getSongTracks, useCollection } from "@/features/collection";
+import { useGameplay } from "@/features/gameplay";
 import { useGear } from "@/features/midi-hardware";
-import { useScore } from "@/features/score";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 
 import { HomePageClient } from "./components/home-page.client";
@@ -23,8 +23,8 @@ vi.mock("@/features/midi-hardware", () => ({
   useGear: vi.fn(),
 }));
 
-vi.mock("@/features/score", () => ({
-  useScore: vi.fn(),
+vi.mock("@/features/gameplay", () => ({
+  useGameplay: vi.fn(),
 }));
 
 describe("HomePageClient", () => {
@@ -41,8 +41,8 @@ describe("HomePageClient", () => {
     selectMIDIInput: vi.fn(),
   };
 
-  const mockScore = {
-    resetScore: vi.fn(),
+  const mockGameplay = {
+    resetGame: vi.fn(),
   };
 
   const mockTracks = [
@@ -59,7 +59,10 @@ describe("HomePageClient", () => {
       mockCollection as unknown as ReturnType<typeof useCollection>,
     );
     vi.mocked(useGear).mockReturnValue(mockGear as unknown as ReturnType<typeof useGear>);
-    vi.mocked(useScore).mockReturnValue(mockScore as unknown as ReturnType<typeof useScore>);
+    vi.mocked(useGameplay).mockReturnValue(
+      mockGameplay as unknown as ReturnType<typeof useGameplay>,
+    );
+
     vi.mocked(getSongTracks).mockResolvedValue(mockTracks);
 
     // Mock MIDI support
@@ -104,7 +107,7 @@ describe("HomePageClient", () => {
     await waitFor(() => {
       expect(mockCollection.resetCollection).toHaveBeenCalled();
     });
-    expect(mockScore.resetScore).toHaveBeenCalled();
+    expect(mockGameplay.resetGame).toHaveBeenCalled();
     expect(mockGear.selectMIDIInput).toHaveBeenCalledWith(null);
   });
 

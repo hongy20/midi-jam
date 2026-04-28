@@ -46,6 +46,7 @@ To maintain a stable framerate, offload all frequent updates to the browser's co
 
 - **Semantic Theme Mapping**: Extract all visual properties (colors, fonts, shadows, radii) into semantic CSS variables within `globals.css` (or imported variables). Components must consume these functional aliases (e.g., `--piano-key-white`, `--ui-card-bg`) instead of hardcoding raw values or using direct theme primitives.
 - **Iconography**: Use `lucide-react` exclusively. For custom icons, use standalone `.svg` files. No inline SVG strings or emojis.
+- **Styling Compliance**: ALWAYS use `npm run lint:fix` to format code and resolve simple linting issues before committing. DO NOT use standalone `prettier` or `eslint` commands unless the registry or build process specifically requires them.
 - **DOM Efficiency**:
   - **Purposeful Elements**: Avoid empty `div`s for spacing or decoration; use parent grid/flex spacing or pseudo-elements (`::before`/`::after`) instead.
 
@@ -163,7 +164,8 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
 4. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion. **DO NOT rely solely on implementation plans for verification; the global SOP takes precedence.**
    - **Mandatory Completion Checklist**: Before providing a final summary to the USER, you MUST run and pass:
      - [ ] `git status` (Must have ZERO uncommitted changes; if files are pending, commit them first)
-     - [ ] `npm run lint` (ESLint & Prettier check)
+     - [ ] `npm run lint:fix` (Fix formatting and simple lint errors)
+     - [ ] `npm run lint` (Verify clean ESLint, Prettier, and Knip state)
      - [ ] `npm run type-check` (TypeScript tsc)
      - [ ] `npm test` (Vitest suite)
      - [ ] `npm run build` (Next.js production build)

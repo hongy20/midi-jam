@@ -38,6 +38,7 @@ export function useScoreEngine({
 
   const processedNotesRef = useRef<Set<number>>(new Set());
   const currentIndexRef = useRef(0);
+
   const activeHitsRef = useRef<
     Map<
       number,

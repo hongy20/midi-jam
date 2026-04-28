@@ -3,19 +3,17 @@
 import { useEffect } from "react";
 
 import { useCollection } from "@/features/collection";
+import { useGameplay } from "@/features/gameplay";
 import { useGear } from "@/features/midi-hardware";
-import { usePlay } from "@/features/play-session";
-import { useScore } from "@/features/score";
 import { useNavigation } from "@/shared/hooks/use-navigation";
 
 import { PausePageView } from "./pause-page.view";
 
 export function PausePageClient() {
   const { toPlay, toOptions, toScore, toHome, toCollection } = useNavigation();
-  const { gameSession, setGameSession } = usePlay();
+  const { gameState, resetGame, finishGame } = useGameplay();
   const { selectedMIDIInput } = useGear();
   const { selectedTrack } = useCollection();
-  const { setSessionResults } = useScore();
 
   useEffect(() => {
     if (!selectedMIDIInput) {
@@ -29,19 +27,17 @@ export function PausePageClient() {
     <PausePageView
       onContinue={() => toPlay()}
       onRestart={() => {
-        setGameSession(null);
+        resetGame();
         toPlay();
       }}
       onOptions={() => toOptions("pause")}
       onQuit={() => {
-        if (gameSession) {
-          const { score: currentScore, combo } = gameSession;
-          setSessionResults({
-            score: currentScore,
-            combo,
+        if (gameState.status === "paused") {
+          finishGame({
+            score: gameState.score,
+            combo: gameState.combo,
           });
         }
-        setGameSession(null);
         toScore();
       }}
     />
