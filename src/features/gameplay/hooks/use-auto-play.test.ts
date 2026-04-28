@@ -1,27 +1,17 @@
 import { act, renderHook } from "@testing-library/react";
-import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useNotePlayer } from "./use-note-player";
-import { useTrackPlayer } from "./use-track-player";
+import { useAutoPlay } from "./use-auto-play";
 
-vi.mock("./use-note-player", () => ({
-  useNotePlayer: vi.fn(),
-}));
-
-describe("useTrackPlayer", () => {
+describe("useAutoPlay", () => {
   let mockObserverCallback: IntersectionObserverCallback;
   const observe = vi.fn();
   const disconnect = vi.fn();
-  const playNote = vi.fn();
-  const stopNote = vi.fn();
+  const onNoteOn = vi.fn();
+  const onNoteOff = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-
-    (useNotePlayer as Mock).mockReturnValue({
-      playNote,
-      stopNote,
-    });
 
     // Mock IntersectionObserver
     global.IntersectionObserver = vi.fn().mockImplementation(function (
@@ -35,7 +25,7 @@ describe("useTrackPlayer", () => {
     }) as unknown as typeof IntersectionObserver;
   });
 
-  it("manages playbackNotes state and triggers audio", () => {
+  it("manages playbackNotes state and triggers callbacks", () => {
     const processNoteEvent = vi.fn();
     const container = document.createElement("div");
     const containerRef = { current: container };
@@ -47,10 +37,11 @@ describe("useTrackPlayer", () => {
     container.querySelectorAll = vi.fn().mockReturnValue([note] as unknown as NodeListOf<Element>);
 
     const { result } = renderHook(() =>
-      useTrackPlayer({
+      useAutoPlay({
         containerRef,
         enabled: true,
-        selectedMIDIOutput: null,
+        onNoteOn,
+        onNoteOff,
         processNoteEvent,
       }),
     );
@@ -71,7 +62,7 @@ describe("useTrackPlayer", () => {
       );
     });
 
-    expect(playNote).toHaveBeenCalledWith(60, 0.7);
+    expect(onNoteOn).toHaveBeenCalledWith(60);
     expect(processNoteEvent).toHaveBeenCalledWith({ type: "note-on", pitch: 60, velocity: 0.7 });
     expect(result.current.playbackNotes.has(60)).toBe(true);
 
@@ -90,12 +81,12 @@ describe("useTrackPlayer", () => {
       );
     });
 
-    expect(stopNote).toHaveBeenCalledWith(60);
+    expect(onNoteOff).toHaveBeenCalledWith(60);
     expect(processNoteEvent).toHaveBeenCalledWith({ type: "note-off", pitch: 60, velocity: 0 });
     expect(result.current.playbackNotes.has(60)).toBe(false);
   });
 
-  it("fires stopNote then playNote for contiguous notes of the same pitch", () => {
+  it("fires onNoteOff then onNoteOn for contiguous notes of the same pitch", () => {
     const container = document.createElement("div");
     const containerRef = { current: container };
 
@@ -112,10 +103,11 @@ describe("useTrackPlayer", () => {
 
     const processNoteEvent = vi.fn();
     const { result } = renderHook(() =>
-      useTrackPlayer({
+      useAutoPlay({
         containerRef,
         enabled: true,
-        selectedMIDIOutput: null,
+        onNoteOn,
+        onNoteOff,
         processNoteEvent,
       }),
     );
@@ -132,14 +124,14 @@ describe("useTrackPlayer", () => {
         {} as IntersectionObserver,
       );
     });
-    expect(playNote).toHaveBeenCalledWith(60, 0.7);
+    expect(onNoteOn).toHaveBeenCalledWith(60);
     expect(result.current.playbackNotes.has(60)).toBe(true);
-    playNote.mockClear();
+    onNoteOn.mockClear();
 
     // Step 2: Batch where note 1 exits and note 2 enters
     const callOrder: string[] = [];
-    playNote.mockImplementation(() => callOrder.push("on"));
-    stopNote.mockImplementation(() => callOrder.push("off"));
+    onNoteOn.mockImplementation(() => callOrder.push("on"));
+    onNoteOff.mockImplementation(() => callOrder.push("off"));
 
     act(() => {
       mockObserverCallback(

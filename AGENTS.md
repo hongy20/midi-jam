@@ -60,7 +60,8 @@ The project follows a layered, domain-driven architecture to ensure scalability 
 - **`src/features/` (Domain Layer)**: Contains domain-specific logic managed as encapsulated modules.
   - Features: `midi-hardware`, `midi-assets`, `audio-player`, `score`, `navigation`, `collection`, `settings`, `theme`.
   - Each feature MUST expose a public API via `index.ts`.
-  - **Isolation Rule**: Features must NOT import from each other's internal folders. They must use the public API (barrel export).
+  - **Strict Isolation Rule**: Features must NOT import from each other, even via public APIs. All inter-feature communication must be orchestrated by the **App Layer** (`src/app/`) or shared via `src/shared/`.
+  - **Inversion of Control**: Features requiring actions from other domains (e.g., Gameplay needing to play Audio) must accept callbacks (`onAction`) or use shared state, rather than importing hooks/utilities from the target feature.
 - **`src/shared/` (Infrastructure Layer)**: Contains generic UI primitives, utility functions, and cross-cutting hooks that have zero knowledge of any feature or app domain.
 
 ### 4.2 Module Anatomy
@@ -163,6 +164,7 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
    - **Root Cause Analysis**: Use `@systematic-debugging` for all bug reports before attempting a fix.
 4. **Validation**: Run the full suite (`lint`, `type-check`, `test`) before proposing completion. **DO NOT rely solely on implementation plans for verification; the global SOP takes precedence.**
    - **Mandatory Completion Checklist**: Before providing a final summary to the USER, you MUST run and pass:
+     - [ ] **Single Plan Verification**: (Must have exactly ONE markdown file in `docs/plans/` for the current task; consolidate design and implementation into one file)
      - [ ] `git status` (Must have ZERO uncommitted changes; if files are pending, commit them first)
      - [ ] `npm run lint:fix` (Fix formatting and simple lint errors)
      - [ ] `npm run lint` (Verify clean ESLint, Prettier, and Knip state)
