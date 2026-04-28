@@ -60,7 +60,8 @@ The project follows a layered, domain-driven architecture to ensure scalability 
 - **`src/features/` (Domain Layer)**: Contains domain-specific logic managed as encapsulated modules.
   - Features: `midi-hardware`, `midi-assets`, `audio-player`, `score`, `navigation`, `collection`, `settings`, `theme`.
   - Each feature MUST expose a public API via `index.ts`.
-  - **Isolation Rule**: Features must NOT import from each other's internal folders. They must use the public API (barrel export).
+  - **Strict Isolation Rule**: Features must NOT import from each other, even via public APIs. All inter-feature communication must be orchestrated by the **App Layer** (`src/app/`) or shared via `src/shared/`.
+  - **Inversion of Control**: Features requiring actions from other domains (e.g., Gameplay needing to play Audio) must accept callbacks (`onAction`) or use shared state, rather than importing hooks/utilities from the target feature.
 - **`src/shared/` (Infrastructure Layer)**: Contains generic UI primitives, utility functions, and cross-cutting hooks that have zero knowledge of any feature or app domain.
 
 ### 4.2 Module Anatomy
