@@ -41,7 +41,7 @@ const Table = React.forwardRef<
     variant?: VariantProps<typeof tableVariants>["variant"];
   }
 >(({ className, font, variant, ...props }, ref) => (
-  <div className={cn("relative flex justify-center w-fit", tableVariants({ font, variant }))}>
+  <div className={cn("relative flex w-fit justify-center", tableVariants({ font, variant }))}>
     <ShadcnTable ref={ref} className={className} {...props} />
 
     {variant !== "borderless" && (
@@ -60,7 +60,7 @@ const TableHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <ShadcnTableHeader
     ref={ref}
-    className={cn(className, "border-b-4 border-foreground dark:border-ring")}
+    className={cn(className, "border-foreground dark:border-ring border-b-4")}
     {...props}
   />
 ));
@@ -86,7 +86,7 @@ const TableRow = React.forwardRef<HTMLTableRowElement, React.ComponentProps<type
   ({ className, ...props }, ref) => (
     <ShadcnTableRow
       ref={ref}
-      className={cn(className, "border-dashed border-b-4 border-foreground dark:border-ring")}
+      className={cn(className, "border-foreground dark:border-ring border-b-4 border-dashed")}
       {...props}
     />
   ),

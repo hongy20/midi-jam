@@ -84,7 +84,7 @@ interface SettingItemProps {
   }
   footer={<PageFooter>Midi Jam v0.1.0 • Experimental Build</PageFooter>}
 >
-  <main className="w-full h-full flex flex-col gap-6 py-4 px-8 max-w-5xl mx-auto">
+  <main className="mx-auto flex h-full w-full max-w-5xl flex-col gap-6 px-8 py-4">
     <SettingItem title="Visual Theme" description="Toggle global application style">
       {/* Theme Toggle logic inline */}
     </SettingItem>

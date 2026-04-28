@@ -44,7 +44,7 @@ function Toggle({ children, font, ...props }: BitToggleProps) {
     <ShadcnToggle
       {...props}
       className={cn(
-        "rounded-none active:translate-y-1 transition-transform relative border-none active:translate-x-1",
+        "relative rounded-none border-none transition-transform active:translate-x-1 active:translate-y-1",
         "data-[state=on]:bg-primary data-[state=on]:text-primary-foreground",
         font !== "normal" && "retro",
         className,
