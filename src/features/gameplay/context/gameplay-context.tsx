@@ -14,7 +14,6 @@ interface ResultsData {
 }
 
 type GameplayState =
-
   | { status: "idle" }
   | ({ status: "playing" } & SessionData)
   | ({ status: "paused" } & SessionData)
