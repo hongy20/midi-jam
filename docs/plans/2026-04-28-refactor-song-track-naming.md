@@ -5,11 +5,11 @@ This plan outlines the steps to refactor and rename song track related files and
 ## Proposed Changes
 
 ### 1. Refactor Collection Feature
-Renaming `song-track.ts` to `get-song-tracks.ts` for better clarity on its purpose.
+Renaming `song-track.ts` to `get-collection.ts` for better clarity on its purpose.
 
 - [MODIFY] [src/features/collection/index.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/collection/index.ts): Update export path.
-- [NEW] [src/features/collection/lib/get-song-tracks.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/collection/lib/get-song-tracks.ts): Renamed from `song-track.ts`.
-- [NEW] [src/features/collection/lib/get-song-tracks.test.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/collection/lib/get-song-tracks.test.ts): Renamed from `song-track.test.ts`.
+- [NEW] [src/features/collection/lib/get-collection.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/collection/lib/get-collection.ts): Renamed from `song-track.ts`.
+- [NEW] [src/features/collection/lib/get-collection.test.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/collection/lib/get-collection.test.ts): Renamed from `song-track.test.ts`.
 - [DELETE] [src/features/collection/lib/song-track.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/collection/lib/song-track.ts)
 - [DELETE] [src/features/collection/lib/song-track.test.ts](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/collection/lib/song-track.test.ts)
 
