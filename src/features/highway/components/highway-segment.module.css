@@ -49,5 +49,5 @@
   border: 1px solid currentColor;
   min-width: 0;
 
-  background-color: color-mix(in srgb, currentColor calc(20% + 20% * var(--is-black)), transparent);
+  background-color: color-mix(in srgb, currentColor 20%, transparent);
 }

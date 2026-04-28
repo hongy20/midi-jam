@@ -11,6 +11,7 @@ We will remove the dependency on `--is-black` by hardcoding the `background-colo
 ### [features/highway]
 
 #### [MODIFY] [highway-segment.module.css](file:///Users/yanhong/Github/hongy20/midi-jam/src/features/highway/components/highway-segment.module.css)
+
 - Replace the direct usage of `--is-black` with a hardcoded opacity value (20%).
 
 ```css
@@ -27,9 +28,11 @@ No changes are required in `features/piano` since we are no longer trying to map
 ## Verification Plan
 
 ### Automated Tests
+
 - Run `npm test` to ensure no regressions.
 - Run `npm run lint` and `npm run type-check`.
 
 ### Manual Verification
+
 - Verify the piano highway rendering in Storybook.
 - Ensure all notes have the same background opacity (20%).
