@@ -33,25 +33,24 @@ interface PlayPageViewProps {
  * PlayPageView handles only the "happy path" of data-ready gameplay.
  * Separation of concerns: Presentation layer using semantic HTML and localized components.
  */
-export function PlayPageView(props: PlayPageViewProps) {
-  const {
-    selectedMIDIInput,
-    selectedTrack,
-    getScore,
-    getCombo,
-    getLastHitQuality,
-    getProgress,
-    handlePause,
-    isFullscreen,
-    handleToggleFullscreen,
-    liveActiveNotes,
-    playbackNotes,
-    notes,
-    groups,
-    scrollRef,
-    getCurrentTimeMs,
-    speed,
-  } = props;
+export function PlayPageView({
+  selectedMIDIInput,
+  selectedTrack,
+  getScore,
+  getCombo,
+  getLastHitQuality,
+  getProgress,
+  handlePause,
+  isFullscreen,
+  handleToggleFullscreen,
+  liveActiveNotes,
+  playbackNotes,
+  notes,
+  groups,
+  scrollRef,
+  getCurrentTimeMs,
+  speed,
+}: PlayPageViewProps) {
 
   const instrumentType = getInstrumentType(selectedMIDIInput);
   const Stage = instrumentType === "piano" ? PianoStage : DrumStage;
