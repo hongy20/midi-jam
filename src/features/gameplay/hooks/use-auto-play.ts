@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+
 import { type MIDINoteEvent } from "@/shared/types/midi";
+
 import { createNoteObserver } from "../lib/note-observer";
 
 interface UseAutoPlayProps {
@@ -13,7 +15,7 @@ interface UseAutoPlayProps {
 /**
  * Hook to handle automated note playback by observing visual note elements
  * as they cross the target line in the gameplay lane.
- * 
+ *
  * Strict Isolation: This hook does NOT import from the audio feature.
  * It relies on callbacks for audio triggering.
  */
@@ -38,7 +40,7 @@ export function useAutoPlay({
           next.add(pitch);
           return next;
         });
-        
+
         onNoteOn(pitch);
         processNoteEvent({ type: "note-on", pitch, velocity: 0.7 });
       },
