@@ -11,5 +11,6 @@ Disabling the `tailwindcss/no-custom-classname` rule in `eslint.config.mjs` to a
 ## Verification Plan
 
 ### Automated Tests
+
 - Run `npm run lint` to ensure no linting warnings remain related to custom Tailwind classnames.
 - Run `npm run type-check` to ensure no regressions.
