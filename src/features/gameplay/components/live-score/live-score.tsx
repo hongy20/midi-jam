@@ -73,10 +73,12 @@ export const LiveScore = memo(function LiveScore({
       // 4. Update Hit Quality Feedback
       if (feedbackRef.current) {
         const el = feedbackRef.current;
-        
-        // DETECTION LOGIC: 
+
+        // DETECTION LOGIC:
         // Trigger if quality changes OR if quality is non-null and score/combo changed (new hit of same quality)
-        const isNewHit = quality !== state.quality || (quality && (score !== state.score || (combo !== state.combo && combo === 0)));
+        const isNewHit =
+          quality !== state.quality ||
+          (quality && (score !== state.score || (combo !== state.combo && combo === 0)));
 
         if (isNewHit && quality) {
           // Clean up previous classes

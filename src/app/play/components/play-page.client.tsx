@@ -68,7 +68,6 @@ export function PlayPageClient() {
     handleFinishRef.current();
   }, []);
 
-
   const { getCurrentTimeMs, getProgress } = useTimeline({
     totalDurationMs,
     speed,
@@ -153,4 +152,3 @@ export function PlayPageClient() {
     />
   );
 }
-

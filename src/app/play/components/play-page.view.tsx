@@ -51,7 +51,6 @@ export function PlayPageView({
   getCurrentTimeMs,
   speed,
 }: PlayPageViewProps) {
-
   const instrumentType = getInstrumentType(selectedMIDIInput);
   const Stage = instrumentType === "piano" ? PianoStage : DrumStage;
 
