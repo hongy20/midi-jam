@@ -20,7 +20,6 @@ export type GameplayState =
   | { status: "finished"; results: ResultsData };
 
 interface GameplayContextType {
-
   gameState: GameplayState;
   startGame: () => void;
   pauseGame: (data: SessionData) => void;
