@@ -2,7 +2,7 @@ import { getInstrumentType } from "@/shared/lib/instrument";
 import type { MidiNote, MidiNoteGroup } from "@/shared/types/midi";
 
 import { LANE_SEGMENT_DURATION_MS } from "./constant";
-import { loadMidiFile } from "./loader";
+import { loadMidiFile } from "./midi-loader";
 import { buildMidiNoteGroups } from "./note-group-builder";
 import { parseMidiNotes } from "./note-parser";
 

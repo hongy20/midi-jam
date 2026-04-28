@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { LEAD_IN_DEFAULT_MS, LEAD_OUT_DEFAULT_MS } from "./constant";
-import { loadMidiFile } from "./loader";
+import { loadMidiFile } from "./midi-loader";
 
 // Mock @tonejs/midi
 interface MockMidi {
@@ -93,7 +93,7 @@ vi.mock("@tonejs/midi", () => {
   };
 });
 
-describe("loader loadMidiFile", () => {
+describe("midi-loader", () => {
   const leadInS = LEAD_IN_DEFAULT_MS / 1000;
   const leadOutS = LEAD_OUT_DEFAULT_MS / 1000;
 
