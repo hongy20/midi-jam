@@ -46,7 +46,7 @@ const METADATA: Record<string, { title: string; artist: string; difficulty: stri
   },
 };
 
-export async function getCollection(minDelayMs = 0): Promise<Track[]> {
+export async function getTracks(minDelayMs = 0): Promise<Track[]> {
   const startTime = Date.now();
   try {
     const midiDir = path.join(process.cwd(), "public", "midi");
