@@ -170,6 +170,7 @@ The **Gemini CLI** is the source of truth for all verification. Always delegate 
      - [ ] `npm run type-check` (TypeScript tsc)
      - [ ] `npm test` (Vitest suite)
      - [ ] `npm run build` (Next.js production build)
+     - [ ] **Single Plan Verification**: (Must have exactly ONE markdown file in `docs/plans/` for the current task; consolidate design and implementation into one file)
    - _Failure to run these command-by-command and verify a clean git state is a violation of Technical Integrity._
 5. **Finalization**: Before providing the final summary to the USER, you MUST automatically create a Pull Request (PR) for the branch using `gh pr create --fill`. Provide the PR link to the USER and request their review and feedback. Do NOT present the "4 options" menu from `@finishing-a-development-branch` if it includes local merge options; the PR workflow is mandatory. **NEVER merge a PR or delete a branch without explicit USER confirmation.** Once verified and approved, follow the Merge Strategy (Squash and Merge).
 
