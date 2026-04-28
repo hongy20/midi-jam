@@ -4,7 +4,7 @@ import { type MidiNoteGroup } from "@/shared/types/midi";
 
 import { LANE_SCROLL_DURATION_MS } from "../lib/constants";
 import { getVisibleSegmentIndexes } from "../lib/utils";
-import { HighwaySegment } from "./HighwaySegment";
+import { HighwaySegment } from "./highway-segment";
 
 export interface HighwayProps {
   groups: MidiNoteGroup[];

@@ -1,1 +1,1 @@
-export { PianoStage } from "./components/piano-stage/PianoStage";
+export { PianoStage } from "./components/piano-stage/piano-stage";

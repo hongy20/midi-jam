@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 // Mock constant values if needed, though they are imported from constants
 import { PIANO_88_KEY_MAX, PIANO_88_KEY_MIN } from "../../lib/constants";
-import { PianoKeyboard } from "./PianoKeyboard";
+import { PianoKeyboard } from "./piano-keyboard";
 
 describe("PianoKeyboard", () => {
   it("renders the full 88-key range", () => {

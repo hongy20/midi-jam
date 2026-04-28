@@ -3,7 +3,7 @@ import { memo, useEffect, useRef } from "react";
 
 import { cn } from "@/shared/lib/utils";
 
-import type { HitQuality } from "../../hooks/use-score-engine";
+import type { HitQuality } from "../hooks/use-score-engine";
 import styles from "./live-score.module.css";
 
 interface LiveScoreProps {

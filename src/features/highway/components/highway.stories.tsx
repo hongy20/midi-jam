@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useEffect, useState } from "react";
 
-import { Highway, HighwayProps } from "./Highway";
+import { Highway, HighwayProps } from "./highway";
 
 const meta: Meta<typeof Highway> = {
-  title: "Features/Highway/Highway",
+  title: "Features/Highway",
   component: Highway,
   parameters: {
     layout: "fullscreen",
