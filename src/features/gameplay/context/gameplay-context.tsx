@@ -2,18 +2,19 @@
 
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from "react";
 
-export interface SessionData {
+interface SessionData {
   score: number;
   combo: number;
   currentProgress: number;
 }
 
-export interface ResultsData {
+interface ResultsData {
   score: number;
   combo: number;
 }
 
-export type GameplayState =
+type GameplayState =
+
   | { status: "idle" }
   | ({ status: "playing" } & SessionData)
   | ({ status: "paused" } & SessionData)
