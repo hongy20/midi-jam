@@ -1,4 +1,4 @@
-:root {
+.container {
   --piano-key-radius-white: 8px;
   --piano-key-radius-black: 4px;
   --piano-key-white: #ffffff;
@@ -8,9 +8,7 @@
   --piano-glow-live-bg: var(--primary);
   --piano-glow-playback-bg: var(--secondary);
   --piano-glow-both-bg: var(--accent);
-}
 
-.container {
   width: 100%;
   height: 100%;
   position: relative;

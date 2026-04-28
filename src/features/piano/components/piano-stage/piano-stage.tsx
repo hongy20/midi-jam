@@ -1,4 +1,4 @@
-import "./piano-layout.css";
+import "../../styles/piano-layout.css";
 
 import React, { useMemo } from "react";
 
