@@ -1,6 +1,7 @@
 # Plan: Enforce Mobile-First Principle
 
 ## Objective
+
 Enforce the mobile-first principle across the codebase for both Tailwind CSS classnames and custom CSS styling.
 
 ## Implementation Steps
