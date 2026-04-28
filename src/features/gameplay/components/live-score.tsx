@@ -141,7 +141,7 @@ export const LiveScore = memo(function LiveScore({
       </div>
 
       {/* Hit Quality Feedback */}
-      <div className="flex min-w-[120px] items-center justify-center">
+      <div className="flex min-w-30 items-center justify-center">
         <span
           ref={feedbackRef}
           className={cn(
@@ -153,7 +153,7 @@ export const LiveScore = memo(function LiveScore({
       </div>
 
       {/* Progress Bar */}
-      <div className="hidden max-w-[150px] flex-1 flex-col gap-2 sm:flex">
+      <div className="hidden max-w-37.5 flex-1 flex-col gap-2 sm:flex">
         <div className="flex items-end justify-between gap-1">
           <span className="text-foreground retro text-[8px] font-normal uppercase opacity-60">
             Progress
@@ -165,7 +165,7 @@ export const LiveScore = memo(function LiveScore({
         <div className="bg-foreground/10 border-foreground h-3 w-full overflow-hidden border-4 [image-rendering:pixelated]">
           <div
             ref={progressBarFillRef}
-            className="bg-primary h-full w-full origin-left [transform:scaleX(0)]"
+            className="bg-primary h-full w-full origin-left transform-[scaleX(0)]"
           />
         </div>
       </div>

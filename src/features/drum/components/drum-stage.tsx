@@ -18,7 +18,7 @@ export function DrumStage({ highway }: StageProps) {
           </div>
         )}
       </main>
-      <footer className="border-foreground/5 h-[var(--footer-height,151px)] border-t" />
+      <footer className="border-foreground/5 h-(--footer-height,151px) border-t" />
     </>
   );
 }

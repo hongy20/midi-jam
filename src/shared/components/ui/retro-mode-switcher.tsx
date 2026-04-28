@@ -21,7 +21,7 @@ export function RetroModeSwitcher({ className, mode, onToggle }: RetroModeSwitch
         xmlns="http://www.w3.org/2000/svg"
         stroke="currentColor"
         strokeWidth="0.25"
-        className={cn("!size-7", mode === "light" ? "hidden" : "block", className)}
+        className={cn("size-7!", mode === "light" ? "hidden" : "block", className)}
         role="img"
         aria-label="sun-dim"
       >
@@ -63,7 +63,7 @@ export function RetroModeSwitcher({ className, mode, onToggle }: RetroModeSwitch
         xmlns="http://www.w3.org/2000/svg"
         stroke="currentColor"
         strokeWidth="0.25"
-        className={cn("!size-7", mode === "dark" ? "hidden" : "block", className)}
+        className={cn("size-7!", mode === "dark" ? "hidden" : "block", className)}
         role="img"
         aria-label="moon"
       >

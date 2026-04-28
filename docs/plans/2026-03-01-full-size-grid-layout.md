@@ -50,7 +50,7 @@ Integrate the header, stepper, and background glow directly into the page. Use `
 ```tsx
 // Example structure in page.tsx
 return (
-  <div className="bg-background animate-fade-in grid h-[100dvh] w-[100dvw] grid-rows-[auto_1fr_auto] overflow-hidden p-6 transition-colors duration-500 landscape:p-4">
+  <div className="bg-background animate-fade-in grid h-dvh w-dvw grid-rows-[auto_1fr_auto] overflow-hidden p-6 transition-colors duration-500 landscape:p-4">
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
       <div className="bg-accent-primary/5 absolute top-[20%] right-[10%] h-[60%] w-[60%] rounded-full blur-[120px]" />
     </div>
