@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 
 import { describe, expect, it, vi } from "vitest";
 
-import { getSongTracks } from "./song-track";
+import { getCollection } from "./get-collection";
 
 vi.mock("node:fs/promises", () => ({
   default: {
@@ -10,7 +10,7 @@ vi.mock("node:fs/promises", () => ({
   },
 }));
 
-describe("getSongTracks", () => {
+describe("getCollection", () => {
   it("should return a list of formatted midi file objects", async () => {
     const mockFiles = [
       "my_cool_song.mid",
@@ -22,7 +22,7 @@ describe("getSongTracks", () => {
 
     vi.mocked(fs.readdir as unknown as () => Promise<string[]>).mockResolvedValue(mockFiles);
 
-    const result = await getSongTracks();
+    const result = await getCollection();
 
     expect(result).toEqual([
       {
@@ -65,7 +65,7 @@ describe("getSongTracks", () => {
 
   it("should return an empty array if the directory is empty", async () => {
     vi.mocked(fs.readdir).mockResolvedValue([]);
-    const result = await getSongTracks();
+    const result = await getCollection();
     expect(result).toEqual([]);
   });
 
@@ -73,7 +73,7 @@ describe("getSongTracks", () => {
     vi.mocked(fs.readdir).mockRejectedValue(new Error("Directory not found"));
     // Avoid logging mocked errors during unit tests
     vi.spyOn(console, "error").mockImplementation(() => {});
-    const result = await getSongTracks();
+    const result = await getCollection();
     expect(result).toEqual([]);
   });
 });

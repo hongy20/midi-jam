@@ -1,9 +1,9 @@
 import type { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
 
-import { getBarLines } from "./midi-barline-parser";
+import { getBarLines } from "./barline-parser";
 
-describe("midi-barline-parser", () => {
+describe("barline-parser", () => {
   const mockMidi = {
     duration: 10,
     header: {

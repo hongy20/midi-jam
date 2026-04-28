@@ -39,7 +39,7 @@ describe("getVisibleMidiRange", () => {
     expect(edgeRange).toEqual({ startPitch: 21, endPitch: 71 });
   });
 
-  it("should return full range if song covers most of the piano", () => {
+  it("should return full range if track covers most of the piano", () => {
     const range = getVisibleMidiRange([21, 108]);
     expect(range).toEqual({ startPitch: 21, endPitch: 108 });
   });

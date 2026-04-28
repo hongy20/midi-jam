@@ -15,7 +15,7 @@ import {
 import { cn } from "@/shared/lib/utils";
 import type { Track } from "@/shared/types/track";
 
-interface SongCardProps {
+interface TrackCardProps {
   track: Track;
   isSelected?: boolean;
   onClick?: () => void;
@@ -25,7 +25,7 @@ interface SongCardProps {
 /**
  * A retro-styled card representing a music track in the library.
  */
-export function SongCard({ track, isSelected, onClick, className }: SongCardProps) {
+export function TrackCard({ track, isSelected, onClick, className }: TrackCardProps) {
   return (
     <div className={cn("h-full p-2", className)}>
       <button

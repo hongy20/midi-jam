@@ -4,8 +4,8 @@ import path from "node:path";
 import { Midi } from "@tonejs/midi";
 import { describe, expect, it } from "vitest";
 
-import { buildMidiNoteGroups } from "./midi-note-group-parser";
-import { parseMidiNotes } from "./midi-note-parser";
+import { buildMidiNoteGroups } from "./note-group-parser";
+import { parseMidiNotes } from "./note-parser";
 
 describe("lane-segment-utils integration with real MIDI", () => {
   // Helper to load and parse MIDI

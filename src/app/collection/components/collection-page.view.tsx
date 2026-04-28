@@ -2,7 +2,7 @@
 
 import { Dices, Play } from "lucide-react";
 
-import { SongCard } from "@/features/collection";
+import { TrackCard } from "@/features/collection";
 import { Button } from "@/shared/components/ui/8bit/button";
 import {
   Carousel,
@@ -62,7 +62,7 @@ export function CollectionPageView({
               <CarouselContent>
                 {tracks.map((track) => (
                   <CarouselItem className="jam-carousel-item pl-4" key={track.id}>
-                    <SongCard
+                    <TrackCard
                       track={track}
                       isSelected={selectedTrack?.id === track.id}
                       onClick={() => onSelect(track)}

@@ -1,5 +1,5 @@
 /**
- * Calculates the maximum possible score for a perfect run of a song.
+ * Calculates the maximum possible score for a perfect run of a track.
  * This follows the engine's multiplier logic: +10% per 10 combo
  * (calculated as 1 + Math.floor(combo / 10) * 0.1).
  */

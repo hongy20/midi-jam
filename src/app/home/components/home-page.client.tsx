@@ -32,7 +32,7 @@ export function HomePageClient({ tracksPromise }: HomePageClientProps) {
     <HomePageView
       onStart={() => toGear()}
       onOptions={() => toOptions()}
-      songsCount={tracks.length}
+      tracksCount={tracks.length}
     />
   );
 }

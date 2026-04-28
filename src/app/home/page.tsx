@@ -1,9 +1,9 @@
-import { getSongTracks } from "@/features/collection";
+import { getCollection } from "@/features/collection";
 
 import { HomePageClient } from "./components/home-page.client";
 
 export default function HomePage() {
-  const tracksPromise = getSongTracks(1000);
+  const tracksPromise = getCollection(1000);
 
   return <HomePageClient tracksPromise={tracksPromise} />;
 }

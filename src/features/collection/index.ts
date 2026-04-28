@@ -1,3 +1,3 @@
-export { SongCard } from "./components/song-card";
+export { TrackCard } from "./components/track-card";
 export { CollectionProvider, useCollection } from "./context/collection-context";
-export { getSongTracks } from "./lib/song-track";
+export { getCollection } from "./lib/get-collection";
