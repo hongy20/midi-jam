@@ -10,13 +10,7 @@
   --piano-glow-both-bg: var(--accent);
 
   width: 100%;
-  /* 
-    Manual aspect-ratio (width / 10) to prevent width-shrinking.
-    Height = (Total Units * Unit Width) / 10.
-    Since Unit Width = 100vw / (end - start),
-    Height = 100vw / (end - start) * 10.
-  */
-  height: calc(100vw / (var(--end-unit) - var(--start-unit)) * 10);
+  aspect-ratio: calc(var(--end-unit) - var(--start-unit)) / 10;
   min-height: 100px;
   max-height: 160px;
   position: relative;
