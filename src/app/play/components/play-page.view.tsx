@@ -55,8 +55,8 @@ export function PlayPageView({
   const Stage = instrumentType === "piano" ? PianoStage : DrumStage;
 
   return (
-    <div className="bg-background text-foreground flex h-dvh w-full flex-col overflow-hidden">
-      <header className="bg-background/80 border-foreground dark:border-ring flex h-auto min-h-16 w-full shrink-0 items-center gap-2 overflow-hidden border-b-4 px-4 py-2 backdrop-blur-sm sm:gap-4 sm:px-6">
+    <div className="bg-background text-foreground grid h-dvh w-full grid-cols-1 grid-rows-[auto_1fr_auto] overflow-hidden">
+      <header className="bg-background/80 border-foreground dark:border-ring flex h-auto min-h-16 w-full items-center gap-2 overflow-hidden border-b-4 px-4 py-2 backdrop-blur-sm sm:gap-4 sm:px-6">
         <LiveScore
           getScore={getScore}
           getCombo={getCombo}
@@ -65,45 +65,41 @@ export function PlayPageView({
           headerText={`${selectedMIDIInput.name} • ${selectedTrack.name}`}
         />
 
-        <div className="flex shrink-0 items-center gap-2">
-          <Button
-            variant="secondary"
-            onClick={handleToggleFullscreen}
-            size="icon"
-            font="retro"
-            className="shrink-0"
-            title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-          >
-            {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handlePause}
-            size="icon"
-            font="retro"
-            className="shrink-0"
-            title="Pause"
-          >
-            <Pause className="size-4" />
-          </Button>
-        </div>
+        <Button
+          variant="secondary"
+          onClick={handleToggleFullscreen}
+          size="icon"
+          font="retro"
+          className="shrink-0"
+          title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+        >
+          {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={handlePause}
+          size="icon"
+          font="retro"
+          className="shrink-0"
+          title="Pause"
+        >
+          <Pause className="size-4" />
+        </Button>
       </header>
 
-      <main className="relative min-h-0 w-full flex-1 overflow-hidden">
-        <Stage
-          notes={notes}
-          liveActiveNotes={liveActiveNotes}
-          playbackNotes={playbackNotes}
-          highway={
-            <Highway
-              groups={groups}
-              scrollRef={scrollRef}
-              getCurrentTimeMs={getCurrentTimeMs}
-              speed={speed}
-            />
-          }
-        />
-      </main>
+      <Stage
+        notes={notes}
+        liveActiveNotes={liveActiveNotes}
+        playbackNotes={playbackNotes}
+        highway={
+          <Highway
+            groups={groups}
+            scrollRef={scrollRef}
+            getCurrentTimeMs={getCurrentTimeMs}
+            speed={speed}
+          />
+        }
+      />
     </div>
   );
 }
