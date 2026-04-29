@@ -114,13 +114,13 @@ export const LiveScore = memo(function LiveScore({
   }, [getScore, getCombo, getProgress, getLastHitQuality]);
 
   return (
-    <div className="flex w-full min-w-0 flex-1 flex-col gap-1.5">
-      <div className="text-foreground/60 font-retro truncate text-[8px] font-black tracking-widest uppercase sm:text-[10px] sm:tracking-[0.2em]">
+    <div className="flex w-full min-w-0 flex-1 flex-col gap-1 overflow-hidden sm:gap-1.5">
+      <div className="text-foreground/60 font-retro w-full min-w-0 truncate text-[8px] font-black tracking-widest uppercase sm:text-[10px] sm:tracking-[0.2em]">
         {headerText}
       </div>
-      <div className="flex w-full items-center gap-4 sm:gap-8">
+      <div className="flex w-full min-w-0 items-center gap-2 sm:gap-8">
         {/* Score & Combo */}
-        <div className="flex items-center gap-3 sm:gap-6">
+        <div className="flex shrink-0 items-center gap-3 sm:gap-6">
           <div className="flex flex-col">
             <span className="text-foreground retro text-[7px] font-normal tracking-wider uppercase opacity-60 sm:text-[8px] sm:tracking-widest">
               Score
@@ -147,7 +147,7 @@ export const LiveScore = memo(function LiveScore({
         </div>
 
         {/* Hit Quality Feedback */}
-        <div className="flex min-w-24 items-center justify-center sm:min-w-30">
+        <div className="flex min-w-20 items-center justify-center sm:min-w-30">
           <span
             ref={feedbackRef}
             className={cn(
