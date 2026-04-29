@@ -56,31 +56,27 @@ export function PlayPageView({
 
   return (
     <div className="bg-background text-foreground grid h-dvh w-screen grid-rows-[auto_1fr_auto] overflow-hidden">
-      <header className="bg-background/80 border-foreground dark:border-ring flex h-auto min-h-16 w-full items-center justify-between border-b-4 px-4 py-2 backdrop-blur-sm sm:px-6">
-        <div className="flex min-w-0 flex-1 flex-col">
-          <LiveScore
-            getScore={getScore}
-            getCombo={getCombo}
-            getLastHitQuality={getLastHitQuality}
-            getProgress={getProgress}
-            headerText={`${selectedMIDIInput.name} • ${selectedTrack.name}`}
-          />
-        </div>
+      <header className="bg-background/80 border-foreground dark:border-ring flex h-auto min-h-16 w-full items-center gap-4 border-b-4 px-4 py-2 backdrop-blur-sm sm:px-6">
+        <LiveScore
+          getScore={getScore}
+          getCombo={getCombo}
+          getLastHitQuality={getLastHitQuality}
+          getProgress={getProgress}
+          headerText={`${selectedMIDIInput.name} • ${selectedTrack.name}`}
+        />
 
-        <div className="flex items-center gap-4">
-          <Button
-            variant="secondary"
-            onClick={handleToggleFullscreen}
-            size="icon"
-            font="retro"
-            title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
-          >
-            {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
-          </Button>
-          <Button variant="secondary" onClick={handlePause} size="icon" font="retro" title="Pause">
-            <Pause className="size-4" />
-          </Button>
-        </div>
+        <Button
+          variant="secondary"
+          onClick={handleToggleFullscreen}
+          size="icon"
+          font="retro"
+          title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+        >
+          {isFullscreen ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
+        </Button>
+        <Button variant="secondary" onClick={handlePause} size="icon" font="retro" title="Pause">
+          <Pause className="size-4" />
+        </Button>
       </header>
 
       <Stage

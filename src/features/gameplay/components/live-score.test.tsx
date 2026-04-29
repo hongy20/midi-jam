@@ -9,6 +9,7 @@ describe("LiveScore", () => {
     getCombo: () => 15,
     getLastHitQuality: () => "perfect" as const,
     getProgress: () => 0.45,
+    headerText: "Test Device • Test Track",
   };
 
   it("renders score, combo and updates progress via rAF", async () => {

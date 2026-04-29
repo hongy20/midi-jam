@@ -20,6 +20,7 @@ const mockGetters = {
   getCombo: () => 42,
   getLastHitQuality: () => "perfect" as const,
   getProgress: () => 0.65,
+  headerText: "Mock Device • Mock Track",
 };
 
 export const Default: Story = {

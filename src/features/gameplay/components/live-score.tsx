@@ -11,7 +11,7 @@ interface LiveScoreProps {
   getCombo: () => number;
   getLastHitQuality: () => HitQuality;
   getProgress: () => number;
-  headerText?: React.ReactNode;
+  headerText: string;
 }
 
 export const LiveScore = memo(function LiveScore({
@@ -114,12 +114,10 @@ export const LiveScore = memo(function LiveScore({
   }, [getScore, getCombo, getProgress, getLastHitQuality]);
 
   return (
-    <div className="flex w-full min-w-0 flex-col gap-1.5">
-      {headerText && (
-        <div className="text-foreground/60 font-retro truncate text-[8px] font-black tracking-widest uppercase sm:text-[10px] sm:tracking-[0.2em]">
-          {headerText}
-        </div>
-      )}
+    <div className="flex w-full min-w-0 flex-1 flex-col gap-1.5">
+      <div className="text-foreground/60 font-retro truncate text-[8px] font-black tracking-widest uppercase sm:text-[10px] sm:tracking-[0.2em]">
+        {headerText}
+      </div>
       <div className="flex w-full items-center gap-4 sm:gap-8">
         {/* Score & Combo */}
         <div className="flex items-center gap-3 sm:gap-6">
