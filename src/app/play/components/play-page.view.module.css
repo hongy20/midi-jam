@@ -1,13 +1,2 @@
-:root {
-  /* Global Layout Constants - Theme Independent */
-  --header-height: 3rem;
-  --footer-height: 3rem;
-}
-
-/* Mobile Portrait, Tablets, and Desktop screens */
-@media (min-height: 601px) {
-  :root {
-    --header-height: 4rem;
-    --footer-height: 4.5rem;
-  }
-}
+/* play-page.view.module.css is now intentionally left blank 
+   as we've migrated to inline classes and auto-sizing tracks. */
