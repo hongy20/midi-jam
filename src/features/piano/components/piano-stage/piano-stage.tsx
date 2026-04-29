@@ -45,9 +45,7 @@ export function PianoStage({ notes, liveActiveNotes, playbackNotes, highway }: S
           } as React.CSSProperties
         }
       >
-        <div className={styles.inputWrapper}>
-          <PianoKeyboard liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />
-        </div>
+        <PianoKeyboard liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />
       </footer>
     </>
   );
