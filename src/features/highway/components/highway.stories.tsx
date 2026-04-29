@@ -9,7 +9,6 @@ const meta: Meta<typeof Highway> = {
   parameters: {
     layout: "fullscreen",
   },
-  tags: ["autodocs"],
   decorators: [
     (Story) => (
       <div
