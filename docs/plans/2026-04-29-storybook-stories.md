@@ -25,6 +25,7 @@
 The file has `tags: ["autodocs"]` which will cause an error because the Docs addon is disabled. Remove the tag.
 
 **File:**
+
 - Modify: `src/features/highway/components/highway.stories.tsx`
 
 **Step 1: Remove `tags: ["autodocs"]` from the meta object**
@@ -64,11 +65,13 @@ git commit -m "fix(storybook): remove autodocs tag from highway stories"
 ## Task 2: `background-lane.stories.tsx`
 
 **Component:** `src/features/piano/components/background-lane/background-lane.tsx`
+
 - Zero props — renders 88 piano key lanes.
 - Depends on `piano-layout.css` (imported inside the component itself).
 - Needs `--start-unit` / `--end-unit` CSS custom properties on a parent container to define the visible range.
 
 **File:**
+
 - Create: `src/features/piano/components/background-lane/background-lane.stories.tsx`
 
 **Step 1: Write the stories**
@@ -145,11 +148,13 @@ git commit -m "feat(storybook): add BackgroundLane stories"
 ## Task 3: `drum-stage.stories.tsx`
 
 **Component:** `src/features/drum/components/drum-stage.tsx`
+
 - Props: `StageProps` → `{ notes, liveActiveNotes, playbackNotes, highway }`.
 - `highway` is a `React.ReactElement`.
 - `DrumStage` uses CSS `row-start-2`, so it needs a grid parent.
 
 **File:**
+
 - Create: `src/features/drum/components/drum-stage.stories.tsx`
 
 **Step 1: Write the stories**
@@ -232,12 +237,14 @@ git commit -m "feat(storybook): add DrumStage stories"
 ## Task 4: `piano-stage.stories.tsx`
 
 **Component:** `src/features/piano/components/piano-stage/piano-stage.tsx`
+
 - Props: `StageProps` → `{ notes, liveActiveNotes, playbackNotes, highway }`.
 - `PianoStage` calls `React.cloneElement(highway, ...)`, so `highway` **must** be a real element.
 - Pass a minimal `<div>` as the `highway` prop.
 - `notes` drives `getPianoLayoutUnits` to compute `--start-unit` / `--end-unit`.
 
 **File:**
+
 - Create: `src/features/piano/components/piano-stage/piano-stage.stories.tsx`
 
 **Step 1: Write the stories**
@@ -318,10 +325,12 @@ git commit -m "feat(storybook): add PianoStage stories"
 ## Task 5: `gear-card.stories.tsx`
 
 **Component:** `src/features/midi-hardware/components/gear-card.tsx`
+
 - Props: `{ badge?, description, icon, title, isSelected?, onClick?, className? }`
 - `icon` is a `ReactNode` — pass a `lucide-react` icon element.
 
 **File:**
+
 - Create: `src/features/midi-hardware/components/gear-card.stories.tsx`
 
 **Step 1: Write the stories**
@@ -390,10 +399,12 @@ git commit -m "feat(storybook): add GearCard stories"
 ## Task 6: `track-card.stories.tsx`
 
 **Component:** `src/features/collection/components/track-card.tsx`
+
 - Props: `{ track: Track, isSelected?, onClick?, className? }`
 - `Track` type: `{ id, name, artist, difficulty, url }`
 
 **File:**
+
 - Create: `src/features/collection/components/track-card.stories.tsx`
 
 **Step 1: Write the stories**
@@ -467,10 +478,12 @@ git commit -m "feat(storybook): add TrackCard stories"
 ## Task 7: `theme-picker.stories.tsx`
 
 **Component:** `src/features/theme/components/theme-picker.tsx`
+
 - Props: `{ activeTheme: Theme, onThemeChange: (theme: Theme) => void }`
 - Uses a `Dialog` — story renders trigger button.
 
 **File:**
+
 - Create: `src/features/theme/components/theme-picker.stories.tsx`
 
 **Step 1: Write the stories**
@@ -526,12 +539,14 @@ git commit -m "feat(storybook): add ThemePicker stories"
 ## Task 8: `play-page.view.stories.tsx`
 
 **Component:** `src/app/play/components/play-page.view.tsx`
+
 - All props required. Key items:
   - `selectedMIDIInput: WebMidi.MIDIInput` → cast a mock object
   - `getLastHitQuality: () => HitQuality` → check `HitQuality` type values in `@/features/gameplay`
   - `getInstrumentType()` checks `selectedMIDIInput.name` — use `"Yamaha P-125 Piano"` to get piano branch; any other name for drums.
 
 **File:**
+
 - Create: `src/app/play/components/play-page.view.stories.tsx`
 
 **Step 1: Check `HitQuality` type before writing**
