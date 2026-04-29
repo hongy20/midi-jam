@@ -9,7 +9,7 @@ import { StageProps } from "@/shared/types/stage";
 export function DrumStage({ highway }: StageProps) {
   return (
     <>
-      <main className="flex h-full items-center justify-center">
+      <main className="row-start-2 flex h-full items-center justify-center">
         {highway ? (
           highway
         ) : (
@@ -18,7 +18,7 @@ export function DrumStage({ highway }: StageProps) {
           </div>
         )}
       </main>
-      <footer className="border-foreground/5 h-(--footer-height,151px) border-t" />
+      <footer className="border-foreground/5 row-start-3 h-full border-t" />
     </>
   );
 }
