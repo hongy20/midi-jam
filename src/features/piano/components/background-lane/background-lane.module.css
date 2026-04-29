@@ -5,6 +5,7 @@
   inset: 0;
   pointer-events: none;
   grid-template-rows: 1fr;
+  grid-auto-columns: 0;
   overflow: hidden;
   /* Hardware accelerated fade-out mask */
   mask-image: linear-gradient(
@@ -19,16 +20,16 @@
 .lane {
   --bg-lane-white: #ffffff;
   --bg-lane-black: #18181b;
+  --lane-opacity: calc(8% + var(--is-black) * 27%);
 
   grid-row: 1;
   height: 100%;
-  box-sizing: border-box;
-  min-width: 0;
   /* Subtle key colors mixed with transparency */
   background-color: color-mix(
     in srgb,
-    var(--bg-lane-white) calc((1 - var(--is-black)) * 8%),
-    var(--bg-lane-black) calc(var(--is-black) * 35%)
+    color-mix(in srgb, var(--bg-lane-white), var(--bg-lane-black) calc(var(--is-black) * 100%))
+      var(--lane-opacity),
+    transparent
   );
   /* Very subtle separator line for black keys to create visual separation */
   border-right: 1px solid rgba(255, 255, 255, calc(0.04 * var(--is-black)));

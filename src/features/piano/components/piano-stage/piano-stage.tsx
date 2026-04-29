@@ -8,8 +8,6 @@ import { PIANO_GRID_CLASS, PIANO_GRID_ITEM_CLASS } from "../../lib/constants";
 import { getPianoLayoutUnits } from "../../lib/utils";
 import { BackgroundLane } from "../background-lane/background-lane";
 import { PianoKeyboard } from "../piano-keyboard/piano-keyboard";
-import styles from "./piano-stage.module.css";
-
 /**
  * PianoStage encapsulates the full piano gameplay visualization.
  * It manages its own layout units and grid alignment.
@@ -21,9 +19,11 @@ export function PianoStage({ notes, liveActiveNotes, playbackNotes, highway }: S
   return (
     <>
       <main
-        className={styles.main}
         style={
           {
+            position: "relative",
+            overflow: "hidden",
+            gridRow: 2,
             "--start-unit": startUnit,
             "--end-unit": endUnit,
           } as React.CSSProperties
@@ -37,9 +37,11 @@ export function PianoStage({ notes, liveActiveNotes, playbackNotes, highway }: S
       </main>
 
       <footer
-        className={styles.footer}
         style={
           {
+            backgroundColor: "color-mix(in srgb, var(--background), transparent 50%)",
+            borderTop: "1px solid color-mix(in srgb, var(--foreground), transparent 95%)",
+            gridRow: 3,
             "--start-unit": startUnit,
             "--end-unit": endUnit,
           } as React.CSSProperties

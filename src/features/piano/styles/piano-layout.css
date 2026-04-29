@@ -8,6 +8,8 @@
   --relative-start: calc(var(--note-start) - var(--start-unit) + 1);
   grid-column: var(--relative-start) / span calc(3 - var(--is-black));
   display: flex;
+  box-sizing: border-box;
+  min-width: 0;
   /*
     Hide notes outside the visible range using two clamp() checks combined with min():
     - Left  of range: --relative-start <= 0           → first  clamp returns 0 (invisible)
