@@ -1,7 +1,5 @@
 "use client";
 
-import "./play-page.view.module.css";
-
 import { Maximize2, Minimize2, Pause } from "lucide-react";
 
 import { DrumStage } from "@/features/drum";
