@@ -36,18 +36,16 @@ export function PianoStage({ notes, liveActiveNotes, playbackNotes, highway }: S
         } as React.HTMLAttributes<HTMLDivElement>)}
       </main>
 
-      <footer className={styles.footer}>
-        <div
-          className={styles.inputWrapper}
-          style={
-            {
-              "--start-unit": startUnit,
-              "--end-unit": endUnit,
-            } as React.CSSProperties
-          }
-        >
-          <PianoKeyboard liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />
-        </div>
+      <footer
+        className={styles.footer}
+        style={
+          {
+            "--start-unit": startUnit,
+            "--end-unit": endUnit,
+          } as React.CSSProperties
+        }
+      >
+        <PianoKeyboard liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />
       </footer>
     </>
   );

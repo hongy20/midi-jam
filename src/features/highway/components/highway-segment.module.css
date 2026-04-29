@@ -9,20 +9,20 @@
 
 .container {
   /* Starting position: The segment is moved entirely above the container.
-     Proportionally calculated based on its music duration relative to the standard fall time. */
-  --translate-y-from: calc(
-    var(--main-height) * (var(--segment-duration-ms) / var(--lane-scroll-duration-ms)) * -1
-  );
+     -100% translateY moves the element up by its own height. */
+  --translate-y-from: -100%;
 
-  /* Target position: The top of the segment reaches the bottom of the container. */
-  --translate-y-to: var(--main-height);
+  /* Target position: The top of the segment reaches the bottom of the container.
+     Since 100% of translateY is element height (Hs), and Hs = Hc * (Sd / Ld),
+     we move by Hc by multiplying by (Ld / Sd). */
+  --translate-y-to: calc(100% * var(--lane-scroll-duration-ms) / var(--segment-duration-ms));
 
   width: 100%;
   position: absolute;
   top: 0;
-  /* Segment height corresponds to LANE_SEGMENT_DURATION_MS.
-     Speed is 1 container height per --lane-scroll-duration-ms. */
-  height: calc(var(--main-height) * (var(--segment-duration-ms) / var(--lane-scroll-duration-ms)));
+  /* Segment height corresponds to LANE_SEGMENT_DURATION_MS relative to lane scroll duration.
+     100% height here refers to the parent container height. */
+  height: calc(100% * (var(--segment-duration-ms) / var(--lane-scroll-duration-ms)));
   will-change: transform;
 
   /* Total travel duration scaled by playback speed */
