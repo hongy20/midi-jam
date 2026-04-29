@@ -6,7 +6,13 @@
 
 .footer {
   width: 100%;
-  height: 100%;
+  /* 
+    multiplier ~15 ensures a realistic key length relative to unit width.
+    aspect-ratio is width / height.
+  */
+  aspect-ratio: calc(var(--end-unit) - var(--start-unit)) / 15;
+  min-height: 3rem;
+  max-height: 40dvh;
   background-color: color-mix(in srgb, var(--background), transparent 50%);
   border-top: 1px solid color-mix(in srgb, var(--foreground), transparent 95%);
   grid-row: 3;

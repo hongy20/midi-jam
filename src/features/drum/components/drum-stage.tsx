@@ -18,7 +18,7 @@ export function DrumStage({ highway }: StageProps) {
           </div>
         )}
       </main>
-      <footer className="border-foreground/5 row-start-3 h-full border-t" />
+      <footer className="border-foreground/5 row-start-3 h-(--footer-height) border-t" />
     </>
   );
 }

@@ -2,7 +2,6 @@
   /* Global Layout Constants - Theme Independent */
   --header-height: 3rem;
   --footer-height: 3rem;
-  --main-height: calc(100dvh - var(--header-height) - var(--footer-height));
 }
 
 /* Mobile Portrait, Tablets, and Desktop screens */
