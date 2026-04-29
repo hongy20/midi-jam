@@ -7,10 +7,10 @@
 .footer {
   width: 100%;
   /* 
-    multiplier ~15 ensures a realistic key length relative to unit width.
+    multiplier ~12 ensures a realistic key length relative to unit width.
     aspect-ratio is width / height.
   */
-  aspect-ratio: calc(var(--end-unit) - var(--start-unit)) / 15;
+  aspect-ratio: calc(var(--end-unit) - var(--start-unit)) / 12;
   min-height: 3rem;
   max-height: 40dvh;
   background-color: color-mix(in srgb, var(--background), transparent 50%);
