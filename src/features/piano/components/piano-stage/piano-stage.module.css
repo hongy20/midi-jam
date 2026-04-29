@@ -6,7 +6,7 @@
 
 .footer {
   width: 100%;
-  height: var(--footer-height);
+  height: 100%;
   background-color: color-mix(in srgb, var(--background), transparent 50%);
   border-top: 1px solid color-mix(in srgb, var(--foreground), transparent 95%);
   grid-row: 3;
