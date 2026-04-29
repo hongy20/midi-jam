@@ -56,16 +56,14 @@ export function PlayPageView({
 
   return (
     <div className="bg-background text-foreground grid h-dvh w-screen grid-rows-[auto_1fr_auto] overflow-hidden">
-      <header className="bg-background/80 border-foreground dark:border-ring flex h-12 w-full items-center justify-between border-b-4 px-6 backdrop-blur-sm [@media(min-height:601px)]:h-16">
-        <div className="flex flex-1 flex-col">
-          <span className="text-foreground/60 font-retro mb-1 text-[10px] font-black tracking-[0.2em] uppercase">
-            {selectedMIDIInput.name} • {selectedTrack.name}
-          </span>
+      <header className="bg-background/80 border-foreground dark:border-ring flex h-auto min-h-16 w-full items-center justify-between border-b-4 px-4 py-2 backdrop-blur-sm sm:px-6">
+        <div className="flex min-w-0 flex-1 flex-col">
           <LiveScore
             getScore={getScore}
             getCombo={getCombo}
             getLastHitQuality={getLastHitQuality}
             getProgress={getProgress}
+            headerText={`${selectedMIDIInput.name} • ${selectedTrack.name}`}
           />
         </div>
 

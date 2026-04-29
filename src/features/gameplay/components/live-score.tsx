@@ -11,6 +11,7 @@ interface LiveScoreProps {
   getCombo: () => number;
   getLastHitQuality: () => HitQuality;
   getProgress: () => number;
+  headerText?: React.ReactNode;
 }
 
 export const LiveScore = memo(function LiveScore({
@@ -18,6 +19,7 @@ export const LiveScore = memo(function LiveScore({
   getCombo,
   getLastHitQuality,
   getProgress,
+  headerText,
 }: LiveScoreProps) {
   const scoreValueRef = useRef<HTMLSpanElement>(null);
   const comboValueRef = useRef<HTMLSpanElement>(null);
@@ -112,61 +114,71 @@ export const LiveScore = memo(function LiveScore({
   }, [getScore, getCombo, getProgress, getLastHitQuality]);
 
   return (
-    <div className="flex w-full items-center gap-8">
-      {/* Score & Combo */}
-      <div className="flex items-center gap-6">
-        <div className="flex flex-col">
-          <span className="text-foreground retro text-[8px] font-normal tracking-widest uppercase opacity-60">
-            Score
-          </span>
+    <div className="flex w-full min-w-0 flex-col gap-1.5">
+      {headerText && (
+        <div className="text-foreground/60 font-retro truncate text-[8px] font-black tracking-widest uppercase sm:text-[10px] sm:tracking-[0.2em]">
+          {headerText}
+        </div>
+      )}
+      <div className="flex w-full items-center gap-4 sm:gap-8">
+        {/* Score & Combo */}
+        <div className="flex items-center gap-3 sm:gap-6">
+          <div className="flex flex-col">
+            <span className="text-foreground retro text-[7px] font-normal tracking-wider uppercase opacity-60 sm:text-[8px] sm:tracking-widest">
+              Score
+            </span>
+            <span
+              ref={scoreValueRef}
+              className="retro text-base leading-relaxed font-normal tabular-nums"
+            >
+              0
+            </span>
+          </div>
+
+          <div className="flex flex-col">
+            <span className="text-foreground retro text-[7px] font-normal tracking-wider uppercase opacity-60 sm:text-[8px] sm:tracking-widest">
+              Combo
+            </span>
+            <span
+              ref={comboValueRef}
+              className="retro text-sm leading-tight font-normal tabular-nums sm:text-base sm:leading-relaxed"
+            >
+              x0
+            </span>
+          </div>
+        </div>
+
+        {/* Hit Quality Feedback */}
+        <div className="flex min-w-24 items-center justify-center sm:min-w-30">
           <span
-            ref={scoreValueRef}
-            className="retro text-base leading-relaxed font-normal tabular-nums"
-          >
-            0
-          </span>
-        </div>
-
-        <div className="flex flex-col">
-          <span className="text-foreground retro text-[8px] font-normal tracking-widest uppercase opacity-60">
-            Combo
-          </span>
-          <span
-            ref={comboValueRef}
-            className="retro text-base leading-relaxed font-normal tabular-nums"
-          >
-            x0
-          </span>
-        </div>
-      </div>
-
-      {/* Hit Quality Feedback */}
-      <div className="flex min-w-30 items-center justify-center">
-        <span
-          ref={feedbackRef}
-          className={cn(
-            "retro text-[0.875rem] font-normal tracking-tight uppercase transition-colors duration-100 will-change-transform",
-            styles.hitText,
-          )}
-          style={{ opacity: 0 }}
-        />
-      </div>
-
-      {/* Progress Bar */}
-      <div className="hidden max-w-37.5 flex-1 flex-col gap-2 sm:flex">
-        <div className="flex items-end justify-between gap-1">
-          <span className="text-foreground retro text-[8px] font-normal uppercase opacity-60">
-            Progress
-          </span>
-          <span ref={progressValueRef} className="retro text-[8px] font-normal tabular-nums">
-            0%
-          </span>
-        </div>
-        <div className="bg-foreground/10 border-foreground h-3 w-full overflow-hidden border-4 [image-rendering:pixelated]">
-          <div
-            ref={progressBarFillRef}
-            className="bg-primary h-full w-full origin-left transform-[scaleX(0)]"
+            ref={feedbackRef}
+            className={cn(
+              "retro text-xs font-normal tracking-tight uppercase transition-colors duration-100 will-change-transform sm:text-[0.875rem]",
+              styles.hitText,
+            )}
+            style={{ opacity: 0 }}
           />
+        </div>
+
+        {/* Progress Bar */}
+        <div className="hidden max-w-37.5 flex-1 flex-col gap-1 sm:flex sm:gap-2">
+          <div className="flex items-end justify-between gap-1">
+            <span className="text-foreground retro text-[7px] font-normal uppercase opacity-60 sm:text-[8px]">
+              Progress
+            </span>
+            <span
+              ref={progressValueRef}
+              className="retro text-[7px] font-normal tabular-nums sm:text-[8px]"
+            >
+              0%
+            </span>
+          </div>
+          <div className="bg-foreground/10 border-foreground h-2 w-full overflow-hidden border-2 [image-rendering:pixelated] sm:h-3 sm:border-4">
+            <div
+              ref={progressBarFillRef}
+              className="bg-primary h-full w-full origin-left transform-[scaleX(0)]"
+            />
+          </div>
         </div>
       </div>
     </div>

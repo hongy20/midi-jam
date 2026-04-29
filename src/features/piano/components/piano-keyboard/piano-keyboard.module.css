@@ -10,7 +10,9 @@
   --piano-glow-both-bg: var(--accent);
 
   width: 100%;
-  height: 100%;
+  height: 20dvh;
+  min-height: 100px;
+  max-height: 160px;
   position: relative;
   /* Implicit tracks (from out-of-range-right notes) must take no space. */
   grid-auto-columns: 0;
