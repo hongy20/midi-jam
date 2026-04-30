@@ -20,8 +20,8 @@ interface PlayPageViewProps {
   handlePause: () => void;
   isFullscreen: boolean;
   handleToggleFullscreen: () => void;
-  liveActiveNotes: Set<number>;
-  playbackNotes: Set<number>;
+  liveActiveNotesRef: React.MutableRefObject<Set<number>>;
+  playbackNotesRef: React.MutableRefObject<Set<number>>;
   notes: MidiNote[];
   groups: MidiNoteGroup[];
   scrollRef: React.RefObject<HTMLDivElement | null>;
@@ -43,8 +43,8 @@ export function PlayPageView({
   handlePause,
   isFullscreen,
   handleToggleFullscreen,
-  liveActiveNotes,
-  playbackNotes,
+  liveActiveNotesRef,
+  playbackNotesRef,
   notes,
   groups,
   scrollRef,
@@ -89,8 +89,8 @@ export function PlayPageView({
 
       <Stage
         notes={notes}
-        liveActiveNotes={liveActiveNotes}
-        playbackNotes={playbackNotes}
+        liveActiveNotesRef={liveActiveNotesRef}
+        playbackNotesRef={playbackNotesRef}
         highway={
           <Highway
             groups={groups}

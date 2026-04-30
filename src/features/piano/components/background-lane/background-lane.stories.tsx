@@ -33,24 +33,24 @@ type Story = StoryObj<typeof BackgroundLane>;
 
 export const Default: Story = {
   args: {
-    liveNotes: new Set(),
-    playbackNotes: new Set(),
+    liveNotesRef: { current: new Set() },
+    playbackNotesRef: { current: new Set() },
   },
 };
 
 /** Reactive state with active notes showing beam and flare effects. */
 export const Reactive: Story = {
   args: {
-    liveNotes: new Set([60, 64, 67]), // C4, E4, G4
-    playbackNotes: new Set([72, 76, 79]), // C5, E5, G5
+    liveNotesRef: { current: new Set([60, 64, 67]) }, // C4, E4, G4
+    playbackNotesRef: { current: new Set([72, 76, 79]) }, // C5, E5, G5
   },
 };
 
 /** Narrowed viewport showing only the middle octave (C4–B4, units 108–129). */
 export const NarrowViewport: Story = {
   args: {
-    liveNotes: new Set([60]),
-    playbackNotes: new Set([64]),
+    liveNotesRef: { current: new Set([60]) },
+    playbackNotesRef: { current: new Set([64]) },
   },
   decorators: [
     (Story) => (

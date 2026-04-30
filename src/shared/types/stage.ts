@@ -2,7 +2,7 @@ import type { MidiNote } from "./midi";
 
 export interface StageProps {
   notes: MidiNote[];
-  liveActiveNotes: Set<number>;
-  playbackNotes: Set<number>;
+  liveActiveNotesRef: React.MutableRefObject<Set<number>>;
+  playbackNotesRef: React.MutableRefObject<Set<number>>;
   highway: React.ReactElement;
 }

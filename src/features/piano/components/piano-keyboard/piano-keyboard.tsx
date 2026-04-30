@@ -16,8 +16,8 @@ import {
 import styles from "./piano-keyboard.module.css";
 
 interface PianoKeyboardProps {
-  liveNotes: Set<number>;
-  playbackNotes: Set<number>;
+  liveNotesRef?: React.MutableRefObject<Set<number>>;
+  playbackNotesRef?: React.MutableRefObject<Set<number>>;
 }
 
 const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
@@ -70,24 +70,37 @@ PianoKeys.displayName = "PianoKeys";
  * A high-performance responsive visual representation of a piano keyboard.
  * Uses a stable DOM tree and imperative Ref updates for 60fps glow effects.
  */
-export const PianoKeyboard = ({ liveNotes, playbackNotes }: PianoKeyboardProps) => {
+export const PianoKeyboard = ({ liveNotesRef, playbackNotesRef }: PianoKeyboardProps) => {
   const keyRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
 
-  // Imperative sync: Update data attributes on key elements without re-rendering
+  // High-performance animation loop to sync DOM with mutable refs
   useEffect(() => {
-    for (const [note, el] of keyRefs.current) {
-      const isLive = liveNotes.has(note);
-      const isPlayback = playbackNotes.has(note);
+    let animationFrameId: number;
 
-      // Update dataset for CSS attribute selectors
-      if (el.dataset.live !== isLive.toString()) {
-        el.dataset.live = isLive.toString();
+    const updateDOM = () => {
+      const liveNotes = liveNotesRef?.current;
+      const playbackNotes = playbackNotesRef?.current;
+
+      for (const [note, el] of keyRefs.current) {
+        const isLive = liveNotes ? liveNotes.has(note) : false;
+        const isPlayback = playbackNotes ? playbackNotes.has(note) : false;
+
+        // Update dataset for CSS attribute selectors
+        if (el.dataset.live !== isLive.toString()) {
+          el.dataset.live = isLive.toString();
+        }
+        if (el.dataset.playback !== isPlayback.toString()) {
+          el.dataset.playback = isPlayback.toString();
+        }
       }
-      if (el.dataset.playback !== isPlayback.toString()) {
-        el.dataset.playback = isPlayback.toString();
-      }
-    }
-  }, [liveNotes, playbackNotes]);
+
+      animationFrameId = requestAnimationFrame(updateDOM);
+    };
+
+    animationFrameId = requestAnimationFrame(updateDOM);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [liveNotesRef, playbackNotesRef]);
 
   return (
     <div className={cn(styles.container, PIANO_GRID_CLASS)} role="img" aria-label="Piano keyboard">

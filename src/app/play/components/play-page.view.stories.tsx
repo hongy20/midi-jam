@@ -52,8 +52,8 @@ const meta: Meta<typeof PlayPageView> = {
     handlePause: () => console.log("Pause clicked"),
     isFullscreen: false,
     handleToggleFullscreen: () => console.log("Toggle fullscreen"),
-    liveActiveNotes: new Set(),
-    playbackNotes: new Set(),
+    liveActiveNotesRef: { current: new Set() },
+    playbackNotesRef: { current: new Set() },
     notes: mockNotes,
     groups: mockGroups,
     scrollRef: { current: null },
@@ -71,8 +71,8 @@ export const PianoDefault: Story = {};
 /** Piano stage with live MIDI notes and a score. */
 export const PianoWithScore: Story = {
   args: {
-    liveActiveNotes: new Set([60, 64, 67]),
-    playbackNotes: new Set([72]),
+    liveActiveNotesRef: { current: new Set([60, 64, 67]) },
+    playbackNotesRef: { current: new Set([72]) },
     getScore: () => 1250,
     getCombo: () => 8,
     getProgress: () => 0.4,

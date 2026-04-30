@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { type MIDINoteEvent } from "@/shared/types/midi";
 
@@ -27,7 +27,7 @@ export function useAutoPlay({
   onNoteOff,
   processNoteEvent,
 }: UseAutoPlayProps) {
-  const [playbackNotes, setPlaybackNotes] = useState<Set<number>>(new Set());
+  const playbackNotesRef = useRef<Set<number>>(new Set());
 
   useEffect(() => {
     const container = containerRef.current;
@@ -36,22 +36,12 @@ export function useAutoPlay({
     const { disconnect } = createNoteObserver({
       container,
       onPitchStart: (pitch) => {
-        setPlaybackNotes((prev) => {
-          const next = new Set(prev);
-          next.add(pitch);
-          return next;
-        });
-
+        playbackNotesRef.current.add(pitch);
         onNoteOn(pitch);
         processNoteEvent({ type: "note-on", pitch, velocity: 0.7 });
       },
       onPitchEnd: (pitch) => {
-        setPlaybackNotes((prev) => {
-          const next = new Set(prev);
-          next.delete(pitch);
-          return next;
-        });
-
+        playbackNotesRef.current.delete(pitch);
         onNoteOff(pitch);
         processNoteEvent({ type: "note-off", pitch, velocity: 0 });
       },
@@ -59,9 +49,9 @@ export function useAutoPlay({
 
     return () => {
       disconnect();
-      setPlaybackNotes(new Set());
+      playbackNotesRef.current.clear();
     };
   }, [containerRef, enabled, onNoteOn, onNoteOff, processNoteEvent]);
 
-  return { playbackNotes };
+  return { playbackNotesRef };
 }

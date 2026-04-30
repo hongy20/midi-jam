@@ -45,14 +45,14 @@ type Story = StoryObj<typeof PianoKeyboard>;
 
 export const Default: Story = {
   args: {
-    liveNotes: new Set(),
-    playbackNotes: new Set(),
+    liveNotesRef: { current: new Set() },
+    playbackNotesRef: { current: new Set() },
   },
 };
 
 export const WithActiveNotes: Story = {
   args: {
-    liveNotes: new Set([60, 64, 67]), // C4 Major chord
-    playbackNotes: new Set([72]), // C5 playback
+    liveNotesRef: { current: new Set([60, 64, 67]) }, // C4 Major chord
+    playbackNotesRef: { current: new Set([72]) }, // C5 playback
   },
 };

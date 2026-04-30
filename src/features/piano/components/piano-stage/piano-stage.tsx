@@ -12,7 +12,7 @@ import { PianoKeyboard } from "../piano-keyboard/piano-keyboard";
  * PianoStage encapsulates the full piano gameplay visualization.
  * It manages its own layout units and grid alignment.
  */
-export function PianoStage({ notes, liveActiveNotes, playbackNotes, highway }: StageProps) {
+export function PianoStage({ notes, liveActiveNotesRef, playbackNotesRef, highway }: StageProps) {
   // Calculate dynamic layout range for consistent grid alignment
   const { startUnit, endUnit } = useMemo(() => getPianoLayoutUnits(notes), [notes]);
 
@@ -30,7 +30,7 @@ export function PianoStage({ notes, liveActiveNotes, playbackNotes, highway }: S
         }
       >
         {React.cloneElement(highway, {
-          children: <BackgroundLane liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />,
+          children: <BackgroundLane liveNotesRef={liveActiveNotesRef} playbackNotesRef={playbackNotesRef} />,
           noteClassName: PIANO_GRID_ITEM_CLASS,
           containerClassName: PIANO_GRID_CLASS,
         } as React.HTMLAttributes<HTMLDivElement>)}
@@ -47,7 +47,7 @@ export function PianoStage({ notes, liveActiveNotes, playbackNotes, highway }: S
           } as React.CSSProperties
         }
       >
-        <PianoKeyboard liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />
+        <PianoKeyboard liveNotesRef={liveActiveNotesRef} playbackNotesRef={playbackNotesRef} />
       </footer>
     </>
   );

@@ -91,11 +91,11 @@ export function PlayPageClient() {
         : 0) * totalDurationMs,
   });
 
-  const liveActiveNotes = useActiveNotes(selectedMIDIInput, processNoteEvent);
+  const liveActiveNotesRef = useActiveNotes(selectedMIDIInput, processNoteEvent);
 
   const { playNote, stopNote } = useNotePlayer(selectedMIDIOutput);
 
-  const { playbackNotes } = useAutoPlay({
+  const { playbackNotesRef } = useAutoPlay({
     containerRef: scrollRef,
     enabled: demoMode && !!trackData && groups.length > 0,
     onNoteOn: (pitch) => playNote(pitch, 0.7),
@@ -125,7 +125,7 @@ export function PlayPageClient() {
   }, [getScore, getCombo, getProgress, toPause, pauseGame]);
 
   // Auto-pause when losing focus or switching tabs
-  useAutoPause(handlePause);
+  // useAutoPause(handlePause);
 
   // --- Native Next.js Boundaries & Guards ---
 
@@ -145,8 +145,8 @@ export function PlayPageClient() {
       handlePause={handlePause}
       isFullscreen={isFullscreen}
       handleToggleFullscreen={toggleFullscreen}
-      liveActiveNotes={liveActiveNotes}
-      playbackNotes={playbackNotes}
+      liveActiveNotesRef={liveActiveNotesRef}
+      playbackNotesRef={playbackNotesRef}
       notes={notes}
       groups={groups}
       scrollRef={scrollRef}

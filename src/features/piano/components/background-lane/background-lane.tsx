@@ -15,8 +15,8 @@ import {
 import styles from "./background-lane.module.css";
 
 interface BackgroundLaneProps {
-  liveNotes?: Set<number>;
-  playbackNotes?: Set<number>;
+  liveNotesRef?: React.MutableRefObject<Set<number>>;
+  playbackNotesRef?: React.MutableRefObject<Set<number>>;
 }
 
 /**
@@ -52,29 +52,42 @@ StaticLanes.displayName = "StaticLanes";
  * Uses imperative Ref updates for high-performance visual effects.
  */
 export function BackgroundLane({
-  liveNotes = new Set(),
-  playbackNotes = new Set(),
+  liveNotesRef,
+  playbackNotesRef,
 }: BackgroundLaneProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Imperative sync: Update data attributes on lane elements without re-rendering
+  // High-performance animation loop to sync DOM with mutable refs
   useEffect(() => {
-    const lanes = containerRef.current?.querySelectorAll<HTMLDivElement>("[data-pitch]");
-    if (!lanes) return;
+    let animationFrameId: number;
 
-    for (const lane of lanes) {
-      const pitch = Number(lane.dataset.pitch);
-      const isLive = liveNotes.has(pitch);
-      const isPlayback = playbackNotes.has(pitch);
+    const updateDOM = () => {
+      const lanes = containerRef.current?.querySelectorAll<HTMLDivElement>("[data-pitch]");
+      if (!lanes) return;
 
-      if (lane.dataset.live !== isLive.toString()) {
-        lane.dataset.live = isLive.toString();
+      const liveNotes = liveNotesRef?.current;
+      const playbackNotes = playbackNotesRef?.current;
+
+      for (const lane of lanes) {
+        const pitch = Number(lane.dataset.pitch);
+        const isLive = liveNotes ? liveNotes.has(pitch) : false;
+        const isPlayback = playbackNotes ? playbackNotes.has(pitch) : false;
+
+        if (lane.dataset.live !== isLive.toString()) {
+          lane.dataset.live = isLive.toString();
+        }
+        if (lane.dataset.playback !== isPlayback.toString()) {
+          lane.dataset.playback = isPlayback.toString();
+        }
       }
-      if (lane.dataset.playback !== isPlayback.toString()) {
-        lane.dataset.playback = isPlayback.toString();
-      }
-    }
-  }, [liveNotes, playbackNotes]);
+
+      animationFrameId = requestAnimationFrame(updateDOM);
+    };
+
+    animationFrameId = requestAnimationFrame(updateDOM);
+
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [liveNotesRef, playbackNotesRef]);
 
   return (
     <div ref={containerRef} className={cn(styles.container, PIANO_GRID_CLASS)}>

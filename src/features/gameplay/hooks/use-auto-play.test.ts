@@ -47,7 +47,7 @@ describe("useAutoPlay", () => {
     );
 
     // Initially empty
-    expect(result.current.playbackNotes.has(60)).toBe(false);
+    expect(result.current.playbackNotesRef.current.has(60)).toBe(false);
 
     // Simulate Note On
     act(() => {
@@ -64,7 +64,7 @@ describe("useAutoPlay", () => {
 
     expect(onNoteOn).toHaveBeenCalledWith(60);
     expect(processNoteEvent).toHaveBeenCalledWith({ type: "note-on", pitch: 60, velocity: 0.7 });
-    expect(result.current.playbackNotes.has(60)).toBe(true);
+    expect(result.current.playbackNotesRef.current.has(60)).toBe(true);
 
     // Simulate Note Off
     act(() => {
@@ -83,7 +83,7 @@ describe("useAutoPlay", () => {
 
     expect(onNoteOff).toHaveBeenCalledWith(60);
     expect(processNoteEvent).toHaveBeenCalledWith({ type: "note-off", pitch: 60, velocity: 0 });
-    expect(result.current.playbackNotes.has(60)).toBe(false);
+    expect(result.current.playbackNotesRef.current.has(60)).toBe(false);
   });
 
   it("fires onNoteOff then onNoteOn for contiguous notes of the same pitch", () => {
@@ -125,7 +125,7 @@ describe("useAutoPlay", () => {
       );
     });
     expect(onNoteOn).toHaveBeenCalledWith(60);
-    expect(result.current.playbackNotes.has(60)).toBe(true);
+    expect(result.current.playbackNotesRef.current.has(60)).toBe(true);
     onNoteOn.mockClear();
 
     // Step 2: Batch where note 1 exits and note 2 enters
@@ -154,6 +154,6 @@ describe("useAutoPlay", () => {
     });
 
     expect(callOrder).toEqual(["off", "on"]);
-    expect(result.current.playbackNotes.has(60)).toBe(true);
+    expect(result.current.playbackNotesRef.current.has(60)).toBe(true);
   });
 });

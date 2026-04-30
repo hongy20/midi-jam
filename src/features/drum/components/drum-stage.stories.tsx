@@ -26,8 +26,8 @@ const meta: Meta<typeof DrumStage> = {
   ],
   args: {
     notes: [],
-    liveActiveNotes: new Set(),
-    playbackNotes: new Set(),
+    liveActiveNotesRef: { current: new Set() },
+    playbackNotesRef: { current: new Set() },
   },
 };
 

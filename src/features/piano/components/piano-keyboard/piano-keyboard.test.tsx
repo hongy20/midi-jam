@@ -7,7 +7,12 @@ import { PianoKeyboard } from "./piano-keyboard";
 
 describe("PianoKeyboard", () => {
   it("renders the full 88-key range", () => {
-    render(<PianoKeyboard liveNotes={new Set()} playbackNotes={new Set()} />);
+    render(
+      <PianoKeyboard
+        liveNotesRef={{ current: new Set() }}
+        playbackNotesRef={{ current: new Set() }}
+      />,
+    );
 
     // Full 88 keys should be present
     const totalKeys = PIANO_88_KEY_MAX - PIANO_88_KEY_MIN + 1;

@@ -36,8 +36,8 @@ const meta: Meta<typeof PianoStage> = {
   ],
   args: {
     notes: mockNotes,
-    liveActiveNotes: new Set(),
-    playbackNotes: new Set(),
+    liveActiveNotesRef: { current: new Set() },
+    playbackNotesRef: { current: new Set() },
     highway: <div style={{ width: "100%", height: "100%" }} />,
   },
 };
@@ -51,13 +51,13 @@ export const Default: Story = {};
 /** With live MIDI input notes (C major chord). */
 export const WithLiveNotes: Story = {
   args: {
-    liveActiveNotes: new Set([60, 64, 67]), // C4 major chord
+    liveActiveNotesRef: { current: new Set([60, 64, 67]) }, // C4 major chord
   },
 };
 
 /** With playback notes active. */
 export const WithPlayback: Story = {
   args: {
-    playbackNotes: new Set([60, 64, 67, 72]),
+    playbackNotesRef: { current: new Set([60, 64, 67, 72]) },
   },
 };
