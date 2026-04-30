@@ -2,7 +2,7 @@
 
 import "../../styles/piano-layout.css";
 
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 
 import { cn } from "@/shared/lib/utils";
 
@@ -20,6 +20,33 @@ interface BackgroundLaneProps {
 }
 
 /**
+ * Memoized static lanes to prevent 88-element reconciliation 
+ * every time notes change during 60fps gameplay.
+ */
+const StaticLanes = memo(() => {
+  const notes = Array.from(
+    { length: PIANO_88_KEY_MAX - PIANO_88_KEY_MIN + 1 },
+    (_, i) => PIANO_88_KEY_MIN + i,
+  );
+
+  return (
+    <>
+      {notes.map((note) => (
+        <div
+          key={`lane-${note}`}
+          className={cn(styles.lane, PIANO_GRID_ITEM_CLASS)}
+          data-pitch={note}
+          data-live="false"
+          data-playback="false"
+        />
+      ))}
+    </>
+  );
+});
+
+StaticLanes.displayName = "StaticLanes";
+
+/**
  * Static lanes matching the piano keys.
  * Always renders the full 88-key range.
  * Uses imperative Ref updates for high-performance visual effects.
@@ -29,11 +56,6 @@ export function BackgroundLane({
   playbackNotes = new Set(),
 }: BackgroundLaneProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-
-  const notes = Array.from(
-    { length: PIANO_88_KEY_MAX - PIANO_88_KEY_MIN + 1 },
-    (_, i) => PIANO_88_KEY_MIN + i,
-  );
 
   // Imperative sync: Update data attributes on lane elements without re-rendering
   useEffect(() => {
@@ -56,15 +78,8 @@ export function BackgroundLane({
 
   return (
     <div ref={containerRef} className={cn(styles.container, PIANO_GRID_CLASS)}>
-      {notes.map((note) => (
-        <div
-          key={`lane-${note}`}
-          className={cn(styles.lane, PIANO_GRID_ITEM_CLASS)}
-          data-pitch={note}
-          data-live="false"
-          data-playback="false"
-        />
-      ))}
+      <StaticLanes />
     </div>
   );
 }
+
