@@ -23,11 +23,11 @@ A vertical gradient strip anchored to the bottom of the lane. It is hidden by de
 
 ```css
 .lane::before {
-  content: '';
+  content: "";
   position: absolute;
   inset-inline: 0;
   bottom: 0;
-  height: 60%;          /* covers lower portion of the lane */
+  height: 60%; /* covers lower portion of the lane */
   opacity: 0;
   pointer-events: none;
   background: linear-gradient(to top, var(--lane-effect-color) 0%, transparent 100%);
@@ -35,14 +35,15 @@ A vertical gradient strip anchored to the bottom of the lane. It is hidden by de
   will-change: opacity;
 }
 
-.lane[data-live='true']::before,
-.lane[data-playback='true']::before {
+.lane[data-live="true"]::before,
+.lane[data-playback="true"]::before {
   opacity: 1;
   transition: opacity 0.25s ease-out;
 }
 ```
 
 Color is set per-state via a CSS variable on the lane element:
+
 - `data-live="true"` → `--lane-effect-color: var(--lane-live-color)`
 - `data-playback="true"` → `--lane-effect-color: var(--lane-playback-color)`
 
@@ -54,13 +55,22 @@ A one-shot radial burst centered at the bottom of the lane. It fires each time `
 
 ```css
 @keyframes lane-flare {
-  0%   { transform: scale(0);   opacity: 0.9; }
-  60%  { transform: scale(2.5); opacity: 0.4; }
-  100% { transform: scale(4);   opacity: 0;   }
+  0% {
+    transform: scale(0);
+    opacity: 0.9;
+  }
+  60% {
+    transform: scale(2.5);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
 }
 
 .lane::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: 0;
   left: 50%;
@@ -74,8 +84,8 @@ A one-shot radial burst centered at the bottom of the lane. It fires each time `
   pointer-events: none;
 }
 
-.lane[data-live='true']::after,
-.lane[data-playback='true']::after {
+.lane[data-live="true"]::after,
+.lane[data-playback="true"]::after {
   animation: lane-flare 0.35s ease-out forwards;
 }
 ```
@@ -90,11 +100,11 @@ A one-shot radial burst centered at the bottom of the lane. It fires each time `
   --lane-effect-color: var(--lane-live-color); /* default; overridden per state */
 }
 
-.lane[data-live='true'] {
+.lane[data-live="true"] {
   --lane-effect-color: var(--lane-live-color);
 }
 
-.lane[data-playback='true'] {
+.lane[data-playback="true"] {
   --lane-effect-color: var(--lane-playback-color);
 }
 ```
@@ -107,10 +117,10 @@ Pass `liveActiveNotes` and `playbackNotes` (already in scope via `StageProps`) i
 
 ```tsx
 // before
-children: <BackgroundLane />
+children: <BackgroundLane />;
 
 // after
-children: <BackgroundLane liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />
+children: <BackgroundLane liveNotes={liveActiveNotes} playbackNotes={playbackNotes} />;
 ```
 
 No other changes to `PianoStage`.
@@ -122,6 +132,7 @@ Update the story to accept and pass `liveNotes`/`playbackNotes` args so the effe
 ## Verification Plan
 
 ### Automated Tests
+
 - `npm run lint:fix` — formatting
 - `npm run lint` — ESLint / Prettier / Knip clean
 - `npm run type-check` — TypeScript tsc
@@ -129,6 +140,7 @@ Update the story to accept and pass `liveNotes`/`playbackNotes` args so the effe
 - `npm run build` — Next.js production build
 
 ### Manual Verification (browser)
+
 1. Start dev server (`npm run dev`, HTTPS).
 2. Navigate to `/play` with a MIDI instrument connected.
 3. Press any key — the corresponding lane should show the beam (sustained) and the flare (one-shot burst at the bottom).

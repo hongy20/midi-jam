@@ -22,8 +22,14 @@
   --bg-lane-black: #18181b;
   --lane-opacity: calc(8% + var(--is-black) * 27%);
 
+  /* Effect Colors matching PianoKeyboard */
+  --lane-live-color: var(--primary);
+  --lane-playback-color: var(--secondary);
+  --lane-effect-color: var(--lane-live-color);
+
   grid-row: 1;
   height: 100%;
+  position: relative; /* Anchor for pseudo-elements */
   /* Subtle key colors mixed with transparency */
   background-color: color-mix(
     in srgb,
@@ -33,4 +39,77 @@
   );
   /* Very subtle separator line for black keys to create visual separation */
   border-right: 1px solid rgba(255, 255, 255, calc(0.04 * var(--is-black)));
+}
+
+/* Beam Effect (A) - Vertical gradient pillar */
+.lane::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 60%;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, var(--lane-effect-color) 0%, transparent 100%);
+  transition: opacity 0.08s ease-in;
+  will-change: opacity;
+}
+
+.lane[data-live="true"]::before,
+.lane[data-playback="true"]::before {
+  opacity: 1;
+  transition: opacity 0.25s ease-out;
+}
+
+/* Flare Effect (B) - Radial burst at the bottom */
+.lane::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 100%;
+  aspect-ratio: 1;
+  transform-origin: center bottom;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--lane-effect-color) 0%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes lane-flare {
+  0% {
+    transform: scale(0);
+    opacity: 0.9;
+  }
+  60% {
+    transform: scale(2.5);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.lane[data-live="true"]::after,
+.lane[data-playback="true"]::after {
+  animation: lane-flare 0.35s ease-out forwards;
+}
+
+/* Color overrides per state */
+.lane[data-live="true"] {
+  --lane-effect-color: var(--lane-live-color);
+  z-index: 2; /* Bring active lanes to front */
+}
+
+.lane[data-playback="true"] {
+  --lane-effect-color: var(--lane-playback-color);
+  z-index: 1;
+}
+
+/* Prioritize live hits */
+.lane[data-live="true"][data-playback="true"] {
+  --lane-effect-color: var(--lane-live-color);
+  z-index: 2;
 }
